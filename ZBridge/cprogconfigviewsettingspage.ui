@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>CProgConfigViewSettingsPage</class>
+ <widget class="QWizardPage" name="CProgConfigViewSettingsPage">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>520</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>WizardPage</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_2">
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="pixmap">
+        <pixmap resource="images.qrc">:/newPrefix/resources/BridgeSceneGG5.bmp</pixmap>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <widget class="QLabel" name="label_2">
+         <property name="maximumSize">
+          <size>
+           <width>310</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>You can choose to have Easy Bridge display the Bidding History during the bidding so you can review what bids were made.  Likewise, you can also choose to see the play history so you can see what cards have been played</string>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+         <property name="indent">
+          <number>9</number>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_3">
+         <property name="maximumSize">
+          <size>
+           <width>310</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>You should note that viewing this information is technically illegal under the rules of bridge.  However, these aids can help you greatly during the learning process.  And besides, who's telling?</string>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+         <property name="indent">
+          <number>9</number>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="autoShowBidHistory">
+         <property name="text">
+          <string>Yes, show me the bidding history when I'm bidding.</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="autoShowPlayHistory">
+         <property name="text">
+          <string>Yes, show me the play history during cardplay.</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_4">
+         <property name="maximumSize">
+          <size>
+           <width>310</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>If English is not your native language, you can choose to have the bidding and play history, as well as the bids in the bid dialog,  displayed using suit symbols instead of suit letters.</string>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+         <property name="indent">
+          <number>9</number>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="useSuitSymbols">
+         <property name="text">
+          <string>Yes, use suit symbols instead of suit letters.</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="images.qrc"/>
+ </resources>
+ <connections/>
+</ui>

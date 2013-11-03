@@ -1,0 +1,1282 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>CMainFrame</class>
+ <widget class="QMainWindow" name="CMainFrame">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>942</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>ZBridge</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout"/>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>942</width>
+     <height>18</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionOpen"/>
+    <addaction name="actionSave"/>
+    <addaction name="actionSave_As"/>
+    <addaction name="separator"/>
+    <addaction name="actionPrint"/>
+    <addaction name="actionPrint_PreView"/>
+    <addaction name="separator"/>
+    <addaction name="actionProperties"/>
+    <addaction name="separator"/>
+    <addaction name="actionRecent_File"/>
+    <addaction name="separator"/>
+    <addaction name="actionExit"/>
+   </widget>
+   <widget class="QMenu" name="menuEdit">
+    <property name="title">
+     <string>Edit</string>
+    </property>
+    <addaction name="action_Undo_Trick"/>
+    <addaction name="separator"/>
+    <addaction name="actionCu_t"/>
+    <addaction name="action_Copy"/>
+    <addaction name="action_Paste"/>
+    <addaction name="separator"/>
+    <addaction name="actionClear_All"/>
+   </widget>
+   <widget class="QMenu" name="menuView">
+    <property name="title">
+     <string>View</string>
+    </property>
+    <addaction name="action_File_Comments"/>
+    <addaction name="actionBidding_Play_History"/>
+    <addaction name="actionRubber_Score"/>
+    <addaction name="separator"/>
+    <addaction name="action_Toolbar"/>
+    <addaction name="actionSecondary_Toolbar"/>
+    <addaction name="actionStatus_Bar"/>
+    <addaction name="separator"/>
+    <addaction name="action_Refresh_Screen"/>
+   </widget>
+   <widget class="QMenu" name="menuGame">
+    <property name="title">
+     <string>Game</string>
+    </property>
+    <addaction name="actionNew_Session"/>
+    <addaction name="action_Deal_New_Hand"/>
+    <addaction name="action_Play_Rubber"/>
+    <addaction name="separator"/>
+    <addaction name="action_Bid_Rebid"/>
+    <addaction name="action_Restart_Hand"/>
+    <addaction name="separator"/>
+    <addaction name="actionClaim_All"/>
+    <addaction name="actionClaim_Contract"/>
+    <addaction name="actionConcede"/>
+    <addaction name="separator"/>
+    <addaction name="actionHint"/>
+    <addaction name="actionAuto_Hints"/>
+    <addaction name="actionAuto_Play_Card"/>
+    <addaction name="actionAuto_Play_All_Cards"/>
+    <addaction name="actionAuto_Play_to_Completion"/>
+    <addaction name="separator"/>
+    <addaction name="actionReview_Game"/>
+    <addaction name="actionAuto_Test"/>
+   </widget>
+   <widget class="QMenu" name="menuCustom">
+    <property name="title">
+     <string>Custom</string>
+    </property>
+    <addaction name="action_deal_Num_bered_Hand"/>
+    <addaction name="separator"/>
+    <addaction name="actionDeal_Game_Hands"/>
+    <addaction name="actionDeal_Major_Suit_Game"/>
+    <addaction name="actionDeal_Mi_nor_Suit_Game"/>
+    <addaction name="actionDeal_No_Trump_Game"/>
+    <addaction name="separator"/>
+    <addaction name="actionDeal_Game_Hands_to_East_West"/>
+    <addaction name="actionDeal_Major_Suit_Game_to_East_West"/>
+    <addaction name="actionDeal_Minor_Suit_Game_to_East_West"/>
+    <addaction name="actionDeal_No_Trump_Game_to_East_West"/>
+    <addaction name="separator"/>
+    <addaction name="actionDeal_Slam_Hands"/>
+    <addaction name="actionDeal_Sma_ll_Slam"/>
+    <addaction name="actionDeal_Gran_d_Slam"/>
+    <addaction name="separator"/>
+    <addaction name="actionDeal_Slam_Hands_to_East_West"/>
+    <addaction name="actionDeal_Small_Slam_to_East_West"/>
+    <addaction name="actionDeal_Grand_Slam_to_East_West"/>
+   </widget>
+   <widget class="QMenu" name="menuHands">
+    <property name="title">
+     <string>Hands</string>
+    </property>
+    <widget class="QMenu" name="menu_Hands">
+     <property name="title">
+      <string>S&amp;wap Cards with</string>
+     </property>
+     <addaction name="actionWest_3"/>
+     <addaction name="actionNorth_3"/>
+     <addaction name="actionEast_3"/>
+    </widget>
+    <addaction name="menu_Hands"/>
+    <addaction name="actionSwap_Cards_Clockwisr"/>
+    <addaction name="actionSwap_Cards_Coun_terclockwise"/>
+    <addaction name="separator"/>
+    <addaction name="action_Lay_Out_Cards"/>
+    <addaction name="action_Edit_Existing_Hands"/>
+    <addaction name="action_Distribute_Remaining_Cards"/>
+   </widget>
+   <widget class="QMenu" name="menuOptions">
+    <property name="title">
+     <string>Options</string>
+    </property>
+    <addaction name="actionSeat_Configuration"/>
+    <addaction name="action_Bidding_Options"/>
+    <addaction name="action_Deal_Options"/>
+    <addaction name="action_Di_splay_Options"/>
+    <addaction name="action_Game_Options"/>
+    <addaction name="separator"/>
+    <addaction name="actionConfiguration_Wizard"/>
+   </widget>
+   <widget class="QMenu" name="menuSpecial">
+    <property name="title">
+     <string>Special</string>
+    </property>
+    <addaction name="action_Expose_All_Cards"/>
+    <addaction name="actionEnable_Analysis_Tracing"/>
+    <addaction name="actionShow_Player_Analyses"/>
+    <addaction name="separator"/>
+    <addaction name="actionManual_Bidding"/>
+    <addaction name="separator"/>
+    <addaction name="actionManual_Play"/>
+    <addaction name="actionManual_Defend"/>
+   </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>Help</string>
+    </property>
+    <addaction name="action_Contents"/>
+    <addaction name="actionIn_troduction"/>
+    <addaction name="action_Rules_of_the_Game"/>
+    <addaction name="action_Menu_Commands"/>
+    <addaction name="actionMi_scellaneous_Topics"/>
+    <addaction name="action_Glossary_of_Terms"/>
+    <addaction name="separator"/>
+    <addaction name="action_Search_for_Help_On"/>
+    <addaction name="separator"/>
+    <addaction name="actionQuick_Start"/>
+    <addaction name="actionFrequently_Asked_Questions"/>
+    <addaction name="actionTip_of_the_Day"/>
+    <addaction name="separator"/>
+    <addaction name="action_View_README_File"/>
+    <addaction name="separator"/>
+    <addaction name="action_About_ZBridge"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuEdit"/>
+   <addaction name="menuView"/>
+   <addaction name="menuGame"/>
+   <addaction name="menuCustom"/>
+   <addaction name="menuHands"/>
+   <addaction name="menuOptions"/>
+   <addaction name="menuSpecial"/>
+   <addaction name="menuHelp"/>
+  </widget>
+  <widget class="QToolBar" name="toolBar">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="actionNew_Session"/>
+   <addaction name="action_Deal_New_Hand"/>
+   <addaction name="action_Play_Rubber"/>
+   <addaction name="separator"/>
+   <addaction name="actionOpen"/>
+   <addaction name="actionSave"/>
+   <addaction name="actionPrint"/>
+   <addaction name="separator"/>
+   <addaction name="action_Undo_Trick"/>
+   <addaction name="action_Restart_Hand"/>
+   <addaction name="action_Bid_Rebid"/>
+   <addaction name="separator"/>
+   <addaction name="actionHint"/>
+   <addaction name="actionAuto_Hints"/>
+   <addaction name="separator"/>
+   <addaction name="actionAuto_Play_Card"/>
+   <addaction name="actionAuto_Play_All_Cards"/>
+   <addaction name="actionAuto_Play_to_Completion"/>
+   <addaction name="separator"/>
+   <addaction name="actionClaim_All"/>
+   <addaction name="actionClaim_Contract"/>
+   <addaction name="actionConcede"/>
+   <addaction name="separator"/>
+   <addaction name="actionManual_Bidding"/>
+   <addaction name="actionManual_Play"/>
+   <addaction name="separator"/>
+   <addaction name="actionBidding_Play_History"/>
+   <addaction name="actionShow_Player_Analyses"/>
+   <addaction name="actionEnable_Analysis_Tracing"/>
+   <addaction name="action_Expose_All_Cards"/>
+   <addaction name="separator"/>
+   <addaction name="actionRubber_Score"/>
+   <addaction name="action_File_Comments"/>
+   <addaction name="separator"/>
+  </widget>
+  <widget class="CStatusBar" name="statusBar">
+   <property name="sizeGripEnabled">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QToolBar" name="toolBar_Secondary">
+   <property name="windowTitle">
+    <string>toolBar_2</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>true</bool>
+   </attribute>
+   <addaction name="actionDeal_Game_Hands"/>
+   <addaction name="actionDeal_Slam_Hands"/>
+   <addaction name="action_deal_Num_bered_Hand"/>
+   <addaction name="separator"/>
+   <addaction name="action_Lay_Out_Cards"/>
+   <addaction name="action_Edit_Existing_Hands"/>
+   <addaction name="separator"/>
+   <addaction name="actionSwap_Cards_Clockwisr"/>
+   <addaction name="actionSwap_Cards_Coun_terclockwise"/>
+   <addaction name="separator"/>
+   <addaction name="action_Refresh_Screen"/>
+   <addaction name="separator"/>
+   <addaction name="actionClear_All"/>
+   <addaction name="separator"/>
+   <addaction name="action_Contents"/>
+   <addaction name="actionTip_of_the_Day"/>
+   <addaction name="action_About_ZBridge"/>
+  </widget>
+  <action name="actionOpen">
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/newPrefix/resources/FILEOPEN.BMP</normaloff>
+     <normalon>:/newPrefix/resources/Open.ico</normalon>:/newPrefix/resources/FILEOPEN.BMP</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Open...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
+  </action>
+  <action name="actionSave">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/newPrefix/resources/FILESAVE.BMP</normaloff>
+     <normalon>:/newPrefix/resources/Save.ico</normalon>:/newPrefix/resources/FILESAVE.BMP</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Save</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="actionSave_As">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Save &amp;As...</string>
+   </property>
+  </action>
+  <action name="actionPrint">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/newPrefix/resources/Fileprint.bmp</normaloff>
+     <normalon>:/newPrefix/resources/Print.ico</normalon>:/newPrefix/resources/Fileprint.bmp</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Print</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+P</string>
+   </property>
+  </action>
+  <action name="actionPrint_PreView">
+   <property name="text">
+    <string>Print Pre&amp;view</string>
+   </property>
+  </action>
+  <action name="actionProperties">
+   <property name="text">
+    <string>P&amp;roperties...</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+Return</string>
+   </property>
+  </action>
+  <action name="actionRecent_File">
+   <property name="text">
+    <string>Recent File</string>
+   </property>
+  </action>
+  <action name="actionExit">
+   <property name="text">
+    <string>E&amp;xit</string>
+   </property>
+  </action>
+  <action name="action_Undo_Trick">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/newPrefix/resources/EDITUNDO.BMP</normaloff>:/newPrefix/resources/EDITUNDO.BMP</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Undo Trick</string>
+   </property>
+   <property name="shortcut">
+    <string>Backspace</string>
+   </property>
+  </action>
+  <action name="actionCu_t">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/newPrefix/resources/EDITCUT.BMP</normaloff>:/newPrefix/resources/EDITCUT.BMP</iconset>
+   </property>
+   <property name="text">
+    <string>Cu&amp;t</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+X</string>
+   </property>
+  </action>
+  <action name="action_Copy">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/newPrefix/resources/EDITCOPY.BMP</normaloff>:/newPrefix/resources/EDITCOPY.BMP</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Copy</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+C</string>
+   </property>
+  </action>
+  <action name="action_Paste">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/newPrefix/resources/Editpaste.bmp</normaloff>:/newPrefix/resources/Editpaste.bmp</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Paste</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+V</string>
+   </property>
+  </action>
+  <action name="actionClear_All">
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/newPrefix/resources/EditClearAll.bmp</normaloff>:/newPrefix/resources/EditClearAll.bmp</iconset>
+   </property>
+   <property name="text">
+    <string>Clear All</string>
+   </property>
+   <property name="shortcut">
+    <string>Shift+C</string>
+   </property>
+  </action>
+  <action name="action_File_Comments">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/newPrefix/resources/ViewFileComments.bmp</normaloff>:/newPrefix/resources/ViewFileComments.bmp</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;File Comments</string>
+   </property>
+  </action>
+  <action name="actionBidding_Play_History">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/newPrefix/resources/history.bmp</normaloff>:/newPrefix/resources/history.bmp</iconset>
+   </property>
+   <property name="text">
+    <string>Bidding &amp;&amp; Play History</string>
+   </property>
+   <property name="shortcut">
+    <string>F10</string>
+   </property>
+  </action>
+  <action name="actionRubber_Score">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/newPrefix/resources/ViewRubberScore.bmp</normaloff>:/newPrefix/resources/ViewRubberScore.bmp</iconset>
+   </property>
+   <property name="text">
+    <string>Rubber &amp;Score</string>
+   </property>
+   <property name="shortcut">
+    <string>F12</string>
+   </property>
+  </action>
+  <action name="action_Toolbar">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>&amp;Toolbar</string>
+   </property>
+  </action>
+  <action name="actionSecondary_Toolbar">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Secondary Toolbar</string>
+   </property>
+  </action>
+  <action name="actionTest_Toolbar">
+   <property name="text">
+    <string>Test Toolbar</string>
+   </property>
+  </action>
+  <action name="actionStatus_Bar">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Status Bar</string>
+   </property>
+  </action>
+  <action name="action_Refresh_Screen">
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/newPrefix/resources/RefreshScreen.bmp</normaloff>:/newPrefix/resources/RefreshScreen.bmp</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Refresh Screen</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+R</string>
+   </property>
+  </action>
+  <action name="action_Deal_New_Hand">
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/newPrefix/resources/DealNewHand.bmp</normaloff>:/newPrefix/resources/DealNewHand.bmp</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Deal New Hand</string>
+   </property>
+   <property name="shortcut">
+    <string>F2</string>
+   </property>
+  </action>
+  <action name="action_Play_Rubber">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/newPrefix/resources/PlayRubber.bmp</normaloff>:/newPrefix/resources/PlayRubber.bmp</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Play Rubber</string>
+   </property>
+   <property name="shortcut">
+    <string>Shift+F2</string>
+   </property>
+  </action>
+  <action name="action_Bid_Rebid">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/newPrefix/resources/BidHand.bmp</normaloff>:/newPrefix/resources/BidHand.bmp</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Bid/Rebid...</string>
+   </property>
+   <property name="shortcut">
+    <string>F3</string>
+   </property>
+  </action>
+  <action name="action_Restart_Hand">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/newPrefix/resources/RestartPlay.bmp</normaloff>:/newPrefix/resources/RestartPlay.bmp</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Restart Hand</string>
+   </property>
+   <property name="shortcut">
+    <string>F4</string>
+   </property>
+  </action>
+  <action name="actionClaim_All">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/newPrefix/resources/ClaimTricks.bmp</normaloff>:/newPrefix/resources/ClaimTricks.bmp</iconset>
+   </property>
+   <property name="text">
+    <string>Claim All</string>
+   </property>
+   <property name="shortcut">
+    <string>F5</string>
+   </property>
+  </action>
+  <action name="actionClaim_Contract">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/newPrefix/resources/ClaimContract.bmp</normaloff>:/newPrefix/resources/ClaimContract.bmp</iconset>
+   </property>
+   <property name="text">
+    <string>Claim Contract</string>
+   </property>
+   <property name="shortcut">
+    <string>Shift+F5</string>
+   </property>
+  </action>
+  <action name="actionConcede">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/newPrefix/resources/ConcedeTricks.bmp</normaloff>:/newPrefix/resources/ConcedeTricks.bmp</iconset>
+   </property>
+   <property name="text">
+    <string>Concede</string>
+   </property>
+   <property name="shortcut">
+    <string>F6</string>
+   </property>
+  </action>
+  <action name="actionHint">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/newPrefix/resources/HelpAppAbout.bmp</normaloff>:/newPrefix/resources/HelpAppAbout.bmp</iconset>
+   </property>
+   <property name="text">
+    <string>Hint</string>
+   </property>
+   <property name="shortcut">
+    <string>Space</string>
+   </property>
+  </action>
+  <action name="actionAuto_Hints">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/newPrefix/resources/AutoHint.bmp</normaloff>:/newPrefix/resources/AutoHint.bmp</iconset>
+   </property>
+   <property name="text">
+    <string>Auto Hints</string>
+   </property>
+   <property name="shortcut">
+    <string>Shift+Space</string>
+   </property>
+  </action>
+  <action name="actionAuto_Play_Card">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/newPrefix/resources/AutoPlayCard.bmp</normaloff>:/newPrefix/resources/AutoPlayCard.bmp</iconset>
+   </property>
+   <property name="text">
+    <string>Auto Play Card</string>
+   </property>
+   <property name="shortcut">
+    <string>F7</string>
+   </property>
+  </action>
+  <action name="actionAuto_Play_All_Cards">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/newPrefix/resources/AutoPlayAll.bmp</normaloff>:/newPrefix/resources/AutoPlayAll.bmp</iconset>
+   </property>
+   <property name="text">
+    <string>Auto Play All Cards</string>
+   </property>
+   <property name="shortcut">
+    <string>F8</string>
+   </property>
+  </action>
+  <action name="actionAuto_Play_to_Completion">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/newPrefix/resources/AutoPlayExpress.bmp</normaloff>:/newPrefix/resources/AutoPlayExpress.bmp</iconset>
+   </property>
+   <property name="text">
+    <string>Auto Play to Completion</string>
+   </property>
+   <property name="shortcut">
+    <string>Shift+F8</string>
+   </property>
+  </action>
+  <action name="actionReview_Game">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Review Game</string>
+   </property>
+   <property name="shortcut">
+    <string>Shift+R</string>
+   </property>
+  </action>
+  <action name="actionAuto_Test">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Auto Test...</string>
+   </property>
+  </action>
+  <action name="action_deal_Num_bered_Hand">
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/newPrefix/resources/numbered.bmp</normaloff>:/newPrefix/resources/numbered.bmp</iconset>
+   </property>
+   <property name="text">
+    <string>Deal Num&amp;bered Hand</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+F2</string>
+   </property>
+  </action>
+  <action name="actionDeal_Game_Hands">
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/newPrefix/resources/DealGameHands.bmp</normaloff>:/newPrefix/resources/DealGameHands.bmp</iconset>
+   </property>
+   <property name="text">
+    <string>Deal &amp;Game Hands</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+G</string>
+   </property>
+  </action>
+  <action name="actionDeal_Major_Suit_Game">
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/newPrefix/resources/DealMajorSuitGame.bmp</normaloff>:/newPrefix/resources/DealMajorSuitGame.bmp</iconset>
+   </property>
+   <property name="text">
+    <string>Deal &amp;Major Suit Game</string>
+   </property>
+   <property name="toolTip">
+    <string>Deal Major Suit Game</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+M</string>
+   </property>
+  </action>
+  <action name="actionDeal_Mi_nor_Suit_Game">
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/newPrefix/resources/DealMinorSuitGame.bmp</normaloff>:/newPrefix/resources/DealMinorSuitGame.bmp</iconset>
+   </property>
+   <property name="text">
+    <string>Deal Mi&amp;nor Suit Game</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+N</string>
+   </property>
+  </action>
+  <action name="actionDeal_No_Trump_Game">
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/newPrefix/resources/DealNTGame.bmp</normaloff>:/newPrefix/resources/DealNTGame.bmp</iconset>
+   </property>
+   <property name="text">
+    <string>Deal No &amp;Trump Game</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+T</string>
+   </property>
+  </action>
+  <action name="actionDeal_Game_Hands_to_East_West">
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/newPrefix/resources/DealGameHandsEW.bmp</normaloff>:/newPrefix/resources/DealGameHandsEW.bmp</iconset>
+   </property>
+   <property name="text">
+    <string>Deal Game Hands to East/West</string>
+   </property>
+   <property name="shortcut">
+    <string>Shift+G</string>
+   </property>
+  </action>
+  <action name="actionDeal_Minor_Suit_Game_to_East_West">
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/newPrefix/resources/DealMinorSuitGameEW.bmp</normaloff>:/newPrefix/resources/DealMinorSuitGameEW.bmp</iconset>
+   </property>
+   <property name="text">
+    <string>Deal Minor Suit Game to East/West</string>
+   </property>
+   <property name="shortcut">
+    <string>Shift+N</string>
+   </property>
+  </action>
+  <action name="actionDeal_No_Trump_Game_to_East_West">
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/newPrefix/resources/DealNTGameEW.bmp</normaloff>:/newPrefix/resources/DealNTGameEW.bmp</iconset>
+   </property>
+   <property name="text">
+    <string>Deal No Trump Game to East/West</string>
+   </property>
+   <property name="shortcut">
+    <string>Shift+T</string>
+   </property>
+  </action>
+  <action name="actionDeal_Slam_Hands">
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/newPrefix/resources/DealSlamHands.bmp</normaloff>:/newPrefix/resources/DealSlamHands.bmp</iconset>
+   </property>
+   <property name="text">
+    <string>Deal &amp;Slam Hands</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+L</string>
+   </property>
+  </action>
+  <action name="actionDeal_Sma_ll_Slam">
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/newPrefix/resources/DealSmallSlam.bmp</normaloff>:/newPrefix/resources/DealSmallSlam.bmp</iconset>
+   </property>
+   <property name="text">
+    <string>Deal Sma&amp;ll Slam</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+9</string>
+   </property>
+  </action>
+  <action name="actionDeal_Gran_d_Slam">
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/newPrefix/resources/DealGrandSlam.bmp</normaloff>:/newPrefix/resources/DealGrandSlam.bmp</iconset>
+   </property>
+   <property name="text">
+    <string>Deal Gran&amp;d Slam</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+0</string>
+   </property>
+  </action>
+  <action name="actionDeal_Slam_Hands_to_East_West">
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/newPrefix/resources/DealSlamHandsEW.bmp</normaloff>:/newPrefix/resources/DealSlamHandsEW.bmp</iconset>
+   </property>
+   <property name="text">
+    <string>Deal Slam Hands to East/West</string>
+   </property>
+   <property name="shortcut">
+    <string>Shift+L</string>
+   </property>
+  </action>
+  <action name="actionDeal_Small_Slam_to_East_West">
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/newPrefix/resources/DealSmallSlamEW.bmp</normaloff>:/newPrefix/resources/DealSmallSlamEW.bmp</iconset>
+   </property>
+   <property name="text">
+    <string>Deal Small Slam to East/West</string>
+   </property>
+  </action>
+  <action name="actionDeal_Grand_Slam_to_East_West">
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/newPrefix/resources/DealGrandSlamEW.bmp</normaloff>:/newPrefix/resources/DealGrandSlamEW.bmp</iconset>
+   </property>
+   <property name="text">
+    <string>Deal Grand Slam to East/West</string>
+   </property>
+  </action>
+  <action name="actionWest_3">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/newPrefix/resources/SwapWithWest.bmp</normaloff>:/newPrefix/resources/SwapWithWest.bmp</iconset>
+   </property>
+   <property name="text">
+    <string>West</string>
+   </property>
+  </action>
+  <action name="actionNorth_3">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/newPrefix/resources/SwapWithNorth.bmp</normaloff>:/newPrefix/resources/SwapWithNorth.bmp</iconset>
+   </property>
+   <property name="text">
+    <string>North</string>
+   </property>
+  </action>
+  <action name="actionEast_3">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/newPrefix/resources/SwapWithEast.bmp</normaloff>:/newPrefix/resources/SwapWithEast.bmp</iconset>
+   </property>
+   <property name="text">
+    <string>East</string>
+   </property>
+  </action>
+  <action name="actionSwap_Cards_Clockwisr">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/newPrefix/resources/SwapCardsClockwise.bmp</normaloff>:/newPrefix/resources/SwapCardsClockwise.bmp</iconset>
+   </property>
+   <property name="text">
+    <string>Swap Cards &amp;Clockwisr</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+W</string>
+   </property>
+  </action>
+  <action name="actionSwap_Cards_Coun_terclockwise">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/newPrefix/resources/SwapCardsCounterclockwise.bmp</normaloff>:/newPrefix/resources/SwapCardsCounterclockwise.bmp</iconset>
+   </property>
+   <property name="text">
+    <string>Swap Cards Coun&amp;terclockwise</string>
+   </property>
+  </action>
+  <action name="action_Lay_Out_Cards">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/newPrefix/resources/LayOutCards.bmp</normaloff>:/newPrefix/resources/LayOutCards.bmp</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Lay Out Cards</string>
+   </property>
+   <property name="shortcut">
+    <string>F9</string>
+   </property>
+  </action>
+  <action name="action_Edit_Existing_Hands">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/newPrefix/resources/EditExistingHands.bmp</normaloff>:/newPrefix/resources/EditExistingHands.bmp</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Edit Existing Hands</string>
+   </property>
+   <property name="shortcut">
+    <string>Shift+F9</string>
+   </property>
+  </action>
+  <action name="action_Distribute_Remaining_Cards">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>&amp;Distribute Remaining Cards</string>
+   </property>
+  </action>
+  <action name="action_Bidding_Options">
+   <property name="text">
+    <string>&amp;Bidding/Play...</string>
+   </property>
+  </action>
+  <action name="action_Deal_Options">
+   <property name="text">
+    <string>&amp;Deal...</string>
+   </property>
+  </action>
+  <action name="action_Di_splay_Options">
+   <property name="text">
+    <string>&amp;Di&amp;splay Options...</string>
+   </property>
+  </action>
+  <action name="action_Game_Options">
+   <property name="text">
+    <string>&amp;Game...</string>
+   </property>
+  </action>
+  <action name="actionConfiguration_Wizard">
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/newPrefix/resources/wizard.bmp</normaloff>:/newPrefix/resources/wizard.bmp</iconset>
+   </property>
+   <property name="text">
+    <string>Configuration Wizard...</string>
+   </property>
+  </action>
+  <action name="action_Expose_All_Cards">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/newPrefix/resources/ExposeAllCards.bmp</normaloff>:/newPrefix/resources/ExposeAllCards.bmp</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Expose All Cards</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+E</string>
+   </property>
+  </action>
+  <action name="actionEnable_Analysis_Tracing">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/newPrefix/resources/EnableAnalysis.bmp</normaloff>:/newPrefix/resources/EnableAnalysis.bmp</iconset>
+   </property>
+   <property name="text">
+    <string>Enable &amp;Analysis Tracing</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Z</string>
+   </property>
+  </action>
+  <action name="actionShow_Player_Analyses">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/newPrefix/resources/ShowAnalysisAll.bmp</normaloff>:/newPrefix/resources/ShowAnalysisAll.bmp</iconset>
+   </property>
+   <property name="text">
+    <string>Show Player Analyses</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+A</string>
+   </property>
+  </action>
+  <action name="actionManual_Play">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/newPrefix/resources/ManualPlay.bmp</normaloff>:/newPrefix/resources/ManualPlay.bmp</iconset>
+   </property>
+   <property name="text">
+    <string>Manual Play</string>
+   </property>
+  </action>
+  <action name="actionManual_Defend">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/newPrefix/resources/ManualDefend.bmp</normaloff>:/newPrefix/resources/ManualDefend.bmp</iconset>
+   </property>
+   <property name="text">
+    <string>Manual Defend</string>
+   </property>
+  </action>
+  <action name="action_Normal_Play_Mode">
+   <property name="text">
+    <string>&amp;Normal Play Mode</string>
+   </property>
+  </action>
+  <action name="actionManual_Play_Mode">
+   <property name="text">
+    <string>Manual &amp;Play Mode</string>
+   </property>
+  </action>
+  <action name="actionManual_Defend_2">
+   <property name="text">
+    <string>Manual Defend</string>
+   </property>
+  </action>
+  <action name="actionAuto_Play_Mode">
+   <property name="text">
+    <string>Auto Play Mode</string>
+   </property>
+  </action>
+  <action name="actionLock_Play_Mode">
+   <property name="text">
+    <string>Lock Play Mode</string>
+   </property>
+  </action>
+  <action name="actionShow_Comment_IDs">
+   <property name="text">
+    <string>Show Comment IDs</string>
+   </property>
+  </action>
+  <action name="action_Contents">
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/newPrefix/resources/HelpContents.bmp</normaloff>:/newPrefix/resources/HelpContents.bmp</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Contents</string>
+   </property>
+  </action>
+  <action name="actionIn_troduction">
+   <property name="text">
+    <string>In&amp;troduction</string>
+   </property>
+  </action>
+  <action name="action_Rules_of_the_Game">
+   <property name="text">
+    <string>&amp;Rules of the Game</string>
+   </property>
+  </action>
+  <action name="action_Menu_Commands">
+   <property name="text">
+    <string>&amp;Menu Commands</string>
+   </property>
+  </action>
+  <action name="actionMi_scellaneous_Topics">
+   <property name="text">
+    <string>Mi&amp;scellaneous Topics</string>
+   </property>
+  </action>
+  <action name="action_Glossary_of_Terms">
+   <property name="text">
+    <string>&amp;Glossary of Terms</string>
+   </property>
+  </action>
+  <action name="action_Search_for_Help_On">
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/newPrefix/resources/HelpSearch.bmp</normaloff>:/newPrefix/resources/HelpSearch.bmp</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Search for Help On...</string>
+   </property>
+  </action>
+  <action name="actionQuick_Start">
+   <property name="text">
+    <string>Quick Start</string>
+   </property>
+  </action>
+  <action name="actionFrequently_Asked_Questions">
+   <property name="text">
+    <string>Frequently Asked Questions</string>
+   </property>
+  </action>
+  <action name="actionTip_of_the_Day">
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/newPrefix/resources/HelpDailyTip.bmp</normaloff>:/newPrefix/resources/HelpDailyTip.bmp</iconset>
+   </property>
+   <property name="text">
+    <string>Tip of the Day</string>
+   </property>
+  </action>
+  <action name="action_View_README_File">
+   <property name="text">
+    <string>&amp;View README File</string>
+   </property>
+  </action>
+  <action name="action_About_ZBridge">
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/newPrefix/resources/HelpAppAbout.bmp</normaloff>:/newPrefix/resources/HelpAppAbout.bmp</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;About ZBridge...</string>
+   </property>
+  </action>
+  <action name="actionDeal_Major_Suit_Game_to_East_West">
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/newPrefix/resources/DealMajorSuitGameEW.bmp</normaloff>:/newPrefix/resources/DealMajorSuitGameEW.bmp</iconset>
+   </property>
+   <property name="text">
+    <string>Deal Major Suit Game to East/West</string>
+   </property>
+   <property name="shortcut">
+    <string>Shift+M</string>
+   </property>
+  </action>
+  <action name="actionManual_Bidding">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/newPrefix/resources/ManualBidding.bmp</normaloff>:/newPrefix/resources/ManualBidding.bmp</iconset>
+   </property>
+   <property name="text">
+    <string>Manual Bidding</string>
+   </property>
+  </action>
+  <action name="actionSeat_Configuration">
+   <property name="text">
+    <string>Seat Configuration</string>
+   </property>
+  </action>
+  <action name="actionNew_Session">
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/newPrefix/resources/ManualDefend.bmp</normaloff>:/newPrefix/resources/ManualDefend.bmp</iconset>
+   </property>
+   <property name="text">
+    <string>New Session</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>CStatusBar</class>
+   <extends>QStatusBar</extends>
+   <header>cstatusbar.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="images.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>action_Toolbar</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>toolBar</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>470</x>
+     <y>34</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionSecondary_Toolbar</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>toolBar_Secondary</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>470</x>
+     <y>68</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionStatus_Bar</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>statusBar</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>470</x>
+     <y>590</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

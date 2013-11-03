@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>CProgramConfigWizard</class>
+ <widget class="QWizard" name="CProgramConfigWizard">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>514</width>
+    <height>375</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Configuration Wizard</string>
+  </property>
+  <widget class="CProgConfigIntroPage" name="progConfigIntroPage">
+   <property name="title">
+    <string>Welcome</string>
+   </property>
+   <property name="subTitle">
+    <string>Welcome to the ZBridge Configuration Wizard.</string>
+   </property>
+  </widget>
+  <widget class="CProgConfigHelpLevelPage" name="progConfigHelpLevelPage">
+   <property name="title">
+    <string>Help Level</string>
+   </property>
+   <property name="subTitle">
+    <string>Please select your level of familiarity with the game of bridge</string>
+   </property>
+  </widget>
+  <widget class="CProgConfigViewSettingsPage" name="progConfigViewSettingsPage">
+   <property name="title">
+    <string>View Settings</string>
+   </property>
+   <property name="subTitle">
+    <string>Set your choice of view settings</string>
+   </property>
+  </widget>
+  <widget class="CProgConfigSuitsDisplayPage" name="progConfigSuitsDisplayPage">
+   <property name="title">
+    <string>Suits Display</string>
+   </property>
+   <property name="subTitle">
+    <string>Choose the order in which card suits are displayed</string>
+   </property>
+  </widget>
+  <widget class="CProgConfigGameMechanicsPage" name="progConfigGameMechanicsPage">
+   <property name="title">
+    <string>Game Options</string>
+   </property>
+   <property name="subTitle">
+    <string>Choose scoring options</string>
+   </property>
+  </widget>
+  <widget class="CProgConfigPausesPage" name="progConfigPausesPage">
+   <property name="title">
+    <string>Pauses</string>
+   </property>
+   <property name="subTitle">
+    <string>Choose pauses in bidding and play</string>
+   </property>
+  </widget>
+  <widget class="CProgConfigBiddingPage" name="progConfigBiddingPage">
+   <property name="title">
+    <string>Bidding Style</string>
+   </property>
+   <property name="subTitle">
+    <string>Choose your bidding style</string>
+   </property>
+  </widget>
+  <widget class="CProgConfigFinishPage" name="progConfigFinishPage">
+   <property name="title">
+    <string>Finish</string>
+   </property>
+   <property name="subTitle">
+    <string>Save your choices</string>
+   </property>
+  </widget>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>CProgConfigIntroPage</class>
+   <extends>QWizardPage</extends>
+   <header>cprogconfigintropage.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>CProgConfigHelpLevelPage</class>
+   <extends>QWizardPage</extends>
+   <header>cprogconfighelplevelpage.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>CProgConfigViewSettingsPage</class>
+   <extends>QWizardPage</extends>
+   <header>cprogconfigviewsettingspage.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>CProgConfigSuitsDisplayPage</class>
+   <extends>QWizardPage</extends>
+   <header>cprogconfigsuitsdisplaypage.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>CProgConfigGameMechanicsPage</class>
+   <extends>QWizardPage</extends>
+   <header>cprogconfiggamemechanicspage.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>CProgConfigPausesPage</class>
+   <extends>QWizardPage</extends>
+   <header>cprogconfigpausespage.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>CProgConfigBiddingPage</class>
+   <extends>QWizardPage</extends>
+   <header>cprogconfigbiddingpage.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>CProgConfigFinishPage</class>
+   <extends>QWizardPage</extends>
+   <header>cprogconfigfinishpage.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

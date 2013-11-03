@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>CProgConfigBiddingPage</class>
+ <widget class="QWizardPage" name="CProgConfigBiddingPage">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>535</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>WizardPage</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_2">
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="pixmap">
+        <pixmap resource="images.qrc">:/newPrefix/resources/BridgeSceneGG6.bmp</pixmap>
+       </property>
+       <property name="wordWrap">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <widget class="QLabel" name="label_2">
+         <property name="maximumSize">
+          <size>
+           <width>310</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="lineWidth">
+          <number>1</number>
+         </property>
+         <property name="text">
+          <string>Please indicate your preferred bidding style, if you have one.  Easy Bridge will tailor its bidding to match your preference as closely as possible.  You can always change these settings later.</string>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+         <property name="margin">
+          <number>0</number>
+         </property>
+         <property name="indent">
+          <number>9</number>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QRadioButton" name="naturalBiddingStyle">
+         <property name="maximumSize">
+          <size>
+           <width>310</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Natural Bidding -- I do not use any conventions (this option
+ is recommended for absolute beginners)</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QRadioButton" name="gorenBiddingStyle">
+         <property name="maximumSize">
+          <size>
+           <width>310</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Goren (4-Card Majors, 16-18 Notrump, Strong 2-bids,
+ Strong Jump Overcalls, Stayman, Takeout Doubles,
+ Shutout Bids, Cue Bids, Blackwood, Gerber, etc.)</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QRadioButton" name="standardAmericanBasicBiddingStyle">
+         <property name="maximumSize">
+          <size>
+           <width>310</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Standard American, Basic (similar to Goren, but with 5-Card
+ Majors, 15-17 Notrump, Jacoby Transfers, Weak 2-bids,
+ Weak Jump Overcalls, Negative Doubles, etc.)</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QRadioButton" name="standardAmericanYellowCardBiddingStyle">
+         <property name="maximumSize">
+          <size>
+           <width>310</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Standard American + Common Optional Conventions (Limit
+ Raises, Unusual NT, Michaels, Jacoby 2NT, Drury,
+ Splinters, 4th Suit Forcing, Jacoby Transfers to Minors)</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QRadioButton" name="acolBiddingStyle">
+         <property name="maximumSize">
+          <size>
+           <width>310</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>ACOL (4-Card Majors, 12-14 Notrump, Strong 2-bids, Strong
+ Jump Overcalls, Michaels Cue Bids, Splinters, Blackwood,
+ Gerber, Takeout Doubles, 4th Suit Forcing, etc.)</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="images.qrc"/>
+ </resources>
+ <connections/>
+</ui>
