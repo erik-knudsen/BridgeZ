@@ -47,6 +47,10 @@ public:
 
     ZBridgeClient *getHandle() { return &handle; }
 
+public slots:
+    void bidValue();
+    void playValue();
+
 signals:
     void sShowAuction();
     void sShowPlay();

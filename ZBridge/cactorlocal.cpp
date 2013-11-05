@@ -1,3 +1,5 @@
+#include <QTimer>
+
 #include "CTblMngr.h"
 #include "cbidengine.h"
 #include "cplayengine.h"
@@ -106,8 +108,9 @@ void CActorLocal::clientActions()
         {
             //Calculate automatic play.
             emit sClearYourTurn();
-            playValue(bidAndPlay.getNextPlay((Seat)zBridgeClientIface_get_player(&handle),
-                                             (Seat)zBridgeClientIface_get_dummy(&handle)));
+
+            //Needs a delay to assure server gets ready for next play.
+            QTimer::singleShot(1000, this, SLOT(playValue()));
         }
     }
 
@@ -146,7 +149,8 @@ void CActorLocal::clientActions()
         else
         {
             //Calculate automatic bid.
-            bidValue(bidAndPlay.getNextBid((Seat)zBridgeClientIface_get_bidder(&handle)));
+            //Needs a delay to assure server gets ready for next bid.
+            QTimer::singleShot(1000, this, SLOT(bidValue()));
         }
     }
 
@@ -180,6 +184,16 @@ void CActorLocal::clientRunCycle()
     zBridgeClient_runCycle(&handle);
 }
 
+//Bidders bid must be delayed to assure that the other 3 players have reported they are ready.
+//This happens automatically when the user selects the bid.
+//(Bidders bid is followed immediately by bidder reporting ready for next bid).
+//(The protocol would be more robust if all 4 bidders required the bid to be returned.)
+void CActorLocal::bidValue()
+{
+    Bids nextBid = bidAndPlay.getNextBid((Seat)zBridgeClientIface_get_bidder(&handle));
+    bidValue(nextBid);
+}
+
 void CActorLocal::bidValue(Bids bid)
 {
     Seat bidder = (Seat)zBridgeClientIface_get_client(&handle);
@@ -192,6 +206,17 @@ void CActorLocal::bidValue(Bids bid)
     emit sBid(bidder, bid);  //Server first then other clients.
 
     bidDone(bidder, bid);    //This client.
+}
+
+//Players play must be delayed to assure that the other 3 players have reported they are ready.
+//This happens automatically when the user selects the play.
+//(Players play is followed immediately by player reporting ready for next play).
+//(The protocol would be more robust if all 4 players required the play to be returned.)
+void CActorLocal::playValue()
+{
+    int nextPlay = bidAndPlay.getNextPlay((Seat)zBridgeClientIface_get_player(&handle),
+                                          (Seat)zBridgeClientIface_get_dummy(&handle));
+    playValue(nextPlay);
 }
 
 void CActorLocal::playValue(int card)

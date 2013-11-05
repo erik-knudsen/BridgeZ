@@ -61,6 +61,20 @@ bool CPlayHistory::cardOk(int card, Seat seat, int cards[])
     int cardsPlayed[13];
     int cardsRemaining[13];
 
+    //Check card is allowed.
+    for (i = 0; i < 13; i++)
+        if (card == cards[i])
+            break;
+    if (i == 13)
+        return false;
+
+    noPlayed = getPlayed(seat, cardsPlayed);
+    for (i = 0; i < noPlayed; i++)
+        if (card == cardsPlayed[i])
+            break;
+    if (i < noPlayed)
+        return false;
+
     //Leader can play whatever he wants.
     if (currentLeader == seat)
         return true;
@@ -75,8 +89,6 @@ bool CPlayHistory::cardOk(int card, Seat seat, int cards[])
     Suit playSuit = CARD_SUIT(card);
     if ( playSuit == leaderSuit)
         return true;
-
-    noPlayed = getPlayed(seat, cardsPlayed);
 
     for (i = 0, j = 0; i < 13; i++)
     {
