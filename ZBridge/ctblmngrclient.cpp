@@ -51,16 +51,16 @@ void CTblMngrClient::newSession()
 
     if (SEATS[doc->getSeatOptions().seat] == WEST_SEAT)
         actor = new CActorLocal((ACTORS[doc->getSeatOptions().westActor] == MANUAL_ACTOR), ewTeamName, WEST_SEAT,
-                                NET_PROTOCOL, doc->getNSBidOptions(), doc->getEWBidOptions(), this);
+                PROTOCOLS[doc->getSeatOptions().protocol], doc->getNSBidOptions(), doc->getEWBidOptions(), this);
     else if (SEATS[doc->getSeatOptions().seat] == NORTH_SEAT)
         actor = new CActorLocal((ACTORS[doc->getSeatOptions().northActor] == MANUAL_ACTOR), nsTeamName, NORTH_SEAT,
-                                NET_PROTOCOL, doc->getNSBidOptions(), doc->getEWBidOptions(), this);
+                PROTOCOLS[doc->getSeatOptions().protocol], doc->getNSBidOptions(), doc->getEWBidOptions(), this);
     else if (SEATS[doc->getSeatOptions().seat] == EAST_SEAT)
         actor = new CActorLocal((ACTORS[doc->getSeatOptions().seat] == MANUAL_ACTOR), ewTeamName, EAST_SEAT,
-                                NET_PROTOCOL, doc->getNSBidOptions(), doc->getEWBidOptions(), this);
+                PROTOCOLS[doc->getSeatOptions().protocol], doc->getNSBidOptions(), doc->getEWBidOptions(), this);
     else
         actor = new CActorLocal((ACTORS[doc->getSeatOptions().seat] == MANUAL_ACTOR), nsTeamName, SOUTH_SEAT,
-                                NET_PROTOCOL, doc->getNSBidOptions(), doc->getEWBidOptions(), this);
+                PROTOCOLS[doc->getSeatOptions().protocol], doc->getNSBidOptions(), doc->getEWBidOptions(), this);
 
     actor->setShowUser((actor->getActorType() == MANUAL_ACTOR) || showAll);
 
@@ -145,7 +145,7 @@ void CTblMngrClient::receiveLine(QString line)
         playView->showCards(hasWest, currentCards[WEST_SEAT], hasNorth, currentCards[WEST_SEAT],
                        hasEast, currentCards[WEST_SEAT], hasSouth, currentCards[WEST_SEAT]);
 
-        actor->cards(cardsMsg.player, cardsMsg.cards);
+        actor->cards(currentCards);
         break;
     }
 

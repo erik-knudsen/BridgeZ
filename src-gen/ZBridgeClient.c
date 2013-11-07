@@ -48,27 +48,6 @@ clearOutEvents(handle);
 		handle->internal.BID_PASS = 0;
 		handle->internal.BID_DOUBLE = 36;
 		handle->internal.BID_REDOUBLE = 37;
-		handle->internal.curBidder = 0;
-		handle->internal.firstBidRound = bool_false;
-		handle->internal.noPasses = 0;
-		handle->internal.lastBidder = 0;
-		handle->internal.leader = 0;
-		handle->internal.playNo = 0;
-		handle->internal.firstTrick = bool_false;
-		handle->iface.boardNumber = 0;
-		handle->iface.vulnerability = 0;
-		handle->iface.client = 0;
-		handle->iface.dealer = 0;
-		handle->iface.bidder = 0;
-		handle->iface.bidVal = 0;
-		handle->iface.lastBid = 0;
-		handle->iface.bidDouble = 0;
-		handle->iface.bidEnable = 0;
-		handle->iface.declarer = 0;
-		handle->iface.dummy = 0;
-		handle->iface.noTrick = 0;
-		handle->iface.player = 0;
-		handle->iface.cardVal = 0;
 	}
 
 }
@@ -386,15 +365,15 @@ void zBridgeClientIface_raise_dealInfo(ZBridgeClient* handle) {
 void zBridgeClientIface_raise_cards(ZBridgeClient* handle) {
 	handle->iface.cards_raised = bool_true;
 }
-void zBridgeClientIface_raise_undo(ZBridgeClient* handle, sc_integer value) {
+void zBridgeClientIface_raise_undo(ZBridgeClient* handle, null value) {
 	handle->iface.undo_value = value;
 	handle->iface.undo_raised = bool_true;
 }
-void zBridgeClientIface_raise_bidDone(ZBridgeClient* handle, sc_integer value) {
+void zBridgeClientIface_raise_bidDone(ZBridgeClient* handle, null value) {
 	handle->iface.bidDone_value = value;
 	handle->iface.bidDone_raised = bool_true;
 }
-void zBridgeClientIface_raise_playerPlays(ZBridgeClient* handle, sc_integer value) {
+void zBridgeClientIface_raise_playerPlays(ZBridgeClient* handle, null value) {
 	handle->iface.playerPlays_value = value;
 	handle->iface.playerPlays_raised = bool_true;
 }
@@ -407,7 +386,7 @@ void zBridgeClientIface_raise_dummyToLead(ZBridgeClient* handle) {
 void zBridgeClientIface_raise_dummyCards(ZBridgeClient* handle) {
 	handle->iface.dummyCards_raised = bool_true;
 }
-void zBridgeClientIface_raise_newLeader(ZBridgeClient* handle, sc_integer value) {
+void zBridgeClientIface_raise_newLeader(ZBridgeClient* handle, null value) {
 	handle->iface.newLeader_value = value;
 	handle->iface.newLeader_raised = bool_true;
 }
@@ -436,14 +415,14 @@ sc_boolean zBridgeClientIface_israised_rBid(ZBridgeClient* handle) {
 sc_boolean zBridgeClientIface_israised_bidInfo(ZBridgeClient* handle) {
 	return handle->iface.bidInfo_raised;
 }
-sc_integer zBridgeClientIface_get_bidInfo_value(ZBridgeClient* handle) {
+ zBridgeClientIface_get_bidInfo_value(ZBridgeClient* handle) {
 	//TODO: Check if event is not raised
 	return handle->iface.bidInfo_value;
 }
 sc_boolean zBridgeClientIface_israised_undoBid(ZBridgeClient* handle) {
 	return handle->iface.undoBid_raised;
 }
-sc_integer zBridgeClientIface_get_undoBid_value(ZBridgeClient* handle) {
+ zBridgeClientIface_get_undoBid_value(ZBridgeClient* handle) {
 	//TODO: Check if event is not raised
 	return handle->iface.undoBid_value;
 }
@@ -465,93 +444,93 @@ sc_boolean zBridgeClientIface_israised_getLeader(ZBridgeClient* handle) {
 sc_boolean zBridgeClientIface_israised_undoTrick(ZBridgeClient* handle) {
 	return handle->iface.undoTrick_raised;
 }
-sc_integer zBridgeClientIface_get_undoTrick_value(ZBridgeClient* handle) {
+ zBridgeClientIface_get_undoTrick_value(ZBridgeClient* handle) {
 	//TODO: Check if event is not raised
 	return handle->iface.undoTrick_value;
 }
 
-sc_integer zBridgeClientIface_get_boardNumber(ZBridgeClient* handle) {
+ zBridgeClientIface_get_boardNumber(ZBridgeClient* handle) {
 	return handle->iface.boardNumber;
 }
-void zBridgeClientIface_set_boardNumber(ZBridgeClient* handle, sc_integer value) {
+void zBridgeClientIface_set_boardNumber(ZBridgeClient* handle,  value) {
 	handle->iface.boardNumber = value;
 }
-sc_integer zBridgeClientIface_get_vulnerability(ZBridgeClient* handle) {
+ zBridgeClientIface_get_vulnerability(ZBridgeClient* handle) {
 	return handle->iface.vulnerability;
 }
-void zBridgeClientIface_set_vulnerability(ZBridgeClient* handle, sc_integer value) {
+void zBridgeClientIface_set_vulnerability(ZBridgeClient* handle,  value) {
 	handle->iface.vulnerability = value;
 }
-sc_integer zBridgeClientIface_get_client(ZBridgeClient* handle) {
+ zBridgeClientIface_get_client(ZBridgeClient* handle) {
 	return handle->iface.client;
 }
-void zBridgeClientIface_set_client(ZBridgeClient* handle, sc_integer value) {
+void zBridgeClientIface_set_client(ZBridgeClient* handle,  value) {
 	handle->iface.client = value;
 }
-sc_integer zBridgeClientIface_get_dealer(ZBridgeClient* handle) {
+ zBridgeClientIface_get_dealer(ZBridgeClient* handle) {
 	return handle->iface.dealer;
 }
-void zBridgeClientIface_set_dealer(ZBridgeClient* handle, sc_integer value) {
+void zBridgeClientIface_set_dealer(ZBridgeClient* handle,  value) {
 	handle->iface.dealer = value;
 }
-sc_integer zBridgeClientIface_get_bidder(ZBridgeClient* handle) {
+ zBridgeClientIface_get_bidder(ZBridgeClient* handle) {
 	return handle->iface.bidder;
 }
-void zBridgeClientIface_set_bidder(ZBridgeClient* handle, sc_integer value) {
+void zBridgeClientIface_set_bidder(ZBridgeClient* handle,  value) {
 	handle->iface.bidder = value;
 }
-sc_integer zBridgeClientIface_get_bidVal(ZBridgeClient* handle) {
+ zBridgeClientIface_get_bidVal(ZBridgeClient* handle) {
 	return handle->iface.bidVal;
 }
-void zBridgeClientIface_set_bidVal(ZBridgeClient* handle, sc_integer value) {
+void zBridgeClientIface_set_bidVal(ZBridgeClient* handle,  value) {
 	handle->iface.bidVal = value;
 }
-sc_integer zBridgeClientIface_get_lastBid(ZBridgeClient* handle) {
+ zBridgeClientIface_get_lastBid(ZBridgeClient* handle) {
 	return handle->iface.lastBid;
 }
-void zBridgeClientIface_set_lastBid(ZBridgeClient* handle, sc_integer value) {
+void zBridgeClientIface_set_lastBid(ZBridgeClient* handle,  value) {
 	handle->iface.lastBid = value;
 }
-sc_integer zBridgeClientIface_get_bidDouble(ZBridgeClient* handle) {
+ zBridgeClientIface_get_bidDouble(ZBridgeClient* handle) {
 	return handle->iface.bidDouble;
 }
-void zBridgeClientIface_set_bidDouble(ZBridgeClient* handle, sc_integer value) {
+void zBridgeClientIface_set_bidDouble(ZBridgeClient* handle,  value) {
 	handle->iface.bidDouble = value;
 }
-sc_integer zBridgeClientIface_get_bidEnable(ZBridgeClient* handle) {
+ zBridgeClientIface_get_bidEnable(ZBridgeClient* handle) {
 	return handle->iface.bidEnable;
 }
-void zBridgeClientIface_set_bidEnable(ZBridgeClient* handle, sc_integer value) {
+void zBridgeClientIface_set_bidEnable(ZBridgeClient* handle,  value) {
 	handle->iface.bidEnable = value;
 }
-sc_integer zBridgeClientIface_get_declarer(ZBridgeClient* handle) {
+ zBridgeClientIface_get_declarer(ZBridgeClient* handle) {
 	return handle->iface.declarer;
 }
-void zBridgeClientIface_set_declarer(ZBridgeClient* handle, sc_integer value) {
+void zBridgeClientIface_set_declarer(ZBridgeClient* handle,  value) {
 	handle->iface.declarer = value;
 }
-sc_integer zBridgeClientIface_get_dummy(ZBridgeClient* handle) {
+ zBridgeClientIface_get_dummy(ZBridgeClient* handle) {
 	return handle->iface.dummy;
 }
-void zBridgeClientIface_set_dummy(ZBridgeClient* handle, sc_integer value) {
+void zBridgeClientIface_set_dummy(ZBridgeClient* handle,  value) {
 	handle->iface.dummy = value;
 }
-sc_integer zBridgeClientIface_get_noTrick(ZBridgeClient* handle) {
+ zBridgeClientIface_get_noTrick(ZBridgeClient* handle) {
 	return handle->iface.noTrick;
 }
-void zBridgeClientIface_set_noTrick(ZBridgeClient* handle, sc_integer value) {
+void zBridgeClientIface_set_noTrick(ZBridgeClient* handle,  value) {
 	handle->iface.noTrick = value;
 }
-sc_integer zBridgeClientIface_get_player(ZBridgeClient* handle) {
+ zBridgeClientIface_get_player(ZBridgeClient* handle) {
 	return handle->iface.player;
 }
-void zBridgeClientIface_set_player(ZBridgeClient* handle, sc_integer value) {
+void zBridgeClientIface_set_player(ZBridgeClient* handle,  value) {
 	handle->iface.player = value;
 }
-sc_integer zBridgeClientIface_get_cardVal(ZBridgeClient* handle) {
+ zBridgeClientIface_get_cardVal(ZBridgeClient* handle) {
 	return handle->iface.cardVal;
 }
-void zBridgeClientIface_set_cardVal(ZBridgeClient* handle, sc_integer value) {
+void zBridgeClientIface_set_cardVal(ZBridgeClient* handle,  value) {
 	handle->iface.cardVal = value;
 }
 		

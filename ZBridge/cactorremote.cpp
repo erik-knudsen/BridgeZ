@@ -45,9 +45,9 @@ void CActorRemote::dealInfo(int boardNumber, Seat dealer, Team vulnerability)
     emit sendLine(dealInfoMsg.line);
 }
 
-void CActorRemote::cards(Seat player, int cards[])
+void CActorRemote::cards(int cards[4][13])
 {
-    CCardsMsg cardsMsg(player, cards);
+    CCardsMsg cardsMsg(seat, cards[seat]);
     emit sendLine(cardsMsg.line);
 }
 

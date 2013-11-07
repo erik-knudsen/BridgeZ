@@ -27,7 +27,7 @@
 CSeatOptionDoc::CSeatOptionDoc()
 {
     seat = SEAT_SOUTH;
-    role = SERVER_ROLE;
+    role = ROLE_SERVER;
 }
 
 // Assignment operator
@@ -39,6 +39,7 @@ CSeatOptionDoc& CSeatOptionDoc::operator=(const CSeatOptionDoc& seatOptionDoc)
 
     seat = seatOptionDoc.seat;
     role = seatOptionDoc.role;
+    protocol = seatOptionDoc.protocol;
     host = seatOptionDoc.host;
     port = seatOptionDoc.port;
     westName = seatOptionDoc.westName;
@@ -59,6 +60,7 @@ void CSeatOptionDoc::WriteSettings()
 
     settings.setValue("seat", seat);
     settings.setValue("role", role);
+    settings.setValue("protocol", protocol);
     settings.setValue("host", host);
     settings.setValue("port", port);
     settings.setValue("westName", westName);
@@ -76,7 +78,8 @@ void CSeatOptionDoc::ReadSettings()
     QSettings settings("ZBridge settings", "Seat");
 
     seat = settings.value("seat", SEAT_SOUTH).toInt();
-    role = settings.value("role", SERVER_ROLE).toInt();
+    role = settings.value("role", ROLE_SERVER).toInt();
+    protocol = settings.value("protocol", NET_PROTOCOL_ADV).toInt();
     host = settings.value("host", "").toString();
     port = settings.value("port", "").toString();
     westName = settings.value("westName", "W").toString();

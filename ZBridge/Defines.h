@@ -27,9 +27,6 @@
 //Cycle time for statetable.
 const int CYCLE_TIME = 100;
 
-//Network protocol version.
-const int NET_PROTOCOL = 18;
-
 //Message type in network protocol.
 enum MsgType { CONNECT_MSG, SEATED_MSG, RTNAMES_MSG, TEAMNAMES_MSG, RSBOARD_MSG, STARTOFBOARD_MSG, RDEALINFO_MSG,
                DEALINFO_MSG, RCARDS_MSG, CARDS_MSG, BID_MSG, RBID_MSG, ILLEGALBID_MSG, PLAYERTOLEAD_MSG,
@@ -205,6 +202,27 @@ const Actor ACTORS[3] = { MANUAL_ACTOR, AUTO_ACTOR, REMOTE_ACTOR };
 
 const int SERVER_ROLE = 0;
 const int CLIENT_ROLE = 1;
+
+const int ROLE_SERVER = 0;
+const int ROLE_CLIENT = 1;
+const QString ROLE_NAMES[2] =
+{
+    "Server",
+    "Client"
+};
+const int ROLES[2] = { SERVER_ROLE, CLIENT_ROLE };
+
+const int NET_PROTOCOL = 18;
+const int NET_PROTOCOL_ADV = 20;
+
+const int PROTOCOL_BASIC = 0;
+const int PROTOCOL_ADVANCED = 1;
+const QString PROTOCOL_NAMES[2] =
+{
+    "Basic",
+    "Advanced"
+};
+const int PROTOCOLS[2] = { NET_PROTOCOL, NET_PROTOCOL_ADV };
 
 const int BUTTON_NONE = 0;
 const int BUTTON_AUCTION_ACTOR = 1;

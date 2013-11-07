@@ -61,10 +61,15 @@ CSeatConfiguration::CSeatConfiguration(CZBridgeApp *app, CZBridgeDoc *doc, QWidg
     ui->eastActor->setCurrentIndex(seatOptionDoc.eastActor);
     ui->southActor->setCurrentIndex(seatOptionDoc.southActor);
 
-    if (seatOptionDoc.role == SERVER_ROLE)
-        ui->server->setChecked(true);
-    else
-        ui->client->setChecked(true);
+    labels.clear();
+    labels << ROLE_NAMES[ROLE_SERVER] << ROLE_NAMES[ROLE_CLIENT];
+    ui->role->addItems(labels);
+    ui->role->setCurrentIndex(seatOptionDoc.role);
+
+    labels.clear();
+    labels << PROTOCOL_NAMES[PROTOCOL_BASIC] << PROTOCOL_NAMES[PROTOCOL_ADVANCED];
+    ui->protocol->addItems(labels);
+    ui->protocol->setCurrentIndex(seatOptionDoc.protocol);
 
     ui->host->setText(seatOptionDoc.host);
     ui->port->setText(seatOptionDoc.port);
@@ -115,14 +120,14 @@ void CSeatConfiguration::on_southActor_currentIndexChanged(int index)
     seatOptionDoc.southActor = index;
 }
 
-void CSeatConfiguration::on_server_clicked()
+void CSeatConfiguration::on_role_currentIndexChanged(int index)
 {
-    seatOptionDoc.role = SERVER_ROLE;
+    seatOptionDoc.role = index;
 }
 
-void CSeatConfiguration::on_client_clicked()
+void CSeatConfiguration::on_protocol_currentIndexChanged(int index)
 {
-    seatOptionDoc.role = CLIENT_ROLE;
+    seatOptionDoc.protocol = index;
 }
 
 void CSeatConfiguration::on_buttonBox_accepted()

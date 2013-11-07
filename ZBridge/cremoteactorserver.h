@@ -39,7 +39,7 @@ class CRemoteActorServer : public QTcpServer
 {
     Q_OBJECT
 public:
-    explicit CRemoteActorServer(QHostAddress hostAddress, quint16 port, QObject *parent = 0);
+    explicit CRemoteActorServer(int protocol, QHostAddress hostAddress, quint16 port, QObject *parent = 0);
     ~CRemoteActorServer();
 
     void incomingConnection(qintptr socketDescriptor);
@@ -63,6 +63,8 @@ private:
         CRemoteActorFrontEnd *frontEnd;
         bool isConnected;
     } remoteConnects[4];
+
+    int protocol;
 };
 
 #endif // CREMOTEACTORSERVER_H

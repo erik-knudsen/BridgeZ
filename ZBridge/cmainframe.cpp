@@ -52,7 +52,7 @@ CMainFrame::CMainFrame(CZBridgeApp *app, CZBridgeDoc *doc) :
     ui->setupUi(this);
 
     playView = new CPlayView(this);
-    if (doc->getSeatOptions().role == SERVER_ROLE)
+    if (ROLES[doc->getSeatOptions().role] == SERVER_ROLE)
         tableManager = new CTblMngrServer(doc, playView, this);
     else
         tableManager = new CTblMngrClient(doc, playView, this);
@@ -435,7 +435,7 @@ void CMainFrame::on_actionSeat_Configuration_triggered()
         doc->WriteSeatOptions();
 
         delete tableManager;
-        if (doc->getSeatOptions().role == SERVER_ROLE)
+        if (ROLES[doc->getSeatOptions().role] == SERVER_ROLE)
             tableManager = new CTblMngrServer(doc, playView, this);
         else
             tableManager = new CTblMngrClient(doc, playView, this);

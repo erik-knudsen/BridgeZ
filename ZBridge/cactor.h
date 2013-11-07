@@ -25,7 +25,7 @@ public:
     virtual void teamNames(QString nsTeamName, QString ewTeamName) = 0;
     virtual void startOfBoard() = 0;
     virtual void dealInfo(int boardNumber, Seat dealer, Team vulnerability) = 0;
-    virtual void cards(Seat player, int cards[13]) = 0;
+    virtual void cards(int cards[4][13]) = 0;
     virtual void bidDone(Seat bidder, Bids bid) = 0;
     virtual void playerToLead(Seat player) = 0;
     virtual void dummyToLead() = 0;

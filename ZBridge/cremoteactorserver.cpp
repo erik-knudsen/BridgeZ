@@ -46,9 +46,11 @@ void CRemoteActorFrontEnd::disConnect()
 }
 
 
-CRemoteActorServer::CRemoteActorServer(QHostAddress hostAddress, quint16 port, QObject *parent) :
+CRemoteActorServer::CRemoteActorServer(int protocol, QHostAddress hostAddress, quint16 port, QObject *parent) :
     QTcpServer(parent)
 {
+    this->protocol = protocol;
+
     for (int i = 0; i < 4; i++)
         remoteConnects[i].isConnected = false;
 
@@ -86,13 +88,13 @@ void CRemoteActorServer::incomingConnection(qintptr socketDescriptor)
     buf[length] = 0;
     QString connectLine(buf);
 
-    int protocol = 0;
+    int assumedProtocol = 0;
     int i = connectLine.size() - 1;
     while (connectLine[i].isDigit()) i--;
     if (i != (connectLine.size() - 1))
-        protocol = connectLine.right(connectLine.size() - 1 - i).toInt();
+        assumedProtocol = connectLine.right(connectLine.size() - 1 - i).toInt();
 
-    if ((protocol != NET_PROTOCOL) ||
+    if ((assumedProtocol != protocol) ||
             !connectLine.contains("Connecting", Qt::CaseInsensitive) ||
             !connectLine.contains("as", Qt::CaseInsensitive) ||
             !connectLine.contains("using protocol version", Qt::CaseInsensitive) ||

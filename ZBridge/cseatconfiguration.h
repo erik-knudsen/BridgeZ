@@ -59,9 +59,9 @@ private slots:
 
     void on_southActor_currentIndexChanged(int index);
 
-    void on_server_clicked();
+    void on_role_currentIndexChanged(int index);
 
-    void on_client_clicked();
+    void on_protocol_currentIndexChanged(int index);
 
     void on_buttonBox_accepted();
 

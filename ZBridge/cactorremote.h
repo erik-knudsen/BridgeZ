@@ -20,7 +20,7 @@ public:
     void teamNames(QString nsTeamName, QString ewTeamName);
     void startOfBoard();
     void dealInfo(int boardNumber, Seat dealer, Team vulnerability);
-    void cards(Seat player, int cards[13]);
+    void cards(int cards[4][13]);
     void bidDone(Seat bidder, Bids bid);
     void playerToLead(Seat player);
     void dummyToLead();

@@ -289,9 +289,9 @@ void CActorLocal::dealInfo(int boardNumber, Seat dealer, Team vulnerability)
     clientRunCycle();
 }
 
-void CActorLocal::cards(Seat player, int cards[])
+void CActorLocal::cards(int cards[4][13])
 {
-    bidAndPlay.setActorsCards(cards);
+    bidAndPlay.setActorsCards(cards[(Seat)zBridgeClientIface_get_client(&handle)]);
 
     bidAndPlay.resetBidHistory();
 
