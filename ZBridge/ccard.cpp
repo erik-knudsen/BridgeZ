@@ -30,6 +30,10 @@ CCard::CCard()
 {
     setFlag(QGraphicsItem::ItemIsSelectable);
     cardSignal = 0;
+
+    value = -1;
+    backValue = 0;
+    showBack = true;
 }
 
 QRectF CCard::boundingRect() const
@@ -40,7 +44,7 @@ QRectF CCard::boundingRect() const
 void CCard::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     QPixmap pixmap;
-    QString card = (value < 52) ? (CARD_FACES[value]) : (CARD_BACK_NAME[value - 100]);
+    QString card = ((value >= 0) && (value <= 51) && !showBack) ? (CARD_FACES[value]) : (CARD_BACK_NAME[backValue]);
     pixmap.load(card);
     painter->drawPixmap(0, 0, pixmap);
 }

@@ -66,6 +66,9 @@ private:
     CActorLocal *actor;
     CRemoteActorClient *remoteActorClient;
 
+    int protocol;
+
+    int noHands;
     int currentCards[4][13];
 
     QTimer *continueButton;

@@ -82,6 +82,8 @@ private:
     CBidHistory bidHistory;
     CPlayHistory playHistory;
 
+    int protocol;
+
     int currentBoardNo;
     Team currentVulnerable;
 

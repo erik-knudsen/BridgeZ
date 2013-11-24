@@ -14,12 +14,11 @@ public:
     explicit CCenterCards(QGraphicsWidget *parent = 0);
 
     QRectF boundingRect() const;
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
     void connectButton(QObject *buttonSignal) { this->buttonSignal = buttonSignal; }
 
-    void showCard(Position pos, int card);
-    void clearCard(Position pos);
+    void showCardOnTable(Position pos, int card);
+    void clearCardOnTable(Position pos);
     void showVulnerable(Position pos);
     void clearVulnerable(Position pos);
     void showText(Position pos, char ewns);
@@ -32,8 +31,6 @@ protected:
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 
 private:
-    bool pressed;
-
     QObject *buttonSignal;
 
     CCard lCard, tCard, rCard, bCard;

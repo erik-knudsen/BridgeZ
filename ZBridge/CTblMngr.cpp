@@ -82,13 +82,13 @@ void CTblMngr::sClearYourTurn()
 
 void CTblMngr::sShowPlayerPlays(Seat player, int card)
 {
-    playView->showCard(player, card);
-    playView->showFace(player, card, false);
+    playView->showCardOnTable(player, card);
+    playView->clearCard(player, card);
 }
 
 void CTblMngr::sClearCards()
 {
-    playView->clearCards();
+    playView->clearCardsOnTable();
 }
 
 void CTblMngr::sShowTricks(int ewTricks, int nsTricks)

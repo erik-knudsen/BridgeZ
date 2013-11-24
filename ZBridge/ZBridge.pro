@@ -49,21 +49,14 @@ SOURCES +=\
     ctopinfoplay.cpp \
     ctopinfoauction.cpp \
     ctopinfo.cpp \
-    ctcards.cpp \
-    ctbhand.cpp \
-    crlhand.cpp \
-    crcards.cpp \
     cmidinfoplay.cpp \
     cmidinfoauction.cpp \
     cmidinfo.cpp \
-    clcards.cpp \
-    chand.cpp \
     ccentercards.cpp \
     ccard.cpp \
     cbottominfoplay.cpp \
     cbottominfoauction.cpp \
     cbottominfo.cpp \
-    cbcards.cpp \
     cbidengine.cpp \
     cactor.cpp \
     cactorremote.cpp \
@@ -83,7 +76,10 @@ SOURCES +=\
     cbiditem.cpp \
     cBottominfoButton.cpp \
     csquare.cpp \
-    cbidandplay.cpp
+    cbidandplay.cpp \
+    ccards.cpp \
+    clrcards.cpp \
+    ctbcards.cpp
 
 HEADERS  += cmainframe.h \
     czbridgedoc.h \
@@ -122,21 +118,14 @@ HEADERS  += cmainframe.h \
     ctopinfoplay.h \
     ctopinfoauction.h \
     ctopinfo.h \
-    ctcards.h \
-    ctbhand.h \
-    crlhand.h \
-    crcards.h \
     cmidinfoplay.h \
     cmidinfoauction.h \
     cmidinfo.h \
-    clcards.h \
-    chand.h \
     ccentercards.h \
     ccard.h \
     cbottominfoplay.h \
     cbottominfoauction.h \
     cbottominfo.h \
-    cbcards.h \
     cbidengine.h \
     cactor.h \
     cactorremote.h \
@@ -158,7 +147,10 @@ HEADERS  += cmainframe.h \
     cbiditem.h \
     cBottominfoButton.h \
     csquare.h \
-    cbidandplay.h
+    cbidandplay.h \
+    ccards.h \
+    clrcards.h \
+    ctbcards.h
 
 FORMS    += cmainframe.ui \
     cfilepropertiesdialog.ui \

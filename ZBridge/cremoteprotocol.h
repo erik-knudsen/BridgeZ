@@ -18,7 +18,7 @@ private:
 protected:
     Seat getSeat(QString line) throw(NetProtocolException);
     Team getTeam(QString line) throw(NetProtocolException);
-    void getFaceValues(int cards[13], QString line, int first) throw(NetProtocolException);
+    void getCardValues(int cards[13], QString line, int first) throw(NetProtocolException);
     int getFaceValue(QString line, int next) throw(NetProtocolException);
     void setFaceValues(int cards[13], QString line);
 

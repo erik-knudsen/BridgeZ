@@ -7,10 +7,8 @@
 
 #include "cplayview.h"
 #include "ccentercards.h"
-#include "clcards.h"
-#include "ctcards.h"
-#include "crcards.h"
-#include "cbcards.h"
+#include "clrcards.h"
+#include "ctbcards.h"
 #include "cmidinfo.h"
 #include "ctopinfo.h"
 #include "cbottominfo.h"
@@ -58,22 +56,22 @@ void CPlayView::createSceneAndWidgetsAndLayout()
     centerCards->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     centerCards->connectButton(this);
 
-    lCards = new CLCards();
+    lCards = new CLRCards(LEFT_POS);
     lCards->setPreferredSize(QSizeF(LR_CARD_HOR_SIZE, CENTER_VER_SIZE));
     lCards->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     lCards->connectCards(this);
 
-    tCards = new CTCards();
+    tCards = new CTBCards(TOP_POS);
     tCards->setPreferredSize(QSizeF(TB_CARD_HOR_SIZE, TB_CARD_VER_SIZE));
     tCards->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     tCards->connectCards(this);
 
-    rCards = new CRCards();
+    rCards = new CLRCards(RIGHT_POS);
     rCards->setPreferredSize(QSizeF(LR_CARD_HOR_SIZE, LR_CARD_VER_SIZE));
     rCards->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     rCards->connectCards(this);
 
-    bCards = new CBCards();
+    bCards = new CTBCards(BOTTOM_POS);
     bCards->setPreferredSize(QSizeF(TB_CARD_HOR_SIZE, TB_CARD_VER_SIZE));
     bCards->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     bCards->connectCards(this);
@@ -211,7 +209,6 @@ void CPlayView::customEvent(QEvent *event)
 
 void CPlayView::setParams(Seat bottomSeat, int cardBack)
 {
-    this->bottomSeat = bottomSeat;
     this->cardBack = cardBack;
 
     //Mapping of position to seat.
@@ -282,7 +279,7 @@ void CPlayView::resetView()
     rCards->setTrumpSuit(ANY);
     bCards->setTrumpSuit(ANY);
 
-    clearCards();
+    clearCardsOnTable();
     clearVulnerable();
     clearEWNSText();
 }
@@ -393,185 +390,46 @@ void CPlayView::showBidDialog(bool show)
 
 void CPlayView::setTrumpSuit(Suit trumpSuit)
 {
+    this->trumpSuit = trumpSuit;
+
     lCards->setTrumpSuit(trumpSuit);
+    lCards->showCards(true);
     tCards->setTrumpSuit(trumpSuit);
+    tCards->showCards(true);
     rCards->setTrumpSuit(trumpSuit);
+    rCards->showCards(true);
     bCards->setTrumpSuit(trumpSuit);
+    bCards->showCards(true);
 }
 
-void CPlayView::showCards(bool hasWest, int *westCards, bool hasNorth, int *northCards,
-                          bool hasEast, int *eastCards, bool hasSouth, int *southCards)
+void CPlayView::setAndShowAllCards(bool hasWest, bool showWest, int *westCards, bool hasNorth, bool showNorth, int *northCards, bool hasEast, bool showEast, int *eastCards, bool hasSouth, bool showSouth, int *southCards)
 {
-    Position pos;
+    trumpSuit = ANY;
 
-    lCards->clearCards();
-    tCards->clearCards();
-    rCards->clearCards();
-    bCards->clearCards();
+    setAndShowCards(WEST_SEAT, hasWest, showWest, westCards);
+    setAndShowCards(NORTH_SEAT, hasNorth, showNorth, northCards);
+    setAndShowCards(EAST_SEAT, hasEast, showEast, eastCards);
+    setAndShowCards(SOUTH_SEAT, hasSouth, showSouth, southCards);
+}
 
-    if (hasWest)
-    {
-        pos = seatToPos[WEST_SEAT];
-        if (pos == LEFT_POS)
-        for (int i = 0; i < 13; i++)
-            lCards->setFace(westCards[i]);
-        else if (pos == TOP_POS)
-        for (int i = 0; i < 13; i++)
-            tCards->setFace(westCards[i]);
-        else if (pos == RIGHT_POS)
-        for (int i = 0; i < 13; i++)
-            rCards->setFace(westCards[i]);
-        else if (pos == BOTTOM_POS)
-        for (int i = 0; i < 13; i++)
-            bCards->setFace(westCards[i]);
-    }
+void CPlayView::setAndShowCards(Seat seat, bool hasSeat, bool showSeat, int *cards)
+{
+    Position pos = seatToPos[seat];
 
-    if (hasNorth)
-    {
-        pos = seatToPos[NORTH_SEAT];
-        if (pos == LEFT_POS)
-        for (int i = 0; i < 13; i++)
-            lCards->setFace(northCards[i]);
-        else if (pos == TOP_POS)
-        for (int i = 0; i < 13; i++)
-            tCards->setFace(northCards[i]);
-        else if (pos == RIGHT_POS)
-        for (int i = 0; i < 13; i++)
-            rCards->setFace(northCards[i]);
-        else if (pos == BOTTOM_POS)
-        for (int i = 0; i < 13; i++)
-            bCards->setFace(northCards[i]);
-    }
+    CCards *xCards;
+    if (pos == LEFT_POS) xCards = lCards;
+    else if (pos == TOP_POS) xCards =tCards;
+    else if (pos == RIGHT_POS) xCards = rCards;
+    else xCards = bCards;
 
-    if (hasEast)
-    {
-        pos = seatToPos[EAST_SEAT];
-        if (pos == LEFT_POS)
+    xCards->clearCards();
+    xCards->setBackValues(cardBack);
+    if (hasSeat)
         for (int i = 0; i < 13; i++)
-            lCards->setFace(eastCards[i]);
-        else if (pos == TOP_POS)
-        for (int i = 0; i < 13; i++)
-            tCards->setFace(eastCards[i]);
-        else if (pos == RIGHT_POS)
-        for (int i = 0; i < 13; i++)
-            rCards->setFace(eastCards[i]);
-        else if (pos == BOTTOM_POS)
-        for (int i = 0; i < 13; i++)
-            bCards->setFace(eastCards[i]);
-    }
-
-    if (hasSouth)
-    {
-        pos = seatToPos[SOUTH_SEAT];
-        if (pos == LEFT_POS)
-        for (int i = 0; i < 13; i++)
-            lCards->setFace(southCards[i]);
-        else if (pos == TOP_POS)
-        for (int i = 0; i < 13; i++)
-            tCards->setFace(southCards[i]);
-        else if (pos == RIGHT_POS)
-        for (int i = 0; i < 13; i++)
-            rCards->setFace(southCards[i]);
-        else if (pos == BOTTOM_POS)
-        for (int i = 0; i < 13; i++)
-            bCards->setFace(southCards[i]);
-    }
-
-    pos = seatToPos[WEST_SEAT];
-    if (hasWest)
-    {
-        if (pos == LEFT_POS)
-            lCards->showFaces();
-        else if (pos == TOP_POS)
-            tCards->showFaces();
-        else if (pos == RIGHT_POS)
-            rCards->showFaces();
-        else if (pos == BOTTOM_POS)
-            bCards->showFaces();
-    }
-    else
-    {
-        if (pos == LEFT_POS)
-            lCards->showBacks(cardBack);
-        else if (pos == TOP_POS)
-            tCards->showBacks(cardBack);
-        else if (pos == RIGHT_POS)
-            rCards->showBacks(cardBack);
-        else if (pos == BOTTOM_POS)
-            bCards->showBacks(cardBack);
-    }
-
-    pos = seatToPos[NORTH_SEAT];
-    if (hasNorth)
-    {
-        if (pos == LEFT_POS)
-            lCards->showFaces();
-        else if (pos == TOP_POS)
-            tCards->showFaces();
-        else if (pos == RIGHT_POS)
-            rCards->showFaces();
-        else if (pos == BOTTOM_POS)
-            bCards->showFaces();
-    }
-    else
-    {
-        if (pos == LEFT_POS)
-            lCards->showBacks(cardBack);
-        else if (pos == TOP_POS)
-            tCards->showBacks(cardBack);
-        else if (pos == RIGHT_POS)
-            rCards->showBacks(cardBack);
-        else if (pos == BOTTOM_POS)
-            bCards->showBacks(cardBack);
-    }
-
-    pos = seatToPos[EAST_SEAT];
-    if (hasEast)
-    {
-        if (pos == LEFT_POS)
-            lCards->showFaces();
-        else if (pos == TOP_POS)
-            tCards->showFaces();
-        else if (pos == RIGHT_POS)
-            rCards->showFaces();
-        else if (pos == BOTTOM_POS)
-            bCards->showFaces();
-    }
-    else
-    {
-        if (pos == LEFT_POS)
-            lCards->showBacks(cardBack);
-        else if (pos == TOP_POS)
-            tCards->showBacks(cardBack);
-        else if (pos == RIGHT_POS)
-            rCards->showBacks(cardBack);
-        else if (pos == BOTTOM_POS)
-            bCards->showBacks(cardBack);
-    }
-
-    pos = seatToPos[SOUTH_SEAT];
-    if (hasSouth)
-    {
-        if (pos == LEFT_POS)
-            lCards->showFaces();
-        else if (pos == TOP_POS)
-            tCards->showFaces();
-        else if (pos == RIGHT_POS)
-            rCards->showFaces();
-        else if (pos == BOTTOM_POS)
-            bCards->showFaces();
-    }
-    else
-    {
-        if (pos == LEFT_POS)
-            lCards->showBacks(cardBack);
-        else if (pos == TOP_POS)
-            tCards->showBacks(cardBack);
-        else if (pos == RIGHT_POS)
-            rCards->showBacks(cardBack);
-        else if (pos == BOTTOM_POS)
-            bCards->showBacks(cardBack);
-    }
+            xCards->setCardValue(cards[i]);
+    xCards->setShowBack(!(hasSeat && showSeat));
+    xCards->setTrumpSuit(trumpSuit);
+    xCards->showCards(true);
 }
 
 void CPlayView::showBid(Seat seat, Bids bid)
@@ -590,24 +448,24 @@ void CPlayView::undoTrick(int wCard, int nCard, int eCard, int sCard)
 {
 }
 
-void CPlayView::clearCard(Seat seat)
+void CPlayView::clearCardOnTable(Seat seat)
 {
     Position pos = seatToPos[seat];
-    centerCards->clearCard(pos);
+    centerCards->clearCardOnTable(pos);
 }
 
-void CPlayView::showCard(Seat seat, int card)
+void CPlayView::showCardOnTable(Seat seat, int card)
 {
     Position pos = seatToPos[seat];
-    centerCards->showCard(pos, card);
+    centerCards->showCardOnTable(pos, card);
 }
 
-void CPlayView::clearCards()
+void CPlayView::clearCardsOnTable()
 {
-    centerCards->clearCard(LEFT_POS);
-    centerCards->clearCard(TOP_POS);
-    centerCards->clearCard(RIGHT_POS);
-    centerCards->clearCard(BOTTOM_POS);
+    centerCards->clearCardOnTable(LEFT_POS);
+    centerCards->clearCardOnTable(TOP_POS);
+    centerCards->clearCardOnTable(RIGHT_POS);
+    centerCards->clearCardOnTable(BOTTOM_POS);
 }
 
 void CPlayView::showEWVulnerable()
@@ -676,7 +534,7 @@ void CPlayView::clearYourTurn()
     centerCards->clearYourTurn();
 }
 
-void CPlayView::showFace(Seat seat, int cardValue, bool visible)
+void CPlayView::clearCard(Seat seat, int cardValue)
 {
     assert((cardValue >= 0) && (cardValue <= 51));
 
@@ -684,47 +542,44 @@ void CPlayView::showFace(Seat seat, int cardValue, bool visible)
     switch(pos)
     {
     case LEFT_POS:
-        lCards->showFace(cardValue, visible);
+        lCards->clearCard(cardValue);
         break;
 
     case TOP_POS:
-        tCards->showFace(cardValue, visible);
+        tCards->clearCard(cardValue);
         break;
 
     case RIGHT_POS:
-        rCards->showFace(cardValue, visible);
+        rCards->clearCard(cardValue);
         break;
 
     default:
-        bCards->showFace(cardValue, visible);
+        bCards->clearCard(cardValue);
         break;
     }
 }
 
-void CPlayView::showBack(Seat seat, int backIndex, bool visible)
+void CPlayView::showClearedCard(Seat seat, int noCard)
 {
-    assert((backIndex >= 0) && (backIndex <= 12));
-
     Position pos = seatToPos[seat];
+    switch(pos)
+    {
+    case LEFT_POS:
+        lCards->showClearedCard(noCard);
+        break;
 
-        switch(pos)
-        {
-        case LEFT_POS:
-            lCards->showBack(backIndex, visible);
-            break;
+    case TOP_POS:
+        tCards->showClearedCard(noCard);
+        break;
 
-        case TOP_POS:
-            tCards->showBack(backIndex, visible);
-            break;
+    case RIGHT_POS:
+        rCards->showClearedCard(noCard);
+        break;
 
-        case RIGHT_POS:
-            rCards->showBack(backIndex, visible);
-            break;
-
-        default:
-            bCards->showBack(backIndex, visible);
-            break;
-        }
+    default:
+        bCards->showClearedCard(noCard);
+        break;
+    }
 }
 
 void CPlayView::enableBidder(Seat bidder, Bids lastBid, Bids doubleBid)

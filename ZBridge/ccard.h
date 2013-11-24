@@ -36,6 +36,8 @@ public:
                QWidget *widget);
     void setValue(int value) { this->value = value; }
     int getValue() { return value; }
+    void setBackValue(int backValue) { this->backValue = backValue; }
+    void setShowBack(bool showBack) { this->showBack = showBack; }
     void setCardPosition(Position cardPosition) { this->cardPosition = cardPosition; }
     Position getCardPosition() { return cardPosition; }
     void connectCard(QObject *cardSignal) { this->cardSignal = cardSignal; }
@@ -46,7 +48,8 @@ protected:
 
 private:
     Position cardPosition;
-    int value;
+    int value, backValue;
+    bool showBack;
     QObject *cardSignal;
 };
 

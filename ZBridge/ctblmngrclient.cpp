@@ -46,21 +46,23 @@ void CTblMngrClient::newSession()
 {
     cleanTableManager();
 
+    protocol = PROTOCOLS[doc->getSeatOptions().protocol];
+
     QString ewTeamName = "ewTeam";
     QString nsTeamName = "nsTeam";
 
     if (SEATS[doc->getSeatOptions().seat] == WEST_SEAT)
         actor = new CActorLocal((ACTORS[doc->getSeatOptions().westActor] == MANUAL_ACTOR), ewTeamName, WEST_SEAT,
-                PROTOCOLS[doc->getSeatOptions().protocol], doc->getNSBidOptions(), doc->getEWBidOptions(), this);
+                protocol, doc->getNSBidOptions(), doc->getEWBidOptions(), this);
     else if (SEATS[doc->getSeatOptions().seat] == NORTH_SEAT)
         actor = new CActorLocal((ACTORS[doc->getSeatOptions().northActor] == MANUAL_ACTOR), nsTeamName, NORTH_SEAT,
-                PROTOCOLS[doc->getSeatOptions().protocol], doc->getNSBidOptions(), doc->getEWBidOptions(), this);
+                protocol, doc->getNSBidOptions(), doc->getEWBidOptions(), this);
     else if (SEATS[doc->getSeatOptions().seat] == EAST_SEAT)
         actor = new CActorLocal((ACTORS[doc->getSeatOptions().seat] == MANUAL_ACTOR), ewTeamName, EAST_SEAT,
-                PROTOCOLS[doc->getSeatOptions().protocol], doc->getNSBidOptions(), doc->getEWBidOptions(), this);
+                protocol, doc->getNSBidOptions(), doc->getEWBidOptions(), this);
     else
         actor = new CActorLocal((ACTORS[doc->getSeatOptions().seat] == MANUAL_ACTOR), nsTeamName, SOUTH_SEAT,
-                PROTOCOLS[doc->getSeatOptions().protocol], doc->getNSBidOptions(), doc->getEWBidOptions(), this);
+                protocol, doc->getNSBidOptions(), doc->getEWBidOptions(), this);
 
     actor->setShowUser((actor->getActorType() == MANUAL_ACTOR) || showAll);
 
@@ -120,32 +122,55 @@ void CTblMngrClient::receiveLine(QString line)
     {
         CDealInfoMsg dealInfoMsg(line);
         actor->dealInfo(dealInfoMsg.boardNumber, dealInfoMsg.dealer, dealInfoMsg.vulnerability);
+        noHands = 0;
         break;
     }
 
     case CARDS_MSG:
     {
-        bool hasWest = showAll || ((actor->getSeat() == WEST_SEAT) && (actor->getActorType() == MANUAL_ACTOR));
-        bool hasNorth = showAll || ((actor->getSeat() == NORTH_SEAT) && (actor->getActorType() == MANUAL_ACTOR));
-        bool hasEast = showAll || ((actor->getSeat() == EAST_SEAT) && (actor->getActorType() == MANUAL_ACTOR));
-        bool hasSouth = showAll || ((actor->getSeat() == SOUTH_SEAT) && (actor->getActorType() == MANUAL_ACTOR));
-
         CCardsMsg cardsMsg(line);
-        if (showAll)
+        if (protocol == NET_PROTOCOL_ADV)
         {
-            //Initialize all of current cards.
+            //Initialize all hands of current cards.
+            for (int i = 0; i < 13; i++)
+                currentCards[cardsMsg.player][i] = cardsMsg.cards[i];
+            noHands++;
         }
         else
         {
-            Seat seat = actor->getSeat();
+            //initialize only the clients hand of current cards.
             for (int i = 0; i < 13; i++)
-                currentCards[seat][i] = cardsMsg.cards[i];
+                currentCards[cardsMsg.player][i] = cardsMsg.cards[i];
+            noHands = 4;
         }
 
-        playView->showCards(hasWest, currentCards[WEST_SEAT], hasNorth, currentCards[WEST_SEAT],
-                       hasEast, currentCards[WEST_SEAT], hasSouth, currentCards[WEST_SEAT]);
+        if (noHands == 4)
+        {
+            bool hasWest, showWest, hasNorth, showNorth, hasEast, showEast, hasSouth, showSouth;
 
-        actor->cards(currentCards);
+            if (protocol == NET_PROTOCOL_ADV)
+            {
+                hasWest = hasNorth = hasEast = hasSouth = true;
+
+                showWest = showAll || ((actor->getSeat() == WEST_SEAT) && (actor->getActorType() == MANUAL_ACTOR));
+                showNorth = showAll || ((actor->getSeat() == NORTH_SEAT) && (actor->getActorType() == MANUAL_ACTOR));
+                showEast = showAll || ((actor->getSeat() == EAST_SEAT) && (actor->getActorType() == MANUAL_ACTOR));
+                showSouth = showAll || ((actor->getSeat() == SOUTH_SEAT) && (actor->getActorType() == MANUAL_ACTOR));
+            }
+            else
+            {
+                hasWest = showWest = (actor->getSeat() == WEST_SEAT) && (actor->getActorType() == MANUAL_ACTOR);
+                hasNorth = showNorth = (actor->getSeat() == NORTH_SEAT) && (actor->getActorType() == MANUAL_ACTOR);
+                hasEast = showEast = (actor->getSeat() == EAST_SEAT) && (actor->getActorType() == MANUAL_ACTOR);
+                hasSouth = showSouth = (actor->getSeat() == SOUTH_SEAT) && (actor->getActorType() == MANUAL_ACTOR);
+
+            }
+
+            playView->setAndShowAllCards(hasWest, showWest, currentCards[WEST_SEAT], hasNorth, showNorth, currentCards[NORTH_SEAT],
+                       hasEast, showEast, currentCards[EAST_SEAT], hasSouth, showSouth, currentCards[SOUTH_SEAT]);
+
+            actor->cards(currentCards);
+        }
         break;
     }
 

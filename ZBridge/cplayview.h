@@ -7,10 +7,8 @@
 
 class QGraphicsScene;
 class CCenterCards;
-class CLCards;
-class CTCards;
-class CRCards;
-class CBCards;
+class CLRCards;
+class CTBCards;
 class CMidInfo;
 class CTopInfo;
 class CBottomInfo;
@@ -45,15 +43,16 @@ public:
     void showInfoAuctionButton(bool show, int id = 0);
     void showInfoPlayButton(bool show, int id = 0);
     void setTrumpSuit(Suit trumpSuit);
-    void showCards(bool hasWest, int *westCards, bool hasNorth, int *northCards,
-                   bool hasEast, int *eastCards, bool hasSouth, int *southCards);
+    void setAndShowAllCards(bool hasWest, bool showWest, int *westCards, bool hasNorth, bool showNorth, int *northCards,
+                            bool hasEast, bool showEast, int *eastCards, bool hasSouth, bool showSouth, int *southCards);
+    void setAndShowCards(Seat seat, bool hasSeat, bool showSeat, int *cards);
     void showBidDialog(bool show);
     void showBid(Seat seat, Bids bid);
     void undoBid(int noBid);
     void undoTrick(int wCard, int nCard, int eCard, int sCard);
-    void clearCard(Seat seat);
-    void showCard(Seat seat, int card);
-    void clearCards();
+    void clearCardOnTable(Seat seat);
+    void showCardOnTable(Seat seat, int card);
+    void clearCardsOnTable();
     void showEWVulnerable();
     void showNSVulnerable();
     void clearVulnerable();
@@ -62,8 +61,8 @@ public:
     void showDummy(Seat dummy);
     void showYourTurn(Seat turn);
     void clearYourTurn();
-    void showFace(Seat seat, int cardValue, bool visible);
-    void showBack(Seat seat, int backIndex, bool visible);
+    void clearCard(Seat seat, int cardValue);
+    void showClearedCard(Seat seat, int noCard);
 
     void enableBidder(Seat bidder, Bids lastBid, Bids doubleBid);
     void disableBidder(Seat bidder);
@@ -90,10 +89,10 @@ private:
 
     QGraphicsScene *scene;
     CCenterCards *centerCards;
-    CLCards *lCards;
-    CTCards *tCards;
-    CRCards *rCards;
-    CBCards *bCards;
+    CLRCards *lCards;
+    CTBCards *tCards;
+    CLRCards *rCards;
+    CTBCards *bCards;
     CMidInfo *midInfo;
     CTopInfo *topInfo;
     CBottomInfo *bottomInfo;
@@ -110,10 +109,10 @@ private:
     CBidDialog *m_pBidDlg;
     bool firstBidDialogShow;
 
-    Seat bottomSeat;
     int cardBack;
     Seat posToSeat[4];
     Position seatToPos[4];
+    Suit trumpSuit;
 };
 
 #endif // CPLAYVIEW_H

@@ -1,15 +1,26 @@
-#include "crlhand.h"
+#include <cassert>
 
-CRLHand::CRLHand()
+#include "clrcards.h"
+
+CLRCards::CLRCards(Position pos, QGraphicsWidget *parent) :
+    CCards(parent)
 {
+    assert((pos == LEFT_POS) || (pos == RIGHT_POS));
+
+    setCardsPosition(pos);
 }
 
-void CRLHand::prepareToDrawFaces(QGraphicsWidget *widget)
+QRectF CLRCards::boundingRect() const
+{
+    return QRectF(0, 0, LR_CARD_HOR_SIZE, LR_CARD_VER_SIZE);
+}
+
+void CLRCards::prepareToDrawFaces(QGraphicsWidget *widget)
 {
     int i, j, count, dist, value;
     Suit sequence[4];
 
-    setCardFaces();
+    setCardValues();
 
     switch (trumpSuit)
     {
@@ -37,18 +48,19 @@ void CRLHand::prepareToDrawFaces(QGraphicsWidget *widget)
     {
         for (i = 0, count = 0; i < 13; i++)
         {
-            value = hand[i].getValue();
+            value = cards[i].getValue();
             if ((value >= SUIT_INTERVAL[sequence[m]][0]) && (value <= SUIT_INTERVAL[sequence[m]][1]))
                 count++;
         }
         dist = (count < 7) ? (29) : ((count < 10) ? (19) : (14));
         for (i = 0, j = 0; i < 13; i++)
         {
-            value = hand[i].getValue();
+            value = cards[i].getValue();
             if ((value >= SUIT_INTERVAL[sequence[m]][0]) && (value <= SUIT_INTERVAL[sequence[m]][1]))
             {
-                hand[i].setPos((j++) * dist, m * TB_CARD_VER_SIZE);
-                hand[i].setZValue(k++);
+                cards[i].setPos((j++) * dist, m * TB_CARD_VER_SIZE);
+                cards[i].setZValue(k++);
+                cards[i].setVisible(!notVisibleValues.contains(value));
             }
         }
     }
@@ -56,35 +68,37 @@ void CRLHand::prepareToDrawFaces(QGraphicsWidget *widget)
     setParent(widget);
 }
 
-void CRLHand::prepareToDrawBacks(int cardBack, QGraphicsWidget *widget)
+void CLRCards::prepareToDrawBacks(QGraphicsWidget *widget)
 {
     int i, k;
 
-    setCardBacks(cardBack);
-
     for (i = 0, k = 0; i < 4; i++)
     {
-        hand[i].setPos((k++) * 30, 0 * TB_CARD_VER_SIZE);
-        hand[i].setZValue(i);
+        cards[i].setPos((k++) * 30, 0 * TB_CARD_VER_SIZE);
+        cards[i].setZValue(i);
     }
 
     for (i = 4, k = 0; i < 7; i++)
     {
-        hand[i].setPos((k++) * 30, 1 * TB_CARD_VER_SIZE);
-        hand[i].setZValue(i);
+        cards[i].setPos((k++) * 30, 1 * TB_CARD_VER_SIZE);
+        cards[i].setZValue(i);
     }
 
     for (i = 7, k = 0; i < 10; i++)
     {
-        hand[i].setPos((k++) * 30, 2 * TB_CARD_VER_SIZE);
-        hand[i].setZValue(i);
+        cards[i].setPos((k++) * 30, 2 * TB_CARD_VER_SIZE);
+        cards[i].setZValue(i);
     }
 
     for (i = 10, k = 0; i < 13; i++)
     {
-        hand[i].setPos((k++) * 30, 3 * TB_CARD_VER_SIZE);
-        hand[i].setZValue(i);
+        cards[i].setPos((k++) * 30, 3 * TB_CARD_VER_SIZE);
+        cards[i].setZValue(i);
     }
+
+    int noInvisible = notVisibleValues.size();
+    for (i = 0; i < 13; i++)
+        cards[i].setVisible(i >= noInvisible);
 
     setParent(widget);
 }

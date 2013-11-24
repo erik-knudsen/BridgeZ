@@ -38,6 +38,11 @@ CCenterCards::CCenterCards(QGraphicsWidget *parent) :
     rCard.setParentItem(this);
     bCard.setParentItem(this);
 
+    lCard.setShowBack(false);
+    tCard.setShowBack(false);
+    rCard.setShowBack(false);
+    bCard.setShowBack(false);
+
     //Vulnerable.
     lVulnerable.setVisible(false);
     tVulnerable.setVisible(false);
@@ -97,8 +102,6 @@ CCenterCards::CCenterCards(QGraphicsWidget *parent) :
     bText.setParentItem(this);
 
     buttonSignal = 0;
-
-    pressed = true;
 }
 
 QRectF CCenterCards::boundingRect() const
@@ -106,25 +109,7 @@ QRectF CCenterCards::boundingRect() const
     return QRectF(0, 0, CENTER_HOR_SIZE, CENTER_VER_SIZE);
 }
 
-void CCenterCards::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
-{
-/*    QRectF rec = boundingRect();
-    QBrush brush(Qt::cyan);
-    if (pressed)
-    {
-        brush.setColor(Qt::darkGray);
-    }
-    else
-    {
-        brush.setColor(Qt::gray);
-    }
-    painter->fillRect(rec, brush);
-    painter->drawRect(rec);
-*/
-    QGraphicsWidget::paint(painter, option, widget);
-}
-
-void CCenterCards::showCard(Position pos, int card)
+void CCenterCards::showCardOnTable(Position pos, int card)
 {
     if (pos == LEFT_POS)
     {
@@ -148,7 +133,7 @@ void CCenterCards::showCard(Position pos, int card)
     }
 }
 
-void CCenterCards::clearCard(Position pos)
+void CCenterCards::clearCardOnTable(Position pos)
 {
     if (pos == LEFT_POS)
         lCard.setVisible(false);

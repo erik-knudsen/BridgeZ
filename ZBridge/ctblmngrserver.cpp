@@ -113,46 +113,48 @@ void CTblMngrServer::newSession()
 
     boardNo = 0;
 
+    protocol = PROTOCOLS[doc->getSeatOptions().protocol];
+
     QString ewTeamName = "ewTeam";
     QString nsTeamName = "nsTeam";
 
     if (ACTORS[doc->getSeatOptions().westActor] == MANUAL_ACTOR)
-        actor = new CActorLocal(true, ewTeamName, WEST_SEAT, PROTOCOLS[doc->getSeatOptions().protocol],
+        actor = new CActorLocal(true, ewTeamName, WEST_SEAT, protocol,
                 doc->getNSBidOptions(), doc->getEWBidOptions(), this);
     else if (remoteActorServer->isConnected(WEST_SEAT))
         actor = new CActorRemote(WEST_SEAT, remoteActorServer->getFrontend(WEST_SEAT), this);
     else
-        actor = new CActorLocal(false, ewTeamName, WEST_SEAT, PROTOCOLS[doc->getSeatOptions().protocol],
+        actor = new CActorLocal(false, ewTeamName, WEST_SEAT, protocol,
                 doc->getNSBidOptions(), doc->getEWBidOptions(), this);
     actors[WEST_SEAT] = actor;
 
     if (ACTORS[doc->getSeatOptions().northActor] == MANUAL_ACTOR)
-        actor = new CActorLocal(true, nsTeamName, NORTH_SEAT, PROTOCOLS[doc->getSeatOptions().protocol],
+        actor = new CActorLocal(true, nsTeamName, NORTH_SEAT, protocol,
                 doc->getNSBidOptions(), doc->getEWBidOptions(), this);
     else if (remoteActorServer->isConnected(NORTH_SEAT))
         actor = new CActorRemote(NORTH_SEAT, remoteActorServer->getFrontend(NORTH_SEAT), this);
     else
-        actor = new CActorLocal(false, nsTeamName, NORTH_SEAT, PROTOCOLS[doc->getSeatOptions().protocol],
+        actor = new CActorLocal(false, nsTeamName, NORTH_SEAT, protocol,
                 doc->getNSBidOptions(), doc->getEWBidOptions(), this);
     actors[NORTH_SEAT] = actor;
 
     if (ACTORS[doc->getSeatOptions().eastActor] == MANUAL_ACTOR)
-        actor = new CActorLocal(true, ewTeamName, EAST_SEAT, PROTOCOLS[doc->getSeatOptions().protocol],
+        actor = new CActorLocal(true, ewTeamName, EAST_SEAT, protocol,
                 doc->getNSBidOptions(), doc->getEWBidOptions(), this);
     else if (remoteActorServer->isConnected(EAST_SEAT))
         actor = new CActorRemote(EAST_SEAT, remoteActorServer->getFrontend(EAST_SEAT), this);
     else
-        actor = new CActorLocal(false, ewTeamName, EAST_SEAT, PROTOCOLS[doc->getSeatOptions().protocol],
+        actor = new CActorLocal(false, ewTeamName, EAST_SEAT, protocol,
                 doc->getNSBidOptions(), doc->getEWBidOptions(), this);
     actors[EAST_SEAT] = actor;
 
     if (ACTORS[doc->getSeatOptions().southActor] == MANUAL_ACTOR)
-        actor = new CActorLocal(true, nsTeamName, SOUTH_SEAT, PROTOCOLS[doc->getSeatOptions().protocol],
+        actor = new CActorLocal(true, nsTeamName, SOUTH_SEAT, protocol,
                 doc->getNSBidOptions(), doc->getEWBidOptions(), this);
     else if (remoteActorServer->isConnected(SOUTH_SEAT))
         actor = new CActorRemote(SOUTH_SEAT, remoteActorServer->getFrontend(SOUTH_SEAT), this);
     else
-        actor = new CActorLocal(false, nsTeamName, SOUTH_SEAT, PROTOCOLS[doc->getSeatOptions().protocol],
+        actor = new CActorLocal(false, nsTeamName, SOUTH_SEAT, protocol,
                 doc->getNSBidOptions(), doc->getEWBidOptions(), this);
     actors[SOUTH_SEAT] = actor;
 
@@ -260,13 +262,13 @@ void CTblMngrServer::serverActions()
             sShowCenter(currentVulnerable);
         }
 
-        bool hasWest = showAll || (ACTORS[doc->getSeatOptions().westActor] == MANUAL_ACTOR);
-        bool hasNorth = showAll || (ACTORS[doc->getSeatOptions().northActor] == MANUAL_ACTOR);
-        bool hasEast = showAll || (ACTORS[doc->getSeatOptions().eastActor] == MANUAL_ACTOR);
-        bool hasSouth = showAll || (ACTORS[doc->getSeatOptions().southActor] == MANUAL_ACTOR);
+        bool showWest = showAll || (ACTORS[doc->getSeatOptions().westActor] == MANUAL_ACTOR);
+        bool showNorth = showAll || (ACTORS[doc->getSeatOptions().northActor] == MANUAL_ACTOR);
+        bool showEast = showAll || (ACTORS[doc->getSeatOptions().eastActor] == MANUAL_ACTOR);
+        bool showSouth = showAll || (ACTORS[doc->getSeatOptions().southActor] == MANUAL_ACTOR);
 
-        playView->showCards(hasWest, currentCards[WEST_SEAT], hasNorth, currentCards[NORTH_SEAT],
-                            hasEast, currentCards[EAST_SEAT], hasSouth, currentCards[SOUTH_SEAT]);
+        playView->setAndShowAllCards(true, showWest, currentCards[WEST_SEAT], true, showNorth, currentCards[NORTH_SEAT],
+                            true, showEast, currentCards[EAST_SEAT], true, showSouth, currentCards[SOUTH_SEAT]);
 
 
         bidHistory.resetBidHistory();
@@ -366,7 +368,7 @@ void CTblMngrServer::serverActions()
     {
         if (showUser)
         {
-            playView->clearCards();
+            playView->clearCardsOnTable();
             playView->clearYourTurn();
         }
 

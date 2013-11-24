@@ -1,14 +1,25 @@
-#include "ctbhand.h"
+#include <cassert>
 
-CTBHand::CTBHand()
+#include "ctbcards.h"
+
+CTBCards::CTBCards(Position pos, QGraphicsWidget * parent) :
+    CCards(parent)
 {
+    assert((pos == TOP_POS) || (pos == BOTTOM_POS));
+
+    setCardsPosition(pos);
 }
 
-void CTBHand::prepareToDrawFaces(QGraphicsWidget *widget)
+QRectF CTBCards::boundingRect() const
+{
+    return QRectF(0, 0, TB_CARD_HOR_SIZE, TB_CARD_VER_SIZE);
+}
+
+void CTBCards::prepareToDrawFaces(QGraphicsWidget *widget)
 {
     Suit sequence[4];
 
-    setCardFaces();
+    setCardValues();
 
     switch (trumpSuit)
     {
@@ -36,11 +47,11 @@ void CTBHand::prepareToDrawFaces(QGraphicsWidget *widget)
     {
         for (int i = 0; i < 13; i++)
         {
-            int value = hand[i].getValue();
+            int value = cards[i].getValue();
             if ((value >= SUIT_INTERVAL[sequence[m]][0]) && (value <= SUIT_INTERVAL[sequence[m]][1]))
             {
-                hand[i].setPos(m * 50 + (j++) * 30, 0);
-                hand[i].setZValue(j);
+                cards[i].setPos(m * 50 + (j++) * 30, 0);
+                cards[i].setZValue(j);
             }
         }
     }
@@ -48,34 +59,32 @@ void CTBHand::prepareToDrawFaces(QGraphicsWidget *widget)
     setParent(widget);
 }
 
-void CTBHand::prepareToDrawBacks(int cardBack, QGraphicsWidget *widget)
+void CTBCards::prepareToDrawBacks(QGraphicsWidget *widget)
 {
     int i;
 
-    setCardBacks(cardBack);
-
     for (i = 0; i < 4; i++)
     {
-        hand[i].setPos(i * 30, 0);
-        hand[i].setZValue(i);
+        cards[i].setPos(i * 30, 0);
+        cards[i].setZValue(i);
     }
 
     for (i = 4; i < 7; i++)
     {
-        hand[i].setPos(i * 30 + 50, 0);
-        hand[i].setZValue(i);
+        cards[i].setPos(i * 30 + 50, 0);
+        cards[i].setZValue(i);
     }
 
     for (i = 7; i < 10; i++)
     {
-        hand[i].setPos(i * 30 + 100, 0);
-        hand[i].setZValue(i);
+        cards[i].setPos(i * 30 + 100, 0);
+        cards[i].setZValue(i);
     }
 
     for (i = 10; i < 13; i++)
     {
-        hand[i].setPos(i * 30 + 150, 0);
-        hand[i].setZValue(i);
+        cards[i].setPos(i * 30 + 150, 0);
+        cards[i].setZValue(i);
     }
 
     setParent(widget);
