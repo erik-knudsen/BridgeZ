@@ -373,12 +373,12 @@ void CTblMngrClient::sEnableContinue()
     continueButton->start(700);
 
     //Also show and enable continue button.
-    playView->enableContinue();
+    playView->enableContinueOnTable();
 }
 
 void CTblMngrClient::sDisableContinue()
 {
-    playView->disableContinue();
+    playView->disableContinueOnTable();
 }
 
 void CTblMngrClient::sContinuePlay()

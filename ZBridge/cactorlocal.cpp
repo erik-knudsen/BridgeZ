@@ -25,11 +25,12 @@ CActorLocal::CActorLocal(bool manual, QString teamName, Seat seat, int protocol,
     connect(this, &CActorLocal::sShowBidDialog, tableManager, &CTblMngr::sShowBidDialog);
     connect(this, &CActorLocal::sShowBid, tableManager, &CTblMngr::sShowBid);
     connect(this, &CActorLocal::sShowCenter, tableManager, &CTblMngr::sShowCenter);
-    connect(this, &CActorLocal::sShowDummy, tableManager, &CTblMngr::sShowDummy);
-    connect(this, &CActorLocal::sShowYourTurn, tableManager, &CTblMngr::sShowYourTurn);
-    connect(this, &CActorLocal::sClearYourTurn, tableManager, &CTblMngr::sClearYourTurn);
+    connect(this, &CActorLocal::sShowDummyCards, tableManager, &CTblMngr::sShowDummyCards);
+    connect(this, &CActorLocal::sShowDummyOnTable, tableManager, &CTblMngr::sShowDummyOnTable);
+    connect(this, &CActorLocal::sShowYourTurnOnTable, tableManager, &CTblMngr::sShowYourTurnOnTable);
+    connect(this, &CActorLocal::sClearYourTurnOnTable, tableManager, &CTblMngr::sClearYourTurnOnTable);
     connect(this, &CActorLocal::sShowPlayerPlays, tableManager, &CTblMngr::sShowPlayerPlays);
-    connect(this, &CActorLocal::sClearCards, tableManager, &CTblMngr::sClearCards);
+    connect(this, &CActorLocal::sClearCardsOnTable, tableManager, &CTblMngr::sClearCardsOnTable);
     connect(this, &CActorLocal::sShowTricks, tableManager, &CTblMngr::sShowTricks);
 
     connect(this, &CActorLocal::sEnableBidder, tableManager, &CTblMngr::sEnableBidder);
@@ -86,8 +87,8 @@ void CActorLocal::clientActions()
         {
             emit sShowBidDialog(false);
             emit sShowBid((Seat)zBridgeClientIface_get_bidder(&handle), BID_BLANK);
-            emit sClearYourTurn();
-            emit sShowDummy((Seat)((zBridgeClientIface_get_declarer(&handle) + 2) & 3));
+            emit sClearYourTurnOnTable();
+            emit sShowDummyOnTable((Seat)((zBridgeClientIface_get_declarer(&handle) + 2) & 3));
             emit sShowPlay();
         }
 
@@ -101,13 +102,13 @@ void CActorLocal::clientActions()
         if (manual)
         {
             Seat player = (Seat)zBridgeClientIface_get_player(&handle);
-            emit sShowYourTurn(player);
+            emit sShowYourTurnOnTable(player);
             emit sEnablePlayer(player);
         }
         else
         {
             //Calculate automatic play.
-            emit sClearYourTurn();
+            emit sClearYourTurnOnTable();
 
             //Needs a delay to assure server gets ready for next play.
             QTimer::singleShot(1000, this, SLOT(playValue()));
@@ -142,13 +143,18 @@ void CActorLocal::clientActions()
     {
         if (manual)
         {
-            emit sEnableBidder((Seat)zBridgeClientIface_get_bidder(&handle),
+            Seat bidder = (Seat)zBridgeClientIface_get_bidder(&handle);
+            emit sShowYourTurnOnTable(bidder);
+
+            emit sEnableBidder(bidder,
                                (Bids)zBridgeClientIface_get_lastBid(&handle),
                                (Bids)zBridgeClientIface_get_bidEnable(&handle));
         }
         else
         {
             //Calculate automatic bid.
+            emit sClearYourTurnOnTable();
+
             //Needs a delay to assure server gets ready for next bid.
             QTimer::singleShot(1000, this, SLOT(bidValue()));
         }
@@ -245,8 +251,8 @@ void CActorLocal::continuePlay()
 
     if (showUser)
     {
-        emit sClearCards();
-        emit sClearYourTurn();
+        emit sClearCardsOnTable();
+        emit sClearYourTurnOnTable();
     }
 
     zBridgeClientIface_raise_newLeader(&handle, bidAndPlay.getNextLeader());
@@ -352,10 +358,15 @@ void CActorLocal::playerPlays(Seat player, int card)
 
 void CActorLocal::dummyCards(int cards[])
 {
+    //Actor gets dummy's cards.
     bidAndPlay.setDummysCards(cards);
 
     zBridgeClientIface_raise_dummyCards(&handle);
     clientRunCycle();
+
+    //Also show the cards on the display.
+    if (showUser)
+        emit sShowDummyCards((Seat)zBridgeClientIface_get_dummy(&handle), cards);
 }
 
 void CActorLocal::undoBid(bool reBid)

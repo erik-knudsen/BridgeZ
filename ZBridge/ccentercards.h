@@ -33,9 +33,9 @@ protected:
 private:
     QObject *buttonSignal;
 
-    CCard lCard, tCard, rCard, bCard;
-    CSquare lVulnerable, tVulnerable, rVulnerable, bVulnerable;
-    QGraphicsSimpleTextItem lText, tText, rText, bText;
+    CCard actorCard[4];
+    CSquare actorVulnerable[4];
+    QGraphicsSimpleTextItem actorText[4];
 };
 
 #endif // CCENTERCARDS_H

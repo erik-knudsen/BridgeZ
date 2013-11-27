@@ -56,25 +56,21 @@ void CPlayView::createSceneAndWidgetsAndLayout()
     centerCards->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     centerCards->connectButton(this);
 
-    lCards = new CLRCards(LEFT_POS);
-    lCards->setPreferredSize(QSizeF(LR_CARD_HOR_SIZE, CENTER_VER_SIZE));
-    lCards->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-    lCards->connectCards(this);
+    actorCards[LEFT_POS] = new CLRCards(LEFT_POS);
+    actorCards[TOP_POS] = new CTBCards(TOP_POS);
+    actorCards[RIGHT_POS] = new CLRCards(RIGHT_POS);
+    actorCards[BOTTOM_POS] = new CTBCards(BOTTOM_POS);
 
-    tCards = new CTBCards(TOP_POS);
-    tCards->setPreferredSize(QSizeF(TB_CARD_HOR_SIZE, TB_CARD_VER_SIZE));
-    tCards->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-    tCards->connectCards(this);
+    actorCards[LEFT_POS]->setPreferredSize(QSizeF(LR_CARD_HOR_SIZE, CENTER_VER_SIZE));
+    actorCards[RIGHT_POS]->setPreferredSize(QSizeF(LR_CARD_HOR_SIZE, LR_CARD_VER_SIZE));
+    actorCards[TOP_POS]->setPreferredSize(QSizeF(TB_CARD_HOR_SIZE, TB_CARD_VER_SIZE));
+    actorCards[BOTTOM_POS]->setPreferredSize(QSizeF(TB_CARD_HOR_SIZE, TB_CARD_VER_SIZE));
 
-    rCards = new CLRCards(RIGHT_POS);
-    rCards->setPreferredSize(QSizeF(LR_CARD_HOR_SIZE, LR_CARD_VER_SIZE));
-    rCards->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-    rCards->connectCards(this);
-
-    bCards = new CTBCards(BOTTOM_POS);
-    bCards->setPreferredSize(QSizeF(TB_CARD_HOR_SIZE, TB_CARD_VER_SIZE));
-    bCards->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-    bCards->connectCards(this);
+    for (int i = 0; i < 4; i++)
+    {
+        actorCards[i]->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+        actorCards[i]->connectCards(this);
+    }
 
     midInfo = new CMidInfo();
     midInfo->setPreferredSize(QSizeF(INF_HOR_SIZE, INF_VER_SIZE));
@@ -95,20 +91,20 @@ void CPlayView::createSceneAndWidgetsAndLayout()
     w->setPos(0, 0);
     w->setLayout(l);
 
-    l->addAnchor(tCards, Qt::AnchorTop, l, Qt::AnchorTop);
-    l->addAnchor(lCards, Qt::AnchorLeft, l, Qt::AnchorLeft);
-    l->addAnchor(bCards, Qt::AnchorBottom, l, Qt::AnchorBottom);
-    l->addAnchor(rCards, Qt::AnchorRight, l, Qt::AnchorRight);
-    l->addAnchor(lCards, Qt::AnchorRight, centerCards, Qt::AnchorLeft);
-    l->addAnchor(lCards, Qt::AnchorVerticalCenter, centerCards, Qt::AnchorVerticalCenter);
-    l->addAnchor(tCards, Qt::AnchorBottom, centerCards, Qt::AnchorTop);
-    l->addAnchor(tCards, Qt::AnchorHorizontalCenter, centerCards, Qt::AnchorHorizontalCenter);
-    l->addAnchor(rCards, Qt::AnchorLeft, centerCards, Qt::AnchorRight);
-    l->addAnchor(rCards, Qt::AnchorVerticalCenter, centerCards, Qt::AnchorVerticalCenter);
-    l->addAnchor(bCards, Qt::AnchorTop, centerCards, Qt::AnchorBottom);
-    l->addAnchor(bCards, Qt::AnchorHorizontalCenter, centerCards, Qt::AnchorHorizontalCenter);
-    l->addAnchor(midInfo, Qt::AnchorLeft, rCards, Qt::AnchorRight);
-    l->addAnchor(midInfo, Qt::AnchorTop, rCards, Qt::AnchorTop);
+    l->addAnchor(actorCards[TOP_POS], Qt::AnchorTop, l, Qt::AnchorTop);
+    l->addAnchor(actorCards[LEFT_POS], Qt::AnchorLeft, l, Qt::AnchorLeft);
+    l->addAnchor(actorCards[BOTTOM_POS], Qt::AnchorBottom, l, Qt::AnchorBottom);
+    l->addAnchor(actorCards[RIGHT_POS], Qt::AnchorRight, l, Qt::AnchorRight);
+    l->addAnchor(actorCards[LEFT_POS], Qt::AnchorRight, centerCards, Qt::AnchorLeft);
+    l->addAnchor(actorCards[LEFT_POS], Qt::AnchorVerticalCenter, centerCards, Qt::AnchorVerticalCenter);
+    l->addAnchor(actorCards[TOP_POS], Qt::AnchorBottom, centerCards, Qt::AnchorTop);
+    l->addAnchor(actorCards[TOP_POS], Qt::AnchorHorizontalCenter, centerCards, Qt::AnchorHorizontalCenter);
+    l->addAnchor(actorCards[RIGHT_POS], Qt::AnchorLeft, centerCards, Qt::AnchorRight);
+    l->addAnchor(actorCards[RIGHT_POS], Qt::AnchorVerticalCenter, centerCards, Qt::AnchorVerticalCenter);
+    l->addAnchor(actorCards[BOTTOM_POS], Qt::AnchorTop, centerCards, Qt::AnchorBottom);
+    l->addAnchor(actorCards[BOTTOM_POS], Qt::AnchorHorizontalCenter, centerCards, Qt::AnchorHorizontalCenter);
+    l->addAnchor(midInfo, Qt::AnchorLeft, actorCards[RIGHT_POS], Qt::AnchorRight);
+    l->addAnchor(midInfo, Qt::AnchorTop, actorCards[RIGHT_POS], Qt::AnchorTop);
     l->addAnchor(topInfo, Qt::AnchorBottom, midInfo, Qt::AnchorTop);
     l->addAnchor(topInfo, Qt::AnchorLeft, midInfo, Qt::AnchorLeft);
     l->addAnchor(bottomInfo, Qt::AnchorTop, midInfo, Qt::AnchorBottom);
@@ -250,10 +246,12 @@ void CPlayView::setParams(Seat bottomSeat, int cardBack)
 
 void CPlayView::resetView()
 {
-    lCards->setEnabled(false);
-    tCards->setEnabled(false);
-    rCards->setEnabled(false);
-    bCards->setEnabled(false);
+    for (int i = 0; i < 4; i++)
+    {
+        actorCards[i]->setEnabled(false);
+        actorCards[i]->clearCards();
+        actorCards[i]->setTrumpSuit(ANY);
+    }
 
     centerCards->setEnabled(false);
 
@@ -269,19 +267,9 @@ void CPlayView::resetView()
 
     m_pBidDlg->hide();
 
-    lCards->clearCards();
-    tCards->clearCards();
-    rCards->clearCards();
-    bCards->clearCards();
-
-    lCards->setTrumpSuit(ANY);
-    tCards->setTrumpSuit(ANY);
-    rCards->setTrumpSuit(ANY);
-    bCards->setTrumpSuit(ANY);
-
     clearCardsOnTable();
-    clearVulnerable();
-    clearEWNSText();
+    clearVulnerableOnTable();
+    clearEWNSTextOnTable();
 }
 
 void CPlayView::setInfoAuction(QString board, Team team, Seat dealer)
@@ -392,14 +380,11 @@ void CPlayView::setTrumpSuit(Suit trumpSuit)
 {
     this->trumpSuit = trumpSuit;
 
-    lCards->setTrumpSuit(trumpSuit);
-    lCards->showCards(true);
-    tCards->setTrumpSuit(trumpSuit);
-    tCards->showCards(true);
-    rCards->setTrumpSuit(trumpSuit);
-    rCards->showCards(true);
-    bCards->setTrumpSuit(trumpSuit);
-    bCards->showCards(true);
+    for (int i = 0; i < 4; i++)
+    {
+        actorCards[i]->setTrumpSuit(trumpSuit);
+        actorCards[i]->showCards(true);
+    }
 }
 
 void CPlayView::setAndShowAllCards(bool hasWest, bool showWest, int *westCards, bool hasNorth, bool showNorth, int *northCards, bool hasEast, bool showEast, int *eastCards, bool hasSouth, bool showSouth, int *southCards)
@@ -416,28 +401,19 @@ void CPlayView::setAndShowCards(Seat seat, bool hasSeat, bool showSeat, int *car
 {
     Position pos = seatToPos[seat];
 
-    CCards *xCards;
-    if (pos == LEFT_POS) xCards = lCards;
-    else if (pos == TOP_POS) xCards =tCards;
-    else if (pos == RIGHT_POS) xCards = rCards;
-    else xCards = bCards;
-
-    xCards->clearCards();
-    xCards->setBackValues(cardBack);
+    actorCards[pos]->clearCards();
+    actorCards[pos]->setBackValues(cardBack);
     if (hasSeat)
         for (int i = 0; i < 13; i++)
-            xCards->setCardValue(cards[i]);
-    xCards->setShowBack(!(hasSeat && showSeat));
-    xCards->setTrumpSuit(trumpSuit);
-    xCards->showCards(true);
+            actorCards[pos]->setCardValue(cards[i]);
+    actorCards[pos]->setShowBack(!(hasSeat && showSeat));
+    actorCards[pos]->setTrumpSuit(trumpSuit);
+    actorCards[pos]->showCards(true);
 }
 
 void CPlayView::showBid(Seat seat, Bids bid)
 {
     midInfoAuction->showBid(seat, bid);
-
-    if (bid == BID_PLAYER)
-        showYourTurn(seat);
 }
 
 void CPlayView::undoBid(int noBid)
@@ -468,7 +444,7 @@ void CPlayView::clearCardsOnTable()
     centerCards->clearCardOnTable(BOTTOM_POS);
 }
 
-void CPlayView::showEWVulnerable()
+void CPlayView::showEWVulnerableOnTable()
 {
     Position pos = seatToPos[WEST_SEAT];
     centerCards->showVulnerable(pos);
@@ -476,7 +452,7 @@ void CPlayView::showEWVulnerable()
     centerCards->showVulnerable(pos);
 }
 
-void CPlayView::showNSVulnerable()
+void CPlayView::showNSVulnerableOnTable()
 {
     Position pos = seatToPos[NORTH_SEAT];
     centerCards->showVulnerable(pos);
@@ -484,7 +460,7 @@ void CPlayView::showNSVulnerable()
     centerCards->showVulnerable(pos);
 }
 
-void CPlayView::clearVulnerable()
+void CPlayView::clearVulnerableOnTable()
 {
     centerCards->clearVulnerable(LEFT_POS);
     centerCards->clearVulnerable(TOP_POS);
@@ -492,7 +468,7 @@ void CPlayView::clearVulnerable()
     centerCards->clearVulnerable(BOTTOM_POS);
 }
 
-void CPlayView::showEWNSText()
+void CPlayView::showEWNSTextOnTable()
 {
     Position pos;
 
@@ -509,7 +485,7 @@ void CPlayView::showEWNSText()
     centerCards->showText(pos, 'S');
 }
 
-void CPlayView::clearEWNSText()
+void CPlayView::clearEWNSTextOnTable()
 {
     centerCards->clearText(LEFT_POS);
     centerCards->clearText(TOP_POS);
@@ -517,19 +493,19 @@ void CPlayView::clearEWNSText()
     centerCards->clearText(BOTTOM_POS);
 }
 
-void CPlayView::showDummy(Seat dummy)
+void CPlayView::showDummyOnTable(Seat dummy)
 {
     Position pos = seatToPos[dummy];
     centerCards->showText(pos, 'D');
 }
 
-void CPlayView::showYourTurn(Seat turn)
+void CPlayView::showYourTurnOnTable(Seat turn)
 {
     Position pos = seatToPos[turn];
     centerCards->showYourTurn(pos);
 }
 
-void CPlayView::clearYourTurn()
+void CPlayView::clearYourTurnOnTable()
 {
     centerCards->clearYourTurn();
 }
@@ -538,48 +514,12 @@ void CPlayView::clearCard(Seat seat, int cardValue)
 {
     assert((cardValue >= 0) && (cardValue <= 51));
 
-    Position pos = seatToPos[seat];
-    switch(pos)
-    {
-    case LEFT_POS:
-        lCards->clearCard(cardValue);
-        break;
-
-    case TOP_POS:
-        tCards->clearCard(cardValue);
-        break;
-
-    case RIGHT_POS:
-        rCards->clearCard(cardValue);
-        break;
-
-    default:
-        bCards->clearCard(cardValue);
-        break;
-    }
+    actorCards[seatToPos[seat]]->clearCard(cardValue);
 }
 
 void CPlayView::showClearedCard(Seat seat, int noCard)
-{
-    Position pos = seatToPos[seat];
-    switch(pos)
-    {
-    case LEFT_POS:
-        lCards->showClearedCard(noCard);
-        break;
-
-    case TOP_POS:
-        tCards->showClearedCard(noCard);
-        break;
-
-    case RIGHT_POS:
-        rCards->showClearedCard(noCard);
-        break;
-
-    default:
-        bCards->showClearedCard(noCard);
-        break;
-    }
+{   
+    actorCards[seatToPos[seat]]->showClearedCard(noCard);
 }
 
 void CPlayView::enableBidder(Seat bidder, Bids lastBid, Bids doubleBid)
@@ -594,58 +534,20 @@ void CPlayView::disableBidder(Seat bidder)
 
 void CPlayView::enablePlayer(Seat player)
 {
-    Position pos = seatToPos[player];
-
-    switch(pos)
-    {
-    case LEFT_POS:
-        lCards->setEnabled(true);
-        break;
-
-    case TOP_POS:
-        tCards->setEnabled(true);
-        break;
-
-    case RIGHT_POS:
-        rCards->setEnabled(true);
-        break;
-
-    default:
-        bCards->setEnabled(true);
-        break;
-    }
+    actorCards[seatToPos[player]]->setEnabled(true);
 }
 
 void CPlayView::disablePlayer(Seat player)
 {
-    Position pos = seatToPos[player];
-
-    switch(pos)
-    {
-    case LEFT_POS:
-        lCards->setEnabled(false);
-        break;
-
-    case TOP_POS:
-        tCards->setEnabled(false);
-        break;
-
-    case RIGHT_POS:
-        rCards->setEnabled(false);
-        break;
-
-    default:
-        bCards->setEnabled(false);
-        break;
-    }
+    actorCards[seatToPos[player]]->setEnabled(false);
 }
 
-void CPlayView::enableContinue()
+void CPlayView::enableContinueOnTable()
 {
     centerCards->setEnabled(true);
 }
 
-void CPlayView::disableContinue()
+void CPlayView::disableContinueOnTable()
 {
     centerCards->setEnabled(false);
 }

@@ -80,11 +80,12 @@ public slots:
     void sShowBidDialog(bool show);
     void sShowBid(Seat seat, Bids bid);
     void sShowCenter(Team vulnerable);
-    void sShowDummy(Seat seat);
-    void sShowYourTurn(Seat seat);
-    void sClearYourTurn();
+    void sShowDummyCards(Seat seat, int cards[13]);
+    void sShowDummyOnTable(Seat seat);
+    void sShowYourTurnOnTable(Seat seat);
+    void sClearYourTurnOnTable();
     void sShowPlayerPlays(Seat player, int card);
-    void sClearCards();
+    void sClearCardsOnTable();
     void sShowTricks(int ewTricks, int nsTricks);
 
     void sEnableBidder(Seat bidder, Bids lastBid, Bids doubleBid);

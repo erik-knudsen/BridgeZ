@@ -320,8 +320,8 @@ void CTblMngrServer::serverActions()
         {
             sShowBidDialog(false);
             sShowBid((Seat)zBridgeServerIface_get_bidder(&handle), BID_BLANK);
-            sClearYourTurn();
-            sShowDummy((Seat)((zBridgeServerIface_get_declarer(&handle) + 2) & 3));
+            sClearYourTurnOnTable();
+            sShowDummyOnTable((Seat)((zBridgeServerIface_get_declarer(&handle) + 2) & 3));
             sShowPlay();
         }
 
@@ -369,7 +369,7 @@ void CTblMngrServer::serverActions()
         if (showUser)
         {
             playView->clearCardsOnTable();
-            playView->clearYourTurn();
+            playView->clearYourTurnOnTable();
         }
 
         zBridgeServerIface_raise_newLeader(&handle, playHistory.getNextLeader());
@@ -543,6 +543,7 @@ void CTblMngrServer::sShowAuction()
 
 void CTblMngrServer::sShowPlay()
 {
+    //Show play info window with dealer, declarer and contract.
     playView->showInfoAuction(false);
 
     QString str;
@@ -556,6 +557,9 @@ void CTblMngrServer::sShowPlay()
     playView->showEWTricks(0);
 
     playView->showInfoPlay(true);
+
+    //Rearrange display of cards for the contracts trumpsuit.
+    playView->setTrumpSuit(BID_SUIT((Bids)zBridgeServerIface_get_lastBid(&handle)));
 }
 
 void CTblMngrServer::sEnableContinue()
@@ -569,7 +573,7 @@ void CTblMngrServer::sEnableContinue()
         continueButton->start(700);
 
         //Also show and enable continue button.
-        playView->enableContinue();
+        playView->enableContinueOnTable();
     }
 }
 
@@ -578,7 +582,7 @@ void CTblMngrServer::sDisableContinue()
     if (waiting)
     {
         waiting = false;
-        playView->disableContinue();
+        playView->disableContinueOnTable();
     }
 }
 

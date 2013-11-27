@@ -57,27 +57,32 @@ void CTblMngr::sShowBid(Seat seat, Bids bid)
 
 void CTblMngr::sShowCenter(Team vulnerable)
 {
-    playView->showEWNSText();
+    playView->showEWNSTextOnTable();
 
     if ((vulnerable == NORTH_SOUTH) || (vulnerable == BOTH))
-        playView->showNSVulnerable();
+        playView->showNSVulnerableOnTable();
     if ((vulnerable == EAST_WEST) || (vulnerable == BOTH))
-        playView->showEWVulnerable();
+        playView->showEWVulnerableOnTable();
 }
 
-void CTblMngr::sShowDummy(Seat seat)
+void CTblMngr::sShowDummyCards(Seat seat, int cards[])
 {
-    playView->showDummy(seat);
+    playView->setAndShowCards(seat, true, true, cards);
 }
 
-void CTblMngr::sShowYourTurn(Seat seat)
+void CTblMngr::sShowDummyOnTable(Seat seat)
 {
-    playView->showYourTurn(seat);
+    playView->showDummyOnTable(seat);
 }
 
-void CTblMngr::sClearYourTurn()
+void CTblMngr::sShowYourTurnOnTable(Seat seat)
 {
-    playView->clearYourTurn();
+    playView->showYourTurnOnTable(seat);
+}
+
+void CTblMngr::sClearYourTurnOnTable()
+{
+    playView->clearYourTurnOnTable();
 }
 
 void CTblMngr::sShowPlayerPlays(Seat player, int card)
@@ -86,7 +91,7 @@ void CTblMngr::sShowPlayerPlays(Seat player, int card)
     playView->clearCard(player, card);
 }
 
-void CTblMngr::sClearCards()
+void CTblMngr::sClearCardsOnTable()
 {
     playView->clearCardsOnTable();
 }

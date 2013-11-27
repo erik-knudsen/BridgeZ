@@ -7,8 +7,7 @@
 
 class QGraphicsScene;
 class CCenterCards;
-class CLRCards;
-class CTBCards;
+class CCards;
 class CMidInfo;
 class CTopInfo;
 class CBottomInfo;
@@ -53,14 +52,14 @@ public:
     void clearCardOnTable(Seat seat);
     void showCardOnTable(Seat seat, int card);
     void clearCardsOnTable();
-    void showEWVulnerable();
-    void showNSVulnerable();
-    void clearVulnerable();
-    void showEWNSText();
-    void clearEWNSText();
-    void showDummy(Seat dummy);
-    void showYourTurn(Seat turn);
-    void clearYourTurn();
+    void showEWVulnerableOnTable();
+    void showNSVulnerableOnTable();
+    void clearVulnerableOnTable();
+    void showEWNSTextOnTable();
+    void clearEWNSTextOnTable();
+    void showDummyOnTable(Seat dummy);
+    void showYourTurnOnTable(Seat turn);
+    void clearYourTurnOnTable();
     void clearCard(Seat seat, int cardValue);
     void showClearedCard(Seat seat, int noCard);
 
@@ -68,8 +67,8 @@ public:
     void disableBidder(Seat bidder);
     void enablePlayer(Seat player);
     void disablePlayer(Seat player);
-    void enableContinue();
-    void disableContinue();
+    void enableContinueOnTable();
+    void disableContinueOnTable();
 
 signals:
     void bidValue(Bids bid);
@@ -89,10 +88,7 @@ private:
 
     QGraphicsScene *scene;
     CCenterCards *centerCards;
-    CLRCards *lCards;
-    CTBCards *tCards;
-    CLRCards *rCards;
-    CTBCards *bCards;
+    CCards *actorCards[4];
     CMidInfo *midInfo;
     CTopInfo *topInfo;
     CBottomInfo *bottomInfo;
