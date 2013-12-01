@@ -1,3 +1,4 @@
+#include "misc.h"
 #include "../src-gen/sc_types.h"
 #include "czbridgedoc.h"
 #include "cplayview.h"
@@ -79,12 +80,15 @@ void CTblMngrClient::newSession()
 //-----------------------------------------------------------------------------
 void CTblMngrClient::clientConnected()
 {
+    ::message(QMessageBox::Information, tr("Client connected."));
+
     //Start actor.
     actor->startNewSession();
 }
 
 void CTblMngrClient::clientDisConnected()
 {
+    ::message(QMessageBox::Information, tr("Client disconnected."));
 }
 
 void CTblMngrClient::receiveLine(QString line)

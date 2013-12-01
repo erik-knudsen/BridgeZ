@@ -1,5 +1,4 @@
-#include <QMessageBox>
-
+#include "misc.h"
 #include "cremoteactorserver.h"
 
 CRemoteActorFrontEnd::CRemoteActorFrontEnd(QString connectLine, QTcpSocket *socket)
@@ -55,7 +54,7 @@ CRemoteActorServer::CRemoteActorServer(int protocol, QHostAddress hostAddress, q
         remoteConnects[i].isConnected = false;
 
     if (!listen(hostAddress, port))
-        errMsg(errorString());
+        ::message(QMessageBox::Warning, errorString());
 }
 
 CRemoteActorServer::~CRemoteActorServer()
@@ -72,7 +71,7 @@ void CRemoteActorServer::incomingConnection(qintptr socketDescriptor)
     socket->setSocketDescriptor(socketDescriptor);
     if (!socket->waitForReadyRead(1000))
     {
-        errMsg("Timeout on client connection.");
+        ::message(QMessageBox::Warning, tr("Timeout on client connection."));
         delete socket;
         return;
     }
@@ -81,7 +80,7 @@ void CRemoteActorServer::incomingConnection(qintptr socketDescriptor)
     int length = socket->read(buf, 200);
     if (length > 175)
     {
-        errMsg("Connecting message from client is too long.");
+        ::message(QMessageBox::Warning, tr("Connecting message from client is too long."));
         delete socket;
         return;
     }
@@ -104,7 +103,7 @@ void CRemoteActorServer::incomingConnection(qintptr socketDescriptor)
              !connectLine.contains("South", Qt::CaseInsensitive)) ||
             (connectLine.count(QChar('"')) != 2))
     {
-        errMsg("Syntax error on connecting message from client.");
+        ::message(QMessageBox::Warning, tr("Syntax error on connecting message from client."));
         delete socket;
         return;
     }
@@ -118,14 +117,14 @@ void CRemoteActorServer::incomingConnection(qintptr socketDescriptor)
 
     if (remoteConnects[seat].isConnected)
     {
-        errMsg("Client tries to connect as already connected hand.");
+        ::message(QMessageBox::Warning, tr("Client tries to connect as already connected hand."));
         delete socket;
         return;
     }
     if ((remoteConnects[(seat + 2) & 3].isConnected) &&
             (remoteConnects[(seat +2) & 3].teamName.compare(teamName, Qt::CaseInsensitive)) != 0)
     {
-        errMsg("Team clients do not agree on team name.");
+        ::message(QMessageBox::Warning, tr("Team clients do not agree on team name."));
         delete socket;
         return;
     }
@@ -146,6 +145,8 @@ void CRemoteActorServer::incomingConnection(qintptr socketDescriptor)
     remoteConnects[seat].frontEnd = frontEnd;
     remoteConnects[seat].isConnected = true;
 
+    ::message(QMessageBox::Information, connectLine);
+
     thread->start();
 }
 
@@ -155,11 +156,4 @@ void CRemoteActorServer::stopAllClients()
         remoteConnects[i].isConnected = false;
 
     emit stopFrontEnds();
-}
-
-void CRemoteActorServer::errMsg(QString msg)
-{
-    QMessageBox msgBox;
-    msgBox.setText(msg);
-    msgBox.exec();
 }

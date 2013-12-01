@@ -7,6 +7,7 @@
 #include <QTcpSocket>
 #include <QThread>
 #include <QString>
+#include <QMessageBox>
 
 #include "Defines.h"
 
@@ -52,8 +53,6 @@ signals:
     void stopFrontEnds();
 
 private:
-    void errMsg(QString msg);
-
     class CRemoteConnects
     {
     public:
