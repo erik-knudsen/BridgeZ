@@ -1,5 +1,0 @@
-#include "chandlebid.h"
-
-CHandleBid::CHandleBid()
-{
-}
