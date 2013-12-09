@@ -33,6 +33,7 @@ CSeatConfiguration::CSeatConfiguration(CZBridgeApp *app, CZBridgeDoc *doc, QWidg
     this->app = app;
     this->doc = doc;
 
+    //First set up combo boxes (NOTE: current index changed is called with index 0).
     QStringList labels;
     labels << ACTOR_NAMES[ACTOR_MANUAL] << ACTOR_NAMES[ACTOR_AUTO];
     ui->westActor->addItems(labels);
@@ -40,6 +41,15 @@ CSeatConfiguration::CSeatConfiguration(CZBridgeApp *app, CZBridgeDoc *doc, QWidg
     ui->eastActor->addItems(labels);
     ui->southActor->addItems(labels);
 
+    labels.clear();
+    labels << ROLE_NAMES[ROLE_SERVER] << ROLE_NAMES[ROLE_CLIENT];
+    ui->role->addItems(labels);
+
+    labels.clear();
+    labels << PROTOCOL_NAMES[PROTOCOL_BASIC] << PROTOCOL_NAMES[PROTOCOL_ADVANCED];
+    ui->protocol->addItems(labels);
+
+    //Next set up dialog based on saved values.
     seatOptionDoc = doc->getSeatOptions();
 
     if (seatOptionDoc.seat == SEAT_WEST)
@@ -61,20 +71,14 @@ CSeatConfiguration::CSeatConfiguration(CZBridgeApp *app, CZBridgeDoc *doc, QWidg
     ui->eastActor->setCurrentIndex(seatOptionDoc.eastActor);
     ui->southActor->setCurrentIndex(seatOptionDoc.southActor);
 
-    updateSeatAndActor();
-
-    labels.clear();
-    labels << ROLE_NAMES[ROLE_SERVER] << ROLE_NAMES[ROLE_CLIENT];
-    ui->role->addItems(labels);
     ui->role->setCurrentIndex(seatOptionDoc.role);
-
-    labels.clear();
-    labels << PROTOCOL_NAMES[PROTOCOL_BASIC] << PROTOCOL_NAMES[PROTOCOL_ADVANCED];
-    ui->protocol->addItems(labels);
     ui->protocol->setCurrentIndex(seatOptionDoc.protocol);
 
     ui->host->setText(seatOptionDoc.host);
     ui->port->setText(seatOptionDoc.port);
+
+    //Enable/disable based on saved values.
+    updateSeatAndActor();
 }
 
 CSeatConfiguration::~CSeatConfiguration()
