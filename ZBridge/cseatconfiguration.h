@@ -66,6 +66,8 @@ private slots:
     void on_buttonBox_accepted();
 
 private:
+    void updateSeatAndActor();
+
     Ui::CSeatConfiguration *ui;
     CZBridgeApp *app;
     CZBridgeDoc *doc;
