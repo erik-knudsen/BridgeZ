@@ -68,9 +68,11 @@ public slots:
     void playerToLead();
     void dummyToLead();
 
+    //Reset table manager.
+    void cleanTableManager();
+
 private:
     void giveNewDeal();
-    void cleanTableManager();
 
     void serverActions();
     void setShowUser(bool showAll);

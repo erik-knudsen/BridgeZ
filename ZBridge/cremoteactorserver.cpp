@@ -1,8 +1,9 @@
 #include "misc.h"
 #include "cremoteactorserver.h"
 
-CRemoteActorFrontEnd::CRemoteActorFrontEnd(QString connectLine, QTcpSocket *socket)
+CRemoteActorFrontEnd::CRemoteActorFrontEnd(Seat seat, QString connectLine, QTcpSocket *socket)
 {
+    this->seat = seat;
     this->connectLine = connectLine;
     this->socket = socket;
     socket->setParent(this);
@@ -19,7 +20,8 @@ void CRemoteActorFrontEnd::start()
 void CRemoteActorFrontEnd::readLine()
 {
     QByteArray lineData;
-    while (socket->waitForReadyRead(10))
+    lineData += socket->readAll();
+    while (socket->waitForReadyRead(100))
         lineData += socket->readAll();
     QString line(lineData);
     emit receiveLine(line);
@@ -41,7 +43,9 @@ void CRemoteActorFrontEnd::stopFrontEnd()
 
 void CRemoteActorFrontEnd::disConnect()
 {
-    emit newSession();
+    emit disConnectSeat(seat);
+    deleteLater();
+    thread()->quit();
 }
 
 
@@ -69,7 +73,7 @@ void CRemoteActorServer::incomingConnection(qintptr socketDescriptor)
     QTcpSocket *socket = new QTcpSocket();
 
     socket->setSocketDescriptor(socketDescriptor);
-    if (!socket->waitForReadyRead(1000))
+    if (!socket->waitForReadyRead(10000))
     {
         ::message(QMessageBox::Warning, tr("Timeout on client connection."));
         delete socket;
@@ -89,9 +93,13 @@ void CRemoteActorServer::incomingConnection(qintptr socketDescriptor)
 
     int assumedProtocol = 0;
     int i = connectLine.size() - 1;
-    while (connectLine[i].isDigit()) i--;
-    if (i != (connectLine.size() - 1))
-        assumedProtocol = connectLine.right(connectLine.size() - 1 - i).toInt();
+    while ((i >= 0) && !connectLine[i].isDigit()) i--;
+    int j = i;
+    while ((j >= 0) && connectLine[j].isDigit()) j--;
+    i++; j++;
+
+    if (i != j)
+        assumedProtocol = connectLine.mid(j, i - j).toInt();
 
     if ((assumedProtocol != protocol) ||
             !connectLine.contains("Connecting", Qt::CaseInsensitive) ||
@@ -132,12 +140,13 @@ void CRemoteActorServer::incomingConnection(qintptr socketDescriptor)
     QThread *thread = new QThread();
     socket->moveToThread(thread);
 
-    CRemoteActorFrontEnd *frontEnd = new CRemoteActorFrontEnd(connectLine, socket);
+    CRemoteActorFrontEnd *frontEnd = new CRemoteActorFrontEnd(seat, connectLine, socket);
 
     frontEnd->moveToThread(thread);
 
     connect(thread, &QThread::finished, thread, &QThread::deleteLater);
     connect(this, &CRemoteActorServer::stopFrontEnds, frontEnd, &CRemoteActorFrontEnd::stopFrontEnd);
+    connect(frontEnd, &CRemoteActorFrontEnd::disConnectSeat, this, &CRemoteActorServer::disConnectSeat);
 
     remoteConnects[seat].teamName = teamName;
     remoteConnects[seat].protocol = protocol;
@@ -156,4 +165,20 @@ void CRemoteActorServer::stopAllClients()
         remoteConnects[i].isConnected = false;
 
     emit stopFrontEnds();
+}
+
+
+void CRemoteActorServer::disConnectSeat(Seat seat)
+{
+    int i;
+
+    remoteConnects[seat].isConnected = false;
+
+    for (i = 0; i < 4; i++)
+        if (SEATS[i] == seat)
+            break;
+
+    ::message(QMessageBox::Critical, SEAT_NAMES[i] + tr(" has disconnected."));
+
+    emit clientDisconnected();
 }

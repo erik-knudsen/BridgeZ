@@ -1,3 +1,4 @@
+#include "misc.h"
 #include "cremoteactorclient.h"
 
 CRemoteActorClient::CRemoteActorClient(QHostAddress hostAddress, quint16 port, QObject *parent) :
@@ -28,10 +29,14 @@ void CRemoteActorClient::sendLine(QString line)
 
 void CRemoteActorClient::connected()
 {
+    ::message(QMessageBox::Information, tr("Client connected."));
+
     emit clientConnected();
 }
 
 void CRemoteActorClient::disConnected()
 {
+    ::message(QMessageBox::Information, tr("Client disconnected."));
+
     emit clientDisConnected();
 }

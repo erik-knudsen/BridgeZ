@@ -16,11 +16,11 @@ class CRemoteActorFrontEnd : public QObject
     Q_OBJECT
 
 public:
-    explicit CRemoteActorFrontEnd(QString connectLine, QTcpSocket *socket);
+    explicit CRemoteActorFrontEnd(Seat seat, QString connectLine, QTcpSocket *socket);
 
 signals:
     void receiveLine(QString line);
-    void newSession();
+    void disConnectSeat(Seat seat);
 
 public slots:
     void start();
@@ -31,6 +31,7 @@ public slots:
 private:
     void readLine();
 
+    Seat seat;
     QTcpSocket *socket;
     QString connectLine;
 };
@@ -51,6 +52,10 @@ public:
 
 signals:
     void stopFrontEnds();
+    void clientDisconnected();
+
+public slots:
+    void disConnectSeat(Seat seat);
 
 private:
     class CRemoteConnects

@@ -33,8 +33,6 @@ class CZBridgeApp : public QApplication
 public:
     static CZBridgeApp* Instance();
     explicit CZBridgeApp(int &argc, char **argv);
-    ~CZBridgeApp()
-    { delete mainFrame;}
 
 private:
     CMainFrame * mainFrame;

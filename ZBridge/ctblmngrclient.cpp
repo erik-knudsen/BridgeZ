@@ -1,4 +1,3 @@
-#include "misc.h"
 #include "../src-gen/sc_types.h"
 #include "czbridgedoc.h"
 #include "cplayview.h"
@@ -16,6 +15,7 @@ CTblMngrClient::CTblMngrClient(CZBridgeDoc *doc, CPlayView *playView, QObject *p
     this->playView = playView;
 
     remoteActorClient = 0;
+    actor = 0;
 
     //Timer for supervision of continue button.
     continueButton = new QTimer(this);
@@ -25,6 +25,7 @@ CTblMngrClient::CTblMngrClient(CZBridgeDoc *doc, CPlayView *playView, QObject *p
 
 CTblMngrClient::~CTblMngrClient()
 {
+    cleanTableManager();
 }
 
 void CTblMngrClient::cleanTableManager()
@@ -80,15 +81,13 @@ void CTblMngrClient::newSession()
 //-----------------------------------------------------------------------------
 void CTblMngrClient::clientConnected()
 {
-    ::message(QMessageBox::Information, tr("Client connected."));
-
     //Start actor.
     actor->startNewSession();
 }
 
 void CTblMngrClient::clientDisConnected()
 {
-    ::message(QMessageBox::Information, tr("Client disconnected."));
+    cleanTableManager();
 }
 
 void CTblMngrClient::receiveLine(QString line)

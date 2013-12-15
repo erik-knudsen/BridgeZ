@@ -30,6 +30,9 @@ CTblMngrServer::CTblMngrServer(CZBridgeDoc *doc, CPlayView *playView, QObject *p
                                                QHostAddress(doc->getSeatOptions().host),
                                                doc->getSeatOptions().port.toInt(), this);
 
+    //Connect for disconnect of remote client.
+    connect(remoteActorServer, &CRemoteActorServer::clientDisconnected, this, &CTblMngrServer::cleanTableManager);
+
     //Timer for supervision of continue button.
     continueButton = new QTimer(this);
     connect(continueButton, &QTimer::timeout, this, &CTblMngr::sContinuePlay);
@@ -39,6 +42,8 @@ CTblMngrServer::CTblMngrServer(CZBridgeDoc *doc, CPlayView *playView, QObject *p
 
 CTblMngrServer::~CTblMngrServer()
 {
+    delete remoteActorServer;
+    cleanTableManager();
 }
 
 void CTblMngrServer::cleanTableManager()

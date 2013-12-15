@@ -23,7 +23,7 @@ void CActorRemote::startNewSession()
 
 void CActorRemote::seated(QString teamName)
 {
-    CSeatedMsg seatedMsg(teamName);
+    CSeatedMsg seatedMsg(seat, teamName);
     emit sendLine(seatedMsg.line);
 }
 
