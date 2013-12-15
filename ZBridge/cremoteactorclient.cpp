@@ -16,7 +16,8 @@ CRemoteActorClient::CRemoteActorClient(QHostAddress hostAddress, quint16 port, Q
 void CRemoteActorClient::readLine()
 {
     QByteArray lineData;
-    while (socket->waitForReadyRead(10))
+    lineData += socket->readAll();
+    while (socket->waitForReadyRead(100))
         lineData += socket->readAll();
     QString line(lineData);
     emit receiveLine(line);

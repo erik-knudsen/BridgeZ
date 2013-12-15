@@ -14,6 +14,8 @@ CTblMngrClient::CTblMngrClient(CZBridgeDoc *doc, CPlayView *playView, QObject *p
     this->doc = doc;
     this->playView = playView;
 
+    actor = 0;
+
     remoteActorClient = 0;
     actor = 0;
 
