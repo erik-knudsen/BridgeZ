@@ -138,7 +138,6 @@ void CRemoteActorServer::incomingConnection(qintptr socketDescriptor)
     }
 
     QThread *thread = new QThread();
-    socket->moveToThread(thread);
 
     CRemoteActorFrontEnd *frontEnd = new CRemoteActorFrontEnd(seat, connectLine, socket);
 
@@ -168,7 +167,7 @@ void CRemoteActorServer::stopAllClients()
 }
 
 
-void CRemoteActorServer::disConnectSeat(Seat seat)
+void CRemoteActorServer::disConnectSeat(int seat)
 {
     int i;
 

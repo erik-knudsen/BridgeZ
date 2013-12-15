@@ -1,7 +1,7 @@
 #include "misc.h"
 #include "cremoteactorclient.h"
 
-CRemoteActorClient::CRemoteActorClient(QHostAddress hostAddress, quint16 port, QObject *parent) :
+CRemoteActorClient::CRemoteActorClient(QString hostAddress, quint16 port, QObject *parent) :
     QObject(parent)
 {
     socket = new QTcpSocket(this);

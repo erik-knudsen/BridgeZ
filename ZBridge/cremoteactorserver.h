@@ -20,7 +20,7 @@ public:
 
 signals:
     void receiveLine(QString line);
-    void disConnectSeat(Seat seat);
+    void disConnectSeat(int seat);
 
 public slots:
     void start();
@@ -55,7 +55,7 @@ signals:
     void clientDisconnected();
 
 public slots:
-    void disConnectSeat(Seat seat);
+    void disConnectSeat(int seat);
 
 private:
     class CRemoteConnects

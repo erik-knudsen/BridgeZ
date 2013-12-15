@@ -70,7 +70,7 @@ void CTblMngrClient::newSession()
 
     actor->setShowUser((actor->getActorType() == MANUAL_ACTOR) || showAll);
 
-    remoteActorClient = new CRemoteActorClient(QHostAddress(doc->getSeatOptions().host),
+    remoteActorClient = new CRemoteActorClient(doc->getSeatOptions().host,
                                                doc->getSeatOptions().port.toInt(), this);
     connect(remoteActorClient, &CRemoteActorClient::clientConnected, this, &CTblMngrClient::clientConnected);
     connect(remoteActorClient, &CRemoteActorClient::clientDisConnected, this, &CTblMngrClient::clientDisConnected);

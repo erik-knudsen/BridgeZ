@@ -11,7 +11,7 @@ class CRemoteActorClient : public QObject
 {
     Q_OBJECT
 public:
-    explicit CRemoteActorClient(QHostAddress hostAddress, quint16 port, QObject *parent = 0);
+    explicit CRemoteActorClient(QString hostAddress, quint16 port, QObject *parent = 0);
     
 signals:
     void clientConnected();
