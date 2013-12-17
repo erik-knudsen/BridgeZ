@@ -67,6 +67,7 @@ private slots:
 
 private:
     void updateSeatAndActor();
+    void updateHostAndPort();
 
     Ui::CSeatConfiguration *ui;
     CZBridgeApp *app;

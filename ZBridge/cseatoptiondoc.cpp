@@ -27,7 +27,7 @@
 CSeatOptionDoc::CSeatOptionDoc()
 {
     seat = SEAT_SOUTH;
-    role = ROLE_SERVER;
+    role = ROLE_STANDALONE;
 }
 
 // Assignment operator
@@ -40,8 +40,10 @@ CSeatOptionDoc& CSeatOptionDoc::operator=(const CSeatOptionDoc& seatOptionDoc)
     seat = seatOptionDoc.seat;
     role = seatOptionDoc.role;
     protocol = seatOptionDoc.protocol;
-    host = seatOptionDoc.host;
-    port = seatOptionDoc.port;
+    hostServer = seatOptionDoc.hostServer;
+    portServer = seatOptionDoc.portServer;
+    hostClient = seatOptionDoc.hostClient;
+    portClient = seatOptionDoc.portClient;
     westName = seatOptionDoc.westName;
     northName = seatOptionDoc.northName;
     eastName = seatOptionDoc.eastName;
@@ -61,8 +63,10 @@ void CSeatOptionDoc::WriteSettings()
     settings.setValue("seat", seat);
     settings.setValue("role", role);
     settings.setValue("protocol", protocol);
-    settings.setValue("host", host);
-    settings.setValue("port", port);
+    settings.setValue("hostServer", hostServer);
+    settings.setValue("portServer", portServer);
+    settings.setValue("hostClient", hostClient);
+    settings.setValue("portClient", portClient);
     settings.setValue("westName", westName);
     settings.setValue("northName", northName);
     settings.setValue("eastName", eastName);
@@ -80,8 +84,10 @@ void CSeatOptionDoc::ReadSettings()
     seat = settings.value("seat", SEAT_SOUTH).toInt();
     role = settings.value("role", ROLE_SERVER).toInt();
     protocol = settings.value("protocol", NET_PROTOCOL_ADV).toInt();
-    host = settings.value("host", "").toString();
-    port = settings.value("port", "").toString();
+    hostServer = settings.value("hostServer", "").toString();
+    portServer = settings.value("portServer", "").toString();
+    hostClient = settings.value("hostClient", "").toString();
+    portClient = settings.value("portClient", "").toString();
     westName = settings.value("westName", "W").toString();
     northName = settings.value("northName", "N").toString();
     eastName = settings.value("eastName", "E").toString();

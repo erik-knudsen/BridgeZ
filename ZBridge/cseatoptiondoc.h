@@ -37,8 +37,10 @@ public:
     int seat;
     int role;
     int protocol;
-    QString host;
-    QString port;
+    QString hostServer;
+    QString portServer;
+    QString hostClient;
+    QString portClient;
     QString westName;
     QString northName;
     QString eastName;

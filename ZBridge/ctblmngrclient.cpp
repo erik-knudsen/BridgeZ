@@ -42,7 +42,10 @@ void CTblMngrClient::cleanTableManager()
         actor = 0;
     }
     if (remoteActorClient != 0)
-            delete remoteActorClient;
+    {
+        delete remoteActorClient;
+        remoteActorClient = 0;
+    }
 }
 
 //Method activated by user through main frame menus.
@@ -71,17 +74,25 @@ void CTblMngrClient::newSession()
 
     actor->setShowUser((actor->getActorType() == MANUAL_ACTOR) || showAll);
 
-    remoteActorClient = new CRemoteActorClient(doc->getSeatOptions().host,
-                                               doc->getSeatOptions().port.toInt(), this);
+    remoteActorClient = new CRemoteActorClient(doc->getSeatOptions().hostClient,
+                                               doc->getSeatOptions().portClient.toInt(), this);
     connect(remoteActorClient, &CRemoteActorClient::clientConnected, this, &CTblMngrClient::clientConnected);
-    connect(remoteActorClient, &CRemoteActorClient::clientDisConnected, this, &CTblMngrClient::clientDisConnected);
+    connect(remoteActorClient, &CRemoteActorClient::clientDisConnected, this, &CTblMngrClient::clientDisConnected, Qt::QueuedConnection);
     connect(remoteActorClient, &CRemoteActorClient::receiveLine, this, &CTblMngrClient::receiveLine);
+    connect(remoteActorClient, &CRemoteActorClient::sSocketError, this, &CTblMngrClient::sSocketError, Qt::QueuedConnection);
 
     handle = actor->getHandle();
 }
 
 //Slots for tcp client.
 //-----------------------------------------------------------------------------
+void CTblMngrClient::sSocketError(QString err)
+{
+    ::message(QMessageBox::Information, err);
+
+    cleanTableManager();
+}
+
 void CTblMngrClient::clientConnected()
 {
     //Start actor.

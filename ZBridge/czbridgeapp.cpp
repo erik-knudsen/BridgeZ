@@ -19,15 +19,21 @@
  * ZBridge application (definition).
  */
 
+#include <QAbstractSocket>
+
 #include "czbridgeapp.h"
 #include "cmainframe.h"
 #include "czbridgedoc.h"
+
+//Q_DECLARE_METATYPE(QAbstractSocket::SocketError)
 
 CZBridgeApp *CZBridgeApp::m_pInstance = 0;
 
 int main(int argc, char *argv[])
 {
     CZBridgeApp app(argc, argv);
+
+    qRegisterMetaType<QAbstractSocket::SocketError>();
 
     return app.exec();
 }

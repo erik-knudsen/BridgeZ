@@ -26,12 +26,16 @@ CTblMngrServer::CTblMngrServer(CZBridgeDoc *doc, CPlayView *playView, QObject *p
     actors[SOUTH_SEAT] = 0;
 
     //Start tcp server for remote clients.
-    remoteActorServer = new CRemoteActorServer(PROTOCOLS[doc->getSeatOptions().protocol],
-                                               QHostAddress(doc->getSeatOptions().host),
-                                               doc->getSeatOptions().port.toInt(), this);
+    remoteActorServer = 0;
+    if (doc->getSeatOptions().role == ROLE_SERVER)
+    {
+        remoteActorServer = new CRemoteActorServer(PROTOCOLS[doc->getSeatOptions().protocol],
+                                               QHostAddress(doc->getSeatOptions().hostServer),
+                                               doc->getSeatOptions().portServer.toInt(), this);
 
-    //Connect for disconnect of remote client.
-    connect(remoteActorServer, &CRemoteActorServer::clientDisconnected, this, &CTblMngrServer::cleanTableManager);
+        //Connect for disconnect of remote client.
+        connect(remoteActorServer, &CRemoteActorServer::clientDisconnected, this, &CTblMngrServer::cleanTableManager);
+    }
 
     //Timer for supervision of continue button.
     continueButton = new QTimer(this);
@@ -42,7 +46,8 @@ CTblMngrServer::CTblMngrServer(CZBridgeDoc *doc, CPlayView *playView, QObject *p
 
 CTblMngrServer::~CTblMngrServer()
 {
-    delete remoteActorServer;
+    if (remoteActorServer != 0)
+        delete remoteActorServer;
     cleanTableManager();
 }
 
@@ -127,7 +132,7 @@ void CTblMngrServer::newSession()
     if (ACTORS[doc->getSeatOptions().westActor] == MANUAL_ACTOR)
         actor = new CActorLocal(true, ewTeamName, WEST_SEAT, protocol,
                 doc->getNSBidOptions(), doc->getEWBidOptions(), this);
-    else if (remoteActorServer->isConnected(WEST_SEAT))
+    else if ((remoteActorServer != 0) && remoteActorServer->isConnected(WEST_SEAT))
         actor = new CActorRemote(WEST_SEAT, remoteActorServer->getFrontend(WEST_SEAT), this);
     else
         actor = new CActorLocal(false, ewTeamName, WEST_SEAT, protocol,
@@ -137,7 +142,7 @@ void CTblMngrServer::newSession()
     if (ACTORS[doc->getSeatOptions().northActor] == MANUAL_ACTOR)
         actor = new CActorLocal(true, nsTeamName, NORTH_SEAT, protocol,
                 doc->getNSBidOptions(), doc->getEWBidOptions(), this);
-    else if (remoteActorServer->isConnected(NORTH_SEAT))
+    else if ((remoteActorServer != 0) && remoteActorServer->isConnected(NORTH_SEAT))
         actor = new CActorRemote(NORTH_SEAT, remoteActorServer->getFrontend(NORTH_SEAT), this);
     else
         actor = new CActorLocal(false, nsTeamName, NORTH_SEAT, protocol,
@@ -147,7 +152,7 @@ void CTblMngrServer::newSession()
     if (ACTORS[doc->getSeatOptions().eastActor] == MANUAL_ACTOR)
         actor = new CActorLocal(true, ewTeamName, EAST_SEAT, protocol,
                 doc->getNSBidOptions(), doc->getEWBidOptions(), this);
-    else if (remoteActorServer->isConnected(EAST_SEAT))
+    else if ((remoteActorServer != 0) && remoteActorServer->isConnected(EAST_SEAT))
         actor = new CActorRemote(EAST_SEAT, remoteActorServer->getFrontend(EAST_SEAT), this);
     else
         actor = new CActorLocal(false, ewTeamName, EAST_SEAT, protocol,
@@ -157,7 +162,7 @@ void CTblMngrServer::newSession()
     if (ACTORS[doc->getSeatOptions().southActor] == MANUAL_ACTOR)
         actor = new CActorLocal(true, nsTeamName, SOUTH_SEAT, protocol,
                 doc->getNSBidOptions(), doc->getEWBidOptions(), this);
-    else if (remoteActorServer->isConnected(SOUTH_SEAT))
+    else if ((remoteActorServer != 0) && remoteActorServer->isConnected(SOUTH_SEAT))
         actor = new CActorRemote(SOUTH_SEAT, remoteActorServer->getFrontend(SOUTH_SEAT), this);
     else
         actor = new CActorLocal(false, nsTeamName, SOUTH_SEAT, protocol,

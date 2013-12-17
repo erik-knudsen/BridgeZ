@@ -42,7 +42,7 @@ CSeatConfiguration::CSeatConfiguration(CZBridgeApp *app, CZBridgeDoc *doc, QWidg
     ui->southActor->addItems(labels);
 
     labels.clear();
-    labels << ROLE_NAMES[ROLE_SERVER] << ROLE_NAMES[ROLE_CLIENT];
+    labels << ROLE_NAMES[ROLE_SERVER] << ROLE_NAMES[ROLE_CLIENT] << ROLE_NAMES[ROLE_STANDALONE];
     ui->role->addItems(labels);
 
     labels.clear();
@@ -74,10 +74,8 @@ CSeatConfiguration::CSeatConfiguration(CZBridgeApp *app, CZBridgeDoc *doc, QWidg
     ui->role->setCurrentIndex(seatOptionDoc.role);
     ui->protocol->setCurrentIndex(seatOptionDoc.protocol);
 
-    ui->host->setText(seatOptionDoc.host);
-    ui->port->setText(seatOptionDoc.port);
-
     //Enable/disable based on saved values.
+    updateHostAndPort();
     updateSeatAndActor();
 }
 
@@ -137,6 +135,7 @@ void CSeatConfiguration::on_southActor_currentIndexChanged(int index)
 void CSeatConfiguration::on_role_currentIndexChanged(int index)
 {
     seatOptionDoc.role = index;
+    updateHostAndPort();
     updateSeatAndActor();
 }
 
@@ -151,8 +150,16 @@ void CSeatConfiguration::on_buttonBox_accepted()
     seatOptionDoc.northName = ui->northName->text();
     seatOptionDoc.eastName = ui->eastName->text();
     seatOptionDoc.southName = ui->southName->text();
-    seatOptionDoc.host = ui->host->text();
-    seatOptionDoc.port = ui->port->text();
+    if (seatOptionDoc.role == ROLE_SERVER)
+    {
+        seatOptionDoc.hostServer = ui->host->text();
+        seatOptionDoc.portServer = ui->port->text();
+    }
+    else if (seatOptionDoc.role == ROLE_CLIENT)
+    {
+        seatOptionDoc.hostClient = ui->host->text();
+        seatOptionDoc.portClient = ui->port->text();
+    }
     doc->setSeatOptions(seatOptionDoc);
 }
 
@@ -167,7 +174,7 @@ void CSeatConfiguration::updateSeatAndActor()
     ui->southName->setVisible(true);
     ui->southActor->setVisible(true);
 
-    if (seatOptionDoc.role == ROLE_SERVER)
+    if ((seatOptionDoc.role == ROLE_SERVER) || (seatOptionDoc.role == ROLE_STANDALONE))
     {
         if (seatOptionDoc.westActor == ACTOR_AUTO)
             ui->westName->setVisible(false);
@@ -208,5 +215,31 @@ void CSeatConfiguration::updateSeatAndActor()
         }
         else if (seatOptionDoc.southActor == ACTOR_AUTO)
             ui->southName->setVisible(false);
+    }
+}
+
+void CSeatConfiguration::updateHostAndPort()
+{
+    ui->host->setVisible(true);
+    ui->host->setEnabled(true);
+    ui->port->setVisible(true);
+    ui->port->setEnabled(true);
+
+    if (seatOptionDoc.role == ROLE_STANDALONE)
+    {
+        ui->host->setText("");
+        ui->port->setText("");
+        ui->host->setEnabled(false);
+        ui->port->setEnabled(false);
+    }
+    else if (seatOptionDoc.role == ROLE_SERVER)
+    {
+        ui->host->setText(seatOptionDoc.hostServer);
+        ui->port->setText(seatOptionDoc.portServer);
+    }
+    else
+    {
+        ui->host->setText(seatOptionDoc.hostClient);
+        ui->port->setText(seatOptionDoc.portClient);
     }
 }

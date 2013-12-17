@@ -17,11 +17,13 @@ signals:
     void clientConnected();
     void clientDisConnected();
     void receiveLine(QString line);
+    void sSocketError(QString err);
 
 public slots:
     void sendLine(QString line);
     void connected();
     void disConnected();
+    void socketError(QAbstractSocket::SocketError error);
 
 private:
     void readLine();

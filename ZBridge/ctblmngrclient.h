@@ -26,6 +26,7 @@ public:
     void newSession();
 
 public slots:
+    void sSocketError(QString err);
     void clientConnected();
     void clientDisConnected();
     void receiveLine(QString line);

@@ -435,7 +435,7 @@ void CMainFrame::on_actionSeat_Configuration_triggered()
         doc->WriteSeatOptions();
 
         delete tableManager;
-        if (ROLES[doc->getSeatOptions().role] == SERVER_ROLE)
+        if ((ROLES[doc->getSeatOptions().role] == STANDALONE_ROLE) || (ROLES[doc->getSeatOptions().role] == SERVER_ROLE))
             tableManager = new CTblMngrServer(doc, playView, this);
         else
             tableManager = new CTblMngrClient(doc, playView, this);

@@ -202,15 +202,18 @@ const Actor ACTORS[3] = { MANUAL_ACTOR, AUTO_ACTOR, REMOTE_ACTOR };
 
 const int SERVER_ROLE = 0;
 const int CLIENT_ROLE = 1;
+const int STANDALONE_ROLE = 2;
 
 const int ROLE_SERVER = 0;
 const int ROLE_CLIENT = 1;
-const QString ROLE_NAMES[2] =
+const int ROLE_STANDALONE = 2;
+const QString ROLE_NAMES[3] =
 {
     "Server",
-    "Client"
+    "Client",
+    "Standalone"
 };
-const int ROLES[2] = { SERVER_ROLE, CLIENT_ROLE };
+const int ROLES[3] = { SERVER_ROLE, CLIENT_ROLE, STANDALONE_ROLE };
 
 const int NET_PROTOCOL = 18;
 const int NET_PROTOCOL_ADV = 20;
