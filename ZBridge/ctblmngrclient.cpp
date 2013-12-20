@@ -1,3 +1,5 @@
+#include <QApplication>
+
 #include "misc.h"
 #include "../src-gen/sc_types.h"
 #include "czbridgedoc.h"
@@ -14,6 +16,9 @@ CTblMngrClient::CTblMngrClient(CZBridgeDoc *doc, CPlayView *playView, QObject *p
 {
     this->doc = doc;
     this->playView = playView;
+
+    //Enable/disable relevant menu actions.
+    QApplication::postEvent(parent, new UPDATE_UI_ACTION_Event(UPDATE_UI_INITIAL));
 
     actor = 0;
 
@@ -56,6 +61,10 @@ void CTblMngrClient::newSession()
 
     protocol = PROTOCOLS[doc->getSeatOptions().protocol];
 
+    //Enable/disable relevant menu actions.
+    QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_CLIENT , protocol == NET_PROTOCOL_ADV));
+    QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_NEW_SESSION , false));
+
     QString ewTeamName = "ewTeam";
     QString nsTeamName = "nsTeam";
 
@@ -91,6 +100,9 @@ void CTblMngrClient::sSocketError(QString err)
     ::message(QMessageBox::Information, err);
 
     cleanTableManager();
+
+    //Enable new session action.
+    QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_NEW_SESSION , true));
 }
 
 void CTblMngrClient::clientConnected()
@@ -106,6 +118,9 @@ void CTblMngrClient::clientDisConnected()
     ::message(QMessageBox::Information, tr("Client disconnected."));
 
     cleanTableManager();
+
+    //Enable new session action.
+    QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_NEW_SESSION , true));
 }
 
 void CTblMngrClient::receiveLine(QString line)

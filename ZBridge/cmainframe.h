@@ -37,6 +37,8 @@ class CHistoryWnd;
 class CSeatConfiguration;
 class CBidDialog;
 
+enum actionIndicator { INITIAL_ACTIONS, SERVER_ACTIONS, CLIENT_ACTIONS };
+
 class CMainFrame : public QMainWindow
 {
     Q_OBJECT
@@ -51,10 +53,18 @@ public:
     void SetStatusText(QString text);
     void ResetStatusText();
 
+    void enableUIActionsServer(bool advProtocol);
+    void enableUIActionsInitial(bool advProtocol);
+    void enableUIActionsClient(bool advProtocol);
+
 protected:
     virtual void resizeEvent(QResizeEvent *resizeEvent);
 
 private:
+    virtual void customEvent(QEvent *event);
+
+    void enableUIActions(actionIndicator actions, bool advProtocol);
+
     Ui::CMainFrame *ui;
     CZBridgeApp *app;
     CZBridgeDoc *doc;

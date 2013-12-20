@@ -82,7 +82,7 @@ void CSeatOptionDoc::ReadSettings()
     QSettings settings("ZBridge settings", "Seat");
 
     seat = settings.value("seat", SEAT_SOUTH).toInt();
-    role = settings.value("role", ROLE_SERVER).toInt();
+    role = settings.value("role", ROLE_STANDALONE).toInt();
     protocol = settings.value("protocol", NET_PROTOCOL_ADV).toInt();
     hostServer = settings.value("hostServer", "").toString();
     portServer = settings.value("portServer", "").toString();

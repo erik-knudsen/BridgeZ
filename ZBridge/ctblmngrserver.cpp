@@ -1,3 +1,5 @@
+#include <QApplication>
+
 #include "misc.h"
 #include "../src-gen/sc_types.h"
 #include "czbridgedoc.h"
@@ -15,6 +17,8 @@
 CTblMngrServer::CTblMngrServer(CZBridgeDoc *doc, CPlayView *playView, QObject *parent) :
     CTblMngr(playView, parent)
 {
+    int protocol;
+
     this->doc = doc;
     this->playView = playView;
 
@@ -24,6 +28,7 @@ CTblMngrServer::CTblMngrServer(CZBridgeDoc *doc, CPlayView *playView, QObject *p
     actors[NORTH_SEAT] = 0;
     actors[EAST_SEAT] = 0;
     actors[SOUTH_SEAT] = 0;
+
 
     //Start tcp server for remote clients.
     remoteActorServer = 0;
@@ -36,6 +41,9 @@ CTblMngrServer::CTblMngrServer(CZBridgeDoc *doc, CPlayView *playView, QObject *p
         //Connect for disconnect of remote client.
         connect(remoteActorServer, &CRemoteActorServer::clientDisconnected, this, &CTblMngrServer::cleanTableManager);
     }
+
+    //Enable/disable relevant menu actions.
+    QApplication::postEvent(parent, new UPDATE_UI_ACTION_Event(UPDATE_UI_INITIAL));
 
     //Timer for supervision of continue button.
     continueButton = new QTimer(this);
@@ -124,7 +132,10 @@ void CTblMngrServer::newSession()
 
     boardNo = 0;
 
-    protocol = PROTOCOLS[doc->getSeatOptions().protocol];
+    protocol = (remoteActorServer != 0) ? PROTOCOLS[doc->getSeatOptions().protocol] : NET_PROTOCOL_ADV;
+
+    //Enable/disable relevant menu actions.
+    QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_SERVER , protocol == NET_PROTOCOL_ADV));
 
     QString ewTeamName = "ewTeam";
     QString nsTeamName = "nsTeam";

@@ -52,7 +52,7 @@ CMainFrame::CMainFrame(CZBridgeApp *app, CZBridgeDoc *doc) :
     ui->setupUi(this);
 
     playView = new CPlayView(this);
-    if (ROLES[doc->getSeatOptions().role] == SERVER_ROLE)
+    if ((ROLES[doc->getSeatOptions().role] == STANDALONE_ROLE) || (ROLES[doc->getSeatOptions().role] == SERVER_ROLE))
         tableManager = new CTblMngrServer(doc, playView, this);
     else
         tableManager = new CTblMngrClient(doc, playView, this);
@@ -98,6 +98,68 @@ void CMainFrame::resizeEvent(QResizeEvent *resizeEvent)
        float scaleYFactor = float(size.height() - 130)/(oldSize.height() - 130);
        playView->scale(scaleXFactor, scaleYFactor);
     }
+}
+
+void CMainFrame::customEvent(QEvent *event)
+{
+    if (event->type() == WMS_UPDATE_UI_ACTION)
+    {
+        UPDATE_UI_ACTION_Event * ev = static_cast<UPDATE_UI_ACTION_Event *>(event);
+
+        UpdateUIAction uiAction = ev->getUIAction();
+        bool param = ev->getEnable();
+
+        switch (uiAction)
+        {
+        case UPDATE_UI_SERVER:
+            enableUIActionsServer(param);
+            break;
+
+        case UPDATE_UI_CLIENT:
+            enableUIActionsClient(param);
+            break;
+
+        case UPDATE_UI_NEW_SESSION:
+            ui->actionNew_Session->setEnabled(param);
+            break;
+        }
+    }
+}
+
+void CMainFrame::enableUIActionsInitial(bool advProtocol)
+{
+    enableUIActions(INITIAL_ACTIONS, advProtocol);
+}
+
+void CMainFrame::enableUIActionsServer(bool advProtocol)
+{
+    enableUIActions(SERVER_ACTIONS, advProtocol);
+}
+
+void CMainFrame::enableUIActionsClient(bool advProtocol)
+{
+    enableUIActions(CLIENT_ACTIONS, advProtocol);
+}
+
+void CMainFrame::enableUIActions(actionIndicator actions, bool advProtocol)
+{
+    ui->actionOpen->setEnabled((actions == INITIAL_ACTIONS) || (actions == SERVER_ACTIONS));
+    ui->actionRecent_File->setEnabled((actions == INITIAL_ACTIONS) || (actions == SERVER_ACTIONS));
+    ui->action_Undo_Trick->setEnabled(((actions == SERVER_ACTIONS) || (actions == CLIENT_ACTIONS)) && advProtocol);
+    ui->actionClear_All->setEnabled((actions == SERVER_ACTIONS) || (actions == CLIENT_ACTIONS));
+    ui->actionBidding_Play_History->setEnabled((actions == SERVER_ACTIONS) || (actions == CLIENT_ACTIONS));
+    ui->actionNew_Session->setEnabled((actions == SERVER_ACTIONS) || (actions == CLIENT_ACTIONS));
+    ui->action_Bid_Rebid->setEnabled(((actions == SERVER_ACTIONS) || (actions == CLIENT_ACTIONS)) && advProtocol);
+    ui->action_Restart_Hand->setEnabled(((actions == SERVER_ACTIONS) || (actions == CLIENT_ACTIONS)) && advProtocol);
+    ui->actionClaim_All->setEnabled(((actions == SERVER_ACTIONS) || (actions == CLIENT_ACTIONS)) && advProtocol);
+    ui->actionClaim_Contract->setEnabled(((actions == SERVER_ACTIONS) || (actions == CLIENT_ACTIONS)) && advProtocol);
+    ui->actionConcede->setEnabled(((actions == SERVER_ACTIONS) || (actions == CLIENT_ACTIONS)) && advProtocol);
+    ui->actionHint->setEnabled(((actions == SERVER_ACTIONS) || (actions == CLIENT_ACTIONS)) && advProtocol);
+    ui->actionAuto_Hints->setEnabled(((actions == SERVER_ACTIONS) || (actions == CLIENT_ACTIONS)) && advProtocol);
+    ui->actionAuto_Play_Card->setEnabled((actions == SERVER_ACTIONS) || (actions == CLIENT_ACTIONS));
+    ui->actionAuto_Play_All_Cards->setEnabled((actions == SERVER_ACTIONS) || (actions == CLIENT_ACTIONS));
+    ui->actionAuto_Play_to_Completion->setEnabled((actions == SERVER_ACTIONS) || (actions == CLIENT_ACTIONS));
+    ui->action_Expose_All_Cards->setEnabled(((actions == SERVER_ACTIONS) || (actions == CLIENT_ACTIONS)) && advProtocol);
 }
 
 void CMainFrame::OnUpdateViewFileComments()

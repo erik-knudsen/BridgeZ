@@ -27,6 +27,9 @@
 //Cycle time for statetable.
 const int CYCLE_TIME = 100;
 
+//Update (enable/disable) UI (mostly menues) actions.
+enum UpdateUIAction { UPDATE_UI_INITIAL, UPDATE_UI_SERVER, UPDATE_UI_CLIENT, UPDATE_UI_NEW_SESSION};
+
 //Message type in network protocol.
 enum MsgType { CONNECT_MSG, SEATED_MSG, RTNAMES_MSG, TEAMNAMES_MSG, RSBOARD_MSG, STARTOFBOARD_MSG, RDEALINFO_MSG,
                DEALINFO_MSG, RCARDS_MSG, CARDS_MSG, BID_MSG, RBID_MSG, ILLEGALBID_MSG, PLAYERTOLEAD_MSG,
@@ -800,6 +803,21 @@ public:
 private:
     Seat seat;
     Bids bid;
+};
+
+#define WMS_UPDATE_UI_ACTION			QEvent::Type(111 + QEvent::User)
+class UPDATE_UI_ACTION_Event : public QEvent
+{
+public:
+    explicit UPDATE_UI_ACTION_Event(UpdateUIAction uiAction, bool enable = true) : QEvent(WMS_UPDATE_UI_ACTION)
+    { this->uiAction = uiAction; this->enable = enable; }
+
+    UpdateUIAction getUIAction() { return uiAction; }
+    bool getEnable() { return enable; }
+
+private:
+    UpdateUIAction uiAction;
+    bool enable;
 };
 
 #endif // DEFINES_H
