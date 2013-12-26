@@ -1,1 +1,29 @@
-README file for ZBridge.
+ZBridge is a program for bridge players who wants to play bridge with the help of a computer.
+There can be from 0 to 4 human players. The computer plays the missing players. Players can
+be either local on the local computer or remote on one or more remote computers.
+I started development of the program because I was not satisfied with any of the existing
+bridge programs with regard to their net abilities.
+I have until now concentrated on the man machine interface and not payed must attention to
+the computers automatic play capability. 
+This is work in progress and still misses a lot. 
+
+
+Development environment is Qt.
+
+Installation for ZBridge development:
+
+1. Install smartgit.
+	clone ZBridge to c:/projects/qt/zbridge
+	
+2. Install eclipse
+	install yakindu in eclipse
+	import project ZBridge to eclipse without copy (default)
+	
+3. Install Qt (at least v. 5)
+
+4. Install DoxyGen
+		Install Graphviz
+		Install mscgen
+		set dot and mscgen pathes in DoxyFile
+	
+5. Install UMLet
