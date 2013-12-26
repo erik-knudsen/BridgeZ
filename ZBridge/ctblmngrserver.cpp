@@ -1,6 +1,5 @@
 #include <QApplication>
 
-#include "misc.h"
 #include "../src-gen/sc_types.h"
 #include "czbridgedoc.h"
 #include "cplayview.h"
@@ -32,9 +31,9 @@ CTblMngrServer::CTblMngrServer(CZBridgeDoc *doc, CPlayView *playView, QObject *p
 
     //Start tcp server for remote clients.
     remoteActorServer = 0;
-    if (doc->getSeatOptions().role == ROLE_SERVER)
+    if (doc->getSeatOptions().role == SERVER_ROLE)
     {
-        remoteActorServer = new CRemoteActorServer(PROTOCOLS[doc->getSeatOptions().protocol],
+        remoteActorServer = new CRemoteActorServer(doc->getSeatOptions().protocol,
                                                QHostAddress(doc->getSeatOptions().hostServer),
                                                doc->getSeatOptions().portServer.toInt(), this);
 
@@ -132,15 +131,15 @@ void CTblMngrServer::newSession()
 
     boardNo = 0;
 
-    protocol = (remoteActorServer != 0) ? PROTOCOLS[doc->getSeatOptions().protocol] : NET_PROTOCOL_ADV;
+    protocol = (remoteActorServer != 0) ? doc->getSeatOptions().protocol : ADVANCED_PROTOCOL;
 
     //Enable/disable relevant menu actions.
-    QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_SERVER , protocol == NET_PROTOCOL_ADV));
+    QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_SERVER , protocol == ADVANCED_PROTOCOL));
 
     QString ewTeamName = "ewTeam";
     QString nsTeamName = "nsTeam";
 
-    if (ACTORS[doc->getSeatOptions().westActor] == MANUAL_ACTOR)
+    if (doc->getSeatOptions().westActor == MANUAL_ACTOR)
         actor = new CActorLocal(true, ewTeamName, WEST_SEAT, protocol,
                 doc->getNSBidOptions(), doc->getEWBidOptions(), this);
     else if ((remoteActorServer != 0) && remoteActorServer->isConnected(WEST_SEAT))
@@ -150,7 +149,7 @@ void CTblMngrServer::newSession()
                 doc->getNSBidOptions(), doc->getEWBidOptions(), this);
     actors[WEST_SEAT] = actor;
 
-    if (ACTORS[doc->getSeatOptions().northActor] == MANUAL_ACTOR)
+    if (doc->getSeatOptions().northActor == MANUAL_ACTOR)
         actor = new CActorLocal(true, nsTeamName, NORTH_SEAT, protocol,
                 doc->getNSBidOptions(), doc->getEWBidOptions(), this);
     else if ((remoteActorServer != 0) && remoteActorServer->isConnected(NORTH_SEAT))
@@ -160,7 +159,7 @@ void CTblMngrServer::newSession()
                 doc->getNSBidOptions(), doc->getEWBidOptions(), this);
     actors[NORTH_SEAT] = actor;
 
-    if (ACTORS[doc->getSeatOptions().eastActor] == MANUAL_ACTOR)
+    if (doc->getSeatOptions().eastActor == MANUAL_ACTOR)
         actor = new CActorLocal(true, ewTeamName, EAST_SEAT, protocol,
                 doc->getNSBidOptions(), doc->getEWBidOptions(), this);
     else if ((remoteActorServer != 0) && remoteActorServer->isConnected(EAST_SEAT))
@@ -170,7 +169,7 @@ void CTblMngrServer::newSession()
                 doc->getNSBidOptions(), doc->getEWBidOptions(), this);
     actors[EAST_SEAT] = actor;
 
-    if (ACTORS[doc->getSeatOptions().southActor] == MANUAL_ACTOR)
+    if (doc->getSeatOptions().southActor == MANUAL_ACTOR)
         actor = new CActorLocal(true, nsTeamName, SOUTH_SEAT, protocol,
                 doc->getNSBidOptions(), doc->getEWBidOptions(), this);
     else if ((remoteActorServer != 0) && remoteActorServer->isConnected(SOUTH_SEAT))
@@ -284,10 +283,10 @@ void CTblMngrServer::serverActions()
             sShowCenter(currentVulnerable);
         }
 
-        bool showWest = showAll || (ACTORS[doc->getSeatOptions().westActor] == MANUAL_ACTOR);
-        bool showNorth = showAll || (ACTORS[doc->getSeatOptions().northActor] == MANUAL_ACTOR);
-        bool showEast = showAll || (ACTORS[doc->getSeatOptions().eastActor] == MANUAL_ACTOR);
-        bool showSouth = showAll || (ACTORS[doc->getSeatOptions().southActor] == MANUAL_ACTOR);
+        bool showWest = showAll || (doc->getSeatOptions().westActor == MANUAL_ACTOR);
+        bool showNorth = showAll || (doc->getSeatOptions().northActor == MANUAL_ACTOR);
+        bool showEast = showAll || (doc->getSeatOptions().eastActor == MANUAL_ACTOR);
+        bool showSouth = showAll || (doc->getSeatOptions().southActor == MANUAL_ACTOR);
 
         playView->setAndShowAllCards(true, showWest, currentCards[WEST_SEAT], true, showNorth, currentCards[NORTH_SEAT],
                             true, showEast, currentCards[EAST_SEAT], true, showSouth, currentCards[SOUTH_SEAT]);
@@ -555,7 +554,7 @@ void CTblMngrServer::sReadyForDummyCards(Seat seat)
 
 void CTblMngrServer::sShowAuction()
 {
-    playView->setParams(SEATS[doc->getSeatOptions().seat], doc->getDisplayOptions().cardBack);
+    playView->setParams(doc->getSeatOptions().seat, doc->getDisplayOptions().cardBack);
 
     QString str;
     str.setNum(currentBoardNo);

@@ -79,8 +79,7 @@ SOURCES +=\
     cbidandplay.cpp \
     ccards.cpp \
     clrcards.cpp \
-    ctbcards.cpp \
-    misc.cpp
+    ctbcards.cpp
 
 HEADERS  += cmainframe.h \
     czbridgedoc.h \
@@ -152,7 +151,7 @@ HEADERS  += cmainframe.h \
     ccards.h \
     clrcards.h \
     ctbcards.h \
-    misc.h
+    ZBridge_documentation.h
 
 FORMS    += cmainframe.ui \
     cfilepropertiesdialog.ui \

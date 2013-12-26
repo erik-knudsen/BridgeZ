@@ -1,3 +1,23 @@
+/* Erik Aagaard Knudsen.
+  Copyright © 2013 - All Rights Reserved
+
+  Project: ZBridge
+  File: CPlayView.h
+  Developers: eak
+
+  Revision History:
+  13-jun-2013 eak: Original
+
+  Abstract: Bridge table view.
+
+  Platforms: Qt.
+  */
+
+/**
+ * @file
+ * The file implements the declaration of the Bridge table view.
+ */
+
 #ifndef CPLAYVIEW_H
 #define CPLAYVIEW_H
 
@@ -20,6 +40,29 @@ class CBottomInfoAuction;
 class CBottomInfoPlay;
 class CBottomInfoButton;
 
+/**
+ * @brief This class implements the declaration of the bridge table view.
+ *
+ * The view divides its scene as shown
+ *
+ * @image html Scene_PlayView.jpg "Play view scene"
+ * \n\n
+ * The scene is divided into a number of sub elements.\n
+ * Left cards, Top cards, Right cards and Bottom cards are where the bridge players
+ * cards are shown (some backside up). It is also here the user interacts with the
+ * cards (chooses which to play etc.).\n
+ * Center cards is where the cards for the current trick are shown.\n
+ * Top info, Mid info and Bottom info are used for displaying different kinds of
+ * information for the play (contract, vulnerability, number of tricks taken, trumph suit,
+ * bids, cards played etc.).\n\n
+ *
+ * The structure of the software implementing the play view scene mirrors how the scene
+ * is divided:
+ *
+ * @image html PlayViewDesign_Overview.jpg "Overview of play view"
+ * \n\n
+ *
+ */
 class CPlayView : public QGraphicsView
 {
     Q_OBJECT
@@ -71,15 +114,15 @@ public:
     void disableContinueOnTable();
 
 signals:
-    void bidValue(Bids bid);
-    void playValue(int card);
-    void bidBackup();
-    void bidHint();
-    void bidRestart();
-    void bidClose();
-    void buttonClicked(int button);
-    void handClicked(Seat seat);
-    void bidClicked(Seat seat, Bids bid);
+    void bidValue(Bids bid);    /**< Next bid to give, as selected by user in the bid dialog. */
+    void playValue(int card);   /**< Next card to play, as selected by user. */
+    void bidBackup();           /**< Request from user to back up bid. */
+    void bidHint();             /**< Requests from user to give hint about next bid. */
+    void bidRestart();          /**< Request from user to restart bidding from beginning. */
+    void bidClose();            /**< Close bidding. */
+    void buttonClicked(int button); /**< Button clicked. Auction or Play button. */
+    void handClicked(Seat seat);    /**< Hand clicked. Requests to display info about hand. */
+    void bidClicked(Seat seat, Bids bid);   /**< Bid clicked. Requests to display info about bid. */
 
 private:
     virtual void customEvent(QEvent *event);

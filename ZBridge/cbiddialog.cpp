@@ -297,10 +297,7 @@ void CBidDialog::enableBidder(Seat seat, Bids lastBid, Bids doubleBid)
 {
     int i;
 
-    for (i = 0; i < 4; i++)
-        if (SEATS[i] == seat) break;
-
-    setWindowTitle("Bidder: " + SEAT_NAMES[i]);
+    setWindowTitle(tr("Bidder: ") + SEAT_NAMES[seat]);
 
     for (i = BID_1C; i <= BID_7NT; i++)
         m_pBidButtons[i]->setEnabled(i > lastBid);

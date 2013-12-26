@@ -26,8 +26,8 @@
 
 CSeatOptionDoc::CSeatOptionDoc()
 {
-    seat = SEAT_SOUTH;
-    role = ROLE_STANDALONE;
+    seat = SOUTH_SEAT;
+    role = STANDALONE_ROLE;
 }
 
 // Assignment operator
@@ -79,11 +79,16 @@ void CSeatOptionDoc::WriteSettings()
 
 void CSeatOptionDoc::ReadSettings()
 {
+    int tmp;
+
     QSettings settings("ZBridge settings", "Seat");
 
-    seat = settings.value("seat", SEAT_SOUTH).toInt();
-    role = settings.value("role", ROLE_STANDALONE).toInt();
-    protocol = settings.value("protocol", NET_PROTOCOL_ADV).toInt();
+    tmp = settings.value("seat", SOUTH_SEAT).toInt();
+    seat = ((tmp >= WEST_SEAT) && (tmp <= SOUTH_SEAT)) ? (Seat)tmp : SOUTH_SEAT;
+    tmp = settings.value("role", STANDALONE_ROLE).toInt();
+    role = ((tmp >= SERVER_ROLE) && (tmp <= STANDALONE_ROLE)) ? (Role)tmp : STANDALONE_ROLE;
+    tmp = settings.value("protocol", ADVANCED_PROTOCOL).toInt();
+    protocol = ((tmp == BASIC_PROTOCOL) || (tmp == ADVANCED_PROTOCOL)) ? (Protocol)tmp : ADVANCED_PROTOCOL;
     hostServer = settings.value("hostServer", "").toString();
     portServer = settings.value("portServer", "").toString();
     hostClient = settings.value("hostClient", "").toString();
@@ -92,8 +97,12 @@ void CSeatOptionDoc::ReadSettings()
     northName = settings.value("northName", "N").toString();
     eastName = settings.value("eastName", "E").toString();
     southName = settings.value("southName", "S").toString();
-    westActor = settings.value("westActor", "").toInt();
-    northActor = settings.value("northActor", "").toInt();
-    eastActor = settings.value("eastActor", "").toInt();
-    southActor = settings.value("southActor", "").toInt();
+    tmp = settings.value("westActor", AUTO_ACTOR).toInt();
+    westActor = ((tmp >= MANUAL_ACTOR) && (tmp <= REMOTE_ACTOR)) ? (Actor)tmp : AUTO_ACTOR;
+    tmp = settings.value("northActor", AUTO_ACTOR).toInt();
+    northActor = ((tmp >= MANUAL_ACTOR) && (tmp <= REMOTE_ACTOR)) ? (Actor)tmp : AUTO_ACTOR;
+    tmp = settings.value("eastActor", "").toInt();
+    eastActor = ((tmp >= MANUAL_ACTOR) && (tmp <= REMOTE_ACTOR)) ? (Actor)tmp : AUTO_ACTOR;
+    tmp = settings.value("southActor", "").toInt();
+    southActor = ((tmp >= MANUAL_ACTOR) && (tmp <= REMOTE_ACTOR)) ? (Actor)tmp : AUTO_ACTOR;
 }

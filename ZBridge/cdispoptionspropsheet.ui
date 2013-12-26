@@ -351,7 +351,7 @@
                  </property>
                  <property name="icon">
                   <iconset resource="images.qrc">
-                   <normaloff>:/newPrefix/resources/cardback1.bmp</normaloff>:/newPrefix/resources/cardback1.bmp</iconset>
+                   <normaloff>:/newPrefix/resources/cardback1.png</normaloff>:/newPrefix/resources/cardback1.png</iconset>
                  </property>
                  <property name="iconSize">
                   <size>
@@ -371,7 +371,7 @@
                  </property>
                  <property name="icon">
                   <iconset resource="images.qrc">
-                   <normaloff>:/newPrefix/resources/cardback2.bmp</normaloff>:/newPrefix/resources/cardback2.bmp</iconset>
+                   <normaloff>:/newPrefix/resources/cardback22.png</normaloff>:/newPrefix/resources/cardback22.png</iconset>
                  </property>
                  <property name="iconSize">
                   <size>
@@ -391,7 +391,7 @@
                  </property>
                  <property name="icon">
                   <iconset resource="images.qrc">
-                   <normaloff>:/newPrefix/resources/cardback3.bmp</normaloff>:/newPrefix/resources/cardback3.bmp</iconset>
+                   <normaloff>:/newPrefix/resources/cardback3.png</normaloff>:/newPrefix/resources/cardback3.png</iconset>
                  </property>
                  <property name="iconSize">
                   <size>
@@ -415,7 +415,7 @@
                  </property>
                  <property name="icon">
                   <iconset resource="images.qrc">
-                   <normaloff>:/newPrefix/resources/cardback5.bmp</normaloff>:/newPrefix/resources/cardback5.bmp</iconset>
+                   <normaloff>:/newPrefix/resources/cardback5.png</normaloff>:/newPrefix/resources/cardback5.png</iconset>
                  </property>
                  <property name="iconSize">
                   <size>
@@ -435,7 +435,7 @@
                  </property>
                  <property name="icon">
                   <iconset resource="images.qrc">
-                   <normaloff>:/newPrefix/resources/cardback11.bmp</normaloff>:/newPrefix/resources/cardback11.bmp</iconset>
+                   <normaloff>:/newPrefix/resources/cardback11.png</normaloff>:/newPrefix/resources/cardback11.png</iconset>
                  </property>
                  <property name="iconSize">
                   <size>
@@ -458,7 +458,7 @@
                  </property>
                  <property name="icon">
                   <iconset resource="images.qrc">
-                   <normaloff>:/newPrefix/resources/cardback22.bmp</normaloff>:/newPrefix/resources/cardback22.bmp</iconset>
+                   <normaloff>:/newPrefix/resources/cardback2.png</normaloff>:/newPrefix/resources/cardback2.png</iconset>
                  </property>
                  <property name="iconSize">
                   <size>

@@ -1,4 +1,3 @@
-#include "misc.h"
 #include "cremoteactorserver.h"
 
 CRemoteActorFrontEnd::CRemoteActorFrontEnd(Seat seat, QString connectLine, QTcpSocket *socket)
@@ -49,7 +48,7 @@ void CRemoteActorFrontEnd::disConnect()
 }
 
 
-CRemoteActorServer::CRemoteActorServer(int protocol, QHostAddress hostAddress, quint16 port, QObject *parent) :
+CRemoteActorServer::CRemoteActorServer(Protocol protocol, QHostAddress hostAddress, quint16 port, QObject *parent) :
     QTcpServer(parent)
 {
     this->protocol = protocol;
@@ -58,7 +57,7 @@ CRemoteActorServer::CRemoteActorServer(int protocol, QHostAddress hostAddress, q
         remoteConnects[i].isConnected = false;
 
     if (!listen(hostAddress, port))
-        ::message(QMessageBox::Warning, errorString());
+        QMessageBox::warning(0, tr("ZBridge"), errorString());
 }
 
 CRemoteActorServer::~CRemoteActorServer()
@@ -75,7 +74,7 @@ void CRemoteActorServer::incomingConnection(qintptr socketDescriptor)
     socket->setSocketDescriptor(socketDescriptor);
     if (!socket->waitForReadyRead(10000))
     {
-        ::message(QMessageBox::Warning, tr("Timeout on client connection."));
+        QMessageBox::warning(0, tr("ZBridge"), tr("Timeout on client connection."));
         delete socket;
         return;
     }
@@ -84,7 +83,7 @@ void CRemoteActorServer::incomingConnection(qintptr socketDescriptor)
     int length = socket->read(buf, 200);
     if (length > 175)
     {
-        ::message(QMessageBox::Warning, tr("Connecting message from client is too long."));
+        QMessageBox::warning(0, tr("ZBridge"), tr("Connecting message from client is too long."));
         delete socket;
         return;
     }
@@ -111,7 +110,7 @@ void CRemoteActorServer::incomingConnection(qintptr socketDescriptor)
              !connectLine.contains("South", Qt::CaseInsensitive)) ||
             (connectLine.count(QChar('"')) != 2))
     {
-        ::message(QMessageBox::Warning, tr("Syntax error on connecting message from client."));
+        QMessageBox::warning(0, tr("ZBridge"), tr("Syntax error on connecting message from client."));
         delete socket;
         return;
     }
@@ -125,14 +124,14 @@ void CRemoteActorServer::incomingConnection(qintptr socketDescriptor)
 
     if (remoteConnects[seat].isConnected)
     {
-        ::message(QMessageBox::Warning, tr("Client tries to connect as already connected hand."));
+        QMessageBox::warning(0, tr("ZBridge"), tr("Client tries to connect as already connected hand."));
         delete socket;
         return;
     }
     if ((remoteConnects[(seat + 2) & 3].isConnected) &&
             (remoteConnects[(seat +2) & 3].teamName.compare(teamName, Qt::CaseInsensitive)) != 0)
     {
-        ::message(QMessageBox::Warning, tr("Team clients do not agree on team name."));
+        QMessageBox::warning(0, tr("ZBridge"), tr("Team clients do not agree on team name."));
         delete socket;
         return;
     }
@@ -153,7 +152,7 @@ void CRemoteActorServer::incomingConnection(qintptr socketDescriptor)
     remoteConnects[seat].frontEnd = frontEnd;
     remoteConnects[seat].isConnected = true;
 
-    ::message(QMessageBox::Information, connectLine);
+    QMessageBox::information(0, tr("ZBridge"), connectLine);
 
     thread->start();
 }
@@ -167,17 +166,11 @@ void CRemoteActorServer::stopAllClients()
 }
 
 
-void CRemoteActorServer::disConnectSeat(int seat)
+void CRemoteActorServer::disConnectSeat(Seat seat)
 {
-    int i;
-
     remoteConnects[seat].isConnected = false;
 
-    for (i = 0; i < 4; i++)
-        if (SEATS[i] == seat)
-            break;
-
-    ::message(QMessageBox::Critical, SEAT_NAMES[i] + tr(" has disconnected."));
+    QMessageBox::critical(0, tr("ZBridge"), tr(SEAT_NAMES[seat]) + tr(" has disconnected."));
 
     emit clientDisconnected();
 }

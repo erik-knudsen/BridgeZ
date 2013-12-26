@@ -22,7 +22,18 @@
 #include "cbottominfoplay.h"
 #include "cbottominfobutton.h"
 
-
+/**
+ * @brief Constructor for playview.
+ * @param parent Pointer to the parent.
+ *
+ * The constructor:
+ *   - Creates the scene, the widgets for the scene and the layout of the widgets
+ *     in the scene.
+ *   - Creates the children for the widgets in the scene.
+ *   - Sets initial parameters for bottom seat and for card backs.
+ *   - Allocates the bid dialog and hides it initially.
+ *   - Connects bid dialog signals to the play view.
+ */
 CPlayView::CPlayView(QWidget *parent) :
     QGraphicsView(parent)
 {
@@ -45,17 +56,26 @@ CPlayView::~CPlayView()
 {
 }
 
+/**
+ * @brief Create the scene for the play view.
+ *
+ * The scene is allocated. The widgets for the scene are allocated and initialized
+ * and the layout is set.
+ */
 void CPlayView::createSceneAndWidgetsAndLayout()
 {
+    //Allocate and initializethe scene.
     scene = new QGraphicsScene(0, 0, SCENE_HOR_SIZE, SCENE_VER_SIZE, this);
     setBackgroundBrush(Qt::gray);
     setScene(scene);
 
+    //Allocate and initialize widget for the center of the scene.
     centerCards = new CCenterCards();
     centerCards->setPreferredSize(QSizeF(CENTER_HOR_SIZE, CENTER_VER_SIZE));
     centerCards->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     centerCards->connectButton(this);
 
+    //Allocate and initialize widgets for the four hands.
     actorCards[LEFT_POS] = new CLRCards(LEFT_POS);
     actorCards[TOP_POS] = new CTBCards(TOP_POS);
     actorCards[RIGHT_POS] = new CLRCards(RIGHT_POS);
@@ -72,18 +92,22 @@ void CPlayView::createSceneAndWidgetsAndLayout()
         actorCards[i]->connectCards(this);
     }
 
+    //Allocate and initialize the mid infor widget.
     midInfo = new CMidInfo();
     midInfo->setPreferredSize(QSizeF(INF_HOR_SIZE, INF_VER_SIZE));
     midInfo->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
 
+    //Allocate and initialize the top info widget.
     topInfo = new CTopInfo();
     topInfo->setPreferredSize(QSizeF(INF_HOR_SIZE, TB_CARD_VER_SIZE));
     topInfo->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
 
+    //Allocat and initialize the bottom info widget.
     bottomInfo = new CBottomInfo();
     bottomInfo->setPreferredSize(QSizeF(INF_HOR_SIZE, TB_CARD_VER_SIZE));
     bottomInfo->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
 
+    //Layout the widgets in the scene.
     QGraphicsAnchorLayout *l = new QGraphicsAnchorLayout;
     l->setSpacing(0);
 
@@ -113,20 +137,26 @@ void CPlayView::createSceneAndWidgetsAndLayout()
     scene->addItem(w);
 }
 
+/**
+ * @brief Create children for the info widgets in the scene.
+ */
 void CPlayView::createChildren()
 {
+    //Top info for auction part of bridge play.
     topInfoAuction = new CTopInfoAuction();
     topInfoAuction->setPreferredSize(QSizeF(INF_HOR_SIZE, TB_CARD_VER_SIZE));
     topInfoAuction->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     topInfoAuction->setParentItem(topInfo);
     topInfoAuction->hide();
 
+    //Top info for play part of bridge play.
     topInfoPlay = new CTopInfoPlay();
     topInfoPlay->setPreferredSize(QSizeF(INF_HOR_SIZE, TB_CARD_VER_SIZE));
     topInfoPlay->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     topInfoPlay->setParentItem(topInfo);
     topInfoPlay->hide();
 
+    //Mid info for auction part of bridge play.
     midInfoAuction = new CMidInfoAuction();
     midInfoAuction->setPreferredSize(QSizeF(INF_HOR_SIZE, INF_VER_SIZE));
     midInfoAuction->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
@@ -134,24 +164,28 @@ void CPlayView::createChildren()
     midInfoAuction->hide();
     midInfoAuction->connectBids(this);
 
+    //Mid info for play part of bridge play.
     midInfoPlay = new CMidInfoPlay();
     midInfoPlay->setPreferredSize(QSizeF(INF_HOR_SIZE, INF_VER_SIZE));
     midInfoPlay->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     midInfoPlay->setParentItem(midInfo);
     midInfoPlay->hide();
 
+    //Bottom info for auction part of bridge play.
     bottomInfoAuction = new CBottomInfoAuction();
     bottomInfoAuction->setPreferredSize(QSizeF(INF_HOR_SIZE, TB_CARD_VER_SIZE));
     bottomInfoAuction->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     bottomInfoAuction->setParentItem(bottomInfo);
     bottomInfoAuction->hide();
 
+    //Bottom info for play part of bridge play.
     bottomInfoPlay = new CBottomInfoPlay();
     bottomInfoPlay->setPreferredSize(QSizeF(INF_HOR_SIZE, TB_CARD_VER_SIZE));
     bottomInfoPlay->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     bottomInfoPlay->setParentItem(bottomInfo);
     bottomInfoPlay->hide();
 
+    //Auction  button to display in bottom info.
     bottomInfoAuctionButton = new CBottomInfoButton(INF_HOR_SIZE, TB_CARD_VER_SIZE, "Start\nAuction");
     bottomInfoAuctionButton->setPreferredSize(QSizeF(INF_HOR_SIZE, TB_CARD_VER_SIZE));
     bottomInfoAuctionButton->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
@@ -159,6 +193,7 @@ void CPlayView::createChildren()
     bottomInfoAuctionButton->setParentItem(bottomInfo);
     bottomInfoAuctionButton->hide();
 
+    //Play button to display in bottom info.
     bottomInfoPlayButton = new CBottomInfoButton(INF_HOR_SIZE, TB_CARD_VER_SIZE, "Start\nPlay");
     bottomInfoPlayButton->setPreferredSize(QSizeF(INF_HOR_SIZE, TB_CARD_VER_SIZE));
     bottomInfoPlayButton->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
@@ -167,6 +202,26 @@ void CPlayView::createChildren()
     bottomInfoPlayButton->hide();
 }
 
+/**
+ * @brief Custom events for play view.
+ * @param event A custom event.
+ *
+ * The play view uses custom events for some events. This seemed to give a simpler
+ * implementation for these events instead of using signals and slots. These events
+ * are converted to signals here. The following events are handled:
+ *   - WMS_CARD_CLICKED
+ *     This event is generated when a card is clicked in one of the cards view
+ *     (Left, Top, Right or Bottom). It is converted to a playvalue signal.
+ *   - WMS_HAND_CLICKED
+ *     This event is generated when the hand is clicked in one of the cards view
+ *     (Left, Top, Right or bottom). It is converted to a handClicked signal.
+ *   - WMS_BUTTON_CLICKED
+ *     This event is generated when one of the buttons (Auction or Play or Continue)
+ *     is clicked. It is converted to a buttonClicked signal.
+ *   - WMS_BID_CLICKED
+ *     This event is generated when a bid is clicked in the mid info auction widget.
+ *     It is converted to a bidClicked signal.
+ */
 void CPlayView::customEvent(QEvent *event)
 {
     if (event->type() == WMS_CARD_CLICKED)
@@ -203,6 +258,14 @@ void CPlayView::customEvent(QEvent *event)
     }
 }
 
+/**
+ * @brief Set parameters for play view.
+ * @param bottomSeat Identifies which seat to display as the bottom seat.
+ * @param cardBack Identifies cardback picture.
+ *
+ * Saves cardback information and creates mapping arrays for seat to position
+ * and for position to seat.
+ */
 void CPlayView::setParams(Seat bottomSeat, int cardBack)
 {
     this->cardBack = cardBack;
@@ -244,8 +307,14 @@ void CPlayView::setParams(Seat bottomSeat, int cardBack)
                                                         BOTTOM_POS;
 }
 
+/**
+ * @brief Reset the play view.
+ *
+ * Does a complete reset and clean up of the play view.
+ */
 void CPlayView::resetView()
 {
+    //Reset and clean up cards (Left, Top, Right, Bottom).
     for (int i = 0; i < 4; i++)
     {
         actorCards[i]->setEnabled(false);
@@ -253,8 +322,10 @@ void CPlayView::resetView()
         actorCards[i]->setTrumpSuit(ANY);
     }
 
+    //Reset and clean up the center.
     centerCards->setEnabled(false);
 
+    //Reset and clean up Info part of scene.
     topInfoAuction->hide();
     topInfoPlay->hide();
     midInfoAuction->hide();
@@ -265,8 +336,10 @@ void CPlayView::resetView()
     bottomInfoAuctionButton->hide();
     bottomInfoPlayButton->hide();
 
+    //Hide bid dialog.
     m_pBidDlg->hide();
 
+    //Clean up table.
     clearCardsOnTable();
     clearVulnerableOnTable();
     clearEWNSTextOnTable();

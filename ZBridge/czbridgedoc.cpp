@@ -8,15 +8,15 @@
   Revision History:
   26-feb-2013 eak: Original
 
-  Abstract: ZBridge mode (data etc.).
+  Abstract: ZBridge model (data etc.).
 
   Platforms: Qt.
 
 */
 
 /**
- * \file
- * ZBridge model (data etc.) (definition).
+ * @file
+ * ZBridge model (data etc.).
  */
 
 #include <QFile>
@@ -28,11 +28,16 @@
 
 CZBridgeDoc *CZBridgeDoc::instance = 0;
 
+
+/**
+ * Constructor for the model container.
+ * Reads data from permanent storage.
+ */
 CZBridgeDoc::CZBridgeDoc(QObject *parent) :
     QObject(parent)
 {
     ReadSeatOptions();
-    seatOptions.role = ROLE_STANDALONE;
+    seatOptions.role = STANDALONE_ROLE;
     ReadSettings();
     LoadBidOptions();
     ReadDealOptions();
@@ -43,11 +48,19 @@ CZBridgeDoc::CZBridgeDoc(QObject *parent) :
     synchronizeOptions(false);
 }
 
+/**
+ * This static method returns a pointer to the (singleton) data container.
+ */
 CZBridgeDoc* CZBridgeDoc::Instance()
 {
     return instance;
 }
 
+/**
+ * Synchronize options with wizard generated options.
+ *
+ * @param[in] all If true then all options else only bid options.
+ */
 void CZBridgeDoc::synchronizeOptions(bool all)
 {
     if (all)
@@ -336,11 +349,16 @@ void CZBridgeDoc::synchronizeOptions(bool all)
         defaultBidOption.discardingNT = SIGNAL_ATTITUDE_LOW;
     }
 
-    //Update.
+    //Update permanent storage.
     WriteGameOptions();
     WriteDisplayOptions();
 }
 
+/**
+ * @brief Get current North/South bid options.
+ *
+ * @return Current North/South bid options.
+ */
 CBidOptionDoc &CZBridgeDoc::getNSBidOptions()
 {
     if (bidOptions.empty())
@@ -358,6 +376,11 @@ CBidOptionDoc &CZBridgeDoc::getNSBidOptions()
     return bidOptions[i];
 }
 
+/**
+ * @brief Get Current East/West bid options.
+ *
+ * @return Current East/West bid options.
+ */
 CBidOptionDoc &CZBridgeDoc::getEWBidOptions()
 {
     if (bidOptions.empty())
@@ -375,16 +398,25 @@ CBidOptionDoc &CZBridgeDoc::getEWBidOptions()
     return bidOptions[i];
 }
 
+/**
+ * @brief Write seat options to permanent storage.
+ */
 void CZBridgeDoc::WriteSeatOptions()
 {
     seatOptions.WriteSettings();
 }
 
+/**
+ * @brief Read seat options from permanent storage.
+ */
 void CZBridgeDoc::ReadSeatOptions()
 {
     seatOptions.ReadSettings();
 }
 
+/**
+ * @brief Write current convention settings to permanent storage.
+ */
 void CZBridgeDoc::WriteSettings()
 {
     QSettings settings("ZBridge settings", "Conventions");
@@ -393,6 +425,9 @@ void CZBridgeDoc::WriteSettings()
     settings.setValue("ewConvention", curBidOption[EWBIDOPTIONSINDEX]);
 }
 
+/**
+ * @brief Read current convention settings from permanent storage.
+ */
 void CZBridgeDoc::ReadSettings()
 {
     QSettings settings("ZBridge settings", "Conventions");
@@ -401,6 +436,9 @@ void CZBridgeDoc::ReadSettings()
     curBidOption[EWBIDOPTIONSINDEX] = settings.value("ewConvention","").toString();
 }
 
+/**
+ * @brief Write bid options to permanent storage.
+ */
 void CZBridgeDoc::SaveBidOptions()
 {
     QFile file(BIDOPTIONFILENAME);
@@ -412,6 +450,9 @@ void CZBridgeDoc::SaveBidOptions()
     file.close();
 }
 
+/**
+ * @brief Read bid options from permanent storage.
+ */
 void CZBridgeDoc::LoadBidOptions()
 {
     QFile file(BIDOPTIONFILENAME);
@@ -424,60 +465,100 @@ void CZBridgeDoc::LoadBidOptions()
     file.close();
 }
 
+/**
+ * @brief Write deal options to permanent storage
+ */
 void CZBridgeDoc::WriteDealOptions()
 {
     dealOptions.WriteSettings();
 }
 
+/**
+ * @brief Read deal options from permanent storage
+ */
 void CZBridgeDoc::ReadDealOptions()
 {
     dealOptions.ReadSettings();
 }
 
+/**
+ * @brief Write display options to permanent storage
+ */
 void CZBridgeDoc::WriteDisplayOptions()
 {
     displayOptions.WriteSettings();
 }
 
+/**
+ * @brief Read display options from permanent storage
+ */
 void CZBridgeDoc::ReadDisplayOptions()
 {
     displayOptions.ReadSettings();
 }
 
+/**
+ * @brief Write game options to permanent storage
+ */
 void CZBridgeDoc::WriteGameOptions()
 {
     gameOptions.WriteSettings();
 }
 
+/**
+ * @brief Read game options from permanent storage
+ */
 void CZBridgeDoc::ReadGameOptions()
 {
     gameOptions.ReadSettings();
 }
 
+/**
+ * @brief Write wizard options to permanent storage
+ */
 void CZBridgeDoc::WriteWizardOptions()
 {
     wizardOptions.WriteSettings();
 }
 
+/**
+ * @brief Read wizard options from permanent storage
+ */
 void CZBridgeDoc::ReadWizardOptions()
 {
     wizardOptions.ReadSettings();
 }
 
+/**
+ * @brief CZBridgeDoc::setFileComments
+ * @param fileComments
+ */
 void CZBridgeDoc::setFileComments(QString &fileComments)
 {
 }
 
+/**
+ * @brief CZBridgeDoc::getFileComments
+ * @return
+ */
 QString &CZBridgeDoc::getFileComments()
 {
     QString *txt = new QString("text");
     return *txt;
 }
 
+/**
+ * @brief CZBridgeDoc::setShowCommentsUponOpen
+ * @param autoShow
+ */
 void CZBridgeDoc::setShowCommentsUponOpen(bool autoShow)
 {
 }
 
+/**
+ * @brief CZBridgeDoc::getShowCommentsUponOpen
+ * @return
+ */
 bool CZBridgeDoc::getShowCommentsUponOpen()
 {
     return false;

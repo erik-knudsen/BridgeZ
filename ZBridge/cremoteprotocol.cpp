@@ -2,6 +2,7 @@
 
 #include "cremoteprotocol.h"
 
+//Indexed with enum Seat values.
 const QString SEAT_NAMES_NET[4] =
 {
     "West",
@@ -10,6 +11,7 @@ const QString SEAT_NAMES_NET[4] =
     "South"
 };
 
+//Indexed with enum Team values.
 const QString VULNERABILITY_NAMES_NET[4] =
 {
     "Neither vulnerable",
@@ -18,7 +20,7 @@ const QString VULNERABILITY_NAMES_NET[4] =
     "Both vulnerable"
 };
 
-enum BidType_Net { PASSES_NET, DOUBLES_NET, REDOUBLES_NET, BIDS_NET};
+enum BidType_Net { PASSES_NET = 0, DOUBLES_NET = 1, REDOUBLES_NET = 2, BIDS_NET};
 const QString BIDTYPE_NET[4] =
 {
     "passes",
@@ -27,6 +29,7 @@ const QString BIDTYPE_NET[4] =
     "bids"
 };
 
+//Indexed with enum Suit values.
 const QString SUITS_NET[5] =
 {
     "C",
@@ -654,7 +657,7 @@ CBidMsg::CBidMsg(QString line) throw (NetProtocolException)
 
 void CBidMsg::msgToLine()
 {
-    line = QString("%1 ").arg(SEAT_NAMES[bidder]);
+    line = QString("%1 ").arg(SEAT_NAMES_NET[bidder]);
 
     if (bid == BID_PASS)
         line += BIDTYPE_NET[PASSES_NET] + "\r\n";

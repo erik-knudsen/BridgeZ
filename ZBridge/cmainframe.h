@@ -16,7 +16,7 @@
 
 /**
  * \file
- * Mainframe (declaration).
+ * Mainframe.
  */
 
 #ifndef CMAINFRAME_H
@@ -37,8 +37,14 @@ class CHistoryWnd;
 class CSeatConfiguration;
 class CBidDialog;
 
+//Enums for initial enable/disable of menu items.
 enum actionIndicator { INITIAL_ACTIONS, SERVER_ACTIONS, CLIENT_ACTIONS };
 
+
+/**
+ * @brief Main frame window. All other windows are controlled from this window.
+ *
+ */
 class CMainFrame : public QMainWindow
 {
     Q_OBJECT
@@ -50,12 +56,14 @@ public:
 
     virtual QMenu *createPopupMenu();
 
+    //Text for status line of mainframe window.
     void SetStatusText(QString text);
     void ResetStatusText();
 
-    void enableUIActionsServer(bool advProtocol);
-    void enableUIActionsInitial(bool advProtocol);
-    void enableUIActionsClient(bool advProtocol);
+    //Initial enable/disable for main menu.
+    void enableUIActionsInitial(bool advProtocol);  //Server/client mode not determined yet.
+    void enableUIActionsServer(bool advProtocol);   //Server mode.
+    void enableUIActionsClient(bool advProtocol);   //Client mode.
 
 protected:
     virtual void resizeEvent(QResizeEvent *resizeEvent);
@@ -81,6 +89,8 @@ private slots:
     void OnUpdateViewFileComments();
     void OnUpdateViewHistory();
     void OnUpdateShowAnalysis();
+
+    //Menu actions.
     void on_actionOpen_triggered();
     void on_actionSave_triggered();
     void on_actionSave_As_triggered();

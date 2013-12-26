@@ -16,8 +16,9 @@
 
 /**
  * \file
- * Mainframe (definition).
+ * Mainframe.
  */
+
 #include <QResizeEvent>
 #include <QSizePolicy>
 
@@ -41,22 +42,44 @@
 #include "ctblmngrserver.h"
 #include "ctblmngrclient.h"
 
+//Static pointer to mainframe singleton.
 CMainFrame *CMainFrame::m_pInstance = 0;
 
+/**
+ * @brief Mainframe constructor.
+ *
+ * Sets up the mainframe etc.:
+ *
+ *   - Set up mainframe (main menu etc.).
+ *   - Allocate playview. This is the view where the play is visualized.
+ *   - Determine (server or client) and allocate table manager. The table manager is\n
+ *     the controller of what happens.
+ *   - Allocate and initialize file comment dialog (EAK).
+ *   - Allocate and initialize status window (EAK).
+ *   - Allocate and initialize history window (EAK).
+ *
+ * @param app Pointer to application.
+ * @param doc Pointer to data container.
+ */
 CMainFrame::CMainFrame(CZBridgeApp *app, CZBridgeDoc *doc) :
     ui(new Ui::CMainFrame)
 {
     this->app = app;
     this->doc = doc;
 
+    //Set up user interface (main menu etc.)
     ui->setupUi(this);
 
+    //Allocate and initialize play view.
     playView = new CPlayView(this);
-    if ((ROLES[doc->getSeatOptions().role] == STANDALONE_ROLE) || (ROLES[doc->getSeatOptions().role] == SERVER_ROLE))
+
+    //Determine, allocate and initialize table manager.
+    if ((doc->getSeatOptions().role == STANDALONE_ROLE) || (doc->getSeatOptions().role == SERVER_ROLE))
         tableManager = new CTblMngrServer(doc, playView, this);
     else
         tableManager = new CTblMngrClient(doc, playView, this);
 
+    //Initialization of main frame window.
     setCentralWidget(playView);
     setWindowIcon(QIcon(":/newPrefix/resources/ZBridgeICN.bmp"));
 
@@ -64,14 +87,17 @@ CMainFrame::CMainFrame(CZBridgeApp *app, CZBridgeDoc *doc) :
     setMinimumSize(QSize(SCENE_HOR_SIZE * .75, SCENE_VER_SIZE * .75));
     setMaximumSize(QSize(SCENE_HOR_SIZE * 1.25, SCENE_VER_SIZE * 1.25));
 
+    //File comment dialog (EAK).
     m_pFileCommentsDlg = new CFileCommentsDialog(app, doc, this);
     connect(m_pFileCommentsDlg, &CFileCommentsDialog::UpdateViewFileComments, this, &CMainFrame::OnUpdateViewFileComments);
 
+    //Status window (EAK)
     m_pWndStatus = new CStatusWnd(app, doc, this);
     addDockWidget(Qt::BottomDockWidgetArea, m_pWndStatus);
     m_pWndStatus->hide();
     connect(m_pWndStatus, &CStatusWnd::UpdateShowAnalysis, this, &CMainFrame::OnUpdateShowAnalysis);
 
+    //History window (EAK).
     m_pWndHistory = new CHistoryWnd(app, doc, this);
     addDockWidget(Qt::LeftDockWidgetArea, m_pWndHistory);
     m_pWndHistory->hide();
@@ -83,11 +109,21 @@ CMainFrame::~CMainFrame()
     delete ui;
 }
 
+/**
+ * @brief Get pointer to mainframe singleton instance.
+ *
+ * @return Pointer to mainframe singleton instance.
+ */
 CMainFrame* CMainFrame::Instance()
 {
     return m_pInstance;
 }
 
+/**
+ * @brief Handle resize of mainframe (and children) windows.
+ *
+ * @param resizeEvent Parameters for resize.
+ */
 void CMainFrame::resizeEvent(QResizeEvent *resizeEvent)
 {
     QSize size = resizeEvent->size();
@@ -100,6 +136,13 @@ void CMainFrame::resizeEvent(QResizeEvent *resizeEvent)
     }
 }
 
+/**
+ * @brief Custom event handling.
+ *
+ * Handles events for disabling/enabling of main menu entries.
+ *
+ * @param event The event type. Only update ui events are handled.
+ */
 void CMainFrame::customEvent(QEvent *event)
 {
     if (event->type() == WMS_UPDATE_UI_ACTION)
@@ -111,14 +154,17 @@ void CMainFrame::customEvent(QEvent *event)
 
         switch (uiAction)
         {
+        //Enable/Disable for initial main menu entries for table manager server.
         case UPDATE_UI_SERVER:
             enableUIActionsServer(param);
             break;
 
+        //Enable/Disable for initial main menu entries for table manager client.
         case UPDATE_UI_CLIENT:
             enableUIActionsClient(param);
             break;
 
+        //Enable/Disable new session menu entry.
         case UPDATE_UI_NEW_SESSION:
             ui->actionNew_Session->setEnabled(param);
             break;
@@ -126,21 +172,46 @@ void CMainFrame::customEvent(QEvent *event)
     }
 }
 
+/**
+ * @brief Enable main menu entries initially (before server or client mode is determined).
+ *
+ * @param advProtocol If true use advanced protocol else use basic protocol.
+ */
 void CMainFrame::enableUIActionsInitial(bool advProtocol)
 {
     enableUIActions(INITIAL_ACTIONS, advProtocol);
 }
 
+/**
+ * @brief Enable main menu entries initially for server mode.
+ *
+ * @param advProtocol If true use advanced protocol else use basic protocol.
+ */
 void CMainFrame::enableUIActionsServer(bool advProtocol)
 {
     enableUIActions(SERVER_ACTIONS, advProtocol);
 }
 
+/**
+ * @brief Enable main menu entries initially for client mode.
+ *
+ * @param advProtocol If true use advanced protocol else use basic protocol.
+ */
 void CMainFrame::enableUIActionsClient(bool advProtocol)
 {
     enableUIActions(CLIENT_ACTIONS, advProtocol);
 }
 
+/**
+ * @brief Enable/disable main menu entries.
+ *
+ * @param actions identifies which actions to intially enable/disable for.
+ *        - INITIAL_ACTIONS before server/client mode is determined.
+ *        - SERVER_ACTIONS for server mode.
+ *        - CLIENT_ACTIONS for client mode.
+ *
+ * @param advProtocol identifies whic protocol to use (advanced or basic).
+ */
 void CMainFrame::enableUIActions(actionIndicator actions, bool advProtocol)
 {
     ui->actionOpen->setEnabled((actions == INITIAL_ACTIONS) || (actions == SERVER_ACTIONS));
@@ -162,36 +233,65 @@ void CMainFrame::enableUIActions(actionIndicator actions, bool advProtocol)
     ui->action_Expose_All_Cards->setEnabled(((actions == SERVER_ACTIONS) || (actions == CLIENT_ACTIONS)) && advProtocol);
 }
 
+/**
+ * @brief CMainFrame::OnUpdateViewFileComments
+ * EAK
+ */
 void CMainFrame::OnUpdateViewFileComments()
 {
     ui->action_File_Comments->setChecked(false);
 }
 
+/**
+ * @brief CMainFrame::OnUpdateViewHistory
+ * EAK
+ */
 void CMainFrame::OnUpdateViewHistory()
 {
     ui->actionBidding_Play_History->setChecked(false);
 }
 
+/**
+ * @brief CMainFrame::OnUpdateShowAnalysis
+ * EAK
+ */
 void CMainFrame::OnUpdateShowAnalysis()
 {
     ui->actionShow_Player_Analyses->setChecked(false);
 }
 
+/**
+ * @brief CMainFrame::createPopupMenu
+ *
+ * Not used yet.
+ *
+ * @return
+ */
 QMenu *CMainFrame::createPopupMenu()
 {
     return 0;
 }
 
+/**
+ * @brief Set text in status line.
+ *
+ * @param text is the text to set.
+ */
 void CMainFrame::SetStatusText(QString text)
 {
     ui->statusBar->showMessage(text);
 }
 
+/**
+ * @brief Clear text in status line.
+ */
 void CMainFrame::ResetStatusText()
 {
     ui->statusBar->clearMessage();
 }
 
+//Following methods are automatically generated main menu actions.
+//----------------------------------------------------------------
 void CMainFrame::on_actionOpen_triggered()
 {
 
@@ -217,8 +317,12 @@ void CMainFrame::on_actionPrint_PreView_triggered()
 
 }
 
+/**
+ * @brief Main menu properties triggered.
+ */
 void CMainFrame::on_actionProperties_triggered()
 {
+    //Show properties dialog.
     CFilePropertiesDialog properties(app, doc);
     properties.exec();
 }
@@ -258,16 +362,24 @@ void CMainFrame::on_actionClear_All_triggered()
 
 }
 
+/**
+ * @brief Main menu file comments triggered.
+ */
 void CMainFrame::on_action_File_Comments_triggered()
 {
+    //Togle hide and show.
     if (m_pFileCommentsDlg->isVisible())
         m_pFileCommentsDlg->hide();
     else
         m_pFileCommentsDlg->show();
 }
 
+/**
+ * @brief Main menu bidding play history triggered.
+ */
 void CMainFrame::on_actionBidding_Play_History_triggered()
 {
+    //Togle hide and show.
     if (m_pWndHistory->isVisible())
         m_pWndHistory->hide();
     else
@@ -304,11 +416,17 @@ void CMainFrame::on_action_Refresh_Screen_triggered()
 
 }
 
+/**
+ * @brief Main menu new session triggered.
+ */
 void CMainFrame::on_actionNew_Session_triggered()
 {
     tableManager->newSession();
 }
 
+/**
+ * @brief Main menu new deal triggered.
+ */
 void CMainFrame::on_action_Deal_New_Hand_triggered()
 {
     tableManager->newDeal();
@@ -489,15 +607,22 @@ void CMainFrame::on_action_Distribute_Remaining_Cards_triggered()
 
 }
 
+/**
+ * @brief Main menu seat configuration triggered.
+ *
+ * Activate seat configuration dialog
+ */
 void CMainFrame::on_actionSeat_Configuration_triggered()
 {
     CSeatConfiguration seatConfiguration(app, doc, this);
     if (seatConfiguration.exec() == QDialog::Accepted)
     {
+        //Seat configuration has changed. The table manager is deleted
+        //and a new table manager (server or client) is allocated and initialized.
         doc->WriteSeatOptions();
 
         delete tableManager;
-        if ((ROLES[doc->getSeatOptions().role] == STANDALONE_ROLE) || (ROLES[doc->getSeatOptions().role] == SERVER_ROLE))
+        if ((doc->getSeatOptions().role == STANDALONE_ROLE) || (doc->getSeatOptions().role == SERVER_ROLE))
             tableManager = new CTblMngrServer(doc, playView, this);
         else
             tableManager = new CTblMngrClient(doc, playView, this);
@@ -505,6 +630,11 @@ void CMainFrame::on_actionSeat_Configuration_triggered()
 
 }
 
+/**
+ * @brief main menu bidding options triggered.
+ *
+ * Activate bid options dialog.
+ */
 void CMainFrame::on_action_Bidding_Options_triggered()
 {
     CBidOptions bidOptsDialog(app, doc, this);
@@ -512,6 +642,11 @@ void CMainFrame::on_action_Bidding_Options_triggered()
         doc->WriteSettings();
 }
 
+/**
+ * @brief main menu deal options triggered.
+ *
+ * Activate deal options dialog.
+ */
 void CMainFrame::on_action_Deal_Options_triggered()
 {
     CDealOptionsPropSheet dealOptsDialog(app, doc, this);
@@ -519,6 +654,11 @@ void CMainFrame::on_action_Deal_Options_triggered()
         doc->WriteDealOptions();
 }
 
+/**
+ * @brief main menu display options triggered.
+ *
+ * Activate display options dialog.
+ */
 void CMainFrame::on_action_Di_splay_Options_triggered()
 {
     CDispOptionsPropSheet dispOptsDialog(app, doc, this);
@@ -526,6 +666,11 @@ void CMainFrame::on_action_Di_splay_Options_triggered()
         doc->WriteDisplayOptions();
 }
 
+/**
+ * @brief main menu game options triggered.
+ *
+ * Activate game options dialog.
+ */
 void CMainFrame::on_action_Game_Options_triggered()
 {
     CGameOptionsPropSheet gameOptsDialog(app, doc, this);
@@ -533,6 +678,11 @@ void CMainFrame::on_action_Game_Options_triggered()
         doc->WriteGameOptions();
 }
 
+/**
+ * @brief main menu configuration wizard triggered.
+ *
+ * Activate configuration wizard.
+ */
 void CMainFrame::on_actionConfiguration_Wizard_triggered()
 {
     CProgramConfigWizard programConfigWizard(app, doc, this);

@@ -15,8 +15,8 @@
 */
 
 /**
- * \file
- * ZBridge application (definition).
+ * @file
+ * ZBridge application.
  */
 
 #include <QAbstractSocket>
@@ -25,10 +25,12 @@
 #include "cmainframe.h"
 #include "czbridgedoc.h"
 
-//Q_DECLARE_METATYPE(QAbstractSocket::SocketError)
 
-CZBridgeApp *CZBridgeApp::m_pInstance = 0;
-
+/**
+ * Main for starting the ZBridge application.
+ * The application is allocated. Relevant meta types are registered and the
+ * application is started.
+ */
 int main(int argc, char *argv[])
 {
     CZBridgeApp app(argc, argv);
@@ -38,18 +40,17 @@ int main(int argc, char *argv[])
     return app.exec();
 }
 
+/**
+ * The constructor initializes the Zbridge application.
+ *   - Allocate data for the application (model).
+ *   - Allocate the main frame window etc. (view).
+ *   - Show the main frame window.
+ */
 CZBridgeApp::CZBridgeApp(int &argc, char **argv) :
     QApplication(argc, argv)
 {
-    m_pInstance = this;
-
     doc = new CZBridgeDoc(this);
 
     mainFrame = new CMainFrame(this, doc);
     mainFrame->show();
-}
-
-CZBridgeApp* CZBridgeApp::Instance()
-{
-    return m_pInstance;
 }

@@ -15,7 +15,7 @@
 */
 
 /**
- * \file
+ * @file
  * ZBridge model (data etc.) (declaration).
  */
 
@@ -33,14 +33,24 @@
 #include "cgameoptiondoc.h"
 #include "cwizardoptiondoc.h"
 
+
+/**
+ * @brief Container for configuration parameters.
+ *
+ * The application is partly controlled by configuration parameters. These parameters
+ * can be changed by the user. This is done via the main frame menu.
+ */
 class CZBridgeDoc : public QObject
 {
     Q_OBJECT
 public:
+    //The container is a singleton and can be referenced anywhere.
     static CZBridgeDoc* Instance();
+
     explicit CZBridgeDoc(QObject *parent = 0);
 
 
+    //Get and set options.
     CSeatOptionDoc &getSeatOptions() { return seatOptions; }
     void setSeatOptions(CSeatOptionDoc &seatOptions) { this->seatOptions = seatOptions; }
     CBidOptionDoc &getDefaultBidOption() { return defaultBidOption; }
@@ -58,6 +68,7 @@ public:
     CBidOptionDoc &getNSBidOptions();
     CBidOptionDoc &getEWBidOptions();
 
+    //Read and write options to permanent storage.
     void WriteSeatOptions();
     void ReadSeatOptions();
     void SaveBidOptions();
@@ -83,8 +94,9 @@ signals:
 public slots:
 
 private:
-    static CZBridgeDoc* instance;
+    static CZBridgeDoc* instance;   //Reference to singleton instance.
 
+    //Option variables.
     CSeatOptionDoc seatOptions;
     CBidOptionDoc defaultBidOption;
     QList<CBidOptionDoc> bidOptions;

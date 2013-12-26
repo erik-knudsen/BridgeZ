@@ -15,8 +15,8 @@
 */
 
 /**
- * \file
- * ZBridge application (declaration).
+ * @file
+ * ZBridge application.
  */
 
 #ifndef CZBRIDGEAPP_H
@@ -24,21 +24,26 @@
 
 #include <QApplication>
 
-#include "cmainframe.h"
+class CMainFrame;
 class CZBridgeDoc;
 
+
+/**
+ * @brief ZBridge application.
+ *
+ * This is the ZBridge application class.
+ * It owns the main frame window (mainframe) and data (doc) for the application.
+ *
+ */
 class CZBridgeApp : public QApplication
 {
     Q_OBJECT
 public:
-    static CZBridgeApp* Instance();
     explicit CZBridgeApp(int &argc, char **argv);
 
 private:
     CMainFrame * mainFrame;
     CZBridgeDoc * doc;
-
-    static CZBridgeApp* m_pInstance;
 
 signals:
 

@@ -1,6 +1,6 @@
 #include <QApplication>
+#include <QMessageBox>
 
-#include "misc.h"
 #include "../src-gen/sc_types.h"
 #include "czbridgedoc.h"
 #include "cplayview.h"
@@ -59,26 +59,26 @@ void CTblMngrClient::newSession()
 {
     cleanTableManager();
 
-    protocol = PROTOCOLS[doc->getSeatOptions().protocol];
+    protocol = doc->getSeatOptions().protocol;
 
     //Enable/disable relevant menu actions.
-    QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_CLIENT , protocol == NET_PROTOCOL_ADV));
+    QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_CLIENT , protocol == ADVANCED_PROTOCOL));
     QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_NEW_SESSION , false));
 
     QString ewTeamName = "ewTeam";
     QString nsTeamName = "nsTeam";
 
-    if (SEATS[doc->getSeatOptions().seat] == WEST_SEAT)
-        actor = new CActorLocal((ACTORS[doc->getSeatOptions().westActor] == MANUAL_ACTOR), ewTeamName, WEST_SEAT,
+    if (doc->getSeatOptions().seat == WEST_SEAT)
+        actor = new CActorLocal((doc->getSeatOptions().westActor == MANUAL_ACTOR), ewTeamName, WEST_SEAT,
                 protocol, doc->getNSBidOptions(), doc->getEWBidOptions(), this);
-    else if (SEATS[doc->getSeatOptions().seat] == NORTH_SEAT)
-        actor = new CActorLocal((ACTORS[doc->getSeatOptions().northActor] == MANUAL_ACTOR), nsTeamName, NORTH_SEAT,
+    else if (doc->getSeatOptions().seat == NORTH_SEAT)
+        actor = new CActorLocal((doc->getSeatOptions().northActor == MANUAL_ACTOR), nsTeamName, NORTH_SEAT,
                 protocol, doc->getNSBidOptions(), doc->getEWBidOptions(), this);
-    else if (SEATS[doc->getSeatOptions().seat] == EAST_SEAT)
-        actor = new CActorLocal((ACTORS[doc->getSeatOptions().seat] == MANUAL_ACTOR), ewTeamName, EAST_SEAT,
+    else if (doc->getSeatOptions().seat == EAST_SEAT)
+        actor = new CActorLocal((doc->getSeatOptions().eastActor == MANUAL_ACTOR), ewTeamName, EAST_SEAT,
                 protocol, doc->getNSBidOptions(), doc->getEWBidOptions(), this);
     else
-        actor = new CActorLocal((ACTORS[doc->getSeatOptions().seat] == MANUAL_ACTOR), nsTeamName, SOUTH_SEAT,
+        actor = new CActorLocal((doc->getSeatOptions().southActor == MANUAL_ACTOR), nsTeamName, SOUTH_SEAT,
                 protocol, doc->getNSBidOptions(), doc->getEWBidOptions(), this);
 
     actor->setShowUser((actor->getActorType() == MANUAL_ACTOR) || showAll);
@@ -97,7 +97,7 @@ void CTblMngrClient::newSession()
 //-----------------------------------------------------------------------------
 void CTblMngrClient::sSocketError(QString err)
 {
-    ::message(QMessageBox::Information, err);
+    QMessageBox::information(0, tr("ZBridge"), err);
 
     cleanTableManager();
 
@@ -110,12 +110,12 @@ void CTblMngrClient::clientConnected()
     //Start actor.
     actor->startNewSession();
 
-    ::message(QMessageBox::Information, tr("Client connected."));
+    QMessageBox::information(0, tr("ZBridge"), tr("Client connected."));
 }
 
 void CTblMngrClient::clientDisConnected()
 {
-    ::message(QMessageBox::Information, tr("Client disconnected."));
+    QMessageBox::information(0, tr("ZBridge"), tr("Client disconnected."));
 
     cleanTableManager();
 
@@ -165,7 +165,7 @@ void CTblMngrClient::receiveLine(QString line)
     case CARDS_MSG:
     {
         CCardsMsg cardsMsg(line);
-        if (protocol == NET_PROTOCOL_ADV)
+        if (protocol == ADVANCED_PROTOCOL)
         {
             //Initialize all hands of current cards.
             for (int i = 0; i < 13; i++)
@@ -184,7 +184,7 @@ void CTblMngrClient::receiveLine(QString line)
         {
             bool hasWest, showWest, hasNorth, showNorth, hasEast, showEast, hasSouth, showSouth;
 
-            if (protocol == NET_PROTOCOL_ADV)
+            if (protocol == ADVANCED_PROTOCOL)
             {
                 hasWest = hasNorth = hasEast = hasSouth = true;
 
@@ -298,7 +298,7 @@ void CTblMngrClient::receiveLine(QString line)
     }
     catch (NetProtocolException &e)
     {
-
+        QMessageBox::critical(0, tr("ZBridge"), e.what());
     }
 }
 
@@ -375,7 +375,7 @@ void CTblMngrClient::sReadyForDummyCards(Seat seat)
 
 void CTblMngrClient::sShowAuction()
 {
-    playView->setParams(SEATS[doc->getSeatOptions().seat], doc->getDisplayOptions().cardBack);
+    playView->setParams(doc->getSeatOptions().seat, doc->getDisplayOptions().cardBack);
 
     QString str;
     str.setNum(zBridgeClientIface_get_boardNumber(handle));

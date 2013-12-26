@@ -207,6 +207,6 @@ void CActorRemote::receiveLine(QString line)
     }
     catch (NetProtocolException &e)
     {
-
+        QMessageBox::critical(0, tr("ZBridge"), e.what());
     }
 }

@@ -22,6 +22,8 @@
 #ifndef CSEATOPTIONDOC_H
 #define CSEATOPTIONDOC_H
 
+#include "Defines.h"
+
 class QString;
 
 class CSeatOptionDoc
@@ -34,9 +36,9 @@ public:
     void WriteSettings();
     void ReadSettings();
 
-    int seat;
-    int role;
-    int protocol;
+    Seat seat;
+    Role role;
+    Protocol protocol;
     QString hostServer;
     QString portServer;
     QString hostClient;
@@ -45,10 +47,10 @@ public:
     QString northName;
     QString eastName;
     QString southName;
-    int westActor;
-    int northActor;
-    int eastActor;
-    int southActor;
+    Actor westActor;
+    Actor northActor;
+    Actor eastActor;
+    Actor southActor;
 };
 
 #endif // CSEATOPTIONDOC_H

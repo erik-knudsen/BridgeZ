@@ -20,7 +20,7 @@ public:
 
 signals:
     void receiveLine(QString line);
-    void disConnectSeat(int seat);
+    void disConnectSeat(Seat seat);
 
 public slots:
     void start();
@@ -41,7 +41,7 @@ class CRemoteActorServer : public QTcpServer
 {
     Q_OBJECT
 public:
-    explicit CRemoteActorServer(int protocol, QHostAddress hostAddress, quint16 port, QObject *parent = 0);
+    explicit CRemoteActorServer(Protocol protocol, QHostAddress hostAddress, quint16 port, QObject *parent = 0);
     ~CRemoteActorServer();
 
     void incomingConnection(qintptr socketDescriptor);
@@ -55,20 +55,20 @@ signals:
     void clientDisconnected();
 
 public slots:
-    void disConnectSeat(int seat);
+    void disConnectSeat(Seat seat);
 
 private:
     class CRemoteConnects
     {
     public:
         QString teamName;
-        int protocol;
+        Protocol protocol;
         QThread *thread;
         CRemoteActorFrontEnd *frontEnd;
         bool isConnected;
     } remoteConnects[4];
 
-    int protocol;
+    Protocol protocol;
 };
 
 #endif // CREMOTEACTORSERVER_H

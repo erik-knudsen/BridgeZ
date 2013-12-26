@@ -24,9 +24,6 @@
 
 #include <QString>
 
-//Cycle time for statetable.
-const int CYCLE_TIME = 100;
-
 //Update (enable/disable) UI (mostly menues) actions.
 enum UpdateUIAction { UPDATE_UI_INITIAL, UPDATE_UI_SERVER, UPDATE_UI_CLIENT, UPDATE_UI_NEW_SESSION};
 
@@ -37,25 +34,28 @@ enum MsgType { CONNECT_MSG, SEATED_MSG, RTNAMES_MSG, TEAMNAMES_MSG, RSBOARD_MSG,
                READYFORDUMMYCARDS_MSG, DUMMYCARDS_MSG, ENDOFSESSION_MSG, UNKNOWN_MSG, UNDOBID_MSG, UNDOTRICK_MSG,
                REBID_MSG, REPLAY_MSG};
 
-// card suits
-enum Suit { ANY=-1, CLUBS=0, DIAMONDS=1, HEARTS=2, SPADES=3, NOTRUMP=4 };
-
-// honor card values
+//Honor card values
 const int TEN =   8;
 const int JACK =  9;
 const int QUEEN = 10;
 const int KING =  11;
 const int ACE =   12;
 
-//Play modes.
-enum Actor { MANUAL_ACTOR = 0, AUTO_ACTOR = 1, REMOTE_ACTOR = 2 };
+//Seat names (indexed by enum Seat).
+const char * const SEAT_NAMES[4] =
+{
+    QT_TR_NOOP("West"),
+    QT_TR_NOOP("North"),
+    QT_TR_NOOP("East"),
+    QT_TR_NOOP("South")
+};
 
-//Positions and teams vulnerability (these values MUST NOT be changed).
+//Suit, position and vulnerability. MUST NOT be changed (used as index).
+enum Suit { ANY=-1, CLUBS=0, DIAMONDS=1, HEARTS=2, SPADES=3, NOTRUMP=4 };
 enum Position { LEFT_POS=0, TOP_POS=1, RIGHT_POS=2, BOTTOM_POS=3};
-enum Seat { WEST_SEAT=0, NORTH_SEAT=1, EAST_SEAT=2, SOUTH_SEAT=3};
-enum Team { NEITHER=-1, NORTH_SOUTH=0, EAST_WEST=1, BOTH=2 };
+enum Team { NEITHER=0, NORTH_SOUTH=1, EAST_WEST=2, BOTH=3 };
 
-//Bids (these values MUST NOT be changed).
+//Bids (these values MUST NOT be changed they are used as index in some places).
 enum Bids {
     BID_NONE=-1,
     BID_PASS=0,
@@ -77,6 +77,7 @@ const int SUIT_INTERVAL[4][2] = {
     { 39, 51}
                                };
 
+//Card faces indexed by card values.
 const QString CARD_FACES[52] = {
     ":/newPrefix/resources/15.png",
     ":/newPrefix/resources/16.png",
@@ -135,6 +136,7 @@ const QString CARD_FACES[52] = {
     ":/newPrefix/resources/40.png"
 };
 
+//Bid icons.
 const QString BIDS[41] = {
     ":/newPrefix/resources/ico_pass.ico",
     ":/newPrefix/resources/ico_1c.ico",
@@ -178,64 +180,19 @@ const QString BIDS[41] = {
     ":/newPrefix/resources/BlankBidPrompt.ico"
 };
 
-//------------------------- Seat options. ---------------------------
-const int SEAT_WEST = 0;
-const int SEAT_NORTH = 1;
-const int SEAT_EAST = 2;
-const int SEAT_SOUTH = 3;
-const QString SEAT_NAMES[4] =
-{
-    "West",
-    "North",
-    "East",
-    "South"
-};
-const Seat SEATS[4] = { WEST_SEAT, NORTH_SEAT, EAST_SEAT, SOUTH_SEAT };
-
-const int ACTOR_MANUAL = 0;
-const int ACTOR_AUTO = 1;
-const int ACTOR_REMOTE = 3;
-const QString ACTOR_NAMES[3] =
-{
-    "Manual",
-    "Auto",
-    "Remote"
-};
-const Actor ACTORS[3] = { MANUAL_ACTOR, AUTO_ACTOR, REMOTE_ACTOR };
-
-const int SERVER_ROLE = 0;
-const int CLIENT_ROLE = 1;
-const int STANDALONE_ROLE = 2;
-
-const int ROLE_SERVER = 0;
-const int ROLE_CLIENT = 1;
-const int ROLE_STANDALONE = 2;
-const QString ROLE_NAMES[3] =
-{
-    "Server",
-    "Client",
-    "Standalone"
-};
-const int ROLES[3] = { SERVER_ROLE, CLIENT_ROLE, STANDALONE_ROLE };
-
-const int NET_PROTOCOL = 18;
-const int NET_PROTOCOL_ADV = 20;
-
-const int PROTOCOL_BASIC = 0;
-const int PROTOCOL_ADVANCED = 1;
-const QString PROTOCOL_NAMES[2] =
-{
-    "Basic",
-    "Advanced"
-};
-const int PROTOCOLS[2] = { NET_PROTOCOL, NET_PROTOCOL_ADV };
-
+//Button ids.
 const int BUTTON_NONE = 0;
 const int BUTTON_AUCTION_ACTOR = 1;
 const int BUTTON_AUCTION_SERVER = 2;
 const int BUTTON_PLAY_ACTOR = 3;
 const int BUTTON_PLAY_SERVER = 4;
 const int BUTTON_CONTINUE = 5;
+
+//------------------------- Seat options. ---------------------------
+enum Seat { WEST_SEAT=0, NORTH_SEAT=1, EAST_SEAT=2, SOUTH_SEAT=3};
+enum Actor { MANUAL_ACTOR = 0, AUTO_ACTOR = 1, REMOTE_ACTOR = 2 };
+enum Role { SERVER_ROLE = 0, CLIENT_ROLE = 1,STANDALONE_ROLE = 2 };
+enum Protocol { BASIC_PROTOCOL = 18, ADVANCED_PROTOCOL = 20 };
 
 //-------------------------- Bid/Play Options --------------------
 //Bid configuration file name.
@@ -624,12 +581,13 @@ const int CARD_BACK_3 = 3;
 const int CARD_BACK_4 = 4;
 const int CARD_BACK_5 = 5;
 const int CARD_BACK_6 = 6;
+//Card back names indexed by above index.
 const QString CARD_BACK_NAME[6] = { ":/newPrefix/resources/cardback1.png",
-                                    ":/newPrefix/resources/cardback2.png",
+                                    ":/newPrefix/resources/cardback22.png",
                                     ":/newPrefix/resources/cardback3.png",
                                     ":/newPrefix/resources/cardback5.png",
                                     ":/newPrefix/resources/cardback11.png",
-                                    ":/newPrefix/resources/cardback22.png"
+                                    ":/newPrefix/resources/cardback2.png"
                                    };
 //Misc.
 const int TILE_BITMAP_MODE = 0;
@@ -683,7 +641,6 @@ const int BID_VER_SIZE = 12;
 
 
 // Shortcuts (Macros)
-#define pApp             CZBridgeApp::Instance()
 #define pMAINFRAME		 CMainframe::Instance()
 #define pDOC			 CZBridgeDoc::Instance()
 
