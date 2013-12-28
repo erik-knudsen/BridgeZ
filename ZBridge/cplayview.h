@@ -74,8 +74,18 @@ public:
 public slots:
 
 public:
+    /** @name Common group
+     * This group of methods are common to all.
+     */
+    /*@{*/
     void setParams(Seat bottomSeat, int cardBack);
     void resetView();
+    /*@}*/
+
+    /** @name Info group
+     * This group of methods Handles the Info part of the playview scene.
+     */
+    /*@{*/
     void setInfoAuction(QString board, Team team, Seat dealer);
     void showInfoAuction(bool show);
     void setInfoPlay(QString board, Team team, Seat dealer, Seat declarer, Bids contract, Bids dbl);
@@ -84,14 +94,38 @@ public:
     void showEWTricks(int tricks);
     void showInfoAuctionButton(bool show, int id = 0);
     void showInfoPlayButton(bool show, int id = 0);
+    /*@}*/
+
+    /** @name Cards group
+     * This group of methods Handles the Cards (Hand) parts of the playview scene.
+     */
+    /*@{*/
     void setTrumpSuit(Suit trumpSuit);
     void setAndShowAllCards(bool hasWest, bool showWest, int *westCards, bool hasNorth, bool showNorth, int *northCards,
                             bool hasEast, bool showEast, int *eastCards, bool hasSouth, bool showSouth, int *southCards);
     void setAndShowCards(Seat seat, bool hasSeat, bool showSeat, int *cards);
+    void clearCard(Seat seat, int cardValue);
+    void showClearedCard(Seat seat, int noCard);
+    void enablePlayer(Seat player);
+    void disablePlayer(Seat player);
+    void undoTrick(int wCard, int nCard, int eCard, int sCard);
+    /*@}*/
+
+    /** @name Bid dialog group
+     * This group of methods Handles the bid dialog.
+     */
+    /*@{*/
     void showBidDialog(bool show);
     void showBid(Seat seat, Bids bid);
     void undoBid(int noBid);
-    void undoTrick(int wCard, int nCard, int eCard, int sCard);
+    void enableBidder(Seat bidder, Bids lastBid, Bids doubleBid);
+    void disableBidder(Seat bidder);
+    /*@}*/
+
+    /** @name Center group
+     * This group of methods handles the Center part of the playview scene.
+     */
+    /*@{*/
     void clearCardOnTable(Seat seat);
     void showCardOnTable(Seat seat, int card);
     void clearCardsOnTable();
@@ -103,15 +137,9 @@ public:
     void showDummyOnTable(Seat dummy);
     void showYourTurnOnTable(Seat turn);
     void clearYourTurnOnTable();
-    void clearCard(Seat seat, int cardValue);
-    void showClearedCard(Seat seat, int noCard);
-
-    void enableBidder(Seat bidder, Bids lastBid, Bids doubleBid);
-    void disableBidder(Seat bidder);
-    void enablePlayer(Seat player);
-    void disablePlayer(Seat player);
     void enableContinueOnTable();
     void disableContinueOnTable();
+    /*@}*/
 
 signals:
     void bidValue(Bids bid);    /**< Next bid to give, as selected by user in the bid dialog. */

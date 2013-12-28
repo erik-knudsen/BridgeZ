@@ -1,3 +1,23 @@
+/* Erik Aagaard Knudsen.
+  Copyright © 2013 - All Rights Reserved
+
+  Project: ZBridge
+  File: CPlayView.cpp
+  Developers: eak
+
+  Revision History:
+  13-jun-2013 eak: Original
+
+  Abstract: Bridge table view.
+
+  Platforms: Qt.
+  */
+
+/**
+ * @file
+ * The file implements the definition of the Bridge table view.
+ */
+
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QGraphicsAnchorLayout>
@@ -211,10 +231,10 @@ void CPlayView::createChildren()
  * are converted to signals here. The following events are handled:
  *   - WMS_CARD_CLICKED
  *     This event is generated when a card is clicked in one of the cards view
- *     (Left, Top, Right or Bottom). It is converted to a playvalue signal.
+ *     (Left, Top, Right or Bottom hand). It is converted to a playvalue signal.
  *   - WMS_HAND_CLICKED
  *     This event is generated when the hand is clicked in one of the cards view
- *     (Left, Top, Right or bottom). It is converted to a handClicked signal.
+ *     (Left, Top, Right or bottom hand). It is converted to a handClicked signal.
  *   - WMS_BUTTON_CLICKED
  *     This event is generated when one of the buttons (Auction or Play or Continue)
  *     is clicked. It is converted to a buttonClicked signal.
@@ -314,7 +334,7 @@ void CPlayView::setParams(Seat bottomSeat, int cardBack)
  */
 void CPlayView::resetView()
 {
-    //Reset and clean up cards (Left, Top, Right, Bottom).
+    //Reset and clean up cards (Left, Top, Right, Bottom hand).
     for (int i = 0; i < 4; i++)
     {
         actorCards[i]->setEnabled(false);
@@ -345,6 +365,16 @@ void CPlayView::resetView()
     clearEWNSTextOnTable();
 }
 
+/**
+ * @brief Set info for the info auction widget.
+ * @param board Identification of the board.
+ * @param team The vulnerabilities.
+ * @param dealer The dealer.
+ *
+ * Initialize the parameters for the info auction widget. The widget belongs
+ * to the top info part of the scene. The widget is meant to be shown during
+ * the bidding auction part of the bridge play.
+ */
 void CPlayView::setInfoAuction(QString board, Team team, Seat dealer)
 {
     topInfoAuction->setBoardId(board);
@@ -352,6 +382,10 @@ void CPlayView::setInfoAuction(QString board, Team team, Seat dealer)
     topInfoAuction->setDealer(dealer);
 }
 
+/**
+ * @brief Show or hide the info auction widget.
+ * @param show If (true) then show the widget else hide the widget.
+ */
 void CPlayView::showInfoAuction(bool show)
 {
     if (show)
@@ -368,6 +402,19 @@ void CPlayView::showInfoAuction(bool show)
     }
 }
 
+/**
+ * @brief Set info for the info play widget.
+ * @param board Identification of the board.
+ * @param team The vulnerabilities.
+ * @param dealer The dealer.
+ * @param declarer The declarer.
+ * @param contract The contract.
+ * @param dbl Indicates if the contract is doubled (or redoubled).
+ *
+ * Initialize the parameters for the info play widget. The widget belongs
+ * to the top info part of the scene. The widget is meant to be shown during the play
+ * part of the bridge play.
+ */
 void CPlayView::setInfoPlay(QString board, Team team, Seat dealer, Seat declarer, Bids contract, Bids dbl)
 {
     topInfoPlay->setBoardId(board);
@@ -377,6 +424,10 @@ void CPlayView::setInfoPlay(QString board, Team team, Seat dealer, Seat declarer
     topInfoPlay->setContract(contract, dbl);
 }
 
+/**
+ * @brief Show or hide the info play widget.
+ * @param show If (true) then show the widget else hide the widget.
+ */
 void CPlayView::showInfoPlay(bool show)
 {
     if (show)
@@ -393,16 +444,35 @@ void CPlayView::showInfoPlay(bool show)
     }
 }
 
+/**
+ * @brief Show number of tricks taken by the North/South partners.
+ * @param tricks Nuber of tricks.
+ *
+ * The number of tricks are shown in the bottom play info part of the scene.
+ */
 void CPlayView::showNSTricks(int tricks)
 {
     bottomInfoPlay->showNSTricks(tricks);
 }
 
+/**
+ * @brief Show number of tricks taken by the East/West partners.
+ * @param tricks Nuber of tricks.
+ *
+ * The number of tricks are shown in the bottom play info part of the scene.
+ */
 void CPlayView::showEWTricks(int tricks)
 {
     bottomInfoPlay->showEWTricks(tricks);
 }
 
+/**
+ * @brief Activate and show/hide the auction button.
+ * @param show if (true) then show the button else hide the button.
+ * @param id Identification of the button.
+ *
+ * The button is shown in the bottom info widget of the scene.
+ */
 void CPlayView::showInfoAuctionButton(bool show, int id)
 {
     if (show)
@@ -418,12 +488,19 @@ void CPlayView::showInfoAuctionButton(bool show, int id)
     }
 }
 
+/**
+ * @brief Activate and show/hide the play button.
+ * @param show if (true) then show the button else hide the button.
+ * @param id Identification of the button.
+ *
+ * The button is shown in the bottom info widget of the scene.
+ */
 void CPlayView::showInfoPlayButton(bool show, int id)
 {
     if (show)
     {
         bottomInfoPlay->hide();
-        bottomInfoAuctionButton->setButtonId(id);
+        bottomInfoPlayButton->setButtonId(id);
         bottomInfoPlayButton->show();
     }
     else
@@ -433,6 +510,135 @@ void CPlayView::showInfoPlayButton(bool show, int id)
     }
 }
 
+/**
+ * @brief Set the trump suit of the bridge play
+ * @param trumpSuit The trumpsuit.
+ *
+ * Sets the trumpsuit and rearranges display of cards according to this.
+ */
+void CPlayView::setTrumpSuit(Suit trumpSuit)
+{
+    this->trumpSuit = trumpSuit;
+
+    for (int i = 0; i < 4; i++)
+    {
+        actorCards[i]->setTrumpSuit(trumpSuit);
+        actorCards[i]->showCards(true);
+    }
+}
+
+/**
+ * @brief Set and show all cards.
+ * @param hasWest If true then the West cards are present.
+ * @param showWest If true then the West card faces should be shown in the scene.
+ * @param westCards The West cards.
+ * @param hasNorth If true then the North cards are present.
+ * @param showNorth If true then the North card faces should be shown in the scene.
+ * @param northCards The North cards.
+ * @param hasEast If true then the East cards are present.
+ * @param showEast If true then the East card faces should be shown in the scene.
+ * @param eastCards The East cards.
+ * @param hasSouth If true then the South cards are present.
+ * @param showSouth If true then the South card faces should be shown in the scene.
+ * @param southCards The South cards.
+ *
+ * The cards are set if they are present and shown in the cards part of the scene
+ * either with their faces or with their backs. Arranged according to the trumpsuit.
+ */
+void CPlayView::setAndShowAllCards(bool hasWest, bool showWest, int *westCards, bool hasNorth, bool showNorth, int *northCards, bool hasEast, bool showEast, int *eastCards, bool hasSouth, bool showSouth, int *southCards)
+{
+    trumpSuit = ANY;
+
+    setAndShowCards(WEST_SEAT, hasWest, showWest, westCards);
+    setAndShowCards(NORTH_SEAT, hasNorth, showNorth, northCards);
+    setAndShowCards(EAST_SEAT, hasEast, showEast, eastCards);
+    setAndShowCards(SOUTH_SEAT, hasSouth, showSouth, southCards);
+}
+
+/**
+ * @brief Set and show cards for one seat.
+ * @param seat The seat to show cards for.
+ * @param hasSeat If true then the cards are present.
+ * @param showSeat If true then the cards faces should be shown in the scene.
+ * @param cards The cards.
+ *
+ * The cards are set for the given seat if they are present and shown in this seats
+ * part of the scene. Arranged according to the trumpsuit.
+ */
+void CPlayView::setAndShowCards(Seat seat, bool hasSeat, bool showSeat, int *cards)
+{
+    Position pos = seatToPos[seat];
+
+    actorCards[pos]->clearCards();
+    actorCards[pos]->setBackValues(cardBack);
+    if (hasSeat)
+        for (int i = 0; i < 13; i++)
+            actorCards[pos]->setCardValue(cards[i]);
+    actorCards[pos]->setShowBack(!(hasSeat && showSeat));
+    actorCards[pos]->setTrumpSuit(trumpSuit);
+    actorCards[pos]->showCards(true);
+}
+
+/**
+ * @brief Hide card from cards display of scene.
+ * @param seat The seat with the card to hide.
+ * @param cardValue The card to hide.
+ *
+ * This is meant to be used when the user has played a card to remove it from the hand.
+ */
+void CPlayView::clearCard(Seat seat, int cardValue)
+{
+    assert((cardValue >= 0) && (cardValue <= 51));
+
+    actorCards[seatToPos[seat]]->clearCard(cardValue);
+}
+
+/**
+ * @brief Show hidden card again in cards display of scene.
+ * @param seat The seat with the card to shoe.
+ * @param noCard Number of cards to show.
+ *
+ * The cards are shown in opposite sequence of which they were hidden. This
+ * is meant to be used when a trick is undone.
+ */
+void CPlayView::showClearedCard(Seat seat, int noCard)
+{
+    actorCards[seatToPos[seat]]->showClearedCard(noCard);
+}
+
+/**
+ * @brief Enable player.
+ * @param player The player to enable.
+ */
+void CPlayView::enablePlayer(Seat player)
+{
+    actorCards[seatToPos[player]]->setEnabled(true);
+}
+
+/**
+ * @brief Disable player.
+ * @param player The player to disable.
+ */
+void CPlayView::disablePlayer(Seat player)
+{
+    actorCards[seatToPos[player]]->setEnabled(false);
+}
+
+/**
+ * @brief Undo trick.
+ * @param wCard
+ * @param nCard
+ * @param eCard
+ * @param sCard
+ */
+void CPlayView::undoTrick(int wCard, int nCard, int eCard, int sCard)
+{
+}
+
+/**
+ * @brief Show/hide the bid dialog.
+ * @param show if (true) then show the dialog else hide the dialog.
+ */
 void CPlayView::showBidDialog(bool show)
 {
     if (show)
@@ -449,66 +655,74 @@ void CPlayView::showBidDialog(bool show)
         m_pBidDlg->hide();
 }
 
-void CPlayView::setTrumpSuit(Suit trumpSuit)
-{
-    this->trumpSuit = trumpSuit;
-
-    for (int i = 0; i < 4; i++)
-    {
-        actorCards[i]->setTrumpSuit(trumpSuit);
-        actorCards[i]->showCards(true);
-    }
-}
-
-void CPlayView::setAndShowAllCards(bool hasWest, bool showWest, int *westCards, bool hasNorth, bool showNorth, int *northCards, bool hasEast, bool showEast, int *eastCards, bool hasSouth, bool showSouth, int *southCards)
-{
-    trumpSuit = ANY;
-
-    setAndShowCards(WEST_SEAT, hasWest, showWest, westCards);
-    setAndShowCards(NORTH_SEAT, hasNorth, showNorth, northCards);
-    setAndShowCards(EAST_SEAT, hasEast, showEast, eastCards);
-    setAndShowCards(SOUTH_SEAT, hasSouth, showSouth, southCards);
-}
-
-void CPlayView::setAndShowCards(Seat seat, bool hasSeat, bool showSeat, int *cards)
-{
-    Position pos = seatToPos[seat];
-
-    actorCards[pos]->clearCards();
-    actorCards[pos]->setBackValues(cardBack);
-    if (hasSeat)
-        for (int i = 0; i < 13; i++)
-            actorCards[pos]->setCardValue(cards[i]);
-    actorCards[pos]->setShowBack(!(hasSeat && showSeat));
-    actorCards[pos]->setTrumpSuit(trumpSuit);
-    actorCards[pos]->showCards(true);
-}
-
+/**
+ * @brief Show bid in mid info auction widget.
+ * @param seat The seat to show the bid for.
+ * @param bid The bid to show.
+ */
 void CPlayView::showBid(Seat seat, Bids bid)
 {
     midInfoAuction->showBid(seat, bid);
 }
 
+/**
+ * @brief Undo bid.
+ * @param noBid Number of bids to undo.
+ */
 void CPlayView::undoBid(int noBid)
 {
 }
 
-void CPlayView::undoTrick(int wCard, int nCard, int eCard, int sCard)
+/**
+ * @brief Enable bidder.
+ * @param bidder The bidder to enable.
+ * @param lastBid The last bid given.
+ * @param doubleBid Double/redouble if any.
+ */
+void CPlayView::enableBidder(Seat bidder, Bids lastBid, Bids doubleBid)
 {
+    m_pBidDlg->enableBidder(bidder, lastBid, doubleBid);
 }
 
+/**
+ * @brief Disable bidder.
+ * @param bidder The bidder to disable.
+ */
+void CPlayView::disableBidder(Seat bidder)
+{
+    m_pBidDlg->disableBidder(bidder);
+}
+
+/**
+ * @brief Clear card in center widget of scene.
+ * @param seat The seat to clear the card for.
+ *
+ * This is meant to be used during the play to update the display of the current trick.
+ */
 void CPlayView::clearCardOnTable(Seat seat)
 {
     Position pos = seatToPos[seat];
     centerCards->clearCardOnTable(pos);
 }
 
+/**
+ * @brief Show card in center widget of scene.
+ * @param seat The seat to show the card for.
+ * @param card The card to show.
+ *
+ * This is meant to be used during the play to update the display of the current trick.
+ */
 void CPlayView::showCardOnTable(Seat seat, int card)
 {
     Position pos = seatToPos[seat];
     centerCards->showCardOnTable(pos, card);
 }
 
+/**
+ * @brief Clear all cards in center widget of the scene.
+ *
+ * This is meant to be done during the play to prepare the display for the next trick.
+ */
 void CPlayView::clearCardsOnTable()
 {
     centerCards->clearCardOnTable(LEFT_POS);
@@ -517,6 +731,9 @@ void CPlayView::clearCardsOnTable()
     centerCards->clearCardOnTable(BOTTOM_POS);
 }
 
+/**
+ * @brief Show East/West vulnerability in the center widget of the scene.
+ */
 void CPlayView::showEWVulnerableOnTable()
 {
     Position pos = seatToPos[WEST_SEAT];
@@ -525,6 +742,9 @@ void CPlayView::showEWVulnerableOnTable()
     centerCards->showVulnerable(pos);
 }
 
+/**
+ * @brief Show North/South vulnerability in the center widget of the scene.
+ */
 void CPlayView::showNSVulnerableOnTable()
 {
     Position pos = seatToPos[NORTH_SEAT];
@@ -533,6 +753,9 @@ void CPlayView::showNSVulnerableOnTable()
     centerCards->showVulnerable(pos);
 }
 
+/**
+ * @brief Clear vulnerability indications in the center widget of the scene.
+ */
 void CPlayView::clearVulnerableOnTable()
 {
     centerCards->clearVulnerable(LEFT_POS);
@@ -541,6 +764,9 @@ void CPlayView::clearVulnerableOnTable()
     centerCards->clearVulnerable(BOTTOM_POS);
 }
 
+/**
+ * @brief Label East, West, North, South positions in the center widget of the scene.
+ */
 void CPlayView::showEWNSTextOnTable()
 {
     Position pos;
@@ -557,6 +783,9 @@ void CPlayView::showEWNSTextOnTable()
     pos = seatToPos[SOUTH_SEAT];
     centerCards->showText(pos, 'S');
 }
+/**
+ * @brief Clear East, West, North, South position labels in the center widget of the scene.
+ */
 
 void CPlayView::clearEWNSTextOnTable()
 {
@@ -566,60 +795,45 @@ void CPlayView::clearEWNSTextOnTable()
     centerCards->clearText(BOTTOM_POS);
 }
 
+/**
+ * @brief Indicate dummy's position in the center widget of the scene.
+ * @param dummy Dummy's seat.
+ */
 void CPlayView::showDummyOnTable(Seat dummy)
 {
     Position pos = seatToPos[dummy];
     centerCards->showText(pos, 'D');
 }
 
+/**
+ * @brief Indicate who is next to bid or play in the center widget of the scene.
+ * @param turn The seat which is next.
+ */
 void CPlayView::showYourTurnOnTable(Seat turn)
 {
     Position pos = seatToPos[turn];
     centerCards->showYourTurn(pos);
 }
 
+/**
+ * @brief Clear who is next to bid or play in the center widget of the scene.
+ */
 void CPlayView::clearYourTurnOnTable()
 {
     centerCards->clearYourTurn();
 }
 
-void CPlayView::clearCard(Seat seat, int cardValue)
-{
-    assert((cardValue >= 0) && (cardValue <= 51));
-
-    actorCards[seatToPos[seat]]->clearCard(cardValue);
-}
-
-void CPlayView::showClearedCard(Seat seat, int noCard)
-{   
-    actorCards[seatToPos[seat]]->showClearedCard(noCard);
-}
-
-void CPlayView::enableBidder(Seat bidder, Bids lastBid, Bids doubleBid)
-{
-    m_pBidDlg->enableBidder(bidder, lastBid, doubleBid);
-}
-
-void CPlayView::disableBidder(Seat bidder)
-{
-    m_pBidDlg->disableBidder(bidder);
-}
-
-void CPlayView::enablePlayer(Seat player)
-{
-    actorCards[seatToPos[player]]->setEnabled(true);
-}
-
-void CPlayView::disablePlayer(Seat player)
-{
-    actorCards[seatToPos[player]]->setEnabled(false);
-}
-
+/**
+ * @brief Enable continue play.
+ */
 void CPlayView::enableContinueOnTable()
 {
     centerCards->setEnabled(true);
 }
 
+/**
+ * @brief Disable continue play.
+ */
 void CPlayView::disableContinueOnTable()
 {
     centerCards->setEnabled(false);

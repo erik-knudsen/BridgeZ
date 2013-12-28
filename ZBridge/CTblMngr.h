@@ -33,7 +33,9 @@ class CPlayView;
  * for table manager classes (server and clients).
  *
  * Table manager strategy classes have a common method interface. The interface is
- * defined by means of the virtual methods in this class.
+ * defined by means of the virtual methods in this class. And by means of the
+ * methods, which are common for all table managers (Server and Client). These
+ * methods are implemented in this class.
  */
 class CTblMngr : public QObject
 {
@@ -43,16 +45,24 @@ public:
     CTblMngr(CPlayView *playView, QObject *parent);
     virtual ~CTblMngr();
 
+    /** @name Main menu activated methods.
+     * These methods are activated via the applications main menu.
+     */
+    /*@{*/
     virtual void newSession() = 0;
     virtual void newDeal();
     virtual void reBid();
     virtual void rePlay();
     virtual void undo();
+    /*@}*/
 
 signals:
 
-public slots:  
-    //From play view.
+public slots:
+    /** @name Play view slots.
+     * These slot methods are signalled from the play view.
+     */
+    /*@{*/
     virtual void buttonClicked(int button) = 0;
     virtual void bidValue(Bids bid) = 0;
     virtual void playValue(int card) = 0;
@@ -61,8 +71,12 @@ public slots:
     virtual void bidRestart() = 0;
     virtual void bidClose() = 0;
     virtual void handClicked(Seat seat) = 0;
+    /*@}*/
 
-    //From actors.
+    /** @name Actor slots.
+     * These slot methods are signalled from the actors.
+     */
+    /*@{*/
     virtual void sConnect(QString name, Seat seat, int protocol) = 0;
     virtual void sRTNames(Seat seat) = 0;
     virtual void sRSBoard(Seat seat) = 0;
@@ -96,6 +110,7 @@ public slots:
     virtual void sDisableContinue() = 0;
 
     virtual void sContinuePlay() = 0;
+    /*@}*/
 
 protected:
     bool showAll;
