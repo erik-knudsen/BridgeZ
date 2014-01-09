@@ -11,7 +11,6 @@
   Abstract: Global constant definitions.
 
   Platforms: Qt.
-
 */
 
 /**

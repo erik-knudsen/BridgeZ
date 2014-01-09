@@ -8,7 +8,7 @@
   Revision History:
   26-feb-2013 eak: Original
 
-  Abstract: Model (data etc.)
+  Abstract: Bid options.
 
   Platforms: Qt.
 
@@ -16,13 +16,16 @@
 
 /**
  * \file
- * Model (data etc.) (definition).
+ * Bid options (definition).
  */
 
 #include "QString"
 #include "QDataStream"
 #include "cbidoptiondoc.h"
 
+/**
+ * @brief The constructor initializes all bid options with defalt values.
+ */
 CBidOptionDoc::CBidOptionDoc()
 {
     int i,j;
@@ -90,7 +93,9 @@ CBidOptionDoc::CBidOptionDoc()
     discardingNT = SIGNAL_ATTITUDE_LOW;
 }
 
-// Assignment operator
+/**
+ * @brief Assignment operator.
+ */
 CBidOptionDoc& CBidOptionDoc::operator=(const CBidOptionDoc& bidOptionDoc)
 {
     // check for self-assignment
@@ -164,6 +169,11 @@ CBidOptionDoc& CBidOptionDoc::operator=(const CBidOptionDoc& bidOptionDoc)
     return *this;
 }
 
+/**
+ * @brief Write operator.
+ * @param stream The stream to write to.
+ * @param bidOptionDoc The options to write.
+ */
 QDataStream& operator <<( QDataStream& stream, const CBidOptionDoc& bidOptionDoc )
 {
     int i, j;
@@ -192,6 +202,11 @@ QDataStream& operator <<( QDataStream& stream, const CBidOptionDoc& bidOptionDoc
     return stream;
 }
 
+/**
+ * @brief Read operator.
+ * @param stream The stream to read from.
+ * @param bidOptionDoc The bid option document to read into.
+ */
 QDataStream& operator >>( QDataStream& stream, CBidOptionDoc& bidOptionDoc )
 {
     qint8 version;

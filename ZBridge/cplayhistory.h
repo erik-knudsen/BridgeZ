@@ -1,8 +1,32 @@
+/*Erik Aagaard Knudsen.
+  Copyright © 2013 - All Rights Reserved
+
+  Project: ZBridge
+  File: CPlayHistory.h
+  Developers: eak
+
+  Revision History:
+  26-feb-2013 eak: Original
+
+  Abstract: Play history.
+
+  Platforms: Qt.
+
+*/
+
+/**
+ * \file
+ * Play History (declaration).
+ */
+
 #ifndef CPLAYHISTORY_H
 #define CPLAYHISTORY_H
 
 #include "Defines.h"
 
+/**
+ * @brief The CPlayHistory class describes the play history.
+ */
 class CPlayHistory
 {
 public:

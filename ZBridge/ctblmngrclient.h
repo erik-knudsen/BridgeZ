@@ -1,3 +1,23 @@
+/* Erik Aagaard Knudsen.
+  Copyright © 2013 - All Rights Reserved
+
+  Project: ZBridge
+  File: CTblMngrClient.h
+  Developers: eak
+
+  Revision History:
+  13-jun-2013 eak: Original
+
+  Abstract: Table manager.
+
+  Platforms: Qt.
+  */
+
+/**
+ * \file
+ * The file implements the declaration of the for the table manager client class.
+ */
+
 #ifndef CTBLMNGRCLIENT_H
 #define CTBLMNGRCLIENT_H
 
@@ -15,6 +35,12 @@ class CPlayEngine;
 class CPlayView;
 class CRemoteActorClient;
 
+
+/**
+ * @brief This class implements the table manager client controller.
+ *
+ * The class controls one local actor (player), which on the corresponding server class is remote.
+ */
 class CTblMngrClient : public CTblMngr
 {
     Q_OBJECT
@@ -23,15 +49,35 @@ public:
     CTblMngrClient(CZBridgeDoc *doc, CPlayView *playView, QObject *parent = 0);
     ~CTblMngrClient();
 
+
+    /** @name Main menu activated methods.
+     * These methods are activated via the applications main menu.
+     */
+    /*@{*/
     void newSession();
+    /*@}*/
+
 
 public slots:
-    void sSocketError(QString err);
-    void clientConnected();
-    void clientDisConnected();
-    void receiveLine(QString line);
+    /** @name Play view slots.
+     * These slot methods are signalled from the play view.
+     */
+    /*@{*/
+    void buttonClicked(int button);
+    void bidValue(Bids bid);
+    void playValue(int card);
+    void bidBackup();
+    void bidHint();
+    void bidRestart();
+    void bidClose();
+    void handClicked(Seat seat);
+    /*@}*/
 
-    //From actors.
+
+    /** @name Actor slots.
+     * These slot methods are signalled from the actors.
+     */
+    /*@{*/
     void sConnect(QString name, Seat seat, int protocol);
     void sRTNames(Seat seat);
     void sRSBoard(Seat seat);
@@ -50,18 +96,20 @@ public slots:
     void sDisableContinue();
 
     void sContinuePlay();
+    /*@}*/
 
-    //From play view.
-    void buttonClicked(int button);
-    void bidValue(Bids bid);
-    void playValue(int card);
-    void bidBackup();
-    void bidHint();
-    void bidRestart();
-    void bidClose();
-    void handClicked(Seat seat);
+    /** @name TCP/IP communication slots.
+     * These slot methods are signalled from the tcp/ip to server connection.
+     */
+    /*@{*/
+    void sSocketError(QString err);
+    void clientConnected();
+    void clientDisConnected();
+    void receiveLine(QString line);
+    /*@}*/
 
 private:
+    //Reset table manager.
     void cleanTableManager();
 
     CActorLocal *actor;

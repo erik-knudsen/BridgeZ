@@ -21,6 +21,14 @@
 
 #include "cbid.h"
 
+/**
+ * @brief Bid constructor.
+ * @param bidder The bidder.
+ * @param bid The bid.
+ * @param alert An alert (if any).
+ *
+ * Constructs the bid.
+ */
 CBid::CBid(Seat bidder, Bids bid, QString alert)
 {
     this->bidder = bidder;

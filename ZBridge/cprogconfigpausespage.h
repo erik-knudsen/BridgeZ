@@ -28,6 +28,9 @@ namespace Ui {
 class CProgConfigPausesPage;
 }
 
+/**
+ * @brief Wizard pauses page.
+ */
 class CProgConfigPausesPage : public QWizardPage
 {
     Q_OBJECT

@@ -32,6 +32,14 @@ namespace Ui {
 class CBidOptions;
 }
 
+/**
+ * @brief The class handles bid option sets.
+ *
+ *The class shows the Bid Options user interface.
+ *   - Create a bid option set.
+ *   - Delete a bid option set.
+ *   - Select bid options for North/South and East/West.
+ */
 class CBidOptions : public QDialog
 {
     Q_OBJECT

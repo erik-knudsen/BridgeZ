@@ -33,6 +33,11 @@ namespace Ui {
 class CDispOptionsPropSheet;
 }
 
+/**
+ * @brief Display option property sheet.
+ *
+ * This class allows the user to set/change the display options.
+ */
 class CDispOptionsPropSheet : public QDialog
 {
     Q_OBJECT

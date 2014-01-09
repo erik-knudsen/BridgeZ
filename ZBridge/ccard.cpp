@@ -2,13 +2,13 @@
   Copyright © 2013 - All Rights Reserved
 
   Project: ZBridge
-  File: CCard.cpp
+  File: CCard.h
   Developers: eak
 
   Revision History:
   26-feb-2013 eak: Original
 
-  Abstract: Cards.
+  Abstract: Describes and paints one card in the play view.
 
   Platforms: Qt.
 
@@ -16,7 +16,7 @@
 
 /**
  * \file
- * Cards (definition).
+ * Describes and paints one card in the play view (definition).
  */
 
 #include <QApplication>
@@ -55,6 +55,14 @@ void CCard::mousePressEvent(QGraphicsSceneMouseEvent *event)
 }
 
 
+/**
+ * @brief Generates user events.
+ * @param event An event received.
+ *
+ * The method generates two types of events:
+ *   - CARD_CLICKED_Event for when the user selects the card with the left mouse button.
+ *   - HAND_CLICKED_Event for when the user selects the card with the right mouse button.
+ */
 void CCard::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton)

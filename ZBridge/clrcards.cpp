@@ -1,3 +1,24 @@
+/*Erik Aagaard Knudsen.
+  Copyright © 2013 - All Rights Reserved
+
+  Project: ZBridge
+  File: CLRCards.h
+  Developers: eak
+
+  Revision History:
+  26-feb-2013 eak: Original
+
+  Abstract: Describes one hand of cards in the left or right position in the play view.
+
+  Platforms: Qt.
+
+*/
+
+/**
+ * \file
+ * Describes one hand of cards in the left or right position in the play view (definition).
+ */
+
 #include <cassert>
 
 #include "clrcards.h"
@@ -15,6 +36,9 @@ QRectF CLRCards::boundingRect() const
     return QRectF(0, 0, LR_CARD_HOR_SIZE, LR_CARD_VER_SIZE);
 }
 
+/**
+ * @brief Layout how to draw faces in the left and right positions.
+ */
 void CLRCards::prepareToDrawFaces(QGraphicsWidget *widget)
 {
     int i, j, count, dist, value;
@@ -68,6 +92,9 @@ void CLRCards::prepareToDrawFaces(QGraphicsWidget *widget)
     setParent(widget);
 }
 
+/**
+ * @brief Layout how to draw back of cards in the left and right positions..
+ */
 void CLRCards::prepareToDrawBacks(QGraphicsWidget *widget)
 {
     int i, k;

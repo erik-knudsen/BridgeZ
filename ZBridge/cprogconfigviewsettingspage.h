@@ -28,6 +28,9 @@ namespace Ui {
 class CProgConfigViewSettingsPage;
 }
 
+/**
+ * @brief Wizard view settings page.
+ */
 class CProgConfigViewSettingsPage : public QWizardPage
 {
     Q_OBJECT

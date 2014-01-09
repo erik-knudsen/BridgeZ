@@ -1,3 +1,24 @@
+/* Erik Aagaard Knudsen.
+  Copyright © 2013 - All Rights Reserved
+
+  Project: ZBridge
+  File: CActor.h
+  Developers: eak
+
+  Revision History:
+  13-jun-2013 eak: Original
+
+  Abstract: Generic strategy for actor.
+
+  Platforms: Qt.
+  */
+
+/**
+ * \file
+ * The file implements the declaration of the generic strategy for actor
+ * strategy classes.
+ */
+
 #ifndef CACTOR_H
 #define CACTOR_H
 
@@ -7,6 +28,16 @@
 
 class CTblMngr;
 
+/**
+ * \brief This abstract class implements the declaration of the generic strategy
+ * for actor classes (local and remote).
+ *
+ * Actor strategy classes have a common method interface. The interface is
+ * defined by means of the virtual methods in this class. And by means of the
+ * methods, which are common for all actor managers (Local and Remote). These
+ * methods are implemented in this class. Actor strategy classes also share a
+ * a number of common signals. These signals are defined here.
+ */
 class CActor : public QObject
 {
     Q_OBJECT

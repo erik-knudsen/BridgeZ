@@ -1,3 +1,24 @@
+/*Erik Aagaard Knudsen.
+  Copyright © 2013 - All Rights Reserved
+
+  Project: ZBridge
+  File: CMidInfo.cpp
+  Developers: eak
+
+  Revision History:
+  26-feb-2013 eak: Original
+
+  Abstract: Midle part of info panel.
+
+  Platforms: Qt.
+
+*/
+
+/**
+ * \file
+ * Midle part of info panel (definition).
+ */
+
 #include <QGraphicsWidget>
 #include <QRectF>
 #include <QBrush>

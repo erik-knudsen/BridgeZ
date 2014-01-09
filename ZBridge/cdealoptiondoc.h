@@ -22,6 +22,11 @@
 #ifndef CDEALOPTIONDOC_H
 #define CDEALOPTIONDOC_H
 
+/**
+ * @brief Deal options.
+ *
+ * This class has the deal options and methods to save and restore the options.
+ */
 class CDealOptionDoc
 {
 public:

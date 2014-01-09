@@ -28,6 +28,9 @@ namespace Ui {
 class CProgConfigFinishPage;
 }
 
+/**
+ * @brief Wizard finish page.
+ */
 class CProgConfigFinishPage : public QWizardPage
 {
     Q_OBJECT

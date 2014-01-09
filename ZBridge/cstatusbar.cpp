@@ -11,7 +11,6 @@
   Abstract: Status bar.
 
   Platforms: Qt.
-
 */
 
 /**

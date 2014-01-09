@@ -8,15 +8,14 @@
   Revision History:
   26-feb-2013 eak: Original
 
-  Abstract:
+  Abstract: Seat option data.
 
   Platforms: Qt.
-
 */
 
 /**
  * \file
- *
+ * Seat option data.
  */
 
 #ifndef CSEATOPTIONDOC_H
@@ -26,6 +25,11 @@
 
 class QString;
 
+/**
+ * @brief Seat options.
+ *
+ * This class has the seat options and methods to save and restore the options.
+ */
 class CSeatOptionDoc
 {
 public:

@@ -16,7 +16,7 @@
 
 /**
  * \file
- * Property sheet for selecting bid options (definition).
+ * Property sheet for selecting bid options.
  */
 
 #include <QList>

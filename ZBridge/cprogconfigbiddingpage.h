@@ -28,6 +28,9 @@ namespace Ui {
 class CProgConfigBiddingPage;
 }
 
+/**
+ * @brief Wizard bidding page.
+ */
 class CProgConfigBiddingPage : public QWizardPage
 {
     Q_OBJECT

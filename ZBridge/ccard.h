@@ -1,6 +1,3 @@
-#ifndef CCARD_H
-#define CCARD_H
-
 /*Erik Aagaard Knudsen.
   Copyright © 2013 - All Rights Reserved
 
@@ -11,21 +8,34 @@
   Revision History:
   26-feb-2013 eak: Original
 
-  Abstract: Cards.
+  Abstract: Describes and paints one card in the play view.
 
   Platforms: Qt.
 
 */
+
+/**
+ * \file
+ * Describes and paints one card in the play view (declaration).
+ */
+
+#ifndef CCARD_H
+#define CCARD_H
 
 #include <QGraphicsItem>
 
 #include "defines.h"
 
 /**
- * \file
- * Cards (declaration).
+ * @brief This class describes one card in the play view.
+ *
+ * The description includes:
+ *   - The value of the card.
+ *   - The back value of the card (how to show the back side of the card).
+ *   - Whether to show the back or the front of the card in the view.
+ *   - The position of the card (West, North, East or South).
+ *   - The receiver of emitted events.
  */
-
 class CCard : public QGraphicsItem
 {
 public:

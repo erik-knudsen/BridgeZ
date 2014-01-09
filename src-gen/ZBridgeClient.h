@@ -31,17 +31,17 @@ typedef enum {
 
 //! Type definition of the data structure for the ZBridgeClientInternal interface scope.
 typedef struct {
-	sc_integer BID_NONE;
-	sc_integer BID_PASS;
-	sc_integer BID_DOUBLE;
-	sc_integer BID_REDOUBLE;
-	sc_integer curBidder;
-	sc_boolean firstBidRound;
-	sc_integer noPasses;
-	sc_integer lastBidder;
-	sc_integer leader;
-	sc_integer playNo;
-	sc_boolean firstTrick;
+	sc_integer  BID_NONE;
+	sc_integer  BID_PASS;
+	sc_integer  BID_DOUBLE;
+	sc_integer  BID_REDOUBLE;
+	sc_integer  curBidder;
+	sc_boolean  firstBidRound;
+	sc_integer  noPasses;
+	sc_integer  lastBidder;
+	sc_integer  leader;
+	sc_integer  playNo;
+	sc_boolean  firstTrick;
 } ZBridgeClientInternal;
 
 //! Type definition of the data structure for the ZBridgeClientIface interface scope.
@@ -59,19 +59,19 @@ typedef struct {
 	sc_boolean rCards_raised;
 	sc_boolean cards_raised;
 	sc_boolean undo_raised;
-	sc_integer undo_value;
+	sc_integer  undo_value;
 	sc_boolean giveBid_raised;
 	sc_boolean rBid_raised;
 	sc_boolean bidDone_raised;
-	sc_integer bidDone_value;
+	sc_integer  bidDone_value;
 	sc_boolean bidInfo_raised;
-	sc_integer bidInfo_value;
+	sc_integer  bidInfo_value;
 	sc_boolean undoBid_raised;
-	sc_integer undoBid_value;
+	sc_integer  undoBid_value;
 	sc_boolean readyForDummy_raised;
 	sc_boolean clientPlays_raised;
 	sc_boolean playerPlays_raised;
-	sc_integer playerPlays_value;
+	sc_integer  playerPlays_value;
 	sc_boolean readyForDummyCards_raised;
 	sc_boolean readyForPlayer_raised;
 	sc_boolean playerToLead_raised;
@@ -79,23 +79,23 @@ typedef struct {
 	sc_boolean dummyCards_raised;
 	sc_boolean getLeader_raised;
 	sc_boolean newLeader_raised;
-	sc_integer newLeader_value;
+	sc_integer  newLeader_value;
 	sc_boolean undoTrick_raised;
-	sc_integer undoTrick_value;
-	sc_integer boardNumber;
-	sc_integer vulnerability;
-	sc_integer client;
-	sc_integer dealer;
-	sc_integer bidder;
-	sc_integer bidVal;
-	sc_integer lastBid;
-	sc_integer bidDouble;
-	sc_integer bidEnable;
-	sc_integer declarer;
-	sc_integer dummy;
-	sc_integer noTrick;
-	sc_integer player;
-	sc_integer cardVal;
+	sc_integer  undoTrick_value;
+	sc_integer  boardNumber;
+	sc_integer  vulnerability;
+	sc_integer  client;
+	sc_integer  dealer;
+	sc_integer  bidder;
+	sc_integer  bidVal;
+	sc_integer  lastBid;
+	sc_integer  bidDouble;
+	sc_integer  bidEnable;
+	sc_integer  declarer;
+	sc_integer  dummy;
+	sc_integer  noTrick;
+	sc_integer  player;
+	sc_integer  cardVal;
 } ZBridgeClientIface;
 
 

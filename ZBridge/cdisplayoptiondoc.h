@@ -25,6 +25,11 @@
 class QString;
 class QColor;
 
+/**
+ * @brief Diaplay options.
+ *
+ * This class has the display options and methods to save and restore the options.
+ */
 class CDisplayOptionDoc
 {
 public:

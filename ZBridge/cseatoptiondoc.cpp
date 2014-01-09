@@ -8,15 +8,14 @@
   Revision History:
   26-feb-2013 eak: Original
 
-  Abstract:
+  Abstract: Seat option data.
 
   Platforms: Qt.
-
 */
 
 /**
  * \file
- *
+ * Seat option data
  */
 
 #include <QSettings>

@@ -8,7 +8,7 @@
   Revision History:
   26-feb-2013 eak: Original
 
-  Abstract: Dialog for plsy file comments.
+  Abstract: Dialog for play file comments.
 
   Platforms: Qt.
 
@@ -33,6 +33,9 @@ namespace Ui {
 class CFileCommentsDialog;
 }
 
+/**
+ * @brief Class for showing the file comments dialog.
+ */
 class CFileCommentsDialog : public QDialog
 {
     Q_OBJECT

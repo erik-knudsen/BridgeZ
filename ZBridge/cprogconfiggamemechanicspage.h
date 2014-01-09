@@ -28,6 +28,9 @@ namespace Ui {
 class CProgConfigGameMechanicsPage;
 }
 
+/**
+ * @brief Wizard game mechanics page.
+ */
 class CProgConfigGameMechanicsPage : public QWizardPage
 {
     Q_OBJECT

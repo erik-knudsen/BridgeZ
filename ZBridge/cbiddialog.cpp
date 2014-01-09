@@ -22,6 +22,15 @@
 #include "cbiddialog.h"
 #include "ui_cbiddialog.h"
 
+/**
+ * @brief Bid dialog
+ * @param parent Pointer to parent.
+ *
+ * The constructor initalizes the bid dialog:
+ *   - Set up user interface.
+ *   - Initially disable the dialog.
+ *   - Map bid user interface bid buttons.
+ */
 CBidDialog::CBidDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::CBidDialog)
@@ -77,12 +86,20 @@ CBidDialog::~CBidDialog()
     delete ui;
 }
 
+/**
+ * @brief Close event for the dialog.
+ * @param event The close event.
+ *
+ * Emits a bidClose signal and then closes the dialog.
+ */
 void CBidDialog::closeEvent(QCloseEvent *event)
 {
     emit bidClose();
     QDialog::closeEvent(event);
 }
 
+//--------------------------------------------------------------------------
+//Click of bid buttons.
 void CBidDialog::on_bid1C_clicked()
 {
     bidClicked(BID_1C);
@@ -273,44 +290,81 @@ void CBidDialog::on_bidRedouble_clicked()
     bidClicked(BID_REDOUBLE);
 }
 
+/**
+ * @brief Catches eventually the bid clicked by the user of the dialog.
+ * @param nBid The bid.
+ *
+ * Emits a bidValue signal.
+ */
 void CBidDialog::bidClicked(Bids nBid)
 {
     emit bidValue(nBid);
 }
 
+/**
+ * @brief Bid backup button was clicked.
+ *
+ * Emits a bidBackup signal.
+ */
 void CBidDialog::on_bidBackup_clicked()
 {
     emit bidBackup();
 }
 
+/**
+ * @brief Bid hint button was clicked.
+ *
+ * Emits a bidHint signal.
+ */
 void CBidDialog::on_bidHint_clicked()
 {
     emit bidHint();
 }
 
+/**
+ * @brief Bid restart button was clicked.
+ *
+ * Emits a bidRestart signal.
+ */
 void CBidDialog::on_bidRestart_clicked()
 {
     emit bidRestart();
 }
 
+/**
+ * @brief Enable the bid dialog.
+ * @param seat The seat to enable for.
+ * @param lastBid The last proper bid given.
+ * @param doubleBid Double bid (if any).
+ *
+ * Sets the dialog window title. Enables relevant bid buttons. Enables the dialog.
+ */
 void CBidDialog::enableBidder(Seat seat, Bids lastBid, Bids doubleBid)
 {
     int i;
 
+    //Set window title.
     setWindowTitle(tr("Bidder: ") + SEAT_NAMES[seat]);
 
+    //Enable proper bid buttons.
     for (i = BID_1C; i <= BID_7NT; i++)
         m_pBidButtons[i]->setEnabled(i > lastBid);
 
+    //Enable proper double/redouble buttons.
     if (lastBid == BID_NONE)
         doubleBid = BID_NONE;
 
     m_pBidButtons[BID_DOUBLE]->setEnabled(doubleBid == BID_DOUBLE);
     m_pBidButtons[BID_REDOUBLE]->setEnabled(doubleBid == BID_REDOUBLE);
 
+    //Enable the dialog.
     setEnabled(true);
 }
 
+/**
+ * @brief Disable the bid dialog.
+ * @param seat The seat (not used).
+ */
 void CBidDialog::disableBidder(Seat seat)
 {
     setEnabled(false);

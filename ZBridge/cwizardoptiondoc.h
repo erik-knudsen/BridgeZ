@@ -11,7 +11,6 @@
   Abstract: Wizard data.
 
   Platforms: Qt.
-
 */
 
 /**
@@ -22,6 +21,11 @@
 #ifndef CWIZARDOPTIONDOC_H
 #define CWIZARDOPTIONDOC_H
 
+/**
+ * @brief Wizard options.
+ *
+ * This class has the wizrd options and methods to save and restore the options.
+ */
 class CWizardOptionDoc
 {
 public:

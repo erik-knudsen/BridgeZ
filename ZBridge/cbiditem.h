@@ -11,7 +11,7 @@
   Revision History:
   5-sep-2013 eak: Original
 
-  Abstract: Bids.
+  Abstract: Description of one bid (to be used in the play view).
 
   Platforms: Qt.
 
@@ -23,9 +23,14 @@
 
 /**
  * \file
- * Bids (declaration).
+ * Description of one bid (declaration).
  */
 
+/**
+ * @brief Description of one bid.
+ *
+ * This class is used by the play view to handle one of the given bids.
+ */
 class CBidItem : public QGraphicsItem
 {
 public:
@@ -45,9 +50,9 @@ protected:
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 
 private:
-    Seat seat;
-    Bids bid;
-    QObject *bidSignal;
+    Seat seat;          /**< The seat who gave the bid. */
+    Bids bid;           /**< The bid. */
+    QObject *bidSignal; /**< Event receiver. */
 };
 
 #endif // CBIDITEM_H

@@ -11,7 +11,6 @@
   Abstract: Status window.
 
   Platforms: Qt.
-
 */
 
 /**

@@ -1,3 +1,24 @@
+/*Erik Aagaard Knudsen.
+  Copyright © 2013 - All Rights Reserved
+
+  Project: ZBridge
+  File: CRemoteProtocol.cpp
+  Developers: eak
+
+  Revision History:
+  26-feb-2013 eak: Original
+
+  Abstract: Pack/unpack communication messages.
+
+  Platforms: Qt.
+
+*/
+
+/**
+ * \file
+ * Pack/unpack communication messages (definitions).
+ */
+
 #include <QVector>
 
 #include "cremoteprotocol.h"
@@ -40,6 +61,11 @@ const QString SUITS_NET[5] =
 };
 
 
+/**
+ * @brief Get the message type from a line received.
+ * @param line The line received.
+ * @return The type.
+ */
 MsgType getMessageType(QString line) throw(NetProtocolException)
 {
     if (line.contains("plays", Qt::CaseInsensitive))
@@ -107,6 +133,11 @@ MsgType getMessageType(QString line) throw(NetProtocolException)
     throw NetProtocolException("Net - Unknown message: " + line.toStdString());
 }
 
+/**
+ *@brief  Get the seat from a line received.
+ * @param line The line.
+ * @return The seat.
+ */
 Seat CMsg::getSeat(QString line) throw(NetProtocolException)
 {
     if (line.contains(SEAT_NAMES_NET[WEST_SEAT], Qt::CaseInsensitive))
@@ -121,6 +152,11 @@ Seat CMsg::getSeat(QString line) throw(NetProtocolException)
         throw NetProtocolException("Net - No seat: " + line.toStdString());
 }
 
+/**
+ * @brief Get the team from a line received.
+ * @param line The line.
+ * @return The team.
+ */
 Team CMsg::getTeam(QString line) throw(NetProtocolException)
 {
     if (line.contains(VULNERABILITY_NAMES_NET[NEITHER], Qt::CaseInsensitive))
@@ -135,6 +171,10 @@ Team CMsg::getTeam(QString line) throw(NetProtocolException)
         throw NetProtocolException("Net - No vulnerability: " + line.toStdString());
 }
 
+/**
+ * @brief Get the card values from a cards line received.
+ * @param line The line.
+ */
 void CMsg::getCardValues(int cards[], QString line, int first) throw(NetProtocolException)
 {
     int i, next, face;
@@ -159,7 +199,6 @@ void CMsg::getCardValues(int cards[], QString line, int first) throw(NetProtocol
         next += 2;
     }
 
-
     next = line.indexOf("D ", first, Qt::CaseInsensitive) + 1;
     while ((face = getFaceValue(line, next)) != -1)
     {
@@ -182,6 +221,12 @@ void CMsg::getCardValues(int cards[], QString line, int first) throw(NetProtocol
         throw NetProtocolException("Net - Cards: " + line.toStdString());
 }
 
+/**
+ * @brief Get next face value from a line received.
+ * @param line The line.
+ * @param next Index into line.
+ * @return The face value.
+ */
 int CMsg::getFaceValue(QString line, int next) throw(NetProtocolException)
 {
     const QString CARD = "23456789TJQKA";
@@ -204,6 +249,12 @@ int CMsg::getFaceValue(QString line, int next) throw(NetProtocolException)
     return CARD.indexOf(line.at(next + 1), 0, Qt::CaseInsensitive);
 }
 
+//Set face values in a string to send.
+/**
+ * @brief Set face values in a string to send.
+ * @param cards The card values.
+ * @param line The line to send.
+ */
 void CMsg::setFaceValues(int cards[], QString line)
 {
     int i, j;
@@ -276,6 +327,9 @@ void CMsg::setFaceValues(int cards[], QString line)
         line += '.';
 }
 
+
+//Unpacking and packing of the different communication messages.
+//--------------------------------------------------------------------
 
 CConnectMsg::CConnectMsg(QString name, Seat seat, int protocol)
 {

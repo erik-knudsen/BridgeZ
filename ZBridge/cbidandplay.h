@@ -1,3 +1,24 @@
+/*Erik Aagaard Knudsen.
+  Copyright © 2013 - All Rights Reserved
+
+  Project: ZBridge
+  File: CBidAndPlay.h
+  Developers: eak
+
+  Revision History:
+  26-feb-2013 eak: Original
+
+  Abstract: Bid and play.
+
+  Platforms: Qt.
+
+*/
+
+/**
+ * @file Bid and play.
+ * Handling of bids and play.
+ */
+
 #ifndef CBIDANDPLAY_H
 #define CBIDANDPLAY_H
 
@@ -9,6 +30,17 @@
 
 class CBidOptionDoc;
 
+/**
+ * @brief Bid and play handling.
+ *
+ * The class handles bid and play for one actor i.e. each actor has a bid and play object.
+ *  - It generates initally engines for automatic bidding and for automatic playing, and uses these engines
+ *    for bidding and playing.
+ *  - It stores the bid history and the play history.
+ *  - It also has the actors cards and the dummys cards.
+ *  - It determines the next leader after a trick has been played.
+ *  - It supports undo of bid and undo of play.
+ */
 class CBidAndPlay
 {
 public:

@@ -1,5 +1,32 @@
+/*Erik Aagaard Knudsen.
+  Copyright © 2013 - All Rights Reserved
+
+  Project: ZBridge
+  File: CRemoteActorServer.cpp
+  Developers: eak
+
+  Revision History:
+  26-feb-2013 eak: Original
+
+  Abstract: Remote actor server.
+
+  Platforms: Qt.
+
+*/
+
+/**
+ * \file
+ * Remote actor server (definition).
+ */
+
 #include "cremoteactorserver.h"
 
+/**
+ * @brief The front end sets up signal/slot connections.
+ * @param seat The seat for the front end actor.
+ * @param connectLine The connect line received in the initial communication with the remote actor.
+ * @param socket The socket to use.
+ */
 CRemoteActorFrontEnd::CRemoteActorFrontEnd(Seat seat, QString connectLine, QTcpSocket *socket)
 {
     this->seat = seat;
@@ -11,11 +38,19 @@ CRemoteActorFrontEnd::CRemoteActorFrontEnd(Seat seat, QString connectLine, QTcpS
     connect(socket, &QTcpSocket::disconnected, this, &CRemoteActorFrontEnd::disConnect);
 }
 
+/**
+ * @brief Starts the front end.
+ *
+ * emits a receiveLine signal with the connect line (to the table manager).
+ */
 void CRemoteActorFrontEnd::start()
 {
     emit receiveLine(connectLine);
 }
 
+/**
+ * @brief Reads a line from the remote actor and emits it to the table manager.
+ */
 void CRemoteActorFrontEnd::readLine()
 {
     QByteArray lineData;
@@ -27,11 +62,20 @@ void CRemoteActorFrontEnd::readLine()
 }
 
 
+/**
+ * @brief Send a line to the remote actor.
+ * @param line The line to send.
+ */
 void CRemoteActorFrontEnd::sendLine(QString line)
 {
     socket->write(line.toLatin1());
 }
 
+/**
+ * @brief Stop the front end.
+ *
+ * Disconnects from the remote actor, makes sure things are cleaned up and quits the front end thread.
+ */
 void CRemoteActorFrontEnd::stopFrontEnd()
 {
     if (socket->state() == QTcpSocket::ConnectedState)
@@ -40,6 +84,9 @@ void CRemoteActorFrontEnd::stopFrontEnd()
     thread()->quit();
 }
 
+/**
+ * @brief Makes sure things are cleaned up and quits the front end thread.
+ */
 void CRemoteActorFrontEnd::disConnect()
 {
     emit disConnectSeat(seat);
@@ -48,6 +95,15 @@ void CRemoteActorFrontEnd::disConnect()
 }
 
 
+/**
+ * @brief Constructor for remote actor server.
+ * @param protocol The protocol to use in the communication.
+ * @param hostAddress The host address.
+ * @param port The port.
+ * @param parent The parent.
+ *
+ * Starts listening for a connect from a remote actor.
+ */
 CRemoteActorServer::CRemoteActorServer(Protocol protocol, QHostAddress hostAddress, quint16 port, QObject *parent) :
     QTcpServer(parent)
 {
@@ -67,11 +123,20 @@ CRemoteActorServer::~CRemoteActorServer()
     emit stopFrontEnds();
 }
 
+/**
+ * @brief A remote actor is connecting.
+ *
+ * After connecting the remote actor server expects to receive the first message from the remote
+ * actor client. It is a connect message. This message is checked and if it is found ok then a
+ * remote actor front end thread is started to take care of further communication.
+ */
 void CRemoteActorServer::incomingConnection(qintptr socketDescriptor)
 {
     QTcpSocket *socket = new QTcpSocket();
 
     socket->setSocketDescriptor(socketDescriptor);
+
+    //Check for reading (connect message).
     if (!socket->waitForReadyRead(10000))
     {
         QMessageBox::warning(0, tr("ZBridge"), tr("Timeout on client connection."));
@@ -79,6 +144,7 @@ void CRemoteActorServer::incomingConnection(qintptr socketDescriptor)
         return;
     }
 
+    //Check size of connect message.
     char buf[200];
     int length = socket->read(buf, 200);
     if (length > 175)
@@ -90,6 +156,7 @@ void CRemoteActorServer::incomingConnection(qintptr socketDescriptor)
     buf[length] = 0;
     QString connectLine(buf);
 
+    //Determine the protocol.
     int assumedProtocol = 0;
     int i = connectLine.size() - 1;
     while ((i >= 0) && !connectLine[i].isDigit()) i--;
@@ -100,6 +167,7 @@ void CRemoteActorServer::incomingConnection(qintptr socketDescriptor)
     if (i != j)
         assumedProtocol = connectLine.mid(j, i - j).toInt();
 
+    //Check protocol and syntax of connect line.
     if ((assumedProtocol != protocol) ||
             !connectLine.contains("Connecting", Qt::CaseInsensitive) ||
             !connectLine.contains("as", Qt::CaseInsensitive) ||
@@ -122,12 +190,15 @@ void CRemoteActorServer::incomingConnection(qintptr socketDescriptor)
 
     QString teamName = connectLine.section('"', 1, 1);
 
+    //Check that the seat is not already connected.
     if (remoteConnects[seat].isConnected)
     {
         QMessageBox::warning(0, tr("ZBridge"), tr("Client tries to connect as already connected hand."));
         delete socket;
         return;
     }
+
+    //Check that they agree on team names.
     if ((remoteConnects[(seat + 2) & 3].isConnected) &&
             (remoteConnects[(seat +2) & 3].teamName.compare(teamName, Qt::CaseInsensitive)) != 0)
     {
@@ -136,6 +207,7 @@ void CRemoteActorServer::incomingConnection(qintptr socketDescriptor)
         return;
     }
 
+    //Everything is ok. Now start a front end thread.
     QThread *thread = new QThread();
 
     CRemoteActorFrontEnd *frontEnd = new CRemoteActorFrontEnd(seat, connectLine, socket);
@@ -157,6 +229,9 @@ void CRemoteActorServer::incomingConnection(qintptr socketDescriptor)
     thread->start();
 }
 
+/**
+ * @brief Stop all remote actor clients.
+ */
 void CRemoteActorServer::stopAllClients()
 {
     for (int i = 0; i < 4; i++)
@@ -165,7 +240,10 @@ void CRemoteActorServer::stopAllClients()
     emit stopFrontEnds();
 }
 
-
+/**
+ * @brief Remote actor has disconnected.
+ * @param seat The remote actors seat.
+ */
 void CRemoteActorServer::disConnectSeat(Seat seat)
 {
     remoteConnects[seat].isConnected = false;

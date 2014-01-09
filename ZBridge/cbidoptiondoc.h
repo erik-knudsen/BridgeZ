@@ -8,7 +8,7 @@
   Revision History:
   26-feb-2013 eak: Original
 
-  Abstract: Model (data).
+  Abstract: Bid options.
 
   Platforms: Qt.
 
@@ -16,7 +16,7 @@
 
 /**
  * \file
- * Model (data) (declaration).
+ * Bid options (declaration).
  */
 
 #ifndef CBIDOPTIONDOC_H
@@ -27,6 +27,10 @@
 class QString;
 class QDataStream;
 
+/**
+ * @brief This class defines a set of bid options. It also describes how the options are ssaved and
+ * restored form persistent storage.
+ */
 class CBidOptionDoc
 {
 public:

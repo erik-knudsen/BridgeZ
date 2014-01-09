@@ -16,7 +16,7 @@
 
 /**
  * \file
- * Property sheet for selecting bid options (definition).
+ * Property sheet for selecting bid options.
  */
 
 #ifndef CBIDOPTIONSPROPSHEET_H
@@ -34,6 +34,9 @@ namespace Ui {
 class CBidOptionsPropSheet;
 }
 
+/**
+ * @brief Property sheet for selecting bid options.
+ */
 class CBidOptionsPropSheet : public QDialog
 {
     Q_OBJECT

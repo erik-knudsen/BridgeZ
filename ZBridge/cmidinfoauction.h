@@ -1,3 +1,24 @@
+/*Erik Aagaard Knudsen.
+  Copyright © 2013 - All Rights Reserved
+
+  Project: ZBridge
+  File: CMidInfoAuction.h
+  Developers: eak
+
+  Revision History:
+  26-feb-2013 eak: Original
+
+  Abstract: Shows information for mid info auction widget.
+
+  Platforms: Qt.
+
+*/
+
+/**
+ * \file
+ * Shows information for mid info auction widget (declaration).
+ */
+
 #ifndef CMIDINFOAUCTION_H
 #define CMIDINFOAUCTION_H
 
@@ -5,6 +26,11 @@
 
 #include "cbiditem.h"
 
+/**
+ * @brief Show auction.
+ *
+ * This class shows in the mid info auction widget (play view) the bids as the auction progresses.
+ */
 class CMidInfoAuction : public QGraphicsWidget
 {
 public:

@@ -43,11 +43,19 @@ void CBidHistory::removeBid()
         bidList.pop_back();
 }
 
+/**
+ * @brief Reset (clear) the bid history.
+ */
 void CBidHistory::resetBidHistory()
 {
     bidList.clear();
 }
 
+/**
+ * @brief Undo some of the bid history.
+ * @param bid The bid.
+ * @return Next bidder.
+ */
 int CBidHistory::undo(Bids *bid)
 {
     return WEST_SEAT;

@@ -31,6 +31,11 @@ namespace Ui {
 class CHistoryWnd;
 }
 
+/**
+ * @brief History window for bid and play.
+ *
+ * This class will propably not be used.
+ */
 class CHistoryWnd : public QDockWidget
 {
     Q_OBJECT

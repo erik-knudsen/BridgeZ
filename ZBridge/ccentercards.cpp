@@ -1,3 +1,24 @@
+/*Erik Aagaard Knudsen.
+  Copyright © 2013 - All Rights Reserved
+
+  Project: ZBridge
+  File: CCenterCards.cpp
+  Developers: eak
+
+  Revision History:
+  26-feb-2013 eak: Original
+
+  Abstract: The table in the play view.
+
+  Platforms: Qt.
+
+*/
+
+/**
+ * \file
+ * The table in the play view (definition).
+ */
+
 #include <QApplication>
 #include <QGraphicsWidget>
 #include <QRectF>

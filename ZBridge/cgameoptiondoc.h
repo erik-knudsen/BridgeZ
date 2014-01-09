@@ -22,6 +22,9 @@
 #ifndef CGAMEOPTIONDOC_H
 #define CGAMEOPTIONDOC_H
 
+/**
+ * @brief Holds the game options and methods to store/restore the options.
+ */
 class CGameOptionDoc
 {
 public:

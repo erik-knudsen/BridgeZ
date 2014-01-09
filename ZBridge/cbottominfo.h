@@ -1,8 +1,38 @@
+/*Erik Aagaard Knudsen.
+  Copyright © 2013 - All Rights Reserved
+
+  Project: ZBridge
+  File: CBottomInfo.h
+  Developers: eak
+
+  Revision History:
+  26-feb-2013 eak: Original
+
+  Abstract: Bottom part of info panel.
+
+  Platforms: Qt.
+
+*/
+
+/**
+ * \file
+ * Bottom part of info panel (declaration).
+ */
+
 #ifndef CBOTTOMINFO_H
 #define CBOTTOMINFO_H
 
 #include <QGraphicsWidget>
 
+/**
+ * @brief Bottom info class.
+ *
+ *The bottom info class is used by the play view to show, depending on context, one of:
+ *   - Auction related information.
+ *   - Auction button.
+ *   - Play related information.
+ *   - Play button.
+ */
 class CBottomInfo : public QGraphicsWidget
 {
 public:

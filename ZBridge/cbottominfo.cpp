@@ -1,3 +1,24 @@
+/*Erik Aagaard Knudsen.
+  Copyright © 2013 - All Rights Reserved
+
+  Project: ZBridge
+  File: CBottomInfo.cpp
+  Developers: eak
+
+  Revision History:
+  26-feb-2013 eak: Original
+
+  Abstract: Bottom part of info panel.
+
+  Platforms: Qt.
+
+*/
+
+/**
+ * \file
+ * Bottom part of info panel (definition).
+ */
+
 #include <QRectF>
 #include <QBrush>
 #include <QPainter>

@@ -8,7 +8,7 @@
   Revision History:
   5-sep-2013 eak: Original
 
-  Abstract: Bids.
+  Abstract: Description of one bid (to be used in the play view)..
 
   Platforms: Qt.
 
@@ -16,7 +16,7 @@
 
 /**
  * \file
- * Bids (definition).
+ * Description of one bid (definition).
  */
 
 #include <QApplication>
@@ -26,6 +26,11 @@
 #include "CBidItem.h"
 #include "Defines.h"
 
+/**
+ * @brief Constructor creates the bid.
+ * @param seat The seat who gave the bid.
+ * @param bid The bid.
+ */
 CBidItem::CBidItem(Seat seat, Bids bid)
 {
     setFlag(QGraphicsItem::ItemIsSelectable);
@@ -40,6 +45,9 @@ QRectF CBidItem::boundingRect() const
     return QRectF(0, 0, BID_HOR_SIZE, BID_VER_SIZE);
 }
 
+/**
+ * @brief Paint the bid.
+ */
 void CBidItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     QPixmap pixmap;
@@ -54,6 +62,12 @@ void CBidItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 }
 
 
+/**
+ * @brief Mouse release event for the bid is sent to the event receiver.
+ * @param event The event.
+ *
+ * In case of a left button release event the bidClickedEvent is sent to the event receiver.
+ */
 void CBidItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton)

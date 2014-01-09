@@ -1,5 +1,24 @@
-//#include <QRectF>
-//#include <QBrush>
+/*Erik Aagaard Knudsen.
+  Copyright © 2013 - All Rights Reserved
+
+  Project: ZBridge
+  File: CBottomInfoButton.h
+  Developers: eak
+
+  Revision History:
+  26-feb-2013 eak: Original
+
+  Abstract: Button for bottom info auction widget.
+
+  Platforms: Qt.
+
+*/
+
+/**
+ * \file
+ * Button for bottom info auction widget (definition).
+ */
+
 #include <QApplication>
 #include <QPainter>
 #include <QGraphicsSceneMouseEvent>
@@ -59,7 +78,12 @@ void CBottomInfoButton::mousePressEvent(QGraphicsSceneMouseEvent *event)
     QGraphicsWidget::mousePressEvent(event);
 }
 
-
+/**
+ * @brief Generates a BUTTON_CLICKED_Event for the left mouse button.
+ * @param event The event
+ *
+ * The event is sent to the receiver.
+ */
 void CBottomInfoButton::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton)

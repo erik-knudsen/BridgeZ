@@ -11,7 +11,6 @@
   Abstract: Status window.
 
   Platforms: Qt.
-
 */
 
 /**
@@ -31,6 +30,9 @@ namespace Ui {
 class CStatusWnd;
 }
 
+/**
+ * @brief Shows the status window (will propably not be used).
+ */
 class CStatusWnd : public QDockWidget
 {
     Q_OBJECT

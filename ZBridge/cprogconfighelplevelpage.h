@@ -28,6 +28,9 @@ namespace Ui {
 class CProgConfigHelpLevelPage;
 }
 
+/**
+ * @brief Wizard help level page.
+ */
 class CProgConfigHelpLevelPage : public QWizardPage
 {
     Q_OBJECT

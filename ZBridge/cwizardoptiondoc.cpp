@@ -11,7 +11,6 @@
   Abstract: Wizard data.
 
   Platforms: Qt.
-
 */
 
 /**

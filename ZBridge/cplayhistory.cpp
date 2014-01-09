@@ -1,3 +1,24 @@
+/*Erik Aagaard Knudsen.
+  Copyright © 2013 - All Rights Reserved
+
+  Project: ZBridge
+  File: CPlayHistory.cpp
+  Developers: eak
+
+  Revision History:
+  26-feb-2013 eak: Original
+
+  Abstract: Play history.
+
+  Platforms: Qt.
+
+*/
+
+/**
+ * \file
+ * Play History (definition).
+ */
+
 #include <cassert>
 
 #include "cplayhistory.h"
@@ -17,6 +38,12 @@ void CPlayHistory::resetPlayHistory()
             play[i][j] = -1;
 }
 
+/**
+ * @brief Set bid info for the play.
+ * @param bid The contract.
+ * @param bidDouble Double/redouble?
+ * @param openLeader The open leader.
+ */
 void CPlayHistory::setBidInfo(Bids bid, Bids bidDouble, Seat openLeader)
 {
     resetPlayHistory();
@@ -30,6 +57,12 @@ void CPlayHistory::setBidInfo(Bids bid, Bids bidDouble, Seat openLeader)
     currentLeader = openLeader;
 }
 
+/**
+ * @brief Set the next played card in the history.
+ * @param player The player.
+ * @param trick The trick number.
+ * @param cardVal The card played.
+ */
 void CPlayHistory::setPlay(Seat player, int trick, int cardVal)
 {
     if ((play[WEST_SEAT][noTrick] != -1) && (play[NORTH_SEAT][noTrick] != -1) &&
@@ -46,6 +79,12 @@ void CPlayHistory::setPlay(Seat player, int trick, int cardVal)
         play[player][trick] = cardVal;
 }
 
+/**
+ * @brief Get which cards has been played until now by this seat.
+ * @param seat The seat.
+ * @param cards Cards played.
+ * @return Number of tricks so far.
+ */
 int CPlayHistory::getPlayed(Seat seat, int cards[])
 {
     for (int i = 0; i <= noTrick; i++)
@@ -54,6 +93,13 @@ int CPlayHistory::getPlayed(Seat seat, int cards[])
     return (cards[noTrick] == -1) ? noTrick : noTrick + 1;
 }
 
+/**
+ * @brief Check if the played card is ok.
+ * @param card The played card.
+ * @param seat The players seat.
+ * @param cards The cards.
+ * @return true if ok else false.
+ */
 bool CPlayHistory::cardOk(int card, Seat seat, int cards[])
 {
     int i, j;
@@ -113,6 +159,10 @@ bool CPlayHistory::cardOk(int card, Seat seat, int cards[])
     return true;
 }
 
+/**
+ * @brief Determine the next leader.
+ * @return The next leader.
+ */
 Seat CPlayHistory::getNextLeader()
 {
     Seat nextLeader;
@@ -159,6 +209,9 @@ Seat CPlayHistory::getNextLeader()
     return nextLeader;
 }
 
+/**
+ * @brief Undo trick.
+ */
 int CPlayHistory::undo()
 {
     return 0;

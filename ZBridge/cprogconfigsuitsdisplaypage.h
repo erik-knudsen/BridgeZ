@@ -28,6 +28,9 @@ namespace Ui {
 class CProgConfigSuitsDisplayPage;
 }
 
+/**
+ * @brief Wizard suits display page.
+ */
 class CProgConfigSuitsDisplayPage : public QWizardPage
 {
     Q_OBJECT

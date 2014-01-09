@@ -15,6 +15,9 @@ QRectF CTBCards::boundingRect() const
     return QRectF(0, 0, TB_CARD_HOR_SIZE, TB_CARD_VER_SIZE);
 }
 
+/**
+ * @brief Layout card faces to be drawn in top and bottom positions.
+ */
 void CTBCards::prepareToDrawFaces(QGraphicsWidget *widget)
 {
     Suit sequence[4];
@@ -59,6 +62,9 @@ void CTBCards::prepareToDrawFaces(QGraphicsWidget *widget)
     setParent(widget);
 }
 
+/**
+ * @brief Layout card backs to be drawn in the top and bottom positions.
+ */
 void CTBCards::prepareToDrawBacks(QGraphicsWidget *widget)
 {
     int i;

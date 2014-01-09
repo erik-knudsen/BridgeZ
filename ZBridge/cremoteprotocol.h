@@ -1,3 +1,24 @@
+/*Erik Aagaard Knudsen.
+  Copyright © 2013 - All Rights Reserved
+
+  Project: ZBridge
+  File: CRemoteProtocol.h
+  Developers: eak
+
+  Revision History:
+  26-feb-2013 eak: Original
+
+  Abstract: Pack/unpack communication messages.
+
+  Platforms: Qt.
+
+*/
+
+/**
+ * \file
+ * Pack/unpack communication messages (declarations).
+ */
+
 #ifndef CREMOTEPROTOCOL_H
 #define CREMOTEPROTOCOL_H
 
@@ -6,13 +27,24 @@
 
 MsgType getMessageType(QString line) throw(NetProtocolException);
 
+/**
+ * @brief Base class for all communication messages.
+ *
+ * It defines common operations for all messages.
+ */
 class CMsg
 {
 public:
     CMsg(){ }
 
 private:
+    /**
+     * @brief Pack message into line.
+     */
     virtual void msgToLine() = 0;
+    /**
+     * @brief Unpack message from line.
+     */
     virtual void lineToMsg() = 0;
 
 protected:
@@ -25,6 +57,7 @@ protected:
 public:
     MsgType msgType;
 };
+
 
 class CConnectMsg : public CMsg
 {

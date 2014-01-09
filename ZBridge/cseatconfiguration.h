@@ -32,7 +32,11 @@ class CZBridgeDoc;
 namespace Ui {
 class CSeatConfiguration;
 }
-
+/**
+ * @brief Seat option dialog.
+ *
+ * Shows the seat option dialog and allows the user to set/change the options.
+ */
 class CSeatConfiguration : public QDialog
 {
     Q_OBJECT

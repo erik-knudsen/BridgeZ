@@ -2,7 +2,8 @@
 <diagram program="umlet" version="12.2">
   <help_text>// Uncomment the following line to change the fontsize and font:
 fontsize=12
-// fontfamily=SansSerif //possible: SansSerif,Serif,Monospaced
+fontfamily=SansSerif
+//possible: SansSerif,Serif,Monospaced
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////

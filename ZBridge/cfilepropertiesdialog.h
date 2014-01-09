@@ -31,6 +31,9 @@ namespace Ui {
 class CFilePropertiesDialog;
 }
 
+/**
+ * @brief The CFilePropertiesDialog class
+ */
 class CFilePropertiesDialog : public QDialog
 {
     Q_OBJECT

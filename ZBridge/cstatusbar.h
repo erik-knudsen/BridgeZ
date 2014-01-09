@@ -11,7 +11,6 @@
   Abstract: Status bar.
 
   Platforms: Qt.
-
 */
 
 /**
@@ -26,6 +25,14 @@
 
 class QLabel;
 
+/**
+ * @brief Control of status bar.
+ *
+ *   - Contract.
+ *   - Declarer.
+ *   - Vulnerability indication.
+ *   - Mode.
+ */
 class CStatusBar : public QStatusBar
 {
     Q_OBJECT

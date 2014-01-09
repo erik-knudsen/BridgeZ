@@ -38,6 +38,9 @@ CNewConvention::~CNewConvention()
     delete ui;
 }
 
+/**
+ * @brief Get the name of the new bid option set.
+ */
 QString CNewConvention::getNewConventionName()
 {
     return ui->newConvention->text();

@@ -1,3 +1,23 @@
+/*Erik Aagaard Knudsen.
+  Copyright © 2013 - All Rights Reserved
+
+  Project: ZBridge
+  File: CTopInfoAuction.h
+  Developers: eak
+
+  Revision History:
+  26-feb-2013 eak: Original
+
+  Abstract: Shows information for top info auction widget.
+
+  Platforms: Qt.
+*/
+
+/**
+ * \file
+ * Shows information for top info auction widget (declaration).
+ */
+
 #ifndef CTOPINFOAUCTION_H
 #define CTOPINFOAUCTION_H
 
@@ -7,6 +27,14 @@
 
 class QGraphicsSimpleTextItem;
 
+/**
+ * @brief Show relevant info for auction.
+ *
+ * This class shows in the top info auction widget (play view) information relevant for the auction:
+ *   - Board id.
+ *   - Vulnerability.
+ *   - Dealer.
+ */
 class CTopInfoAuction : public QGraphicsWidget
 {
 public:

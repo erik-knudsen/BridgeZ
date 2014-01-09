@@ -30,6 +30,9 @@ namespace Ui {
 class CNewConvention;
 }
 
+/**
+ * @brief Dialog for user to select the name of a new bid option set.
+ */
 class CNewConvention : public QDialog
 {
     Q_OBJECT

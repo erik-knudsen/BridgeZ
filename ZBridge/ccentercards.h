@@ -1,3 +1,24 @@
+/*Erik Aagaard Knudsen.
+  Copyright © 2013 - All Rights Reserved
+
+  Project: ZBridge
+  File: CCenterCards.h
+  Developers: eak
+
+  Revision History:
+  26-feb-2013 eak: Original
+
+  Abstract: The table in the play view.
+
+  Platforms: Qt.
+
+*/
+
+/**
+ * \file
+ * The table in the play view (declaration).
+ */
+
 #ifndef CCENTERCARDS_H
 #define CCENTERCARDS_H
 
@@ -8,6 +29,12 @@
 #include "ccard.h"
 #include "csquare.h"
 
+/**
+ * @brief This class shows the table in the play view.
+ *
+ * Shows the cards trick by trick as the play progresses. It also shows vulnerability and who is to
+ * play next.
+ */
 class CCenterCards : public QGraphicsWidget
 {
 public:

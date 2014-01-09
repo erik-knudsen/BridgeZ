@@ -33,6 +33,11 @@ namespace Ui {
 class CGameOptionsPropSheet;
 }
 
+/**
+ * @brief Game option property sheet.
+ *
+ * Shows the game option property sheet and allows the user to set/change the options.
+ */
 class CGameOptionsPropSheet : public QDialog
 {
     Q_OBJECT

@@ -33,6 +33,9 @@ namespace Ui {
 class CProgramConfigWizard;
 }
 
+/**
+ * @brief Program configuration wizard.
+ */
 class CProgramConfigWizard : public QWizard
 {
     Q_OBJECT

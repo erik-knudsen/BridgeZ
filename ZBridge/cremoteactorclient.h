@@ -1,3 +1,24 @@
+/*Erik Aagaard Knudsen.
+  Copyright © 2013 - All Rights Reserved
+
+  Project: ZBridge
+  File: CRemoteActorClient.h
+  Developers: eak
+
+  Revision History:
+  26-feb-2013 eak: Original
+
+  Abstract: Remote actor client.
+
+  Platforms: Qt.
+
+*/
+
+/**
+ * \file
+ * Remote actor client (declaration).
+ */
+
 #ifndef CREMOTEACTORCLIENT_H
 #define CREMOTEACTORCLIENT_H
 
@@ -7,6 +28,11 @@
 
 #include "Defines.h"
 
+/**
+ * @brief Remote actor client class.
+ *
+ * This class takes care of tcp/ip communication on the remote actor client side
+ */
 class CRemoteActorClient : public QObject
 {
     Q_OBJECT

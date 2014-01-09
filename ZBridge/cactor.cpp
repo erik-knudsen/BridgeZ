@@ -1,6 +1,33 @@
+/* Erik Aagaard Knudsen.
+  Copyright © 2013 - All Rights Reserved
+
+  Project: ZBridge
+  File: CActor.cpp
+  Developers: eak
+
+  Revision History:
+  13-jun-2013 eak: Original
+
+  Abstract: Generic strategy for actor.
+
+  Platforms: Qt.
+  */
+
+/**
+ * \file
+ * The file implements the definition of the generic strategy for actor
+ * strategy classes.
+ */
+
 #include "CTblMngr.h"
 #include "cactor.h"
 
+/**
+ * @brief Constructor for actor.
+ * @param tableManager Pointer to the table manager for the actor..
+ *
+ * The constructor creates common connections from the actor to the controlling table manager.
+ */
 CActor::CActor(CTblMngr *tableManager) :
     QObject(tableManager)
 {

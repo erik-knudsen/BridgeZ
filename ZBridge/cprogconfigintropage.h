@@ -28,6 +28,9 @@ namespace Ui {
 class CProgConfigIntroPage;
 }
 
+/**
+ * @brief Wizard intro page.
+ */
 class CProgConfigIntroPage : public QWizardPage
 {
     Q_OBJECT

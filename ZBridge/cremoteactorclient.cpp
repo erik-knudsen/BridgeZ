@@ -1,5 +1,37 @@
+/*Erik Aagaard Knudsen.
+  Copyright © 2013 - All Rights Reserved
+
+  Project: ZBridge
+  File: CRemoteActorClient.cpp
+  Developers: eak
+
+  Revision History:
+  26-feb-2013 eak: Original
+
+  Abstract: Remote actor client.
+
+  Platforms: Qt.
+
+*/
+
+/**
+ * \file
+ * Remote actor client (definition).
+ */
+
 #include "cremoteactorclient.h"
 
+/**
+ * @brief Constructor for remote actor client.
+ * @param hostAddress Address of host to connect to.
+ * @param port Port to use when connecting.
+ * @param parent The parent.
+ *
+ * The constructor:
+ *   - Allocates a socket.
+ *   - Sets up signal/slot connections for the communication.
+ *   - Connects to the host.
+ */
 CRemoteActorClient::CRemoteActorClient(QString hostAddress, quint16 port, QObject *parent) :
     QObject(parent)
 {
@@ -13,6 +45,9 @@ CRemoteActorClient::CRemoteActorClient(QString hostAddress, quint16 port, QObjec
     socket->connectToHost(hostAddress, port);
 }
 
+/**
+ * @brief Read a line from the host.
+ */
 void CRemoteActorClient::readLine()
 {
     QByteArray lineData;
@@ -23,21 +58,37 @@ void CRemoteActorClient::readLine()
     emit receiveLine(line);
 }
 
+/**
+ * @brief Send a line to the host.
+ * @param line The line to send.
+ */
 void CRemoteActorClient::sendLine(QString line)
 {
     socket->write(line.toLatin1());
 }
 
+/**
+ * @brief emit clientConnected signal.
+ */
 void CRemoteActorClient::connected()
 {
     emit clientConnected();
 }
 
+/**
+ * @brief emit clientDisConnected signal.
+ */
 void CRemoteActorClient::disConnected()
 {
     emit clientDisConnected();
 }
 
+/**
+ * @brief There was a socket error.
+ * @param error The error.
+ *
+ * Report the error and emit sSocketError signal.
+ */
 void CRemoteActorClient::socketError(QAbstractSocket::SocketError error)
 {
     QString err;

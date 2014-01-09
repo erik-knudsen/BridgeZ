@@ -33,6 +33,11 @@ namespace Ui {
 class CDealOptionsPropSheet;
 }
 
+/**
+ * @brief Deal option property sheet.
+ *
+ * This class shows the deal option property sheet and allows the user to set/change the deal options.
+ */
 class CDealOptionsPropSheet : public QDialog
 {
     Q_OBJECT
