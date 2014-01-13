@@ -473,7 +473,7 @@ void CTeamNamesMsg::lineToMsg() throw (NetProtocolException)
     if (!line.contains("Teams: N/S: ", Qt::CaseInsensitive) ||
         !line.contains(". E/W: ", Qt::CaseInsensitive) ||
         !(line.count(QChar('"')) == 4) ||
-        !(line.count(QChar(':') == 2)))
+        !(line.count(QChar(':') == 3)))
         throw NetProtocolException("Net - Teamnames: " + line.toStdString());
 
     nsTeamName = line.section('"', 1, 1);
