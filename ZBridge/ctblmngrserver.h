@@ -88,7 +88,7 @@ public slots:
      * These slot methods are signalled from the actors.
      */
     /*@{*/
-    void sConnect(QString name, Seat seat, int protocol);
+    void sConnect(QString teamName, Seat seat, int protocol);
     void sRTNames(Seat seat);
     void sRSBoard(Seat seat);
     void sRDealInfo(Seat seat);
@@ -144,6 +144,7 @@ private:
     Team vulnerable[4] = { NEITHER, NORTH_SOUTH, EAST_WEST, BOTH };
     Seat dealer[4] = { NORTH_SEAT, EAST_SEAT, SOUTH_SEAT, WEST_SEAT };
 
+    QByteArray teamNames[4];
     int currentCards[4][13];
     bool showUser;      /**< If true then the server handles the play view. */
     bool waiting;

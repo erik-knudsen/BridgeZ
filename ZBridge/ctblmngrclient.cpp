@@ -117,8 +117,8 @@ void CTblMngrClient::newSession()
     QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_CLIENT , protocol == ADVANCED_PROTOCOL));
     QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_NEW_SESSION , false));
 
-    QString ewTeamName = "ewTeam";
-    QString nsTeamName = "nsTeam";
+    QString ewTeamName = "ZBridge";
+    QString nsTeamName = "ZBridge";
 
     //Set up actor.
     if (doc->getSeatOptions().seat == WEST_SEAT)
@@ -457,7 +457,7 @@ void CTblMngrClient::receiveLine(QString line)
     {
         //Seated message was received.
         CSeatedMsg seatedMsg(line);
-        actor->seated(seatedMsg.name);
+        actor->seated(seatedMsg.teamName);
         break;
     }
 

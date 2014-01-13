@@ -80,7 +80,7 @@ public:
 class CSeatedMsg : public CMsg
 {
 public:
-    CSeatedMsg(Seat seat, QString name);
+    CSeatedMsg(Seat seat, QString teamName);
     CSeatedMsg(QString line) throw (NetProtocolException);
 
 private:
@@ -89,7 +89,7 @@ private:
 
 public:
     Seat seat;
-    QString name;
+    QString teamName;
 
     QString line;
 };

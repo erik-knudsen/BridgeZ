@@ -101,7 +101,7 @@ MsgType getMessageType(QString line) throw(NetProtocolException)
         return SEATED_MSG;
     if (line.contains("ready for teams", Qt::CaseInsensitive))
         return RTNAMES_MSG;
-    if (line.contains("Teams:N/S", Qt::CaseInsensitive))
+    if (line.contains("Teams: N/S", Qt::CaseInsensitive))
         return TEAMNAMES_MSG;
     if (line.contains("ready to start", Qt::CaseInsensitive))
         return RSBOARD_MSG;
@@ -376,12 +376,12 @@ void CConnectMsg::lineToMsg() throw (NetProtocolException)
 }
 
 
-CSeatedMsg::CSeatedMsg(Seat seat, QString name)
+CSeatedMsg::CSeatedMsg(Seat seat, QString teamName)
 {
     msgType = SEATED_MSG;
 
     this->seat = seat;
-    this->name = name;
+    this->teamName = teamName;
 
     msgToLine();
 }
@@ -397,7 +397,7 @@ CSeatedMsg::CSeatedMsg(QString line) throw (NetProtocolException)
 
 void CSeatedMsg::msgToLine()
 {
-    line = QString("%1 \"%2\" seated\r\n").arg(SEAT_NAMES_NET[seat]).arg(name);
+    line = QString("%1 \"%2\" seated\r\n").arg(SEAT_NAMES_NET[seat]).arg(teamName);
 }
 
 void CSeatedMsg::lineToMsg() throw (NetProtocolException)
@@ -408,7 +408,7 @@ void CSeatedMsg::lineToMsg() throw (NetProtocolException)
 
     seat = getSeat(line);
 
-    name = line.section('"', 1, 1);
+    teamName = line.section('"', 1, 1);
 }
 
 

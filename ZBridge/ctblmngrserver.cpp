@@ -450,8 +450,8 @@ void CTblMngrServer::newSession()
     //Enable/disable relevant menu actions.
     QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_SERVER , protocol == ADVANCED_PROTOCOL));
 
-    QString ewTeamName = "ewTeam";
-    QString nsTeamName = "nsTeam";
+    QString ewTeamName = "ZBridge";
+    QString nsTeamName = "ZBridge";
 
     //Set up actors.
     if (doc->getSeatOptions().westActor == MANUAL_ACTOR)
@@ -701,16 +701,16 @@ void CTblMngrServer::dummyToLead()
 //-----------------------------------------------------------------------------
 /**
  * @brief Actor requests connect (actor slot).
- * @param name Team name for actor.
+ * @param teamName Team name for actor.
  * @param seat Seat for actor.
  * @param protocol Protocol to use.
  *
  * The name is set in the statechart and connect is signalled to the statechart.
  */
-void CTblMngrServer::sConnect(QString name, Seat seat, int protocol)
+void CTblMngrServer::sConnect(QString teamName, Seat seat, int protocol)
 {
-    QByteArray ba = name.toLatin1();
-    zBridgeServerIface_set_name(&handle, ba.data());
+    this->teamNames[seat] = teamName.toLatin1();
+    zBridgeServerIface_set_name(&handle, this->teamNames[seat].data());
     zBridgeServerIface_raise_connect(&handle, seat);
     serverRunCycle();
 }

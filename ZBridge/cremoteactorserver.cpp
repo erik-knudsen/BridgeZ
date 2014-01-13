@@ -198,15 +198,6 @@ void CRemoteActorServer::incomingConnection(qintptr socketDescriptor)
         return;
     }
 
-    //Check that they agree on team names.
-    if ((remoteConnects[(seat + 2) & 3].isConnected) &&
-            (remoteConnects[(seat +2) & 3].teamName.compare(teamName, Qt::CaseInsensitive)) != 0)
-    {
-        QMessageBox::warning(0, tr("ZBridge"), tr("Team clients do not agree on team name."));
-        delete socket;
-        return;
-    }
-
     //Everything is ok. Now start a front end thread.
     QThread *thread = new QThread();
 

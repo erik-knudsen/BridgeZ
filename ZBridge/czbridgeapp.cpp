@@ -24,6 +24,9 @@
 #include "czbridgeapp.h"
 #include "cmainframe.h"
 #include "czbridgedoc.h"
+#include "Defines.h"
+
+Q_DECLARE_METATYPE(Seat)
 
 
 /**
@@ -36,9 +39,11 @@ int main(int argc, char *argv[])
     CZBridgeApp app(argc, argv);
 
     qRegisterMetaType<QAbstractSocket::SocketError>();
+    qRegisterMetaType<Seat>();
 
     return app.exec();
 }
+
 
 /**
  * The constructor initializes the Zbridge application.
