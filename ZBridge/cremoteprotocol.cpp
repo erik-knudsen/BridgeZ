@@ -240,7 +240,7 @@ int CMsg::getFaceValue(QString line, int next) throw(NetProtocolException)
     if (!(line.size() > next))
         throw NetProtocolException("Net - Cards: " + line.toStdString());
 
-    if (line.at(next + 1) == '-')
+    if ((line.at(next + 1) == '.') || (line.at(next + 1) == '-'))
         return -1;
 
     if (!CARD.contains(line.at(next + 1)))
@@ -255,11 +255,11 @@ int CMsg::getFaceValue(QString line, int next) throw(NetProtocolException)
  * @param cards The card values.
  * @param line The line to send.
  */
-void CMsg::setFaceValues(int cards[], QString line)
+void CMsg::setFaceValues(int cards[], QString &line)
 {
     int i, j;
     QVector<int> handCardValues;
-    const char CARD[] = {'A', 'K', 'Q', 'J', 'T', '9', '8', '7', '6', '5', '4', '3', '2'};
+    const char CARD[] = {'2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K', 'A'};
 
     for (int i = 0; i < 13; i++)
         handCardValues.append(cards[i]);
@@ -267,12 +267,13 @@ void CMsg::setFaceValues(int cards[], QString line)
     qSort(handCardValues.begin(), handCardValues.end(), qGreater<int>());
 
     //Get spades.
-    line += "S ";
+    line += " S";
     for (i = 0, j = 0; i < 13; i++)
     {
         if (IS_SPADES(handCardValues.at(i)))
         {
-            line += " " + CARD[CARD_FACE(handCardValues.at(i))];
+            line += " ";
+            line += CARD[CARD_FACE(handCardValues.at(i))];
             j++;
         }
     }
@@ -282,12 +283,13 @@ void CMsg::setFaceValues(int cards[], QString line)
         line += '.';
 
     //Get hearts.
-    line += "H ";
+    line += " H";
     for (i = 0, j = 0; i < 13; i++)
     {
         if (IS_HEARTS(handCardValues.at(i)))
         {
-            line += " " + CARD[CARD_FACE(handCardValues.at(i))];
+            line += " ";
+            line += CARD[CARD_FACE(handCardValues.at(i))];
             j++;
         }
     }
@@ -297,12 +299,13 @@ void CMsg::setFaceValues(int cards[], QString line)
         line += '.';
 
     //Get diamonds.
-    line += "D ";
+    line += " D";
     for (i = 0, j = 0; i < 13; i++)
     {
         if (IS_DIAMONDS(handCardValues.at(i)))
         {
-            line += " " + CARD[CARD_FACE(handCardValues.at(i))];
+            line += " ";
+            line += CARD[CARD_FACE(handCardValues.at(i))];
             j++;
         }
     }
@@ -312,12 +315,13 @@ void CMsg::setFaceValues(int cards[], QString line)
         line += '.';
 
     //Get clubs.
-    line += "C ";
+    line += " C";
     for (i = 0, j = 0; i < 13; i++)
     {
         if (IS_CLUBS(handCardValues.at(i)))
         {
-            line += " " + CARD[CARD_FACE(handCardValues.at(i))];
+            line += " ";
+            line += CARD[CARD_FACE(handCardValues.at(i))];
             j++;
         }
     }
@@ -667,7 +671,7 @@ CCardsMsg::CCardsMsg(QString line) throw (NetProtocolException)
 
 void CCardsMsg::msgToLine()
 {
-    line = QString("%1's cards : ").arg(SEAT_NAMES_NET[player]);
+    line = QString("%1's cards :").arg(SEAT_NAMES_NET[player]);
 
     setFaceValues(cards, line);
 
@@ -676,10 +680,10 @@ void CCardsMsg::msgToLine()
 
 void CCardsMsg::lineToMsg() throw (NetProtocolException)
 {
-    if (!line.contains("cards", Qt::CaseInsensitive) &&
-        !line.contains("S ", Qt::CaseInsensitive) &&
-        !line.contains("H ", Qt::CaseInsensitive) &&
-        !line.contains("D ", Qt::CaseInsensitive) &&
+    if (!line.contains("cards", Qt::CaseInsensitive) ||
+        !line.contains("S ", Qt::CaseInsensitive) ||
+        !line.contains("H ", Qt::CaseInsensitive) ||
+        !line.contains("D ", Qt::CaseInsensitive) ||
         !line.contains("C ", Qt::CaseInsensitive))
         throw NetProtocolException("Net - Cards: " + line.toStdString());
 
