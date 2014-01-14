@@ -113,7 +113,7 @@ MsgType getMessageType(QString line) throw(NetProtocolException)
         return DEALINFO_MSG;
     if (line.contains("ready for cards", Qt::CaseInsensitive))
         return RCARDS_MSG;
-    if (line.contains("cards:", Qt::CaseInsensitive))
+    if (line.contains("cards : ", Qt::CaseInsensitive))
         return CARDS_MSG;
     if (line.contains("Illegal bid", Qt::CaseInsensitive))
         return ILLEGALBID_MSG;
@@ -472,8 +472,7 @@ void CTeamNamesMsg::lineToMsg() throw (NetProtocolException)
 {
     if (!line.contains("Teams: N/S: ", Qt::CaseInsensitive) ||
         !line.contains(". E/W: ", Qt::CaseInsensitive) ||
-        !(line.count(QChar('"')) == 4) ||
-        !(line.count(QChar(':') == 3)))
+        !(line.count(QChar('"')) == 4))
         throw NetProtocolException("Net - Teamnames: " + line.toStdString());
 
     nsTeamName = line.section('"', 1, 1);
@@ -604,8 +603,8 @@ void CDealInfoMsg::lineToMsg() throw (NetProtocolException)
 
     if (!line.contains("Board number", Qt::CaseInsensitive) ||
         !line.contains("Dealer", Qt::CaseInsensitive) ||
-        !(line.count(QChar('.') == 2)) ||
-        (m = line.indexOf('.') <= 13))
+        !(line.count(QChar('.')) == 2) ||
+        ((m = line.indexOf('.')) <= 13))
         throw NetProtocolException("Net - Deal info: " + line.toStdString());
 
     dealer = getSeat(line);

@@ -145,7 +145,7 @@ void CSeatConfiguration::on_role_currentIndexChanged(int index)
 
 void CSeatConfiguration::on_protocol_currentIndexChanged(int index)
 {
-    seatOptionDoc.protocol = (index = PROTOCOL_BASIC) ? BASIC_PROTOCOL : ADVANCED_PROTOCOL;
+    seatOptionDoc.protocol = (index == PROTOCOL_BASIC) ? BASIC_PROTOCOL : ADVANCED_PROTOCOL;
 }
 
 void CSeatConfiguration::on_buttonBox_accepted()
