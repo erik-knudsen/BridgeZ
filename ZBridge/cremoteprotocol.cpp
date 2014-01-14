@@ -595,7 +595,7 @@ CDealInfoMsg::CDealInfoMsg(QString line) throw (NetProtocolException)
 
 void CDealInfoMsg::msgToLine()
 {
-    line = QString("Board number %1. Dealer %2. %3\r\n").arg(boardNumber).arg(SEAT_NAMES_NET[dealer].arg(VULNERABILITY_NAMES_NET[vulnerability]));
+    line = QString("Board number %1. Dealer %2. %3\r\n").arg(boardNumber).arg(SEAT_NAMES_NET[dealer]).arg(VULNERABILITY_NAMES_NET[vulnerability]);
 }
 
 void CDealInfoMsg::lineToMsg() throw (NetProtocolException)
