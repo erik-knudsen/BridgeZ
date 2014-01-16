@@ -803,7 +803,7 @@ void CRBidMsg::lineToMsg() throw (NetProtocolException)
         !line.contains("bid", Qt::CaseInsensitive))
         throw NetProtocolException("Net - Ready for bids: " + line.toStdString());
 
-    player = getSeat(line);
+    player = getSeat(line.mid(0, 7));
     bidder = getSeat(QString(line.mid(10)));
 }
 
@@ -962,7 +962,7 @@ void CReadyForPlayerMsg::lineToMsg() throw (NetProtocolException)
         !line.contains("card to trick", Qt::CaseInsensitive) )
         throw NetProtocolException("Net - Ready for player: " + line.toStdString());
 
-    seat = getSeat(line);
+    seat = getSeat(line.mid(0, 7));
     player = getSeat(QString(line.mid(10)));
 
     int i = line.indexOf("card to trick", 0, Qt::CaseInsensitive) + 13;
