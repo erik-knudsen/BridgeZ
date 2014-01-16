@@ -767,8 +767,9 @@ void CBidMsg::lineToMsg() throw (NetProtocolException)
         else
             throw NetProtocolException("Net - Bids: " + line.toStdString());
 
-        bid = (Bids)((i - 1) * 5 + j);
+        bid = (Bids)((level - 1) * 5 + j + 1);
     }
+
 }
 
 
