@@ -49,7 +49,7 @@ void CLRCards::prepareToDrawFaces(QGraphicsWidget *widget)
     switch (trumpSuit)
     {
     case SPADES:
-        sequence[0] = SPADES; sequence[1] = HEARTS; sequence[2] = CLUBS; sequence[3] = DIAMONDS;
+        sequence[0] = SPADES; sequence[1] = HEARTS; sequence[2] = DIAMONDS; sequence[3] = CLUBS;
         break;
 
     case HEARTS:
@@ -57,7 +57,7 @@ void CLRCards::prepareToDrawFaces(QGraphicsWidget *widget)
         break;
 
     case CLUBS:
-        sequence[0] = CLUBS; sequence[1] = HEARTS; sequence[2] = SPADES; sequence[3] = DIAMONDS;
+        sequence[0] = CLUBS; sequence[1] = SPADES; sequence[2] = HEARTS; sequence[3] = DIAMONDS;
         break;
 
     case DIAMONDS:
@@ -65,7 +65,7 @@ void CLRCards::prepareToDrawFaces(QGraphicsWidget *widget)
         break;
 
     default:
-        sequence[0] = SPADES; sequence[1] = HEARTS; sequence[2] = CLUBS; sequence[3] = DIAMONDS;
+        sequence[0] = SPADES; sequence[1] = HEARTS; sequence[2] = DIAMONDS; sequence[3] = CLUBS;
     }
 
     for (int m = 0, k = 0; m < 4; m++)

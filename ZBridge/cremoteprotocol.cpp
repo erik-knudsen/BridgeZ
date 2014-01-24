@@ -958,6 +958,8 @@ void CReadyForPlayerMsg::msgToLine()
 
 void CReadyForPlayerMsg::lineToMsg() throw (NetProtocolException)
 {
+    bool ok;
+
     if (!line.contains("ready for", Qt::CaseInsensitive) ||
         !line.contains("card to trick", Qt::CaseInsensitive) )
         throw NetProtocolException("Net - Ready for player: " + line.toStdString());
@@ -966,8 +968,8 @@ void CReadyForPlayerMsg::lineToMsg() throw (NetProtocolException)
     player = getSeat(QString(line.mid(10)));
 
     int i = line.indexOf("card to trick", 0, Qt::CaseInsensitive) + 13;
-    trick = line.mid(i).toInt();
-    if (trick == 0)
+    trick = line.mid(i).toInt(&ok);
+    if (!ok)
         throw NetProtocolException("Net - Ready for player: " + line.toStdString());
 }
 
@@ -998,14 +1000,16 @@ void CReadyForDummyMsg::msgToLine()
 
 void CReadyForDummyMsg::lineToMsg() throw (NetProtocolException)
 {
+    bool ok;
+
     if (!line.contains("ready for dummy's card to trick", Qt::CaseInsensitive))
         throw NetProtocolException("Net - Ready for dummy: " + line.toStdString());
 
     seat = getSeat(line);
 
     int i = line.indexOf("card to trick", 0, Qt::CaseInsensitive) + 13;
-    trick = line.mid(i).toInt();
-    if (trick == 0)
+    trick = line.mid(i).toInt(&ok);
+    if (!ok)
         throw NetProtocolException("Net - Ready for player: " + line.toStdString());
 }
 

@@ -640,6 +640,11 @@ void CTblMngrClient::receiveLine(QString line)
     catch (NetProtocolException &e)
     {
         QMessageBox::critical(0, tr("ZBridge"), e.what());
+
+        cleanTableManager();
+
+        //Enable new session action.
+        QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_NEW_SESSION , true));
     }
 }
 
