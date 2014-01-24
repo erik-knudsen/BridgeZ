@@ -53,7 +53,7 @@ void CRemoteActorFrontEnd::start()
  */
 void CRemoteActorFrontEnd::readLine()
 {
-    if (socket->canReadLine())
+    while (socket->canReadLine())
     {
         char lineData[500];
         socket->readLine(lineData, sizeof(lineData));

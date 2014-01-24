@@ -50,7 +50,7 @@ CRemoteActorClient::CRemoteActorClient(QString hostAddress, quint16 port, QObjec
  */
 void CRemoteActorClient::readLine()
 {
-    if (socket->canReadLine())
+    while (socket->canReadLine())
     {
         char lineData[500];
         socket->readLine(lineData, sizeof(lineData));
