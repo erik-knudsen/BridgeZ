@@ -142,7 +142,6 @@ void CActorLocal::clientActions()
             //Must clear bid dialog, clear auction info and show play info.
             emit sShowBidDialog(false);
             emit sShowBid((Seat)zBridgeClientIface_get_bidder(&handle), BID_BLANK);
-            emit sClearYourTurnOnTable();
             emit sShowDummyOnTable((Seat)((zBridgeClientIface_get_declarer(&handle) + 2) & 3));
             emit sShowPlay();
         }
@@ -158,7 +157,7 @@ void CActorLocal::clientActions()
         //Actor plays a card.
         if (manual)
         {
-            //Must get card to play form manual player.
+            //Must get card to play from manual player.
             Seat player = (Seat)zBridgeClientIface_get_player(&handle);
             emit sShowYourTurnOnTable(player);
             emit sEnablePlayer(player);
@@ -167,8 +166,6 @@ void CActorLocal::clientActions()
         {
             //Must get card to play from automatic play.
             //Calculate automatic play.
-            emit sClearYourTurnOnTable();
-
             //Needs a delay to assure server gets ready for next play.
             QTimer::singleShot(1000, this, SLOT(playValue()));
         }
@@ -219,8 +216,6 @@ void CActorLocal::clientActions()
         {
             //Must get bid from automatic player.
             //Calculate automatic bid.
-            emit sClearYourTurnOnTable();
-
             //Needs a delay to assure server gets ready for next bid.
             QTimer::singleShot(1000, this, SLOT(bidValue()));
         }
@@ -287,7 +282,10 @@ void CActorLocal::bidValue(Bids bid)
 
     //If the bid is manual then disable the bid dialog.
     if (manual)
+    {
         emit sDisableBidder(bidder);
+        emit sClearYourTurnOnTable();
+    }
 
     //Server must continue to next (Bidding Wait) states before clients can send
     //signals to these states.
@@ -328,7 +326,11 @@ void CActorLocal::playValue(int card)
     {
         //If the play is manual then disable the player.
         if (manual)
+        {
             emit sDisablePlayer(player);
+            emit sClearYourTurnOnTable();
+        }
+
 
         //Server must continue to next (Playing Wait) states before clients can send
         //signals to these states.
@@ -349,12 +351,9 @@ void CActorLocal::continuePlay()
     if (manual)
         emit sDisableContinue();
 
+    //Must prepare play view for next trick.
     if (showUser)
-    {
-        //Must prepare play view for next trick.
         emit sClearCardsOnTable();
-        emit sClearYourTurnOnTable();
-    }
 
     //Get next leader.
     zBridgeClientIface_raise_newLeader(&handle, bidAndPlay.getNextLeader());

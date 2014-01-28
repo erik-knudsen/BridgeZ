@@ -228,9 +228,9 @@ void CActorRemote::receiveLine(QString line, bool connected)
         CConnectMsg connectMsg(line);
 
         //If already connected then the connect message should be discarded.
-        //The message can be received when a new session is requested from the server. In this
+        //The message will be received when a new session is requested from the server. In this
         //case the client is not restarted completely from scratch, but the already established
-        //connection is kept.
+        //connection is kept. So the connect message is not needed.
         if (!connected)
             emit sConnect(connectMsg.name, connectMsg.seat, connectMsg.protocol);
         break;
