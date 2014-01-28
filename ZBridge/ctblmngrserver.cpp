@@ -66,12 +66,29 @@ CTblMngrServer::CTblMngrServer(CZBridgeDoc *doc, CPlayView *playView, QObject *p
     remoteActorServer = 0;
     if (doc->getSeatOptions().role == SERVER_ROLE)
     {
-        remoteActorServer = new CRemoteActorServer(doc->getSeatOptions().protocol,
-                                               QHostAddress(doc->getSeatOptions().hostServer),
+        QHostInfo hostInfo = QHostInfo::fromName(doc->getSeatOptions().hostServer);
+        if (hostInfo.addresses().isEmpty())
+            QMessageBox::warning(0, tr("ZBridge"), tr("Could not determine IP address."));
+        else
+        {
+      //      QList<QHostAddress> listAddr = hostInfo.addresses();
+      //      QHostAddress ipAddress;
+      //      for (int i = 0; i < listAddr.size(); i++)
+      //      {
+      //          if (listAddr.at(i).protocol() == QAbstractSocket::IPv4Protocol)
+      //          {
+      //              ipAddress = listAddr.at(i);
+      //              break;
+      //          }
+      //      }
+            remoteActorServer = new CRemoteActorServer(doc->getSeatOptions().protocol,
+//                                             QHostAddress(doc->getSeatOptions().hostServer),
+                                               hostInfo.addresses().first(),
                                                doc->getSeatOptions().portServer.toInt(), this);
 
-        //Connect for disconnect of remote client.
-        connect(remoteActorServer, &CRemoteActorServer::clientDisconnected, this, &CTblMngrServer::cleanTableManager);
+            //Connect for disconnect of remote client.
+            connect(remoteActorServer, &CRemoteActorServer::clientDisconnected, this, &CTblMngrServer::cleanTableManager);
+        }
     }
 
     //Enable/disable relevant menu actions.
