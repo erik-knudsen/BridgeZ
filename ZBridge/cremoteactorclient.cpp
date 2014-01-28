@@ -40,7 +40,7 @@ CRemoteActorClient::CRemoteActorClient(QString hostAddress, quint16 port, QObjec
     connect(socket, &QTcpSocket::connected, this, &CRemoteActorClient::connected);
     connect(socket, &QTcpSocket::disconnected, this, &CRemoteActorClient::disConnected);
     connect(socket, &QTcpSocket::readyRead, this, &CRemoteActorClient::readLine);
-//    connect(socket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(socketError(QAbstractSocket::SocketError)));
+    connect(socket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(socketError(QAbstractSocket::SocketError)));
 
     socket->connectToHost(hostAddress, port);
 }
@@ -101,14 +101,12 @@ void CRemoteActorClient::socketError(QAbstractSocket::SocketError error)
     QString str;
     switch (error)
     {
-    case QAbstractSocket::SocketTimeoutError:
-        err = tr("Server connection timed out. ");
+    case QAbstractSocket::RemoteHostClosedError:
         break;
 
     default:
-        err = tr("Server connection error: ") + str.setNum(error);
+        err = tr("Server connection error.");
+        emit sSocketError(err);
         break;
     }
-
-    emit sSocketError(err);
 }
