@@ -98,6 +98,7 @@ void CTblMngrClient::cleanTableManager()
  * when the table manager client is not connected to a table manager server and can therefore
  * not be activated when the client is connected..
  *
+ *   - Determine IP address (must be IPV4 address).
  *   - Prepare for a new session.
  *   - Determine protocol (Advanced or Basic).
  *   - Enable/disable relevant main menu actions.
@@ -107,6 +108,27 @@ void CTblMngrClient::cleanTableManager()
  */
 void CTblMngrClient::newSession()
 {
+    //Determine IP address.
+    QHostInfo hostInfo = QHostInfo::fromName(doc->getSeatOptions().hostClient);
+    if (hostInfo.addresses().isEmpty())
+    {
+        QMessageBox::warning(0, tr("ZBridge"), tr("Could not determine IP address."));
+        return;
+    }
+
+    QList<QHostAddress> hostAddresses = hostInfo.addresses();
+    int hostInx;
+    for (hostInx = 0; hostInx < hostAddresses.size(); hostInx++)
+    {
+        if (hostAddresses.at(hostInx).protocol() == QAbstractSocket::IPv4Protocol)
+           break;
+    }
+    if (hostInx == hostAddresses.size())
+    {
+        QMessageBox::warning(0, tr("ZBridge"), tr("Could not determine IP address."));
+        return;
+    }
+
     //Prepare for new session.
     cleanTableManager();
 
@@ -137,7 +159,8 @@ void CTblMngrClient::newSession()
     actor->setShowUser((actor->getActorType() == MANUAL_ACTOR) || showAll);
 
     //Start tcp/ip interface to server.
-    remoteActorClient = new CRemoteActorClient(doc->getSeatOptions().hostClient,
+//    remoteActorClient = new CRemoteActorClient(doc->getSeatOptions().hostClient,
+    remoteActorClient = new CRemoteActorClient(hostAddresses.at(hostInx).toString(),
                                                doc->getSeatOptions().portClient.toInt(), this);
 
     //Make relevant connects to tcp/ip interface.
