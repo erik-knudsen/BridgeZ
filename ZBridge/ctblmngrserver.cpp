@@ -72,18 +72,18 @@ CTblMngrServer::CTblMngrServer(CZBridgeDoc *doc, CPlayView *playView, QObject *p
         else
         {
             QList<QHostAddress> hostAddresses = hostInfo.addresses();
-            int i;
-            for (i = 0; i < hostAddresses.size(); i++)
+            int hostInx;
+            for (hostInx = 0; hostInx < hostAddresses.size(); hostInx++)
             {
-                if (hostAddresses.at(i).protocol() == QAbstractSocket::IPv4Protocol)
+                if (hostAddresses.at(hostInx).protocol() == QAbstractSocket::IPv4Protocol)
                     break;
             }
-            if (i == hostAddresses.size())
+            if (hostInx == hostAddresses.size())
                 QMessageBox::warning(0, tr("ZBridge"), tr("Could not determine IP address."));
             else
             {
                 remoteActorServer = new CRemoteActorServer(doc->getSeatOptions().protocol,
-                                               hostAddresses.at(i),
+                                               hostAddresses.at(hostInx),
                                                doc->getSeatOptions().portServer.toInt(), this);
 
                 //Connect for disconnect of remote client.
