@@ -61,33 +61,34 @@ CTblMngrServer::CTblMngrServer(CZBridgeDoc *doc, CPlayView *playView, QObject *p
     actors[EAST_SEAT] = 0;
     actors[SOUTH_SEAT] = 0;
 
-
     //Start tcp server for remote clients.
     remoteActorServer = 0;
     if (doc->getSeatOptions().role == SERVER_ROLE)
     {
+        //Determine IP address.
         QHostInfo hostInfo = QHostInfo::fromName(doc->getSeatOptions().hostServer);
         if (hostInfo.addresses().isEmpty())
             QMessageBox::warning(0, tr("ZBridge"), tr("Could not determine IP address."));
         else
         {
-      //      QList<QHostAddress> listAddr = hostInfo.addresses();
-      //      QHostAddress ipAddress;
-      //      for (int i = 0; i < listAddr.size(); i++)
-      //      {
-      //          if (listAddr.at(i).protocol() == QAbstractSocket::IPv4Protocol)
-      //          {
-      //              ipAddress = listAddr.at(i);
-      //              break;
-      //          }
-      //      }
-            remoteActorServer = new CRemoteActorServer(doc->getSeatOptions().protocol,
-//                                             QHostAddress(doc->getSeatOptions().hostServer),
-                                               hostInfo.addresses().first(),
+            QList<QHostAddress> hostAddresses = hostInfo.addresses();
+            int i;
+            for (i = 0; i < hostAddresses.size(); i++)
+            {
+                if (hostAddresses.at(i).protocol() == QAbstractSocket::IPv4Protocol)
+                    break;
+            }
+            if (i == hostAddresses.size())
+                QMessageBox::warning(0, tr("ZBridge"), tr("Could not determine IP address."));
+            else
+            {
+                remoteActorServer = new CRemoteActorServer(doc->getSeatOptions().protocol,
+                                               hostAddresses.at(i),
                                                doc->getSeatOptions().portServer.toInt(), this);
 
-            //Connect for disconnect of remote client.
-            connect(remoteActorServer, &CRemoteActorServer::clientDisconnected, this, &CTblMngrServer::cleanTableManager);
+                //Connect for disconnect of remote client.
+                connect(remoteActorServer, &CRemoteActorServer::clientDisconnected, this, &CTblMngrServer::cleanTableManager);
+            }
         }
     }
 
