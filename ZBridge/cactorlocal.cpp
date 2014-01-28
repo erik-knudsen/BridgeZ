@@ -579,3 +579,9 @@ void CActorLocal::endOfSession()
     zBridgeClientIface_raise_endOfSession(&handle);
     clientRunCycle();
 }
+
+void CActorLocal::reStart()
+{
+    zBridgeClientIface_raise_reStart(&handle);
+    clientRunCycle();
+}

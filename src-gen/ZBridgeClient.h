@@ -82,6 +82,7 @@ typedef struct {
 	sc_integer  newLeader_value;
 	sc_boolean undoTrick_raised;
 	sc_integer  undoTrick_value;
+	sc_boolean reStart_raised;
 	sc_integer  boardNumber;
 	sc_integer  vulnerability;
 	sc_integer  client;
@@ -220,6 +221,9 @@ extern sc_boolean zBridgeClientIface_israised_undoTrick(ZBridgeClient* handle);
 
 /*! Gets the value of the out event 'undoTrick' that is defined in the default interface scope. */ 
 extern sc_integer zBridgeClientIface_get_undoTrick_value(ZBridgeClient* handle);
+
+/*! Raises the in event 'reStart' that is defined in the default interface scope. */ 
+extern void zBridgeClientIface_raise_reStart(ZBridgeClient* handle);
 
 /*! Gets the value of the variable 'boardNumber' that is defined in the default interface scope. */ 
 extern sc_integer zBridgeClientIface_get_boardNumber(ZBridgeClient* handle);

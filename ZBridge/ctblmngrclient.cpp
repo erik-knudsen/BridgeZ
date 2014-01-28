@@ -627,7 +627,7 @@ void CTblMngrClient::receiveLine(QString line)
     {
         //End of session message was received.
         CEndOfSessionMsg endOfSession(line);
-        actor->endOfSession();
+        actor->reStart();
         break;
     }
 

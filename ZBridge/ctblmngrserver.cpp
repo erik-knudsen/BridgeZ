@@ -88,6 +88,7 @@ CTblMngrServer::~CTblMngrServer()
 {
     if (remoteActorServer != 0)
         delete remoteActorServer;
+
     cleanTableManager();
 }
 
@@ -366,16 +367,19 @@ void CTblMngrServer::cleanTableManager()
         actors[WEST_SEAT]->endOfSession();
         delete actors[WEST_SEAT];
     }
+
     if (actors[NORTH_SEAT] != 0)
     {
         actors[NORTH_SEAT]->endOfSession();
         delete actors[NORTH_SEAT];
     }
+
     if (actors[EAST_SEAT] != 0)
     {
         actors[EAST_SEAT]->endOfSession();
         delete actors[EAST_SEAT];
     }
+
     if (actors[SOUTH_SEAT] != 0)
     {
         actors[SOUTH_SEAT]->endOfSession();

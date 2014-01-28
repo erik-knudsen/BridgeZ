@@ -38,6 +38,11 @@ CRemoteActorFrontEnd::CRemoteActorFrontEnd(Seat seat, QString connectLine, QTcpS
     connect(socket, &QTcpSocket::disconnected, this, &CRemoteActorFrontEnd::disConnect);
 }
 
+CRemoteActorFrontEnd::~CRemoteActorFrontEnd()
+{
+    delete socket;
+}
+
 /**
  * @brief Starts the front end.
  *

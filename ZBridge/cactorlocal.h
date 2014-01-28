@@ -69,6 +69,7 @@ public:
     void undoBid(bool reBid);
     void undoTrick(bool rePlay);
     void endOfSession();
+    void reStart();
 
     Actor getActorType() { return (manual ? MANUAL_ACTOR : AUTO_ACTOR); }
     Seat getSeat() {return (Seat)zBridgeClientIface_get_client(&handle); }

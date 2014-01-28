@@ -44,6 +44,7 @@ class CRemoteActorFrontEnd : public QObject
 
 public:
     explicit CRemoteActorFrontEnd(Seat seat, QString connectLine, QTcpSocket *socket);
+    ~CRemoteActorFrontEnd();
 
 signals:
     void receiveLine(QString line);

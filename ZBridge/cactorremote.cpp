@@ -225,7 +225,7 @@ void CActorRemote::receiveLine(QString line)
     {
         //A connect message has been received
         CConnectMsg connectMsg(line);
-        emit sConnect(connectMsg.name, connectMsg.seat, connectMsg.protocol);
+//        emit sConnect(connectMsg.name, connectMsg.seat, connectMsg.protocol);
         break;
     }
 
