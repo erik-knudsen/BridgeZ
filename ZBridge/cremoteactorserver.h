@@ -47,7 +47,7 @@ public:
     ~CRemoteActorFrontEnd();
 
 signals:
-    void receiveLine(QString line);
+    void receiveLine(QString line, bool connected);
     void disConnectSeat(Seat seat);
 
 public slots:

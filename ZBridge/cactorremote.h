@@ -65,7 +65,7 @@ public:
     bool isWaiting() { return false; }
 
 public slots:
-    void receiveLine(QString line);     /**< Receive a line from the client. */
+    void receiveLine(QString line, bool connected);     /**< Receive a line from the client. */
 
 signals:
     void start();

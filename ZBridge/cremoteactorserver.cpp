@@ -50,7 +50,7 @@ CRemoteActorFrontEnd::~CRemoteActorFrontEnd()
  */
 void CRemoteActorFrontEnd::start()
 {
-    emit receiveLine(connectLine);
+    emit receiveLine(connectLine, false);
 }
 
 /**
@@ -63,7 +63,7 @@ void CRemoteActorFrontEnd::readLine()
         char lineData[500];
         socket->readLine(lineData, sizeof(lineData));
         QString line(lineData);
-        emit receiveLine(line);
+        emit receiveLine(line, true);
     }
 }
 

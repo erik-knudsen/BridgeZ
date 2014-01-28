@@ -208,12 +208,13 @@ void CActorRemote::endOfSession()
 /**
  * @brief Receive line from client (remote actor).
  * @param line The line.
+ * @param connected If true then the initial connect message has been received.
  *
  * The method is activated via the front end. It determines the type of message received from the
  * client (remote actor), unpacks the message and emits a signal to the table manager according to
  * the type of message.
  */
-void CActorRemote::receiveLine(QString line)
+void CActorRemote::receiveLine(QString line, bool connected)
 {
     try
     {
@@ -225,7 +226,13 @@ void CActorRemote::receiveLine(QString line)
     {
         //A connect message has been received
         CConnectMsg connectMsg(line);
-//        emit sConnect(connectMsg.name, connectMsg.seat, connectMsg.protocol);
+
+        //If already connected then the connect message should be discarded.
+        //The message can be received when a new session is requested from the server. In this
+        //case the client is not restarted completely from scratch, but the already established
+        //connection is kept.
+        if (!connected)
+            emit sConnect(connectMsg.name, connectMsg.seat, connectMsg.protocol);
         break;
     }
 
