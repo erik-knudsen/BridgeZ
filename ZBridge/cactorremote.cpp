@@ -32,10 +32,11 @@
  *
  * Saves parameters for later use and connects to the front end.
  */
-CActorRemote::CActorRemote(Seat seat, CRemoteActorFrontEnd *frontEnd, CTblMngr *tableManager) :
+CActorRemote::CActorRemote(Seat seat, int protocol, CRemoteActorFrontEnd *frontEnd, CTblMngr *tableManager) :
     CActor(tableManager)
 {
     this->seat = seat;
+    this->protocol = protocol;
     this->frontEnd = frontEnd;
     this->tableManager = tableManager;
 
@@ -105,8 +106,17 @@ void CActorRemote::dealInfo(int boardNumber, Seat dealer, Team vulnerability)
  */
 void CActorRemote::cards(int cards[4][13])
 {
-    CCardsMsg cardsMsg(seat, cards[seat]);
-    emit sendLine(cardsMsg.line);
+    if (protocol == BASIC_PROTOCOL)
+    {
+        CCardsMsg cardsMsg(seat, cards[seat]);
+        emit sendLine(cardsMsg.line);
+    }
+    else
+    for (int i = 0; i < 4; i++)
+    {
+        CCardsMsg cardsMsg((Seat)i, cards[i]);
+        emit sendLine(cardsMsg.line);
+    }
 }
 
 /**

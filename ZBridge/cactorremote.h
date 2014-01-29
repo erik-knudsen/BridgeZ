@@ -42,7 +42,7 @@ class CActorRemote : public CActor
 {
     Q_OBJECT
 public:
-    CActorRemote(Seat seat, CRemoteActorFrontEnd *frontEnd, CTblMngr *tableManager);
+    CActorRemote(Seat seat, int protocol, CRemoteActorFrontEnd *frontEnd, CTblMngr *tableManager);
 
     void startNewSession();
 
@@ -73,6 +73,7 @@ signals:
 
 private:
     Seat seat;
+    int protocol;                       /**< Protocol (Advanced or Basic). */
     CRemoteActorFrontEnd *frontEnd;     /**< The front end. */
     CTblMngr * tableManager;            /**< The table manager. */
 };

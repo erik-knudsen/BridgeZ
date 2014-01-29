@@ -480,7 +480,7 @@ void CTblMngrServer::newSession()
         actor = new CActorLocal(true, ewTeamName, WEST_SEAT, protocol,
                 doc->getNSBidOptions(), doc->getEWBidOptions(), this);
     else if ((remoteActorServer != 0) && remoteActorServer->isConnected(WEST_SEAT))
-        actor = new CActorRemote(WEST_SEAT, remoteActorServer->getFrontend(WEST_SEAT), this);
+        actor = new CActorRemote(WEST_SEAT, protocol, remoteActorServer->getFrontend(WEST_SEAT), this);
     else
         actor = new CActorLocal(false, ewTeamName, WEST_SEAT, protocol,
                 doc->getNSBidOptions(), doc->getEWBidOptions(), this);
@@ -490,7 +490,7 @@ void CTblMngrServer::newSession()
         actor = new CActorLocal(true, nsTeamName, NORTH_SEAT, protocol,
                 doc->getNSBidOptions(), doc->getEWBidOptions(), this);
     else if ((remoteActorServer != 0) && remoteActorServer->isConnected(NORTH_SEAT))
-        actor = new CActorRemote(NORTH_SEAT, remoteActorServer->getFrontend(NORTH_SEAT), this);
+        actor = new CActorRemote(NORTH_SEAT, protocol, remoteActorServer->getFrontend(NORTH_SEAT), this);
     else
         actor = new CActorLocal(false, nsTeamName, NORTH_SEAT, protocol,
                 doc->getNSBidOptions(), doc->getEWBidOptions(), this);
@@ -500,7 +500,7 @@ void CTblMngrServer::newSession()
         actor = new CActorLocal(true, ewTeamName, EAST_SEAT, protocol,
                 doc->getNSBidOptions(), doc->getEWBidOptions(), this);
     else if ((remoteActorServer != 0) && remoteActorServer->isConnected(EAST_SEAT))
-        actor = new CActorRemote(EAST_SEAT, remoteActorServer->getFrontend(EAST_SEAT), this);
+        actor = new CActorRemote(EAST_SEAT, protocol, remoteActorServer->getFrontend(EAST_SEAT), this);
     else
         actor = new CActorLocal(false, ewTeamName, EAST_SEAT, protocol,
                 doc->getNSBidOptions(), doc->getEWBidOptions(), this);
@@ -510,7 +510,7 @@ void CTblMngrServer::newSession()
         actor = new CActorLocal(true, nsTeamName, SOUTH_SEAT, protocol,
                 doc->getNSBidOptions(), doc->getEWBidOptions(), this);
     else if ((remoteActorServer != 0) && remoteActorServer->isConnected(SOUTH_SEAT))
-        actor = new CActorRemote(SOUTH_SEAT, remoteActorServer->getFrontend(SOUTH_SEAT), this);
+        actor = new CActorRemote(SOUTH_SEAT, protocol, remoteActorServer->getFrontend(SOUTH_SEAT), this);
     else
         actor = new CActorLocal(false, nsTeamName, SOUTH_SEAT, protocol,
                 doc->getNSBidOptions(), doc->getEWBidOptions(), this);

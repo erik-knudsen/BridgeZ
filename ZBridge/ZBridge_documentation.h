@@ -70,13 +70,14 @@
  */
 
 
-/** @page protocol Blue Chip Bridge protocol for Inter-Program Communication
+/** @page protocol Blue Chip Bridge (basic and advanced) protocol for Inter-Program Communication
  *
  * <b>NETWORKING OF COMPUTER BRIDGE PROGRAMS</b>\n
  *
  * <b>A PROTOCOL FOR INTER-PROGRAM COMMUNICATION</b>\n
 
- * Version 18  (1 August 2005)\n\n
+ * Version 18  basic protocol (1 August 2005)\n
+ * <i><b>Version 20  advanced protocol (1 January 2014)</b></i>\n\n
  *
  * <b>Introductory</b>\n
  *
@@ -130,6 +131,13 @@
  *   - The protocol has been designed so that a single message is transmitted by a client to the Table Manager
  *     and a single message is transmitted in return.
  *
+ *   - <i><b>The Blue Chip Bridge protocol version 18 is called the basic protocol in the following. An enhanced
+ *     protocol is also described. This protocol is called the advanced protocol (version 20). It is described
+ *     in the text as deviations from the basic protocol. It eliminates the timing problems in the basic protocol
+ *     and adds a few synchronization points to the client/server communication. It also makes it possible to
+ *     perform undo and other similar functions. The deviations to the basic protocol are clearly marked in the
+ *     following text.</b></i>
+ *
  *
  * <b>Message summary</b>
  *
@@ -150,15 +158,15 @@
  *   12. <i>Ready for leader's card	(except leader, or declarer when dummy is leader)</i>
  *   13. <b>Leader to lead (only to leader)</b>
  *   14. <i>Leader plays x (leader)</i>
- *   15. <b>Transmit card 1 (to others)</b>
+ *   15. <b>Transmit card 1</b>
  *   16. <i>Ready for dummy (only trick 1 and except dummy)</i>
  *   17. <b>Dummy's cards (only trick 1 and except dummy)</b>
  *   18. <i>Second hand plays x (second hand) or Ready for second hand's card (others)</i>
- *   19. <b>Transmit card 2 (to others)</b>
+ *   19. <b>Transmit card 2</b>
  *   20. <i>Third hand plays x	(third hand) or Ready for third hand's card (others)</i>
- *   21. <b>Transmit card 3 (to others)</b>
+ *   21. <b>Transmit card 3</b>
  *   22. <i>Fourth hand plays x (fourth hand) or Ready for fourth hand's card (others)</i>
- *   23. <b>Transmit card 4 (to others)</b>\n\n
+ *   23. <b>Transmit card 4</b>\n\n
  *   24. Table Manager pauses for one second\n\n
  *   25. [loop to 12 until end of board]
  *   26. [loop to 6 until end of round]
@@ -209,7 +217,8 @@
  *      - As always, the entire string is terminated by #13#10.\n\n
  *   5. Each player sends "[Hand] ready for cards".\n\n
  *   6. When all four hands are ready for their cards, the Table Manager replies to each hand with :\n
- *      "[Player]’s cards : [player’s hand]"\n\n
+ *      "[Player]’s cards : [player’s hand]"\n
+ *      <i><b> The advanced protocol sends all cards to all hands.</b></i>\n
  *   7. A hand of cards is in the following format :
  *        - The first letter of the suit (S, H, D or C) followed by a space (ASCII #32). Preferably, the suits should be specified in that order (spades, hearts, diamonds, clubs).
  *        - The initial letter of the value of each card in the suit (A K Q J T 9 8 7 6 5 4 3 2). Note that 10 is represented as T so that each card is a single character. Each character is separated from the next by a space. The cards should be specified in descending order.
@@ -226,9 +235,10 @@
  *     - If appropriate, the bid is followed by alert information (see next section).\n\n
  *   2. Dealer makes an opening bid.\n\n
  *   3. Each player (other than the next player to bid) sends "[Player] ready for [bidder]'s bid".\n\n
- *   4. The Table Manager re-transmits the bid to the other three players.  If the bid has been alerted
- *     (see below), the Table manager re-transmits the alert and associated information to the bidder's
- *     opponents, but not to the bidder's partner.\n\n
+ *   4. The Table Manager re-transmits the bid to the other three players <i><b>(the advanced protocol
+ *      re-transmits the bid to all players)</b></i>. If the bid has been alerted (see below), the Table
+ *      manager re-transmits the alert and associated information to the bidder's opponents, but not to
+ *      the bidder's partner.\n\n
  *   5. The next hand bids.\n\n
  *   6. This sequence continues until the auction is complete.\n\n
  *   7. If the hand is passed out, each player sends "[Player] ready for deal" to the Table Manager and the
@@ -392,7 +402,8 @@
  *       declarer and the defenders each send "[Hand] ready for  [Player]'s card to trick [trick number]"
  *       and dummy sends "[Hand] ready for dummy's card to trick [trick number]". Note that dummy will send
  *       this message for every card, since declarer will be the player of dummy’s cards.\n\n
- *   5.  The Table Manager sends "[Player] plays [Card]" to the other three players.\n\n
+ *   5.  The Table Manager sends "[Player] plays [Card]" to the other three players <i><b>(the advanced
+ *       protocol sends "[Player] plays [Card]" to all players)</b></i>.\n\n
  *   6.  If the Table Manager receives an illegal card, it will ignore it and respond "Illegal card" to the
  *       player. It is assumed that playing programs will ensure that they do not play illegal cards so, at
  *       this stage in development, the protocol does not define what will then happen.\n\n
