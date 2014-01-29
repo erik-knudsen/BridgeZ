@@ -166,8 +166,11 @@ void CActorLocal::clientActions()
         {
             //Must get card to play from automatic play.
             //Calculate automatic play.
-            //Needs a delay to assure server gets ready for next play.
-            QTimer::singleShot(1000, this, SLOT(playValue()));
+            //For the basic protocol we need a delay to assure server gets ready for next play.
+            if (protocol == BASIC_PROTOCOL)
+                QTimer::singleShot(1000, this, SLOT(playValue()));
+            else
+                playValue();
         }
     }
 
@@ -216,8 +219,11 @@ void CActorLocal::clientActions()
         {
             //Must get bid from automatic player.
             //Calculate automatic bid.
-            //Needs a delay to assure server gets ready for next bid.
-            QTimer::singleShot(1000, this, SLOT(bidValue()));
+            //for the basic protocol we need a delay to assure server gets ready for next bid.
+            if (protocol == BASIC_PROTOCOL)
+                QTimer::singleShot(1000, this, SLOT(bidValue()));
+            else
+                bidValue();
         }
     }
 
@@ -260,11 +266,14 @@ void CActorLocal::clientRunCycle()
 /**
  * @brief Get next bid automatically.
  *
- * Bidders bid must be delayed to assure that the other 3 players have reported they are ready. This
- * method is activated after a delay, when the bid is done automatically to assure this. When the bid
- * is done manually this happens automatically. The problem is that bidders bid is followed immediately
- * by bidder reporting ready for next bid.\n
- * The protocol would be more robust if all 4 bidders required the bid to be returned.
+ * For the basic protocol:
+ *   - Bidders bid must be delayed to assure that the other 3 players have reported they are ready.
+ *     This method is activated after a delay, when the bid is done automatically to assure this. When
+ *     the bid is done manually this happens automatically. The problem is that bidders bid is followed
+ *     immediately by bidder reporting ready for next bid.\n
+ *
+ * For the advanced protocol:
+ *   - All 4 bidders requires the bid to be returned and this eliminates the need for a delay.
  */
 void CActorLocal::bidValue()
 {
@@ -289,19 +298,23 @@ void CActorLocal::bidValue(Bids bid)
 
     //Server must continue to next (Bidding Wait) states before clients can send
     //signals to these states.
-    emit sBid(bidder, bid);  //Server first then other clients.
+    emit sBid(bidder, bid);  //Server first then clients.
 
-    bidDone(bidder, bid);    //This client.
+    if (protocol == BASIC_PROTOCOL)
+        bidDone(bidder, bid);    //This client.
 }
 
 /**
  * @brief Get next play automatically.
  *
- * Players play must be delayed to assure that the other 3 players have reported they are ready. This
- * method is activated after a delay, when the play is done automatically to assure this. When the play
- * is done manually this happens automatically. The problem is that players play is followed immediately
- * by player reporting ready for next play.\n
- * The protocol would be more robust if all 4 players required the play to be returned.
+ * For the basic protocol:
+ *   - Players play must be delayed to assure that the other 3 players have reported they are ready. This
+ *     method is activated after a delay, when the play is done automatically to assure this. When the play
+ *     is done manually this happens automatically. The problem is that players play is followed immediately
+ *     by player reporting ready for next play.\n
+ *
+ * For the advanced protocol:
+ *   - All 4 players requires the play to be returned and this eliminates the need for a delay.
  */
 void CActorLocal::playValue()
 {
@@ -334,9 +347,10 @@ void CActorLocal::playValue(int card)
 
         //Server must continue to next (Playing Wait) states before clients can send
         //signals to these states.
-        emit sPlayerPlays((Seat)zBridgeClientIface_get_client(&handle), card); //Server first then other clients.
+        emit sPlayerPlays((Seat)zBridgeClientIface_get_client(&handle), card); //Server first then clients.
 
-        playerPlays(player, card); //This client.
+        if (protocol == BASIC_PROTOCOL)
+            playerPlays(player, card); //This client.
     }
 }
 

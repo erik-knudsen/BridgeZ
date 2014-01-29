@@ -237,11 +237,11 @@ void CTblMngrServer::serverActions()
         zBridgeServerIface_raise_continue(&handle);
         serverRunCycle();
 
-        //Then inform other players about bid (they might send signals back to server).
-        if (bidder != WEST_SEAT) actors[WEST_SEAT]->bidDone(bidder, bid);
-        if (bidder != NORTH_SEAT) actors[NORTH_SEAT]->bidDone(bidder, bid);
-        if (bidder != EAST_SEAT) actors[EAST_SEAT]->bidDone(bidder, bid);
-        if (bidder != SOUTH_SEAT)  actors[SOUTH_SEAT]->bidDone(bidder, bid);
+        //Then inform players about bid (they might send signals back to server).
+        if ((protocol != BASIC_PROTOCOL) || (bidder != WEST_SEAT)) actors[WEST_SEAT]->bidDone(bidder, bid);
+        if ((protocol != BASIC_PROTOCOL) || (bidder != NORTH_SEAT)) actors[NORTH_SEAT]->bidDone(bidder, bid);
+        if ((protocol != BASIC_PROTOCOL) || (bidder != EAST_SEAT)) actors[EAST_SEAT]->bidDone(bidder, bid);
+        if ((protocol != BASIC_PROTOCOL) || (bidder != SOUTH_SEAT))  actors[SOUTH_SEAT]->bidDone(bidder, bid);
     }
 
     else if (zBridgeServerIface_israised_bidInfo(&handle))
@@ -285,10 +285,10 @@ void CTblMngrServer::serverActions()
         //Note declarer plays dummy's cards.
         Seat seat = (player == (Seat)zBridgeServerIface_get_dummy(&handle)) ?
                     (Seat)zBridgeServerIface_get_declarer(&handle) : player;
-        if (seat != WEST_SEAT) actors[WEST_SEAT]->playerPlays(player, card);
-        if (seat != NORTH_SEAT) actors[NORTH_SEAT]->playerPlays(player, card);
-        if (seat != EAST_SEAT) actors[EAST_SEAT]->playerPlays(player, card);
-        if (seat != SOUTH_SEAT) actors[SOUTH_SEAT]->playerPlays(player, card);
+        if ((protocol != BASIC_PROTOCOL) || (seat != WEST_SEAT)) actors[WEST_SEAT]->playerPlays(player, card);
+        if ((protocol != BASIC_PROTOCOL) || (seat != NORTH_SEAT)) actors[NORTH_SEAT]->playerPlays(player, card);
+        if ((protocol != BASIC_PROTOCOL) || (seat != EAST_SEAT)) actors[EAST_SEAT]->playerPlays(player, card);
+        if ((protocol != BASIC_PROTOCOL) || (seat != SOUTH_SEAT)) actors[SOUTH_SEAT]->playerPlays(player, card);
     }
 
     else if (zBridgeServerIface_israised_dummyCards(&handle))
