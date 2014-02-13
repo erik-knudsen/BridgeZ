@@ -44,6 +44,8 @@ CActor::CActor(CTblMngr *tableManager) :
     connect(this, &CActor::sReadyForPlayer, tableManager, &CTblMngr::sReadyForPlayer);
     connect(this, &CActor::sReadyForDummy, tableManager, &CTblMngr::sReadyForDummy);
     connect(this, &CActor::sReadyForDummyCards, tableManager, &CTblMngr::sReadyForDummyCards);
+    connect(this, &CActor::sAttemptSyncFromClientToServer, tableManager, &CTblMngr::sAttemptSyncFromClientToServer);
+    connect(this, &CActor::sConfirmSyncFromClientToServer, tableManager, &CTblMngr::sConfirmSyncFromClientToServer);
 }
 
 CActor::~CActor()

@@ -24,6 +24,7 @@
 #include <QObject>
 
 #include "../src-gen/ZBridgeClient.h"
+#include "../src-gen/ZBridgeClientSync.h"
 
 #include "Defines.h"
 #include "cbidandplay.h"
@@ -49,10 +50,11 @@ public:
 
     void startNewSession();
     void clientRunCycle();
+    void clientSyncRunCycle();
 
     void bidValue(Bids bid);
     void playValue(int card);
-    void continuePlay();
+    void continueLeader();
 
     void setShowUser(bool showUser) { this->showUser = showUser; }
 
@@ -70,6 +72,10 @@ public:
     void undoTrick(bool rePlay);
     void endOfSession();
     void reStart();
+
+    void attemptSyncFromServerToClient();
+    void confirmSyncFromServerToClient();
+    void allSyncFromServerToClient();
 
     Actor getActorType() { return (manual ? MANUAL_ACTOR : AUTO_ACTOR); }
     Seat getSeat() {return (Seat)zBridgeClientIface_get_client(&handle); }
@@ -99,12 +105,12 @@ signals:
     void sDisableBidder(Seat bidder);
     void sEnablePlayer(Seat player);
     void sDisablePlayer(Seat Player);
-    void sEnableContinue();
-    void sDisableContinue();
-
+    void sEnableLeader();
+    void sDisableLeader();
 
 private:
     void clientActions();
+    void clientSyncActions();
 
     bool manual;        /**< Automatic or Manual actor ? */
     bool showUser;      /**< Control what is shown to the user? */
@@ -118,6 +124,9 @@ private:
     CTblMngr *tableManager; /**< Controlling table manager (Server or Client). */
 
     ZBridgeClient handle;   /**< Handle to client Yakindu state chart. */
+    ZBridgeClientSync syncHandle; /**< Handle to client Yakindu state chart synchronization. */
+
+    bool synchronizing;
 };
 
 #endif // CACTORLOCAL_H

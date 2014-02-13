@@ -216,6 +216,24 @@ void CActorRemote::endOfSession()
 }
 
 /**
+ * @brief Synchronization message from table manager (pack and send to client via front end).
+ */
+void CActorRemote::attemptSyncFromServerToClient()
+{
+
+}
+
+void CActorRemote::confirmSyncFromServerToClient()
+{
+
+}
+
+void CActorRemote::allSyncFromServerToClient()
+{
+
+}
+
+/**
  * @brief Receive line from client (remote actor).
  * @param line The line.
  * @param connected If true then the initial connect message has been received.

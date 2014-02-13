@@ -25,6 +25,7 @@
 
 #include "CTblMngr.h"
 #include "../src-gen/ZBridgeServer.h"
+#include "../src-gen/ZBridgeServerSync.h"
 
 #include "Defines.h"
 #include "cbidhistory.h"
@@ -57,6 +58,7 @@ public:
 
     //Run cycle for the server statechart.
     void serverRunCycle();
+    void serverSyncRunCycle();
 
     /** @name Main menu activated methods.
      * These methods are activated via the applications main menu.
@@ -99,13 +101,15 @@ public slots:
     void sReadyForPlayer(Seat seat, Seat player, int trick);
     void sReadyForDummy(Seat seat, int trick);
     void sReadyForDummyCards(Seat seat);
+    void sAttemptSyncFromClientToServer(Seat syncher);
+    void sConfirmSyncFromClientToServer(Seat syncher);
 
     void sShowAuction();
     void sShowPlay();
-    void sEnableContinue();
-    void sDisableContinue();
+    void sEnableLeader();
+    void sDisableLeader();
 
-    void sContinuePlay();
+    void sContinueLeader();
     /*@}*/
 
 
@@ -126,9 +130,13 @@ private:
     void giveNewDeal();
 
     void serverActions();
+    void serverSyncActions();
     void setShowUser(bool showAll);
 
     ZBridgeServer handle;
+    ZBridgeServerSync syncHandle;
+
+    bool synchronizing;
 
     CActor *actors[4];
     CRemoteActorServer *remoteActorServer;
@@ -149,7 +157,7 @@ private:
     bool showUser;      /**< If true then the server handles the play view. */
     bool waiting;
 
-    QTimer *continueButton;
+    QTimer *leaderButton;
 
     CZBridgeDoc *doc;
     CPlayView *playView;

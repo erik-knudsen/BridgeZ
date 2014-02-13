@@ -65,6 +65,10 @@ typedef enum {
 	ZBridgeServer_entry__Exit2 ,
 	ZBridgeServer_entry__Exit3 ,
 	ZBridgeServer_entry__WaitLeader ,
+	ZBridgeServer_entry__SyncSB ,
+	ZBridgeServer_entry__SyncLeader ,
+	ZBridgeServer_entry__SyncAuction ,
+	ZBridgeServer_entry__SyncPlay ,
 	ZBridgeServer_last_state
 } ZBridgeServerStates;
 
@@ -123,6 +127,7 @@ typedef struct {
 	sc_boolean seated_raised;
 	sc_integer  seated_value;
 	sc_boolean teamNames_raised;
+	sc_boolean newDealClients_raised;
 	sc_boolean startOfBoard_raised;
 	sc_boolean startOfBoardDelayed_raised;
 	sc_boolean continue_raised;
@@ -167,6 +172,8 @@ typedef struct {
 	sc_integer  newLeader_value;
 	sc_boolean undoTrick_raised;
 	sc_integer  undoTrick_value;
+	sc_boolean allSync_raised;
+	sc_boolean synchronize_raised;
 	sc_boolean endOfSession_raised;
 	sc_integer  noOfBoards;
 	sc_string  name;
@@ -231,6 +238,9 @@ extern sc_integer zBridgeServerIface_get_seated_value(ZBridgeServer* handle);
 
 /*! Checks if the out event 'teamNames' that is defined in the default interface scope has been raised. */ 
 extern sc_boolean zBridgeServerIface_israised_teamNames(ZBridgeServer* handle);
+
+/*! Checks if the out event 'newDealClients' that is defined in the default interface scope has been raised. */ 
+extern sc_boolean zBridgeServerIface_israised_newDealClients(ZBridgeServer* handle);
 
 /*! Checks if the out event 'startOfBoard' that is defined in the default interface scope has been raised. */ 
 extern sc_boolean zBridgeServerIface_israised_startOfBoard(ZBridgeServer* handle);
@@ -333,6 +343,12 @@ extern sc_boolean zBridgeServerIface_israised_undoTrick(ZBridgeServer* handle);
 
 /*! Gets the value of the out event 'undoTrick' that is defined in the default interface scope. */ 
 extern sc_integer zBridgeServerIface_get_undoTrick_value(ZBridgeServer* handle);
+
+/*! Raises the in event 'allSync' that is defined in the default interface scope. */ 
+extern void zBridgeServerIface_raise_allSync(ZBridgeServer* handle);
+
+/*! Checks if the out event 'synchronize' that is defined in the default interface scope has been raised. */ 
+extern sc_boolean zBridgeServerIface_israised_synchronize(ZBridgeServer* handle);
 
 /*! Checks if the out event 'endOfSession' that is defined in the default interface scope has been raised. */ 
 extern sc_boolean zBridgeServerIface_israised_endOfSession(ZBridgeServer* handle);

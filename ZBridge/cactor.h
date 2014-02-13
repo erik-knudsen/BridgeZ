@@ -49,8 +49,7 @@ public:
 
     virtual void bidValue(Bids bid) {}
     virtual void playValue(int card) {}
-    virtual void continuePlay() {}
-    virtual void raiseContinue() {}
+    virtual void continueLeader() {}
 
     virtual void seated(QString teamName) = 0;
     virtual void teamNames(QString nsTeamName, QString ewTeamName) = 0;
@@ -65,6 +64,9 @@ public:
     virtual void undoBid(bool reBid) = 0;
     virtual void undoTrick(bool rePlay) = 0;
     virtual void endOfSession() = 0;
+    virtual void attemptSyncFromServerToClient() = 0;
+    virtual void confirmSyncFromServerToClient() = 0;
+    virtual void allSyncFromServerToClient() = 0;
 
     virtual Actor getActorType() = 0;
     virtual Seat getSeat() = 0;
@@ -83,6 +85,8 @@ signals:
     void sReadyForPlayer(Seat seat, Seat player, int trick);
     void sReadyForDummy(Seat seat, int trick);
     void sReadyForDummyCards(Seat seat);
+    void sAttemptSyncFromClientToServer(Seat syncher);
+    void sConfirmSyncFromClientToServer(Seat syncher);
 
 private:
     CTblMngr *tableManager;

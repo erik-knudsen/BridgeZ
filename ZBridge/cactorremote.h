@@ -60,6 +60,10 @@ public:
     void undoTrick(bool rePlay);
     void endOfSession();
 
+    void attemptSyncFromServerToClient();
+    void confirmSyncFromServerToClient();
+    void allSyncFromServerToClient();
+
     Actor getActorType() { return REMOTE_ACTOR; }
     Seat getSeat() { return seat; }
     bool isWaiting() { return false; }

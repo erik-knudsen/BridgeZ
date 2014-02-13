@@ -826,7 +826,7 @@ void CPlayView::clearYourTurnOnTable()
 /**
  * @brief Enable continue play.
  */
-void CPlayView::enableContinueOnTable()
+void CPlayView::enableLeaderOnTable()
 {
     centerCards->setEnabled(true);
 }
@@ -834,7 +834,7 @@ void CPlayView::enableContinueOnTable()
 /**
  * @brief Disable continue play.
  */
-void CPlayView::disableContinueOnTable()
+void CPlayView::disableLeaderOnTable()
 {
     centerCards->setEnabled(false);
 }

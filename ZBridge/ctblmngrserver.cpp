@@ -54,6 +54,8 @@ CTblMngrServer::CTblMngrServer(CZBridgeDoc *doc, CPlayView *playView, QObject *p
     this->doc = doc;
     this->playView = playView;
 
+    synchronizing = false;
+
     boardNo = -1;
 
     actors[WEST_SEAT] = 0;
@@ -95,10 +97,10 @@ CTblMngrServer::CTblMngrServer(CZBridgeDoc *doc, CPlayView *playView, QObject *p
     //Enable/disable relevant menu actions.
     QApplication::postEvent(parent, new UPDATE_UI_ACTION_Event(UPDATE_UI_INITIAL));
 
-    //Timer for supervision of continue button.
-    continueButton = new QTimer(this);
-    connect(continueButton, &QTimer::timeout, this, &CTblMngr::sContinuePlay);
-    continueButton->setSingleShot(true);
+    //Timer for supervision of continue button (only used in bascic protocol).
+    leaderButton = new QTimer(this);
+    connect(leaderButton, &QTimer::timeout, this, &CTblMngr::sContinueLeader);
+    leaderButton->setSingleShot(true);
     waiting = false;
 }
 
@@ -121,6 +123,14 @@ void CTblMngrServer::serverRunCycle()
     serverActions();
     //Assure all out flags gets cleared (they have been handled now and can disturb recursive calls).
     zBridgeServer_runCycle(&handle);
+}
+
+void CTblMngrServer::serverSyncRunCycle()
+{
+    //Handle raised in flags.
+    zBridgeServerSync_runCycle(&syncHandle);
+    //Handle out flags raised by the run cycle.
+    serverSyncActions();
 }
 
 /**
@@ -162,10 +172,13 @@ void CTblMngrServer::serverActions()
         //All actors are ready for start of board.
         startOfBoard();
     }
+
     else if (zBridgeServerIface_israised_startOfBoardDelayed(&handle))
     {
+        int delay = (protocol == BASIC_PROTOCOL) ? 1000 : 10;
+
         //For synchronization reasons start of board must be time delayed in some cases.
-        QTimer::singleShot(1000, this, SLOT(startOfBoard()));
+        QTimer::singleShot(delay, this, SLOT(startOfBoard()));
     }
 
     else if (zBridgeServerIface_israised_dealInfo(&handle))
@@ -338,6 +351,14 @@ void CTblMngrServer::serverActions()
         actors[EAST_SEAT]->undoTrick(val);
         actors[SOUTH_SEAT]->undoTrick(val);
     }
+    else if (zBridgeServerIface_israised_newDealClients(&handle))
+    {
+        //New deal for all actors (uses startOfBoard for this).
+        actors[WEST_SEAT]->startOfBoard();
+        actors[NORTH_SEAT]->startOfBoard();
+        actors[EAST_SEAT]->startOfBoard();
+        actors[SOUTH_SEAT]->startOfBoard();
+    }
 
     else if (zBridgeServerIface_israised_endOfSession(&handle))
     {
@@ -353,23 +374,104 @@ void CTblMngrServer::serverActions()
     //Can come together with bidInfo and must be processed after bidInfo.
     if (zBridgeServerIface_israised_playerToLead(&handle))
     {
+        int delay = (protocol == BASIC_PROTOCOL) ? 1000 : 10;
+
         //Player to lead next trick.
-        //Wait for one second to assure that the client to lead waits for this message when it is sent.
+        //For the basic protocol wait for one second to assure that the client to lead waits for this
+        //message when it is sent.
         //The lead client on its side must assure that it has completed its end of trick work within
         //this second.
-        //This is a requirement of the protocol.
-        QTimer::singleShot(1000, this, SLOT(playerToLead()));
+        //This is a requirement of the basic protocol.
+        //For the advanced protocol just make sure the action is not called untill the run cycle of
+        //the thread.
+        QTimer::singleShot(delay, this, SLOT(playerToLead()));
+    }
+
+    //Can come after newDealClients.
+    if (zBridgeServerIface_israised_synchronize(&handle))
+    {
+        if (protocol == BASIC_PROTOCOL)
+        {
+            zBridgeServerIface_raise_allSync(&handle);
+            serverRunCycle();
+        }
+        else
+        {
+            //Synchronization of server and clients.
+            zBridgeServerSync_init(&syncHandle);
+            synchronizing = true;
+            zBridgeServerSync_enter(&syncHandle);
+            zBridgeServerSyncIface_raise_continue(&syncHandle);
+            serverSyncRunCycle();
+        }
     }
 
     //Can (in principle - not in practice) come together with bidInfo and must be processed after bidInfo.
     if (zBridgeServerIface_israised_dummyToLead(&handle))
     {
+        int delay = (protocol == BASIC_PROTOCOL) ? 1000 : 10;
+
         //Dummy to lead next trick.
-        //Wait for one second to assure that the client to lead waits for this message when it is sent.
+        //For the basic protocol wait for one second to assure that the client to lead waits for this
+        //message when it is sent.
         //The lead client on its side must assure that it has completed its end of trick work within
         //this second.
-        //This is a requirement of the protocol.
-        QTimer::singleShot(1000, this, SLOT(dummyToLead()));
+        //This is a requirement of the basic protocol.
+        //For the advanced protocol just make sure the action is not called until the run cycle of
+        //the thread.
+        QTimer::singleShot(delay, this, SLOT(dummyToLead()));
+    }
+}
+
+void CTblMngrServer::serverSyncActions()
+{
+    bool israised_sendConfirmSync = zBridgeServerSyncIface_israised_sendConfirmSync (&syncHandle);
+
+    //React to sync server out events.
+    if (zBridgeServerSyncIface_israised_sendAttemptSyncAll(&syncHandle))
+    {
+        qDebug() << "Server Action: Attempt sync from server to all clients.";
+        for (int i = 0; i < 4; i++)
+            actors[i]->attemptSyncFromServerToClient();
+    }
+    else if (zBridgeServerSyncIface_israised_sendAttemptSync (&syncHandle))
+    {
+        Seat seat = (Seat)zBridgeServerSyncIface_get_sendAttemptSync_value(&syncHandle);
+        qDebug() << "Server Action: Seat: " << seat << "  Attempt sync from server to client.";
+        actors[seat]->attemptSyncFromServerToClient();
+    }
+
+    else if (zBridgeServerSyncIface_israised_sendAllSync(&syncHandle))
+    {
+        qDebug() << "Server Action: continue before allSync to all clients.";
+
+        zBridgeServerSyncIface_raise_continue(&syncHandle);
+        serverSyncRunCycle();
+
+        qDebug() << "Server Action (main): allSync after server synchronization finished.";
+        zBridgeServerIface_raise_allSync(&handle);
+        serverRunCycle();
+
+        qDebug() << "Server Action: allSync from server to all clients.";
+
+        for (int i = 0; i < 4; i++)
+            actors[i]->allSyncFromServerToClient();
+
+        synchronizing = false;
+    }
+
+    //Comes together with and after sendAttemptSync (gets cleared in some cases by sendAttemptSync).
+    if (israised_sendConfirmSync)
+    {
+        qDebug() << "Server continue before confirm sync to all clients.";
+
+        zBridgeServerSyncIface_raise_continue(&syncHandle);
+        serverSyncRunCycle();
+
+        qDebug() << "Server Action: Confirm sync from server to all clients.";
+
+        for (int i = 0; i < 4; i++)
+         actors[i]->confirmSyncFromServerToClient();
     }
 }
 
@@ -467,7 +569,8 @@ void CTblMngrServer::newSession()
 
     boardNo = 0;
 
-    protocol = (remoteActorServer != 0) ? doc->getSeatOptions().protocol : ADVANCED_PROTOCOL;
+    protocol = doc->getSeatOptions().protocol;
+//EAK    protocol = (remoteActorServer != 0) ? doc->getSeatOptions().protocol : ADVANCED_PROTOCOL;
 
     //Enable/disable relevant menu actions.
     QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_SERVER , protocol == ADVANCED_PROTOCOL));
@@ -618,8 +721,8 @@ void CTblMngrServer::setShowUser(bool showAll)
 void CTblMngrServer::buttonClicked(int button)
 {
     //The Continue button was clicked (from Center widget in play view).
-    if (button == BUTTON_CONTINUE)
-        sContinuePlay();
+    if (button == BUTTON_LEADER)
+        sContinueLeader();
 }
 
 /**
@@ -846,6 +949,27 @@ void CTblMngrServer::sReadyForDummyCards(Seat seat)
 }
 
 /**
+ * @brief Synchronization signal from one of the four clients to the server.
+ * @param syncher The clients seat.
+ */
+void CTblMngrServer::sAttemptSyncFromClientToServer(Seat syncher)
+{
+    if (synchronizing)
+    {
+        qDebug() << "Server: Signal from client: Seat: " << syncher << " attempt sync.";
+        zBridgeServerSyncIface_raise_attemptSync(&syncHandle, syncher);
+        serverSyncRunCycle();
+    }
+}
+
+void CTblMngrServer::sConfirmSyncFromClientToServer(Seat syncher)
+{
+    qDebug() << "Server: signal from client: Seat: " << syncher << " confirm sync.";
+    zBridgeServerSyncIface_raise_confirmSync(&syncHandle, syncher);
+    serverSyncRunCycle();
+}
+
+/**
  * @brief Show auction info widgets in play view (actor slot).
  */
 void CTblMngrServer::sShowAuction()
@@ -883,46 +1007,49 @@ void CTblMngrServer::sShowPlay()
 }
 
 /**
- * @brief Enable Continue button (actor slot).
+ * @brief Enable Leader button (actor slot).
  *
- * It is assured that the waiting time before the user presses the continue button is less than
- * one second. This is the maximun time the server waits for the clients to be ready. This is a
- * requirement of the protocol.
+ * For the basic protocol it is assured that the waiting time before the user presses the continue
+ * button is less than one second. This is the maximun time the server waits for the clients to be ready.
+ * This is a requirement of the basic protocol./n
+ * There are no such requirement in the advanced protocol.
  */
-void CTblMngrServer::sEnableContinue()
+void CTblMngrServer::sEnableLeader()
 {
     if (!waiting)
     {
         waiting = true;
         //Waiting time must be less than one second.
-        continueButton->start(700);
+        if  (protocol == BASIC_PROTOCOL)
+            leaderButton->start(700);
 
         //Also show and enable continue button.
-        playView->enableContinueOnTable();
+        playView->enableLeaderOnTable();
     }
 }
 
 /**
  * @brief Disable Continue button (actor slot).
  */
-void CTblMngrServer::sDisableContinue()
+void CTblMngrServer::sDisableLeader()
 {
     if (waiting)
     {
         waiting = false;
-        playView->disableContinueOnTable();
+        playView->disableLeaderOnTable();
     }
 }
 
 /**
  * @brief Continue play with next trick (actor slot).
  */
-void CTblMngrServer::sContinuePlay()
+void CTblMngrServer::sContinueLeader()
 {
-    continueButton->stop();
+    if (protocol == BASIC_PROTOCOL)
+        leaderButton->stop();
 
-    if (actors[WEST_SEAT]->getActorType() == MANUAL_ACTOR) actors[WEST_SEAT]->continuePlay();
-    if (actors[NORTH_SEAT]->getActorType() == MANUAL_ACTOR) actors[NORTH_SEAT]->continuePlay();
-    if (actors[EAST_SEAT]->getActorType() == MANUAL_ACTOR) actors[EAST_SEAT]->continuePlay();
-    if (actors[SOUTH_SEAT]->getActorType() == MANUAL_ACTOR) actors[SOUTH_SEAT]->continuePlay();
+    if (actors[WEST_SEAT]->getActorType() == MANUAL_ACTOR) actors[WEST_SEAT]->continueLeader();
+    if (actors[NORTH_SEAT]->getActorType() == MANUAL_ACTOR) actors[NORTH_SEAT]->continueLeader();
+    if (actors[EAST_SEAT]->getActorType() == MANUAL_ACTOR) actors[EAST_SEAT]->continueLeader();
+    if (actors[SOUTH_SEAT]->getActorType() == MANUAL_ACTOR) actors[SOUTH_SEAT]->continueLeader();
 }

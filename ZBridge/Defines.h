@@ -181,11 +181,10 @@ const QString BIDS[41] = {
 
 //Button ids.
 const int BUTTON_NONE = 0;
-const int BUTTON_AUCTION_ACTOR = 1;
-const int BUTTON_AUCTION_SERVER = 2;
-const int BUTTON_PLAY_ACTOR = 3;
-const int BUTTON_PLAY_SERVER = 4;
-const int BUTTON_CONTINUE = 5;
+const int BUTTON_AUCTION = 1;
+const int BUTTON_PLAY = 2;
+const int BUTTON_LEADER = 3;
+const int BUTTON_DEAL = 4;
 
 //------------------------- Seat options. ---------------------------
 enum Seat { WEST_SEAT=0, NORTH_SEAT=1, EAST_SEAT=2, SOUTH_SEAT=3};

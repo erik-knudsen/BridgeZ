@@ -54,9 +54,9 @@ CTblMngrClient::CTblMngrClient(CZBridgeDoc *doc, CPlayView *playView, QObject *p
     actor = 0;
 
     //Timer for supervision of continue button.
-    continueButton = new QTimer(this);
-    connect(continueButton, &QTimer::timeout, this, &CTblMngr::sContinuePlay);
-    continueButton->setSingleShot(true);
+    leaderButton = new QTimer(this);
+    connect(leaderButton, &QTimer::timeout, this, &CTblMngr::sContinueLeader);
+    leaderButton->setSingleShot(true);
 }
 
 CTblMngrClient::~CTblMngrClient()
@@ -180,8 +180,8 @@ void CTblMngrClient::newSession()
  */
 void CTblMngrClient::buttonClicked(int button)
 {
-    if (button == BUTTON_CONTINUE)
-        sContinuePlay();
+    if (button == BUTTON_LEADER)
+        sContinueLeader();
 }
 
 /**
@@ -347,6 +347,16 @@ void CTblMngrClient::sReadyForDummyCards(Seat seat)
     remoteActorClient->sendLine(readyForDummyCardsMsg.line);
 }
 
+void CTblMngrClient::sAttemptSyncFromClientToServer(Seat syncher)
+{
+
+}
+
+void CTblMngrClient::sConfirmSyncFromClientToServer(Seat syncher)
+{
+
+}
+
 /**
  * @brief Show auction info widgets in play view (actor slot).
  */
@@ -382,35 +392,35 @@ void CTblMngrClient::sShowPlay()
 }
 
 /**
- * @brief Enable Continue button (actor slot).
+ * @brief Enable Leader button (actor slot).
  */
-void CTblMngrClient::sEnableContinue()
+void CTblMngrClient::sEnableLeader()
 {
     //Waiting time must be less than one second. This is the maximum time the server waits
     //for the clients to be ready.
     //This is a requirement of the protocol.
-    continueButton->start(700);
+    leaderButton->start(700);
 
     //Also show and enable continue button.
-    playView->enableContinueOnTable();
+    playView->enableLeaderOnTable();
 }
 
 /**
- * @brief Disable Continue button (actor slot).
+ * @brief Disable Leader button (actor slot).
  */
-void CTblMngrClient::sDisableContinue()
+void CTblMngrClient::sDisableLeader()
 {
-    playView->disableContinueOnTable();
+    playView->disableLeaderOnTable();
 }
 
 /**
  * @brief Continue play with next trick (actor slot).
  */
-void CTblMngrClient::sContinuePlay()
+void CTblMngrClient::sContinueLeader()
 {
-    continueButton->stop();
+    leaderButton->stop();
 
-    actor->continuePlay();
+    actor->continueLeader();
 }
 //Slots for tcp client.
 //-----------------------------------------------------------------------------

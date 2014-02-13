@@ -26,11 +26,19 @@ typedef enum {
 	ZBridgeClient_main_region_WaitLeader ,
 	ZBridgeClient_main_region_Exit1 ,
 	ZBridgeClient_main_region_Exit2 ,
+	ZBridgeClient_main_region_SyncSB ,
+	ZBridgeClient_main_region_SyncLeader ,
+	ZBridgeClient_main_region_SyncAuction ,
+	ZBridgeClient_main_region_SyncPlay ,
 	ZBridgeClient_last_state
 } ZBridgeClientStates;
 
 //! Type definition of the data structure for the ZBridgeClientInternal interface scope.
 typedef struct {
+	sc_integer  SS;
+	sc_integer  SA;
+	sc_integer  SP;
+	sc_integer  SL;
 	sc_integer  BID_NONE;
 	sc_integer  BID_PASS;
 	sc_integer  BID_DOUBLE;
@@ -83,6 +91,8 @@ typedef struct {
 	sc_boolean undoTrick_raised;
 	sc_integer  undoTrick_value;
 	sc_boolean reStart_raised;
+	sc_boolean allSync_raised;
+	sc_boolean synchronize_raised;
 	sc_integer  boardNumber;
 	sc_integer  vulnerability;
 	sc_integer  client;
@@ -97,6 +107,7 @@ typedef struct {
 	sc_integer  noTrick;
 	sc_integer  player;
 	sc_integer  cardVal;
+	sc_integer  syncState;
 } ZBridgeClientIface;
 
 
@@ -225,6 +236,12 @@ extern sc_integer zBridgeClientIface_get_undoTrick_value(ZBridgeClient* handle);
 /*! Raises the in event 'reStart' that is defined in the default interface scope. */ 
 extern void zBridgeClientIface_raise_reStart(ZBridgeClient* handle);
 
+/*! Raises the in event 'allSync' that is defined in the default interface scope. */ 
+extern void zBridgeClientIface_raise_allSync(ZBridgeClient* handle);
+
+/*! Checks if the out event 'synchronize' that is defined in the default interface scope has been raised. */ 
+extern sc_boolean zBridgeClientIface_israised_synchronize(ZBridgeClient* handle);
+
 /*! Gets the value of the variable 'boardNumber' that is defined in the default interface scope. */ 
 extern sc_integer zBridgeClientIface_get_boardNumber(ZBridgeClient* handle);
 /*! Sets the value of the variable 'boardNumber' that is defined in the default interface scope. */ 
@@ -281,6 +298,10 @@ extern void zBridgeClientIface_set_player(ZBridgeClient* handle, sc_integer valu
 extern sc_integer zBridgeClientIface_get_cardVal(ZBridgeClient* handle);
 /*! Sets the value of the variable 'cardVal' that is defined in the default interface scope. */ 
 extern void zBridgeClientIface_set_cardVal(ZBridgeClient* handle, sc_integer value);
+/*! Gets the value of the variable 'syncState' that is defined in the default interface scope. */ 
+extern sc_integer zBridgeClientIface_get_syncState(ZBridgeClient* handle);
+/*! Sets the value of the variable 'syncState' that is defined in the default interface scope. */ 
+extern void zBridgeClientIface_set_syncState(ZBridgeClient* handle, sc_integer value);
 
 
 /*! Checks if the specified state is active. */

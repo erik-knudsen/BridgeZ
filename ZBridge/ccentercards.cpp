@@ -170,7 +170,7 @@ void CCenterCards::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton)
     {
-        BUTTON_CLICKED_Event *buttonClickedEvent = new BUTTON_CLICKED_Event(BUTTON_CONTINUE);
+        BUTTON_CLICKED_Event *buttonClickedEvent = new BUTTON_CLICKED_Event(BUTTON_LEADER);
         QApplication::postEvent(buttonSignal, buttonClickedEvent);
     }
     else

@@ -89,13 +89,15 @@ public slots:
     void sReadyForPlayer(Seat seat, Seat player, int trick);
     void sReadyForDummy(Seat seat, int trick);
     void sReadyForDummyCards(Seat seat);
+    void sAttemptSyncFromClientToServer(Seat syncher);
+    void sConfirmSyncFromClientToServer(Seat syncher);
 
     void sShowAuction();
     void sShowPlay();
-    void sEnableContinue();
-    void sDisableContinue();
+    void sEnableLeader();
+    void sDisableLeader();
 
-    void sContinuePlay();
+    void sContinueLeader();
     /*@}*/
 
     /** @name TCP/IP communication slots.
@@ -120,7 +122,7 @@ private:
     int noHands;
     int currentCards[4][13];
 
-    QTimer *continueButton;
+    QTimer *leaderButton;
 
     CZBridgeDoc *doc;
     CPlayView *playView;

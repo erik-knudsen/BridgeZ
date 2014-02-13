@@ -88,6 +88,8 @@ public slots:
     virtual void sReadyForPlayer(Seat seat, Seat player, int trick) = 0;
     virtual void sReadyForDummy(Seat seat, int trick) = 0;
     virtual void sReadyForDummyCards(Seat seat) = 0;
+    virtual void sAttemptSyncFromClientToServer(Seat syncher) = 0;
+    virtual void sConfirmSyncFromClientToServer(Seat syncher) = 0;
 
     virtual void sShowAuction() = 0;
     virtual void sShowPlay() = 0;
@@ -106,10 +108,10 @@ public slots:
     void sDisableBidder(Seat bidder);
     void sEnablePlayer(Seat player);
     void sDisablePlayer(Seat player);
-    virtual void sEnableContinue() = 0;
-    virtual void sDisableContinue() = 0;
+    virtual void sEnableLeader() = 0;
+    virtual void sDisableLeader() = 0;
 
-    virtual void sContinuePlay() = 0;
+    virtual void sContinueLeader() = 0;
     /*@}*/
 
 protected:

@@ -19,12 +19,21 @@
  */
 
 #include <QTimer>
+#include <QDebug>
 
 #include "CTblMngr.h"
 #include "cbidengine.h"
 #include "cplayengine.h"
 #include "defines.h"
 #include "cactorlocal.h"
+
+//Sync states (must be the same as in the Yakindu client synchronization statechart).
+//These values are used to determine whether there should be a pause and if so, which kind
+//of pause (show a button etc.).
+const int SS = 1;       //Start of Board synchronization (before new deal starts).
+const int SA = 2;       //Start of Auction synchronization (before auction starts).
+const int SP = 3;       //Start of Play synchronization (before play starts).
+const int SL = 4;       //Start of Leader synchronization (before next trick starts).
 
 /**
  * @brief Constructor for local actor.
@@ -52,6 +61,7 @@ CActorLocal::CActorLocal(bool manual, QString teamName, Seat seat, int protocol,
     bidAndPlay.generateEngines(bidOptionDocOwn, bidOptionDocOpp);
     this->tableManager = tableManager;
     showUser = false;
+    synchronizing = false;
 
     zBridgeClient_init(&handle);
     zBridgeClientIface_set_client(&handle, seat);
@@ -73,8 +83,8 @@ CActorLocal::CActorLocal(bool manual, QString teamName, Seat seat, int protocol,
     connect(this, &CActorLocal::sDisableBidder, tableManager, &CTblMngr::sDisableBidder);
     connect(this, &CActorLocal::sEnablePlayer, tableManager, &CTblMngr::sEnablePlayer);
     connect(this, &CActorLocal::sDisablePlayer, tableManager, &CTblMngr::sDisablePlayer);
-    connect(this, &CActorLocal::sEnableContinue, tableManager, &CTblMngr::sEnableContinue);
-    connect(this, &CActorLocal::sDisableContinue, tableManager, &CTblMngr::sDisableContinue);
+    connect(this, &CActorLocal::sEnableLeader, tableManager, &CTblMngr::sEnableLeader);
+    connect(this, &CActorLocal::sDisableLeader, tableManager, &CTblMngr::sDisableLeader);
 }
 
 /**
@@ -97,7 +107,27 @@ void CActorLocal::startNewSession()
 void CActorLocal::clientActions()
 {
     //React to client out events.
-    if (zBridgeClientIface_israised_connect(&handle))
+    if (zBridgeClientIface_israised_synchronize(&handle))
+    {
+        if (protocol == BASIC_PROTOCOL)
+        {
+            //There is no synchronization.
+            zBridgeClientIface_raise_allSync(&handle);
+            clientRunCycle();
+        }
+        else
+        {
+            //Synchronization of server and clients.
+            zBridgeClientSync_init(&syncHandle);
+            int syncState = zBridgeClientIface_get_syncState(&handle);
+            zBridgeClientSyncIface_set_syncState(&syncHandle, syncState);
+            synchronizing = true;
+            zBridgeClientSync_enter(&syncHandle);
+            clientSyncActions();
+        }
+    }
+
+    else if (zBridgeClientIface_israised_connect(&handle))
     {
         //Connect to the server (upon entry of the statechart).
         emit sConnect(teamName ,  (Seat)zBridgeClientIface_get_client(&handle), protocol);
@@ -184,9 +214,9 @@ void CActorLocal::clientActions()
     {
         //Get leader of next play.
         if (manual)
-            emit sEnableContinue();
+            emit sEnableLeader();
         else
-           continuePlay();
+           continueLeader();
     }
 
     else if (zBridgeClientIface_israised_undoBid(&handle))
@@ -250,6 +280,32 @@ void CActorLocal::clientActions()
     }
 }
 
+void CActorLocal::clientSyncActions()
+{
+    //React to sync client out events.
+    if (zBridgeClientSyncIface_israised_sendAttemptSync(&syncHandle))
+    {
+        Seat seat = (Seat)zBridgeClientIface_get_client(&handle);
+        qDebug() << "Client Action: Seat: " << seat << " attempt sync.";
+        emit sAttemptSyncFromClientToServer(seat);
+    }
+
+    else if (zBridgeClientSyncIface_israised_sendConfirmSync(&syncHandle))
+    {
+        Seat seat = (Seat)zBridgeClientIface_get_client(&handle);
+        qDebug() << "Client Action: Seat: " << seat << " confirm sync.";
+        emit sConfirmSyncFromClientToServer(seat);
+    }
+
+    else if (zBridgeClientSyncIface_israised_okSync(&syncHandle))
+    {
+        qDebug() << "Client Action: ok sync.";
+        synchronizing = false;
+        zBridgeClientIface_raise_allSync(&handle);
+        clientRunCycle();
+    }
+}
+
 /**
  * @brief Run cycle for the Yakindu statechart.
  */
@@ -261,6 +317,17 @@ void CActorLocal::clientRunCycle()
     clientActions();
     //Assure all out flags gets cleared (they have been handled now and will otherwise disturb recursive calls).
     zBridgeClient_runCycle(&handle);
+}
+
+/**
+ * @brief Run cycle for the Yakindu synchronization statechart.
+ */
+void CActorLocal::clientSyncRunCycle()
+{
+    //Handle raised in flags.
+    zBridgeClientSync_runCycle(&syncHandle);
+    //Handle out flags raised by the run cycle.
+    clientSyncActions();
 }
 
 /**
@@ -359,11 +426,11 @@ void CActorLocal::playValue(int card)
  *
  * Prepare and initialize for the next trick to be played.
  */
-void CActorLocal::continuePlay()
+void CActorLocal::continueLeader()
 {
     //If manual then disable the continue button.
     if (manual)
-        emit sDisableContinue();
+        emit sDisableLeader();
 
     //Must prepare play view for next trick.
     if (showUser)
@@ -597,4 +664,34 @@ void CActorLocal::reStart()
 {
     zBridgeClientIface_raise_reStart(&handle);
     clientRunCycle();
+}
+
+void CActorLocal::attemptSyncFromServerToClient()
+{
+    if (synchronizing)
+    {
+        Seat seat = (Seat)zBridgeClientIface_get_client(&handle);
+        qDebug() << "Client: " << seat << " attemptSync call from server to client.";
+
+        zBridgeClientSyncIface_raise_attemptSync(&syncHandle);
+        clientSyncRunCycle();
+    }
+}
+
+void CActorLocal::confirmSyncFromServerToClient()
+{
+    Seat seat = (Seat)zBridgeClientIface_get_client(&handle);
+    qDebug() << "Client: " << seat << " confirmSync call from server to client.";
+
+    zBridgeClientSyncIface_raise_confirmSync(&syncHandle);
+    clientSyncRunCycle();
+}
+
+void CActorLocal::allSyncFromServerToClient()
+{
+    Seat seat = (Seat)zBridgeClientIface_get_client(&handle);
+    qDebug() << "Client: " << seat << " allSync call from server to client.";
+
+    zBridgeClientSyncIface_raise_allSync(&syncHandle);
+    clientSyncRunCycle();
 }

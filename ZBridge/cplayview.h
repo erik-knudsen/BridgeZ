@@ -137,8 +137,8 @@ public:
     void showDummyOnTable(Seat dummy);
     void showYourTurnOnTable(Seat turn);
     void clearYourTurnOnTable();
-    void enableContinueOnTable();
-    void disableContinueOnTable();
+    void enableLeaderOnTable();
+    void disableLeaderOnTable();
     /*@}*/
 
 signals:
