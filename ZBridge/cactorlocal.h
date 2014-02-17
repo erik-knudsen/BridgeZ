@@ -55,6 +55,7 @@ public:
     void bidValue(Bids bid);
     void playValue(int card);
     void continueLeader();
+    void continueSync();
 
     void setShowUser(bool showUser) { this->showUser = showUser; }
 
@@ -105,9 +106,11 @@ signals:
     void sDisableBidder(Seat bidder);
     void sEnablePlayer(Seat player);
     void sDisablePlayer(Seat Player);
-    void sEnableLeader();
-    void sDisableLeader();
-
+    void sEnableContinueLeader();
+    void sDisableContinueLeader();
+    void sEnableContinueSync(int syncState);
+    void sDisableContinueSync(int syncState)
+;
 private:
     void clientActions();
     void clientSyncActions();

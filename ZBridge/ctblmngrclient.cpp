@@ -349,12 +349,14 @@ void CTblMngrClient::sReadyForDummyCards(Seat seat)
 
 void CTblMngrClient::sAttemptSyncFromClientToServer(Seat syncher)
 {
-
+    CAttemptSynchronizeMsg attemptSynchronizeMsg(syncher);
+    remoteActorClient->sendLine(attemptSynchronizeMsg.line);
 }
 
 void CTblMngrClient::sConfirmSyncFromClientToServer(Seat syncher)
 {
-
+    CConfirmSynchronizeMsg confirmSynchronizeMsg(syncher);
+    remoteActorClient->sendLine(confirmSynchronizeMsg.line);
 }
 
 /**
@@ -394,7 +396,7 @@ void CTblMngrClient::sShowPlay()
 /**
  * @brief Enable Leader button (actor slot).
  */
-void CTblMngrClient::sEnableLeader()
+void CTblMngrClient::sEnableContinueLeader()
 {
     //Waiting time must be less than one second. This is the maximum time the server waits
     //for the clients to be ready.
@@ -408,9 +410,34 @@ void CTblMngrClient::sEnableLeader()
 /**
  * @brief Disable Leader button (actor slot).
  */
-void CTblMngrClient::sDisableLeader()
+void CTblMngrClient::sDisableContinueLeader()
 {
     playView->disableLeaderOnTable();
+}
+
+void CTblMngrClient::sEnableContinueSync(int syncState)
+{
+    switch (syncState)
+    {
+    case BUTTON_AUCTION:
+        playView->showInfoAuctionButton(true, BUTTON_AUCTION);
+        break;
+
+    default:
+        ;
+    }
+}
+
+void CTblMngrClient::sDisableContinueSync(int syncState)
+{
+    switch (syncState)
+    {
+    case BUTTON_AUCTION:
+        playView->showInfoAuctionButton(false, BUTTON_AUCTION);
+        break;
+
+    default: ;
+    }
 }
 
 /**
@@ -421,6 +448,11 @@ void CTblMngrClient::sContinueLeader()
     leaderButton->stop();
 
     actor->continueLeader();
+}
+
+void CTblMngrClient::sContinueSync()
+{
+    actor->continueSync();
 }
 //Slots for tcp client.
 //-----------------------------------------------------------------------------
@@ -661,6 +693,30 @@ void CTblMngrClient::receiveLine(QString line)
         //End of session message was received.
         CEndOfSessionMsg endOfSession(line);
         actor->reStart();
+        break;
+    }
+
+    case ATTEMPT_SYNCHRONIZE_MSG:
+    {
+        //Attempt synchronize message was received.
+        CAttemptSynchronizeMsg attemptSynchronize(line);
+        actor->attemptSyncFromServerToClient();
+        break;
+    }
+
+    case CONFIRM_SYNCHRONIZE_MSG:
+    {
+        //Confirm synchronize message was received.
+        CConfirmSynchronizeMsg confirmSynchronize(line);
+        actor->confirmSyncFromServerToClient();
+        break;
+    }
+
+    case ALL_SYNCHRONIZED_MSG:
+    {
+        //All synchronized message was received.
+        CAllSynchronizedMsg allSynchronized(line);
+        actor->allSyncFromServerToClient();
         break;
     }
 

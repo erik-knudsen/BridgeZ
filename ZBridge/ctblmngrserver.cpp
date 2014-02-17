@@ -430,29 +430,29 @@ void CTblMngrServer::serverSyncActions()
     //React to sync server out events.
     if (zBridgeServerSyncIface_israised_sendAttemptSyncAll(&syncHandle))
     {
-        qDebug() << "Server Action: Attempt sync from server to all clients.";
+//        qDebug() << "Server Action: Attempt sync from server to all clients.";
         for (int i = 0; i < 4; i++)
             actors[i]->attemptSyncFromServerToClient();
     }
     else if (zBridgeServerSyncIface_israised_sendAttemptSync (&syncHandle))
     {
         Seat seat = (Seat)zBridgeServerSyncIface_get_sendAttemptSync_value(&syncHandle);
-        qDebug() << "Server Action: Seat: " << seat << "  Attempt sync from server to client.";
+//        qDebug() << "Server Action: Seat: " << seat << "  Attempt sync from server to client.";
         actors[seat]->attemptSyncFromServerToClient();
     }
 
     else if (zBridgeServerSyncIface_israised_sendAllSync(&syncHandle))
     {
-        qDebug() << "Server Action: continue before allSync to all clients.";
+//        qDebug() << "Server Action: continue before allSync to all clients.";
 
         zBridgeServerSyncIface_raise_continue(&syncHandle);
         serverSyncRunCycle();
 
-        qDebug() << "Server Action (main): allSync after server synchronization finished.";
+//        qDebug() << "Server Action (main): allSync after server synchronization finished.";
         zBridgeServerIface_raise_allSync(&handle);
         serverRunCycle();
 
-        qDebug() << "Server Action: allSync from server to all clients.";
+//        qDebug() << "Server Action: allSync from server to all clients.";
 
         for (int i = 0; i < 4; i++)
             actors[i]->allSyncFromServerToClient();
@@ -463,12 +463,12 @@ void CTblMngrServer::serverSyncActions()
     //Comes together with and after sendAttemptSync (gets cleared in some cases by sendAttemptSync).
     if (israised_sendConfirmSync)
     {
-        qDebug() << "Server continue before confirm sync to all clients.";
+//        qDebug() << "Server continue before confirm sync to all clients.";
 
         zBridgeServerSyncIface_raise_continue(&syncHandle);
         serverSyncRunCycle();
 
-        qDebug() << "Server Action: Confirm sync from server to all clients.";
+//        qDebug() << "Server Action: Confirm sync from server to all clients.";
 
         for (int i = 0; i < 4; i++)
          actors[i]->confirmSyncFromServerToClient();
@@ -567,6 +567,7 @@ void CTblMngrServer::newSession()
 
     cleanTableManager();
 
+    waiting = false;
     boardNo = 0;
 
     protocol = doc->getSeatOptions().protocol;
@@ -638,6 +639,8 @@ void CTblMngrServer::newSession()
  */
 void CTblMngrServer::newDeal()
 {
+    waiting = false;
+
     zBridgeServerIface_raise_newDeal(&handle);
     serverRunCycle();
 }
@@ -723,6 +726,8 @@ void CTblMngrServer::buttonClicked(int button)
     //The Continue button was clicked (from Center widget in play view).
     if (button == BUTTON_LEADER)
         sContinueLeader();
+    else if ((button == BUTTON_AUCTION) || (button == BUTTON_PLAY) || (button == BUTTON_DEAL))
+        sContinueSync();
 }
 
 /**
@@ -974,6 +979,8 @@ void CTblMngrServer::sConfirmSyncFromClientToServer(Seat syncher)
  */
 void CTblMngrServer::sShowAuction()
 {
+    playView->showInfoPlay(false);
+
     playView->setParams(doc->getSeatOptions().seat, doc->getDisplayOptions().cardBack);
 
     QString str;
@@ -1014,7 +1021,7 @@ void CTblMngrServer::sShowPlay()
  * This is a requirement of the basic protocol./n
  * There are no such requirement in the advanced protocol.
  */
-void CTblMngrServer::sEnableLeader()
+void CTblMngrServer::sEnableContinueLeader()
 {
     if (!waiting)
     {
@@ -1031,12 +1038,61 @@ void CTblMngrServer::sEnableLeader()
 /**
  * @brief Disable Continue button (actor slot).
  */
-void CTblMngrServer::sDisableLeader()
+void CTblMngrServer::sDisableContinueLeader()
 {
     if (waiting)
     {
         waiting = false;
         playView->disableLeaderOnTable();
+    }
+}
+
+void CTblMngrServer::sEnableContinueSync(int syncState)
+{
+    if (!waiting)
+    {
+        waiting = true;
+        switch (syncState)
+        {
+        case BUTTON_AUCTION:
+            playView->showInfoAuctionButton(true, BUTTON_AUCTION);
+            break;
+
+        case BUTTON_PLAY:
+            playView->showInfoPlayButton(true, BUTTON_PLAY);
+            break;
+
+        case BUTTON_DEAL:
+            playView->showInfoNextButton(true, BUTTON_DEAL);
+            break;
+
+        default:
+            ;
+        }
+    }
+}
+
+void CTblMngrServer::sDisableContinueSync(int syncState)
+{
+    if (waiting)
+    {
+        waiting = false;
+        switch (syncState)
+        {
+        case BUTTON_AUCTION:
+            playView->showInfoAuctionButton(false, BUTTON_AUCTION);
+            break;
+
+        case BUTTON_PLAY:
+            playView->showInfoPlayButton(false, BUTTON_PLAY);
+            break;
+
+        case BUTTON_DEAL:
+            playView->showInfoNextButton(false, BUTTON_DEAL);
+            break;
+
+        default: ;
+        }
     }
 }
 
@@ -1052,4 +1108,15 @@ void CTblMngrServer::sContinueLeader()
     if (actors[NORTH_SEAT]->getActorType() == MANUAL_ACTOR) actors[NORTH_SEAT]->continueLeader();
     if (actors[EAST_SEAT]->getActorType() == MANUAL_ACTOR) actors[EAST_SEAT]->continueLeader();
     if (actors[SOUTH_SEAT]->getActorType() == MANUAL_ACTOR) actors[SOUTH_SEAT]->continueLeader();
+}
+
+/**
+ * @brief Continue after button.
+ */
+void CTblMngrServer::sContinueSync()
+{
+    if (actors[WEST_SEAT]->getActorType() == MANUAL_ACTOR) actors[WEST_SEAT]->continueSync();
+    if (actors[NORTH_SEAT]->getActorType() == MANUAL_ACTOR) actors[NORTH_SEAT]->continueSync();
+    if (actors[EAST_SEAT]->getActorType() == MANUAL_ACTOR) actors[EAST_SEAT]->continueSync();
+    if (actors[SOUTH_SEAT]->getActorType() == MANUAL_ACTOR) actors[SOUTH_SEAT]->continueSync();
 }

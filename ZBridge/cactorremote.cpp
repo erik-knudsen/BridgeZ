@@ -344,6 +344,22 @@ void CActorRemote::receiveLine(QString line, bool connected)
         break;
     }
 
+    case ATTEMPT_SYNCHRONIZE_MSG:
+    {
+        //An attempt synchronize message has been received.
+        CAttemptSynchronizeMsg attemptSynchronize(line);
+        emit sAttemptSyncFromClientToServer(attemptSynchronize.seat);
+        break;
+    }
+
+    case CONFIRM_SYNCHRONIZE_MSG:
+    {
+        //A confirm synchronize message has been received.
+        CConfirmSynchronizeMsg confirmSynchronize(line);
+        emit sConfirmSyncFromClientToServer(confirmSynchronize.seat);
+        break;
+    }
+
     default:
         throw NetProtocolException("Net - Illegal message: " + line.toStdString());
         break;

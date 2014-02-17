@@ -220,6 +220,14 @@ void CPlayView::createChildren()
     bottomInfoPlayButton->connectButton(this);
     bottomInfoPlayButton->setParentItem(bottomInfo);
     bottomInfoPlayButton->hide();
+
+    //Next deal button to display in bottom info.
+    bottomInfoNextButton = new CBottomInfoButton(INF_HOR_SIZE, TB_CARD_VER_SIZE, "Start\nNext Deal");
+    bottomInfoNextButton->setPreferredSize(QSizeF(INF_HOR_SIZE, TB_CARD_VER_SIZE));
+    bottomInfoNextButton->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+    bottomInfoNextButton->connectButton(this);
+    bottomInfoNextButton->setParentItem(bottomInfo);
+    bottomInfoNextButton->hide();
 }
 
 /**
@@ -508,6 +516,19 @@ void CPlayView::showInfoPlayButton(bool show, int id)
         bottomInfoPlayButton->hide();
         bottomInfoPlay->show();
     }
+}
+
+void CPlayView::showInfoNextButton(bool show, int id)
+{
+    if (show)
+    {
+        bottomInfoAuction->hide();
+        bottomInfoPlay->hide();
+        bottomInfoNextButton->setButtonId(id);
+        bottomInfoNextButton->show();
+    }
+    else
+        bottomInfoNextButton->hide();
 }
 
 /**

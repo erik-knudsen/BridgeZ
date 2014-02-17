@@ -94,6 +94,7 @@ public:
     void showEWTricks(int tricks);
     void showInfoAuctionButton(bool show, int id = 0);
     void showInfoPlayButton(bool show, int id = 0);
+    void showInfoNextButton(bool show, int id = 0);
     /*@}*/
 
     /** @name Cards group
@@ -172,6 +173,7 @@ private:
     CBottomInfoPlay *bottomInfoPlay;
     CBottomInfoButton *bottomInfoAuctionButton;
     CBottomInfoButton *bottomInfoPlayButton;
+    CBottomInfoButton *bottomInfoNextButton;
 
     CBidDialog *m_pBidDlg;
     bool firstBidDialogShow;

@@ -24,8 +24,6 @@ typedef enum {
 	ZBridgeClient_main_region_DummyCards ,
 	ZBridgeClient_main_region_Play ,
 	ZBridgeClient_main_region_WaitLeader ,
-	ZBridgeClient_main_region_Exit1 ,
-	ZBridgeClient_main_region_Exit2 ,
 	ZBridgeClient_main_region_SyncSB ,
 	ZBridgeClient_main_region_SyncLeader ,
 	ZBridgeClient_main_region_SyncAuction ,

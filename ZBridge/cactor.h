@@ -50,6 +50,7 @@ public:
     virtual void bidValue(Bids bid) {}
     virtual void playValue(int card) {}
     virtual void continueLeader() {}
+    virtual void continueSync() {}
 
     virtual void seated(QString teamName) = 0;
     virtual void teamNames(QString nsTeamName, QString ewTeamName) = 0;

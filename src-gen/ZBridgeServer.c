@@ -7336,7 +7336,35 @@ static void zBridgeServer_react_entry__SyncAuction(ZBridgeServer* handle) {
 					}
 				}
 			}
-		} 
+		}  else {
+			if (handle->iface.newDeal_raised) { 
+				{
+					/* Default exit sequence for state SyncAuction */
+					handle->stateConfVector[0] = ZBridgeServer_last_state;
+					handle->stateConfVectorPosition = 0;
+				}
+				handle->iface.newDealClients_raised = bool_true;
+				handle->internal.noBoards += 1;
+				{
+					/* The reactions of state null. */
+					if (handle->internal.noBoards == handle->iface.noOfBoards) { 
+						handle->iface.endOfSession_raised = bool_true;
+						{
+							/* 'default' enter sequence for state Exit1 */
+							handle->stateConfVector[0] = ZBridgeServer_entry__Exit1;
+							handle->stateConfVectorPosition = 0;
+						}
+					}  else {
+						handle->iface.synchronize_raised = bool_true;
+						{
+							/* 'default' enter sequence for state SyncSB */
+							handle->stateConfVector[0] = ZBridgeServer_entry__SyncSB;
+							handle->stateConfVectorPosition = 0;
+						}
+					}
+				}
+			} 
+		}
 	}
 }
 
@@ -7488,7 +7516,35 @@ static void zBridgeServer_react_entry__SyncPlay(ZBridgeServer* handle) {
 					}
 				}
 			}
-		} 
+		}  else {
+			if (handle->iface.newDeal_raised) { 
+				{
+					/* Default exit sequence for state SyncPlay */
+					handle->stateConfVector[0] = ZBridgeServer_last_state;
+					handle->stateConfVectorPosition = 0;
+				}
+				handle->iface.newDealClients_raised = bool_true;
+				handle->internal.noBoards += 1;
+				{
+					/* The reactions of state null. */
+					if (handle->internal.noBoards == handle->iface.noOfBoards) { 
+						handle->iface.endOfSession_raised = bool_true;
+						{
+							/* 'default' enter sequence for state Exit1 */
+							handle->stateConfVector[0] = ZBridgeServer_entry__Exit1;
+							handle->stateConfVectorPosition = 0;
+						}
+					}  else {
+						handle->iface.synchronize_raised = bool_true;
+						{
+							/* 'default' enter sequence for state SyncSB */
+							handle->stateConfVector[0] = ZBridgeServer_entry__SyncSB;
+							handle->stateConfVectorPosition = 0;
+						}
+					}
+				}
+			} 
+		}
 	}
 }
 

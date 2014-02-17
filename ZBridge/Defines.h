@@ -31,7 +31,7 @@ enum MsgType { CONNECT_MSG, SEATED_MSG, RTNAMES_MSG, TEAMNAMES_MSG, RSBOARD_MSG,
                DEALINFO_MSG, RCARDS_MSG, CARDS_MSG, BID_MSG, RBID_MSG, ILLEGALBID_MSG, PLAYERTOLEAD_MSG,
                DUMMYTOLEAD_MSG, PLAYERPLAYS_MSG, READYFORPLAYER_MSG, READYFORDUMMY_MSG, ILLEGALCARD_MSG,
                READYFORDUMMYCARDS_MSG, DUMMYCARDS_MSG, ENDOFSESSION_MSG, UNKNOWN_MSG, UNDOBID_MSG, UNDOTRICK_MSG,
-               REBID_MSG, REPLAY_MSG};
+               REBID_MSG, REPLAY_MSG, ATTEMPT_SYNCHRONIZE_MSG, CONFIRM_SYNCHRONIZE_MSG, ALL_SYNCHRONIZED_MSG};
 
 //Honor card values
 const int TEN =   8;
@@ -179,12 +179,20 @@ const QString BIDS[41] = {
     ":/newPrefix/resources/BlankBidPrompt.ico"
 };
 
+//Sync states (must be the same as in the Yakindu client synchronization statechart).
+//These values are used to determine whether there should be a pause and if so, which kind
+//of pause (show a button etc.).
+const int SS = 1;       //Start of Board synchronization (before new deal starts).
+const int SA = 2;       //Start of Auction synchronization (before auction starts).
+const int SP = 3;       //Start of Play synchronization (before play starts).
+const int SL = 4;       //Start of Leader synchronization (before next trick starts).
+
 //Button ids.
 const int BUTTON_NONE = 0;
-const int BUTTON_AUCTION = 1;
-const int BUTTON_PLAY = 2;
-const int BUTTON_LEADER = 3;
-const int BUTTON_DEAL = 4;
+const int BUTTON_AUCTION = SA;
+const int BUTTON_PLAY = SP;
+const int BUTTON_LEADER = SL;
+const int BUTTON_DEAL = SS;
 
 //------------------------- Seat options. ---------------------------
 enum Seat { WEST_SEAT=0, NORTH_SEAT=1, EAST_SEAT=2, SOUTH_SEAT=3};

@@ -129,6 +129,12 @@ MsgType getMessageType(QString line) throw(NetProtocolException)
         return REBID_MSG;
     if (line.contains("replay", Qt::CaseInsensitive))
         return REPLAY_MSG;
+    if (line.contains("attempt synchronize", Qt::CaseInsensitive))
+        return ATTEMPT_SYNCHRONIZE_MSG;
+    if (line.contains("confirm synchronize", Qt::CaseInsensitive))
+        return CONFIRM_SYNCHRONIZE_MSG;
+    if (line.contains("all synchronized", Qt::CaseInsensitive))
+        return ALL_SYNCHRONIZED_MSG;
 
     throw NetProtocolException("Net - Unknown message: " + line.toStdString());
 }
@@ -1276,4 +1282,100 @@ void CRePlayMsg::lineToMsg() throw (NetProtocolException)
 {
     if (!line.contains("replay", Qt::CaseInsensitive))
         throw NetProtocolException("Net - Replay: " + line.toStdString());
+}
+
+
+CAttemptSynchronizeMsg::CAttemptSynchronizeMsg(Seat seat)
+{
+    msgType = ATTEMPT_SYNCHRONIZE_MSG;
+
+    this->seat = seat;
+
+    msgToLine();
+}
+
+CAttemptSynchronizeMsg::CAttemptSynchronizeMsg(QString line) throw (NetProtocolException)
+{
+    msgType = ATTEMPT_SYNCHRONIZE_MSG;
+
+    this->line = line;
+
+    lineToMsg();
+}
+
+void CAttemptSynchronizeMsg::msgToLine()
+{
+    line = QString("%1 attempt synchronize\r\n").arg(SEAT_NAMES_NET[seat]);
+}
+
+void CAttemptSynchronizeMsg::lineToMsg() throw (NetProtocolException)
+{
+    if (!line.contains("attempt synchronize", Qt::CaseInsensitive))
+        throw NetProtocolException("Net - Ready to start: " + line.toStdString());
+
+    seat = getSeat(line);
+}
+
+
+CConfirmSynchronizeMsg::CConfirmSynchronizeMsg(Seat seat)
+{
+    msgType = CONFIRM_SYNCHRONIZE_MSG;
+
+    this->seat = seat;
+
+    msgToLine();
+}
+
+CConfirmSynchronizeMsg::CConfirmSynchronizeMsg(QString line) throw (NetProtocolException)
+{
+    msgType = CONFIRM_SYNCHRONIZE_MSG;
+
+    this->line = line;
+
+    lineToMsg();
+}
+
+void CConfirmSynchronizeMsg::msgToLine()
+{
+    line = QString("%1 confirm synchronize\r\n").arg(SEAT_NAMES_NET[seat]);
+}
+
+void CConfirmSynchronizeMsg::lineToMsg() throw (NetProtocolException)
+{
+    if (!line.contains("confirm synchronize", Qt::CaseInsensitive))
+        throw NetProtocolException("Net - Ready to start: " + line.toStdString());
+
+    seat = getSeat(line);
+}
+
+
+CAllSynchronizedMsg::CAllSynchronizedMsg(Seat seat)
+{
+    msgType = ALL_SYNCHRONIZED_MSG;
+
+    this->seat = seat;
+
+    msgToLine();
+}
+
+CAllSynchronizedMsg::CAllSynchronizedMsg(QString line) throw (NetProtocolException)
+{
+    msgType = ALL_SYNCHRONIZED_MSG;
+
+    this->line = line;
+
+    lineToMsg();
+}
+
+void CAllSynchronizedMsg::msgToLine()
+{
+    line = QString("%1 all synchronized\r\n").arg(SEAT_NAMES_NET[seat]);
+}
+
+void CAllSynchronizedMsg::lineToMsg() throw (NetProtocolException)
+{
+    if (!line.contains("all synchronized", Qt::CaseInsensitive))
+        throw NetProtocolException("Net - Ready to start: " + line.toStdString());
+
+    seat = getSeat(line);
 }

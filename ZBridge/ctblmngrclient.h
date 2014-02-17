@@ -94,10 +94,13 @@ public slots:
 
     void sShowAuction();
     void sShowPlay();
-    void sEnableLeader();
-    void sDisableLeader();
+    void sEnableContinueLeader();
+    void sDisableContinueLeader();
+    void sEnableContinueSync(int syncState);
+    void sDisableContinueSync(int syncState);
 
     void sContinueLeader();
+    void sContinueSync();
     /*@}*/
 
     /** @name TCP/IP communication slots.

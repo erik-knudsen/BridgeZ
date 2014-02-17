@@ -472,4 +472,55 @@ public:
 };
 
 
+class CAttemptSynchronizeMsg : public CMsg
+{
+public:
+    CAttemptSynchronizeMsg(Seat seat);
+    CAttemptSynchronizeMsg(QString line) throw (NetProtocolException);
+
+private:
+    void msgToLine();
+    void lineToMsg() throw (NetProtocolException);
+
+public:
+    Seat seat;
+
+    QString line;
+};
+
+
+class CConfirmSynchronizeMsg : public CMsg
+{
+public:
+    CConfirmSynchronizeMsg(Seat seat);
+    CConfirmSynchronizeMsg(QString line) throw (NetProtocolException);
+
+private:
+    void msgToLine();
+    void lineToMsg() throw (NetProtocolException);
+
+public:
+    Seat seat;
+
+    QString line;
+};
+
+
+class CAllSynchronizedMsg : public CMsg
+{
+public:
+    CAllSynchronizedMsg(Seat seat);
+    CAllSynchronizedMsg(QString line) throw (NetProtocolException);
+
+private:
+    void msgToLine();
+    void lineToMsg() throw (NetProtocolException);
+
+public:
+    Seat seat;
+
+    QString line;
+};
+
+
 #endif // CREMOTEPROTOCOL_H
