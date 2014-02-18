@@ -486,14 +486,12 @@ void CPlayView::showInfoAuctionButton(bool show, int id)
     if (show)
     {
         bottomInfoAuction->hide();
+        bottomInfoPlay->hide();
         bottomInfoAuctionButton->setButtonId(id);
         bottomInfoAuctionButton->show();
     }
     else
-    {
         bottomInfoAuctionButton->hide();
-        bottomInfoAuction->show();
-    }
 }
 
 /**
@@ -507,15 +505,13 @@ void CPlayView::showInfoPlayButton(bool show, int id)
 {
     if (show)
     {
+        bottomInfoAuction->hide();
         bottomInfoPlay->hide();
         bottomInfoPlayButton->setButtonId(id);
         bottomInfoPlayButton->show();
     }
     else
-    {
         bottomInfoPlayButton->hide();
-        bottomInfoPlay->show();
-    }
 }
 
 void CPlayView::showInfoNextButton(bool show, int id)
