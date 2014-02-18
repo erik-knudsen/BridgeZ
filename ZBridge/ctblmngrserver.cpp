@@ -430,29 +430,22 @@ void CTblMngrServer::serverSyncActions()
     //React to sync server out events.
     if (zBridgeServerSyncIface_israised_sendAttemptSyncAll(&syncHandle))
     {
-//        qDebug() << "Server Action: Attempt sync from server to all clients.";
         for (int i = 0; i < 4; i++)
             actors[i]->attemptSyncFromServerToClient();
     }
     else if (zBridgeServerSyncIface_israised_sendAttemptSync (&syncHandle))
     {
         Seat seat = (Seat)zBridgeServerSyncIface_get_sendAttemptSync_value(&syncHandle);
-//        qDebug() << "Server Action: Seat: " << seat << "  Attempt sync from server to client.";
         actors[seat]->attemptSyncFromServerToClient();
     }
 
     else if (zBridgeServerSyncIface_israised_sendAllSync(&syncHandle))
     {
-//        qDebug() << "Server Action: continue before allSync to all clients.";
-
         zBridgeServerSyncIface_raise_continue(&syncHandle);
         serverSyncRunCycle();
 
-//        qDebug() << "Server Action (main): allSync after server synchronization finished.";
         zBridgeServerIface_raise_allSync(&handle);
         serverRunCycle();
-
-//        qDebug() << "Server Action: allSync from server to all clients.";
 
         for (int i = 0; i < 4; i++)
             actors[i]->allSyncFromServerToClient();
@@ -463,12 +456,8 @@ void CTblMngrServer::serverSyncActions()
     //Comes together with and after sendAttemptSync (gets cleared in some cases by sendAttemptSync).
     if (israised_sendConfirmSync)
     {
-//        qDebug() << "Server continue before confirm sync to all clients.";
-
         zBridgeServerSyncIface_raise_continue(&syncHandle);
         serverSyncRunCycle();
-
-//        qDebug() << "Server Action: Confirm sync from server to all clients.";
 
         for (int i = 0; i < 4; i++)
          actors[i]->confirmSyncFromServerToClient();
@@ -640,6 +629,8 @@ void CTblMngrServer::newSession()
 void CTblMngrServer::newDeal()
 {
     waiting = false;
+
+    playView->resetView();
 
     zBridgeServerIface_raise_newDeal(&handle);
     serverRunCycle();
@@ -961,7 +952,6 @@ void CTblMngrServer::sAttemptSyncFromClientToServer(Seat syncher)
 {
     if (synchronizing)
     {
-        qDebug() << "Server: Signal from client: Seat: " << syncher << " attempt sync.";
         zBridgeServerSyncIface_raise_attemptSync(&syncHandle, syncher);
         serverSyncRunCycle();
     }
@@ -969,7 +959,6 @@ void CTblMngrServer::sAttemptSyncFromClientToServer(Seat syncher)
 
 void CTblMngrServer::sConfirmSyncFromClientToServer(Seat syncher)
 {
-    qDebug() << "Server: signal from client: Seat: " << syncher << " confirm sync.";
     zBridgeServerSyncIface_raise_confirmSync(&syncHandle, syncher);
     serverSyncRunCycle();
 }

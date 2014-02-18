@@ -19,7 +19,6 @@
  */
 
 #include <QTimer>
-#include <QDebug>
 
 #include "CTblMngr.h"
 #include "cbidengine.h"
@@ -280,7 +279,6 @@ void CActorLocal::clientSyncActions()
     if (zBridgeClientSyncIface_israised_sendAttemptSync(&syncHandle))
     {
         Seat seat = (Seat)zBridgeClientIface_get_client(&handle);
-//        qDebug() << "Client Action: Seat: " << seat << " attempt sync.";
         emit sAttemptSyncFromClientToServer(seat);
     }
 
@@ -295,7 +293,6 @@ void CActorLocal::clientSyncActions()
 
     else if (zBridgeClientSyncIface_israised_okSync(&syncHandle))
     {
-//        qDebug() << "Client Action: ok sync.";
         synchronizing = false;
         zBridgeClientIface_raise_allSync(&handle);
         clientRunCycle();
@@ -452,7 +449,6 @@ void CActorLocal::continueSync()
         emit sDisableContinueSync(zBridgeClientSyncIface_get_syncState(&syncHandle));
 
     Seat seat = (Seat)zBridgeClientIface_get_client(&handle);
-    qDebug() << "Client Action: Seat: " << seat << " confirm sync.";
     emit sConfirmSyncFromClientToServer(seat);
 }
 
@@ -677,9 +673,6 @@ void CActorLocal::attemptSyncFromServerToClient()
 {
     if (synchronizing)
     {
-        Seat seat = (Seat)zBridgeClientIface_get_client(&handle);
-//        qDebug() << "Client: " << seat << " attemptSync call from server to client.";
-
         zBridgeClientSyncIface_raise_attemptSync(&syncHandle);
         clientSyncRunCycle();
     }
@@ -687,18 +680,12 @@ void CActorLocal::attemptSyncFromServerToClient()
 
 void CActorLocal::confirmSyncFromServerToClient()
 {
-    Seat seat = (Seat)zBridgeClientIface_get_client(&handle);
-//    qDebug() << "Client: " << seat << " confirmSync call from server to client.";
-
     zBridgeClientSyncIface_raise_confirmSync(&syncHandle);
     clientSyncRunCycle();
 }
 
 void CActorLocal::allSyncFromServerToClient()
 {
-    Seat seat = (Seat)zBridgeClientIface_get_client(&handle);
-//    qDebug() << "Client: " << seat << " allSync call from server to client.";
-
     zBridgeClientSyncIface_raise_allSync(&syncHandle);
     clientSyncRunCycle();
 }

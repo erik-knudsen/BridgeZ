@@ -520,6 +520,8 @@ void CPlayView::showInfoNextButton(bool show, int id)
     {
         bottomInfoAuction->hide();
         bottomInfoPlay->hide();
+        bottomInfoAuctionButton->hide();
+        bottomInfoPlayButton->hide();
         bottomInfoNextButton->setButtonId(id);
         bottomInfoNextButton->show();
     }
