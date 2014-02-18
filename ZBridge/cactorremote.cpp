@@ -220,17 +220,28 @@ void CActorRemote::endOfSession()
  */
 void CActorRemote::attemptSyncFromServerToClient()
 {
-
+    CAttemptSynchronizeMsg attemptSynchronizeMsg(seat);
+    emit sendLine(attemptSynchronizeMsg.line);
 }
 
+
+/**
+ * @brief Synchronization message from table manager (pack and send to client via front end).
+ */
 void CActorRemote::confirmSyncFromServerToClient()
 {
-
+    CConfirmSynchronizeMsg confirmSynchronizeMsg(seat);
+    emit sendLine(confirmSynchronizeMsg.line);
 }
 
+
+/**
+ * @brief Synchronization message from table manager (pack and send to client via front end).
+ */
 void CActorRemote::allSyncFromServerToClient()
 {
-
+    CAllSynchronizedMsg allSynchronizeMsg(seat);
+    emit sendLine(allSynchronizeMsg.line);
 }
 
 /**

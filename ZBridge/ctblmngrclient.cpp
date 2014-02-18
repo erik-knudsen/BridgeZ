@@ -182,6 +182,8 @@ void CTblMngrClient::buttonClicked(int button)
 {
     if (button == BUTTON_LEADER)
         sContinueLeader();
+    else if ((button == BUTTON_AUCTION) || (button == BUTTON_PLAY) || (button == BUTTON_DEAL))
+        sContinueSync();
 }
 
 /**
