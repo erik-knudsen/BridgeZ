@@ -397,13 +397,19 @@ void CTblMngrClient::sShowPlay()
 
 /**
  * @brief Enable Leader button (actor slot).
+ *
+ * For the basic protocol it is assured that the waiting time before the user presses the continue
+ * button is less than one second. This is the maximun time the server waits for the clients to be ready.
+ * This is a requirement of the basic protocol./n
+ * There are no such requirement in the advanced protocol.
  */
 void CTblMngrClient::sEnableContinueLeader()
 {
     //Waiting time must be less than one second. This is the maximum time the server waits
     //for the clients to be ready.
     //This is a requirement of the protocol.
-    leaderButton->start(700);
+    if  (protocol == BASIC_PROTOCOL)
+        leaderButton->start(700);
 
     //Also show and enable continue button.
     playView->enableLeaderOnTable();
@@ -425,6 +431,14 @@ void CTblMngrClient::sEnableContinueSync(int syncState)
         playView->showInfoAuctionButton(true, BUTTON_AUCTION);
         break;
 
+    case BUTTON_PLAY:
+        playView->showInfoPlayButton(true, BUTTON_PLAY);
+        break;
+
+    case BUTTON_DEAL:
+        playView->showInfoNextButton(true, BUTTON_DEAL);
+        break;
+
     default:
         ;
     }
@@ -438,6 +452,14 @@ void CTblMngrClient::sDisableContinueSync(int syncState)
         playView->showInfoAuctionButton(false, BUTTON_AUCTION);
         break;
 
+    case BUTTON_PLAY:
+        playView->showInfoPlayButton(false, BUTTON_PLAY);
+        break;
+
+    case BUTTON_DEAL:
+        playView->showInfoNextButton(false, BUTTON_DEAL);
+        break;
+
     default: ;
     }
 }
@@ -447,7 +469,8 @@ void CTblMngrClient::sDisableContinueSync(int syncState)
  */
 void CTblMngrClient::sContinueLeader()
 {
-    leaderButton->stop();
+    if (protocol == BASIC_PROTOCOL)
+        leaderButton->stop();
 
     actor->continueLeader();
 }
