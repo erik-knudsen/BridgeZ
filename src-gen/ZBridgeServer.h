@@ -66,9 +66,9 @@ typedef enum {
 	ZBridgeServer_entry__Exit3 ,
 	ZBridgeServer_entry__WaitLeader ,
 	ZBridgeServer_entry__SyncSB ,
-	ZBridgeServer_entry__SyncLeader ,
 	ZBridgeServer_entry__SyncAuction ,
 	ZBridgeServer_entry__SyncPlay ,
+	ZBridgeServer_entry__SyncLeader ,
 	ZBridgeServer_last_state
 } ZBridgeServerStates;
 

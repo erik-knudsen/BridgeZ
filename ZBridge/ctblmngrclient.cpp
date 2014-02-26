@@ -96,7 +96,7 @@ void CTblMngrClient::cleanTableManager()
  * This method is activated from the main menu. It starts a new session by trying to connect
  * to a table manager server. The main menu entry, which activates this method is only enabled
  * when the table manager client is not connected to a table manager server and can therefore
- * not be activated when the client is connected..
+ * not be activated when the client is connected.
  *
  *   - Determine IP address (must be IPV4 address).
  *   - Prepare for a new session.
@@ -159,7 +159,6 @@ void CTblMngrClient::newSession()
     actor->setShowUser((actor->getActorType() == MANUAL_ACTOR) || showAll);
 
     //Start tcp/ip interface to server.
-//    remoteActorClient = new CRemoteActorClient(doc->getSeatOptions().hostClient,
     remoteActorClient = new CRemoteActorClient(hostAddresses.at(hostInx).toString(),
                                                doc->getSeatOptions().portClient.toInt(), this);
 
@@ -180,9 +179,9 @@ void CTblMngrClient::newSession()
  */
 void CTblMngrClient::buttonClicked(int button)
 {
-    if (button == BUTTON_LEADER)
+    if ((protocol == BASIC_PROTOCOL) && (button == BUTTON_LEADER))
         sContinueLeader();
-    else if ((button == BUTTON_AUCTION) || (button == BUTTON_PLAY) || (button == BUTTON_DEAL))
+    else
         sContinueSync();
 }
 
@@ -396,33 +395,35 @@ void CTblMngrClient::sShowPlay()
 }
 
 /**
- * @brief Enable Leader button (actor slot).
+ * @brief Enable Leader button (only basic protocol).
  *
  * For the basic protocol it is assured that the waiting time before the user presses the continue
  * button is less than one second. This is the maximun time the server waits for the clients to be ready.
  * This is a requirement of the basic protocol./n
- * There are no such requirement in the advanced protocol.
  */
 void CTblMngrClient::sEnableContinueLeader()
 {
     //Waiting time must be less than one second. This is the maximum time the server waits
     //for the clients to be ready.
     //This is a requirement of the protocol.
-    if  (protocol == BASIC_PROTOCOL)
-        leaderButton->start(700);
+    leaderButton->start(700);
 
     //Also show and enable continue button.
     playView->enableLeaderOnTable();
 }
 
 /**
- * @brief Disable Leader button (actor slot).
+ * @brief Disable Leader button (only basic protocol).
  */
 void CTblMngrClient::sDisableContinueLeader()
 {
     playView->disableLeaderOnTable();
 }
 
+/**
+ * @brief Enable auction, play, leader or next deal button (only advanced protocol).
+ * @param syncState Identifies the button to enable.
+ */
 void CTblMngrClient::sEnableContinueSync(int syncState)
 {
     switch (syncState)
@@ -435,6 +436,10 @@ void CTblMngrClient::sEnableContinueSync(int syncState)
         playView->showInfoPlayButton(true, BUTTON_PLAY);
         break;
 
+    case BUTTON_LEADER:
+        playView->enableLeaderOnTable();
+        break;
+
     case BUTTON_DEAL:
         playView->showInfoNextButton(true, BUTTON_DEAL);
         break;
@@ -444,6 +449,10 @@ void CTblMngrClient::sEnableContinueSync(int syncState)
     }
 }
 
+/**
+ * @brief Disable auction, play, leader or next deal button (only advanced protocol).
+ * @param syncState Identifies the button to disable.
+ */
 void CTblMngrClient::sDisableContinueSync(int syncState)
 {
     switch (syncState)
@@ -456,6 +465,10 @@ void CTblMngrClient::sDisableContinueSync(int syncState)
         playView->showInfoPlayButton(false, BUTTON_PLAY);
         break;
 
+    case BUTTON_LEADER:
+        playView->disableLeaderOnTable();
+        break;
+
     case BUTTON_DEAL:
         playView->showInfoNextButton(false, BUTTON_DEAL);
         break;
@@ -465,20 +478,22 @@ void CTblMngrClient::sDisableContinueSync(int syncState)
 }
 
 /**
- * @brief Continue play with next trick (actor slot).
+ * @brief Continue play with next trick (only basic protocol).
  */
 void CTblMngrClient::sContinueLeader()
 {
-    if (protocol == BASIC_PROTOCOL)
-        leaderButton->stop();
-
+    leaderButton->stop();
     actor->continueLeader();
 }
 
+/**
+ * @brief Continue after button (only advanced protocol).
+ */
 void CTblMngrClient::sContinueSync()
 {
     actor->continueSync();
 }
+
 //Slots for tcp client.
 //-----------------------------------------------------------------------------
 /**

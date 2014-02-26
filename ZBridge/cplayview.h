@@ -120,7 +120,7 @@ public:
     void showBid(Seat seat, Bids bid);
     void undoBid(int noBid);
     void enableBidder(Seat bidder, Bids lastBid, Bids doubleBid);
-    void disableBidder(Seat bidder);
+    void disableBidder();
     /*@}*/
 
     /** @name Center group

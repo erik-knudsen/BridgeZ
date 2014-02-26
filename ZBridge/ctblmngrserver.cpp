@@ -714,10 +714,9 @@ void CTblMngrServer::setShowUser(bool showAll)
  */
 void CTblMngrServer::buttonClicked(int button)
 {
-    //The Continue button was clicked (from Center widget in play view).
-    if (button == BUTTON_LEADER)
+    if ((protocol == BASIC_PROTOCOL) && (button == BUTTON_LEADER))
         sContinueLeader();
-    else if ((button == BUTTON_AUCTION) || (button == BUTTON_PLAY) || (button == BUTTON_DEAL))
+    else
         sContinueSync();
 }
 
@@ -1003,21 +1002,20 @@ void CTblMngrServer::sShowPlay()
 }
 
 /**
- * @brief Enable Leader button (actor slot).
+ * @brief Enable Leader button (only basic protocol).
  *
  * For the basic protocol it is assured that the waiting time before the user presses the continue
- * button is less than one second. This is the maximun time the server waits for the clients to be ready.
+ * button is less than one second. This is the maximum time the server waits for the clients to be ready.
  * This is a requirement of the basic protocol./n
- * There are no such requirement in the advanced protocol.
  */
 void CTblMngrServer::sEnableContinueLeader()
 {
     if (!waiting)
     {
         waiting = true;
+
         //Waiting time must be less than one second.
-        if  (protocol == BASIC_PROTOCOL)
-            leaderButton->start(700);
+        leaderButton->start(700);
 
         //Also show and enable continue button.
         playView->enableLeaderOnTable();
@@ -1025,7 +1023,7 @@ void CTblMngrServer::sEnableContinueLeader()
 }
 
 /**
- * @brief Disable Continue button (actor slot).
+ * @brief Disable Continue button (only basic protocol).
  */
 void CTblMngrServer::sDisableContinueLeader()
 {
@@ -1036,6 +1034,10 @@ void CTblMngrServer::sDisableContinueLeader()
     }
 }
 
+/**
+ * @brief Enable auction, play, leader or next deal button (only advanced protocol).
+ * @param syncState Identifies the button to enable.
+ */
 void CTblMngrServer::sEnableContinueSync(int syncState)
 {
     if (!waiting)
@@ -1051,6 +1053,10 @@ void CTblMngrServer::sEnableContinueSync(int syncState)
             playView->showInfoPlayButton(true, BUTTON_PLAY);
             break;
 
+        case BUTTON_LEADER:
+            playView->enableLeaderOnTable();
+            break;
+
         case BUTTON_DEAL:
             playView->showInfoNextButton(true, BUTTON_DEAL);
             break;
@@ -1061,6 +1067,10 @@ void CTblMngrServer::sEnableContinueSync(int syncState)
     }
 }
 
+/**
+ * @brief Disable auction, play, leader or next deal button (only advanced protocol).
+ * @param syncState Identifies the button to disable.
+ */
 void CTblMngrServer::sDisableContinueSync(int syncState)
 {
     if (waiting)
@@ -1076,6 +1086,10 @@ void CTblMngrServer::sDisableContinueSync(int syncState)
             playView->showInfoPlayButton(false, BUTTON_PLAY);
             break;
 
+        case BUTTON_LEADER:
+            playView->disableLeaderOnTable();
+            break;
+
         case BUTTON_DEAL:
             playView->showInfoNextButton(false, BUTTON_DEAL);
             break;
@@ -1086,12 +1100,11 @@ void CTblMngrServer::sDisableContinueSync(int syncState)
 }
 
 /**
- * @brief Continue play with next trick (actor slot).
+ * @brief Continue play with next trick (only basic protocol).
  */
 void CTblMngrServer::sContinueLeader()
 {
-    if (protocol == BASIC_PROTOCOL)
-        leaderButton->stop();
+    leaderButton->stop();
 
     if (actors[WEST_SEAT]->getActorType() == MANUAL_ACTOR) actors[WEST_SEAT]->continueLeader();
     if (actors[NORTH_SEAT]->getActorType() == MANUAL_ACTOR) actors[NORTH_SEAT]->continueLeader();
@@ -1100,7 +1113,7 @@ void CTblMngrServer::sContinueLeader()
 }
 
 /**
- * @brief Continue after button.
+ * @brief Continue after button (only advanced protocol).
  */
 void CTblMngrServer::sContinueSync()
 {

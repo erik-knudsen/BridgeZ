@@ -366,6 +366,7 @@ void CPlayView::resetView()
 
     //Hide bid dialog.
     m_pBidDlg->hide();
+    disableBidder();
 
     //Clean up table.
     clearCardsOnTable();
@@ -705,11 +706,10 @@ void CPlayView::enableBidder(Seat bidder, Bids lastBid, Bids doubleBid)
 
 /**
  * @brief Disable bidder.
- * @param bidder The bidder to disable.
  */
-void CPlayView::disableBidder(Seat bidder)
+void CPlayView::disableBidder()
 {
-    m_pBidDlg->disableBidder(bidder);
+    m_pBidDlg->disableBidder();
 }
 
 /**

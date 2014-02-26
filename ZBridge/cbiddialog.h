@@ -46,7 +46,7 @@ public:
 
     void closeEvent(QCloseEvent *event);
     void enableBidder(Seat seat, Bids lastBid, Bids doubleBid);
-    void disableBidder(Seat seat);
+    void disableBidder();
 
 signals:
     void bidValue(Bids bid);

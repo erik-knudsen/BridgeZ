@@ -207,7 +207,7 @@ void CTblMngr::sEnableBidder(Seat bidder, Bids lastBid, Bids doubleBid)
  */
 void CTblMngr::sDisableBidder(Seat bidder)
 {
-    playView->disableBidder(bidder);
+    playView->disableBidder();
 }
 
 /**

@@ -205,11 +205,22 @@ void CActorLocal::clientActions()
 
     else if (zBridgeClientIface_israised_getLeader(&handle))
     {
-        //Get leader of next play.
-        if (manual)
-            emit sEnableContinueLeader();
+        if (protocol == BASIC_PROTOCOL)
+        {
+            //Get leader of next play.
+            if (manual)
+                emit sEnableContinueLeader();
+            else
+                continueLeader();
+        }
         else
-           continueLeader();
+        {
+            //Get next leader.
+            zBridgeClientIface_raise_newLeader(&handle, bidAndPlay.getNextLeader());
+
+            //State chart run cycle.
+            clientRunCycle();
+        }
     }
 
     else if (zBridgeClientIface_israised_undoBid(&handle))
@@ -285,7 +296,7 @@ void CActorLocal::clientSyncActions()
     else if (zBridgeClientSyncIface_israised_sendConfirmSync(&syncHandle))
     {
         int syncState = zBridgeClientSyncIface_get_syncState(&syncHandle);
-        if (manual && ((syncState == SA) || (syncState == SP) || (syncState == SS)))
+        if (manual && ((syncState == SA) || (syncState == SP) || (syncState == SS) || (syncState == SL)))
             emit sEnableContinueSync(zBridgeClientSyncIface_get_syncState(&syncHandle));
         else
             continueSync();
@@ -415,7 +426,7 @@ void CActorLocal::playValue(int card)
 }
 
 /**
- * @brief Continue with play when a trick has been played by all four players.
+ * @brief Continue with play when a trick has been played by all four players (only basic protocol).
  *
  * Prepare and initialize for the next trick to be played.
  */
@@ -442,11 +453,23 @@ void CActorLocal::continueLeader()
     clientRunCycle();
 }
 
+/**
+ * @brief Continue after synchronization (only advanced protocol).
+ */
 void CActorLocal::continueSync()
 {
     int syncState = zBridgeClientSyncIface_get_syncState(&syncHandle);
-    if (manual && ((syncState == SA) || (syncState == SP) || (syncState == SS)))
+    if (manual && ((syncState == SA) || (syncState == SP) || (syncState == SS) || (syncState == SL)))
         emit sDisableContinueSync(zBridgeClientSyncIface_get_syncState(&syncHandle));
+
+    if (showUser &&(syncState == SL))
+    {
+        //Must prepare play view for next trick.
+        emit sClearCardsOnTable();
+
+        //Show number of tricks.
+        emit sShowTricks(bidAndPlay.getEWTricks(), bidAndPlay.getNSTricks());
+    }
 
     Seat seat = (Seat)zBridgeClientIface_get_client(&handle);
     emit sConfirmSyncFromClientToServer(seat);

@@ -59,9 +59,9 @@ static void zBridgeServer_react_entry__Exit2(ZBridgeServer* handle);
 static void zBridgeServer_react_entry__Exit3(ZBridgeServer* handle);
 static void zBridgeServer_react_entry__WaitLeader(ZBridgeServer* handle);
 static void zBridgeServer_react_entry__SyncSB(ZBridgeServer* handle);
-static void zBridgeServer_react_entry__SyncLeader(ZBridgeServer* handle);
 static void zBridgeServer_react_entry__SyncAuction(ZBridgeServer* handle);
 static void zBridgeServer_react_entry__SyncPlay(ZBridgeServer* handle);
+static void zBridgeServer_react_entry__SyncLeader(ZBridgeServer* handle);
 static void zBridgeServer_react_ZBridgeServer_entry___sync0(ZBridgeServer* handle);
 static void zBridgeServer_react_ZBridgeServer_entry___sync1(ZBridgeServer* handle);
 static void zBridgeServer_react_ZBridgeServer_entry___sync2(ZBridgeServer* handle);
@@ -349,14 +349,6 @@ void zBridgeServer_exit(ZBridgeServer* handle)
 					}
 					break;
 				}
-				case ZBridgeServer_entry__SyncLeader : {
-					{
-						/* Default exit sequence for state SyncLeader */
-						handle->stateConfVector[0] = ZBridgeServer_last_state;
-						handle->stateConfVectorPosition = 0;
-					}
-					break;
-				}
 				case ZBridgeServer_entry__SyncAuction : {
 					{
 						/* Default exit sequence for state SyncAuction */
@@ -368,6 +360,14 @@ void zBridgeServer_exit(ZBridgeServer* handle)
 				case ZBridgeServer_entry__SyncPlay : {
 					{
 						/* Default exit sequence for state SyncPlay */
+						handle->stateConfVector[0] = ZBridgeServer_last_state;
+						handle->stateConfVectorPosition = 0;
+					}
+					break;
+				}
+				case ZBridgeServer_entry__SyncLeader : {
+					{
+						/* Default exit sequence for state SyncLeader */
 						handle->stateConfVector[0] = ZBridgeServer_last_state;
 						handle->stateConfVectorPosition = 0;
 					}
@@ -926,16 +926,16 @@ void zBridgeServer_runCycle(ZBridgeServer* handle) {
 			zBridgeServer_react_entry__SyncSB(handle);
 			break;
 		}
-		case ZBridgeServer_entry__SyncLeader : {
-			zBridgeServer_react_entry__SyncLeader(handle);
-			break;
-		}
 		case ZBridgeServer_entry__SyncAuction : {
 			zBridgeServer_react_entry__SyncAuction(handle);
 			break;
 		}
 		case ZBridgeServer_entry__SyncPlay : {
 			zBridgeServer_react_entry__SyncPlay(handle);
+			break;
+		}
+		case ZBridgeServer_entry__SyncLeader : {
+			zBridgeServer_react_entry__SyncLeader(handle);
 			break;
 		}
 		default:
@@ -1108,14 +1108,14 @@ sc_boolean zBridgeServer_isActive(ZBridgeServer* handle, ZBridgeServerStates sta
 		case ZBridgeServer_entry__SyncSB : 
 			return (sc_boolean) (handle->stateConfVector[0] == ZBridgeServer_entry__SyncSB
 			);
-		case ZBridgeServer_entry__SyncLeader : 
-			return (sc_boolean) (handle->stateConfVector[0] == ZBridgeServer_entry__SyncLeader
-			);
 		case ZBridgeServer_entry__SyncAuction : 
 			return (sc_boolean) (handle->stateConfVector[0] == ZBridgeServer_entry__SyncAuction
 			);
 		case ZBridgeServer_entry__SyncPlay : 
 			return (sc_boolean) (handle->stateConfVector[0] == ZBridgeServer_entry__SyncPlay
+			);
+		case ZBridgeServer_entry__SyncLeader : 
+			return (sc_boolean) (handle->stateConfVector[0] == ZBridgeServer_entry__SyncLeader
 			);
 		default: return bool_false;
 	}
@@ -5406,23 +5406,26 @@ static void zBridgeServer_react_entry__Playing_West_Wait(ZBridgeServer* handle) 
 							}
 						}
 					}
-					handle->iface.newDealClients_raised = bool_true;
-					handle->internal.noBoards += 1;
 					{
 						/* The reactions of state null. */
-						if (handle->internal.noBoards == handle->iface.noOfBoards) { 
-							handle->iface.endOfSession_raised = bool_true;
-							{
-								/* 'default' enter sequence for state Exit1 */
-								handle->stateConfVector[0] = ZBridgeServer_entry__Exit1;
-								handle->stateConfVectorPosition = 0;
-							}
-						}  else {
-							handle->iface.synchronize_raised = bool_true;
-							{
-								/* 'default' enter sequence for state SyncSB */
-								handle->stateConfVector[0] = ZBridgeServer_entry__SyncSB;
-								handle->stateConfVectorPosition = 0;
+						handle->iface.newDealClients_raised = bool_true;
+						handle->internal.noBoards += 1;
+						{
+							/* The reactions of state null. */
+							if (handle->internal.noBoards == handle->iface.noOfBoards) { 
+								handle->iface.endOfSession_raised = bool_true;
+								{
+									/* 'default' enter sequence for state Exit1 */
+									handle->stateConfVector[0] = ZBridgeServer_entry__Exit1;
+									handle->stateConfVectorPosition = 0;
+								}
+							}  else {
+								handle->iface.synchronize_raised = bool_true;
+								{
+									/* 'default' enter sequence for state SyncSB */
+									handle->stateConfVector[0] = ZBridgeServer_entry__SyncSB;
+									handle->stateConfVectorPosition = 0;
+								}
 							}
 						}
 					}
@@ -6057,23 +6060,26 @@ static void zBridgeServer_react_entry__Playing_West_Sync(ZBridgeServer* handle) 
 							}
 						}
 					}
-					handle->iface.newDealClients_raised = bool_true;
-					handle->internal.noBoards += 1;
 					{
 						/* The reactions of state null. */
-						if (handle->internal.noBoards == handle->iface.noOfBoards) { 
-							handle->iface.endOfSession_raised = bool_true;
-							{
-								/* 'default' enter sequence for state Exit1 */
-								handle->stateConfVector[0] = ZBridgeServer_entry__Exit1;
-								handle->stateConfVectorPosition = 0;
-							}
-						}  else {
-							handle->iface.synchronize_raised = bool_true;
-							{
-								/* 'default' enter sequence for state SyncSB */
-								handle->stateConfVector[0] = ZBridgeServer_entry__SyncSB;
-								handle->stateConfVectorPosition = 0;
+						handle->iface.newDealClients_raised = bool_true;
+						handle->internal.noBoards += 1;
+						{
+							/* The reactions of state null. */
+							if (handle->internal.noBoards == handle->iface.noOfBoards) { 
+								handle->iface.endOfSession_raised = bool_true;
+								{
+									/* 'default' enter sequence for state Exit1 */
+									handle->stateConfVector[0] = ZBridgeServer_entry__Exit1;
+									handle->stateConfVectorPosition = 0;
+								}
+							}  else {
+								handle->iface.synchronize_raised = bool_true;
+								{
+									/* 'default' enter sequence for state SyncSB */
+									handle->stateConfVector[0] = ZBridgeServer_entry__SyncSB;
+									handle->stateConfVectorPosition = 0;
+								}
 							}
 						}
 					}
@@ -7018,36 +7024,11 @@ static void zBridgeServer_react_entry__WaitLeader(ZBridgeServer* handle) {
 			handle->internal.leader = handle->iface.newLeader_value;
 			handle->iface.player = handle->internal.leader;
 			handle->internal.playNo = 0;
+			handle->iface.synchronize_raised = bool_true;
 			{
-				/* The reactions of state null. */
-				if (handle->iface.noTrick == 13) { 
-					handle->internal.noBoards += 1;
-					{
-						/* The reactions of state null. */
-						if (handle->internal.noBoards == handle->iface.noOfBoards) { 
-							handle->iface.endOfSession_raised = bool_true;
-							{
-								/* 'default' enter sequence for state Exit1 */
-								handle->stateConfVector[0] = ZBridgeServer_entry__Exit1;
-								handle->stateConfVectorPosition = 0;
-							}
-						}  else {
-							handle->iface.synchronize_raised = bool_true;
-							{
-								/* 'default' enter sequence for state SyncSB */
-								handle->stateConfVector[0] = ZBridgeServer_entry__SyncSB;
-								handle->stateConfVectorPosition = 0;
-							}
-						}
-					}
-				}  else {
-					handle->iface.synchronize_raised = bool_true;
-					{
-						/* 'default' enter sequence for state SyncLeader */
-						handle->stateConfVector[0] = ZBridgeServer_entry__SyncLeader;
-						handle->stateConfVectorPosition = 0;
-					}
-				}
+				/* 'default' enter sequence for state SyncLeader */
+				handle->stateConfVector[0] = ZBridgeServer_entry__SyncLeader;
+				handle->stateConfVectorPosition = 0;
 			}
 		} 
 	}
@@ -7114,156 +7095,6 @@ static void zBridgeServer_react_entry__SyncSB(ZBridgeServer* handle) {
 							/* 'default' enter sequence for state Info */
 							handle->stateConfVector[3] = ZBridgeServer_entry__Deal_South_Info;
 							handle->stateConfVectorPosition = 3;
-						}
-					}
-				}
-			}
-		} 
-	}
-}
-
-/* The reactions of state SyncLeader. */
-static void zBridgeServer_react_entry__SyncLeader(ZBridgeServer* handle) {
-	{
-		/* The reactions of state SyncLeader. */
-		if (handle->iface.allSync_raised) { 
-			{
-				/* Default exit sequence for state SyncLeader */
-				handle->stateConfVector[0] = ZBridgeServer_last_state;
-				handle->stateConfVectorPosition = 0;
-			}
-			{
-				/* The reactions of state null. */
-				if (handle->internal.leader == handle->iface.dummy) { 
-					handle->iface.dummyToLead_value = handle->iface.declarer;
-					handle->iface.dummyToLead_raised = bool_true;
-					{
-						/* 'default' enter sequence for state Playing */
-						{
-							/* 'default' enter sequence for region West */
-							{
-								/* Default react sequence for initial entry  */
-								{
-									/* 'default' enter sequence for state Wait */
-									{
-										/* Entry action for state 'Wait'. */
-										handle->internal.westRCard = bool_false;
-									}
-									handle->stateConfVector[0] = ZBridgeServer_entry__Playing_West_Wait;
-									handle->stateConfVectorPosition = 0;
-								}
-							}
-						}
-						{
-							/* 'default' enter sequence for region North */
-							{
-								/* Default react sequence for initial entry  */
-								{
-									/* 'default' enter sequence for state Wait */
-									{
-										/* Entry action for state 'Wait'. */
-										handle->internal.northRCard = bool_false;
-									}
-									handle->stateConfVector[1] = ZBridgeServer_entry__Playing_North_Wait;
-									handle->stateConfVectorPosition = 1;
-								}
-							}
-						}
-						{
-							/* 'default' enter sequence for region East */
-							{
-								/* Default react sequence for initial entry  */
-								{
-									/* 'default' enter sequence for state Wait */
-									{
-										/* Entry action for state 'Wait'. */
-										handle->internal.eastRCard = bool_false;
-									}
-									handle->stateConfVector[2] = ZBridgeServer_entry__Playing_East_Wait;
-									handle->stateConfVectorPosition = 2;
-								}
-							}
-						}
-						{
-							/* 'default' enter sequence for region South */
-							{
-								/* Default react sequence for initial entry  */
-								{
-									/* 'default' enter sequence for state Wait */
-									{
-										/* Entry action for state 'Wait'. */
-										handle->internal.southRCard = bool_false;
-									}
-									handle->stateConfVector[3] = ZBridgeServer_entry__Playing_South_Wait;
-									handle->stateConfVectorPosition = 3;
-								}
-							}
-						}
-					}
-				}  else {
-					handle->iface.playerToLead_value = handle->internal.leader;
-					handle->iface.playerToLead_raised = bool_true;
-					{
-						/* 'default' enter sequence for state Playing */
-						{
-							/* 'default' enter sequence for region West */
-							{
-								/* Default react sequence for initial entry  */
-								{
-									/* 'default' enter sequence for state Wait */
-									{
-										/* Entry action for state 'Wait'. */
-										handle->internal.westRCard = bool_false;
-									}
-									handle->stateConfVector[0] = ZBridgeServer_entry__Playing_West_Wait;
-									handle->stateConfVectorPosition = 0;
-								}
-							}
-						}
-						{
-							/* 'default' enter sequence for region North */
-							{
-								/* Default react sequence for initial entry  */
-								{
-									/* 'default' enter sequence for state Wait */
-									{
-										/* Entry action for state 'Wait'. */
-										handle->internal.northRCard = bool_false;
-									}
-									handle->stateConfVector[1] = ZBridgeServer_entry__Playing_North_Wait;
-									handle->stateConfVectorPosition = 1;
-								}
-							}
-						}
-						{
-							/* 'default' enter sequence for region East */
-							{
-								/* Default react sequence for initial entry  */
-								{
-									/* 'default' enter sequence for state Wait */
-									{
-										/* Entry action for state 'Wait'. */
-										handle->internal.eastRCard = bool_false;
-									}
-									handle->stateConfVector[2] = ZBridgeServer_entry__Playing_East_Wait;
-									handle->stateConfVectorPosition = 2;
-								}
-							}
-						}
-						{
-							/* 'default' enter sequence for region South */
-							{
-								/* Default react sequence for initial entry  */
-								{
-									/* 'default' enter sequence for state Wait */
-									{
-										/* Entry action for state 'Wait'. */
-										handle->internal.southRCard = bool_false;
-									}
-									handle->stateConfVector[3] = ZBridgeServer_entry__Playing_South_Wait;
-									handle->stateConfVectorPosition = 3;
-								}
-							}
 						}
 					}
 				}
@@ -7540,6 +7371,212 @@ static void zBridgeServer_react_entry__SyncPlay(ZBridgeServer* handle) {
 							/* 'default' enter sequence for state SyncSB */
 							handle->stateConfVector[0] = ZBridgeServer_entry__SyncSB;
 							handle->stateConfVectorPosition = 0;
+						}
+					}
+				}
+			} 
+		}
+	}
+}
+
+/* The reactions of state SyncLeader. */
+static void zBridgeServer_react_entry__SyncLeader(ZBridgeServer* handle) {
+	{
+		/* The reactions of state SyncLeader. */
+		if (handle->iface.allSync_raised) { 
+			{
+				/* Default exit sequence for state SyncLeader */
+				handle->stateConfVector[0] = ZBridgeServer_last_state;
+				handle->stateConfVectorPosition = 0;
+			}
+			{
+				/* The reactions of state null. */
+				if (handle->iface.noTrick == 13) { 
+					handle->internal.noBoards += 1;
+					{
+						/* The reactions of state null. */
+						if (handle->internal.noBoards == handle->iface.noOfBoards) { 
+							handle->iface.endOfSession_raised = bool_true;
+							{
+								/* 'default' enter sequence for state Exit1 */
+								handle->stateConfVector[0] = ZBridgeServer_entry__Exit1;
+								handle->stateConfVectorPosition = 0;
+							}
+						}  else {
+							handle->iface.synchronize_raised = bool_true;
+							{
+								/* 'default' enter sequence for state SyncSB */
+								handle->stateConfVector[0] = ZBridgeServer_entry__SyncSB;
+								handle->stateConfVectorPosition = 0;
+							}
+						}
+					}
+				}  else {
+					{
+						/* The reactions of state null. */
+						if (handle->internal.leader == handle->iface.dummy) { 
+							handle->iface.dummyToLead_value = handle->iface.declarer;
+							handle->iface.dummyToLead_raised = bool_true;
+							{
+								/* 'default' enter sequence for state Playing */
+								{
+									/* 'default' enter sequence for region West */
+									{
+										/* Default react sequence for initial entry  */
+										{
+											/* 'default' enter sequence for state Wait */
+											{
+												/* Entry action for state 'Wait'. */
+												handle->internal.westRCard = bool_false;
+											}
+											handle->stateConfVector[0] = ZBridgeServer_entry__Playing_West_Wait;
+											handle->stateConfVectorPosition = 0;
+										}
+									}
+								}
+								{
+									/* 'default' enter sequence for region North */
+									{
+										/* Default react sequence for initial entry  */
+										{
+											/* 'default' enter sequence for state Wait */
+											{
+												/* Entry action for state 'Wait'. */
+												handle->internal.northRCard = bool_false;
+											}
+											handle->stateConfVector[1] = ZBridgeServer_entry__Playing_North_Wait;
+											handle->stateConfVectorPosition = 1;
+										}
+									}
+								}
+								{
+									/* 'default' enter sequence for region East */
+									{
+										/* Default react sequence for initial entry  */
+										{
+											/* 'default' enter sequence for state Wait */
+											{
+												/* Entry action for state 'Wait'. */
+												handle->internal.eastRCard = bool_false;
+											}
+											handle->stateConfVector[2] = ZBridgeServer_entry__Playing_East_Wait;
+											handle->stateConfVectorPosition = 2;
+										}
+									}
+								}
+								{
+									/* 'default' enter sequence for region South */
+									{
+										/* Default react sequence for initial entry  */
+										{
+											/* 'default' enter sequence for state Wait */
+											{
+												/* Entry action for state 'Wait'. */
+												handle->internal.southRCard = bool_false;
+											}
+											handle->stateConfVector[3] = ZBridgeServer_entry__Playing_South_Wait;
+											handle->stateConfVectorPosition = 3;
+										}
+									}
+								}
+							}
+						}  else {
+							handle->iface.playerToLead_value = handle->internal.leader;
+							handle->iface.playerToLead_raised = bool_true;
+							{
+								/* 'default' enter sequence for state Playing */
+								{
+									/* 'default' enter sequence for region West */
+									{
+										/* Default react sequence for initial entry  */
+										{
+											/* 'default' enter sequence for state Wait */
+											{
+												/* Entry action for state 'Wait'. */
+												handle->internal.westRCard = bool_false;
+											}
+											handle->stateConfVector[0] = ZBridgeServer_entry__Playing_West_Wait;
+											handle->stateConfVectorPosition = 0;
+										}
+									}
+								}
+								{
+									/* 'default' enter sequence for region North */
+									{
+										/* Default react sequence for initial entry  */
+										{
+											/* 'default' enter sequence for state Wait */
+											{
+												/* Entry action for state 'Wait'. */
+												handle->internal.northRCard = bool_false;
+											}
+											handle->stateConfVector[1] = ZBridgeServer_entry__Playing_North_Wait;
+											handle->stateConfVectorPosition = 1;
+										}
+									}
+								}
+								{
+									/* 'default' enter sequence for region East */
+									{
+										/* Default react sequence for initial entry  */
+										{
+											/* 'default' enter sequence for state Wait */
+											{
+												/* Entry action for state 'Wait'. */
+												handle->internal.eastRCard = bool_false;
+											}
+											handle->stateConfVector[2] = ZBridgeServer_entry__Playing_East_Wait;
+											handle->stateConfVectorPosition = 2;
+										}
+									}
+								}
+								{
+									/* 'default' enter sequence for region South */
+									{
+										/* Default react sequence for initial entry  */
+										{
+											/* 'default' enter sequence for state Wait */
+											{
+												/* Entry action for state 'Wait'. */
+												handle->internal.southRCard = bool_false;
+											}
+											handle->stateConfVector[3] = ZBridgeServer_entry__Playing_South_Wait;
+											handle->stateConfVectorPosition = 3;
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}  else {
+			if (handle->iface.newDeal_raised) { 
+				{
+					/* Default exit sequence for state SyncLeader */
+					handle->stateConfVector[0] = ZBridgeServer_last_state;
+					handle->stateConfVectorPosition = 0;
+				}
+				{
+					/* The reactions of state null. */
+					handle->iface.newDealClients_raised = bool_true;
+					handle->internal.noBoards += 1;
+					{
+						/* The reactions of state null. */
+						if (handle->internal.noBoards == handle->iface.noOfBoards) { 
+							handle->iface.endOfSession_raised = bool_true;
+							{
+								/* 'default' enter sequence for state Exit1 */
+								handle->stateConfVector[0] = ZBridgeServer_entry__Exit1;
+								handle->stateConfVectorPosition = 0;
+							}
+						}  else {
+							handle->iface.synchronize_raised = bool_true;
+							{
+								/* 'default' enter sequence for state SyncSB */
+								handle->stateConfVector[0] = ZBridgeServer_entry__SyncSB;
+								handle->stateConfVectorPosition = 0;
+							}
 						}
 					}
 				}

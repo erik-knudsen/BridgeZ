@@ -363,9 +363,11 @@ void CBidDialog::enableBidder(Seat seat, Bids lastBid, Bids doubleBid)
 
 /**
  * @brief Disable the bid dialog.
- * @param seat The seat (not used).
  */
-void CBidDialog::disableBidder(Seat seat)
-{
+void CBidDialog::disableBidder()
+{  
+    //Erase window title.
+    setWindowTitle(tr(""));
+
     setEnabled(false);
 }
