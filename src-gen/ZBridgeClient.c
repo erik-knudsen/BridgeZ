@@ -1012,13 +1012,22 @@ static void zBridgeClient_react_main_region_Bid(ZBridgeClient* handle) {
 								handle->stateConfVectorPosition = 0;
 							}
 							{
-								/* 'default' enter sequence for state Connecting */
+								/* The reactions of state null. */
 								{
-									/* Entry action for state 'Connecting'. */
-									handle->iface.connect_raised = bool_true;
+									/* The reactions of state null. */
+									{
+										/* The reactions of state null. */
+										{
+											/* 'default' enter sequence for state Connecting */
+											{
+												/* Entry action for state 'Connecting'. */
+												handle->iface.connect_raised = bool_true;
+											}
+											handle->stateConfVector[0] = ZBridgeClient_main_region_Connecting;
+											handle->stateConfVectorPosition = 0;
+										}
+									}
 								}
-								handle->stateConfVector[0] = ZBridgeClient_main_region_Connecting;
-								handle->stateConfVectorPosition = 0;
 							}
 						} 
 					}
@@ -1321,23 +1330,27 @@ static void zBridgeClient_react_main_region_Play(ZBridgeClient* handle) {
 						}
 					}
 				}  else {
-					if (handle->iface.reStart_raised) { 
+					if (handle->iface.startOfBoard_raised) { 
 						{
 							/* Default exit sequence for state Play */
 							handle->stateConfVector[0] = ZBridgeClient_last_state;
 							handle->stateConfVectorPosition = 0;
 						}
 						{
-							/* 'default' enter sequence for state Connecting */
+							/* The reactions of state null. */
+							handle->iface.synchronize_raised = bool_true;
 							{
-								/* Entry action for state 'Connecting'. */
-								handle->iface.connect_raised = bool_true;
+								/* 'default' enter sequence for state SyncSB */
+								{
+									/* Entry action for state 'SyncSB'. */
+									handle->iface.syncState = handle->internal.SS;
+								}
+								handle->stateConfVector[0] = ZBridgeClient_main_region_SyncSB;
+								handle->stateConfVectorPosition = 0;
 							}
-							handle->stateConfVector[0] = ZBridgeClient_main_region_Connecting;
-							handle->stateConfVectorPosition = 0;
 						}
 					}  else {
-						if (handle->iface.startOfBoard_raised) { 
+						if (handle->iface.reStart_raised) { 
 							{
 								/* Default exit sequence for state Play */
 								handle->stateConfVector[0] = ZBridgeClient_last_state;
@@ -1345,15 +1358,26 @@ static void zBridgeClient_react_main_region_Play(ZBridgeClient* handle) {
 							}
 							{
 								/* The reactions of state null. */
-								handle->iface.synchronize_raised = bool_true;
 								{
-									/* 'default' enter sequence for state SyncSB */
+									/* The reactions of state null. */
 									{
-										/* Entry action for state 'SyncSB'. */
-										handle->iface.syncState = handle->internal.SS;
+										/* The reactions of state null. */
+										{
+											/* The reactions of state null. */
+											{
+												/* The reactions of state null. */
+												{
+													/* 'default' enter sequence for state Connecting */
+													{
+														/* Entry action for state 'Connecting'. */
+														handle->iface.connect_raised = bool_true;
+													}
+													handle->stateConfVector[0] = ZBridgeClient_main_region_Connecting;
+													handle->stateConfVectorPosition = 0;
+												}
+											}
+										}
 									}
-									handle->stateConfVector[0] = ZBridgeClient_main_region_SyncSB;
-									handle->stateConfVectorPosition = 0;
 								}
 							}
 						} 
@@ -1406,7 +1430,27 @@ static void zBridgeClient_react_main_region_SyncSB(ZBridgeClient* handle) {
 				handle->stateConfVector[0] = ZBridgeClient_main_region_StartOfBoard;
 				handle->stateConfVectorPosition = 0;
 			}
-		} 
+		}  else {
+			if (handle->iface.reStart_raised) { 
+				{
+					/* Default exit sequence for state SyncSB */
+					handle->stateConfVector[0] = ZBridgeClient_last_state;
+					handle->stateConfVectorPosition = 0;
+				}
+				{
+					/* The reactions of state null. */
+					{
+						/* 'default' enter sequence for state Connecting */
+						{
+							/* Entry action for state 'Connecting'. */
+							handle->iface.connect_raised = bool_true;
+						}
+						handle->stateConfVector[0] = ZBridgeClient_main_region_Connecting;
+						handle->stateConfVectorPosition = 0;
+					}
+				}
+			} 
+		}
 	}
 }
 
@@ -1503,7 +1547,39 @@ static void zBridgeClient_react_main_region_SyncLeader(ZBridgeClient* handle) {
 						handle->stateConfVectorPosition = 0;
 					}
 				}
-			} 
+			}  else {
+				if (handle->iface.reStart_raised) { 
+					{
+						/* Default exit sequence for state SyncLeader */
+						handle->stateConfVector[0] = ZBridgeClient_last_state;
+						handle->stateConfVectorPosition = 0;
+					}
+					{
+						/* The reactions of state null. */
+						{
+							/* The reactions of state null. */
+							{
+								/* The reactions of state null. */
+								{
+									/* The reactions of state null. */
+									{
+										/* The reactions of state null. */
+										{
+											/* 'default' enter sequence for state Connecting */
+											{
+												/* Entry action for state 'Connecting'. */
+												handle->iface.connect_raised = bool_true;
+											}
+											handle->stateConfVector[0] = ZBridgeClient_main_region_Connecting;
+											handle->stateConfVectorPosition = 0;
+										}
+									}
+								}
+							}
+						}
+					}
+				} 
+			}
 		}
 	}
 }
@@ -1553,7 +1629,30 @@ static void zBridgeClient_react_main_region_SyncAuction(ZBridgeClient* handle) {
 					handle->stateConfVector[0] = ZBridgeClient_main_region_SyncSB;
 					handle->stateConfVectorPosition = 0;
 				}
-			} 
+			}  else {
+				if (handle->iface.reStart_raised) { 
+					{
+						/* Default exit sequence for state SyncAuction */
+						handle->stateConfVector[0] = ZBridgeClient_last_state;
+						handle->stateConfVectorPosition = 0;
+					}
+					{
+						/* The reactions of state null. */
+						{
+							/* The reactions of state null. */
+							{
+								/* 'default' enter sequence for state Connecting */
+								{
+									/* Entry action for state 'Connecting'. */
+									handle->iface.connect_raised = bool_true;
+								}
+								handle->stateConfVector[0] = ZBridgeClient_main_region_Connecting;
+								handle->stateConfVectorPosition = 0;
+							}
+						}
+					}
+				} 
+			}
 		}
 	}
 }
@@ -1631,7 +1730,36 @@ static void zBridgeClient_react_main_region_SyncPlay(ZBridgeClient* handle) {
 					handle->stateConfVector[0] = ZBridgeClient_main_region_SyncSB;
 					handle->stateConfVectorPosition = 0;
 				}
-			} 
+			}  else {
+				if (handle->iface.reStart_raised) { 
+					{
+						/* Default exit sequence for state SyncPlay */
+						handle->stateConfVector[0] = ZBridgeClient_last_state;
+						handle->stateConfVectorPosition = 0;
+					}
+					{
+						/* The reactions of state null. */
+						{
+							/* The reactions of state null. */
+							{
+								/* The reactions of state null. */
+								{
+									/* The reactions of state null. */
+									{
+										/* 'default' enter sequence for state Connecting */
+										{
+											/* Entry action for state 'Connecting'. */
+											handle->iface.connect_raised = bool_true;
+										}
+										handle->stateConfVector[0] = ZBridgeClient_main_region_Connecting;
+										handle->stateConfVectorPosition = 0;
+									}
+								}
+							}
+						}
+					}
+				} 
+			}
 		}
 	}
 }
