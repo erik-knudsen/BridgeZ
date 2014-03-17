@@ -105,6 +105,7 @@ public:
     void setAndShowAllCards(bool hasWest, bool showWest, int *westCards, bool hasNorth, bool showNorth, int *northCards,
                             bool hasEast, bool showEast, int *eastCards, bool hasSouth, bool showSouth, int *southCards);
     void setAndShowCards(Seat seat, bool hasSeat, bool showSeat, int *cards);
+    void showCards(Seat seat, bool showSeat);
     void clearCard(Seat seat, int cardValue);
     void showClearedCard(Seat seat, int noCard);
     void enablePlayer(Seat player);

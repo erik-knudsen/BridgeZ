@@ -66,6 +66,7 @@ public:
     /*@{*/
     void newSession();
     void newDeal();
+    void showAllCards();
     void reBid();
     void rePlay();
     void undo();

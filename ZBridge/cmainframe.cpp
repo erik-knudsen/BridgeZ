@@ -695,7 +695,7 @@ void CMainFrame::on_actionConfiguration_Wizard_triggered()
 
 void CMainFrame::on_action_Expose_All_Cards_triggered()
 {
-
+    tableManager->showAllCards();
 }
 
 void CMainFrame::on_actionEnable_Analysis_Tracing_triggered()

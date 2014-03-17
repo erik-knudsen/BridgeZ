@@ -76,7 +76,7 @@
  *
  * <b>A PROTOCOL FOR INTER-PROGRAM COMMUNICATION</b>\n
 
- * Version 18  basic protocol (1 August 2005)\n
+ * Version 18  <b>basic protocol</b> (1 August 2005)\n
  * <i><b>Version 20  advanced protocol (1 January 2014)</b></i>\n\n
  *
  * <b>Introductory</b>\n
@@ -133,9 +133,9 @@
  *
  *   - <i><b>The Blue Chip Bridge protocol version 18 is called the basic protocol in the following. An enhanced
  *     protocol is also described. This protocol is called the advanced protocol (version 20). It is described
- *     in the text as deviations from the basic protocol. It eliminates the timing problems in the basic protocol
- *     and adds a few synchronization points to the client/server communication. It also makes it possible to
- *     perform undo and other similar functions. The deviations to the basic protocol are clearly marked in the
+ *     in the text as deviations from the basic protocol. It eliminates the race conditions in the basic
+ *     protocol and adds a few synchronization points to the client/server communication. It also makes it possible
+ *     to perform undo and other similar functions. The deviations to the basic protocol are clearly marked in the
  *     following text.</b></i>
  *
  *
@@ -143,6 +143,8 @@
  *
  * The following is an outline of the scheme of exchange of messages transmitted by the clients (<i>italic</i>) and the
  * Table Manager (<b>block</b>). The messages are summarised and are defined in detail in the following sections.\n
+ * <i><b>The message summary is for the basic protocol. Deviations for the advanced protocol is described in the
+ * explanation of the points in the summary.</b></i>
  *
  *   1.  <i>Connecting</i>
  *   2.  <b>Seated</b>
@@ -205,7 +207,13 @@
  * \n
  * <b>Dealing</b>\n
  *
- *   1. At the start of each board, the Table Manager sends to each player "Start of board".\n\n
+ *   1. At the start of each board, the Table Manager sends to each player "Start of board".\n
+ *      <i><b>The advanced protocol inserts a synchronization point for rounds following the first. This might
+ *      be when a round is finished and the next round is about to be started or when the user decides that a
+ *      new board should be started although the current is not finished. The synchronization eliminates race
+ *      conditions between Table Manager and clients. It also makes it possible to insert a waiting point for
+ *      interaction with the user (show results etc.). The synchronization protocol is described in the
+ *      appendix @ref synchronization "Synchronization Protocol".</b></i> \n\n
  *   2. Each player responds by sending "[Hand] ready for deal".  The message must not be sent before receipt
  *      of the "Start of board" message.\n\n
  *   3. The Table Manager (having set up a deal) sends information about the deal to each player.\n\n
@@ -220,10 +228,17 @@
  *      "[Player]’s cards : [player’s hand]"\n
  *      <i><b> The advanced protocol sends all cards to all hands.</b></i>\n
  *   7. A hand of cards is in the following format :
- *        - The first letter of the suit (S, H, D or C) followed by a space (ASCII #32). Preferably, the suits should be specified in that order (spades, hearts, diamonds, clubs).
- *        - The initial letter of the value of each card in the suit (A K Q J T 9 8 7 6 5 4 3 2). Note that 10 is represented as T so that each card is a single character. Each character is separated from the next by a space. The cards should be specified in descending order.
+ *        - The first letter of the suit (S, H, D or C) followed by a space (ASCII #32). Preferably, the suits
+ *          should be specified in that order (spades, hearts, diamonds, clubs).
+ *        - The initial letter of the value of each card in the suit (A K Q J T 9 8 7 6 5 4 3 2). Note that 10
+ *          is represented as T so that each card is a single character. Each character is separated from the next
+ *          by a space. The cards should be specified in descending order.
  *        - The last card in each suit is followed by a full-stop.
  *        - A void suit is indicated by a dash (ASCII #45).
+ *   8. <i><b>The advanced protocol inserts a synchronization point before the bidding phase (auction) is entered.
+ *      The synchronization eliminates race conditions between Table Manager and clients. It also makes it possible
+ *      to insert a waiting point for interaction with the user (Start Auction). The synchronization protocol is
+ *      described in the appendix @ref synchronization "Synchronization Protocol".</b></i>
  *
  *\n
  * <b>Bidding</b>\n
@@ -240,10 +255,16 @@
  *      manager re-transmits the alert and associated information to the bidder's opponents, but not to
  *      the bidder's partner.\n\n
  *   5. The next hand bids.\n\n
- *   6. This sequence continues until the auction is complete.\n\n
+ *   6. This sequence continues until the auction is complete.\n
+ *      <i><b>The advanced protocol inserts a synchronization point before the playing phase is entered.
+ *      The synchronization eliminates race conditions between Table Manager and clients. It also makes it possible
+ *      to insert a waiting point for interaction with the user (Start Play). The synchronization protocol is
+ *      described in the appendix @ref synchronization "Synchronization Protocol".</b></i>\n\n
  *   7. If the hand is passed out, each player sends "[Player] ready for deal" to the Table Manager and the
  *      sequence re-commences as above.\n\n
- *   8. If the Table Manager receives an illegal bid, it will ignore it and respond "Illegal bid" to the bidder.  It is assumed that playing programs will ensure that they do not make illegal bids so, at this stage in development, the protocol does not define what will then happen.
+ *   8. If the Table Manager receives an illegal bid, it will ignore it and respond "Illegal bid" to the bidder.
+ *      It is assumed that playing programs will ensure that they do not make illegal bids so, at this stage in
+ *      development, the protocol does not define what will then happen.
  *
  *\n
  * <b>Alerting (introductory note)</b>\n
@@ -394,7 +415,11 @@
  *       and sends the lead card to the next trick before the Table Manager has completed its housekeeping for
  *       the preceding trick. For the same reason, Table Manager will pause for one second at the end of each
  *       trick before sending the ".. to lead" message to enable the leader to the next trick to complete its
- *       end-of-trick housekeeping.\n\n
+ *       end-of-trick housekeeping.\n
+ *       <i><b>The advanced protocol handles the race condition described above differently. A synchronization
+ *       point is inserted at the end of each trick to eliminate race conditions between Table Manager and clients.
+ *       It also makes it possible to insert a waiting point for interaction with the user (Next Trick). The
+ *       synchronization protocol is described in the appendix @ref synchronization "Synchronization Protocol".</b></i>\n\n
  *   2.  Opening leader sends "[Player] plays [Card]" to the Table Manager.\n\n
  *   3.  [Card] is in two character format [A K Q J T 9 8 7 6 5 4 3 2] + [S H D C]. (Note : an alternative
  *       suggestion is [suit] + [value]).\n\n
@@ -491,6 +516,30 @@
  *   4. How to handle network time-outs and failures ?\n\n
  *   5. How to handle bidding/play out of turn ?\n\n
  *   6. How to handle illegal bids/cards ?\n\n
+ *
+ * @anchor synchronization
+ * <b>SYNCHRONIZATION PROTOCOL</b>\n
+ *
+ * The purpose of the synchronization protocol is to bring the Table Manager and the 4 clients into known states
+ * at the point of synchronization. The <b>basic protocol</b> relies on inserted time delays to avoid race conditions.
+ * The <b>advanced protocol</b> uses the synchronization protocol to assure that race conditions are handled
+ * properly.\n\n
+ *
+ * When entering a synchronization point the Table Manager sends "[Hand] ATTEMPT SYNCHRONIZE" to each client (player).
+ * It then awaits a "[Hand] ATTEMPT SYNCHRONIZE" from each client. When all clients have responded the Table Manager
+ * sends "[Hand] CONFIRM SYNCHRONIZE" to each client. The Table Manager then awaits a "[Hand] CONFIRM SYNCHRONIZE"
+ * from each client. The client may make a pause before sending "[Hand] CONFIRM SYNCHRONIZE". When the Table manager
+ * has received "[Hand] CONFIRM SYNCHRONIZE" from all four clients it sends "[Hand] ALL SYNCHRONIZED" to each client.\n\n
+ *
+ * When entering a synchronization point each client sends "[Hand] ATTEMPT SYNCHRONIZE" to the Table Manager. Each
+ * client then awaits a "[Hand] ATTEMPT SYNCHRONIZE" from the Table Manager. When the Table Manager has responded
+ * each client sends "[Hand] CONFIRM SYNCHRONIZE" to the Table Manager. The client may make a pause before sending
+ * "[Hand] CONFIRM SYNCHRONIZE". The client then awaits a "[Hand] ALL SYNCHRONIZED" from the Table Manager.\n\n
+ *
+ * For this protocol to work it relies on that the Table Manager continues to its next state before sending the
+ * "[Hand] ALL SYNCHRONIZED" to the clients. And it also relies on that the Table Managers next state does not
+ * have an entry action that sends to any of the clients. After "[Hand] ALL SYNCHRONIZED" is sent to the clients
+ * the Table Manager may perform actions which involve sending to clients.
  */
 
 /** @page exceptions Exceptions and asserts

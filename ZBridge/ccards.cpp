@@ -190,7 +190,8 @@ void CCards::setParent(QGraphicsWidget *widget)
 {
     for (int i = 0; i < 13; i++)
     {
-        cards[i].setVisible(widget != 0);
+        if (widget == 0)
+            cards[i].setVisible(false);
         cards[i].setParentItem(widget);
     }
 }

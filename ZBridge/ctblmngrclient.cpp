@@ -171,6 +171,24 @@ void CTblMngrClient::newSession()
     handle = actor->getHandle();
 }
 
+void CTblMngrClient::showAllCards()
+{
+    if (protocol == BASIC_PROTOCOL)
+        return;
+
+    showAll = !showAll;
+
+    bool showWest = showAll || ((actor->getSeat() == WEST_SEAT) && (actor->getActorType() == MANUAL_ACTOR));
+    bool showNorth = showAll || ((actor->getSeat() == NORTH_SEAT) && (actor->getActorType() == MANUAL_ACTOR));
+    bool showEast = showAll || ((actor->getSeat() == EAST_SEAT) && (actor->getActorType() == MANUAL_ACTOR));
+    bool showSouth = showAll || ((actor->getSeat() == SOUTH_SEAT) && (actor->getActorType() == MANUAL_ACTOR));
+
+    playView->showCards(WEST_SEAT, showWest);
+    playView->showCards(NORTH_SEAT, showNorth);
+    playView->showCards(EAST_SEAT, showEast);
+    playView->showCards(SOUTH_SEAT, showSouth);
+}
+
 //Slots for play view.
 //-----------------------------------------------------------------------------
 /**

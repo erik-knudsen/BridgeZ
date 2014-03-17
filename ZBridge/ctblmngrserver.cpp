@@ -636,6 +636,25 @@ void CTblMngrServer::newDeal()
     serverRunCycle();
 }
 
+void CTblMngrServer::showAllCards()
+{
+    if (protocol == BASIC_PROTOCOL)
+        return;
+
+    showAll = !showAll;
+
+    //Determine which cards to show in play view.
+    bool showWest = showAll || (doc->getSeatOptions().westActor == MANUAL_ACTOR);
+    bool showNorth = showAll || (doc->getSeatOptions().northActor == MANUAL_ACTOR);
+    bool showEast = showAll || (doc->getSeatOptions().eastActor == MANUAL_ACTOR);
+    bool showSouth = showAll || (doc->getSeatOptions().southActor == MANUAL_ACTOR);
+
+    playView->showCards(WEST_SEAT, showWest);
+    playView->showCards(NORTH_SEAT, showNorth);
+    playView->showCards(EAST_SEAT, showEast);
+    playView->showCards(SOUTH_SEAT, showSouth);
+}
+
 /**
  * @brief Rebid the current deal (from main menu).
  */

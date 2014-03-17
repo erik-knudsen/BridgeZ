@@ -51,6 +51,7 @@ public:
     /*@{*/
     virtual void newSession() = 0;
     virtual void newDeal();
+    virtual void showAllCards() = 0;
     virtual void reBid();
     virtual void rePlay();
     virtual void undo();

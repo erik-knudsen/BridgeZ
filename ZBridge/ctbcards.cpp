@@ -55,6 +55,7 @@ void CTBCards::prepareToDrawFaces(QGraphicsWidget *widget)
             {
                 cards[i].setPos(m * 50 + (j++) * 30, 0);
                 cards[i].setZValue(j);
+                cards[i].setVisible(!notVisibleValues.contains(value));
             }
         }
     }
@@ -92,6 +93,10 @@ void CTBCards::prepareToDrawBacks(QGraphicsWidget *widget)
         cards[i].setPos(i * 30 + 150, 0);
         cards[i].setZValue(i);
     }
+
+    int noInvisible = notVisibleValues.size();
+    for (i = 0; i < 13; i++)
+        cards[i].setVisible(i >= noInvisible);
 
     setParent(widget);
 }

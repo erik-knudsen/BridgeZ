@@ -599,6 +599,14 @@ void CPlayView::setAndShowCards(Seat seat, bool hasSeat, bool showSeat, int *car
     actorCards[pos]->showCards(true);
 }
 
+void CPlayView::showCards(Seat seat, bool showSeat)
+{
+    Position pos = seatToPos[seat];
+
+    actorCards[pos]->setShowBack(!showSeat);
+    actorCards[pos]->showCards(true);
+}
+
 /**
  * @brief Hide card from cards display of scene.
  * @param seat The seat with the card to hide.
