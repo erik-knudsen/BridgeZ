@@ -488,8 +488,7 @@ void CTblMngrClient::sDisableContinueSync(int syncState)
         break;
 
     case BUTTON_DEAL:
-        //Disable New Deal and Show All menu actions.
-        QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_NEW_DEAL , false));
+        //Disable Show All menu actions.
         QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_SHOW_ALL , false));
 
         playView->showInfoNextButton(false, BUTTON_DEAL);
@@ -662,12 +661,9 @@ void CTblMngrClient::receiveLine(QString line)
             playView->setAndShowAllCards(hasWest, showWest, currentCards[WEST_SEAT], hasNorth, showNorth, currentCards[NORTH_SEAT],
                        hasEast, showEast, currentCards[EAST_SEAT], hasSouth, showSouth, currentCards[SOUTH_SEAT]);
 
+            //Enable Show All menu actions.
             if (protocol == ADVANCED_PROTOCOL)
-            {
-                //Enable New Deal and Show All menu actions.
-                QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_NEW_DEAL , true));
                 QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_SHOW_ALL , true));
-            }
 
             //Set actor cards.
             actor->cards(currentCards);
