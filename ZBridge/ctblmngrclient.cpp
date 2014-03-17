@@ -459,6 +459,9 @@ void CTblMngrClient::sEnableContinueSync(int syncState)
         break;
 
     case BUTTON_DEAL:
+        //Disable Show All menu actions.
+        QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_SHOW_ALL , false));
+
         playView->showInfoNextButton(true, BUTTON_DEAL);
         break;
 
@@ -488,9 +491,6 @@ void CTblMngrClient::sDisableContinueSync(int syncState)
         break;
 
     case BUTTON_DEAL:
-        //Disable Show All menu actions.
-        QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_SHOW_ALL , false));
-
         playView->showInfoNextButton(false, BUTTON_DEAL);
         break;
 
