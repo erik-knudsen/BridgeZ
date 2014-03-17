@@ -154,6 +154,11 @@ void CMainFrame::customEvent(QEvent *event)
 
         switch (uiAction)
         {
+        //Enable/Disable for initial main menu entries.
+        case UPDATE_UI_INITIAL:
+            enableUIActionsInitial(param);
+            break;
+
         //Enable/Disable for initial main menu entries for table manager server.
         case UPDATE_UI_SERVER:
             enableUIActionsServer(param);
@@ -167,6 +172,16 @@ void CMainFrame::customEvent(QEvent *event)
         //Enable/Disable new session menu entry.
         case UPDATE_UI_NEW_SESSION:
             ui->actionNew_Session->setEnabled(param);
+            break;
+
+        //Enable/Disable new deal menu entry.
+        case UPDATE_UI_NEW_DEAL:
+            ui->action_Deal_New_Hand->setEnabled(param);
+            break;
+
+        //Enable/Disable show all menu entry.
+        case UPDATE_UI_SHOW_ALL:
+            ui->action_Expose_All_Cards->setEnabled(param);
             break;
         }
     }
@@ -219,7 +234,6 @@ void CMainFrame::enableUIActions(actionIndicator actions, bool advProtocol)
     ui->action_Undo_Trick->setEnabled(((actions == SERVER_ACTIONS) || (actions == CLIENT_ACTIONS)) && advProtocol);
     ui->actionClear_All->setEnabled((actions == SERVER_ACTIONS) || (actions == CLIENT_ACTIONS));
     ui->actionBidding_Play_History->setEnabled((actions == SERVER_ACTIONS) || (actions == CLIENT_ACTIONS));
-    ui->actionNew_Session->setEnabled((actions == SERVER_ACTIONS) || (actions == CLIENT_ACTIONS));
     ui->action_Bid_Rebid->setEnabled(((actions == SERVER_ACTIONS) || (actions == CLIENT_ACTIONS)) && advProtocol);
     ui->action_Restart_Hand->setEnabled(((actions == SERVER_ACTIONS) || (actions == CLIENT_ACTIONS)) && advProtocol);
     ui->actionClaim_All->setEnabled(((actions == SERVER_ACTIONS) || (actions == CLIENT_ACTIONS)) && advProtocol);
@@ -230,7 +244,10 @@ void CMainFrame::enableUIActions(actionIndicator actions, bool advProtocol)
     ui->actionAuto_Play_Card->setEnabled((actions == SERVER_ACTIONS) || (actions == CLIENT_ACTIONS));
     ui->actionAuto_Play_All_Cards->setEnabled((actions == SERVER_ACTIONS) || (actions == CLIENT_ACTIONS));
     ui->actionAuto_Play_to_Completion->setEnabled((actions == SERVER_ACTIONS) || (actions == CLIENT_ACTIONS));
-    ui->action_Expose_All_Cards->setEnabled(((actions == SERVER_ACTIONS) || (actions == CLIENT_ACTIONS)) && advProtocol);
+
+    ui->actionNew_Session->setEnabled(true);
+    ui->action_Deal_New_Hand->setEnabled(false);
+    ui->action_Expose_All_Cards->setEnabled(false);
 }
 
 /**

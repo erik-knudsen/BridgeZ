@@ -24,7 +24,8 @@
 #include <QString>
 
 //Update (enable/disable) UI (mostly menues) actions.
-enum UpdateUIAction { UPDATE_UI_INITIAL, UPDATE_UI_SERVER, UPDATE_UI_CLIENT, UPDATE_UI_NEW_SESSION};
+enum UpdateUIAction { UPDATE_UI_INITIAL, UPDATE_UI_SERVER, UPDATE_UI_CLIENT, UPDATE_UI_NEW_SESSION,
+                    UPDATE_UI_NEW_DEAL, UPDATE_UI_SHOW_ALL};
 
 //Message type in network protocol.
 enum MsgType { CONNECT_MSG, SEATED_MSG, RTNAMES_MSG, TEAMNAMES_MSG, RSBOARD_MSG, STARTOFBOARD_MSG, RDEALINFO_MSG,

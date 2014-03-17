@@ -95,7 +95,7 @@ CTblMngrServer::CTblMngrServer(CZBridgeDoc *doc, CPlayView *playView, QObject *p
     }
 
     //Enable/disable relevant menu actions.
-    QApplication::postEvent(parent, new UPDATE_UI_ACTION_Event(UPDATE_UI_INITIAL));
+    QApplication::postEvent(parent, new UPDATE_UI_ACTION_Event(UPDATE_UI_INITIAL, false));
 
     //Timer for supervision of continue button (only used in bascic protocol).
     leaderButton = new QTimer(this);
@@ -208,6 +208,13 @@ void CTblMngrServer::serverActions()
         //Show the cards in play view.
         playView->setAndShowAllCards(true, showWest, currentCards[WEST_SEAT], true, showNorth, currentCards[NORTH_SEAT],
                             true, showEast, currentCards[EAST_SEAT], true, showSouth, currentCards[SOUTH_SEAT]);
+
+        if (protocol == ADVANCED_PROTOCOL)
+        {
+            //Enable New Deal and Show All menu actions.
+            QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_NEW_DEAL , true));
+            QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_SHOW_ALL , true));
+        }
 
 
         bidHistory.resetBidHistory();
@@ -1076,7 +1083,11 @@ void CTblMngrServer::sEnableContinueSync(int syncState)
             playView->enableLeaderOnTable();
             break;
 
-        case BUTTON_DEAL:
+        case BUTTON_DEAL:          
+            //Disable New Deal and Show All menu actions.
+            QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_NEW_DEAL , false));
+            QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_SHOW_ALL , false));
+
             playView->showInfoNextButton(true, BUTTON_DEAL);
             break;
 

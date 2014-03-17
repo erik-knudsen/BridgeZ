@@ -363,6 +363,7 @@ void CPlayView::resetView()
     bottomInfoPlay->hide();
     bottomInfoAuctionButton->hide();
     bottomInfoPlayButton->hide();
+    bottomInfoNextButton->hide();
 
     //Hide bid dialog.
     m_pBidDlg->hide();

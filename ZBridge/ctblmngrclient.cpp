@@ -46,7 +46,7 @@ CTblMngrClient::CTblMngrClient(CZBridgeDoc *doc, CPlayView *playView, QObject *p
     this->playView = playView;
 
     //Enable/disable relevant menu actions.
-    QApplication::postEvent(parent, new UPDATE_UI_ACTION_Event(UPDATE_UI_INITIAL));
+    QApplication::postEvent(parent, new UPDATE_UI_ACTION_Event(UPDATE_UI_INITIAL, false));
 
     actor = 0;
 
@@ -488,6 +488,10 @@ void CTblMngrClient::sDisableContinueSync(int syncState)
         break;
 
     case BUTTON_DEAL:
+        //Disable New Deal and Show All menu actions.
+        QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_NEW_DEAL , false));
+        QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_SHOW_ALL , false));
+
         playView->showInfoNextButton(false, BUTTON_DEAL);
         break;
 
@@ -657,6 +661,13 @@ void CTblMngrClient::receiveLine(QString line)
             //Show cards in play view.
             playView->setAndShowAllCards(hasWest, showWest, currentCards[WEST_SEAT], hasNorth, showNorth, currentCards[NORTH_SEAT],
                        hasEast, showEast, currentCards[EAST_SEAT], hasSouth, showSouth, currentCards[SOUTH_SEAT]);
+
+            if (protocol == ADVANCED_PROTOCOL)
+            {
+                //Enable New Deal and Show All menu actions.
+                QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_NEW_DEAL , true));
+                QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_SHOW_ALL , true));
+            }
 
             //Set actor cards.
             actor->cards(currentCards);
