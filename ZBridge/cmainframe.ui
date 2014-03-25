@@ -46,8 +46,6 @@
     <property name="title">
      <string>Edit</string>
     </property>
-    <addaction name="action_Undo_Trick"/>
-    <addaction name="separator"/>
     <addaction name="actionCu_t"/>
     <addaction name="action_Copy"/>
     <addaction name="action_Paste"/>
@@ -76,6 +74,7 @@
     <addaction name="action_Deal_New_Hand"/>
     <addaction name="action_Play_Rubber"/>
     <addaction name="separator"/>
+    <addaction name="actionUndo"/>
     <addaction name="action_Bid_Rebid"/>
     <addaction name="action_Restart_Hand"/>
     <addaction name="separator"/>
@@ -213,7 +212,7 @@
    <addaction name="actionSave"/>
    <addaction name="actionPrint"/>
    <addaction name="separator"/>
-   <addaction name="action_Undo_Trick"/>
+   <addaction name="actionUndo"/>
    <addaction name="action_Restart_Hand"/>
    <addaction name="action_Bid_Rebid"/>
    <addaction name="separator"/>
@@ -347,21 +346,6 @@
   <action name="actionExit">
    <property name="text">
     <string>E&amp;xit</string>
-   </property>
-  </action>
-  <action name="action_Undo_Trick">
-   <property name="enabled">
-    <bool>false</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="images.qrc">
-     <normaloff>:/newPrefix/resources/EDITUNDO.BMP</normaloff>:/newPrefix/resources/EDITUNDO.BMP</iconset>
-   </property>
-   <property name="text">
-    <string>&amp;Undo Trick</string>
-   </property>
-   <property name="shortcut">
-    <string>Backspace</string>
    </property>
   </action>
   <action name="actionCu_t">
@@ -522,7 +506,7 @@
     <string>&amp;Deal New Hand</string>
    </property>
    <property name="shortcut">
-    <string>F2</string>
+    <string>F1</string>
    </property>
   </action>
   <action name="action_Play_Rubber">
@@ -549,7 +533,7 @@
      <normaloff>:/newPrefix/resources/BidHand.bmp</normaloff>:/newPrefix/resources/BidHand.bmp</iconset>
    </property>
    <property name="text">
-    <string>&amp;Bid/Rebid...</string>
+    <string>&amp;Rebid</string>
    </property>
    <property name="shortcut">
     <string>F3</string>
@@ -564,7 +548,7 @@
      <normaloff>:/newPrefix/resources/RestartPlay.bmp</normaloff>:/newPrefix/resources/RestartPlay.bmp</iconset>
    </property>
    <property name="text">
-    <string>&amp;Restart Hand</string>
+    <string>&amp;Replay</string>
    </property>
    <property name="shortcut">
     <string>F4</string>
@@ -1215,6 +1199,24 @@
    </property>
    <property name="text">
     <string>New Session</string>
+   </property>
+  </action>
+  <action name="actionUndo">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/newPrefix/resources/EDITUNDO.BMP</normaloff>:/newPrefix/resources/EDITUNDO.BMP</iconset>
+   </property>
+   <property name="text">
+    <string>Undo</string>
+   </property>
+   <property name="toolTip">
+    <string>Undo bid or trick</string>
+   </property>
+   <property name="shortcut">
+    <string>F2</string>
    </property>
   </action>
  </widget>

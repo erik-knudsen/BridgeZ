@@ -154,32 +154,47 @@ void CMainFrame::customEvent(QEvent *event)
 
         switch (uiAction)
         {
-        //Enable/Disable for initial main menu entries.
+            //Enable/Disable for initial main menu entries.
         case UPDATE_UI_INITIAL:
             enableUIActionsInitial(param);
             break;
 
-        //Enable/Disable for initial main menu entries for table manager server.
+            //Enable/Disable for initial main menu entries for table manager server.
         case UPDATE_UI_SERVER:
             enableUIActionsServer(param);
             break;
 
-        //Enable/Disable for initial main menu entries for table manager client.
+            //Enable/Disable for initial main menu entries for table manager client.
         case UPDATE_UI_CLIENT:
             enableUIActionsClient(param);
             break;
 
-        //Enable/Disable new session menu entry.
+            //Enable/Disable new session menu entry.
         case UPDATE_UI_NEW_SESSION:
             ui->actionNew_Session->setEnabled(param);
             break;
 
-        //Enable/Disable new deal menu entry.
+            //Enable/Disable new deal menu entry.
         case UPDATE_UI_NEW_DEAL:
             ui->action_Deal_New_Hand->setEnabled(param);
             break;
 
-        //Enable/Disable show all menu entry.
+            //Enable/Disable undo bid or trick menu entry.
+        case UPDATE_UI_UNDO:
+            ui->actionUndo->setEnabled(param);
+            break;
+
+            //Enable/Disable rebid menu entry.
+        case UPDATE_UI_REBID:
+            ui->action_Bid_Rebid->setEnabled(param);
+            break;
+
+            //Enable/Disable replay menu entry.
+        case UPDATE_UI_REPLAY:
+            ui->action_Restart_Hand->setEnabled(param);
+            break;
+
+            //Enable/Disable show all menu entry.
         case UPDATE_UI_SHOW_ALL:
             ui->action_Expose_All_Cards->setEnabled(param);
             break;
@@ -231,11 +246,8 @@ void CMainFrame::enableUIActions(actionIndicator actions, bool advProtocol)
 {
     ui->actionOpen->setEnabled((actions == INITIAL_ACTIONS) || (actions == SERVER_ACTIONS));
     ui->actionRecent_File->setEnabled((actions == INITIAL_ACTIONS) || (actions == SERVER_ACTIONS));
-    ui->action_Undo_Trick->setEnabled(((actions == SERVER_ACTIONS) || (actions == CLIENT_ACTIONS)) && advProtocol);
     ui->actionClear_All->setEnabled((actions == SERVER_ACTIONS) || (actions == CLIENT_ACTIONS));
     ui->actionBidding_Play_History->setEnabled((actions == SERVER_ACTIONS) || (actions == CLIENT_ACTIONS));
-    ui->action_Bid_Rebid->setEnabled(((actions == SERVER_ACTIONS) || (actions == CLIENT_ACTIONS)) && advProtocol);
-    ui->action_Restart_Hand->setEnabled(((actions == SERVER_ACTIONS) || (actions == CLIENT_ACTIONS)) && advProtocol);
     ui->actionClaim_All->setEnabled(((actions == SERVER_ACTIONS) || (actions == CLIENT_ACTIONS)) && advProtocol);
     ui->actionClaim_Contract->setEnabled(((actions == SERVER_ACTIONS) || (actions == CLIENT_ACTIONS)) && advProtocol);
     ui->actionConcede->setEnabled(((actions == SERVER_ACTIONS) || (actions == CLIENT_ACTIONS)) && advProtocol);
@@ -245,8 +257,14 @@ void CMainFrame::enableUIActions(actionIndicator actions, bool advProtocol)
     ui->actionAuto_Play_All_Cards->setEnabled((actions == SERVER_ACTIONS) || (actions == CLIENT_ACTIONS));
     ui->actionAuto_Play_to_Completion->setEnabled((actions == SERVER_ACTIONS) || (actions == CLIENT_ACTIONS));
 
+
     ui->actionNew_Session->setEnabled(true);
     ui->action_Deal_New_Hand->setEnabled(false);
+
+    ui->action_Bid_Rebid->setEnabled(false);
+    ui->action_Restart_Hand->setEnabled(false);
+    ui->actionUndo->setEnabled(false);
+
     ui->action_Expose_All_Cards->setEnabled(false);
 }
 
@@ -354,11 +372,6 @@ void CMainFrame::on_actionExit_triggered()
 
 }
 
-void CMainFrame::on_action_Undo_Trick_triggered()
-{
-
-}
-
 void CMainFrame::on_actionCu_t_triggered()
 {
 
@@ -450,6 +463,11 @@ void CMainFrame::on_action_Deal_New_Hand_triggered()
 }
 
 void CMainFrame::on_action_Play_Rubber_triggered()
+{
+
+}
+
+void CMainFrame::on_actionUndo_triggered()
 {
 
 }

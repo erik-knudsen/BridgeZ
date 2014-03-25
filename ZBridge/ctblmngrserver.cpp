@@ -1072,10 +1072,14 @@ void CTblMngrServer::sEnableContinueSync(int syncState)
         switch (syncState)
         {
         case BUTTON_AUCTION:
+            QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_UNDO , false));
+            QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_REBID , false));
+            QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_REPLAY , false));
             playView->showInfoAuctionButton(true, BUTTON_AUCTION);
             break;
 
         case BUTTON_PLAY:
+            QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_UNDO , false));
             playView->showInfoPlayButton(true, BUTTON_PLAY);
             break;
 
@@ -1084,7 +1088,10 @@ void CTblMngrServer::sEnableContinueSync(int syncState)
             break;
 
         case BUTTON_DEAL:          
-            //Disable New Deal and Show All menu actions.
+            //Disable Undo and Rebid and replay and New Deal and Show All menu actions.
+            QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_UNDO , false));
+            QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_REBID , false));
+            QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_REPLAY , false));
             QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_NEW_DEAL , false));
             QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_SHOW_ALL , false));
 
@@ -1110,10 +1117,14 @@ void CTblMngrServer::sDisableContinueSync(int syncState)
         {
         case BUTTON_AUCTION:
             playView->showInfoAuctionButton(false, BUTTON_AUCTION);
+            QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_UNDO , true));
+            QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_REBID , true));
             break;
 
         case BUTTON_PLAY:
             playView->showInfoPlayButton(false, BUTTON_PLAY);
+            QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_UNDO , true));
+            QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_REPLAY , true));
             break;
 
         case BUTTON_LEADER:

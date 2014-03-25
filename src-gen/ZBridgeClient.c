@@ -775,9 +775,14 @@ static void zBridgeClient_react_main_region_Bid(ZBridgeClient* handle) {
 					{
 						/* The reactions of state null. */
 						if ((handle->internal.noPasses == 4) && handle->internal.firstBidRound) { 
+							handle->iface.synchronize_raised = bool_true;
 							{
-								/* 'default' enter sequence for state Bid */
-								handle->stateConfVector[0] = ZBridgeClient_main_region_Bid;
+								/* 'default' enter sequence for state SyncSB */
+								{
+									/* Entry action for state 'SyncSB'. */
+									handle->iface.syncState = handle->internal.SS;
+								}
+								handle->stateConfVector[0] = ZBridgeClient_main_region_SyncSB;
 								handle->stateConfVectorPosition = 0;
 							}
 						}  else {

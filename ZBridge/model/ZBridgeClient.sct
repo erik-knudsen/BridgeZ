@@ -22,7 +22,7 @@
       <vertices xsi:type="sgraph:State" xmi:id="_lExPoNM2EeKSaNWh3hHQLA" name="Cards" incomingTransitions="_m4IDoNM2EeKSaNWh3hHQLA">
         <outgoingTransitions xmi:id="_-qK8gNM2EeKSaNWh3hHQLA" specification="cards/&#xD;&#xA;bidder = dealer;&#xD;&#xA;firstBidRound = true;&#xD;&#xA;lastBid = BID_NONE;&#xD;&#xA;noPasses = 0;&#xD;&#xA;raise synchronize" target="_YIAMEJS2EeOC89u96Qw0_w"/>
       </vertices>
-      <vertices xsi:type="sgraph:State" xmi:id="_1eCkINM2EeKSaNWh3hHQLA" specification="" name="Bid" incomingTransitions="_9JXwwNM5EeKSaNWh3hHQLA _SBqOQNM6EeKSaNWh3hHQLA _WvGJkNNBEeKSaNWh3hHQLA">
+      <vertices xsi:type="sgraph:State" xmi:id="_1eCkINM2EeKSaNWh3hHQLA" specification="" name="Bid" incomingTransitions="_9JXwwNM5EeKSaNWh3hHQLA _SBqOQNM6EeKSaNWh3hHQLA">
         <outgoingTransitions xmi:id="_cLnukNM_EeKSaNWh3hHQLA" specification="bidDone/&#xD;&#xA;bidVal = valueof(bidDone);&#xD;&#xA;curBidder = bidder;&#xD;&#xA;bidder += 1;&#xD;&#xA;bidder &amp;= 3" target="_bAnUANM_EeKSaNWh3hHQLA"/>
         <outgoingTransitions xmi:id="_GyVM4AZwEeOWZfIRx2XxPw" specification="//bidVal already set.&#xD;&#xA;undo [valueof(undo) >= 0]/&#xD;&#xA;lastBidder =(valueof(undo) + leader) &amp; 3;&#xD;&#xA;lastBid = bidVal;&#xD;&#xA;bidDouble = BID_NONE;&#xD;&#xA;noPasses = 0;&#xD;&#xA;bidder = (lastBidder + 1) &amp; 3;&#xD;&#xA;raise undoBid : valueof(undo)" target="_9sRw4NM2EeKSaNWh3hHQLA"/>
         <outgoingTransitions xmi:id="_NuiPYAaDEeOWZfIRx2XxPw" specification="//Rebid.&#xD;&#xA;undo [valueof(undo) == -1]/&#xD;&#xA;bidder = dealer;&#xD;&#xA;firstBidRound = true;&#xD;&#xA;lastBid = BID_NONE;&#xD;&#xA;noPasses = 0;&#xD;&#xA;raise undoBid : valueof(undo)" target="_9sRw4NM2EeKSaNWh3hHQLA"/>
@@ -38,7 +38,7 @@
         <outgoingTransitions xmi:id="_WIqRINNAEeKSaNWh3hHQLA" specification="else/firstBidRound = false;&#xD;&#xA;noPasses = 0" target="_VG_YwNNAEeKSaNWh3hHQLA"/>
       </vertices>
       <vertices xsi:type="sgraph:Choice" xmi:id="_BnPbgNNAEeKSaNWh3hHQLA" incomingTransitions="_DcOnMNNAEeKSaNWh3hHQLA">
-        <outgoingTransitions xmi:id="_WvGJkNNBEeKSaNWh3hHQLA" specification="[firstBidRound &amp;&amp;&#xD;&#xA;(noPasses == 4)]" target="_1eCkINM2EeKSaNWh3hHQLA"/>
+        <outgoingTransitions xmi:id="_WvGJkNNBEeKSaNWh3hHQLA" specification="[firstBidRound &amp;&amp;&#xD;&#xA;(noPasses == 4)]/&#xD;&#xA;raise synchronize" target="_karCUI2JEeOXd8SmXxh0bQ"/>
         <outgoingTransitions xmi:id="_1YwagNNBEeKSaNWh3hHQLA" specification="[!firstBidRound &amp;&amp; (noPasses == 3)]/&#xD;&#xA;declarer = lastBidder;&#xD;&#xA;dummy = (declarer + 2) &amp; 3;&#xD;&#xA;firstTrick = true;&#xD;&#xA;noTrick = 0;&#xD;&#xA;leader = (declarer + 1) &amp; 3;&#xD;&#xA;playNo = 0;&#xD;&#xA;player = leader;&#xD;&#xA;raise synchronize" target="_K7-vUJS5EeOC89u96Qw0_w"/>
         <outgoingTransitions xmi:id="_sj5dMNNCEeKSaNWh3hHQLA" specification="else" target="_9sRw4NM2EeKSaNWh3hHQLA"/>
       </vertices>
@@ -102,7 +102,7 @@
         <outgoingTransitions xmi:id="_7fBVYDGMEeOW7o9OPMOryQ" specification="[client != dummy]/&#xD;&#xA;raise readyForDummyCards" target="_t4QTINNlEeKSaNWh3hHQLA"/>
         <outgoingTransitions xmi:id="_8-_TUDGMEeOW7o9OPMOryQ" specification="else" target="_yG0P8NQCEeK24eatk0u_EA"/>
       </vertices>
-      <vertices xsi:type="sgraph:State" xmi:id="_karCUI2JEeOXd8SmXxh0bQ" specification="entry/&#xD;&#xA;syncState = SS" name="SyncSB" incomingTransitions="_R_rbwAdEEeOAr_XBoLMwEQ _InFMIActEeOAr_XBoLMwEQ _q3EM8JZbEeOscbePm0L34w _3gOF0JZbEeOscbePm0L34w">
+      <vertices xsi:type="sgraph:State" xmi:id="_karCUI2JEeOXd8SmXxh0bQ" specification="entry/&#xD;&#xA;syncState = SS" name="SyncSB" incomingTransitions="_R_rbwAdEEeOAr_XBoLMwEQ _InFMIActEeOAr_XBoLMwEQ _q3EM8JZbEeOscbePm0L34w _3gOF0JZbEeOscbePm0L34w _WvGJkNNBEeKSaNWh3hHQLA">
         <outgoingTransitions xmi:id="_8ibsgI2JEeOXd8SmXxh0bQ" specification="allSync" target="_dlXUQNM1EeKSaNWh3hHQLA"/>
         <outgoingTransitions xmi:id="_vKdnYJ8EEeOcQqDSz8isbQ" specification="reStart" target="_ouozcJ8EEeOcQqDSz8isbQ"/>
       </vertices>
@@ -602,15 +602,15 @@
       <bendpoints xsi:type="notation:RelativeBendpoints" xmi:id="_zQPEQtNAEeKSaNWh3hHQLA" points="[-5, -7, 69, 105]$[-72, -108, 2, 4]"/>
       <targetAnchor xsi:type="notation:IdentityAnchor" xmi:id="_388X4C_uEeOU1bf1vc7JQA" id="(0.6,0.8666666666666667)"/>
     </edges>
-    <edges xmi:id="_WvGwoNNBEeKSaNWh3hHQLA" type="Transition" element="_WvGJkNNBEeKSaNWh3hHQLA" source="_BnQCkNNAEeKSaNWh3hHQLA" target="_1eDLMNM2EeKSaNWh3hHQLA">
+    <edges xmi:id="_WvGwoNNBEeKSaNWh3hHQLA" type="Transition" element="_WvGJkNNBEeKSaNWh3hHQLA" source="_BnQCkNNAEeKSaNWh3hHQLA" target="_kawh4I2JEeOXd8SmXxh0bQ">
       <children xsi:type="notation:DecorationNode" xmi:id="_WvGwpNNBEeKSaNWh3hHQLA" type="TransitionExpression">
         <styles xsi:type="notation:ShapeStyle" xmi:id="_WvGwpdNBEeKSaNWh3hHQLA"/>
-        <layoutConstraint xsi:type="notation:Location" xmi:id="_WvGwptNBEeKSaNWh3hHQLA" x="-140" y="-20"/>
+        <layoutConstraint xsi:type="notation:Location" xmi:id="_WvGwptNBEeKSaNWh3hHQLA" x="-354" y="84"/>
       </children>
       <styles xsi:type="notation:ConnectorStyle" xmi:id="_WvGwodNBEeKSaNWh3hHQLA" lineColor="4210752"/>
       <styles xsi:type="notation:FontStyle" xmi:id="_WvGwo9NBEeKSaNWh3hHQLA" fontName="Verdana"/>
-      <bendpoints xsi:type="notation:RelativeBendpoints" xmi:id="_WvGwotNBEeKSaNWh3hHQLA" points="[-7, 0, 53, 390]$[-67, 0, -7, 390]$[-67, -381, -7, 9]"/>
-      <targetAnchor xsi:type="notation:IdentityAnchor" xmi:id="_QwbD4BDHEeOg8v4KpppdtQ" id="(0.49800796812749004,0.8392857142857143)"/>
+      <bendpoints xsi:type="notation:RelativeBendpoints" xmi:id="_WvGwotNBEeKSaNWh3hHQLA" points="[-7, 0, 174, 908]$[-187, 0, -6, 908]$[-187, -901, -6, 7]"/>
+      <targetAnchor xsi:type="notation:IdentityAnchor" xmi:id="_QwbD4BDHEeOg8v4KpppdtQ" id="(0.3114754098360656,0.9)"/>
     </edges>
     <edges xmi:id="_1YxBkNNBEeKSaNWh3hHQLA" type="Transition" element="_1YwagNNBEeKSaNWh3hHQLA" source="_BnQCkNNAEeKSaNWh3hHQLA" target="_K8BLkJS5EeOC89u96Qw0_w">
       <children xsi:type="notation:DecorationNode" xmi:id="_1YxBlNNBEeKSaNWh3hHQLA" type="TransitionExpression">

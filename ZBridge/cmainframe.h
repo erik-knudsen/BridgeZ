@@ -99,7 +99,6 @@ private slots:
     void on_actionProperties_triggered();
     void on_actionRecent_File_triggered();
     void on_actionExit_triggered();
-    void on_action_Undo_Trick_triggered();
     void on_actionCu_t_triggered();
     void on_action_Copy_triggered();
     void on_action_Paste_triggered();
@@ -114,6 +113,7 @@ private slots:
     void on_action_Refresh_Screen_triggered();
     void on_action_Deal_New_Hand_triggered();
     void on_action_Play_Rubber_triggered();
+    void on_actionUndo_triggered();
     void on_action_Bid_Rebid_triggered();
     void on_action_Restart_Hand_triggered();
     void on_actionClaim_All_triggered();
