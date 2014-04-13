@@ -67,9 +67,6 @@ public slots:
     virtual void buttonClicked(int button) = 0;
     virtual void bidValue(Bids bid) = 0;
     virtual void playValue(int card) = 0;
-    virtual void bidBackup() = 0;
-    virtual void bidHint() = 0;
-    virtual void bidRestart() = 0;
     virtual void bidClose() = 0;
     virtual void handClicked(Seat seat) = 0;
     /*@}*/
@@ -104,6 +101,7 @@ public slots:
     void sShowPlayerPlays(Seat player, int card);
     void sClearCardsOnTable();
     void sShowTricks(int ewTricks, int nsTricks);
+    void sUndoBid(int noBid);
 
     void sEnableBidder(Seat bidder, Bids lastBid, Bids doubleBid);
     void sDisableBidder(Seat bidder);

@@ -221,18 +221,6 @@ void CTblMngrClient::playValue(int card)
     actor->playValue(card);
 }
 
-void CTblMngrClient::bidBackup()
-{
-}
-
-void CTblMngrClient::bidHint()
-{
-}
-
-void CTblMngrClient::bidRestart()
-{
-}
-
 void CTblMngrClient::bidClose()
 {
 }

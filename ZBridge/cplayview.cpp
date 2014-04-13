@@ -66,9 +66,6 @@ CPlayView::CPlayView(QWidget *parent) :
     firstBidDialogShow = true;
 
     connect(m_pBidDlg, &CBidDialog::bidValue, this, &CPlayView::bidValue);
-    connect(m_pBidDlg, &CBidDialog::bidBackup, this, &CPlayView::bidBackup);
-    connect(m_pBidDlg, &CBidDialog::bidHint, this, &CPlayView::bidHint);
-    connect(m_pBidDlg, &CBidDialog::bidRestart, this, &CPlayView::bidRestart);
     connect(m_pBidDlg, &CBidDialog::bidClose, this, &CPlayView::bidClose);
 }
 
@@ -696,10 +693,11 @@ void CPlayView::showBid(Seat seat, Bids bid)
 
 /**
  * @brief Undo bid.
- * @param noBid Number of bids to undo.
+ * @param noBid Number of bids to keep.
  */
 void CPlayView::undoBid(int noBid)
 {
+    midInfoAuction->undoBid(noBid);
 }
 
 /**

@@ -53,9 +53,6 @@ void CTblMngr::createConnections()
     //From playview to tablemanager.
     connect(playView, &CPlayView::buttonClicked, this, &CTblMngr::buttonClicked);
     connect(playView, &CPlayView::bidValue, this, &CTblMngr::bidValue);
-    connect(playView, &CPlayView::bidBackup, this, &CTblMngr::bidBackup);
-    connect(playView, &CPlayView::bidHint, this, &CTblMngr::bidHint);
-    connect(playView, &CPlayView::bidRestart, this, &CTblMngr::bidRestart);
     connect(playView, &CPlayView::bidClose, this, &CTblMngr::bidClose);
     connect(playView, &CPlayView::handClicked, this, &CTblMngr::handClicked);
     connect(playView, &CPlayView::playValue, this, &CTblMngr::playValue);
@@ -188,6 +185,11 @@ void CTblMngr::sShowTricks(int ewTricks, int nsTricks)
 {
     playView->showEWTricks(ewTricks);
     playView->showNSTricks(nsTricks);
+}
+
+void CTblMngr::sUndoBid(int noBid)
+{
+    playView->undoBid(noBid);
 }
 
 /**

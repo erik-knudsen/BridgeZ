@@ -37,6 +37,7 @@ CBidDialog::CBidDialog(QWidget *parent) :
 {
     //Show dialog.
     ui->setupUi(this);
+    setWindowFlags(Qt::Window | Qt::CustomizeWindowHint | Qt::WindowTitleHint| Qt::WindowSystemMenuHint);
 
     setEnabled(false);
 
@@ -299,36 +300,6 @@ void CBidDialog::on_bidRedouble_clicked()
 void CBidDialog::bidClicked(Bids nBid)
 {
     emit bidValue(nBid);
-}
-
-/**
- * @brief Bid backup button was clicked.
- *
- * Emits a bidBackup signal.
- */
-void CBidDialog::on_bidBackup_clicked()
-{
-    emit bidBackup();
-}
-
-/**
- * @brief Bid hint button was clicked.
- *
- * Emits a bidHint signal.
- */
-void CBidDialog::on_bidHint_clicked()
-{
-    emit bidHint();
-}
-
-/**
- * @brief Bid restart button was clicked.
- *
- * Emits a bidRestart signal.
- */
-void CBidDialog::on_bidRestart_clicked()
-{
-    emit bidRestart();
 }
 
 /**

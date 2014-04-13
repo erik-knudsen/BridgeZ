@@ -50,9 +50,6 @@ public:
 
 signals:
     void bidValue(Bids bid);
-    void bidBackup();
-    void bidHint();
-    void bidRestart();
     void bidClose();
 
 private:
@@ -97,9 +94,6 @@ private slots:
     void on_bidPass_clicked();
     void on_bidDouble_clicked();
     void on_bidRedouble_clicked();
-    void on_bidBackup_clicked();
-    void on_bidHint_clicked();
-    void on_bidRestart_clicked();
 
 private:
     Ui::CBidDialog *ui;

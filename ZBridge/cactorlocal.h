@@ -101,6 +101,7 @@ signals:
     void sShowPlayerPlays(Seat player, int card);
     void sClearCardsOnTable();
     void sShowTricks(int ewTricks, int nsTricks);
+    void sUndoBid(int noBid);
 
     void sEnableBidder(Seat bidder, Bids lastBid, Bids doubleBid);
     void sDisableBidder(Seat bidder);

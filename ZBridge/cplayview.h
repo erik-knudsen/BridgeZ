@@ -146,9 +146,6 @@ public:
 signals:
     void bidValue(Bids bid);    /**< Next bid to give, as selected by user in the bid dialog. */
     void playValue(int card);   /**< Next card to play, as selected by user. */
-    void bidBackup();           /**< Request from user to back up bid. */
-    void bidHint();             /**< Requests from user to give hint about next bid. */
-    void bidRestart();          /**< Request from user to restart bidding from beginning. */
     void bidClose();            /**< Close bidding. */
     void buttonClicked(int button); /**< Button clicked. Auction or Play button. */
     void handClicked(Seat seat);    /**< Hand clicked. Requests to display info about hand. */

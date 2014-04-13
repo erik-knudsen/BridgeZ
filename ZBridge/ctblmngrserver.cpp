@@ -343,10 +343,10 @@ void CTblMngrServer::serverActions()
     {
         //Undo bid.
         int val = zBridgeServerIface_get_undoBid_value(&handle);
-        actors[WEST_SEAT]->undoBid(val);
-        actors[NORTH_SEAT]->undoBid( val);
-        actors[EAST_SEAT]->undoBid(val);
-        actors[SOUTH_SEAT]->undoBid(val);
+        actors[WEST_SEAT]->undoBid(val == -1);
+        actors[NORTH_SEAT]->undoBid(val == -1);
+        actors[EAST_SEAT]->undoBid(val == -1);
+        actors[SOUTH_SEAT]->undoBid(val == -1);
     }
 
     else if (zBridgeServerIface_israised_undoTrick(&handle))
@@ -768,18 +768,6 @@ void CTblMngrServer::playValue(int card)
 
     Seat seat = (player == dummy) ? (declarer) : (player);
     actors[seat]->playValue(card);
-}
-
-void CTblMngrServer::bidBackup()
-{
-}
-
-void CTblMngrServer::bidHint()
-{
-}
-
-void CTblMngrServer::bidRestart()
-{
 }
 
 void CTblMngrServer::bidClose()

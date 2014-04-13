@@ -80,9 +80,6 @@ public slots:
     void buttonClicked(int button);
     void bidValue(Bids bid);
     void playValue(int card);
-    void bidBackup();
-    void bidHint();
-    void bidRestart();
     void bidClose();
     void handClicked(Seat seat);
     /*@}*/

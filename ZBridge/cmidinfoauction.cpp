@@ -95,6 +95,29 @@ void CMidInfoAuction::showBid(Seat seat, Bids bid)
     if (last != 0) last->update();
 }
 
+void CMidInfoAuction::undoBid(int noBid)
+{
+    Seat nextBidder;
+
+    if (noBid == -1)
+        while (!bidValues.empty())
+        {
+            nextBidder = bidValues.last()->getSeat();
+            delete bidValues.last();
+            bidValues.removeLast();
+        }
+    else
+        while (bidValues.size() > (noBid + 1))
+        {
+            nextBidder = bidValues.last()->getSeat();
+            delete bidValues.last();
+            bidValues.removeLast();
+        }
+    line = (noBid == -1) ? 0 : (noBid / 4);
+
+    showBid(nextBidder, BID_PLAYER);
+}
+
 void CMidInfoAuction::reset()
 {
     for (int i = 0; i < bidValues.size(); i++)

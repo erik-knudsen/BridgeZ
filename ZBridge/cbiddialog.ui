@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>266</width>
-    <height>273</height>
+    <width>198</width>
+    <height>214</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -1115,120 +1115,11 @@
        </item>
       </layout>
      </item>
-     <item>
-      <layout class="QVBoxLayout" name="verticalLayout_4">
-       <item>
-        <widget class="QPushButton" name="help">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>60</width>
-           <height>25</height>
-          </size>
-         </property>
-         <property name="toolTip">
-          <string>Help on using this dialog</string>
-         </property>
-         <property name="text">
-          <string>Help...</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <spacer name="verticalSpacer">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
-        <widget class="QPushButton" name="bidBackup">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>60</width>
-           <height>25</height>
-          </size>
-         </property>
-         <property name="toolTip">
-          <string>Backup one bid</string>
-         </property>
-         <property name="text">
-          <string>Backup</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="bidHint">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>60</width>
-           <height>25</height>
-          </size>
-         </property>
-         <property name="toolTip">
-          <string>Get a bidding hint</string>
-         </property>
-         <property name="text">
-          <string>Hint...</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="bidRestart">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>60</width>
-           <height>25</height>
-          </size>
-         </property>
-         <property name="toolTip">
-          <string>Restart the bidding</string>
-         </property>
-         <property name="text">
-          <string>Restart</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
     </layout>
    </item>
   </layout>
  </widget>
  <tabstops>
-  <tabstop>help</tabstop>
-  <tabstop>bidBackup</tabstop>
-  <tabstop>bidHint</tabstop>
-  <tabstop>bidRestart</tabstop>
   <tabstop>bid2D</tabstop>
   <tabstop>bid2H</tabstop>
   <tabstop>bid2S</tabstop>

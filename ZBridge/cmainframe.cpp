@@ -469,7 +469,7 @@ void CMainFrame::on_action_Play_Rubber_triggered()
 
 void CMainFrame::on_actionUndo_triggered()
 {
-
+    tableManager->undo();
 }
 
 void CMainFrame::on_action_Bid_Rebid_triggered()

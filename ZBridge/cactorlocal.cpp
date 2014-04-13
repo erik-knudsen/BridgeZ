@@ -69,6 +69,7 @@ CActorLocal::CActorLocal(bool manual, QString teamName, Seat seat, int protocol,
     connect(this, &CActorLocal::sShowPlayerPlays, tableManager, &CTblMngr::sShowPlayerPlays);
     connect(this, &CActorLocal::sClearCardsOnTable, tableManager, &CTblMngr::sClearCardsOnTable);
     connect(this, &CActorLocal::sShowTricks, tableManager, &CTblMngr::sShowTricks);
+    connect(this, &CActorLocal::sUndoBid, tableManager, &CTblMngr::sUndoBid);
 
     connect(this, &CActorLocal::sEnableBidder, tableManager, &CTblMngr::sEnableBidder);
     connect(this, &CActorLocal::sDisableBidder, tableManager, &CTblMngr::sDisableBidder);
@@ -226,6 +227,11 @@ void CActorLocal::clientActions()
     else if (zBridgeClientIface_israised_undoBid(&handle))
     {
         //Undo bid.
+        if (showUser && protocol == ADVANCED_PROTOCOL)
+        {
+            int undo = zBridgeClientIface_get_undoBid_value(&handle);
+            emit sUndoBid(undo);
+        }
 
     }
 
@@ -636,24 +642,25 @@ void CActorLocal::dummyCards(int cards[])
 
 /**
  * @brief Undo bid message from table manager.
- * @param reBid Might start from scratch with bidding.
+ * @param reBid If true then start bidding from scratch.
  */
 void CActorLocal::undoBid(bool reBid)
 {
-    int lastBidder;
+    int undo;
 
     if (reBid)
     {
-        lastBidder = -1;
         bidAndPlay.resetBidHistory();
+        undo = -1;
     }
     else
     {
         Bids bid;
-        lastBidder = bidAndPlay.bidUndo(&bid);
-        zBridgeClientIface_set_bidVal(&handle, bid);
+        undo = bidAndPlay.bidUndo(&bid);
+        if (undo >= 0)
+            zBridgeClientIface_set_bidVal(&handle, bid);
     }
-    zBridgeClientIface_raise_undo(&handle, lastBidder);
+    zBridgeClientIface_raise_undo(&handle, undo);
     clientRunCycle();
 }
 

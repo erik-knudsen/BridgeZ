@@ -37,6 +37,7 @@ public:
     explicit CMidInfoAuction(QGraphicsWidget *parent = 0);
 
     void showBid(Seat seat, Bids bid);
+    void undoBid(int noBid);
     void reset();
     void connectBids(QObject *bidSignalStrategy) {this->bidSignalStrategy = bidSignalStrategy; }
 

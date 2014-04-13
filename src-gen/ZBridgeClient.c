@@ -936,7 +936,7 @@ static void zBridgeClient_react_main_region_Bid(ZBridgeClient* handle) {
 					handle->stateConfVector[0] = ZBridgeClient_last_state;
 					handle->stateConfVectorPosition = 0;
 				}
-				handle->internal.lastBidder = (handle->iface.undo_value + handle->internal.leader) & 3;
+				handle->internal.lastBidder = (handle->iface.undo_value + handle->iface.dealer) & 3;
 				handle->iface.lastBid = handle->iface.bidVal;
 				handle->iface.bidDouble = handle->internal.BID_NONE;
 				handle->internal.noPasses = 0;
