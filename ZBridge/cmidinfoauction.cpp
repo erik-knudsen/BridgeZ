@@ -113,7 +113,11 @@ void CMidInfoAuction::undoBid(int noBid)
             delete bidValues.last();
             bidValues.removeLast();
         }
-    line = (noBid == -1) ? 0 : (noBid / 4);
+
+    line = 0;
+    for (int i = 1; i < bidValues.size(); i++)
+        if (bidValues.at(i)->getSeat() == WEST_SEAT)
+            line++;
 
     showBid(nextBidder, BID_PLAYER);
 }
