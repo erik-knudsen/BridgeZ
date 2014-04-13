@@ -58,7 +58,7 @@ void CBidHistory::resetBidHistory()
  */
 int CBidHistory::undo(Bids *bid)
 {
-    if (bidList.length() <= 4)
+    if (bidList.size() <= 4)
     {
         resetBidHistory();
         return -1;
@@ -75,5 +75,5 @@ int CBidHistory::undo(Bids *bid)
         return -1;
 
     *bid = bidList.last().bid;
-    return bidList.length() - 1;
+    return bidList.size() - 1;
 }
