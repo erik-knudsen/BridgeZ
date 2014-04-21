@@ -1,0 +1,10 @@
+GeneratorModel for yakindu::c {
+
+	statechart ZBridgeServerSync {
+
+		feature Outlet {
+			targetProject = "ZBridge"
+			targetFolder = "src-gen"
+		}
+	}
+}
