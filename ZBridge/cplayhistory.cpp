@@ -30,6 +30,7 @@ CPlayHistory::CPlayHistory()
 void CPlayHistory::resetPlayHistory()
 {
     noTrick = 0;
+    finishedTrick = -1;
     ewTricks = 0;
     nsTricks = 0;
 
@@ -160,7 +161,7 @@ bool CPlayHistory::cardOk(int card, Seat seat, int cards[])
 }
 
 /**
- * @brief Determine the next leader.
+ * @brief Determine the next leader and update play stack.
  * @return The next leader.
  */
 Seat CPlayHistory::getNextLeader()
@@ -205,6 +206,11 @@ Seat CPlayHistory::getNextLeader()
         nsTricks++;
 
     currentLeader = nextLeader;
+
+    playStack[noTrick].ewTricks = ewTricks;
+    playStack[noTrick].nsTricks = nsTricks;
+    playStack[noTrick].nextLeader = nextLeader;
+    finishedTrick = noTrick;
 
     return nextLeader;
 }

@@ -53,6 +53,14 @@ private:
     Suit trumpSuit;
     int level;
     Bids bidDouble;
+    struct playStack
+    {
+        int ewTricks;
+        int nsTricks;
+        Seat nextLeader;
+    } playStack[13];
+    int finishedTrick;
+
     int play[4][13];
 };
 
