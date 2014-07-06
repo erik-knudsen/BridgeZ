@@ -18,6 +18,7 @@
  * The file implements the definition of the table manager server class.
  */
 
+#include <cassert>
 #include <QApplication>
 
 #include "../src-gen/sc_types.h"
@@ -343,20 +344,20 @@ void CTblMngrServer::serverActions()
     {
         //Undo bid.
         int val = zBridgeServerIface_get_undoBid_value(&handle);
-        actors[WEST_SEAT]->undoBid(val == -1);
-        actors[NORTH_SEAT]->undoBid(val == -1);
-        actors[EAST_SEAT]->undoBid(val == -1);
-        actors[SOUTH_SEAT]->undoBid(val == -1);
+        actors[WEST_SEAT]->undoBid(val == REBID);
+        actors[NORTH_SEAT]->undoBid(val == REBID);
+        actors[EAST_SEAT]->undoBid(val == REBID);
+        actors[SOUTH_SEAT]->undoBid(val == REBID);
     }
 
     else if (zBridgeServerIface_israised_undoTrick(&handle))
     {
         //Undo trick.
         int val = zBridgeServerIface_get_undoTrick_value(&handle);
-        actors[WEST_SEAT]->undoTrick(val);
-        actors[NORTH_SEAT]->undoTrick(val);
-        actors[EAST_SEAT]->undoTrick(val);
-        actors[SOUTH_SEAT]->undoTrick(val);
+        actors[WEST_SEAT]->undoTrick(val == REPLAY);
+        actors[NORTH_SEAT]->undoTrick(val == REPLAY);
+        actors[EAST_SEAT]->undoTrick(val == REPLAY);
+        actors[SOUTH_SEAT]->undoTrick(val == REPLAY);
     }
     else if (zBridgeServerIface_israised_newDealClients(&handle))
     {
@@ -667,7 +668,12 @@ void CTblMngrServer::showAllCards()
  */
 void CTblMngrServer::reBid()
 {
-    zBridgeServerIface_raise_undo(&handle, -1);
+    assert(zBridgeServer_isActive(&handle, ZBridgeServer_entry__Bidding));
+
+    playHistory.resetPlayHistory();
+    bidHistory.resetBidHistory();
+
+    zBridgeServerIface_raise_undo(&handle, REBID);
     serverRunCycle();
 }
 
@@ -676,11 +682,13 @@ void CTblMngrServer::reBid()
  */
 void CTblMngrServer::rePlay()
 {
-    if (zBridgeServer_isActive(&handle, ZBridgeServer_entry__Playing))
-    {
-        zBridgeServerIface_raise_undo(&handle, 0);
-        serverRunCycle();
-    }
+    assert(zBridgeServer_isActive(&handle, ZBridgeServer_entry__Playing) ||
+           zBridgeServer_isActive(&handle, ZBridgeServer_entry__SyncLeader));
+
+    playHistory.resetPlayHistory();
+
+    zBridgeServerIface_raise_undo(&handle, REPLAY);
+    serverRunCycle();
 }
 
 /**
@@ -688,22 +696,29 @@ void CTblMngrServer::rePlay()
  */
 void CTblMngrServer::undo()
 {
+    assert(zBridgeServer_isActive(&handle, ZBridgeServer_entry__Bidding) ||
+           zBridgeServer_isActive(&handle, ZBridgeServer_entry__Playing) ||
+           zBridgeServer_isActive(&handle, ZBridgeServer_entry__SyncLeader));
+
     if (zBridgeServer_isActive(&handle, ZBridgeServer_entry__Bidding))
     {
-        int bidder;
         Bids bidVal;
-        bidder = bidHistory.undo(&bidVal);
-        if (bidder != -1)
+        int bidder = bidHistory.undo(&bidVal);
+        if (bidder != REBID)
             zBridgeServerIface_set_bidVal(&handle, bidVal);
         zBridgeServerIface_raise_undo(&handle, bidder);
         serverRunCycle();
     }
     else if (zBridgeServer_isActive(&handle, ZBridgeServer_entry__Playing))
     {
-        int noTrick;
-
-        noTrick = playHistory.undo();
-        zBridgeServerIface_raise_undo(&handle, noTrick);
+        int leader = playHistory.undo(PT);
+        zBridgeServerIface_raise_undo(&handle, leader);
+        serverRunCycle();
+    }
+    else if (zBridgeServer_isActive(&handle, ZBridgeServer_entry__SyncLeader))
+    {
+        int leader = playHistory.undo(CT);
+        zBridgeServerIface_raise_undo(&handle, leader);
         serverRunCycle();
     }
 }
@@ -1068,6 +1083,7 @@ void CTblMngrServer::sEnableContinueSync(int syncState)
 
         case BUTTON_PLAY:
             QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_UNDO , false));
+            QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_REBID , false));
             playView->showInfoPlayButton(true, BUTTON_PLAY);
             break;
 
@@ -1112,6 +1128,7 @@ void CTblMngrServer::sDisableContinueSync(int syncState)
         case BUTTON_PLAY:
             playView->showInfoPlayButton(false, BUTTON_PLAY);
             QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_UNDO , true));
+            QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_REBID , true));
             QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_REPLAY , true));
             break;
 

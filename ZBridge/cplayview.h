@@ -114,7 +114,7 @@ public:
     /*@}*/
 
     /** @name Bid dialog group
-     * This group of methods Handles the bid dialog.
+     * This group of methods Handles the bid dialog and bid info in the mid info auction display.
      */
     /*@{*/
     void showBidDialog(bool show);

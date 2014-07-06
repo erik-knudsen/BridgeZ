@@ -195,6 +195,13 @@ const int BUTTON_PLAY = SP;
 const int BUTTON_LEADER = SL;
 const int BUTTON_DEAL = SS;
 
+//UNDO values (must be the same as in the Yakindu synchronization statecharts.
+//These values are used as undo values to determine the undo type (rebid, replay, complete trick or partial trick).
+const int REBID = -1;
+const int REPLAY = -2;
+const int CT = 1;
+const int PT = 2;
+
 //------------------------- Seat options. ---------------------------
 enum Seat { WEST_SEAT=0, NORTH_SEAT=1, EAST_SEAT=2, SOUTH_SEAT=3};
 enum Actor { MANUAL_ACTOR = 0, AUTO_ACTOR = 1, REMOTE_ACTOR = 2 };

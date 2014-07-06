@@ -54,14 +54,14 @@ void CBidHistory::resetBidHistory()
 /**
  * @brief Undo some of the bid history.
  * @param bid Last regular bidders bid (not double, redouble or pass) after one round (4) bids have been popped.
- * @return One less than number of bids given until (and including) last regular bidder or -1 if bid history gets reset.
+ * @return One less than number of bids given until (and including) last regular bidder or REBID if bid history gets reset.
  */
 int CBidHistory::undo(Bids *bid)
 {
     if (bidList.size() <= 4)
     {
         resetBidHistory();
-        return -1;
+        return REBID;
     }
     removeBid();
     removeBid();
@@ -72,7 +72,7 @@ int CBidHistory::undo(Bids *bid)
         removeBid();
 
     if (bidList.empty())
-        return -1;
+        return REBID;
 
     *bid = bidList.last().bid;
     return bidList.size() - 1;

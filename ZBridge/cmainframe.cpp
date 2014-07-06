@@ -474,12 +474,12 @@ void CMainFrame::on_actionUndo_triggered()
 
 void CMainFrame::on_action_Bid_Rebid_triggered()
 {
-
+    tableManager->reBid();
 }
 
 void CMainFrame::on_action_Restart_Hand_triggered()
 {
-
+    tableManager->rePlay();
 }
 
 void CMainFrame::on_actionClaim_All_triggered()

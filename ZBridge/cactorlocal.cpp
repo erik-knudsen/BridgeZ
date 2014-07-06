@@ -18,6 +18,7 @@
  * The file implements the definition of the actor local class.
  */
 
+#include <cassert>
 #include <QTimer>
 
 #include "CTblMngr.h"
@@ -101,27 +102,7 @@ void CActorLocal::startNewSession()
 void CActorLocal::clientActions()
 {
     //React to client out events.
-    if (zBridgeClientIface_israised_synchronize(&handle))
-    {
-        if (protocol == BASIC_PROTOCOL)
-        {
-            //There is no synchronization.
-            zBridgeClientIface_raise_allSync(&handle);
-            clientRunCycle();
-        }
-        else
-        {
-            //Synchronization of server and clients.
-            zBridgeClientSync_init(&syncHandle);
-            int syncState = zBridgeClientIface_get_syncState(&handle);
-            zBridgeClientSyncIface_set_syncState(&syncHandle, syncState);
-            synchronizing = true;
-            zBridgeClientSync_enter(&syncHandle);
-            clientSyncActions();
-        }
-    }
-
-    else if (zBridgeClientIface_israised_connect(&handle))
+    if (zBridgeClientIface_israised_connect(&handle))
     {
         //Connect to the server (upon entry of the statechart).
         emit sConnect(teamName ,  (Seat)zBridgeClientIface_get_client(&handle), protocol);
@@ -232,13 +213,16 @@ void CActorLocal::clientActions()
             int undo = zBridgeClientIface_get_undoBid_value(&handle);
             emit sUndoBid(undo);
         }
-
     }
 
     else if (zBridgeClientIface_israised_undoTrick(&handle))
     {
         //Undo trick.
-
+        if (showUser && protocol == ADVANCED_PROTOCOL)
+        {
+            int undo = zBridgeClientIface_get_undoTrick_value(&handle);
+//            emit sUndoTrick(undo);
+        }
     }
 
     //Can come together with undoBid and must be processed after undoBid.
@@ -287,6 +271,27 @@ void CActorLocal::clientActions()
         //Actor is ready for player to play a card.
         emit sReadyForPlayer((Seat)zBridgeClientIface_get_client(&handle),
                              (Seat)zBridgeClientIface_get_player(&handle), zBridgeClientIface_get_noTrick(&handle));
+    }
+
+    //Can Come after undoTrick.
+    if (zBridgeClientIface_israised_synchronize(&handle))
+    {
+        if (protocol == BASIC_PROTOCOL)
+        {
+            //There is no synchronization.
+            zBridgeClientIface_raise_allSync(&handle);
+            clientRunCycle();
+        }
+        else
+        {
+            //Synchronization of server and clients.
+            zBridgeClientSync_init(&syncHandle);
+            int syncState = zBridgeClientIface_get_syncState(&handle);
+            zBridgeClientSyncIface_set_syncState(&syncHandle, syncState);
+            synchronizing = true;
+            zBridgeClientSync_enter(&syncHandle);
+            clientSyncActions();
+        }
     }
 }
 
@@ -651,7 +656,7 @@ void CActorLocal::undoBid(bool reBid)
     if (reBid)
     {
         bidAndPlay.resetBidHistory();
-        undo = -1;
+        undo = REBID;
     }
     else
     {
@@ -670,17 +675,19 @@ void CActorLocal::undoBid(bool reBid)
  */
 void CActorLocal::undoTrick(bool rePlay)
 {
-    int noTrick;
+    int leader;
 
     if (rePlay)
     {
         bidAndPlay.resetPlayHistory();
-        noTrick = 0;
+        leader = REPLAY;
     }
-    else
-        noTrick = bidAndPlay.playUndo();
+    else if (zBridgeClient_isActive(&handle, ZBridgeClient_main_region_Play))
+        leader = bidAndPlay.playUndo(PT);
+    else if (zBridgeClient_isActive(&handle, ZBridgeClient_main_region_SyncLeader))
+        leader = bidAndPlay.playUndo(CT);
 
-    zBridgeClientIface_raise_undo(&handle, noTrick);
+    zBridgeClientIface_raise_undo(&handle, leader);
     clientRunCycle();
 }
 

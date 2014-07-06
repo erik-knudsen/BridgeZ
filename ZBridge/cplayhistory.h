@@ -41,7 +41,7 @@ public:
     int getNSTricks() { return nsTricks; }
 
     Seat getNextLeader();
-    int undo();
+    int undo(int undoType);
 
 private:
     int noTrick;

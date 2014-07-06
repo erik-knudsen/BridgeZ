@@ -66,7 +66,7 @@ public:
     int getNSTricks() { return playHistory.getNSTricks(); }
     void setPlay(Seat player, int trick, int cardVal) { playHistory.setPlay(player, trick, cardVal); }
     void resetPlayHistory() { playHistory.resetPlayHistory(); }
-    int playUndo() { return playHistory.undo(); }
+    int playUndo(int val) { return playHistory.undo(val); }
     int getNextPlay(Seat player, Seat dummySeat);
 
 private:

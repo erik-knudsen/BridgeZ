@@ -66,18 +66,13 @@ void CPlayHistory::setBidInfo(Bids bid, Bids bidDouble, Seat openLeader)
  */
 void CPlayHistory::setPlay(Seat player, int trick, int cardVal)
 {
-    if ((play[WEST_SEAT][noTrick] != -1) && (play[NORTH_SEAT][noTrick] != -1) &&
-            (play[EAST_SEAT][noTrick] != -1) && (play[SOUTH_SEAT][noTrick] != -1) &&
-            (trick == (noTrick + 1)) && (trick < 13))
-        noTrick++;
+    assert ((trick >= 0) && (trick < 13));
+    assert ((trick == noTrick) && (play[player][trick] == -1));
+    assert (!((play[WEST_SEAT][noTrick] == -1) && (play[NORTH_SEAT][noTrick] == -1) &&
+                    (play[EAST_SEAT][noTrick] == -1) && (play[SOUTH_SEAT][noTrick] == -1) &&
+                    (player != currentLeader)));
 
-    if ((play[WEST_SEAT][noTrick] == -1) && (play[NORTH_SEAT][noTrick] == -1) &&
-            (play[EAST_SEAT][noTrick] == -1) && (play[SOUTH_SEAT][noTrick] == -1) &&
-            (player != currentLeader))
-        return;
-
-    if ((trick == noTrick) && play[player][trick] == -1)
-        play[player][trick] = cardVal;
+    play[player][trick] = cardVal;
 }
 
 /**
@@ -88,10 +83,10 @@ void CPlayHistory::setPlay(Seat player, int trick, int cardVal)
  */
 int CPlayHistory::getPlayed(Seat seat, int cards[])
 {
-    for (int i = 0; i <= noTrick; i++)
+    for (int i = 0; i < noTrick; i++)
         cards[i] = play[seat][i];
 
-    return (cards[noTrick] == -1) ? noTrick : noTrick + 1;
+    return noTrick;
 }
 
 /**
@@ -211,14 +206,36 @@ Seat CPlayHistory::getNextLeader()
     playStack[noTrick].nsTricks = nsTricks;
     playStack[noTrick].nextLeader = nextLeader;
     finishedTrick = noTrick;
+    noTrick++;
 
     return nextLeader;
 }
 
 /**
  * @brief Undo trick.
+ * @param undoType PT: undo partial trick. CT: undo complete(finished) trick.
+ * @return REPLAY: start play from beginning otherwise the leader from the top of the play stack.
  */
-int CPlayHistory::undo()
+int CPlayHistory::undo(int undoType)
 {
-    return 0;
+    assert ((undoType == PT) && ((noTrick >= 0) && (noTrick < 13))||
+            (undoType == CT) && ((noTrick > 0) && (noTrick <= 13)));
+
+    if (undoType == CT)
+    {
+        noTrick--;
+        finishedTrick--;
+        if (noTrick > 0)
+        {
+            nsTricks = playStack[noTrick - 1].nsTricks;
+            ewTricks = playStack[noTrick - 1].ewTricks;
+            currentLeader = playStack[noTrick - 1].nextLeader;
+        }
+        else
+            nsTricks = ewTricks = 0;
+    }
+
+    play[WEST_SEAT][noTrick] = play[NORTH_SEAT][noTrick] = play[EAST_SEAT][noTrick] = play[SOUTH_SEAT][noTrick] = -1;
+
+    return (noTrick == 0) ? (REPLAY) : (playStack[noTrick - 1].nextLeader);
 }
