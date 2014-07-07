@@ -67,6 +67,7 @@ public:
     void setPlay(Seat player, int trick, int cardVal) { playHistory.setPlay(player, trick, cardVal); }
     void resetPlayHistory() { playHistory.resetPlayHistory(); }
     int playUndo(int val) { return playHistory.undo(val); }
+    int getNoTrick() { return playHistory.getNoTrick(); }
     int getNextPlay(Seat player, Seat dummySeat);
 
 private:

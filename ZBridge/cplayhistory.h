@@ -42,6 +42,7 @@ public:
 
     Seat getNextLeader();
     int undo(int undoType);
+    int getNoTrick() { return noTrick; }
 
 private:
     int noTrick;
@@ -59,7 +60,6 @@ private:
         int nsTricks;
         Seat nextLeader;
     } playStack[13];
-    int finishedTrick;
 
     int play[4][13];
 };

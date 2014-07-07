@@ -622,7 +622,7 @@ void CPlayView::clearCard(Seat seat, int cardValue)
 /**
  * @brief Show hidden card again in cards display of scene.
  * @param seat The seat with the card to shoe.
- * @param noCard Number of cards to show.
+ * @param noCard Number of cards to still not show.
  *
  * The cards are shown in opposite sequence of which they were hidden. This
  * is meant to be used when a trick is undone.
@@ -652,13 +652,37 @@ void CPlayView::disablePlayer(Seat player)
 
 /**
  * @brief Undo trick.
- * @param wCard
- * @param nCard
- * @param eCard
- * @param sCard
+ * @param noTrick Number of (complete) tricks to keep.
+ * @param dummy Dummy seat.
+ * @param nsTricks Number of NS tricks until now.
+ * @param ewTricks Number of EW tricks until now.
+ *
+ * Step back one trick in play view.
  */
-void CPlayView::undoTrick(int wCard, int nCard, int eCard, int sCard)
+void CPlayView::undoTrick(int noTrick, Seat dummy, int nsTricks, int ewTricks)
 {
+    //Clear cards in center  display.
+    clearCardsOnTable();
+
+    //Show cards undone in hands.
+    for (int i = 0; i < 4; i++)
+        actorCards[i]->showClearedCard(noTrick);
+
+    //Replay?
+    if (noTrick > 0)
+        //Not replay. Show cards for previous trick in center display.
+        for (int i = 0; i < 4; i++)
+        {
+            int card = actorCards[i]->getTopCard();
+            centerCards->showCardOnTable((Position)i, card);
+        }
+    else
+        //Replay. Hide dummy hand.
+        showCards(dummy, false);
+
+    //Show number of tricks after undo.
+    showNSTricks(nsTricks);
+    showEWTricks(ewTricks);
 }
 
 /**

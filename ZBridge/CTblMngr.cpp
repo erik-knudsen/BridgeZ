@@ -192,6 +192,11 @@ void CTblMngr::sUndoBid(int noBid)
     playView->undoBid(noBid);
 }
 
+void CTblMngr::sUndoTrick(int noTrick, Seat dummy, int nsTricks, int ewTricks)
+{
+    playView->undoTrick(noTrick, dummy, nsTricks, ewTricks);
+}
+
 /**
  * @brief Enable next bidder tod bid.
  * @param bidder The bidder.

@@ -71,6 +71,7 @@ CActorLocal::CActorLocal(bool manual, QString teamName, Seat seat, int protocol,
     connect(this, &CActorLocal::sClearCardsOnTable, tableManager, &CTblMngr::sClearCardsOnTable);
     connect(this, &CActorLocal::sShowTricks, tableManager, &CTblMngr::sShowTricks);
     connect(this, &CActorLocal::sUndoBid, tableManager, &CTblMngr::sUndoBid);
+    connect(this, &CActorLocal::sUndoTrick, tableManager, &CTblMngr::sUndoTrick);
 
     connect(this, &CActorLocal::sEnableBidder, tableManager, &CTblMngr::sEnableBidder);
     connect(this, &CActorLocal::sDisableBidder, tableManager, &CTblMngr::sDisableBidder);
@@ -219,10 +220,8 @@ void CActorLocal::clientActions()
     {
         //Undo trick.
         if (showUser && protocol == ADVANCED_PROTOCOL)
-        {
-            int undo = zBridgeClientIface_get_undoTrick_value(&handle);
-//            emit sUndoTrick(undo);
-        }
+            emit sUndoTrick(bidAndPlay.getNoTrick(), (Seat)((zBridgeClientIface_get_declarer(&handle) + 2) & 3),
+                            bidAndPlay.getNSTricks(), bidAndPlay.getEWTricks());
     }
 
     //Can come together with undoBid and must be processed after undoBid.

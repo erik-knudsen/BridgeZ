@@ -165,21 +165,20 @@ void CCards::clearCard(int cardValue)
 
 /**
  * @brief Show played card(s) again after having been cleared
- * @param noCard Number of cards to show (undo).
+ * @param noTrick Number of cards to keep cleared (undo remaining).
  */
-void CCards::showClearedCard(int noCard)
+void CCards::showClearedCard(int noTrick)
 {
-    for (int k = 0; k < noCard; k++)
-        if (!notVisibleValues.isEmpty())
+    while (notVisibleValues.size() > noTrick)
+    {
+        int cardValue = notVisibleValues.last();
+        int i = showBack ? notVisibleValues.size() : getCardIndex(cardValue);
+        if ( i < 13)
         {
-            int cardValue = notVisibleValues.last();
-            int i = showBack ? notVisibleValues.size() : getCardIndex(cardValue);
-            if ( i < 13)
-            {
-                cards[i].setVisible(true);
-                notVisibleValues.pop_back();
-            }
+            cards[i].setVisible(true);
+            notVisibleValues.pop_back();
         }
+    }
 }
 
 /**

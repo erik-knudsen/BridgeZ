@@ -30,7 +30,6 @@ CPlayHistory::CPlayHistory()
 void CPlayHistory::resetPlayHistory()
 {
     noTrick = 0;
-    finishedTrick = -1;
     ewTricks = 0;
     nsTricks = 0;
 
@@ -205,7 +204,6 @@ Seat CPlayHistory::getNextLeader()
     playStack[noTrick].ewTricks = ewTricks;
     playStack[noTrick].nsTricks = nsTricks;
     playStack[noTrick].nextLeader = nextLeader;
-    finishedTrick = noTrick;
     noTrick++;
 
     return nextLeader;
@@ -224,7 +222,6 @@ int CPlayHistory::undo(int undoType)
     if (undoType == CT)
     {
         noTrick--;
-        finishedTrick--;
         if (noTrick > 0)
         {
             nsTricks = playStack[noTrick - 1].nsTricks;

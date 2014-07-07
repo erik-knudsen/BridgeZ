@@ -50,7 +50,8 @@ public:
     void setTrumpSuit(Suit trumpSuit) { this->trumpSuit = trumpSuit;}
     void connectCards(QObject *cardSignalStrategy);
     void clearCard(int cardValue);
-    void showClearedCard(int noCard);
+    void showClearedCard(int noTrick);
+    int getTopCard() { return notVisibleValues.last(); }
 
 protected:
     void setCardValues();
