@@ -35,6 +35,7 @@ CTblMngr::CTblMngr(CPlayView *playView, QObject *parent) :
     this->playView = playView;
 
     showAll = false;
+    showDummy = false;
 
     createConnections();
 }
@@ -128,6 +129,9 @@ void CTblMngr::sShowCenter(Team vulnerable)
  */
 void CTblMngr::sShowDummyCards(Seat seat, int cards[])
 {
+    showDummy = true;
+    dummy = seat;
+
     playView->setAndShowCards(seat, true, true, cards);
 }
 
@@ -192,9 +196,14 @@ void CTblMngr::sUndoBid(int noBid)
     playView->undoBid(noBid);
 }
 
-void CTblMngr::sUndoTrick(int noTrick, Seat dummy, int nsTricks, int ewTricks)
+void CTblMngr::sUndoTrick(int noTrick, int nsTricks, int ewTricks)
 {
-    playView->undoTrick(noTrick, dummy, nsTricks, ewTricks);
+    bool hideDummy = showDummy && (noTrick == 0) && !showAll;
+
+    if (noTrick == 0)
+        showDummy = false;
+
+    playView->undoTrick(noTrick, nsTricks, ewTricks, dummy, hideDummy);
 }
 
 /**

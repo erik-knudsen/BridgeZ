@@ -220,8 +220,8 @@ void CActorLocal::clientActions()
     {
         //Undo trick.
         if (showUser && protocol == ADVANCED_PROTOCOL)
-            emit sUndoTrick(bidAndPlay.getNoTrick(), (Seat)((zBridgeClientIface_get_declarer(&handle) + 2) & 3),
-                            bidAndPlay.getNSTricks(), bidAndPlay.getEWTricks());
+            emit sUndoTrick(bidAndPlay.getNoTrick(), bidAndPlay.getNSTricks(),
+                            bidAndPlay.getEWTricks());
     }
 
     //Can come together with undoBid and must be processed after undoBid.

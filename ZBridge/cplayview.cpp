@@ -651,20 +651,27 @@ void CPlayView::disablePlayer(Seat player)
 }
 
 /**
- * @brief Undo trick.
+ * @brief Undo trick(s).
  * @param noTrick Number of (complete) tricks to keep.
+ * @param nsTricks Number of NS tricks after undo.
+ * @param ewTricks Number of EW tricks after undo.
  * @param dummy Dummy seat.
- * @param nsTricks Number of NS tricks until now.
- * @param ewTricks Number of EW tricks until now.
+ * @param hide If true then dummy should be hidden on replay.
  *
- * Step back one trick in play view.
+ * Step back tricks in play view. Tricks are unstacked and card(s) are
+ * returned to the hand from where they came. After undo the top level
+ * trick (4 cards) in the stack is shown in the center display. In case
+ * undo unstacks all tricks then dummy hand will be hidden if required.
+ *
  */
-void CPlayView::undoTrick(int noTrick, Seat dummy, int nsTricks, int ewTricks)
+void CPlayView::undoTrick(int noTrick, int nsTricks, int ewTricks, Seat dummy, bool hide)
 {
+    assert(noTrick == (nsTricks + ewTricks));
+
     //Clear cards in center  display.
     clearCardsOnTable();
 
-    //Show cards undone in hands.
+    //Unstack trick(s) and return to hands.
     for (int i = 0; i < 4; i++)
         actorCards[i]->showClearedCard(noTrick);
 
@@ -676,7 +683,7 @@ void CPlayView::undoTrick(int noTrick, Seat dummy, int nsTricks, int ewTricks)
             int card = actorCards[i]->getTopCard();
             centerCards->showCardOnTable((Position)i, card);
         }
-    else
+    else if (hide)
         //Replay. Hide dummy hand.
         showCards(dummy, false);
 

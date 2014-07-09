@@ -110,7 +110,7 @@ public:
     void showClearedCard(Seat seat, int noCard);
     void enablePlayer(Seat player);
     void disablePlayer(Seat player);
-    void undoTrick(int noTrick, Seat dummy, int nsTricks, int ewTricks);
+    void undoTrick(int noTrick, int nsTricks, int ewTricks, Seat dummy, bool hide);
     /*@}*/
 
     /** @name Bid dialog group

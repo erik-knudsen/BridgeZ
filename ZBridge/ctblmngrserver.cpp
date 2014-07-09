@@ -201,6 +201,7 @@ void CTblMngrServer::serverActions()
         }
 
         //Determine which cards to show in play view.
+        showDummy = false;
         bool showWest = showAll || (doc->getSeatOptions().westActor == MANUAL_ACTOR);
         bool showNorth = showAll || (doc->getSeatOptions().northActor == MANUAL_ACTOR);
         bool showEast = showAll || (doc->getSeatOptions().eastActor == MANUAL_ACTOR);
@@ -652,10 +653,14 @@ void CTblMngrServer::showAllCards()
     showAll = !showAll;
 
     //Determine which cards to show in play view.
-    bool showWest = showAll || (doc->getSeatOptions().westActor == MANUAL_ACTOR);
-    bool showNorth = showAll || (doc->getSeatOptions().northActor == MANUAL_ACTOR);
-    bool showEast = showAll || (doc->getSeatOptions().eastActor == MANUAL_ACTOR);
-    bool showSouth = showAll || (doc->getSeatOptions().southActor == MANUAL_ACTOR);
+    bool showWest = showAll || (doc->getSeatOptions().westActor == MANUAL_ACTOR) ||
+            (showDummy && (WEST_SEAT == dummy));
+    bool showNorth = showAll || (doc->getSeatOptions().northActor == MANUAL_ACTOR) ||
+            (showDummy && (NORTH_SEAT == dummy));
+    bool showEast = showAll || (doc->getSeatOptions().eastActor == MANUAL_ACTOR) ||
+            (showDummy && (EAST_SEAT == dummy));
+    bool showSouth = showAll || (doc->getSeatOptions().southActor == MANUAL_ACTOR) ||
+            (showDummy && (SOUTH_SEAT == dummy));
 
     playView->showCards(WEST_SEAT, showWest);
     playView->showCards(NORTH_SEAT, showNorth);

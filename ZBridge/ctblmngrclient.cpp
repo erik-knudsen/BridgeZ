@@ -178,10 +178,14 @@ void CTblMngrClient::showAllCards()
 
     showAll = !showAll;
 
-    bool showWest = showAll || ((actor->getSeat() == WEST_SEAT) && (actor->getActorType() == MANUAL_ACTOR));
-    bool showNorth = showAll || ((actor->getSeat() == NORTH_SEAT) && (actor->getActorType() == MANUAL_ACTOR));
-    bool showEast = showAll || ((actor->getSeat() == EAST_SEAT) && (actor->getActorType() == MANUAL_ACTOR));
-    bool showSouth = showAll || ((actor->getSeat() == SOUTH_SEAT) && (actor->getActorType() == MANUAL_ACTOR));
+    bool showWest = showAll || ((actor->getSeat() == WEST_SEAT) && (actor->getActorType() == MANUAL_ACTOR)) ||
+            (showDummy && (actor->getSeat() == dummy));
+    bool showNorth = showAll || ((actor->getSeat() == NORTH_SEAT) && (actor->getActorType() == MANUAL_ACTOR)) ||
+            (showDummy && (actor->getSeat() == dummy));
+    bool showEast = showAll || ((actor->getSeat() == EAST_SEAT) && (actor->getActorType() == MANUAL_ACTOR)) ||
+            (showDummy && (actor->getSeat() == dummy));
+    bool showSouth = showAll || ((actor->getSeat() == SOUTH_SEAT) && (actor->getActorType() == MANUAL_ACTOR)) ||
+            (showDummy && (actor->getSeat() == dummy));
 
     playView->showCards(WEST_SEAT, showWest);
     playView->showCards(NORTH_SEAT, showNorth);
@@ -630,6 +634,8 @@ void CTblMngrClient::receiveLine(QString line)
             if (protocol == ADVANCED_PROTOCOL)
             {
                 hasWest = hasNorth = hasEast = hasSouth = true;
+
+                showDummy = false;
 
                 showWest = showAll || ((actor->getSeat() == WEST_SEAT) && (actor->getActorType() == MANUAL_ACTOR));
                 showNorth = showAll || ((actor->getSeat() == NORTH_SEAT) && (actor->getActorType() == MANUAL_ACTOR));

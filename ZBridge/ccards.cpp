@@ -158,7 +158,10 @@ void CCards::clearCard(int cardValue)
 
     if (i < 13)
     {
+        //Clear card from hand.
         cards[i].setVisible(false);
+
+        //Stack card.
         notVisibleValues.append(cardValue);
     }
 }
@@ -169,6 +172,7 @@ void CCards::clearCard(int cardValue)
  */
 void CCards::showClearedCard(int noTrick)
 {
+    //Unstack card(s) and return card(s) to hand.
     while (notVisibleValues.size() > noTrick)
     {
         int cardValue = notVisibleValues.last();
