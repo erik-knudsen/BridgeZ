@@ -729,6 +729,7 @@ void CTblMngrClient::receiveLine(QString line)
         //Undo trick message was received.
         CUndoTrickMsg undoTrickMsg(line);
         actor->undoTrick(false);
+        break;
     }
 
     case REBID_MSG:
