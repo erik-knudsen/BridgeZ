@@ -341,9 +341,13 @@ void CTblMngrServer::serverActions()
         serverRunCycle();
     }
 
-    else if (zBridgeServerIface_israised_undoBid(&handle))
+    else if (zBridgeServerIface_israised_undoPlay(&handle) || zBridgeServerIface_israised_undoBid(&handle))
     {
-        //Undo bid.
+        //Undo play.
+        if (zBridgeServerIface_israised_undoPlay(&handle))
+            QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_REPLAY , false));
+
+        //Undo bid always follows undo play.
         int val = zBridgeServerIface_get_undoBid_value(&handle);
         actors[WEST_SEAT]->undoBid(val == REBID);
         actors[NORTH_SEAT]->undoBid(val == REBID);
@@ -673,7 +677,9 @@ void CTblMngrServer::showAllCards()
  */
 void CTblMngrServer::reBid()
 {
-    assert(zBridgeServer_isActive(&handle, ZBridgeServer_entry__Bidding));
+    assert(zBridgeServer_isActive(&handle, ZBridgeServer_entry__Bidding) ||
+        zBridgeServer_isActive(&handle, ZBridgeServer_entry__Playing) ||
+        zBridgeServer_isActive(&handle, ZBridgeServer_entry__SyncLeader));
 
     playHistory.resetPlayHistory();
     bidHistory.resetBidHistory();
@@ -781,7 +787,6 @@ void CTblMngrServer::bidValue(Bids bid)
  */
 void CTblMngrServer::playValue(int card)
 {
-
     Seat declarer = (Seat)zBridgeServerIface_get_declarer(&handle);
     Seat dummy = (Seat)zBridgeServerIface_get_dummy(&handle);
     Seat player = (Seat)zBridgeServerIface_get_player(&handle);

@@ -206,11 +206,20 @@ void CActorLocal::clientActions()
         }
     }
 
-    else if (zBridgeClientIface_israised_undoBid(&handle))
+    else if (zBridgeClientIface_israised_undoPlay(&handle) || zBridgeClientIface_israised_undoBid(&handle))
     {
         //Undo bid.
         if (showUser && protocol == ADVANCED_PROTOCOL)
         {
+            if (zBridgeClientIface_israised_undoPlay(&handle))
+            {
+                //Rebid when started playing.
+                emit sUndoTrick(0, 0, 0);
+                emit sShowAuction();
+                emit sShowBidDialog(true);
+            }
+
+            //undoBid always follows undoPlay.
             int undo = zBridgeClientIface_get_undoBid_value(&handle);
             emit sUndoBid(undo);
         }
@@ -654,6 +663,7 @@ void CActorLocal::undoBid(bool reBid)
 
     if (reBid)
     {
+        bidAndPlay.resetPlayHistory();  //Could come from play part.
         bidAndPlay.resetBidHistory();
         undo = REBID;
     }

@@ -80,6 +80,7 @@ typedef struct {
 	sc_integer  bidInfo_value;
 	sc_boolean undoBid_raised;
 	sc_integer  undoBid_value;
+	sc_boolean undoPlay_raised;
 	sc_boolean readyForDummy_raised;
 	sc_boolean clientPlays_raised;
 	sc_boolean playerPlays_raised;
@@ -200,6 +201,9 @@ extern sc_boolean zBridgeClientIface_israised_undoBid(ZBridgeClient* handle);
 
 /*! Gets the value of the out event 'undoBid' that is defined in the default interface scope. */ 
 extern sc_integer zBridgeClientIface_get_undoBid_value(ZBridgeClient* handle);
+
+/*! Checks if the out event 'undoPlay' that is defined in the default interface scope has been raised. */ 
+extern sc_boolean zBridgeClientIface_israised_undoPlay(ZBridgeClient* handle);
 
 /*! Checks if the out event 'readyForDummy' that is defined in the default interface scope has been raised. */ 
 extern sc_boolean zBridgeClientIface_israised_readyForDummy(ZBridgeClient* handle);

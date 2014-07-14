@@ -281,6 +281,7 @@ static void clearOutEvents(ZBridgeClient* handle) {
 	handle->iface.rBid_raised = bool_false;
 	handle->iface.bidInfo_raised = bool_false;
 	handle->iface.undoBid_raised = bool_false;
+	handle->iface.undoPlay_raised = bool_false;
 	handle->iface.readyForDummy_raised = bool_false;
 	handle->iface.clientPlays_raised = bool_false;
 	handle->iface.readyForDummyCards_raised = bool_false;
@@ -513,6 +514,9 @@ sc_boolean zBridgeClientIface_israised_undoBid(ZBridgeClient* handle) {
 sc_integer zBridgeClientIface_get_undoBid_value(ZBridgeClient* handle) {
 	//TODO: Check if event is not raised
 	return handle->iface.undoBid_value;
+}
+sc_boolean zBridgeClientIface_israised_undoPlay(ZBridgeClient* handle) {
+	return handle->iface.undoPlay_raised;
 }
 sc_boolean zBridgeClientIface_israised_readyForDummy(ZBridgeClient* handle) {
 	return handle->iface.readyForDummy_raised;
@@ -1397,6 +1401,7 @@ static void zBridgeClient_react_main_region_Play(ZBridgeClient* handle) {
 							}
 							{
 								/* The reactions of state null. */
+								handle->iface.undoPlay_raised = bool_true;
 								{
 									/* The reactions of state null. */
 									handle->iface.bidder = handle->iface.dealer;
@@ -1437,6 +1442,7 @@ static void zBridgeClient_react_main_region_Play(ZBridgeClient* handle) {
 								{
 									/* The reactions of state null. */
 									handle->internal.leader = handle->iface.undo_value;
+									handle->iface.player = handle->internal.leader;
 									handle->internal.playNo = 0;
 									handle->iface.synchronize_raised = bool_true;
 									{
@@ -1684,6 +1690,7 @@ static void zBridgeClient_react_main_region_SyncLeader(ZBridgeClient* handle) {
 							}
 							{
 								/* The reactions of state null. */
+								handle->iface.undoPlay_raised = bool_true;
 								{
 									/* The reactions of state null. */
 									handle->iface.bidder = handle->iface.dealer;
@@ -1725,6 +1732,7 @@ static void zBridgeClient_react_main_region_SyncLeader(ZBridgeClient* handle) {
 								{
 									/* The reactions of state null. */
 									handle->internal.leader = handle->iface.undo_value;
+									handle->iface.player = handle->internal.leader;
 									handle->internal.playNo = 0;
 									handle->iface.synchronize_raised = bool_true;
 									{

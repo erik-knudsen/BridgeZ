@@ -99,7 +99,7 @@ void CMidInfoAuction::undoBid(int noBid)
 {
     Seat nextBidder;
 
-    if (noBid == -1)
+    if (noBid == REBID)
         while (!bidValues.empty())
         {
             nextBidder = bidValues.last()->getSeat();

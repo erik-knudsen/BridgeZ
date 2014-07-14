@@ -724,6 +724,7 @@ static void clearOutEvents(ZBridgeServer* handle) {
 	handle->iface.bidDone_raised = bool_false;
 	handle->iface.bidInfo_raised = bool_false;
 	handle->iface.undoBid_raised = bool_false;
+	handle->iface.undoPlay_raised = bool_false;
 	handle->iface.playerToLead_raised = bool_false;
 	handle->iface.dummyToLead_raised = bool_false;
 	handle->iface.sendPlayerPlays_raised = bool_false;
@@ -1255,6 +1256,9 @@ sc_boolean zBridgeServerIface_israised_undoBid(ZBridgeServer* handle) {
 sc_integer zBridgeServerIface_get_undoBid_value(ZBridgeServer* handle) {
 	//TODO: Check if event is not raised
 	return handle->iface.undoBid_value;
+}
+sc_boolean zBridgeServerIface_israised_undoPlay(ZBridgeServer* handle) {
+	return handle->iface.undoPlay_raised;
 }
 sc_boolean zBridgeServerIface_israised_playerToLead(ZBridgeServer* handle) {
 	return handle->iface.playerToLead_raised;
@@ -5140,6 +5144,7 @@ static void zBridgeServer_react_entry__Playing_West_Wait(ZBridgeServer* handle) 
 			}
 			{
 				/* The reactions of state null. */
+				handle->iface.undoPlay_raised = bool_true;
 				{
 					/* The reactions of state null. */
 					handle->iface.bidder = handle->iface.dealer;
@@ -5934,6 +5939,7 @@ static void zBridgeServer_react_entry__Playing_West_Sync(ZBridgeServer* handle) 
 			}
 			{
 				/* The reactions of state null. */
+				handle->iface.undoPlay_raised = bool_true;
 				{
 					/* The reactions of state null. */
 					handle->iface.bidder = handle->iface.dealer;
@@ -7939,6 +7945,7 @@ static void zBridgeServer_react_entry__SyncLeader(ZBridgeServer* handle) {
 							}
 							{
 								/* The reactions of state null. */
+								handle->iface.undoPlay_raised = bool_true;
 								{
 									/* The reactions of state null. */
 									handle->iface.bidder = handle->iface.dealer;

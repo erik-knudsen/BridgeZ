@@ -36,6 +36,8 @@ void CPlayHistory::resetPlayHistory()
     for (int i = 0; i < 4; i++)
         for (int j = 0; j < 13; j++)
             play[i][j] = -1;
+
+    currentLeader = openLeader;
 }
 
 /**
@@ -46,7 +48,6 @@ void CPlayHistory::resetPlayHistory()
  */
 void CPlayHistory::setBidInfo(Bids bid, Bids bidDouble, Seat openLeader)
 {
-    resetPlayHistory();
 
     this->bid = bid;
     trumpSuit = BID_SUIT(bid);
@@ -54,7 +55,8 @@ void CPlayHistory::setBidInfo(Bids bid, Bids bidDouble, Seat openLeader)
 
     this->bidDouble = bidDouble;
     this->openLeader = openLeader;
-    currentLeader = openLeader;
+
+    resetPlayHistory();
 }
 
 /**
@@ -229,7 +231,10 @@ int CPlayHistory::undo(int undoType)
             currentLeader = playStack[noTrick - 1].nextLeader;
         }
         else
+        {
             nsTricks = ewTricks = 0;
+            currentLeader = openLeader;
+        }
     }
 
     play[WEST_SEAT][noTrick] = play[NORTH_SEAT][noTrick] = play[EAST_SEAT][noTrick] = play[SOUTH_SEAT][noTrick] = -1;
