@@ -2830,7 +2830,7 @@
     <edges xmi:id="_s5r6EJZdEeOscbePm0L34w" type="Transition" element="_s5oPsJZdEeOscbePm0L34w" source="_raNxsJS4EeOC89u96Qw0_w" target="_M-bgcchvEeKrXbuGQ7I4Jw">
       <children xsi:type="notation:DecorationNode" xmi:id="_s5r6FJZdEeOscbePm0L34w" type="TransitionExpression">
         <styles xsi:type="notation:ShapeStyle" xmi:id="_s5r6FZZdEeOscbePm0L34w"/>
-        <layoutConstraint xsi:type="notation:Location" xmi:id="_s5r6FpZdEeOscbePm0L34w" x="-142" y="-28"/>
+        <layoutConstraint xsi:type="notation:Location" xmi:id="_s5r6FpZdEeOscbePm0L34w" x="-93" y="-27"/>
       </children>
       <styles xsi:type="notation:ConnectorStyle" xmi:id="_s5r6EZZdEeOscbePm0L34w" lineColor="4210752"/>
       <styles xsi:type="notation:FontStyle" xmi:id="_s5r6E5ZdEeOscbePm0L34w" fontName="Verdana"/>

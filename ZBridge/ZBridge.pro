@@ -81,7 +81,11 @@ SOURCES +=\
     clrcards.cpp \
     ctbcards.cpp \
     ../src-gen/ZBridgeClientSync.c \
-    ../src-gen/ZBridgeServerSync.c
+    ../src-gen/ZBridgeServerSync.c \
+    cmainscoredialog.cpp \
+    cauctionandplaydialog.cpp \
+    crubberscoredialog.cpp \
+    ccomparescoredialog.cpp
 
 HEADERS  += cmainframe.h \
     czbridgedoc.h \
@@ -155,7 +159,11 @@ HEADERS  += cmainframe.h \
     ctbcards.h \
     ZBridge_documentation.h \
     ../src-gen/ZBridgeClientSync.h \
-    ../src-gen/ZBridgeServerSync.h
+    ../src-gen/ZBridgeServerSync.h \
+    cmainscoredialog.h \
+    cauctionandplaydialog.h \
+    crubberscoredialog.h \
+    ccomparescoredialog.h
 
 FORMS    += cmainframe.ui \
     cfilepropertiesdialog.ui \
@@ -179,6 +187,10 @@ FORMS    += cmainframe.ui \
     cbiddialog.ui \
     cseatconfiguration.ui \
     cbidoptions.ui \
-    cnewconvention.ui
+    cnewconvention.ui \
+    cmainscoredialog.ui \
+    cauctionandplaydialog.ui \
+    crubberscoredialog.ui \
+    ccomparescoredialog.ui
 
 RESOURCES = images.qrc
