@@ -8,14 +8,14 @@
 
 // prototypes of all internal functions
 
-static void zBridgeClientSync_entryaction(ZBridgeClientSync* handle);
-static void zBridgeClientSync_exitaction(ZBridgeClientSync* handle);
+static void zBridgeClientSync_enact_SequenceImpl(ZBridgeClientSync* handle);
+static void zBridgeClientSync_exact_SequenceImpl(ZBridgeClientSync* handle);
 static void zBridgeClientSync_react_main_region_WaitForAttemptSync(ZBridgeClientSync* handle);
-static void zBridgeClientSync_react_main_region__final_0(ZBridgeClientSync* handle);
+static void zBridgeClientSync_react_main_region__final_(ZBridgeClientSync* handle);
 static void zBridgeClientSync_react_main_region_WaitForConfirmSync(ZBridgeClientSync* handle);
 static void zBridgeClientSync_react_main_region_WaitForAllSync(ZBridgeClientSync* handle);
-static void clearInEvents(ZBridgeClientSync* handle);
-static void clearOutEvents(ZBridgeClientSync* handle);
+static void zBridgeClientSync_clearInEvents(ZBridgeClientSync* handle);
+static void zBridgeClientSync_clearOutEvents(ZBridgeClientSync* handle);
 
 
 void zBridgeClientSync_init(ZBridgeClientSync* handle)
@@ -28,95 +28,69 @@ void zBridgeClientSync_init(ZBridgeClientSync* handle)
 	
 	handle->stateConfVectorPosition = 0;
 
-clearInEvents(handle);
-clearOutEvents(handle);
+	zBridgeClientSync_clearInEvents(handle);
+	zBridgeClientSync_clearOutEvents(handle);
 
-	// TODO: initialize all events ...
-
-	{
-		/* Default init sequence for statechart ZBridgeClientSync */
-		handle->iface.syncState = 0;
-	}
+	/* Default init sequence for statechart ZBridgeClientSync */
+	handle->iface.syncState = 0;
 
 }
 
 void zBridgeClientSync_enter(ZBridgeClientSync* handle)
 {
-	{
-		/* Default enter sequence for statechart ZBridgeClientSync */
-		zBridgeClientSync_entryaction(handle);
-		{
-			/* 'default' enter sequence for region main region */
-			{
-				/* Default react sequence for initial entry  */
-				{
-					/* 'default' enter sequence for state WaitForAttemptSync */
-					{
-						/* Entry action for state 'WaitForAttemptSync'. */
-						handle->iface.sendAttemptSync_raised = bool_true;
-					}
-					handle->stateConfVector[0] = ZBridgeClientSync_main_region_WaitForAttemptSync;
-					handle->stateConfVectorPosition = 0;
-				}
-			}
-		}
-	}
+	/* Default enter sequence for statechart ZBridgeClientSync */
+	zBridgeClientSync_enact_SequenceImpl(handle);
+	/* 'default' enter sequence for region main region */
+	/* Default react sequence for initial entry  */
+	/* 'default' enter sequence for state WaitForAttemptSync */
+	/* Entry action for state 'WaitForAttemptSync'. */
+	handle->iface.sendAttemptSync_raised = bool_true;
+	handle->stateConfVector[0] = ZBridgeClientSync_main_region_WaitForAttemptSync;
+	handle->stateConfVectorPosition = 0;
 }
 
 void zBridgeClientSync_exit(ZBridgeClientSync* handle)
 {
-	{
-		/* Default exit sequence for statechart ZBridgeClientSync */
-		{
-			/* Default exit sequence for region main region */
-			/* Handle exit of all possible states (of main region) at position 0... */
-			switch(handle->stateConfVector[ 0 ]) {
-				case ZBridgeClientSync_main_region_WaitForAttemptSync : {
-					{
-						/* Default exit sequence for state WaitForAttemptSync */
-						handle->stateConfVector[0] = ZBridgeClientSync_last_state;
-						handle->stateConfVectorPosition = 0;
-					}
-					break;
-				}
-				case ZBridgeClientSync_main_region__final_ : {
-					{
-						/* Default exit sequence for final state. */
-						handle->stateConfVector[0] = ZBridgeClientSync_last_state;
-						handle->stateConfVectorPosition = 0;
-					}
-					break;
-				}
-				case ZBridgeClientSync_main_region_WaitForConfirmSync : {
-					{
-						/* Default exit sequence for state WaitForConfirmSync */
-						handle->stateConfVector[0] = ZBridgeClientSync_last_state;
-						handle->stateConfVectorPosition = 0;
-					}
-					break;
-				}
-				case ZBridgeClientSync_main_region_WaitForAllSync : {
-					{
-						/* Default exit sequence for state WaitForAllSync */
-						handle->stateConfVector[0] = ZBridgeClientSync_last_state;
-						handle->stateConfVectorPosition = 0;
-					}
-					break;
-				}
-				default: break;
-			}
+	/* Default exit sequence for statechart ZBridgeClientSync */
+	/* Default exit sequence for region main region */
+	/* Handle exit of all possible states (of main region) at position 0... */
+	switch(handle->stateConfVector[ 0 ]) {
+		case ZBridgeClientSync_main_region_WaitForAttemptSync : {
+			/* Default exit sequence for state WaitForAttemptSync */
+			handle->stateConfVector[0] = ZBridgeClientSync_last_state;
+			handle->stateConfVectorPosition = 0;
+			break;
 		}
-		zBridgeClientSync_exitaction(handle);
+		case ZBridgeClientSync_main_region__final_ : {
+			/* Default exit sequence for final state. */
+			handle->stateConfVector[0] = ZBridgeClientSync_last_state;
+			handle->stateConfVectorPosition = 0;
+			break;
+		}
+		case ZBridgeClientSync_main_region_WaitForConfirmSync : {
+			/* Default exit sequence for state WaitForConfirmSync */
+			handle->stateConfVector[0] = ZBridgeClientSync_last_state;
+			handle->stateConfVectorPosition = 0;
+			break;
+		}
+		case ZBridgeClientSync_main_region_WaitForAllSync : {
+			/* Default exit sequence for state WaitForAllSync */
+			handle->stateConfVector[0] = ZBridgeClientSync_last_state;
+			handle->stateConfVectorPosition = 0;
+			break;
+		}
+		default: break;
 	}
+	zBridgeClientSync_exact_SequenceImpl(handle);
 }
 
-static void clearInEvents(ZBridgeClientSync* handle) {
+static void zBridgeClientSync_clearInEvents(ZBridgeClientSync* handle) {
 	handle->iface.attemptSync_raised = bool_false;
 	handle->iface.confirmSync_raised = bool_false;
 	handle->iface.allSync_raised = bool_false;
 }
 
-static void clearOutEvents(ZBridgeClientSync* handle) {
+static void zBridgeClientSync_clearOutEvents(ZBridgeClientSync* handle) {
 	handle->iface.sendAttemptSync_raised = bool_false;
 	handle->iface.sendConfirmSync_raised = bool_false;
 	handle->iface.okSync_raised = bool_false;
@@ -124,7 +98,7 @@ static void clearOutEvents(ZBridgeClientSync* handle) {
 
 void zBridgeClientSync_runCycle(ZBridgeClientSync* handle) {
 	
-	clearOutEvents(handle);
+	zBridgeClientSync_clearOutEvents(handle);
 	
 	for (handle->stateConfVectorPosition = 0;
 		handle->stateConfVectorPosition < ZBRIDGECLIENTSYNC_MAX_ORTHOGONAL_STATES;
@@ -136,7 +110,7 @@ void zBridgeClientSync_runCycle(ZBridgeClientSync* handle) {
 			break;
 		}
 		case ZBridgeClientSync_main_region__final_ : {
-			zBridgeClientSync_react_main_region__final_0(handle);
+			zBridgeClientSync_react_main_region__final_(handle);
 			break;
 		}
 		case ZBridgeClientSync_main_region_WaitForConfirmSync : {
@@ -152,7 +126,7 @@ void zBridgeClientSync_runCycle(ZBridgeClientSync* handle) {
 		}
 	}
 	
-	clearInEvents(handle);
+	zBridgeClientSync_clearInEvents(handle);
 }
 
 
@@ -200,88 +174,62 @@ sc_integer zBridgeClientSyncIface_get_syncState(ZBridgeClientSync* handle) {
 void zBridgeClientSyncIface_set_syncState(ZBridgeClientSync* handle, sc_integer value) {
 	handle->iface.syncState = value;
 }
-		
+
 // implementations of all internal functions
 
 /* Entry action for statechart 'ZBridgeClientSync'. */
-static void zBridgeClientSync_entryaction(ZBridgeClientSync* handle) {
-	{
-		/* Entry action for statechart 'ZBridgeClientSync'. */
-	}
+static void zBridgeClientSync_enact_SequenceImpl(ZBridgeClientSync* handle) {
 }
 
 /* Exit action for state 'ZBridgeClientSync'. */
-static void zBridgeClientSync_exitaction(ZBridgeClientSync* handle) {
-	{
-		/* Exit action for state 'ZBridgeClientSync'. */
-	}
+static void zBridgeClientSync_exact_SequenceImpl(ZBridgeClientSync* handle) {
 }
 
 /* The reactions of state WaitForAttemptSync. */
 static void zBridgeClientSync_react_main_region_WaitForAttemptSync(ZBridgeClientSync* handle) {
-	{
-		/* The reactions of state WaitForAttemptSync. */
-		if (handle->iface.attemptSync_raised) { 
-			{
-				/* Default exit sequence for state WaitForAttemptSync */
-				handle->stateConfVector[0] = ZBridgeClientSync_last_state;
-				handle->stateConfVectorPosition = 0;
-			}
-			handle->iface.sendAttemptSync_raised = bool_true;
-			{
-				/* 'default' enter sequence for state WaitForConfirmSync */
-				handle->stateConfVector[0] = ZBridgeClientSync_main_region_WaitForConfirmSync;
-				handle->stateConfVectorPosition = 0;
-			}
-		} 
-	}
+	/* The reactions of state WaitForAttemptSync. */
+	if (handle->iface.attemptSync_raised) { 
+		/* Default exit sequence for state WaitForAttemptSync */
+		handle->stateConfVector[0] = ZBridgeClientSync_last_state;
+		handle->stateConfVectorPosition = 0;
+		handle->iface.sendAttemptSync_raised = bool_true;
+		/* 'default' enter sequence for state WaitForConfirmSync */
+		handle->stateConfVector[0] = ZBridgeClientSync_main_region_WaitForConfirmSync;
+		handle->stateConfVectorPosition = 0;
+	} 
 }
 
 /* The reactions of state null. */
-static void zBridgeClientSync_react_main_region__final_0(ZBridgeClientSync* handle) {
-	{
-		/* The reactions of state null. */
-	}
+static void zBridgeClientSync_react_main_region__final_(ZBridgeClientSync* handle) {
+	/* The reactions of state null. */
 }
 
 /* The reactions of state WaitForConfirmSync. */
 static void zBridgeClientSync_react_main_region_WaitForConfirmSync(ZBridgeClientSync* handle) {
-	{
-		/* The reactions of state WaitForConfirmSync. */
-		if (handle->iface.confirmSync_raised) { 
-			{
-				/* Default exit sequence for state WaitForConfirmSync */
-				handle->stateConfVector[0] = ZBridgeClientSync_last_state;
-				handle->stateConfVectorPosition = 0;
-			}
-			handle->iface.sendConfirmSync_raised = bool_true;
-			{
-				/* 'default' enter sequence for state WaitForAllSync */
-				handle->stateConfVector[0] = ZBridgeClientSync_main_region_WaitForAllSync;
-				handle->stateConfVectorPosition = 0;
-			}
-		} 
-	}
+	/* The reactions of state WaitForConfirmSync. */
+	if (handle->iface.confirmSync_raised) { 
+		/* Default exit sequence for state WaitForConfirmSync */
+		handle->stateConfVector[0] = ZBridgeClientSync_last_state;
+		handle->stateConfVectorPosition = 0;
+		handle->iface.sendConfirmSync_raised = bool_true;
+		/* 'default' enter sequence for state WaitForAllSync */
+		handle->stateConfVector[0] = ZBridgeClientSync_main_region_WaitForAllSync;
+		handle->stateConfVectorPosition = 0;
+	} 
 }
 
 /* The reactions of state WaitForAllSync. */
 static void zBridgeClientSync_react_main_region_WaitForAllSync(ZBridgeClientSync* handle) {
-	{
-		/* The reactions of state WaitForAllSync. */
-		if (handle->iface.allSync_raised) { 
-			{
-				/* Default exit sequence for state WaitForAllSync */
-				handle->stateConfVector[0] = ZBridgeClientSync_last_state;
-				handle->stateConfVectorPosition = 0;
-			}
-			handle->iface.okSync_raised = bool_true;
-			{
-				/* Default enter sequence for state null */
-				handle->stateConfVector[0] = ZBridgeClientSync_main_region__final_;
-				handle->stateConfVectorPosition = 0;
-			}
-		} 
-	}
+	/* The reactions of state WaitForAllSync. */
+	if (handle->iface.allSync_raised) { 
+		/* Default exit sequence for state WaitForAllSync */
+		handle->stateConfVector[0] = ZBridgeClientSync_last_state;
+		handle->stateConfVectorPosition = 0;
+		handle->iface.okSync_raised = bool_true;
+		/* Default enter sequence for state null */
+		handle->stateConfVector[0] = ZBridgeClientSync_main_region__final_;
+		handle->stateConfVectorPosition = 0;
+	} 
 }
 
 

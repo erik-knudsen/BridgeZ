@@ -85,7 +85,8 @@ SOURCES +=\
     cmainscoredialog.cpp \
     cauctionandplaydialog.cpp \
     crubberscoredialog.cpp \
-    ccomparescoredialog.cpp
+    ccomparescoredialog.cpp \
+    cgamesdoc.cpp
 
 HEADERS  += cmainframe.h \
     czbridgedoc.h \
@@ -163,7 +164,8 @@ HEADERS  += cmainframe.h \
     cmainscoredialog.h \
     cauctionandplaydialog.h \
     crubberscoredialog.h \
-    ccomparescoredialog.h
+    ccomparescoredialog.h \
+    cgamesdoc.h
 
 FORMS    += cmainframe.ui \
     cfilepropertiesdialog.ui \

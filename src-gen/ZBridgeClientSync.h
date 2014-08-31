@@ -13,10 +13,10 @@ extern "C" {
 
 //! enumeration of all states 
 typedef enum {
-	ZBridgeClientSync_main_region_WaitForAttemptSync ,
-	ZBridgeClientSync_main_region__final_ ,
-	ZBridgeClientSync_main_region_WaitForConfirmSync ,
-	ZBridgeClientSync_main_region_WaitForAllSync ,
+	ZBridgeClientSync_main_region_WaitForAttemptSync,
+	ZBridgeClientSync_main_region__final_,
+	ZBridgeClientSync_main_region_WaitForConfirmSync,
+	ZBridgeClientSync_main_region_WaitForAllSync,
 	ZBridgeClientSync_last_state
 } ZBridgeClientSyncStates;
 
@@ -28,7 +28,7 @@ typedef struct {
 	sc_boolean sendConfirmSync_raised;
 	sc_boolean allSync_raised;
 	sc_boolean okSync_raised;
-	sc_integer  syncState;
+	sc_integer syncState;
 } ZBridgeClientSyncIface;
 
 

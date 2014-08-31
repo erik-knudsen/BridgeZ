@@ -13,52 +13,52 @@ extern "C" {
 
 //! enumeration of all states 
 typedef enum {
-	ZBridgeServerSync_entry_SynChronizeServer ,
-	ZBridgeServerSync_entry_SynChronizeServer_West_WaitForAttemptSync ,
-	ZBridgeServerSync_entry_SynChronizeServer_West_waitForConfirmSync ,
-	ZBridgeServerSync_entry_SynChronizeServer_North_WaitForAttemptSync ,
-	ZBridgeServerSync_entry_SynChronizeServer_North_waitForConfirmSync ,
-	ZBridgeServerSync_entry_SynChronizeServer_East_WaitForAttemptSync ,
-	ZBridgeServerSync_entry_SynChronizeServer_East_waitForConfirmSync ,
-	ZBridgeServerSync_entry_SynChronizeServer_South_WaitForAttemptSync ,
-	ZBridgeServerSync_entry_SynChronizeServer_South_waitForConfirmSync ,
-	ZBridgeServerSync_entry_ClientConfirm ,
-	ZBridgeServerSync_entry_ClientConfirm_West_WaitForConfirmSync ,
-	ZBridgeServerSync_entry_ClientConfirm_West_WaitForSync ,
-	ZBridgeServerSync_entry_ClientConfirm_North_WaitForConfirmSync ,
-	ZBridgeServerSync_entry_ClientConfirm_North_WaitForSync ,
-	ZBridgeServerSync_entry_ClientConfirm_East_WaitForConfirmSync ,
-	ZBridgeServerSync_entry_ClientConfirm_East_WaitForSync ,
-	ZBridgeServerSync_entry_ClientConfirm_South_WaitForConfirmSync ,
-	ZBridgeServerSync_entry_ClientConfirm_South_WaitForSync ,
-	ZBridgeServerSync_entry__final_ ,
-	ZBridgeServerSync_entry_AttemptSync ,
+	ZBridgeServerSync_entry_SynChronizeServer,
+	ZBridgeServerSync_entry_SynChronizeServer_West_WaitForAttemptSync,
+	ZBridgeServerSync_entry_SynChronizeServer_West_waitForConfirmSync,
+	ZBridgeServerSync_entry_SynChronizeServer_North_WaitForAttemptSync,
+	ZBridgeServerSync_entry_SynChronizeServer_North_waitForConfirmSync,
+	ZBridgeServerSync_entry_SynChronizeServer_East_WaitForAttemptSync,
+	ZBridgeServerSync_entry_SynChronizeServer_East_waitForConfirmSync,
+	ZBridgeServerSync_entry_SynChronizeServer_South_WaitForAttemptSync,
+	ZBridgeServerSync_entry_SynChronizeServer_South_waitForConfirmSync,
+	ZBridgeServerSync_entry_ClientConfirm,
+	ZBridgeServerSync_entry_ClientConfirm_West_WaitForConfirmSync,
+	ZBridgeServerSync_entry_ClientConfirm_West_WaitForSync,
+	ZBridgeServerSync_entry_ClientConfirm_North_WaitForConfirmSync,
+	ZBridgeServerSync_entry_ClientConfirm_North_WaitForSync,
+	ZBridgeServerSync_entry_ClientConfirm_East_WaitForConfirmSync,
+	ZBridgeServerSync_entry_ClientConfirm_East_WaitForSync,
+	ZBridgeServerSync_entry_ClientConfirm_South_WaitForConfirmSync,
+	ZBridgeServerSync_entry_ClientConfirm_South_WaitForSync,
+	ZBridgeServerSync_entry__final_,
+	ZBridgeServerSync_entry_AttemptSync,
 	ZBridgeServerSync_last_state
 } ZBridgeServerSyncStates;
 
 //! Type definition of the data structure for the ZBridgeServerSyncInternal interface scope.
 typedef struct {
-	sc_integer  W;
-	sc_integer  N;
-	sc_integer  E;
-	sc_integer  S;
-	sc_boolean  confirmWest;
-	sc_boolean  confirmNorth;
-	sc_boolean  confirmEast;
-	sc_boolean  confirmSouth;
+	sc_integer W;
+	sc_integer N;
+	sc_integer E;
+	sc_integer S;
+	sc_boolean confirmWest;
+	sc_boolean confirmNorth;
+	sc_boolean confirmEast;
+	sc_boolean confirmSouth;
 } ZBridgeServerSyncInternal;
 
 //! Type definition of the data structure for the ZBridgeServerSyncIface interface scope.
 typedef struct {
 	sc_boolean attemptSync_raised;
-	sc_integer  attemptSync_value;
+	sc_integer attemptSync_value;
 	sc_boolean continue_raised;
 	sc_boolean sendAttemptSync_raised;
-	sc_integer  sendAttemptSync_value;
+	sc_integer sendAttemptSync_value;
 	sc_boolean sendAttemptSyncAll_raised;
 	sc_boolean sendConfirmSync_raised;
 	sc_boolean confirmSync_raised;
-	sc_integer  confirmSync_value;
+	sc_integer confirmSync_value;
 	sc_boolean sendAllSync_raised;
 } ZBridgeServerSyncIface;
 

@@ -13,188 +13,188 @@ extern "C" {
 
 //! enumeration of all states 
 typedef enum {
-	ZBridgeServer_entry__Connect ,
-	ZBridgeServer_entry__Connect_West_Seated ,
-	ZBridgeServer_entry__Connect_West_TeamNames ,
-	ZBridgeServer_entry__Connect_West_StartOfBoard ,
-	ZBridgeServer_entry__Connect_West_Connect ,
-	ZBridgeServer_entry__Connect_North_Seated ,
-	ZBridgeServer_entry__Connect_North_TeamNames ,
-	ZBridgeServer_entry__Connect_North_StartOfBoard ,
-	ZBridgeServer_entry__Connect_North_Connect ,
-	ZBridgeServer_entry__Connect_East_Seated ,
-	ZBridgeServer_entry__Connect_East_TeamNames ,
-	ZBridgeServer_entry__Connect_East_StartOfBoard ,
-	ZBridgeServer_entry__Connect_East_Connect ,
-	ZBridgeServer_entry__Connect_South_Seated ,
-	ZBridgeServer_entry__Connect_South_TeamNames ,
-	ZBridgeServer_entry__Connect_South_StartOfBoard ,
-	ZBridgeServer_entry__Connect_South_Connect ,
-	ZBridgeServer_entry__Deal ,
-	ZBridgeServer_entry__Deal_West_Info ,
-	ZBridgeServer_entry__Deal_West_Cards ,
-	ZBridgeServer_entry__Deal_West_Sync ,
-	ZBridgeServer_entry__Deal_North_Info ,
-	ZBridgeServer_entry__Deal_North_Cards ,
-	ZBridgeServer_entry__Deal_North_Sync ,
-	ZBridgeServer_entry__Deal_East_Info ,
-	ZBridgeServer_entry__Deal_East_Cards ,
-	ZBridgeServer_entry__Deal_East_Sync ,
-	ZBridgeServer_entry__Deal_South_Info ,
-	ZBridgeServer_entry__Deal_South_Cards ,
-	ZBridgeServer_entry__Deal_South_Sync ,
-	ZBridgeServer_entry__Bidding ,
-	ZBridgeServer_entry__Bidding_West_Wait ,
-	ZBridgeServer_entry__Bidding_West_Sync ,
-	ZBridgeServer_entry__Bidding_North_Wait ,
-	ZBridgeServer_entry__Bidding_North_Sync ,
-	ZBridgeServer_entry__Bidding_East_Wait ,
-	ZBridgeServer_entry__Bidding_East_Sync ,
-	ZBridgeServer_entry__Bidding_South_Wait ,
-	ZBridgeServer_entry__Bidding_South_Sync ,
-	ZBridgeServer_entry__Playing ,
-	ZBridgeServer_entry__Playing_West_Wait ,
-	ZBridgeServer_entry__Playing_West_Sync ,
-	ZBridgeServer_entry__Playing_North_Wait ,
-	ZBridgeServer_entry__Playing_North_Sync ,
-	ZBridgeServer_entry__Playing_East_Wait ,
-	ZBridgeServer_entry__Playing_East_Sync ,
-	ZBridgeServer_entry__Playing_South_Wait ,
-	ZBridgeServer_entry__Playing_South_Sync ,
-	ZBridgeServer_entry__Exit1 ,
-	ZBridgeServer_entry__Exit2 ,
-	ZBridgeServer_entry__Exit3 ,
-	ZBridgeServer_entry__WaitLeader ,
-	ZBridgeServer_entry__SyncSB ,
-	ZBridgeServer_entry__SyncAuction ,
-	ZBridgeServer_entry__SyncPlay ,
-	ZBridgeServer_entry__SyncLeader ,
-	ZBridgeServer_entry__SyncReplay ,
+	ZBridgeServer_entry__Connect,
+	ZBridgeServer_entry__Connect_West_Seated,
+	ZBridgeServer_entry__Connect_West_TeamNames,
+	ZBridgeServer_entry__Connect_West_StartOfBoard,
+	ZBridgeServer_entry__Connect_West_Connect,
+	ZBridgeServer_entry__Connect_North_Seated,
+	ZBridgeServer_entry__Connect_North_TeamNames,
+	ZBridgeServer_entry__Connect_North_StartOfBoard,
+	ZBridgeServer_entry__Connect_North_Connect,
+	ZBridgeServer_entry__Connect_East_Seated,
+	ZBridgeServer_entry__Connect_East_TeamNames,
+	ZBridgeServer_entry__Connect_East_StartOfBoard,
+	ZBridgeServer_entry__Connect_East_Connect,
+	ZBridgeServer_entry__Connect_South_Seated,
+	ZBridgeServer_entry__Connect_South_TeamNames,
+	ZBridgeServer_entry__Connect_South_StartOfBoard,
+	ZBridgeServer_entry__Connect_South_Connect,
+	ZBridgeServer_entry__Deal,
+	ZBridgeServer_entry__Deal_West_Info,
+	ZBridgeServer_entry__Deal_West_Cards,
+	ZBridgeServer_entry__Deal_West_Sync,
+	ZBridgeServer_entry__Deal_North_Info,
+	ZBridgeServer_entry__Deal_North_Cards,
+	ZBridgeServer_entry__Deal_North_Sync,
+	ZBridgeServer_entry__Deal_East_Info,
+	ZBridgeServer_entry__Deal_East_Cards,
+	ZBridgeServer_entry__Deal_East_Sync,
+	ZBridgeServer_entry__Deal_South_Info,
+	ZBridgeServer_entry__Deal_South_Cards,
+	ZBridgeServer_entry__Deal_South_Sync,
+	ZBridgeServer_entry__Bidding,
+	ZBridgeServer_entry__Bidding_West_Wait,
+	ZBridgeServer_entry__Bidding_West_Sync,
+	ZBridgeServer_entry__Bidding_North_Wait,
+	ZBridgeServer_entry__Bidding_North_Sync,
+	ZBridgeServer_entry__Bidding_East_Wait,
+	ZBridgeServer_entry__Bidding_East_Sync,
+	ZBridgeServer_entry__Bidding_South_Wait,
+	ZBridgeServer_entry__Bidding_South_Sync,
+	ZBridgeServer_entry__Playing,
+	ZBridgeServer_entry__Playing_West_Wait,
+	ZBridgeServer_entry__Playing_West_Sync,
+	ZBridgeServer_entry__Playing_North_Wait,
+	ZBridgeServer_entry__Playing_North_Sync,
+	ZBridgeServer_entry__Playing_East_Wait,
+	ZBridgeServer_entry__Playing_East_Sync,
+	ZBridgeServer_entry__Playing_South_Wait,
+	ZBridgeServer_entry__Playing_South_Sync,
+	ZBridgeServer_entry__Exit1,
+	ZBridgeServer_entry__Exit2,
+	ZBridgeServer_entry__Exit3,
+	ZBridgeServer_entry__WaitLeader,
+	ZBridgeServer_entry__SyncSB,
+	ZBridgeServer_entry__SyncAuction,
+	ZBridgeServer_entry__SyncPlay,
+	ZBridgeServer_entry__SyncLeader,
+	ZBridgeServer_entry__SyncReplay,
 	ZBridgeServer_last_state
 } ZBridgeServerStates;
 
 //! Type definition of the data structure for the ZBridgeServerInternal interface scope.
 typedef struct {
-	sc_integer  BID_NONE;
-	sc_integer  BID_PASS;
-	sc_integer  BID_DOUBLE;
-	sc_integer  BID_REDOUBLE;
-	sc_integer  W;
-	sc_integer  N;
-	sc_integer  E;
-	sc_integer  S;
-	sc_integer  REBID;
-	sc_integer  REPLAY;
-	sc_integer  CT;
-	sc_integer  PT;
-	sc_boolean  westConnected;
-	sc_boolean  northConnected;
-	sc_boolean  eastConnected;
-	sc_boolean  southConnected;
-	sc_boolean  westRTNames;
-	sc_boolean  northRTNames;
-	sc_boolean  eastRTNames;
-	sc_boolean  southRTNames;
-	sc_boolean  westRSBoard;
-	sc_boolean  northRSBoard;
-	sc_boolean  eastRSBoard;
-	sc_boolean  southRSBoard;
-	sc_boolean  westRSBid;
-	sc_boolean  northRSBid;
-	sc_boolean  eastRSBid;
-	sc_boolean  southRSBid;
-	sc_boolean  westBid;
-	sc_boolean  northBid;
-	sc_boolean  eastBid;
-	sc_boolean  southBid;
-	sc_integer  noBoards;
-	sc_boolean  westRCard;
-	sc_boolean  northRCard;
-	sc_boolean  eastRCard;
-	sc_boolean  southRCard;
-	sc_integer  curBidder;
-	sc_boolean  firstBidRound;
-	sc_integer  lastBidder;
-	sc_integer  noPasses;
-	sc_integer  leader;
-	sc_integer  playNo;
+	sc_integer BID_NONE;
+	sc_integer BID_PASS;
+	sc_integer BID_DOUBLE;
+	sc_integer BID_REDOUBLE;
+	sc_integer W;
+	sc_integer N;
+	sc_integer E;
+	sc_integer S;
+	sc_integer REBID;
+	sc_integer REPLAY;
+	sc_integer CT;
+	sc_integer PT;
+	sc_boolean westConnected;
+	sc_boolean northConnected;
+	sc_boolean eastConnected;
+	sc_boolean southConnected;
+	sc_boolean westRTNames;
+	sc_boolean northRTNames;
+	sc_boolean eastRTNames;
+	sc_boolean southRTNames;
+	sc_boolean westRSBoard;
+	sc_boolean northRSBoard;
+	sc_boolean eastRSBoard;
+	sc_boolean southRSBoard;
+	sc_boolean westRSBid;
+	sc_boolean northRSBid;
+	sc_boolean eastRSBid;
+	sc_boolean southRSBid;
+	sc_boolean westBid;
+	sc_boolean northBid;
+	sc_boolean eastBid;
+	sc_boolean southBid;
+	sc_integer noBoards;
+	sc_boolean westRCard;
+	sc_boolean northRCard;
+	sc_boolean eastRCard;
+	sc_boolean southRCard;
+	sc_integer curBidder;
+	sc_boolean firstBidRound;
+	sc_integer lastBidder;
+	sc_integer noPasses;
+	sc_integer leader;
+	sc_integer playNo;
 } ZBridgeServerInternal;
 
 //! Type definition of the data structure for the ZBridgeServerIface interface scope.
 typedef struct {
 	sc_boolean newSession_raised;
 	sc_boolean connect_raised;
-	sc_integer  connect_value;
+	sc_integer connect_value;
 	sc_boolean rTNames_raised;
-	sc_integer  rTNames_value;
+	sc_integer rTNames_value;
 	sc_boolean rSBoard_raised;
-	sc_integer  rSBoard_value;
+	sc_integer rSBoard_value;
 	sc_boolean seated_raised;
-	sc_integer  seated_value;
+	sc_integer seated_value;
 	sc_boolean teamNames_raised;
 	sc_boolean newDealClients_raised;
 	sc_boolean startOfBoard_raised;
 	sc_boolean startOfBoardDelayed_raised;
 	sc_boolean continue_raised;
 	sc_boolean rDealInfo_raised;
-	sc_integer  rDealInfo_value;
+	sc_integer rDealInfo_value;
 	sc_boolean dealInfo_raised;
-	sc_integer  dealInfo_value;
+	sc_integer dealInfo_value;
 	sc_boolean rCards_raised;
-	sc_integer  rCards_value;
+	sc_integer rCards_value;
 	sc_boolean cards_raised;
 	sc_boolean newDeal_raised;
 	sc_boolean undo_raised;
-	sc_integer  undo_value;
+	sc_integer undo_value;
 	sc_boolean bid_raised;
-	sc_integer  bid_value;
+	sc_integer bid_value;
 	sc_boolean rBid_raised;
-	sc_integer  rBid_value;
+	sc_integer rBid_value;
 	sc_boolean bidDone_raised;
-	sc_integer  bidDone_value;
+	sc_integer bidDone_value;
 	sc_boolean bidInfo_raised;
-	sc_integer  bidInfo_value;
+	sc_integer bidInfo_value;
 	sc_boolean undoBid_raised;
-	sc_integer  undoBid_value;
+	sc_integer undoBid_value;
 	sc_boolean undoPlay_raised;
 	sc_boolean playerPlays_raised;
-	sc_integer  playerPlays_value;
+	sc_integer playerPlays_value;
 	sc_boolean readyForPlayer_raised;
-	sc_integer  readyForPlayer_value;
+	sc_integer readyForPlayer_value;
 	sc_boolean playerToLead_raised;
-	sc_integer  playerToLead_value;
+	sc_integer playerToLead_value;
 	sc_boolean readyForDummy_raised;
-	sc_integer  readyForDummy_value;
+	sc_integer readyForDummy_value;
 	sc_boolean dummyToLead_raised;
-	sc_integer  dummyToLead_value;
+	sc_integer dummyToLead_value;
 	sc_boolean sendPlayerPlays_raised;
-	sc_integer  sendPlayerPlays_value;
+	sc_integer sendPlayerPlays_value;
 	sc_boolean readyForDummyCards_raised;
-	sc_integer  readyForDummyCards_value;
+	sc_integer readyForDummyCards_value;
 	sc_boolean dummyCards_raised;
-	sc_integer  dummyCards_value;
+	sc_integer dummyCards_value;
 	sc_boolean getLeader_raised;
 	sc_boolean newLeader_raised;
-	sc_integer  newLeader_value;
+	sc_integer newLeader_value;
 	sc_boolean undoTrick_raised;
-	sc_integer  undoTrick_value;
+	sc_integer undoTrick_value;
 	sc_boolean allSync_raised;
 	sc_boolean synchronize_raised;
 	sc_boolean endOfSession_raised;
-	sc_integer  noOfBoards;
-	sc_string  name;
-	sc_string  nsTeamName;
-	sc_string  ewTeamName;
-	sc_integer  dealer;
-	sc_integer  bidVal;
-	sc_integer  bidder;
-	sc_integer  lastBid;
-	sc_integer  bidDouble;
-	sc_integer  declarer;
-	sc_integer  dummy;
-	sc_integer  player;
-	sc_integer  noTrick;
-	sc_integer  cardVal;
+	sc_integer noOfBoards;
+	sc_string name;
+	sc_string nsTeamName;
+	sc_string ewTeamName;
+	sc_integer dealer;
+	sc_integer bidVal;
+	sc_integer bidder;
+	sc_integer lastBid;
+	sc_integer bidDouble;
+	sc_integer declarer;
+	sc_integer dummy;
+	sc_integer player;
+	sc_integer noTrick;
+	sc_integer cardVal;
 } ZBridgeServerIface;
 
 
