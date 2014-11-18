@@ -26,6 +26,7 @@
 
 class CMainFrame;
 class CZBridgeDoc;
+class CGamesDoc;
 
 
 /**
@@ -44,6 +45,7 @@ public:
 private:
     CMainFrame * mainFrame;
     CZBridgeDoc * doc;
+    CGamesDoc * games;
 
 signals:
 

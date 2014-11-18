@@ -21,11 +21,21 @@
 
 #include <QResizeEvent>
 #include <QSizePolicy>
+#include <QFileDialog>
+#include <QFile>
+#include <QFileInfo>
+#include <QStringList>
+#include <QString>
+#include <QTextStream>
+#include <QInputDialog>
+#include <QMessageBox>
 
+#include "ZBridgeException.h"
 #include "cmainframe.h"
 #include "ui_cmainframe.h"
 #include "czbridgeapp.h"
 #include "czbridgedoc.h"
+#include "cgamesdoc.h"
 #include "cplayview.h"
 #include "cfilepropertiesdialog.h"
 #include "caboutdlg.h"
@@ -61,11 +71,12 @@ CMainFrame *CMainFrame::m_pInstance = 0;
  * @param app Pointer to application.
  * @param doc Pointer to data container.
  */
-CMainFrame::CMainFrame(CZBridgeApp *app, CZBridgeDoc *doc) :
+CMainFrame::CMainFrame(CZBridgeApp *app, CZBridgeDoc *doc, CGamesDoc *games) :
     ui(new Ui::CMainFrame)
 {
     this->app = app;
     this->doc = doc;
+    this->games = games;
 
     //Set up user interface (main menu etc.)
     ui->setupUi(this);
@@ -329,7 +340,40 @@ void CMainFrame::ResetStatusText()
 //----------------------------------------------------------------
 void CMainFrame::on_actionOpen_triggered()
 {
+    try
+    {
+    //Determine pbn file to read from.
+    QString originalFileName = QFileDialog::getOpenFileName(this,
+        tr("Open Portable Bridge Notation file"), "", tr("Portable Bridge Notation (*.pbn)"));
+    QFile originalFile(originalFileName);
+    if (!originalFile.open(QIODevice::ReadOnly | QIODevice::Text))
+        return;
+    QTextStream original(&originalFile);
+    QTextStream played;
+    QString event;
 
+    //Determine events.
+    QStringList strLines;
+    games->determineEvents(original, strLines);
+
+    if (strLines.size() > 1)
+    {
+        bool ok;
+        event = QInputDialog::getItem(this, tr("Select Event"), tr("Event"), strLines, 0, false, &ok);
+        if (!ok)
+            return;
+    }
+    else if (strLines.size() == 1)
+        event = strLines.at(0);
+
+    original.seek(0);
+    games->readGames(original, played, event);
+    }
+    catch (PlayException &e)
+    {
+        //There was an error in proceesing of pbn file..
+        QMessageBox::critical(0, tr("ZBridge"), e.what());
+    }
 }
 
 void CMainFrame::on_actionSave_triggered()

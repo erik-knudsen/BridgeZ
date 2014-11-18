@@ -25,6 +25,13 @@
 
 CPlayHistory::CPlayHistory()
 {
+    noTrick = 0;
+    ewTricks = 0;
+    nsTricks = 0;
+
+    for (int i = 0; i < 4; i++)
+        for (int j = 0; j < 13; j++)
+            play[i][j] = -1;
 }
 
 void CPlayHistory::resetPlayHistory()

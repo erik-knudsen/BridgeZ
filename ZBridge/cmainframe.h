@@ -29,6 +29,7 @@ class CMainFrame;
 }
 class CZBridgeApp;
 class CZBridgeDoc;
+class CGamesDoc;
 class CPlayView;
 class CTblMngr;
 class CFileCommentsDialog;
@@ -51,7 +52,7 @@ class CMainFrame : public QMainWindow
     
 public:
     static CMainFrame* Instance();
-    explicit CMainFrame(CZBridgeApp *app, CZBridgeDoc *doc);
+    explicit CMainFrame(CZBridgeApp *app, CZBridgeDoc *doc, CGamesDoc *games);
     ~CMainFrame();
 
     virtual QMenu *createPopupMenu();
@@ -76,6 +77,7 @@ private:
     Ui::CMainFrame *ui;
     CZBridgeApp *app;
     CZBridgeDoc *doc;
+    CGamesDoc *games;
     CPlayView *playView;
     CTblMngr *tableManager;
 

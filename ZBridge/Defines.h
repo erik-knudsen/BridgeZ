@@ -680,7 +680,7 @@ const int BID_VER_SIZE = 12;
 //#define ISMINOR(suit)	(((suit == CLUBS) || (suit == DIAMONDS)) ? TRUE : FALSE)
 //#define ISNOTRUMP(suit)((suit == NOTRUMP) ? TRUE : FALSE)
 
-#define MAKE_BID(suit, level) (BID_PASS + (level-1)*5 + suit + 1)
+#define MAKE_BID(suit, level) (Bids)(BID_PASS + (level-1)*5 + suit + 1)
 #define BID_SUIT(bid)  (Suit)(((bid <= BID_PASS) || (bid >= BID_DOUBLE)) ? -1 : (((bid-1) % 5)))
 #define BID_LEVEL(bid) ( ((bid <= BID_PASS) || (bid >= BID_DOUBLE)) ? -1 : (((bid-1) / 5) + 1) )
 

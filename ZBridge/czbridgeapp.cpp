@@ -24,6 +24,7 @@
 #include "czbridgeapp.h"
 #include "cmainframe.h"
 #include "czbridgedoc.h"
+#include "cgamesdoc.h"
 #include "Defines.h"
 
 Q_DECLARE_METATYPE(Seat)
@@ -55,7 +56,8 @@ CZBridgeApp::CZBridgeApp(int &argc, char **argv) :
     QApplication(argc, argv)
 {
     doc = new CZBridgeDoc(this);
+    games = new CGamesDoc(this);
 
-    mainFrame = new CMainFrame(this, doc);
+    mainFrame = new CMainFrame(this, doc, games);
     mainFrame->show();
 }

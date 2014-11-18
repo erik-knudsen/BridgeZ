@@ -33,7 +33,7 @@ class CBid
 {
 public:
     CBid(Seat bidder, Bids bid, QString alert);
-    CBid() { }
+    CBid() { bid = BID_NONE; }
 
     Seat bidder;      /**< Position east, south, north or west. */
     Bids bid;           /**< Bid value. */
