@@ -19,6 +19,7 @@
  */
 
 #include <QMap>
+#include <QtDebug>
 
 #include "cgamesdoc.h"
 
@@ -46,24 +47,24 @@ void CGamesDoc::readGames(QTextStream &original, QTextStream &played, QString &e
     CGame *game = 0;
 
     //Map of tag names.
-    tagName["[EVENT"] = TAG_EVENT;
-    tagName["[SITE"] = TAG_SITE;
-    tagName["[DATE"] = TAG_DATE;
-    tagName["[ROUND"] = TAG_ROUND;
-    tagName["[BOARD"] = TAG_BOARD;
-    tagName["[WEST"] = TAG_WEST;
-    tagName["[NORTH"] = TAG_NORTH;
-    tagName["[EAST"] = TAG_EAST;
-    tagName["[SOUTH"] = TAG_SOUTH;
-    tagName["[DEALER"] = TAG_DEALER;
-    tagName["[VULNERABLE"] = TAG_VULNERABLE;
-    tagName["[DEAL"] = TAG_DEAL;
-    tagName["[SCORING"] = TAG_SCORING;
-    tagName["[DECLARER"] = TAG_DECLARER;
-    tagName["[CONTRACT"] = TAG_CONTRACT;
-    tagName["[RESULT"] = TAG_RESULT;
-    tagName["[AUCTION"] = TAG_AUCTION;
-    tagName["[PLAY"] = TAG_PLAY;
+    tagName["EVENT"] = TAG_EVENT;
+    tagName["SITE"] = TAG_SITE;
+    tagName["DATE"] = TAG_DATE;
+    tagName["ROUND"] = TAG_ROUND;
+    tagName["BOARD"] = TAG_BOARD;
+    tagName["WEST"] = TAG_WEST;
+    tagName["NORTH"] = TAG_NORTH;
+    tagName["EAST"] = TAG_EAST;
+    tagName["SOUTH"] = TAG_SOUTH;
+    tagName["DEALER"] = TAG_DEALER;
+    tagName["VULNERABLE"] = TAG_VULNERABLE;
+    tagName["DEAL"] = TAG_DEAL;
+    tagName["SCORING"] = TAG_SCORING;
+    tagName["DECLARER"] = TAG_DECLARER;
+    tagName["CONTRACT"] = TAG_CONTRACT;
+    tagName["RESULT"] = TAG_RESULT;
+    tagName["AUCTION"] = TAG_AUCTION;
+    tagName["PLAY"] = TAG_PLAY;
 
     //Initial tag values.
     tagMap[TAG_EVENT] = "";
@@ -77,6 +78,23 @@ void CGamesDoc::readGames(QTextStream &original, QTextStream &played, QString &e
     tagMap[TAG_SOUTH] = "";
     tagMap[TAG_SCORING] = "";
     tagMap[TAG_RESULT] = "";
+
+    //Clean up for new game.
+    while (!originalGames.isEmpty())
+    {
+        CGame *game = originalGames.takeFirst();
+        while (!game->auctionAndPlay.isEmpty())
+            delete(game->auctionAndPlay.takeFirst());
+        delete game;
+
+    }
+    while (!playedGames.isEmpty())
+    {
+        CGame *game = playedGames.takeFirst();
+        while (!game->auctionAndPlay.isEmpty())
+            delete(game->auctionAndPlay.takeFirst());
+        delete game;
+    }
 
     numLines = preloadPBNFile(original, event, strLines, auctionNotes, playNotes);
 
@@ -101,7 +119,14 @@ void CGamesDoc::readGames(QTextStream &original, QTextStream &played, QString &e
                     CGame *nextGame = gameItr.next();
                     if (nextGame->board == game->board)
                     {
-                        //Should also check redundant info here (not yet done!).
+                        bool error;
+                        for (int i = 0; i < 13; i++)
+                            if ((nextGame->wCards[i] != game->wCards[i]) || (nextGame->nCards[i] != game->nCards[i]) ||
+                                    (nextGame->eCards[i] != game->eCards[i]) || (nextGame->sCards[i] != game->sCards[i]))
+                                error = true;
+                        if ((nextGame->dealer != game->dealer) || (nextGame->vulnerable != game->vulnerable) || error)
+                            throw PlayException(QString("PBN - Illegal redundant info in games with board: %1").arg(game->board).toStdString());
+
                         if (!auctionAndPlay->westName.isEmpty() && !auctionAndPlay->northName.isEmpty() &&
                                 !auctionAndPlay->eastName.isEmpty() && !auctionAndPlay->southName.isEmpty())
                             nextGame->auctionAndPlay.append(auctionAndPlay);
@@ -201,7 +226,7 @@ void CGamesDoc::readGames(QTextStream &original, QTextStream &played, QString &e
                             noPasses = 0;
                     }
                     else if (bidCall == BID_NONE)       //Not a valid bid.
-                        throw PlayException("PBN - Illegal bid: " + currentLine.toStdString());
+                        throw PlayException((QString("PBN - Illegal bid: %1 %2 %3").arg(currentLine).arg(" in board: ").arg(game->board)).toStdString());
 
                 } while (inxNext != currentLine.size());
             }
@@ -218,7 +243,7 @@ void CGamesDoc::readGames(QTextStream &original, QTextStream &played, QString &e
                 {
                     if ((inxNext = getPlay(currentLine, inx, &playCall)) != inx)
                     {
-                        if ((playCall == -2) || (playCall = -3))       //* or -  (end of play or not played)
+                        if ((playCall == -2) || (playCall == -3))       //* or -  (end of play or not played)
                         {
                             context = TAG_CONTEXT;
                             break;
@@ -240,10 +265,11 @@ void CGamesDoc::readGames(QTextStream &original, QTextStream &played, QString &e
                                 int *cards = (seat == WEST_SEAT) ? (game->wCards) :
                                              (seat == NORTH_SEAT) ? (game->nCards) :
                                              (seat == EAST_SEAT) ? (game->eCards) : (game->sCards);
-                                if (auctionAndPlay->playHistory.cardOk(oneTrick[i], seat, cards))
-                                    auctionAndPlay->playHistory.setPlay(seat, trickNo, oneTrick[i]);
+                                int trickInx = (4 + seat - (auctionAndPlay->declarer + 1)) % 4;
+                                  if (auctionAndPlay->playHistory.cardOk(oneTrick[trickInx], seat, cards))
+                                    auctionAndPlay->playHistory.setPlay(seat, trickNo, oneTrick[trickInx]);
                                 else
-                                    throw PlayException("PBN - Illegal play: " + currentLine.toStdString());
+                                    throw PlayException((QString("PBN - Illegal play: %1 %2 %3").arg(currentLine).arg(" in board: ").arg(game->board)).toStdString());
                             }
                             currentLeader = auctionAndPlay->playHistory.getNextLeader();
                             actorNo = 0;
@@ -256,7 +282,7 @@ void CGamesDoc::readGames(QTextStream &original, QTextStream &played, QString &e
                         }
                     }
                     else if (playCall == -1)       //Not a valid play.
-                        throw PlayException("PBN - Illegal play: " + currentLine.toStdString());
+                        throw PlayException((QString("PBN - Illegal play: %1 %2 %3").arg(currentLine).arg(" in board: ").arg(game->board)).toStdString());
 
                 } while (inxNext != currentLine.size());
             }
@@ -264,11 +290,10 @@ void CGamesDoc::readGames(QTextStream &original, QTextStream &played, QString &e
 
             case TAG_CONTEXT:
             {
-                QString strTag;
                 QString strValue;
 
                 //Parse for relevant tags.
-                tagIds tag = parsePBNLine(currentLine, strTag, strValue, tagName);
+                tagIds tag = parsePBNLine(currentLine, strValue, tagName);
                 if ((tag == TAG_NONE) || strValue.isEmpty() || (strValue == "?"))
                     continue;
 
@@ -288,7 +313,13 @@ void CGamesDoc::readGames(QTextStream &original, QTextStream &played, QString &e
                 {
                     game = new CGame;
                     game->board = -1;
+                    game->dealer = NO_SEAT;
+                    game->vulnerable = NONE;
                     auctionAndPlay = new CAuctionAndPlay;
+                    auctionAndPlay->declarer = NO_SEAT;
+                    auctionAndPlay->contract = BID_NONE;
+                    auctionAndPlay->contractModifier = BID_NONE;
+                    auctionAndPlay->result = -1;
                 }
 
                 //Process tag.
@@ -300,7 +331,7 @@ void CGamesDoc::readGames(QTextStream &original, QTextStream &played, QString &e
                     if (board > 0)
                         game->board = board;
                     else
-                        throw PlayException("PBN - Illegal board: " + strValue.toStdString());
+                    throw PlayException(QString("PBN - Illegal board value: %1").arg(strValue).toStdString());
                 }
                     break;
 
@@ -330,7 +361,7 @@ void CGamesDoc::readGames(QTextStream &original, QTextStream &played, QString &e
                     else if (QString::compare(strValue, "S", Qt::CaseInsensitive) == 0)
                         game->dealer = SOUTH_SEAT;
                     else
-                        throw PlayException("PBN - Illegal dealer: " + strValue.toStdString());
+                    throw PlayException(QString("PBN - Illegal dealer: %1 %2 %3").arg(strValue).arg(" in board: ").arg(game->board).toStdString());
                     break;
 
                 case TAG_VULNERABLE:
@@ -346,11 +377,17 @@ void CGamesDoc::readGames(QTextStream &original, QTextStream &played, QString &e
                              (QString::compare(strValue, "BOTH", Qt::CaseInsensitive) == 0))
                         game->vulnerable = BOTH;
                     else
-                        throw PlayException("PBN - Illegal vulnerability: " + strValue.toStdString());
+                        throw PlayException(QString("PBN - Illegal vulnerability: %1 %2 %3").arg(strValue).arg(" in board: ").arg(game->board).toStdString());
                     break;
 
                 case TAG_DEAL:
-                    getCards(strValue, game->wCards, game->nCards, game->eCards, game->sCards);
+                {
+                    Seat dealer = getCards(strValue, game->wCards, game->nCards, game->eCards, game->sCards, game->board);
+                    if (game->dealer == NO_SEAT)
+                        game->dealer = dealer;
+                    if (game->dealer != dealer)
+                        throw PlayException(QString("PBN - Illegal dealer: %1 %2 %3").arg(strValue).arg(" in board: ").arg(game->board).toStdString());
+                }
                     break;
 
                 case TAG_DECLARER:
@@ -363,7 +400,7 @@ void CGamesDoc::readGames(QTextStream &original, QTextStream &played, QString &e
                     else if (QString::compare(strValue, "S", Qt::CaseInsensitive) == 0)
                         auctionAndPlay->declarer = SOUTH_SEAT;
                     else
-                        throw PlayException("PBN - Illegal declarer: " + strValue.toStdString());
+                        throw PlayException(QString("PBN - Illegal declarer: %1 %2 %3").arg(strValue).arg(" in board: ").arg(game->board).toStdString());
                     break;
 
                 case TAG_CONTRACT:
@@ -381,37 +418,38 @@ void CGamesDoc::readGames(QTextStream &original, QTextStream &played, QString &e
                         if ((size > 0) && (strValue[0].isDigit())) n = 1;
                         if ((n = 1) && (size > 1) && (strValue[1].isDigit())) n = 2;
                         if (n == 0)
-                            throw PlayException("PBN - Illegal number of tricks in contract: " + strValue.toStdString());
+                            throw PlayException(QString("PBN - Illegal number of tricks in contract: %1 %2 %3").arg(strValue).arg(" in board: ").arg(game->board).toStdString());
 
-                            level = strValue.mid(0, n).toInt();
-                            if ((level < 1) || (level > 7) || (size <= n))
-                                throw PlayException("PBN - Illegal format of contract: " + strValue.toStdString());
+                        level = strValue.mid(0, n).toInt();
+                        if ((level < 1) || (level > 7) || (size <= n))
+                            throw PlayException(QString("PBN - Illegal format of contract: %1 %2 %3").arg(strValue).arg(" in board: ").arg(game->board).toStdString());
 
-                                if (QString::compare(strValue.mid(n, 1), "S", Qt::CaseInsensitive) == 0)
-                                    suit = SPADES;
-                                else if (QString::compare(strValue.mid(n, 1), "H", Qt::CaseInsensitive) == 0)
-                                    suit = HEARTS;
-                                else if (QString::compare(strValue.mid(n, 1), "D", Qt::CaseInsensitive) == 0)
-                                    suit = DIAMONDS;
-                                else if (QString::compare(strValue.mid(n, 1), "C", Qt::CaseInsensitive) == 0)
-                                    suit = CLUBS;
-                                else if (QString::compare(strValue.mid(n, 1), "NT", Qt::CaseInsensitive) == 0)
-                                    suit = NOTRUMP;
-                                else
-                                    throw PlayException("PBN - Illegal suit in contract: " + strValue.toStdString());
+                        int m = 1;
+                        if (QString::compare(strValue.mid(n, 1), "S", Qt::CaseInsensitive) == 0)
+                            suit = SPADES;
+                        else if (QString::compare(strValue.mid(n, 1), "H", Qt::CaseInsensitive) == 0)
+                            suit = HEARTS;
+                        else if (QString::compare(strValue.mid(n, 1), "D", Qt::CaseInsensitive) == 0)
+                            suit = DIAMONDS;
+                        else if (QString::compare(strValue.mid(n, 1), "C", Qt::CaseInsensitive) == 0)
+                            suit = CLUBS;
+                        else if (QString::compare(strValue.mid(n, 2), "NT", Qt::CaseInsensitive) == 0)
+                        { suit = NOTRUMP; m = 2;}
+                        else
+                            throw PlayException(QString("PBN - Illegal suit in contract: %1 %2 %3").arg(strValue).arg(" in board: ").arg(game->board).toStdString());
 
-                                auctionAndPlay->contract = MAKE_BID(suit, level);
+                        auctionAndPlay->contract = MAKE_BID(suit, level);
 
-                                if (size == (n + 1))
-                                    auctionAndPlay->contractModifier = BID_NONE;
-                                else if ((size == (n + 2)) &&
-                                        (QString::compare(strValue.mid(n + 1, 1), "X", Qt::CaseInsensitive) == 0))
-                                    auctionAndPlay->contractModifier = BID_DOUBLE;
-                                else if ((size == (n + 3)) &&
-                                    (QString::compare(strValue.mid(n + 1, 2), "XX", Qt::CaseInsensitive) == 0))
-                                    auctionAndPlay->contractModifier = BID_REDOUBLE;
-                                else
-                                    throw PlayException("PBN - Illegal contract modifier in contract: " + strValue.toStdString());
+                        if (size == (n + m))
+                            auctionAndPlay->contractModifier = BID_NONE;
+                        else if ((size == (n + m + 1)) &&
+                                 (QString::compare(strValue.mid(n + m, 1), "X", Qt::CaseInsensitive) == 0))
+                            auctionAndPlay->contractModifier = BID_DOUBLE;
+                        else if ((size == (n + m + 2)) &&
+                                 (QString::compare(strValue.mid(n + m, 2), "XX", Qt::CaseInsensitive) == 0))
+                            auctionAndPlay->contractModifier = BID_REDOUBLE;
+                        else
+                            throw PlayException(QString("PBN - Illegal contract modifier in contract: %1 %2 %3").arg(strValue).arg(" in board: ").arg(game->board).toStdString());
                     }
                     break;
 
@@ -419,7 +457,7 @@ void CGamesDoc::readGames(QTextStream &original, QTextStream &played, QString &e
                 {
                     for (int i = 0; i < strValue.size(); i++)
                         if (!strValue[i].isDigit())
-                            throw PlayException("PBN - Illegal result: " + strValue.toStdString());
+                            throw PlayException(QString("PBN - Illegal result: %1 %2 %3").arg(strValue).arg(" in board: ").arg(game->board).toStdString());
                         auctionAndPlay->result = strValue.toInt();
                 }
                     break;
@@ -437,10 +475,12 @@ void CGamesDoc::readGames(QTextStream &original, QTextStream &played, QString &e
                     else if (QString::compare(strValue, "S", Qt::CaseInsensitive) == 0)
                         dealer = SOUTH_SEAT;
                     else
-                        throw PlayException("PBN - Illegal dealer: " + strValue.toStdString());
+                        throw PlayException(QString("PBN - Illegal dealer: %1 %2 %3").arg(strValue).arg(" in board: ").arg(game->board).toStdString());
 
+                    if (game->dealer == NO_SEAT)
+                        game->dealer = dealer;
                     if (dealer != game->dealer)
-                        throw PlayException("PBN - Illegal dealer: " + strValue.toStdString());
+                        throw PlayException(QString("PBN - Illegal dealer: %1 %2 %3").arg(strValue).arg(" in board: ").arg(game->board).toStdString());
 
                     auctionAndPlay->bidHistory.resetBidHistory();
 
@@ -463,14 +503,17 @@ void CGamesDoc::readGames(QTextStream &original, QTextStream &played, QString &e
                     else if (QString::compare(strValue, "S", Qt::CaseInsensitive) == 0)
                         leader = SOUTH_SEAT;
                     else
-                        throw PlayException("PBN - Illegal leader: " + strValue.toStdString());
+                        throw PlayException(QString("PBN - Illegal leader: %1 %2 %3").arg(strValue).arg(" in board: ").arg(game->board).toStdString());
+
+                    if (auctionAndPlay->declarer == NO_SEAT)
+                        auctionAndPlay->declarer = (Seat)((leader + 4 - 1) % 4);
 
                      currentLeader = (Seat)((auctionAndPlay->declarer + 1) % 4);
                     if (leader != currentLeader)
-                        throw PlayException("PBN - Illegal leader: " + strValue.toStdString());
+                        throw PlayException(QString("PBN - Illegal leader: %1 %2 %3").arg(strValue).arg(" in board: ").arg(game->board).toStdString());
 
                     auctionAndPlay->playHistory.setBidInfo(auctionAndPlay->contract, auctionAndPlay->contractModifier,
-                                                           auctionAndPlay->declarer);
+                                                           currentLeader);
                     actorNo = 0;
                     trickNo = 0;
                     context = PLAY_CONTEXT;
@@ -540,6 +583,9 @@ void CGamesDoc::determineEvents(QTextStream &original, QStringList &events)
                 event = line.mid(firstInx + 1, lastInx - (firstInx + 1));
             else
                 continue;
+
+            if (event == "?")
+                event = "";
 
             if (events.indexOf(event) == -1)
                 events.append(event);
@@ -699,7 +745,7 @@ int CGamesDoc::preloadPBNFile(QTextStream &PBNFile, QString event, QStringList &
                     checkNote = false;
 
             //Append line if not a note.
-            if (line.indexOf("[NOTE ", 0, Qt::CaseInsensitive) == 0)
+            if (line.indexOf("[NOTE ", 0, Qt::CaseInsensitive) != 0)
             {
                 strLines.append(line);
                 numLinesRead++;
@@ -730,11 +776,13 @@ bool CGamesDoc::searchGame(QString &line, QString &event)
             curEvent = line.mid(firstInx + 1, lastInx - (firstInx + 1));
     }
 
-    return (curEvent == event);
+    return ((curEvent == event) || ((event.isEmpty() && curEvent == "?")));
 }
 
-tagIds CGamesDoc::parsePBNLine(QString &currentLine, QString &strTag, QString &strValue, QMap<QString, tagIds> &tagName)
+tagIds CGamesDoc::parsePBNLine(QString &currentLine, QString &strValue, QMap<QString, tagIds> &tagName)
 {
+    QString strTag;
+
     //Clear output.
     strTag = strValue = "";
 
@@ -748,13 +796,14 @@ tagIds CGamesDoc::parsePBNLine(QString &currentLine, QString &strTag, QString &s
     if (inx < 0)
         return TAG_NONE;
     strTag = currentLine.mid(1, inx-1);
+    strTag = strTag.toUpper();
 
     //Retrieve the value.
     strValue = currentLine.mid(inx+1, size-inx-2);
 
     //Strip quotes.
     size = strValue.size();
-    if ((size < 2) || (strValue[0] != '\"') || (strValue[size - 1] != '\"'))
+    if ((size < 2) || (strValue[0] != '"') || (strValue[size - 1] != '"'))
         return TAG_NONE;
 
     strValue = strValue.mid(1, size - 2);
@@ -768,40 +817,44 @@ tagIds CGamesDoc::parsePBNLine(QString &currentLine, QString &strTag, QString &s
     return TAG_NONE;
 }
 
-void CGamesDoc::getCards(QString &strValue, int *wCards, int *nCards, int *eCards, int *sCards) throw(PlayException)
+Seat CGamesDoc::getCards(QString &strValue, int wCards[], int nCards[], int eCards[], int sCards[], int board) throw(PlayException)
 {
-    int seat;
+    Seat dealer;
     int *cards[4] = { wCards, nCards, eCards, sCards };
 
     //Check size (2 for dealer, 52 for cards, 3*4 for punctuations and 3 for spaces.
     if (strValue.size() != (2 + 52 + 3*4 + 3))
-        throw PlayException("PBN - Illegal deal (size): " + strValue.toStdString());
+        throw PlayException(QString("PBN - Illegal deal (size): %1 %2 %3").arg(strValue).arg(" in board: ").arg(board).toStdString());
 
     //Get dealer.
     if (QString::compare(strValue.mid(0, 2), "W:", Qt::CaseInsensitive) == 0)
-        seat = (int)WEST_SEAT;
+        dealer = WEST_SEAT;
     else if (QString::compare(strValue.mid(0, 2), "N:", Qt::CaseInsensitive) == 0)
-        seat = (int)NORTH_SEAT;
+        dealer = NORTH_SEAT;
     else if (QString::compare(strValue.mid(0, 2), "E:", Qt::CaseInsensitive) == 0)
-        seat = (int)EAST_SEAT;
+        dealer = EAST_SEAT;
     else if (QString::compare(strValue.mid(0, 2), "S:", Qt::CaseInsensitive) == 0)
-            seat = (int)SOUTH_SEAT;
+            dealer = SOUTH_SEAT;
     else
-        throw PlayException("PBN - Illegal deal (dealer): " + strValue.toStdString());
+        throw PlayException(QString("PBN - Illegal deal (dealer): %1 %2 %3").arg(strValue).arg(" in board: ").arg(board).toStdString());
+
+    int seat = dealer;
 
     int inx = 2;
 
     for (int i = 0; i < 4; i++)
     {
-        inx = getCards(strValue, inx, cards[seat]);
+        inx = getCards(strValue, inx, cards[seat], board);
         if (((i < 3) && (strValue[inx] != ' ')) || ((i == 3) && (inx != strValue.size())))
-            throw PlayException("PBN - Illegal deal (hand terminator): " + strValue.toStdString());
+            throw PlayException(QString("PBN - Illegal deal (hand terminator): %1 %2 %3").arg(strValue).arg(" in board: ").arg(board).toStdString());
         inx++;
-        seat = (seat++) % 4;
+        seat = (++seat) % 4;
     }
+
+    return dealer;
 }
 
-int CGamesDoc::getCards(QString &strValue, int inx, int cards[]) throw(PlayException)
+int CGamesDoc::getCards(QString &strValue, int inx, int cards[], int board) throw(PlayException)
 {
     Suit suits[4] = { SPADES, HEARTS, DIAMONDS, CLUBS };
     int faceValue;
@@ -810,30 +863,30 @@ int CGamesDoc::getCards(QString &strValue, int inx, int cards[]) throw(PlayExcep
 
     for (int suitInx = 0; suitInx < 4; suitInx++)
     {
-        while ((faceValue = getFaceValue(strValue, i + inx)) != -1)
+        while ((faceValue = getFaceValue(strValue, i + inx, board)) != -1)
         {
             if (k >= 13)
-                throw PlayException("PBN - Illegal deal (size of hand - too many): " + strValue.toStdString());
-            cards[i] = MAKE_CARD(suits[suitInx], faceValue);
+                throw PlayException(QString("PBN - Illegal deal (size of hand - too many): %1 %2 %3").arg(strValue).arg(" in board: ").arg(board).toStdString());
+            cards[k] = MAKE_CARD(suits[suitInx], faceValue);
             i++;
             k++;
         }
 
         if ((suitInx < 3) && (strValue[i + inx] != '.'))
-            throw PlayException("PBN - Illegal deal (punctuation): " + strValue.toStdString());
+            throw PlayException(QString("PBN - Illegal deal (punctuation): %1 %2 %3").arg(strValue).arg(" in board: ").arg(board).toStdString());
 
         i++;
     }
 
     if (k != 13)
-        throw PlayException("PBN - Illegal deal (size of hand - too few): " + strValue.toStdString());
+        throw PlayException(QString("PBN - Illegal deal (size of hand - too few): %1 %2 %3").arg(strValue).arg(" in board: ").arg(board).toStdString());
 
     return (i - 1 + inx);
 }
 
-int CGamesDoc::getFaceValue(QString &strValue, int inx) throw(PlayException)
+int CGamesDoc::getFaceValue(QString &strValue, int inx, int board) throw(PlayException)
 {
-    const QString CARD = "23456789TBQKA";
+    const QString CARD = "23456789TJQKA";
 
     if (strValue.size() <= inx)
         return -1;
@@ -841,7 +894,7 @@ int CGamesDoc::getFaceValue(QString &strValue, int inx) throw(PlayException)
         return -1;
 
     if (!CARD.contains(strValue[inx], Qt::CaseInsensitive))
-        throw PlayException("PBN - Illegal deal (face value): " + strValue.toStdString());
+        throw PlayException(QString("PBN - Illegal deal (face value): %1 %2 %3").arg(strValue).arg(" in board: ").arg(board).toStdString());
 
     return CARD.indexOf(strValue[inx], 0, Qt::CaseInsensitive);
 }
@@ -863,7 +916,7 @@ int CGamesDoc::getBid(QString &line, int inx, Bids *bidCall)
     if (n != -1)
     {
         partLine = partLine.mid(0, n);
-        n = line.indexOf(partLine) + partLine.size();
+        n = line.mid(inx).indexOf(partLine) + partLine.size() + inx;
     }
     else
         n = line.size();
@@ -898,7 +951,7 @@ int CGamesDoc::getBid(QString &line, int inx, Bids *bidCall)
         }
     }
 
-    if (*bidCall = BID_NONE)
+    if (*bidCall == BID_NONE)
         return inx;
 
     return n;
@@ -906,7 +959,7 @@ int CGamesDoc::getBid(QString &line, int inx, Bids *bidCall)
 
 int CGamesDoc::getPlay(QString &line, int inx, int *playCall)
 {
-    const QString CARD = "23456789TBQKA";
+    const QString CARD = "23456789TJQKA";
     Suit suit;
     int face;
 

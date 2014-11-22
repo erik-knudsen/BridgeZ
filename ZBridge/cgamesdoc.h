@@ -84,10 +84,10 @@ private:
                        QMap<int, QString> &auctionNotes,  QMap<int, QString> &playNotes);
     void readGames(QTextStream &stream, QList<CGame> &games, QString &event);
     bool searchGame(QString &line, QString &event);
-    tagIds parsePBNLine(QString &currentLine, QString &strTag, QString &strValue, QMap<QString, tagIds> &tagName);
-    void getCards(QString &strValue, int *wCards, int *nCards, int *eCards, int *sCards) throw(PlayException);
-    int getCards(QString &strValue, int inx, int cards[]) throw(PlayException);
-    int getFaceValue(QString &strValue, int inx)  throw(PlayException);
+    tagIds parsePBNLine(QString &currentLine, QString &strValue, QMap<QString, tagIds> &tagName);
+    Seat getCards(QString &strValue, int wCards[], int nCards[], int eCards[], int sCards[], int board) throw(PlayException);
+    int getCards(QString &strValue, int inx, int cards[], int board) throw(PlayException);
+    int getFaceValue(QString &strValue, int inx, int board)  throw(PlayException);
     int getBid(QString &line, int inx, Bids *bidCall);
     int getPlay(QString &line, int inx, int *playCall);
     int getNote(QString &line, int inx, int *note);

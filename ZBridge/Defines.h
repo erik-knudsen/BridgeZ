@@ -53,7 +53,7 @@ const char * const SEAT_NAMES[4] =
 //Suit, position and vulnerability. MUST NOT be changed (used as index).
 enum Suit { ANY=-1, CLUBS=0, DIAMONDS=1, HEARTS=2, SPADES=3, NOTRUMP=4 };
 enum Position { LEFT_POS=0, TOP_POS=1, RIGHT_POS=2, BOTTOM_POS=3};
-enum Team { NEITHER=0, NORTH_SOUTH=1, EAST_WEST=2, BOTH=3 };
+enum Team { NONE=-1, NEITHER=0, NORTH_SOUTH=1, EAST_WEST=2, BOTH=3 };
 
 //Bids (these values MUST NOT be changed they are used as index in some places).
 enum Bids {
@@ -203,7 +203,7 @@ const int CT = 1;
 const int PT = 2;
 
 //------------------------- Seat options. ---------------------------
-enum Seat { WEST_SEAT=0, NORTH_SEAT=1, EAST_SEAT=2, SOUTH_SEAT=3};
+enum Seat { NO_SEAT=-1, WEST_SEAT=0, NORTH_SEAT=1, EAST_SEAT=2, SOUTH_SEAT=3};
 enum Actor { MANUAL_ACTOR = 0, AUTO_ACTOR = 1, REMOTE_ACTOR = 2 };
 enum Role { SERVER_ROLE = 0, CLIENT_ROLE = 1,STANDALONE_ROLE = 2 };
 enum Protocol { BASIC_PROTOCOL = 18, ADVANCED_PROTOCOL = 20 };
