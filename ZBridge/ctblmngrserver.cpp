@@ -23,6 +23,7 @@
 
 #include "../src-gen/sc_types.h"
 #include "czbridgedoc.h"
+#include "cgamesdoc.h"
 #include "cplayview.h"
 #include "cactor.h"
 #include "cactorlocal.h"
@@ -49,10 +50,11 @@
  *   - In server mode it sets up a tcp server for remote actors.
  *   - Enables/disables relevant main menu entries.
  */
-CTblMngrServer::CTblMngrServer(CZBridgeDoc *doc, CPlayView *playView, QObject *parent) :
+CTblMngrServer::CTblMngrServer(CZBridgeDoc *doc, CGamesDoc *games, CPlayView *playView, QObject *parent) :
     CTblMngr(playView, parent)
 {
     this->doc = doc;
+    this->games = games;
     this->playView = playView;
 
     synchronizing = false;
@@ -519,35 +521,10 @@ void CTblMngrServer::cleanTableManager()
  */
 void CTblMngrServer::giveNewDeal()
 {
-    int i, j, inx;
-    int cardDeck[52];
     Seat currentDealer;
 
-    //Info about board.
-    boardNo++;
-
-    currentBoardNo = boardNo;
-    currentDealer = dealer[boardNo%4];
-    currentVulnerable = vulnerable[(boardNo%4 + boardNo/4)%4];
+    games->getNextDeal(&currentBoardNo, currentCards, &currentDealer, &currentVulnerable);
     zBridgeServerIface_set_dealer(&handle, currentDealer);
-
-    //Shuffle card deck.
-    for (i = 0; i < 52; i++)
-        cardDeck[i] = i;
-    QTime cur;
-    qsrand(cur.currentTime().msec());
-    for (i = 0; i < 52; i++)
-    {
-        inx = rand()%52;
-        j = cardDeck[i];
-        cardDeck[i] = cardDeck[inx];
-        cardDeck[inx] = j;
-    }
-
-    //Give cards.
-    for (i = 0; i < 4; i++)
-        for (j = 0; j < 13; j++)
-            currentCards[i][j] = cardDeck[i * 13 + j];
 }
 
 //Methods activated by user through main frame menus.
@@ -577,6 +554,9 @@ void CTblMngrServer::newSession()
 
     //Enable/disable relevant menu actions.
     QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_SERVER , protocol == ADVANCED_PROTOCOL));
+
+    //EAK TEMPORARY.
+    QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_SCORE , true));
 
     QString ewTeamName = "ZBridge";
     QString nsTeamName = "ZBridge";

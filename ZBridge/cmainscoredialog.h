@@ -23,6 +23,8 @@
 
 #include <QDialog>
 
+class CGamesDoc;
+
 namespace Ui {
 class CMainScoreDialog;
 }
@@ -32,11 +34,13 @@ class CMainScoreDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit CMainScoreDialog(QWidget *parent = 0);
+    explicit CMainScoreDialog(CGamesDoc *games, QWidget *parent = 0);
     ~CMainScoreDialog();
 
 private:
     Ui::CMainScoreDialog *ui;
+
+    CGamesDoc *games;
 };
 
 #endif // CMAINSCOREDIALOG_H

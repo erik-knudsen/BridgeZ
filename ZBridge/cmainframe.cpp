@@ -51,6 +51,7 @@
 #include "cseatconfiguration.h"
 #include "ctblmngrserver.h"
 #include "ctblmngrclient.h"
+#include "cmainscoredialog.h"
 
 //Static pointer to mainframe singleton.
 CMainFrame *CMainFrame::m_pInstance = 0;
@@ -86,9 +87,9 @@ CMainFrame::CMainFrame(CZBridgeApp *app, CZBridgeDoc *doc, CGamesDoc *games) :
 
     //Determine, allocate and initialize table manager.
     if ((doc->getSeatOptions().role == STANDALONE_ROLE) || (doc->getSeatOptions().role == SERVER_ROLE))
-        tableManager = new CTblMngrServer(doc, playView, this);
+        tableManager = new CTblMngrServer(doc, games, playView, this);
     else
-        tableManager = new CTblMngrClient(doc, playView, this);
+        tableManager = new CTblMngrClient(doc, games, playView, this);
 
     //Initialization of main frame window.
     setCentralWidget(playView);
@@ -209,6 +210,11 @@ void CMainFrame::customEvent(QEvent *event)
         case UPDATE_UI_SHOW_ALL:
             ui->action_Expose_All_Cards->setEnabled(param);
             break;
+
+            //Enable/Disable score dialogs.
+        case UPDATE_UI_SCORE:
+            ui->action_Score->setEnabled(param);
+            break;
         }
     }
 }
@@ -277,6 +283,8 @@ void CMainFrame::enableUIActions(actionIndicator actions, bool advProtocol)
     ui->actionUndo->setEnabled(false);
 
     ui->action_Expose_All_Cards->setEnabled(false);
+
+    ui->action_Score->setEnabled(false);
 }
 
 /**
@@ -374,6 +382,8 @@ void CMainFrame::on_actionOpen_triggered()
         //There was an error in proceesing of pbn file..
         QMessageBox::critical(0, tr("ZBridge"), e.what());
     }
+
+    tableManager->newSession();
 }
 
 void CMainFrame::on_actionSave_triggered()
@@ -460,9 +470,11 @@ void CMainFrame::on_actionBidding_Play_History_triggered()
         m_pWndHistory->show();
 }
 
-void CMainFrame::on_actionRubber_Score_triggered()
+void CMainFrame::on_action_Score_triggered()
 {
-
+    //Show score dialog.
+    CMainScoreDialog mainScoreDialog(games);
+    mainScoreDialog.exec();
 }
 
 void CMainFrame::on_action_Toolbar_triggered()
@@ -491,10 +503,12 @@ void CMainFrame::on_action_Refresh_Screen_triggered()
 }
 
 /**
- * @brief Main menu new session triggered.
+ * @brief Main menu new (random) session triggered.
  */
 void CMainFrame::on_actionNew_Session_triggered()
 {
+    games->clearGames();
+
     tableManager->newSession();
 }
 
@@ -702,9 +716,9 @@ void CMainFrame::on_actionSeat_Configuration_triggered()
 
         delete tableManager;
         if ((doc->getSeatOptions().role == STANDALONE_ROLE) || (doc->getSeatOptions().role == SERVER_ROLE))
-            tableManager = new CTblMngrServer(doc, playView, this);
+            tableManager = new CTblMngrServer(doc, games, playView, this);
         else
-            tableManager = new CTblMngrClient(doc, playView, this);
+            tableManager = new CTblMngrClient(doc, games, playView, this);
     }
 
 }

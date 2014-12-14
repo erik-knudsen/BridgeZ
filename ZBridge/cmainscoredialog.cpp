@@ -18,14 +18,17 @@
  * The file implements the definition of the main score dialog class.
  */
 
+#include "cgameoptiondoc.h"
 #include "cmainscoredialog.h"
 #include "ui_cmainscoredialog.h"
 
-CMainScoreDialog::CMainScoreDialog(QWidget *parent) :
+CMainScoreDialog::CMainScoreDialog(CGamesDoc *games, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::CMainScoreDialog)
 {
     ui->setupUi(this);
+
+    this->games = games;
 }
 
 CMainScoreDialog::~CMainScoreDialog()

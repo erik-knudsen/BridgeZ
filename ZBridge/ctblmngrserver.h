@@ -32,6 +32,7 @@
 #include "cplayhistory.h"
 
 class CZBridgeDoc;
+class CGamesDoc;
 class CActor;
 class CBidEngine;
 class CPlayEngine;
@@ -53,7 +54,7 @@ class CTblMngrServer : public CTblMngr
     Q_OBJECT
 
 public:
-    CTblMngrServer(CZBridgeDoc *doc, CPlayView *playView, QObject *parent = 0);
+    CTblMngrServer(CZBridgeDoc *doc, CGamesDoc *games, CPlayView *playView, QObject *parent = 0);
     ~CTblMngrServer();
 
     //Run cycle for the server statechart.
@@ -161,6 +162,7 @@ private:
     QTimer *leaderButton;
 
     CZBridgeDoc *doc;
+    CGamesDoc *games;
     CPlayView *playView;
 };
 

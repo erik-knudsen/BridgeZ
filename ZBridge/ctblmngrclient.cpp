@@ -23,6 +23,7 @@
 
 #include "../src-gen/sc_types.h"
 #include "czbridgedoc.h"
+#include "cgamesdoc.h"
 #include "cplayview.h"
 #include "cactorlocal.h"
 #include "cremoteactorclient.h"
@@ -39,10 +40,11 @@
  * The constructor initialize the table management client. It Enables/disables relevant main
  * menu entries.
  */
-CTblMngrClient::CTblMngrClient(CZBridgeDoc *doc, CPlayView *playView, QObject *parent) :
+CTblMngrClient::CTblMngrClient(CZBridgeDoc *doc, CGamesDoc *games, CPlayView *playView, QObject *parent) :
     CTblMngr(playView, parent)
 {
     this->doc = doc;
+    this->games = games;
     this->playView = playView;
 
     //Enable/disable relevant menu actions.

@@ -42,11 +42,13 @@ public:
 
     void writeGames(QTextStream &stream);
 
-    void getNextDeal(int *board, int wCards[13], int nCards[13], int eCards[13], int sCards[13], Seat *dealer, Team *vulnerable);
+    void clearGames();
+
+    void getNextDeal(int *board, int cards[][13], Seat *dealer, Team *vulnerable);
     void setPlayedResult(CBidHistory &bidHistory, CPlayHistory &playHistory, QString &westName, QString &northName,
-                   QString &eastName, QString &southName, CBid &contract, CBid &contractModifier, int &result);
+                   QString &eastName, QString &southName, Seat declarer, Bids contract, Bids contractModifier, int result);
     void setAutoResult(CBidHistory &bidHistory, CPlayHistory &playHistory, QString &westName, QString &northName,
-                   QString &eastName, QString &southName, CBid &contract, CBid &contractModifier, int &result);
+                   QString &eastName, QString &southName, Seat declarer, Bids contract, Bids contractModifier, int result);
     void determineEvents(QTextStream &original, QStringList &events);
 
 signals:
@@ -54,8 +56,10 @@ signals:
 public slots:
 
 private:
+    enum GameType { ORIGINAL_GAME, PLAYED_GAME, AUTO_GAME };
     struct CAuctionAndPlay
     {
+        GameType gameType;
         CBidHistory bidHistory;
         CPlayHistory playHistory;
         QString westName;
@@ -94,9 +98,9 @@ private:
 
     int eventIndex;
     QString event;
-    QList<CGame *> originalGames;
-    QList<CGame *> playedGames;
+    QList<CGame *> games;
     int currentGameIndex;
+    GameType gameType;
 };
 
 #endif // CGAMESDOC_H

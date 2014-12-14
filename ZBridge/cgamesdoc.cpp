@@ -19,6 +19,7 @@
  */
 
 #include <QMap>
+#include <QTime>
 #include <QtDebug>
 
 #include "cgamesdoc.h"
@@ -28,6 +29,7 @@ enum PBNContext { TAG_CONTEXT, AUCTION_CONTEXT, PLAY_CONTEXT};
 CGamesDoc::CGamesDoc(QObject *parent) :
     QObject(parent)
 {
+    gameType = PLAYED_GAME;
 }
 
 void CGamesDoc::readGames(QTextStream &original, QTextStream &played, QString &event) throw(PlayException)
@@ -80,21 +82,8 @@ void CGamesDoc::readGames(QTextStream &original, QTextStream &played, QString &e
     tagMap[TAG_RESULT] = "";
 
     //Clean up for new game.
-    while (!originalGames.isEmpty())
-    {
-        CGame *game = originalGames.takeFirst();
-        while (!game->auctionAndPlay.isEmpty())
-            delete(game->auctionAndPlay.takeFirst());
-        delete game;
-
-    }
-    while (!playedGames.isEmpty())
-    {
-        CGame *game = playedGames.takeFirst();
-        while (!game->auctionAndPlay.isEmpty())
-            delete(game->auctionAndPlay.takeFirst());
-        delete game;
-    }
+    clearGames();
+    gameType = ORIGINAL_GAME;
 
     numLines = preloadPBNFile(original, event, strLines, auctionNotes, playNotes);
 
@@ -113,7 +102,7 @@ void CGamesDoc::readGames(QTextStream &original, QTextStream &played, QString &e
             if (game != 0)
             {
                 //Check for already found game, but new auction and play.
-                QListIterator<CGame *> gameItr(originalGames);
+                QListIterator<CGame *> gameItr(games);
                 while (gameItr.hasNext())
                 {
                     CGame *nextGame = gameItr.next();
@@ -133,6 +122,8 @@ void CGamesDoc::readGames(QTextStream &original, QTextStream &played, QString &e
                         else
                             delete auctionAndPlay;
 
+                        qDebug() << "board: " << game->board;
+
                         delete game;
                         game = 0;
                     }
@@ -148,7 +139,7 @@ void CGamesDoc::readGames(QTextStream &original, QTextStream &played, QString &e
                 else
                     delete auctionAndPlay;
 
-                originalGames.append(game);
+                games.append(game);
                 game = 0;
             }
 
@@ -543,19 +534,133 @@ void CGamesDoc::writeGames(QTextStream &stream)
 
 }
 
-void CGamesDoc::getNextDeal(int *board, int wCards[], int nCards[], int eCards[], int sCards[], Seat *dealer, Team *vulnerable)
+void CGamesDoc::clearGames()
 {
+    //Clean up for new (random) game.
+    while (!games.isEmpty())
+    {
+        CGame *game = games.takeFirst();
+        while (!game->auctionAndPlay.isEmpty())
+            delete(game->auctionAndPlay.takeFirst());
+        delete game;
 
+    }
+    currentGameIndex = -1;
+    gameType = PLAYED_GAME;
 }
 
-void CGamesDoc::setPlayedResult(CBidHistory &bidHistory, CPlayHistory &playHistory, QString &westName, QString &northName, QString &eastName, QString &southName, CBid &contract, CBid &contractModifier, int &result)
-{
+void CGamesDoc::getNextDeal(int *board, int cards[][13], Seat *dealer, Team *vulnerable)
+{    
+    currentGameIndex++;
 
+    //Give random card distribution?
+    if (gameType == PLAYED_GAME)
+    {
+        CGame *currentGame = new CGame();
+
+        Team VULNERABLE[4] = { NEITHER, NORTH_SOUTH, EAST_WEST, BOTH };
+        Seat DEALER[4] = { NORTH_SEAT, EAST_SEAT, SOUTH_SEAT, WEST_SEAT };
+        int i, j, inx;
+        int cardDeck[52];
+
+        //Info about board.
+        int boardNo = currentGameIndex;
+
+        *board = boardNo;
+        *dealer = DEALER[boardNo%4];
+        *vulnerable = VULNERABLE[(boardNo%4 + boardNo/4)%4];
+
+        currentGame->board = *board;
+        currentGame->dealer = *dealer;
+        currentGame->vulnerable = *vulnerable;
+
+        //Shuffle card deck.
+        for (i = 0; i < 52; i++)
+            cardDeck[i] = i;
+        QTime cur;
+        qsrand(cur.currentTime().msec());
+        for (i = 0; i < 52; i++)
+        {
+            inx = rand()%52;
+            j = cardDeck[i];
+            cardDeck[i] = cardDeck[inx];
+            cardDeck[inx] = j;
+        }
+
+        //Give cards.
+        for (j = 0; j < 4; j++)
+            for (i = 0; i < 13; i++)
+                cards[j][i] = cardDeck[j * 13 + i];
+
+        for (i = 0; i < 13; i++)
+        {
+            currentGame->wCards[i] = cards[WEST_SEAT][i];
+            currentGame->nCards[i] = cards[NORTH_SEAT][i];
+            currentGame->eCards[i] = cards[EAST_SEAT][i];
+            currentGame->sCards[i] = cards[SOUTH_SEAT][i];
+        }
+
+        games.append(currentGame);
+    }
+    else
+    {
+        if (games.size() > currentGameIndex)
+        {
+            CGame *currentGame = games[currentGameIndex];
+            *board = currentGame->board;
+            *dealer = currentGame->dealer;
+            *vulnerable = currentGame->vulnerable;
+            for (int i = 0; i < 13; i++)
+            {
+                cards[WEST_SEAT][i] = currentGame->wCards[i];
+                cards[NORTH_SEAT][i] = currentGame->nCards[i];
+                cards[EAST_SEAT][i] = currentGame->eCards[i];
+                cards[SOUTH_SEAT][i] = currentGame->sCards[i];
+            }
+        }
+    }
 }
 
-void CGamesDoc::setAutoResult(CBidHistory &bidHistory, CPlayHistory &playHistory, QString &westName, QString &northName, QString &eastName, QString &southName, CBid &contract, CBid &contractModifier, int &result)
+void CGamesDoc::setPlayedResult(CBidHistory &bidHistory, CPlayHistory &playHistory, QString &westName,
+                                QString &northName, QString &eastName, QString &southName, Seat declarer,
+                                Bids contract, Bids contractModifier, int result)
 {
+    CAuctionAndPlay * auctionAndPlay = new CAuctionAndPlay();
 
+    auctionAndPlay->gameType = PLAYED_GAME;
+    auctionAndPlay->bidHistory = bidHistory;
+    auctionAndPlay->playHistory = playHistory;
+    auctionAndPlay->westName = westName;
+    auctionAndPlay->northName = northName;
+    auctionAndPlay->eastName = eastName;
+    auctionAndPlay->southName = southName;
+    auctionAndPlay->declarer;
+    auctionAndPlay->contract = contract;
+    auctionAndPlay->contractModifier = contractModifier;
+    auctionAndPlay->result = result;
+
+    games[currentGameIndex]->auctionAndPlay.append(auctionAndPlay);
+}
+
+void CGamesDoc::setAutoResult(CBidHistory &bidHistory, CPlayHistory &playHistory, QString &westName,
+                              QString &northName, QString &eastName, QString &southName, Seat declarer,
+                              Bids contract, Bids contractModifier, int result)
+{
+    CAuctionAndPlay * auctionAndPlay = new CAuctionAndPlay();
+
+    auctionAndPlay->gameType = AUTO_GAME;
+    auctionAndPlay->bidHistory = bidHistory;
+    auctionAndPlay->playHistory = playHistory;
+    auctionAndPlay->westName = westName;
+    auctionAndPlay->northName = northName;
+    auctionAndPlay->eastName = eastName;
+    auctionAndPlay->southName = southName;
+    auctionAndPlay->declarer;
+    auctionAndPlay->contract = contract;
+    auctionAndPlay->contractModifier = contractModifier;
+    auctionAndPlay->result = result;
+
+    games[currentGameIndex]->auctionAndPlay.append(auctionAndPlay);
 }
 
 void CGamesDoc::determineEvents(QTextStream &original, QStringList &events)
@@ -747,6 +852,17 @@ int CGamesDoc::preloadPBNFile(QTextStream &PBNFile, QString event, QStringList &
             //Append line if not a note.
             if (line.indexOf("[NOTE ", 0, Qt::CaseInsensitive) != 0)
             {
+                //First remove NAG's.
+                while (line.indexOf('$') != -1)
+                {
+                    int nagInx = line.indexOf('$');
+                    QString partLine = line.mid(nagInx);
+                    int i = 1;
+                    while ((i < partLine.size()) && partLine[i].isDigit())
+                       i++;
+                    if (i != 1)
+                        line = line.mid(0, nagInx) + line.mid(nagInx + i);
+                }
                 strLines.append(line);
                 numLinesRead++;
             }
@@ -1031,15 +1147,18 @@ int CGamesDoc::getNote(QString &line, int inx, int *note)
         return line.size();
 
     int n = partLine.indexOf('=');
-    if ((n == -1) || ((n + 2) <= partLine.size()))
+    if ((n == -1) || (n != 0))
         return inx;
 
-    partLine = partLine.mid(n + 1);
+    int partLineInx = line.indexOf(partLine);
+
+    partLine = partLine.mid(1);
     n = partLine.indexOf('=');
-    if (n == -1)
+    if ((n == -1) ||(n == 0) ||(n > 2) || ((n == 2) && !partLine[0].isDigit() && !partLine[1].isDigit()) ||
+            ((n == 1) && !partLine[0].isDigit()))
         return inx;
 
     *note = partLine.mid(0, n).toInt();
 
-    return (n + 1);
+    return (partLineInx + n + 2);
 }

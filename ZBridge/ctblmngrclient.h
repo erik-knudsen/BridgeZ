@@ -29,6 +29,7 @@
 #include "Defines.h"
 
 class CZBridgeDoc;
+class CGamesDoc;
 class CActorLocal;
 class CBidEngine;
 class CPlayEngine;
@@ -46,7 +47,7 @@ class CTblMngrClient : public CTblMngr
     Q_OBJECT
 
 public:
-    CTblMngrClient(CZBridgeDoc *doc, CPlayView *playView, QObject *parent = 0);
+    CTblMngrClient(CZBridgeDoc *doc, CGamesDoc *games, CPlayView *playView, QObject *parent = 0);
     ~CTblMngrClient();
 
 
@@ -126,6 +127,7 @@ private:
     QTimer *leaderButton;
 
     CZBridgeDoc *doc;
+    CGamesDoc *games;
     CPlayView *playView;
 
     ZBridgeClient *handle;

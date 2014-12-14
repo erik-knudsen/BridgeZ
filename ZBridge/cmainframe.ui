@@ -58,7 +58,7 @@
     </property>
     <addaction name="action_File_Comments"/>
     <addaction name="actionBidding_Play_History"/>
-    <addaction name="actionRubber_Score"/>
+    <addaction name="action_Score"/>
     <addaction name="separator"/>
     <addaction name="action_Toolbar"/>
     <addaction name="actionSecondary_Toolbar"/>
@@ -235,7 +235,7 @@
    <addaction name="actionEnable_Analysis_Tracing"/>
    <addaction name="action_Expose_All_Cards"/>
    <addaction name="separator"/>
-   <addaction name="actionRubber_Score"/>
+   <addaction name="action_Score"/>
    <addaction name="action_File_Comments"/>
    <addaction name="separator"/>
   </widget>
@@ -432,16 +432,19 @@
     <string>F10</string>
    </property>
   </action>
-  <action name="actionRubber_Score">
+  <action name="action_Score">
    <property name="enabled">
     <bool>false</bool>
    </property>
    <property name="icon">
     <iconset resource="images.qrc">
-     <normaloff>:/newPrefix/resources/ViewRubberScore.bmp</normaloff>:/newPrefix/resources/ViewRubberScore.bmp</iconset>
+     <normaloff>:/newPrefix/resources/ViewScore.bmp</normaloff>:/newPrefix/resources/ViewScore.bmp</iconset>
    </property>
    <property name="text">
-    <string>Rubber &amp;Score</string>
+    <string> &amp;Score</string>
+   </property>
+   <property name="toolTip">
+    <string>Score</string>
    </property>
    <property name="shortcut">
     <string>F12</string>

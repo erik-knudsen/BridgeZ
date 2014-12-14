@@ -22,7 +22,7 @@
 #ifndef CBIDHISTORY_H
 #define CBIDHISTORY_H
 
-#include <QVector>
+#include <QList>
 
 #include "cbid.h"
 
@@ -33,13 +33,14 @@ class CBidHistory
 {
 public:
     CBidHistory();
+//    CBidHistory& operator=(const CBidHistory &bidHistory);
 
     void appendBid(CBid &bid);
     void removeBid();
     void resetBidHistory();
     int undo(Bids *bid);
 
-    QVector<CBid> bidList;
+    QList<CBid> bidList;
 };
 
 #endif // CBIDHISTORY_H

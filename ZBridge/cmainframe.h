@@ -107,7 +107,7 @@ private slots:
     void on_actionClear_All_triggered();
     void on_action_File_Comments_triggered();
     void on_actionBidding_Play_History_triggered();
-    void on_actionRubber_Score_triggered();
+    void on_action_Score_triggered();
     void on_action_Toolbar_triggered();
     void on_actionSecondary_Toolbar_triggered();
     void on_actionTest_Toolbar_triggered();

@@ -25,6 +25,16 @@ CBidHistory::CBidHistory()
 {
 }
 
+/*CBidHistory& CBidHistory::operator= (const CBidHistory &bidHistory)
+{
+    bidList.clear();
+
+    for (int i = 0; i < bidHistory.bidList.size(); i++)
+        bidList.append(bidHistory.bidList[i]);
+
+    return *this;
+}*/
+
 /**
  * @brief Append a bid to the bid history.
  * @param bid The bid to append.
