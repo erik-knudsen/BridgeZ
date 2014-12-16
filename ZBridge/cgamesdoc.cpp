@@ -29,10 +29,220 @@ enum PBNContext { TAG_CONTEXT, AUCTION_CONTEXT, PLAY_CONTEXT};
 CGamesDoc::CGamesDoc(QObject *parent) :
     QObject(parent)
 {
-    gameType = PLAYED_GAME;
+    dealType = RANDOM_DEAL;
 }
 
 void CGamesDoc::readGames(QTextStream &original, QTextStream &played, QString &event) throw(PlayException)
+{
+    //Clean up for new game.
+    clearGames();
+
+    this->event = event;
+
+    //Original games (check that there are original games).
+    if (original.device() != 0)
+    {
+        readGames(original, event, true);
+        if (games.size() > 0)
+            dealType = ORIGINAL_DEAL;
+    }
+
+    //Played games (check that there are played games).
+    if (played.device() != 0)
+        readGames(played, event, false);
+}
+
+void CGamesDoc::writeOriginalGames(QTextStream &stream)
+{
+    QListIterator<CGame *> gameItr(games);
+    while (gameItr.hasNext())
+    {
+        CGame *nextGame = gameItr.next();
+        writeGame(stream, nextGame, ORIGINAL_GAME, event);
+    }
+}
+
+void CGamesDoc::writePlayedGames(QTextStream &stream)
+{
+    QListIterator<CGame *> gameItr(games);
+    while (gameItr.hasNext())
+    {
+        CGame *nextGame = gameItr.next();
+        writeGame(stream, nextGame, PLAYED_GAME, event);
+        writeGame(stream, nextGame, AUTO_GAME, event);
+    }
+}
+
+void CGamesDoc::clearGames()
+{
+    //Clean up for new (random) game.
+    while (!games.isEmpty())
+    {
+        CGame *game = games.takeFirst();
+        while (!game->auctionAndPlay.isEmpty())
+            delete(game->auctionAndPlay.takeFirst());
+        delete game;
+
+    }
+    currentGameIndex = -1;
+    dealType = RANDOM_DEAL;
+}
+
+void CGamesDoc::getNextDeal(int *board, int cards[][13], Seat *dealer, Team *vulnerable)
+{
+    currentGameIndex++;
+
+    //Give random card distribution etc.?
+    if (dealType == PLAYED_GAME)
+    {
+        CGame *currentGame = new CGame();
+
+        Team VULNERABLE[4] = { NEITHER, NORTH_SOUTH, EAST_WEST, BOTH };
+        Seat DEALER[4] = { NORTH_SEAT, EAST_SEAT, SOUTH_SEAT, WEST_SEAT };
+        int i, j, inx;
+        int cardDeck[52];
+
+        //Info about board.
+        int boardNo = currentGameIndex;
+
+        *board = boardNo;
+        *dealer = DEALER[boardNo%4];
+        *vulnerable = VULNERABLE[(boardNo%4 + boardNo/4)%4];
+
+        currentGame->board = *board;
+        currentGame->dealer = *dealer;
+        currentGame->vulnerable = *vulnerable;
+
+        //Shuffle card deck.
+        for (i = 0; i < 52; i++)
+            cardDeck[i] = i;
+        QTime cur;
+        qsrand(cur.currentTime().msec());
+        for (i = 0; i < 52; i++)
+        {
+            inx = rand()%52;
+            j = cardDeck[i];
+            cardDeck[i] = cardDeck[inx];
+            cardDeck[inx] = j;
+        }
+
+        //Give cards.
+        for (j = 0; j < 4; j++)
+            for (i = 0; i < 13; i++)
+                cards[j][i] = cardDeck[j * 13 + i];
+
+        //Save game.
+        for (i = 0; i < 13; i++)
+        {
+            currentGame->wCards[i] = cards[WEST_SEAT][i];
+            currentGame->nCards[i] = cards[NORTH_SEAT][i];
+            currentGame->eCards[i] = cards[EAST_SEAT][i];
+            currentGame->sCards[i] = cards[SOUTH_SEAT][i];
+        }
+
+        //Append to already played games.
+        games.append(currentGame);
+    }
+    else
+    {
+        //Take card distribution etc. from next game.
+        if (games.size() > currentGameIndex)
+        {
+            CGame *currentGame = games[currentGameIndex];
+            *board = currentGame->board;
+            *dealer = currentGame->dealer;
+            *vulnerable = currentGame->vulnerable;
+            for (int i = 0; i < 13; i++)
+            {
+                cards[WEST_SEAT][i] = currentGame->wCards[i];
+                cards[NORTH_SEAT][i] = currentGame->nCards[i];
+                cards[EAST_SEAT][i] = currentGame->eCards[i];
+                cards[SOUTH_SEAT][i] = currentGame->sCards[i];
+            }
+        }
+    }
+}
+
+void CGamesDoc::setPlayedResult(CBidHistory &bidHistory, CPlayHistory &playHistory, QString &westName,
+                                QString &northName, QString &eastName, QString &southName, Seat declarer,
+                                Bids contract, Bids contractModifier, int result)
+{
+    //Set result of manually played game.
+    CAuctionAndPlay * auctionAndPlay = new CAuctionAndPlay();
+
+    auctionAndPlay->gameType = PLAYED_GAME;
+    auctionAndPlay->bidHistory = bidHistory;
+    auctionAndPlay->playHistory = playHistory;
+    auctionAndPlay->westName = westName;
+    auctionAndPlay->northName = northName;
+    auctionAndPlay->eastName = eastName;
+    auctionAndPlay->southName = southName;
+    auctionAndPlay->declarer = declarer;
+    auctionAndPlay->contract = contract;
+    auctionAndPlay->contractModifier = contractModifier;
+    auctionAndPlay->result = result;
+
+    games[currentGameIndex]->auctionAndPlay.append(auctionAndPlay);
+}
+
+void CGamesDoc::setAutoResult(CBidHistory &bidHistory, CPlayHistory &playHistory, QString &westName,
+                              QString &northName, QString &eastName, QString &southName, Seat declarer,
+                              Bids contract, Bids contractModifier, int result)
+{
+    //Set result af automatically played game.
+    CAuctionAndPlay * auctionAndPlay = new CAuctionAndPlay();
+
+    auctionAndPlay->gameType = AUTO_GAME;
+    auctionAndPlay->bidHistory = bidHistory;
+    auctionAndPlay->playHistory = playHistory;
+    auctionAndPlay->westName = westName;
+    auctionAndPlay->northName = northName;
+    auctionAndPlay->eastName = eastName;
+    auctionAndPlay->southName = southName;
+    auctionAndPlay->declarer = declarer;
+    auctionAndPlay->contract = contract;
+    auctionAndPlay->contractModifier = contractModifier;
+    auctionAndPlay->result = result;
+
+    games[currentGameIndex]->auctionAndPlay.append(auctionAndPlay);
+}
+
+void CGamesDoc::determineEvents(QTextStream &original, QStringList &events)
+{
+    QString line;
+    QString event;
+
+    while (!original.atEnd())
+    {
+        line = original.readLine();
+
+        if (line.indexOf("[EVENT", 0, Qt::CaseInsensitive) == 0)
+        {
+            int firstInx = line.indexOf('"');
+            int lastInx = line.lastIndexOf('"');
+
+            //Check for syntax (silently discard in case of syntax error).
+            if ((firstInx == -1) || (firstInx == lastInx))
+                continue;
+
+            //Handle header (##) and substitution (#).
+            if (line.indexOf("##", firstInx + 1) == (firstInx + 1))
+                event = line.mid(firstInx + 3, lastInx - (firstInx + 3));
+            else if (line.indexOf('#', firstInx + 1) != (firstInx + 1))
+                event = line.mid(firstInx + 1, lastInx - (firstInx + 1));
+            else
+                continue;
+
+            if (event == "?")
+                event = "";
+
+            if (events.indexOf(event) == -1)
+                events.append(event);
+        }
+    }
+}
+
+void CGamesDoc::readGames(QTextStream &pbnText, QString &event, bool originalGames) throw(PlayException)
 {
     int numLines;
     PBNContext context;
@@ -81,12 +291,10 @@ void CGamesDoc::readGames(QTextStream &original, QTextStream &played, QString &e
     tagMap[TAG_SCORING] = "";
     tagMap[TAG_RESULT] = "";
 
-    //Clean up for new game.
-    clearGames();
-    gameType = ORIGINAL_GAME;
+    //Read and preprocess pbn file.
+    numLines = preloadPBNFile(pbnText, event, strLines, auctionNotes, playNotes);
 
-    numLines = preloadPBNFile(original, event, strLines, auctionNotes, playNotes);
-
+    //Process one line at a time.
     gameNo = 0;
     context = TAG_CONTEXT;
     QListIterator<QString> lineItr(strLines);
@@ -103,11 +311,14 @@ void CGamesDoc::readGames(QTextStream &original, QTextStream &played, QString &e
             {
                 //Check for already found game, but new auction and play.
                 QListIterator<CGame *> gameItr(games);
+                int gameInx = -1;
                 while (gameItr.hasNext())
                 {
+                    gameInx++;
                     CGame *nextGame = gameItr.next();
                     if (nextGame->board == game->board)
                     {
+                        //Check redundant info (cards etc.).
                         bool error;
                         for (int i = 0; i < 13; i++)
                             if ((nextGame->wCards[i] != game->wCards[i]) || (nextGame->nCards[i] != game->nCards[i]) ||
@@ -118,11 +329,28 @@ void CGamesDoc::readGames(QTextStream &original, QTextStream &played, QString &e
 
                         if (!auctionAndPlay->westName.isEmpty() && !auctionAndPlay->northName.isEmpty() &&
                                 !auctionAndPlay->eastName.isEmpty() && !auctionAndPlay->southName.isEmpty())
+                        {
+                            bool foundPlayed = false;
+                            if (!originalGames)
+                            {
+                                //In case we are processing (by this program) played games, then the first game
+                                //is a manually played game and the next (if existing) is an automatically
+                                //played game (there will at most be two played games).
+                                QListIterator<CAuctionAndPlay *> auctionAndPlayItr(nextGame->auctionAndPlay);
+                                while (!foundPlayed && auctionAndPlayItr.hasNext())
+                                {
+                                    CAuctionAndPlay *nextAuctionAndPlay = auctionAndPlayItr.next();
+                                    if (nextAuctionAndPlay->gameType == PLAYED_GAME)
+                                        foundPlayed = true;
+                                }
+                            }
+                            auctionAndPlay->gameType = (originalGames) ? (ORIGINAL_GAME) : (foundPlayed) ? (AUTO_GAME) : (PLAYED_GAME);
                             nextGame->auctionAndPlay.append(auctionAndPlay);
+                            if (foundPlayed)
+                                currentGameIndex = gameInx;
+                        }
                         else
                             delete auctionAndPlay;
-
-                        qDebug() << "board: " << game->board;
 
                         delete game;
                         game = 0;
@@ -135,7 +363,14 @@ void CGamesDoc::readGames(QTextStream &original, QTextStream &played, QString &e
             {
                 if (!auctionAndPlay->westName.isEmpty() && !auctionAndPlay->northName.isEmpty() &&
                         !auctionAndPlay->eastName.isEmpty() && !auctionAndPlay->southName.isEmpty())
+                {
+                    auctionAndPlay->gameType = (originalGames) ? (ORIGINAL_GAME) : (PLAYED_GAME);
                     game->auctionAndPlay.append(auctionAndPlay);
+
+                    //Update the current game index to the next game. We do not want to play already played games.
+                    if (!originalGames)
+                        currentGameIndex = games.size();
+                }
                 else
                     delete auctionAndPlay;
 
@@ -162,6 +397,7 @@ void CGamesDoc::readGames(QTextStream &original, QTextStream &played, QString &e
 
             switch (context)
             {
+            //We are processing auction information.
             case AUCTION_CONTEXT:
             {
                 Seat actor;
@@ -172,6 +408,7 @@ void CGamesDoc::readGames(QTextStream &original, QTextStream &played, QString &e
 
                 do
                 {
+                    //Get next bid.
                     if ((inxNext = getBid(currentLine, inx, &bidCall)) != inx)
                     {
                         if (bidCall == BID_BLANK)       //*  (end of auction)
@@ -181,6 +418,7 @@ void CGamesDoc::readGames(QTextStream &original, QTextStream &played, QString &e
                         }
                         else if (bidCall == BID_PLAYER) //AP (All Passes)
                         {
+                            //Append 3 consecutive passes.
                             bidCall = BID_PASS;
                             for (int i = noPasses; i < 3; i++)
                             {
@@ -197,6 +435,7 @@ void CGamesDoc::readGames(QTextStream &original, QTextStream &played, QString &e
                         QString alert;
                         actor = (Seat)((game->dealer + actorNo) % 4);
                         actorNo++;
+                        //Check for notes.
                         if ((inxNext = getNote(currentLine, inx, &note)) != inx)
                         {
                             inx = inxNext;
@@ -204,9 +443,11 @@ void CGamesDoc::readGames(QTextStream &original, QTextStream &played, QString &e
                         }
                         CBid bid(actor, bidCall, alert);
                         auctionAndPlay->bidHistory.appendBid(bid);
+                        //Check for pass.
                         if (bidCall == BID_PASS)
                         {
                             noPasses++;
+                            //Finished?
                             if (noPasses == 3)          //3 consecutive passes ends auction.
                             {
                                 context = TAG_CONTEXT;
@@ -223,6 +464,7 @@ void CGamesDoc::readGames(QTextStream &original, QTextStream &played, QString &e
             }
                 break;
 
+            //We are processing play information.
             case PLAY_CONTEXT:
             {
                 int playCall;
@@ -232,6 +474,7 @@ void CGamesDoc::readGames(QTextStream &original, QTextStream &played, QString &e
 
                 do
                 {
+                    //Get next play.
                     if ((inxNext = getPlay(currentLine, inx, &playCall)) != inx)
                     {
                         if ((playCall == -2) || (playCall == -3))       //* or -  (end of play or not played)
@@ -240,6 +483,7 @@ void CGamesDoc::readGames(QTextStream &original, QTextStream &played, QString &e
                             break;
                         }
 
+                        //Check for notes.
                         inx = inxNext;
                         QString alert;
                         if ((inxNext = getNote(currentLine, inx, &note)) != inx)
@@ -247,9 +491,13 @@ void CGamesDoc::readGames(QTextStream &original, QTextStream &played, QString &e
                             inx = inxNext;
                             alert = playNotes[note + gameNo*32];
                         }
+                        //Save play.
                         oneTrick[actorNo++] = playCall;
+
+                        //Have all (4) actors played?
                         if (actorNo == 4)
                         {
+                            //Save play.
                             for (int i = 0; i < 4; i++)
                             {
                                 Seat seat = (Seat)((currentLeader + i) % 4);
@@ -262,9 +510,11 @@ void CGamesDoc::readGames(QTextStream &original, QTextStream &played, QString &e
                                 else
                                     throw PlayException((QString("PBN - Illegal play: %1 %2 %3").arg(currentLine).arg(" in board: ").arg(game->board)).toStdString());
                             }
+                            //Update to next trick.
                             currentLeader = auctionAndPlay->playHistory.getNextLeader();
                             actorNo = 0;
                             trickNo++;
+                            //Finished?
                             if (trickNo == 13)
                             {
                                 context = TAG_CONTEXT;
@@ -279,6 +529,7 @@ void CGamesDoc::readGames(QTextStream &original, QTextStream &played, QString &e
             }
                 break;
 
+            //We are processing tags.
             case TAG_CONTEXT:
             {
                 QString strValue;
@@ -524,176 +775,15 @@ void CGamesDoc::readGames(QTextStream &original, QTextStream &played, QString &e
     }
 }
 
-void CGamesDoc::readGames(QTextStream &stream, QList<CGame> &games, QString &event)
+void CGamesDoc::writeGame(QTextStream &stream, CGame *game, GameType gameType, QString event)
 {
-
-}
-
-void CGamesDoc::writeGames(QTextStream &stream)
-{
-
-}
-
-void CGamesDoc::clearGames()
-{
-    //Clean up for new (random) game.
-    while (!games.isEmpty())
+    QListIterator<CAuctionAndPlay *> auctionAndPlayItr(game->auctionAndPlay);
+    while (auctionAndPlayItr.hasNext())
     {
-        CGame *game = games.takeFirst();
-        while (!game->auctionAndPlay.isEmpty())
-            delete(game->auctionAndPlay.takeFirst());
-        delete game;
-
-    }
-    currentGameIndex = -1;
-    gameType = PLAYED_GAME;
-}
-
-void CGamesDoc::getNextDeal(int *board, int cards[][13], Seat *dealer, Team *vulnerable)
-{    
-    currentGameIndex++;
-
-    //Give random card distribution?
-    if (gameType == PLAYED_GAME)
-    {
-        CGame *currentGame = new CGame();
-
-        Team VULNERABLE[4] = { NEITHER, NORTH_SOUTH, EAST_WEST, BOTH };
-        Seat DEALER[4] = { NORTH_SEAT, EAST_SEAT, SOUTH_SEAT, WEST_SEAT };
-        int i, j, inx;
-        int cardDeck[52];
-
-        //Info about board.
-        int boardNo = currentGameIndex;
-
-        *board = boardNo;
-        *dealer = DEALER[boardNo%4];
-        *vulnerable = VULNERABLE[(boardNo%4 + boardNo/4)%4];
-
-        currentGame->board = *board;
-        currentGame->dealer = *dealer;
-        currentGame->vulnerable = *vulnerable;
-
-        //Shuffle card deck.
-        for (i = 0; i < 52; i++)
-            cardDeck[i] = i;
-        QTime cur;
-        qsrand(cur.currentTime().msec());
-        for (i = 0; i < 52; i++)
+        CAuctionAndPlay *nextAuctionAndPlay = auctionAndPlayItr.next();
+        if (nextAuctionAndPlay->gameType == gameType)
         {
-            inx = rand()%52;
-            j = cardDeck[i];
-            cardDeck[i] = cardDeck[inx];
-            cardDeck[inx] = j;
-        }
 
-        //Give cards.
-        for (j = 0; j < 4; j++)
-            for (i = 0; i < 13; i++)
-                cards[j][i] = cardDeck[j * 13 + i];
-
-        for (i = 0; i < 13; i++)
-        {
-            currentGame->wCards[i] = cards[WEST_SEAT][i];
-            currentGame->nCards[i] = cards[NORTH_SEAT][i];
-            currentGame->eCards[i] = cards[EAST_SEAT][i];
-            currentGame->sCards[i] = cards[SOUTH_SEAT][i];
-        }
-
-        games.append(currentGame);
-    }
-    else
-    {
-        if (games.size() > currentGameIndex)
-        {
-            CGame *currentGame = games[currentGameIndex];
-            *board = currentGame->board;
-            *dealer = currentGame->dealer;
-            *vulnerable = currentGame->vulnerable;
-            for (int i = 0; i < 13; i++)
-            {
-                cards[WEST_SEAT][i] = currentGame->wCards[i];
-                cards[NORTH_SEAT][i] = currentGame->nCards[i];
-                cards[EAST_SEAT][i] = currentGame->eCards[i];
-                cards[SOUTH_SEAT][i] = currentGame->sCards[i];
-            }
-        }
-    }
-}
-
-void CGamesDoc::setPlayedResult(CBidHistory &bidHistory, CPlayHistory &playHistory, QString &westName,
-                                QString &northName, QString &eastName, QString &southName, Seat declarer,
-                                Bids contract, Bids contractModifier, int result)
-{
-    CAuctionAndPlay * auctionAndPlay = new CAuctionAndPlay();
-
-    auctionAndPlay->gameType = PLAYED_GAME;
-    auctionAndPlay->bidHistory = bidHistory;
-    auctionAndPlay->playHistory = playHistory;
-    auctionAndPlay->westName = westName;
-    auctionAndPlay->northName = northName;
-    auctionAndPlay->eastName = eastName;
-    auctionAndPlay->southName = southName;
-    auctionAndPlay->declarer;
-    auctionAndPlay->contract = contract;
-    auctionAndPlay->contractModifier = contractModifier;
-    auctionAndPlay->result = result;
-
-    games[currentGameIndex]->auctionAndPlay.append(auctionAndPlay);
-}
-
-void CGamesDoc::setAutoResult(CBidHistory &bidHistory, CPlayHistory &playHistory, QString &westName,
-                              QString &northName, QString &eastName, QString &southName, Seat declarer,
-                              Bids contract, Bids contractModifier, int result)
-{
-    CAuctionAndPlay * auctionAndPlay = new CAuctionAndPlay();
-
-    auctionAndPlay->gameType = AUTO_GAME;
-    auctionAndPlay->bidHistory = bidHistory;
-    auctionAndPlay->playHistory = playHistory;
-    auctionAndPlay->westName = westName;
-    auctionAndPlay->northName = northName;
-    auctionAndPlay->eastName = eastName;
-    auctionAndPlay->southName = southName;
-    auctionAndPlay->declarer;
-    auctionAndPlay->contract = contract;
-    auctionAndPlay->contractModifier = contractModifier;
-    auctionAndPlay->result = result;
-
-    games[currentGameIndex]->auctionAndPlay.append(auctionAndPlay);
-}
-
-void CGamesDoc::determineEvents(QTextStream &original, QStringList &events)
-{
-    QString line;
-    QString event;
-
-    while (!original.atEnd())
-    {
-        line = original.readLine();
-
-        if (line.indexOf("[EVENT", 0, Qt::CaseInsensitive) == 0)
-        {
-            int firstInx = line.indexOf('"');
-            int lastInx = line.lastIndexOf('"');
-
-            //Check for syntax (silently discard in case of syntax error).
-            if ((firstInx == -1) || (firstInx == lastInx))
-                continue;
-
-            //Handle header (##) and substitution (#).
-            if (line.indexOf("##", firstInx + 1) == (firstInx + 1))
-                event = line.mid(firstInx + 3, lastInx - (firstInx + 3));
-            else if (line.indexOf('#', firstInx + 1) != (firstInx + 1))
-                event = line.mid(firstInx + 1, lastInx - (firstInx + 1));
-            else
-                continue;
-
-            if (event == "?")
-                event = "";
-
-            if (events.indexOf(event) == -1)
-                events.append(event);
         }
     }
 }

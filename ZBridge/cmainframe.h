@@ -87,6 +87,9 @@ private:
     CStatusWnd *m_pWndStatus;
     CHistoryWnd *m_pWndHistory;
 
+    int eventIndex;
+    QString fileName;
+
 private slots:
     void OnUpdateViewFileComments();
     void OnUpdateViewHistory();

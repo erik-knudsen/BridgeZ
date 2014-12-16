@@ -39,23 +39,21 @@ class CGamesDoc : public QObject
 public:
     explicit CGamesDoc(QObject *parent = 0);
     void readGames(QTextStream &original, QTextStream &played, QString &event) throw(PlayException);
-
-    void writeGames(QTextStream &stream);
-
+    void writeOriginalGames(QTextStream &stream);
+    void writePlayedGames(QTextStream &stream);
     void clearGames();
-
     void getNextDeal(int *board, int cards[][13], Seat *dealer, Team *vulnerable);
     void setPlayedResult(CBidHistory &bidHistory, CPlayHistory &playHistory, QString &westName, QString &northName,
                    QString &eastName, QString &southName, Seat declarer, Bids contract, Bids contractModifier, int result);
     void setAutoResult(CBidHistory &bidHistory, CPlayHistory &playHistory, QString &westName, QString &northName,
                    QString &eastName, QString &southName, Seat declarer, Bids contract, Bids contractModifier, int result);
     void determineEvents(QTextStream &original, QStringList &events);
-
 signals:
 
 public slots:
 
 private:
+    enum DealType { ORIGINAL_DEAL, RANDOM_DEAL };
     enum GameType { ORIGINAL_GAME, PLAYED_GAME, AUTO_GAME };
     struct CAuctionAndPlay
     {
@@ -84,9 +82,10 @@ private:
         QList<CAuctionAndPlay *> auctionAndPlay;
     };
 
+    void readGames(QTextStream &pbnText, QString &event, bool originalGames) throw(PlayException);
+    void writeGame(QTextStream &stream, CGame *game, GameType gameType, QString event);
     int preloadPBNFile(QTextStream &PBNFile, QString event, QStringList &strLines,
                        QMap<int, QString> &auctionNotes,  QMap<int, QString> &playNotes);
-    void readGames(QTextStream &stream, QList<CGame> &games, QString &event);
     bool searchGame(QString &line, QString &event);
     tagIds parsePBNLine(QString &currentLine, QString &strValue, QMap<QString, tagIds> &tagName);
     Seat getCards(QString &strValue, int wCards[], int nCards[], int eCards[], int sCards[], int board) throw(PlayException);
@@ -96,11 +95,10 @@ private:
     int getPlay(QString &line, int inx, int *playCall);
     int getNote(QString &line, int inx, int *note);
 
-    int eventIndex;
     QString event;
     QList<CGame *> games;
     int currentGameIndex;
-    GameType gameType;
+    DealType dealType;
 };
 
 #endif // CGAMESDOC_H

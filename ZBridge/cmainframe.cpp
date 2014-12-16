@@ -262,6 +262,8 @@ void CMainFrame::enableUIActionsClient(bool advProtocol)
 void CMainFrame::enableUIActions(actionIndicator actions, bool advProtocol)
 {
     ui->actionOpen->setEnabled((actions == INITIAL_ACTIONS) || (actions == SERVER_ACTIONS));
+    ui->actionSave->setEnabled((actions == INITIAL_ACTIONS) || (actions == SERVER_ACTIONS));
+    ui->actionSave_As->setEnabled((actions == INITIAL_ACTIONS) || (actions == SERVER_ACTIONS));
     ui->actionRecent_File->setEnabled((actions == INITIAL_ACTIONS) || (actions == SERVER_ACTIONS));
     ui->actionClear_All->setEnabled((actions == SERVER_ACTIONS) || (actions == CLIENT_ACTIONS));
     ui->actionBidding_Play_History->setEnabled((actions == SERVER_ACTIONS) || (actions == CLIENT_ACTIONS));
@@ -350,13 +352,14 @@ void CMainFrame::on_actionOpen_triggered()
 {
     try
     {
-    //Determine pbn file to read from.
+    //Determine pbn file to read games from.
     QString originalFileName = QFileDialog::getOpenFileName(this,
         tr("Open Portable Bridge Notation file"), "", tr("Portable Bridge Notation (*.pbn)"));
     QFile originalFile(originalFileName);
     if (!originalFile.open(QIODevice::ReadOnly | QIODevice::Text))
         return;
     QTextStream original(&originalFile);
+
     QTextStream played;
     QString event;
 
@@ -374,26 +377,88 @@ void CMainFrame::on_actionOpen_triggered()
     else if (strLines.size() == 1)
         event = strLines.at(0);
 
+    //Determine event index.
+    int inx;
+    for (inx = 0; inx < strLines.size(); inx++)
+        if (strLines.at(inx) == event)
+            break;
+
+    //Open file with already (in this program) played games.
+    QString playedFilename = originalFileName.left(originalFileName.indexOf(".pbn", 0, Qt::CaseInsensitive)) +
+            "_" + QString::number(inx) + ".zbr";
+    QFile playedFile(playedFilename);
+    //None might be played.
+    if (playedFile.open(QIODevice::ReadOnly | QIODevice::Text))
+        played.setDevice(&playedFile);
+
+    //Read games.
     original.seek(0);
     games->readGames(original, played, event);
+
+    //Save info about pbn file.
+    eventIndex = inx;
+    fileName = originalFileName;
+
+    //Start session.
+    tableManager->newSession();
     }
     catch (PlayException &e)
     {
-        //There was an error in proceesing of pbn file..
+        //There was an error in proceesing of pbn file.
         QMessageBox::critical(0, tr("ZBridge"), e.what());
     }
-
-    tableManager->newSession();
 }
 
 void CMainFrame::on_actionSave_triggered()
 {
+    //Save (in this program) played games.
+    //Might be (by this program) random generated games.
+    if (fileName.size() == 0)
+        on_actionSave_As_triggered();
+    else
+    {
+        //Save (by this program) played games.
+        QString playedFilename = fileName.left(fileName.indexOf(".pbn", 0, Qt::CaseInsensitive)) +
+                "_" + QString::number(eventIndex) + ".zbr";
+        QFile playedFile(playedFilename);
+        playedFile.open(QIODevice::ReadWrite | QIODevice::Text);
+        QTextStream played(&playedFile);
 
+        games->writePlayedGames(played);
+    }
 }
 
 void CMainFrame::on_actionSave_As_triggered()
 {
+    //Save games with a new filename.
+    QString originalFileName;
 
+    //Determine pbn file to write to.
+    originalFileName = QFileDialog::getSaveFileName(this,
+        tr("Save Portable Bridge Notation file"), "", tr("Portable Bridge Notation (*.pbn)"));
+    if (originalFileName.indexOf(".pbn", Qt::CaseInsensitive) == -1)
+        originalFileName += ".pbn";
+
+    QFile originalFile(originalFileName);
+    originalFile.open(QIODevice::ReadWrite | QIODevice::Text);
+    QTextStream original(&originalFile);
+
+    //Save current file name and event index.
+    fileName = originalFileName;
+    eventIndex = 0;
+
+    //Determine file with (by this program) played games.
+    QString playedFilename = fileName.left(fileName.indexOf(".pbn", 0, Qt::CaseInsensitive)) +
+            "_" + QString::number(eventIndex) + ".zbr";
+    QFile playedFile(playedFilename);
+    playedFile.open(QIODevice::ReadWrite | QIODevice::Text);
+    QTextStream played(&playedFile);
+
+    //Save original games (in case of random generated games there is no original games).
+    games->writeOriginalGames(original);
+
+    //Save (by this program) played games.
+    games->writePlayedGames((played));
 }
 
 void CMainFrame::on_actionPrint_triggered()
@@ -508,6 +573,8 @@ void CMainFrame::on_action_Refresh_Screen_triggered()
 void CMainFrame::on_actionNew_Session_triggered()
 {
     games->clearGames();
+    fileName.clear();
+    eventIndex = 0;
 
     tableManager->newSession();
 }
