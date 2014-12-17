@@ -262,8 +262,8 @@ void CMainFrame::enableUIActionsClient(bool advProtocol)
 void CMainFrame::enableUIActions(actionIndicator actions, bool advProtocol)
 {
     ui->actionOpen->setEnabled((actions == INITIAL_ACTIONS) || (actions == SERVER_ACTIONS));
-    ui->actionSave->setEnabled((actions == INITIAL_ACTIONS) || (actions == SERVER_ACTIONS));
-    ui->actionSave_As->setEnabled((actions == INITIAL_ACTIONS) || (actions == SERVER_ACTIONS));
+    ui->actionSave->setEnabled(actions == SERVER_ACTIONS);
+    ui->actionSave_As->setEnabled(actions == SERVER_ACTIONS);
     ui->actionRecent_File->setEnabled((actions == INITIAL_ACTIONS) || (actions == SERVER_ACTIONS));
     ui->actionClear_All->setEnabled((actions == SERVER_ACTIONS) || (actions == CLIENT_ACTIONS));
     ui->actionBidding_Play_History->setEnabled((actions == SERVER_ACTIONS) || (actions == CLIENT_ACTIONS));
@@ -395,6 +395,9 @@ void CMainFrame::on_actionOpen_triggered()
     original.seek(0);
     games->readGames(original, played, event);
 
+    playedFile.close();
+    originalFile.close();
+
     //Save info about pbn file.
     eventIndex = inx;
     fileName = originalFileName;
@@ -422,9 +425,12 @@ void CMainFrame::on_actionSave_triggered()
                 "_" + QString::number(eventIndex) + ".zbr";
         QFile playedFile(playedFilename);
         playedFile.open(QIODevice::ReadWrite | QIODevice::Text);
+        playedFile.resize(0);
         QTextStream played(&playedFile);
 
         games->writePlayedGames(played);
+
+        playedFile.close();
     }
 }
 
@@ -441,6 +447,7 @@ void CMainFrame::on_actionSave_As_triggered()
 
     QFile originalFile(originalFileName);
     originalFile.open(QIODevice::ReadWrite | QIODevice::Text);
+    originalFile.resize(0);
     QTextStream original(&originalFile);
 
     //Save current file name and event index.
@@ -452,6 +459,7 @@ void CMainFrame::on_actionSave_As_triggered()
             "_" + QString::number(eventIndex) + ".zbr";
     QFile playedFile(playedFilename);
     playedFile.open(QIODevice::ReadWrite | QIODevice::Text);
+    playedFile.resize(0);
     QTextStream played(&playedFile);
 
     //Save original games (in case of random generated games there is no original games).
@@ -459,6 +467,9 @@ void CMainFrame::on_actionSave_As_triggered()
 
     //Save (by this program) played games.
     games->writePlayedGames((played));
+
+    originalFile.close();
+    playedFile.close();
 }
 
 void CMainFrame::on_actionPrint_triggered()

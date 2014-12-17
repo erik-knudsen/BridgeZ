@@ -43,6 +43,8 @@ public:
     Seat getNextLeader();
     int undo(int undoType);
     int getNoTrick() { return noTrick; }
+    Seat getOpenLeader() { return openLeader; }
+    void getTrick(int trickNo, int trick[]);
 
 private:
     int noTrick;

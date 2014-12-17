@@ -99,6 +99,11 @@ private:
     QList<CGame *> games;
     int currentGameIndex;
     DealType dealType;
+    QString &setCards(int wCards[], int nCards[], int eCards[], int sCards[], QString &line);
+    void setSuit(int cards[], Suit suit, QString &line);
+    QString &setContract(Bids contract, Bids contractModifier, QString &line);
+    void makeAuction(QTextStream &stream, CBidHistory &bidHistory);
+    void makePlay(QTextStream &stream, CPlayHistory &playHistory);
 };
 
 #endif // CGAMESDOC_H

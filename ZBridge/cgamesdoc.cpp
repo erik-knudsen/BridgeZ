@@ -55,21 +55,32 @@ void CGamesDoc::readGames(QTextStream &original, QTextStream &played, QString &e
 void CGamesDoc::writeOriginalGames(QTextStream &stream)
 {
     QListIterator<CGame *> gameItr(games);
-    while (gameItr.hasNext())
+    if (gameItr.hasNext())
     {
         CGame *nextGame = gameItr.next();
         writeGame(stream, nextGame, ORIGINAL_GAME, event);
+    }
+    while (gameItr.hasNext())
+    {
+        CGame *nextGame = gameItr.next();
+        writeGame(stream, nextGame, ORIGINAL_GAME, "#");
     }
 }
 
 void CGamesDoc::writePlayedGames(QTextStream &stream)
 {
     QListIterator<CGame *> gameItr(games);
-    while (gameItr.hasNext())
+    if (gameItr.hasNext())
     {
         CGame *nextGame = gameItr.next();
         writeGame(stream, nextGame, PLAYED_GAME, event);
-        writeGame(stream, nextGame, AUTO_GAME, event);
+        writeGame(stream, nextGame, AUTO_GAME, "#");
+    }
+    while (gameItr.hasNext())
+    {
+        CGame *nextGame = gameItr.next();
+        writeGame(stream, nextGame, PLAYED_GAME, "#");
+        writeGame(stream, nextGame, AUTO_GAME, "#");
     }
 }
 
@@ -627,8 +638,6 @@ void CGamesDoc::readGames(QTextStream &pbnText, QString &event, bool originalGam
                     Seat dealer = getCards(strValue, game->wCards, game->nCards, game->eCards, game->sCards, game->board);
                     if (game->dealer == NO_SEAT)
                         game->dealer = dealer;
-                    if (game->dealer != dealer)
-                        throw PlayException(QString("PBN - Illegal dealer: %1 %2 %3").arg(strValue).arg(" in board: ").arg(game->board).toStdString());
                 }
                     break;
 
@@ -777,13 +786,32 @@ void CGamesDoc::readGames(QTextStream &pbnText, QString &event, bool originalGam
 
 void CGamesDoc::writeGame(QTextStream &stream, CGame *game, GameType gameType, QString event)
 {
+    const QString SEAT_NAMES[4] = {"W", "N", "E", "S"};
+    const QString VULNERABILITY_NAMES[4] = {"None", "NS", "EW", "All"};
+    QString ev = event;
+    QString line;
     QListIterator<CAuctionAndPlay *> auctionAndPlayItr(game->auctionAndPlay);
     while (auctionAndPlayItr.hasNext())
     {
         CAuctionAndPlay *nextAuctionAndPlay = auctionAndPlayItr.next();
         if (nextAuctionAndPlay->gameType == gameType)
         {
-
+            stream << "[Event \"" << ev << "\"]\n";
+            ev = "#";
+            stream << QString("[Board \"%1\"]\n").arg(game->board).toLatin1();
+            stream << QString("[West \"%1\"]\n").arg(nextAuctionAndPlay->westName);
+            stream << QString("[North \"%1\"]\n").arg(nextAuctionAndPlay->northName);
+            stream << QString("[East \"%1\"]\n").arg(nextAuctionAndPlay->eastName);
+            stream << QString("[South \"%1\"]\n").arg(nextAuctionAndPlay->southName);
+            stream << QString("[Dealer \"%1\"]\n").arg(SEAT_NAMES[game->dealer]);
+            stream << QString("[Vulnerable \"%1\"]\n").arg(VULNERABILITY_NAMES[game->vulnerable]);
+            stream << setCards(game->wCards, game->nCards, game->eCards, game->sCards, line).toLatin1();
+            stream << QString("[Declarer \"%1\"]\n").arg(SEAT_NAMES[nextAuctionAndPlay->declarer]);
+            stream << setContract(nextAuctionAndPlay->contract, nextAuctionAndPlay->contractModifier, line);
+            stream << QString("[Result \"%1\"]\n").arg(nextAuctionAndPlay->result);
+            makeAuction(stream, nextAuctionAndPlay->bidHistory);
+            makePlay(stream, nextAuctionAndPlay->playHistory);
+            stream << QString("\n");
         }
     }
 }
@@ -1251,4 +1279,190 @@ int CGamesDoc::getNote(QString &line, int inx, int *note)
     *note = partLine.mid(0, n).toInt();
 
     return (partLineInx + n + 2);
+}
+
+QString &CGamesDoc::setCards(int wCards[], int nCards[], int eCards[], int sCards[], QString &line)
+{
+    line = "[Deal \"N:";
+
+    //First north.
+    setSuit(nCards, SPADES, line);
+    line += ".";
+    setSuit(nCards, HEARTS, line);
+    line += ".";
+    setSuit(nCards, DIAMONDS, line);
+    line += ".";
+    setSuit(nCards, CLUBS, line);
+
+    line += " ";
+
+    //Then east.
+    setSuit(eCards, SPADES, line);
+    line += ".";
+    setSuit(eCards, HEARTS, line);
+    line += ".";
+    setSuit(eCards, DIAMONDS, line);
+    line += ".";
+    setSuit(eCards, CLUBS, line);
+
+    line += " ";
+
+    //Then south.
+    setSuit(sCards, SPADES, line);
+    line += ".";
+    setSuit(sCards, HEARTS, line);
+    line += ".";
+    setSuit(sCards, DIAMONDS, line);
+    line += ".";
+    setSuit(sCards, CLUBS, line);
+
+    line += " ";
+
+    //Then west.
+    setSuit(wCards, SPADES, line);
+    line += ".";
+    setSuit(wCards, HEARTS, line);
+    line += ".";
+    setSuit(wCards, DIAMONDS, line);
+    line += ".";
+    setSuit(wCards, CLUBS, line);
+
+    line += "\"]\n";
+
+    return line;
+}
+
+void CGamesDoc::setSuit(int cards[], Suit suit, QString &line)
+{
+    int i;
+    const char CARD[] = {'2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K', 'A'};
+
+    for (i = 0; i < 13; i++)
+    {
+        if (((suit == SPADES) && (IS_SPADES(cards[i]))) ||
+            ((suit == HEARTS) && (IS_HEARTS(cards[i]))) ||
+            ((suit == DIAMONDS) && (IS_DIAMONDS(cards[i]))) ||
+            ((suit == CLUBS) && (IS_CLUBS(cards[i]))))
+            line += CARD[CARD_FACE(cards[i])];
+    }
+}
+
+QString &CGamesDoc::setContract(Bids contract, Bids contractModifier, QString &line)
+{
+    const QString SUIT_NAMES[5] = { "C", "D", "H", "S", "NT" };
+    Suit suit;
+    int level;
+
+    suit = BID_SUIT(contract);
+    level = BID_LEVEL(contract);
+
+    line = QString("[Contract \"%1%2").arg(level).arg(SUIT_NAMES[suit]);
+    if (contractModifier == BID_DOUBLE)
+        line += "X";
+    else if (contractModifier == BID_REDOUBLE)
+        line += "XX";
+
+    line += "\"]\n";
+
+    return line;
+}
+
+void CGamesDoc::makeAuction(QTextStream &stream, CBidHistory &bidHistory)
+{
+    const QString SUIT_NAMES[5] = { "C", "D", "H", "S", "NT" };
+    const QString SEAT_NAMES[4] = { "W", "N", "E", "S"};
+    QList<QString> notes;
+    int noNotes = 0;
+
+    int noBids = bidHistory.bidList.size();
+    if (noBids > 0)
+    {
+        Seat dealer = bidHistory.bidList[0].bidder;
+        stream << QString("[Auction \"%1\"]").arg(SEAT_NAMES[dealer]);
+        for (int i = 0; i < noBids; i++)
+        {
+            //Line shift for each four bids.
+            if ((i % 4) == 0)
+                stream << "\n";
+
+            Bids bid = bidHistory.bidList[i].bid;
+
+            // Double bid?
+            if (bid == BID_DOUBLE)
+                stream << "X ";
+
+            //Redouble bid ?
+            else if (bid == BID_REDOUBLE)
+                stream << "XX ";
+
+            //Pass bid?
+            else if (bid == BID_PASS)
+                stream << "Pass ";
+
+            //Ordinary bid?
+            else
+            {
+                //Get suit and level.
+                Suit suit = BID_SUIT(bid);
+                int level = BID_LEVEL(bid);
+
+                //Output level and suit.
+                stream << QString("%1%2 ").arg(level).arg(SUIT_NAMES[suit]);
+
+                //Is there an alert?
+                if (bidHistory.bidList[i].alert.size() > 0)
+                {
+                    //Calculate alert note and save for later output.
+                    noNotes++;
+                    QString alert = QString("[Note \"%1:%2\"]\n").arg(noNotes).arg(bidHistory.bidList[i].alert);
+                    notes.append(alert);
+
+                    //Output reference to alert note.
+                    stream << QString("=%1= ").arg(noNotes);
+                }
+            }
+        }
+        stream << "\n";
+
+        //Output alert notes.
+        for (int i = 0; i < notes.size(); i++)
+            stream << notes[i];
+    }
+}
+
+void CGamesDoc::makePlay(QTextStream &stream, CPlayHistory &playHistory)
+{
+    const QString SUIT_NAMES[4] = { "C", "D", "H", "S"};
+    const QString SEAT_NAMES[4] = { "W", "N", "E", "S"};
+    const QString CARD = "23456789TJQKA";
+    int noTrick = playHistory.getNoTrick();
+    if (noTrick > 0)
+    {
+        Seat openLeader = playHistory.getOpenLeader();
+        stream << QString("[Play \"%1\"]\n").arg(SEAT_NAMES[openLeader]);
+        for (int i = 0; i < noTrick; i++)
+        {
+            int trick[4];
+            Suit s1, s2, s3, s4;
+            int f1, f2, f3, f4;
+
+            playHistory.getTrick(i, trick);
+
+            s1 = CARD_SUIT(trick[openLeader]);
+            f1 = CARD_FACE(trick[openLeader]);
+            s2 = CARD_SUIT(trick[(openLeader + 1) % 4]);
+            f2 = CARD_FACE(trick[(openLeader + 1) % 4]);
+            s3 = CARD_SUIT(trick[(openLeader + 2) % 4]);
+            f3 = CARD_FACE(trick[(openLeader + 2) % 4]);
+            s4 = CARD_SUIT(trick[(openLeader + 3) % 4]);
+            f4 = CARD_FACE(trick[(openLeader + 3) % 4]);
+
+            stream << QString("%1%2 %3%4 %5%6 %7%8\n").arg(SUIT_NAMES[s1]).arg(CARD[f1])
+                      .arg(SUIT_NAMES[s2]).arg(CARD[f2])
+                      .arg(SUIT_NAMES[s3]).arg(CARD[f3])
+                      .arg(SUIT_NAMES[s4]).arg(CARD[f4]);
+        }
+        if (noTrick < 13)
+            stream << "*\n";
+    }
 }

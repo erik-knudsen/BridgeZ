@@ -248,3 +248,13 @@ int CPlayHistory::undo(int undoType)
 
     return (noTrick == 0) ? (REPLAY) : (playStack[noTrick - 1].nextLeader);
 }
+
+void CPlayHistory::getTrick(int trickNo, int trick[])
+{
+    assert ((trickNo >= 0) && (trickNo <= 12));
+
+    trick[WEST_SEAT] = play[WEST_SEAT][trickNo];
+    trick[NORTH_SEAT] = play[NORTH_SEAT][trickNo];
+    trick[EAST_SEAT] = play[EAST_SEAT][trickNo];
+    trick[SOUTH_SEAT] = play[SOUTH_SEAT][trickNo];
+}
