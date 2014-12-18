@@ -24,14 +24,34 @@
 
 #include "cgamesdoc.h"
 
+//Context for the processing of a pbn file.
 enum PBNContext { TAG_CONTEXT, AUCTION_CONTEXT, PLAY_CONTEXT};
 
+//PBN values.
+static const QString PBN_SEAT_NAMES[4] = {"W", "N", "E", "S"};
+static const QString PBN_CARD = "23456789TJQKA";
+static const QString PBN_SUIT_NAMES[5] = { "C", "D", "H", "S", "NT" };
+static const QString PBN_VULNERABILITY_NAMES[4] = {"None", "NS", "EW", "All"};
+
+/**
+ * @brief Constructor for the games class.
+ * @param parent[in] Parent.
+ */
 CGamesDoc::CGamesDoc(QObject *parent) :
     QObject(parent)
 {
     dealType = RANDOM_DEAL;
 }
 
+/**
+ * @brief Read original and played games.
+ * @param[in] original The stream from which to read original games.
+ * @param[in] played The stream from which to read already played games (auto and played).
+ * @param[in] event The event to read (in case there are more events in a pbn file; have never seen that though).
+ *
+ * Reads original games in case there are any and determines whether this game set is original or random. Then
+ * read alredy played games in case there are any.
+ */
 void CGamesDoc::readGames(QTextStream &original, QTextStream &played, QString &event) throw(PlayException)
 {
     //Clean up for new game.
@@ -52,6 +72,13 @@ void CGamesDoc::readGames(QTextStream &original, QTextStream &played, QString &e
         readGames(played, event, false);
 }
 
+/**
+ * @brief Write original games.
+ * @param[in] stream The stream to write the original games to.
+ *
+ * Writes all original games to the given stream. The event name of the games are only written for the
+ * first game. Replication symbol is used for the following games.
+ */
 void CGamesDoc::writeOriginalGames(QTextStream &stream)
 {
     QListIterator<CGame *> gameItr(games);
@@ -67,6 +94,14 @@ void CGamesDoc::writeOriginalGames(QTextStream &stream)
     }
 }
 
+/**
+ * @brief Write played games.
+ * @param[in] stream The stream to write the played games to.
+ *
+ * Writes all played games to the given stream. The event name of the games are only written for the
+ * first game. Replication symbol is used for the following games. The sequence of games written is always
+ * first played game then auto game.
+ */
 void CGamesDoc::writePlayedGames(QTextStream &stream)
 {
     QListIterator<CGame *> gameItr(games);
@@ -84,6 +119,9 @@ void CGamesDoc::writePlayedGames(QTextStream &stream)
     }
 }
 
+/**
+ * @brief Clear all games and prepare initially for a new set of random games.
+ */
 void CGamesDoc::clearGames()
 {
     //Clean up for new (random) game.
@@ -99,6 +137,16 @@ void CGamesDoc::clearGames()
     dealType = RANDOM_DEAL;
 }
 
+/**
+ * @brief Retrieve the next game in the current game set.
+ * @param[out] board Board number for the next game.
+ * @param[out] cards The cards for the next game.
+ * @param[out] dealer The dealer for the next game.
+ * @param[out] vulnerable The vulnerability for the next game.
+ *
+ * Retrieves the next game in the current game set. Depending on the game set type then this might be a
+ * random generated game or the next game in a game set read from a pbn file.
+ */
 void CGamesDoc::getNextDeal(int *board, int cards[][13], Seat *dealer, Team *vulnerable)
 {
     currentGameIndex++;
@@ -108,8 +156,8 @@ void CGamesDoc::getNextDeal(int *board, int cards[][13], Seat *dealer, Team *vul
     {
         CGame *currentGame = new CGame();
 
-        Team VULNERABLE[4] = { NEITHER, NORTH_SOUTH, EAST_WEST, BOTH };
-        Seat DEALER[4] = { NORTH_SEAT, EAST_SEAT, SOUTH_SEAT, WEST_SEAT };
+        const Team VULNERABLE[4] = { NEITHER, NORTH_SOUTH, EAST_WEST, BOTH };
+        const Seat DEALER[4] = { NORTH_SEAT, EAST_SEAT, SOUTH_SEAT, WEST_SEAT };
         int i, j, inx;
         int cardDeck[52];
 
@@ -174,6 +222,19 @@ void CGamesDoc::getNextDeal(int *board, int cards[][13], Seat *dealer, Team *vul
     }
 }
 
+/**
+ * @brief Set played result for the current game (manually played game).
+ * @param[in] bidHistory The bid history.
+ * @param[in] playHistory The play history.
+ * @param[in] westName Name of west player.
+ * @param[in] northName Name of north player.
+ * @param[in] eastName Name of east player.
+ * @param[in] southName Name of south player.
+ * @param[in] declarer The declarer.
+ * @param[in] contract The contract.
+ * @param[in] contractModifier The conract modifier (if any).
+ * @param[in] result The result.
+ */
 void CGamesDoc::setPlayedResult(CBidHistory &bidHistory, CPlayHistory &playHistory, QString &westName,
                                 QString &northName, QString &eastName, QString &southName, Seat declarer,
                                 Bids contract, Bids contractModifier, int result)
@@ -196,6 +257,19 @@ void CGamesDoc::setPlayedResult(CBidHistory &bidHistory, CPlayHistory &playHisto
     games[currentGameIndex]->auctionAndPlay.append(auctionAndPlay);
 }
 
+/**
+ * @brief Set auto result for the current game (auto played game).
+ * @param[in] bidHistory The bid history.
+ * @param[in] playHistory The play history.
+ * @param[in] westName Name of west player.
+ * @param[in] northName Name of north player.
+ * @param[in] eastName Name of east player.
+ * @param[in] southName Name of south player.
+ * @param[in] declarer The declarer.
+ * @param[in] contract The contract.
+ * @param[in] contractModifier The conract modifier (if any).
+ * @param[in] result The result.
+ */
 void CGamesDoc::setAutoResult(CBidHistory &bidHistory, CPlayHistory &playHistory, QString &westName,
                               QString &northName, QString &eastName, QString &southName, Seat declarer,
                               Bids contract, Bids contractModifier, int result)
@@ -218,6 +292,11 @@ void CGamesDoc::setAutoResult(CBidHistory &bidHistory, CPlayHistory &playHistory
     games[currentGameIndex]->auctionAndPlay.append(auctionAndPlay);
 }
 
+/**
+ * @brief Determine the events in a pbn file.
+ * @param original[in] The stream to read the pbn file from.
+ * @param events[out] The events found.
+ */
 void CGamesDoc::determineEvents(QTextStream &original, QStringList &events)
 {
     QString line;
@@ -253,6 +332,15 @@ void CGamesDoc::determineEvents(QTextStream &original, QStringList &events)
     }
 }
 
+/**
+ * @brief Read games from a pbn file.
+ * @param[in] pbnText The stream to read from.
+ * @param[in] event The event to read.
+ * @param[in] originalGames If true read original games. if false read played games.
+ *
+ * Reads either original or played games. In case of played games then each game has been played
+ * maximum two times. The first play for a game is manually played and the second play is auto played.
+ */
 void CGamesDoc::readGames(QTextStream &pbnText, QString &event, bool originalGames) throw(PlayException)
 {
     int numLines;
@@ -269,7 +357,7 @@ void CGamesDoc::readGames(QTextStream &pbnText, QString &event, bool originalGam
     CAuctionAndPlay *auctionAndPlay = 0;
     CGame *game = 0;
 
-    //Map of tag names.
+    //Map of pbn tag names.
     tagName["EVENT"] = TAG_EVENT;
     tagName["SITE"] = TAG_SITE;
     tagName["DATE"] = TAG_DATE;
@@ -289,7 +377,7 @@ void CGamesDoc::readGames(QTextStream &pbnText, QString &event, bool originalGam
     tagName["AUCTION"] = TAG_AUCTION;
     tagName["PLAY"] = TAG_PLAY;
 
-    //Initial tag values.
+    //Initial pbn tag values.
     tagMap[TAG_EVENT] = "";
     tagMap[TAG_SITE] = "";
     tagMap[TAG_DATE] = "";
@@ -302,7 +390,7 @@ void CGamesDoc::readGames(QTextStream &pbnText, QString &event, bool originalGam
     tagMap[TAG_SCORING] = "";
     tagMap[TAG_RESULT] = "";
 
-    //Read and preprocess pbn file.
+    //Read and preprocess pbn file (remove comments etc.).
     numLines = preloadPBNFile(pbnText, event, strLines, auctionNotes, playNotes);
 
     //Process one line at a time.
@@ -406,6 +494,8 @@ void CGamesDoc::readGames(QTextStream &pbnText, QString &event, bool originalGam
                  (currentLine.indexOf("[", 0, Qt::CaseInsensitive) == 0))
                 context = TAG_CONTEXT;
 
+            //There are three contexts. In auction context we are processing auction lines. In play context
+            //we are processing play lines. Otherwise (in tag context) we are processing tag lines.
             switch (context)
             {
             //We are processing auction information.
@@ -505,7 +595,7 @@ void CGamesDoc::readGames(QTextStream &pbnText, QString &event, bool originalGam
                         //Save play.
                         oneTrick[actorNo++] = playCall;
 
-                        //Have all (4) actors played?
+                        //Have all (4) actors played (we skip the last trick if it is incomplete)?
                         if (actorNo == 4)
                         {
                             //Save play.
@@ -638,6 +728,9 @@ void CGamesDoc::readGames(QTextStream &pbnText, QString &event, bool originalGam
                     Seat dealer = getCards(strValue, game->wCards, game->nCards, game->eCards, game->sCards, game->board);
                     if (game->dealer == NO_SEAT)
                         game->dealer = dealer;
+
+                    if (dealer != game->dealer)
+                        throw PlayException(QString("PBN - Illegal dealer: %1 %2 %3").arg(dealer).arg(" in board: ").arg(game->board).toStdString());
                 }
                     break;
 
@@ -784,10 +877,17 @@ void CGamesDoc::readGames(QTextStream &pbnText, QString &event, bool originalGam
     }
 }
 
+/**
+ * @brief Write a game in pbn format.
+ * @param[in] stream The stream to write to.
+ * @param[in] game The game to write.
+ * @param[in] gameType The game type for the game.
+ * @param[in] event The event.
+ *
+ * Writes the game including all plays as determined by the game type (original, played or auto).
+ */
 void CGamesDoc::writeGame(QTextStream &stream, CGame *game, GameType gameType, QString event)
 {
-    const QString SEAT_NAMES[4] = {"W", "N", "E", "S"};
-    const QString VULNERABILITY_NAMES[4] = {"None", "NS", "EW", "All"};
     QString ev = event;
     QString line;
     QListIterator<CAuctionAndPlay *> auctionAndPlayItr(game->auctionAndPlay);
@@ -803,10 +903,10 @@ void CGamesDoc::writeGame(QTextStream &stream, CGame *game, GameType gameType, Q
             stream << QString("[North \"%1\"]\n").arg(nextAuctionAndPlay->northName);
             stream << QString("[East \"%1\"]\n").arg(nextAuctionAndPlay->eastName);
             stream << QString("[South \"%1\"]\n").arg(nextAuctionAndPlay->southName);
-            stream << QString("[Dealer \"%1\"]\n").arg(SEAT_NAMES[game->dealer]);
-            stream << QString("[Vulnerable \"%1\"]\n").arg(VULNERABILITY_NAMES[game->vulnerable]);
-            stream << setCards(game->wCards, game->nCards, game->eCards, game->sCards, line).toLatin1();
-            stream << QString("[Declarer \"%1\"]\n").arg(SEAT_NAMES[nextAuctionAndPlay->declarer]);
+            stream << QString("[Dealer \"%1\"]\n").arg(PBN_SEAT_NAMES[game->dealer]);
+            stream << QString("[Vulnerable \"%1\"]\n").arg(PBN_VULNERABILITY_NAMES[game->vulnerable]);
+            stream << setCards(game->dealer, game->wCards, game->nCards, game->eCards, game->sCards, line).toLatin1();
+            stream << QString("[Declarer \"%1\"]\n").arg(PBN_SEAT_NAMES[nextAuctionAndPlay->declarer]);
             stream << setContract(nextAuctionAndPlay->contract, nextAuctionAndPlay->contractModifier, line);
             stream << QString("[Result \"%1\"]\n").arg(nextAuctionAndPlay->result);
             makeAuction(stream, nextAuctionAndPlay->bidHistory);
@@ -816,7 +916,17 @@ void CGamesDoc::writeGame(QTextStream &stream, CGame *game, GameType gameType, Q
     }
 }
 
-//Preload PBN file, strip comments check for export tag and load only data for the given event.
+/**
+ * @brief Preload pbn file.
+ * @param[in] PBNFile The text stream to read from.
+ * @param[in] event The event to read.
+ * @param[out] strLines The preprocessed lines read.
+ * @param[out] auctionNotes Auction notes (used for alerts).
+ * @param[out] playNotes Play notes (not used)
+ * @return Number of lines after preprocessing.
+ *
+ * Preload PBN file, strip comments check for export tag and load only data for the given event.
+ */
 int CGamesDoc::preloadPBNFile(QTextStream &PBNFile, QString event, QStringList &strLines,
                               QMap<int, QString> &auctionNotes, QMap<int, QString> &playNotes)
 {
@@ -990,6 +1100,7 @@ int CGamesDoc::preloadPBNFile(QTextStream &PBNFile, QString event, QStringList &
     return numLinesRead;
 }
 
+//Search for the given event.
 bool CGamesDoc::searchGame(QString &line, QString &event)
 {
     static QString curEvent;
@@ -1013,6 +1124,7 @@ bool CGamesDoc::searchGame(QString &line, QString &event)
     return ((curEvent == event) || ((event.isEmpty() && curEvent == "?")));
 }
 
+//Parse pbn line and determine tag id and value.
 tagIds CGamesDoc::parsePBNLine(QString &currentLine, QString &strValue, QMap<QString, tagIds> &tagName)
 {
     QString strTag;
@@ -1051,6 +1163,18 @@ tagIds CGamesDoc::parsePBNLine(QString &currentLine, QString &strValue, QMap<QSt
     return TAG_NONE;
 }
 
+/**
+ * @brief Get cards for a pbn deal line.
+ * @param[in] strValue The deal line.
+ * @param[out] wCards Cards for west.
+ * @param[out] nCards Cards for north.
+ * @param[out] eCards Cards for east.
+ * @param[out] sCards Cards for south.
+ * @param[in] board Current board.
+ * @return Dealer.
+ *
+ * @exception PlayException is thrown in case of illegal deal size.
+ */
 Seat CGamesDoc::getCards(QString &strValue, int wCards[], int nCards[], int eCards[], int sCards[], int board) throw(PlayException)
 {
     Seat dealer;
@@ -1076,6 +1200,7 @@ Seat CGamesDoc::getCards(QString &strValue, int wCards[], int nCards[], int eCar
 
     int inx = 2;
 
+    //Get cards one hand at a time.
     for (int i = 0; i < 4; i++)
     {
         inx = getCards(strValue, inx, cards[seat], board);
@@ -1088,9 +1213,10 @@ Seat CGamesDoc::getCards(QString &strValue, int wCards[], int nCards[], int eCar
     return dealer;
 }
 
+//Get cards for one hand in a pbn deal line.
 int CGamesDoc::getCards(QString &strValue, int inx, int cards[], int board) throw(PlayException)
 {
-    Suit suits[4] = { SPADES, HEARTS, DIAMONDS, CLUBS };
+    const Suit SUITS[4] = { SPADES, HEARTS, DIAMONDS, CLUBS};
     int faceValue;
     int i = 0;
     int k = 0;
@@ -1101,7 +1227,7 @@ int CGamesDoc::getCards(QString &strValue, int inx, int cards[], int board) thro
         {
             if (k >= 13)
                 throw PlayException(QString("PBN - Illegal deal (size of hand - too many): %1 %2 %3").arg(strValue).arg(" in board: ").arg(board).toStdString());
-            cards[k] = MAKE_CARD(suits[suitInx], faceValue);
+            cards[k] = MAKE_CARD(SUITS[suitInx], faceValue);
             i++;
             k++;
         }
@@ -1118,21 +1244,27 @@ int CGamesDoc::getCards(QString &strValue, int inx, int cards[], int board) thro
     return (i - 1 + inx);
 }
 
+//Get face value for a given position in a pbn deal line.
 int CGamesDoc::getFaceValue(QString &strValue, int inx, int board) throw(PlayException)
 {
-    const QString CARD = "23456789TJQKA";
-
     if (strValue.size() <= inx)
         return -1;
     if ((strValue[inx] == '.') || (strValue[inx] == ' '))
         return -1;
 
-    if (!CARD.contains(strValue[inx], Qt::CaseInsensitive))
+    if (!PBN_CARD.contains(strValue[inx], Qt::CaseInsensitive))
         throw PlayException(QString("PBN - Illegal deal (face value): %1 %2 %3").arg(strValue).arg(" in board: ").arg(board).toStdString());
 
-    return CARD.indexOf(strValue[inx], 0, Qt::CaseInsensitive);
+    return PBN_CARD.indexOf(strValue[inx], 0, Qt::CaseInsensitive);
 }
 
+/**
+ * @brief Get bid for a given position in a pbn auction line.
+ * @param[in] line The auction line.
+ * @param[in] inx The index for the position in the line.
+ * @param[out] bidCall The bid.
+ * @return Next index.
+ */
 int CGamesDoc::getBid(QString &line, int inx, Bids *bidCall)
 {
     if (inx >= line.size())
@@ -1191,9 +1323,15 @@ int CGamesDoc::getBid(QString &line, int inx, Bids *bidCall)
     return n;
 }
 
+/**
+ * @brief Get play for a given position in a pbn play line.
+ * @param[in] line The line.
+ * @param[in] inx The index of the position.
+ * @param[out] playCall The play.
+ * @return The next index.
+ */
 int CGamesDoc::getPlay(QString &line, int inx, int *playCall)
 {
-    const QString CARD = "23456789TJQKA";
     Suit suit;
     int face;
 
@@ -1241,19 +1379,26 @@ int CGamesDoc::getPlay(QString &line, int inx, int *playCall)
         return inx;
     }
 
-    if ((partLine.size() != 2) || (!CARD.contains(partLine[1], Qt::CaseInsensitive)))
+    if ((partLine.size() != 2) || (!PBN_CARD.contains(partLine[1], Qt::CaseInsensitive)))
     {
         *playCall = -1;
         return inx;
     }
 
-    face = CARD.indexOf(partLine[1], 0, Qt::CaseInsensitive);
+    face = PBN_CARD.indexOf(partLine[1], 0, Qt::CaseInsensitive);
 
     *playCall = MAKE_CARD(suit, face);
 
     return n;
 }
 
+/**
+ * @brief Get note number from a given position in an auction line. Maybe there is none.
+ * @param[in] line The auction line.
+ * @param[in] inx The index for the position.
+ * @param[out] note number.
+ * @return The next index.
+ */
 int CGamesDoc::getNote(QString &line, int inx, int *note)
 {
     if (inx >= line.size())
@@ -1281,82 +1426,70 @@ int CGamesDoc::getNote(QString &line, int inx, int *note)
     return (partLineInx + n + 2);
 }
 
-QString &CGamesDoc::setCards(int wCards[], int nCards[], int eCards[], int sCards[], QString &line)
+/**
+ * @brief Construct a pbn deal line.
+ * @param[in] dealer The dealer.
+ * @param[in] wCards The cards for west.
+ * @param[in] nCards The cards for north.
+ * @param[in] eCards The cards for east.
+ * @param[in] sCards The cards for south.
+ * @param[out] line The constructed deal line.
+ * @return The line.
+ */
+QString &CGamesDoc::setCards(Seat dealer, int wCards[], int nCards[], int eCards[], int sCards[], QString &line)
 {
-    line = "[Deal \"N:";
+    int *cards[4] = { wCards, nCards, eCards, sCards };
+    int seat = dealer;
 
-    //First north.
-    setSuit(nCards, SPADES, line);
-    line += ".";
-    setSuit(nCards, HEARTS, line);
-    line += ".";
-    setSuit(nCards, DIAMONDS, line);
-    line += ".";
-    setSuit(nCards, CLUBS, line);
+    line = QString("[Deal \"%1:").arg(PBN_SEAT_NAMES[dealer]);
 
-    line += " ";
+    for (int i = 0; i < 4; i++)
+    {
+        setSuit(cards[seat], SPADES, line);
+        line += ".";
+        setSuit(cards[seat], HEARTS, line);
+        line += ".";
+        setSuit(cards[seat], DIAMONDS, line);
+        line += ".";
+        setSuit(cards[seat], CLUBS, line);
 
-    //Then east.
-    setSuit(eCards, SPADES, line);
-    line += ".";
-    setSuit(eCards, HEARTS, line);
-    line += ".";
-    setSuit(eCards, DIAMONDS, line);
-    line += ".";
-    setSuit(eCards, CLUBS, line);
-
-    line += " ";
-
-    //Then south.
-    setSuit(sCards, SPADES, line);
-    line += ".";
-    setSuit(sCards, HEARTS, line);
-    line += ".";
-    setSuit(sCards, DIAMONDS, line);
-    line += ".";
-    setSuit(sCards, CLUBS, line);
-
-    line += " ";
-
-    //Then west.
-    setSuit(wCards, SPADES, line);
-    line += ".";
-    setSuit(wCards, HEARTS, line);
-    line += ".";
-    setSuit(wCards, DIAMONDS, line);
-    line += ".";
-    setSuit(wCards, CLUBS, line);
+        if (i != 3)
+            line += " ";
+        seat = (++seat) % 4;
+    }
 
     line += "\"]\n";
 
     return line;
 }
 
+//Sets the cards for a given suit in the pbn deal line.
 void CGamesDoc::setSuit(int cards[], Suit suit, QString &line)
 {
-    int i;
-    const char CARD[] = {'2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K', 'A'};
-
-    for (i = 0; i < 13; i++)
-    {
+    for (int i = 0; i < 13; i++)
         if (((suit == SPADES) && (IS_SPADES(cards[i]))) ||
-            ((suit == HEARTS) && (IS_HEARTS(cards[i]))) ||
-            ((suit == DIAMONDS) && (IS_DIAMONDS(cards[i]))) ||
-            ((suit == CLUBS) && (IS_CLUBS(cards[i]))))
-            line += CARD[CARD_FACE(cards[i])];
-    }
+                ((suit == HEARTS) && (IS_HEARTS(cards[i]))) ||
+                ((suit == DIAMONDS) && (IS_DIAMONDS(cards[i]))) ||
+                ((suit == CLUBS) && (IS_CLUBS(cards[i]))))
+            line += PBN_CARD[CARD_FACE(cards[i])];
 }
 
+/**
+ * @brief Construct a pbn contract line.
+ * @param[in] contract The contract.
+ * @param[in] contractModifier The contract modifier (double or redouble).
+ * @param[out] line The contract line constructed.
+ * @return The line.
+ */
 QString &CGamesDoc::setContract(Bids contract, Bids contractModifier, QString &line)
 {
-    const QString SUIT_NAMES[5] = { "C", "D", "H", "S", "NT" };
     Suit suit;
     int level;
 
     suit = BID_SUIT(contract);
     level = BID_LEVEL(contract);
 
-    line = QString("[Contract \"%1%2").arg(level).arg(SUIT_NAMES[suit]);
+    line = QString("[Contract \"%1%2").arg(level).arg(PBN_SUIT_NAMES[suit]);
     if (contractModifier == BID_DOUBLE)
         line += "X";
     else if (contractModifier == BID_REDOUBLE)
@@ -1367,10 +1500,13 @@ QString &CGamesDoc::setContract(Bids contract, Bids contractModifier, QString &l
     return line;
 }
 
+/**
+ * @brief Make pbn auction lines (including notes).
+ * @param[in] stream The stream to write to.
+ * @param[in] bidHistory The bid history to use making the auction lines.
+ */
 void CGamesDoc::makeAuction(QTextStream &stream, CBidHistory &bidHistory)
 {
-    const QString SUIT_NAMES[5] = { "C", "D", "H", "S", "NT" };
-    const QString SEAT_NAMES[4] = { "W", "N", "E", "S"};
     QList<QString> notes;
     int noNotes = 0;
 
@@ -1378,7 +1514,7 @@ void CGamesDoc::makeAuction(QTextStream &stream, CBidHistory &bidHistory)
     if (noBids > 0)
     {
         Seat dealer = bidHistory.bidList[0].bidder;
-        stream << QString("[Auction \"%1\"]").arg(SEAT_NAMES[dealer]);
+        stream << QString("[Auction \"%1\"]").arg(PBN_SEAT_NAMES[dealer]);
         for (int i = 0; i < noBids; i++)
         {
             //Line shift for each four bids.
@@ -1407,7 +1543,7 @@ void CGamesDoc::makeAuction(QTextStream &stream, CBidHistory &bidHistory)
                 int level = BID_LEVEL(bid);
 
                 //Output level and suit.
-                stream << QString("%1%2 ").arg(level).arg(SUIT_NAMES[suit]);
+                stream << QString("%1%2 ").arg(level).arg(PBN_SUIT_NAMES[suit]);
 
                 //Is there an alert?
                 if (bidHistory.bidList[i].alert.size() > 0)
@@ -1430,16 +1566,18 @@ void CGamesDoc::makeAuction(QTextStream &stream, CBidHistory &bidHistory)
     }
 }
 
+/**
+ * @brief Make pbn play lines.
+ * @param[in] stream The stream to write to.
+ * @param[in] playHistory The play history.
+ */
 void CGamesDoc::makePlay(QTextStream &stream, CPlayHistory &playHistory)
 {
-    const QString SUIT_NAMES[4] = { "C", "D", "H", "S"};
-    const QString SEAT_NAMES[4] = { "W", "N", "E", "S"};
-    const QString CARD = "23456789TJQKA";
     int noTrick = playHistory.getNoTrick();
     if (noTrick > 0)
     {
         Seat openLeader = playHistory.getOpenLeader();
-        stream << QString("[Play \"%1\"]\n").arg(SEAT_NAMES[openLeader]);
+        stream << QString("[Play \"%1\"]\n").arg(PBN_SEAT_NAMES[openLeader]);
         for (int i = 0; i < noTrick; i++)
         {
             int trick[4];
@@ -1457,10 +1595,10 @@ void CGamesDoc::makePlay(QTextStream &stream, CPlayHistory &playHistory)
             s4 = CARD_SUIT(trick[(openLeader + 3) % 4]);
             f4 = CARD_FACE(trick[(openLeader + 3) % 4]);
 
-            stream << QString("%1%2 %3%4 %5%6 %7%8\n").arg(SUIT_NAMES[s1]).arg(CARD[f1])
-                      .arg(SUIT_NAMES[s2]).arg(CARD[f2])
-                      .arg(SUIT_NAMES[s3]).arg(CARD[f3])
-                      .arg(SUIT_NAMES[s4]).arg(CARD[f4]);
+            stream << QString("%1%2 %3%4 %5%6 %7%8\n").arg(PBN_SUIT_NAMES[s1]).arg(PBN_CARD[f1])
+                      .arg(PBN_SUIT_NAMES[s2]).arg(PBN_CARD[f2])
+                      .arg(PBN_SUIT_NAMES[s3]).arg(PBN_CARD[f3])
+                      .arg(PBN_SUIT_NAMES[s4]).arg(PBN_CARD[f4]);
         }
         if (noTrick < 13)
             stream << "*\n";
