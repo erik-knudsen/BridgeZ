@@ -153,8 +153,10 @@ void CTblMngrServer::serverActions()
         Seat seat = (Seat)zBridgeServerIface_get_seated_value(&handle);
 
         //The actor is seated.
-        char * teamName = ((seat == WEST_SEAT) || (seat == EAST_SEAT)) ?
-                    zBridgeServerIface_get_ewTeamName(&handle): zBridgeServerIface_get_nsTeamName(&handle);
+        char * teamName = (seat == WEST_SEAT) ? zBridgeServerIface_get_wTeamName(&handle) :
+                          (seat == NORTH_SEAT) ? zBridgeServerIface_get_nTeamName(&handle) :
+                          (seat == EAST_SEAT) ? zBridgeServerIface_get_eTeamName(&handle) :
+                           zBridgeServerIface_get_nTeamName(&handle);
 
         actors[seat]->seated(QString(teamName));
     }
@@ -162,8 +164,19 @@ void CTblMngrServer::serverActions()
     else if (zBridgeServerIface_israised_teamNames(&handle))
     {
         //All actors have connected and their team names are set.
-        QString nsTeamName = QString(zBridgeServerIface_get_nsTeamName(&handle));
-        QString ewTeamName = QString(zBridgeServerIface_get_ewTeamName(&handle));
+        teamNames[WEST_SEAT] = QString(zBridgeServerIface_get_wTeamName(&handle));
+        teamNames[NORTH_SEAT] = QString(zBridgeServerIface_get_nTeamName(&handle));
+        teamNames[EAST_SEAT] = QString(zBridgeServerIface_get_eTeamName(&handle));
+        teamNames[SOUTH_SEAT] = QString(zBridgeServerIface_get_sTeamName(&handle));
+
+        QString nsTeamName = teamNames[NORTH_SEAT];
+        QString ewTeamName = teamNames[EAST_SEAT];
+
+        if (protocol == ADVANCED_PROTOCOL)
+        {
+            nsTeamName += ":" + teamNames[SOUTH_SEAT];
+            ewTeamName += ":" + teamNames[WEST_SEAT];
+        }
         actors[WEST_SEAT]->teamNames(nsTeamName, ewTeamName);
         actors[NORTH_SEAT]->teamNames(nsTeamName, ewTeamName);
         actors[EAST_SEAT]->teamNames(nsTeamName, ewTeamName);
@@ -222,6 +235,7 @@ void CTblMngrServer::serverActions()
 
 
         bidHistory.resetBidHistory();
+        playHistory.resetPlayHistory();
 
         zBridgeServerIface_raise_continue(&handle);
         serverRunCycle();
@@ -558,54 +572,51 @@ void CTblMngrServer::newSession()
     //EAK TEMPORARY.
     QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_SCORE , true));
 
-    QString ewTeamName = "ZBridge";
-    QString nsTeamName = "ZBridge";
-
     //Set up actors.
     if (doc->getSeatOptions().westActor == MANUAL_ACTOR)
-        actor = new CActorLocal(true, ewTeamName, WEST_SEAT, protocol,
+        actor = new CActorLocal(true, doc->getSeatOptions().westName, WEST_SEAT, protocol,
                 doc->getNSBidOptions(), doc->getEWBidOptions(), this);
     else if ((remoteActorServer != 0) && remoteActorServer->isConnected(WEST_SEAT))
         actor = new CActorRemote(WEST_SEAT, protocol, remoteActorServer->getFrontend(WEST_SEAT), this);
     else
-        actor = new CActorLocal(false, ewTeamName, WEST_SEAT, protocol,
+        actor = new CActorLocal(false, doc->getSeatOptions().westName, WEST_SEAT, protocol,
                 doc->getNSBidOptions(), doc->getEWBidOptions(), this);
     actors[WEST_SEAT] = actor;
 
     if (doc->getSeatOptions().northActor == MANUAL_ACTOR)
-        actor = new CActorLocal(true, nsTeamName, NORTH_SEAT, protocol,
+        actor = new CActorLocal(true, doc->getSeatOptions().northName, NORTH_SEAT, protocol,
                 doc->getNSBidOptions(), doc->getEWBidOptions(), this);
     else if ((remoteActorServer != 0) && remoteActorServer->isConnected(NORTH_SEAT))
         actor = new CActorRemote(NORTH_SEAT, protocol, remoteActorServer->getFrontend(NORTH_SEAT), this);
     else
-        actor = new CActorLocal(false, nsTeamName, NORTH_SEAT, protocol,
+        actor = new CActorLocal(false, doc->getSeatOptions().northName, NORTH_SEAT, protocol,
                 doc->getNSBidOptions(), doc->getEWBidOptions(), this);
     actors[NORTH_SEAT] = actor;
 
     if (doc->getSeatOptions().eastActor == MANUAL_ACTOR)
-        actor = new CActorLocal(true, ewTeamName, EAST_SEAT, protocol,
+        actor = new CActorLocal(true, doc->getSeatOptions().eastName, EAST_SEAT, protocol,
                 doc->getNSBidOptions(), doc->getEWBidOptions(), this);
     else if ((remoteActorServer != 0) && remoteActorServer->isConnected(EAST_SEAT))
         actor = new CActorRemote(EAST_SEAT, protocol, remoteActorServer->getFrontend(EAST_SEAT), this);
     else
-        actor = new CActorLocal(false, ewTeamName, EAST_SEAT, protocol,
+        actor = new CActorLocal(false, doc->getSeatOptions().eastName, EAST_SEAT, protocol,
                 doc->getNSBidOptions(), doc->getEWBidOptions(), this);
     actors[EAST_SEAT] = actor;
 
     if (doc->getSeatOptions().southActor == MANUAL_ACTOR)
-        actor = new CActorLocal(true, nsTeamName, SOUTH_SEAT, protocol,
+        actor = new CActorLocal(true, doc->getSeatOptions().southName, SOUTH_SEAT, protocol,
                 doc->getNSBidOptions(), doc->getEWBidOptions(), this);
     else if ((remoteActorServer != 0) && remoteActorServer->isConnected(SOUTH_SEAT))
         actor = new CActorRemote(SOUTH_SEAT, protocol, remoteActorServer->getFrontend(SOUTH_SEAT), this);
     else
-        actor = new CActorLocal(false, nsTeamName, SOUTH_SEAT, protocol,
+        actor = new CActorLocal(false, doc->getSeatOptions().southName, SOUTH_SEAT, protocol,
                 doc->getNSBidOptions(), doc->getEWBidOptions(), this);
     actors[SOUTH_SEAT] = actor;
 
     setShowUser(showAll);
 
     zBridgeServer_init(&handle);
-    zBridgeServerIface_set_noOfBoards(&handle, 16);
+    zBridgeServerIface_set_noOfBoards(&handle, 512);
     zBridgeServer_enter(&handle);
     serverActions();
 
@@ -848,8 +859,7 @@ void CTblMngrServer::dummyToLead()
  */
 void CTblMngrServer::sConnect(QString teamName, Seat seat, int protocol)
 {
-    this->teamNames[seat] = teamName.toLatin1();
-    zBridgeServerIface_set_name(&handle, this->teamNames[seat].data());
+    zBridgeServerIface_set_name(&handle, teamName.toLatin1().data());
     zBridgeServerIface_raise_connect(&handle, seat);
     serverRunCycle();
 }
@@ -1088,6 +1098,8 @@ void CTblMngrServer::sEnableContinueSync(int syncState)
             QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_REPLAY , false));
             QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_NEW_DEAL , false));
             QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_SHOW_ALL , false));
+
+            QMessageBox::information(0, tr("ZBridge"), tr("South made 6 in 2spx -300."));
 
             playView->showInfoNextButton(true, BUTTON_DEAL);
             break;

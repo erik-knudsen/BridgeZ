@@ -348,6 +348,12 @@ void CMainFrame::ResetStatusText()
 
 //Following methods are automatically generated main menu actions.
 //----------------------------------------------------------------
+/**
+ * @brief Open pbn file. Use the games in the file(s) for playing.
+ *
+ * The original games are read from the pbn file. Played games are read from a companion to the original
+ * pbn file with a filename derived from the original pbn filename and the event index. With the extension zbr.
+ */
 void CMainFrame::on_actionOpen_triggered()
 {
     try
@@ -412,6 +418,12 @@ void CMainFrame::on_actionOpen_triggered()
     }
 }
 
+/**
+ * @brief Save the current games in pbn file format.
+ *
+ * Played games are saved as companion to the original pbn file with a filename derived from the original
+ * pbn filename and the event index. With the extension zbr.
+ */
 void CMainFrame::on_actionSave_triggered()
 {
     //Save (in this program) played games.
@@ -434,6 +446,14 @@ void CMainFrame::on_actionSave_triggered()
     }
 }
 
+/**
+ * @brief Save the current games in pbn file format, but with a new name.
+ *
+ * The games from the original pbn file with the chosen event are saved in a new pbn file. In case of
+ * random generated games (no original pbn file) then the file will be empty. But it will still be existing.
+ * This to allow it to be chosen in the open action. Played games are saved as companion to the new pbn file
+ * with a filename derived from the new pbn filename and the event index zero (0). With the extension zbr.
+ */
 void CMainFrame::on_actionSave_As_triggered()
 {
     //Save games with a new filename.

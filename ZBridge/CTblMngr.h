@@ -121,6 +121,7 @@ protected:
     bool showAll;
     bool showDummy;
     Seat dummy;
+    QString teamNames[4];
 
 private:
     void createConnections();

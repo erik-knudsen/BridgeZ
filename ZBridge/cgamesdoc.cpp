@@ -100,7 +100,8 @@ void CGamesDoc::writeOriginalGames(QTextStream &stream)
  *
  * Writes all played games to the given stream. The event name of the games are only written for the
  * first game. Replication symbol is used for the following games. The sequence of games written is always
- * first played game then auto game.
+ * first played game then auto game. Each game might have been played in two ways, played game and auto
+ * game.
  */
 void CGamesDoc::writePlayedGames(QTextStream &stream)
 {
@@ -144,15 +145,15 @@ void CGamesDoc::clearGames()
  * @param[out] dealer The dealer for the next game.
  * @param[out] vulnerable The vulnerability for the next game.
  *
- * Retrieves the next game in the current game set. Depending on the game set type then this might be a
- * random generated game or the next game in a game set read from a pbn file.
+ * Retrieves the next game in the current game set. Depending on the game set type (random or original),
+ * then this might be a random generated game or the next game in a game set read from a pbn file.
  */
 void CGamesDoc::getNextDeal(int *board, int cards[][13], Seat *dealer, Team *vulnerable)
 {
     currentGameIndex++;
 
     //Give random card distribution etc.?
-    if (dealType == PLAYED_GAME)
+    if (dealType == RANDOM_DEAL)
     {
         CGame *currentGame = new CGame();
 
@@ -202,6 +203,8 @@ void CGamesDoc::getNextDeal(int *board, int cards[][13], Seat *dealer, Team *vul
         //Append to already played games.
         games.append(currentGame);
     }
+
+    //Give cards as read from a pbn file?
     else
     {
         //Take card distribution etc. from next game.
@@ -234,6 +237,9 @@ void CGamesDoc::getNextDeal(int *board, int cards[][13], Seat *dealer, Team *vul
  * @param[in] contract The contract.
  * @param[in] contractModifier The conract modifier (if any).
  * @param[in] result The result.
+ *
+ * After the current game has been manually played, then the results are assigned to the current game
+ * structure.
  */
 void CGamesDoc::setPlayedResult(CBidHistory &bidHistory, CPlayHistory &playHistory, QString &westName,
                                 QString &northName, QString &eastName, QString &southName, Seat declarer,
@@ -269,6 +275,9 @@ void CGamesDoc::setPlayedResult(CBidHistory &bidHistory, CPlayHistory &playHisto
  * @param[in] contract The contract.
  * @param[in] contractModifier The conract modifier (if any).
  * @param[in] result The result.
+ *
+ * After the current game has been auto played, then the results are assigned to the current game
+ * structure.
  */
 void CGamesDoc::setAutoResult(CBidHistory &bidHistory, CPlayHistory &playHistory, QString &westName,
                               QString &northName, QString &eastName, QString &southName, Seat declarer,
@@ -296,6 +305,8 @@ void CGamesDoc::setAutoResult(CBidHistory &bidHistory, CPlayHistory &playHistory
  * @brief Determine the events in a pbn file.
  * @param original[in] The stream to read the pbn file from.
  * @param events[out] The events found.
+ *
+ * Determine the pbn events in a pbn file (I have never seen more than one event in a pbn file).
  */
 void CGamesDoc::determineEvents(QTextStream &original, QStringList &events)
 {
@@ -339,7 +350,8 @@ void CGamesDoc::determineEvents(QTextStream &original, QStringList &events)
  * @param[in] originalGames If true read original games. if false read played games.
  *
  * Reads either original or played games. In case of played games then each game has been played
- * maximum two times. The first play for a game is manually played and the second play is auto played.
+ * maximum two times. The sequence of played games are always the same. The first play for a game is
+ * manually played and the second play is auto played.
  */
 void CGamesDoc::readGames(QTextStream &pbnText, QString &event, bool originalGames) throw(PlayException)
 {
@@ -668,6 +680,7 @@ void CGamesDoc::readGames(QTextStream &pbnText, QString &event, bool originalGam
                 //Process tag.
                 switch (tag)
                 {
+                //Board tag.
                 case TAG_BOARD:
                 {
                     int board = strValue.toInt();
@@ -678,22 +691,27 @@ void CGamesDoc::readGames(QTextStream &pbnText, QString &event, bool originalGam
                 }
                     break;
 
+                //Name of west player.
                 case TAG_WEST:
                     auctionAndPlay->westName = strValue;
                     break;
 
+                //Name of north player.
                 case TAG_NORTH:
                     auctionAndPlay->northName = strValue;
                     break;
 
+                //Name of east player.
                 case TAG_EAST:
                     auctionAndPlay->eastName = strValue;
                     break;
 
+                //Name of south player.
                 case TAG_SOUTH:
                     auctionAndPlay->southName = strValue;
                     break;
 
+                //Dealer tag.
                 case TAG_DEALER:
                     if (QString::compare(strValue, "W", Qt::CaseInsensitive) == 0)
                         game->dealer = WEST_SEAT;
@@ -707,6 +725,7 @@ void CGamesDoc::readGames(QTextStream &pbnText, QString &event, bool originalGam
                     throw PlayException(QString("PBN - Illegal dealer: %1 %2 %3").arg(strValue).arg(" in board: ").arg(game->board).toStdString());
                     break;
 
+                //Vulnerable tag.
                 case TAG_VULNERABLE:
                     if ((QString::compare(strValue, "NONE", Qt::CaseInsensitive) == 0) ||
                         (QString::compare(strValue, "LOVE", Qt::CaseInsensitive) == 0) ||
@@ -723,6 +742,7 @@ void CGamesDoc::readGames(QTextStream &pbnText, QString &event, bool originalGam
                         throw PlayException(QString("PBN - Illegal vulnerability: %1 %2 %3").arg(strValue).arg(" in board: ").arg(game->board).toStdString());
                     break;
 
+                //Deal tag.
                 case TAG_DEAL:
                 {
                     Seat dealer = getCards(strValue, game->wCards, game->nCards, game->eCards, game->sCards, game->board);
@@ -734,6 +754,7 @@ void CGamesDoc::readGames(QTextStream &pbnText, QString &event, bool originalGam
                 }
                     break;
 
+                //Declarer tag.
                 case TAG_DECLARER:
                     if (QString::compare(strValue, "W", Qt::CaseInsensitive) == 0)
                         auctionAndPlay->declarer = WEST_SEAT;
@@ -747,6 +768,7 @@ void CGamesDoc::readGames(QTextStream &pbnText, QString &event, bool originalGam
                         throw PlayException(QString("PBN - Illegal declarer: %1 %2 %3").arg(strValue).arg(" in board: ").arg(game->board).toStdString());
                     break;
 
+                //Contract tag.
                 case TAG_CONTRACT:
                     if (QString::compare(strValue, "PASS", Qt::CaseInsensitive) == 0)
                     {
@@ -797,6 +819,7 @@ void CGamesDoc::readGames(QTextStream &pbnText, QString &event, bool originalGam
                     }
                     break;
 
+                //Result tag.
                 case TAG_RESULT:
                 {
                     for (int i = 0; i < strValue.size(); i++)
@@ -806,6 +829,7 @@ void CGamesDoc::readGames(QTextStream &pbnText, QString &event, bool originalGam
                 }
                     break;
 
+                //Auction tag.
                 case TAG_AUCTION:
                 {
                     Seat dealer;
@@ -834,6 +858,7 @@ void CGamesDoc::readGames(QTextStream &pbnText, QString &event, bool originalGam
                     break;
                 }
 
+                //Play tag.
                 case TAG_PLAY:
                 {
                     Seat leader;
@@ -864,6 +889,7 @@ void CGamesDoc::readGames(QTextStream &pbnText, QString &event, bool originalGam
                     break;
                 }
 
+                //Not used tags.
                 default:
                     break;
                 }
@@ -897,7 +923,7 @@ void CGamesDoc::writeGame(QTextStream &stream, CGame *game, GameType gameType, Q
         if (nextAuctionAndPlay->gameType == gameType)
         {
             stream << "[Event \"" << ev << "\"]\n";
-            ev = "#";
+            ev = "#";       //Following events are written as inheritance of first event.
             stream << QString("[Board \"%1\"]\n").arg(game->board).toLatin1();
             stream << QString("[West \"%1\"]\n").arg(nextAuctionAndPlay->westName);
             stream << QString("[North \"%1\"]\n").arg(nextAuctionAndPlay->northName);
@@ -1100,7 +1126,7 @@ int CGamesDoc::preloadPBNFile(QTextStream &PBNFile, QString event, QStringList &
     return numLinesRead;
 }
 
-//Search for the given event.
+//Search for the given event in the given line. Also take care of header (##) and substitution (#).
 bool CGamesDoc::searchGame(QString &line, QString &event)
 {
     static QString curEvent;
@@ -1173,7 +1199,7 @@ tagIds CGamesDoc::parsePBNLine(QString &currentLine, QString &strValue, QMap<QSt
  * @param[in] board Current board.
  * @return Dealer.
  *
- * @exception PlayException is thrown in case of illegal deal size.
+ * @exception PlayException is thrown in case of illegal deal syntax.
  */
 Seat CGamesDoc::getCards(QString &strValue, int wCards[], int nCards[], int eCards[], int sCards[], int board) throw(PlayException)
 {
@@ -1262,8 +1288,8 @@ int CGamesDoc::getFaceValue(QString &strValue, int inx, int board) throw(PlayExc
  * @brief Get bid for a given position in a pbn auction line.
  * @param[in] line The auction line.
  * @param[in] inx The index for the position in the line.
- * @param[out] bidCall The bid.
- * @return Next index.
+ * @param[out] bidCall The bid (might be BID_NONE if no bid is found).
+ * @return Next index after the found bid. If nothing (no bid) is found then return the start index (inx).
  */
 int CGamesDoc::getBid(QString &line, int inx, Bids *bidCall)
 {
@@ -1327,8 +1353,8 @@ int CGamesDoc::getBid(QString &line, int inx, Bids *bidCall)
  * @brief Get play for a given position in a pbn play line.
  * @param[in] line The line.
  * @param[in] inx The index of the position.
- * @param[out] playCall The play.
- * @return The next index.
+ * @param[out] playCall The play (-1 for no play, -2 for -, -3 for *).
+ * @return The next index after the found play. If nothing (no play) is found then return the start index (inx).
  */
 int CGamesDoc::getPlay(QString &line, int inx, int *playCall)
 {
@@ -1397,7 +1423,7 @@ int CGamesDoc::getPlay(QString &line, int inx, int *playCall)
  * @param[in] line The auction line.
  * @param[in] inx The index for the position.
  * @param[out] note number.
- * @return The next index.
+ * @return The next index (start index (inx) if no note reference is found).
  */
 int CGamesDoc::getNote(QString &line, int inx, int *note)
 {
@@ -1503,7 +1529,7 @@ QString &CGamesDoc::setContract(Bids contract, Bids contractModifier, QString &l
 /**
  * @brief Make pbn auction lines (including notes).
  * @param[in] stream The stream to write to.
- * @param[in] bidHistory The bid history to use making the auction lines.
+ * @param[in] bidHistory The bid history to use for making the auction lines.
  */
 void CGamesDoc::makeAuction(QTextStream &stream, CBidHistory &bidHistory)
 {
@@ -1569,7 +1595,7 @@ void CGamesDoc::makeAuction(QTextStream &stream, CBidHistory &bidHistory)
 /**
  * @brief Make pbn play lines.
  * @param[in] stream The stream to write to.
- * @param[in] playHistory The play history.
+ * @param[in] playHistory The play history to use for making the play lines..
  */
 void CGamesDoc::makePlay(QTextStream &stream, CPlayHistory &playHistory)
 {

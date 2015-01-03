@@ -141,22 +141,19 @@ void CTblMngrClient::newSession()
     QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_CLIENT , protocol == ADVANCED_PROTOCOL));
     QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_NEW_SESSION , false));
 
-    QString ewTeamName = "ZBridge";
-    QString nsTeamName = "ZBridge";
-
     //Set up actor.
     if (doc->getSeatOptions().seat == WEST_SEAT)
-        actor = new CActorLocal((doc->getSeatOptions().westActor == MANUAL_ACTOR), ewTeamName, WEST_SEAT,
-                protocol, doc->getNSBidOptions(), doc->getEWBidOptions(), this);
+        actor = new CActorLocal((doc->getSeatOptions().westActor == MANUAL_ACTOR), doc->getSeatOptions().westName,
+                                WEST_SEAT, protocol, doc->getNSBidOptions(), doc->getEWBidOptions(), this);
     else if (doc->getSeatOptions().seat == NORTH_SEAT)
-        actor = new CActorLocal((doc->getSeatOptions().northActor == MANUAL_ACTOR), nsTeamName, NORTH_SEAT,
-                protocol, doc->getNSBidOptions(), doc->getEWBidOptions(), this);
+        actor = new CActorLocal((doc->getSeatOptions().northActor == MANUAL_ACTOR), doc->getSeatOptions().northName,
+                                NORTH_SEAT, protocol, doc->getNSBidOptions(), doc->getEWBidOptions(), this);
     else if (doc->getSeatOptions().seat == EAST_SEAT)
-        actor = new CActorLocal((doc->getSeatOptions().eastActor == MANUAL_ACTOR), ewTeamName, EAST_SEAT,
-                protocol, doc->getNSBidOptions(), doc->getEWBidOptions(), this);
+        actor = new CActorLocal((doc->getSeatOptions().eastActor == MANUAL_ACTOR), doc->getSeatOptions().eastName,
+                                EAST_SEAT, protocol, doc->getNSBidOptions(), doc->getEWBidOptions(), this);
     else
-        actor = new CActorLocal((doc->getSeatOptions().southActor == MANUAL_ACTOR), nsTeamName, SOUTH_SEAT,
-                protocol, doc->getNSBidOptions(), doc->getEWBidOptions(), this);
+        actor = new CActorLocal((doc->getSeatOptions().southActor == MANUAL_ACTOR), doc->getSeatOptions().southName,
+                                SOUTH_SEAT, protocol, doc->getNSBidOptions(), doc->getEWBidOptions(), this);
 
     actor->setShowUser((actor->getActorType() == MANUAL_ACTOR) || showAll);
 
@@ -586,6 +583,21 @@ void CTblMngrClient::receiveLine(QString line)
         //Team names message was received.
         CTeamNamesMsg teamNamesMsg(line);
         actor->teamNames(teamNamesMsg.nsTeamName, teamNamesMsg.ewTeamName);
+
+        if (protocol == BASIC_PROTOCOL)
+        {
+            teamNames[NORTH_SEAT] = teamNames[SOUTH_SEAT] = teamNamesMsg.nsTeamName;
+            teamNames[EAST_SEAT] = teamNames[WEST_SEAT] = teamNamesMsg.ewTeamName;
+        }
+        else
+        {
+            int inx = teamNamesMsg.nsTeamName.indexOf(":");
+            teamNames[NORTH_SEAT] = teamNamesMsg.nsTeamName.left(inx);
+            teamNames[SOUTH_SEAT] = teamNamesMsg.nsTeamName.mid(inx + 1);
+            inx = teamNamesMsg.ewTeamName.indexOf(":");
+            teamNames[EAST_SEAT] = teamNamesMsg.ewTeamName.left(inx);
+            teamNames[WEST_SEAT] = teamNamesMsg.ewTeamName.mid(inx + 1);
+        }
         break;
     }
 

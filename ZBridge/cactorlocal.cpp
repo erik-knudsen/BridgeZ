@@ -500,19 +500,21 @@ void CActorLocal::continueSync()
  */
 void CActorLocal::seated(QString teamName)
 {
-    //EAK What to do with teamName?
+    //Should perhaps check that the teamname in the parameter, coming from the table manager server
+    //is the same as used by the actor in the connect message (local teamname).
     zBridgeClientIface_raise_seated(&handle);
     clientRunCycle();
 }
 
 /**
  * @brief Team names message from table manager.
- * @param nsTeamName North/south team name.
- * @param ewTeamName East/west team name.
+ * @param nsTeamName North/south team name (not used).
+ * @param ewTeamName East/west team name (not used).
  */
 void CActorLocal::teamNames(QString nsTeamName, QString ewTeamName)
 {
-    //EAK What to do  with team names?
+    //The parameter team names are not used by the actor. The table manager server or client
+    //handles the names.
     zBridgeClientIface_raise_teamNames(&handle);
     clientRunCycle();
 }
@@ -551,8 +553,9 @@ void CActorLocal::cards(int cards[4][13])
     //Save cards.
     bidAndPlay.setActorsCards(cards[(Seat)zBridgeClientIface_get_client(&handle)]);
 
-    //Initialize for a new bid history.
+    //Initialize for a new bid and play history.
     bidAndPlay.resetBidHistory();
+    bidAndPlay.resetPlayHistory();
 
     if (showUser)
     {

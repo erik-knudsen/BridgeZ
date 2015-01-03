@@ -40,7 +40,7 @@ enum tagIds { TAG_EVENT = 0, TAG_SITE, TAG_DATE, TAG_ROUND, TAG_BOARD, TAG_WEST,
  * The class handles reading and writing of pbn files with bridge games. It can also generate random bridge games.
  * It stores data for the games in an internal format.\n
  * There are three types of games:
- *   - Already played games read from a pbn file. There are called original games. If the games are random
+ *   - Already played games read from a pbn file. They are called original games. If the games are random
  *     generated (by this program), then there are no original games.
  *   - Games played manually by the user in cooperation with this program. They are called played games.
  *   - Games played automatically by this program. They are called auto games.
@@ -70,10 +70,10 @@ public slots:
 
 private:
     enum DealType { ORIGINAL_DEAL, RANDOM_DEAL };               /**< The two types of game sets. */
-    enum GameType { ORIGINAL_GAME, PLAYED_GAME, AUTO_GAME };    /**< The three types of games. */
+    enum GameType { ORIGINAL_GAME, PLAYED_GAME, AUTO_GAME };    /**< The three types of games in a game set. */
 
     /**
-     * @brief Structure with info for auction and play of how a game was played.
+     * @brief Structure with info for auction and play of how a game was played (auction and play).
      */
     struct CAuctionAndPlay
     {
@@ -125,8 +125,8 @@ private:
 
     QString event;              /**< The current game event. */
     QList<CGame *> games;       /**< List with all games. */
-    int currentGameIndex;       /**< Index of the game currently being played. */
-    DealType dealType;          /**< Type of current game set. */
+    int currentGameIndex;       /**< Index (into the games list) of the game currently being played. */
+    DealType dealType;          /**< Type of current game set (original or random). */
 };
 
 #endif // CGAMESDOC_H

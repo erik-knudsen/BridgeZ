@@ -183,8 +183,10 @@ typedef struct {
 	sc_boolean endOfSession_raised;
 	sc_integer noOfBoards;
 	sc_string name;
-	sc_string nsTeamName;
-	sc_string ewTeamName;
+	sc_string wTeamName;
+	sc_string nTeamName;
+	sc_string eTeamName;
+	sc_string sTeamName;
 	sc_integer dealer;
 	sc_integer bidVal;
 	sc_integer bidder;
@@ -370,14 +372,22 @@ extern void zBridgeServerIface_set_noOfBoards(ZBridgeServer* handle, sc_integer 
 extern sc_string zBridgeServerIface_get_name(ZBridgeServer* handle);
 /*! Sets the value of the variable 'name' that is defined in the default interface scope. */ 
 extern void zBridgeServerIface_set_name(ZBridgeServer* handle, sc_string value);
-/*! Gets the value of the variable 'nsTeamName' that is defined in the default interface scope. */ 
-extern sc_string zBridgeServerIface_get_nsTeamName(ZBridgeServer* handle);
-/*! Sets the value of the variable 'nsTeamName' that is defined in the default interface scope. */ 
-extern void zBridgeServerIface_set_nsTeamName(ZBridgeServer* handle, sc_string value);
-/*! Gets the value of the variable 'ewTeamName' that is defined in the default interface scope. */ 
-extern sc_string zBridgeServerIface_get_ewTeamName(ZBridgeServer* handle);
-/*! Sets the value of the variable 'ewTeamName' that is defined in the default interface scope. */ 
-extern void zBridgeServerIface_set_ewTeamName(ZBridgeServer* handle, sc_string value);
+/*! Gets the value of the variable 'wTeamName' that is defined in the default interface scope. */ 
+extern sc_string zBridgeServerIface_get_wTeamName(ZBridgeServer* handle);
+/*! Sets the value of the variable 'wTeamName' that is defined in the default interface scope. */ 
+extern void zBridgeServerIface_set_wTeamName(ZBridgeServer* handle, sc_string value);
+/*! Gets the value of the variable 'nTeamName' that is defined in the default interface scope. */ 
+extern sc_string zBridgeServerIface_get_nTeamName(ZBridgeServer* handle);
+/*! Sets the value of the variable 'nTeamName' that is defined in the default interface scope. */ 
+extern void zBridgeServerIface_set_nTeamName(ZBridgeServer* handle, sc_string value);
+/*! Gets the value of the variable 'eTeamName' that is defined in the default interface scope. */ 
+extern sc_string zBridgeServerIface_get_eTeamName(ZBridgeServer* handle);
+/*! Sets the value of the variable 'eTeamName' that is defined in the default interface scope. */ 
+extern void zBridgeServerIface_set_eTeamName(ZBridgeServer* handle, sc_string value);
+/*! Gets the value of the variable 'sTeamName' that is defined in the default interface scope. */ 
+extern sc_string zBridgeServerIface_get_sTeamName(ZBridgeServer* handle);
+/*! Sets the value of the variable 'sTeamName' that is defined in the default interface scope. */ 
+extern void zBridgeServerIface_set_sTeamName(ZBridgeServer* handle, sc_string value);
 /*! Gets the value of the variable 'dealer' that is defined in the default interface scope. */ 
 extern sc_integer zBridgeServerIface_get_dealer(ZBridgeServer* handle);
 /*! Sets the value of the variable 'dealer' that is defined in the default interface scope. */ 

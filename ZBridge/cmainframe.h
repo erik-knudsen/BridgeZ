@@ -87,8 +87,8 @@ private:
     CStatusWnd *m_pWndStatus;
     CHistoryWnd *m_pWndHistory;
 
-    int eventIndex;
-    QString fileName;
+    int eventIndex;             //PBN event index.
+    QString fileName;           //PBN file name.
 
 private slots:
     void OnUpdateViewFileComments();
