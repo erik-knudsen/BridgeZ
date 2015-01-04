@@ -44,6 +44,10 @@ public:
     int undo(int undoType);
     int getNoTrick() { return noTrick; }
     Seat getOpenLeader() { return openLeader; }
+    Seat getDeclarer() { return (Seat)((openLeader + 3) % 4); }
+    Bids getContract() { return bid; }
+    Bids getContractModifier() { return bidDouble; }
+    int getResult();
     void getTrick(int trickNo, int trick[]);
 
 private:

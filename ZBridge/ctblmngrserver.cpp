@@ -1099,6 +1099,9 @@ void CTblMngrServer::sEnableContinueSync(int syncState)
             QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_NEW_DEAL , false));
             QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_SHOW_ALL , false));
 
+            games->setPlayedResult(bidHistory, playHistory, teamNames[WEST_SEAT], teamNames[NORTH_SEAT],
+                                   teamNames[EAST_SEAT], teamNames[SOUTH_SEAT]);
+
             QMessageBox::information(0, tr("ZBridge"), tr("South made 6 in 2spx -300."));
 
             playView->showInfoNextButton(true, BUTTON_DEAL);

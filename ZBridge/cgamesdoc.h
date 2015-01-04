@@ -60,9 +60,9 @@ public:
     void clearGames();
     void getNextDeal(int *board, int cards[][13], Seat *dealer, Team *vulnerable);
     void setPlayedResult(CBidHistory &bidHistory, CPlayHistory &playHistory, QString &westName, QString &northName,
-                   QString &eastName, QString &southName, Seat declarer, Bids contract, Bids contractModifier, int result);
+                   QString &eastName, QString &southName);
     void setAutoResult(CBidHistory &bidHistory, CPlayHistory &playHistory, QString &westName, QString &northName,
-                   QString &eastName, QString &southName, Seat declarer, Bids contract, Bids contractModifier, int result);
+                   QString &eastName, QString &southName);
     void determineEvents(QTextStream &original, QStringList &events);
 signals:
 
@@ -105,6 +105,8 @@ private:
         QList<CAuctionAndPlay *> auctionAndPlay;
     };
 
+    void setResult(GameType gameType, CBidHistory &bidHistory, CPlayHistory &playHistory, QString &westName,
+                   QString &northName, QString &eastName, QString &southName);
     void readGames(QTextStream &pbnText, QString &event, bool originalGames) throw(PlayException);
     void writeGame(QTextStream &stream, CGame *game, GameType gameType, QString event);
     int preloadPBNFile(QTextStream &PBNFile, QString event, QStringList &strLines,
@@ -127,6 +129,9 @@ private:
     QList<CGame *> games;       /**< List with all games. */
     int currentGameIndex;       /**< Index (into the games list) of the game currently being played. */
     DealType dealType;          /**< Type of current game set (original or random). */
+
+    QString curEvent;           /**< Current event while processing pbn file (also with regards to # and ##). */
+
 };
 
 #endif // CGAMESDOC_H

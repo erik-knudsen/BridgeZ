@@ -134,6 +134,7 @@ void CGamesDoc::clearGames()
         delete game;
 
     }
+    curEvent.clear();
     currentGameIndex = -1;
     dealType = RANDOM_DEAL;
 }
@@ -242,25 +243,10 @@ void CGamesDoc::getNextDeal(int *board, int cards[][13], Seat *dealer, Team *vul
  * structure.
  */
 void CGamesDoc::setPlayedResult(CBidHistory &bidHistory, CPlayHistory &playHistory, QString &westName,
-                                QString &northName, QString &eastName, QString &southName, Seat declarer,
-                                Bids contract, Bids contractModifier, int result)
+                                QString &northName, QString &eastName, QString &southName)
 {
     //Set result of manually played game.
-    CAuctionAndPlay * auctionAndPlay = new CAuctionAndPlay();
-
-    auctionAndPlay->gameType = PLAYED_GAME;
-    auctionAndPlay->bidHistory = bidHistory;
-    auctionAndPlay->playHistory = playHistory;
-    auctionAndPlay->westName = westName;
-    auctionAndPlay->northName = northName;
-    auctionAndPlay->eastName = eastName;
-    auctionAndPlay->southName = southName;
-    auctionAndPlay->declarer = declarer;
-    auctionAndPlay->contract = contract;
-    auctionAndPlay->contractModifier = contractModifier;
-    auctionAndPlay->result = result;
-
-    games[currentGameIndex]->auctionAndPlay.append(auctionAndPlay);
+    setResult(PLAYED_GAME, bidHistory, playHistory, westName, northName, eastName, southName);
 }
 
 /**
@@ -280,23 +266,29 @@ void CGamesDoc::setPlayedResult(CBidHistory &bidHistory, CPlayHistory &playHisto
  * structure.
  */
 void CGamesDoc::setAutoResult(CBidHistory &bidHistory, CPlayHistory &playHistory, QString &westName,
-                              QString &northName, QString &eastName, QString &southName, Seat declarer,
-                              Bids contract, Bids contractModifier, int result)
+                              QString &northName, QString &eastName, QString &southName)
 {
     //Set result af automatically played game.
+    setResult(AUTO_GAME, bidHistory, playHistory, westName, northName, eastName, southName);
+}
+
+void CGamesDoc::setResult(GameType gameType, CBidHistory &bidHistory, CPlayHistory &playHistory, QString &westName,
+                                QString &northName, QString &eastName, QString &southName)
+{
+    //Set result of manually played game.
     CAuctionAndPlay * auctionAndPlay = new CAuctionAndPlay();
 
-    auctionAndPlay->gameType = AUTO_GAME;
+    auctionAndPlay->gameType = gameType;
     auctionAndPlay->bidHistory = bidHistory;
     auctionAndPlay->playHistory = playHistory;
     auctionAndPlay->westName = westName;
     auctionAndPlay->northName = northName;
     auctionAndPlay->eastName = eastName;
     auctionAndPlay->southName = southName;
-    auctionAndPlay->declarer = declarer;
-    auctionAndPlay->contract = contract;
-    auctionAndPlay->contractModifier = contractModifier;
-    auctionAndPlay->result = result;
+    auctionAndPlay->declarer = playHistory.getDeclarer();
+    auctionAndPlay->contract = playHistory.getContract();
+    auctionAndPlay->contractModifier = playHistory.getContractModifier();
+    auctionAndPlay->result = playHistory.getResult();
 
     games[currentGameIndex]->auctionAndPlay.append(auctionAndPlay);
 }
@@ -430,7 +422,7 @@ void CGamesDoc::readGames(QTextStream &pbnText, QString &event, bool originalGam
                     if (nextGame->board == game->board)
                     {
                         //Check redundant info (cards etc.).
-                        bool error;
+                        bool error = false;
                         for (int i = 0; i < 13; i++)
                             if ((nextGame->wCards[i] != game->wCards[i]) || (nextGame->nCards[i] != game->nCards[i]) ||
                                     (nextGame->eCards[i] != game->eCards[i]) || (nextGame->sCards[i] != game->sCards[i]))
@@ -749,8 +741,8 @@ void CGamesDoc::readGames(QTextStream &pbnText, QString &event, bool originalGam
                     if (game->dealer == NO_SEAT)
                         game->dealer = dealer;
 
-                    if (dealer != game->dealer)
-                        throw PlayException(QString("PBN - Illegal dealer: %1 %2 %3").arg(dealer).arg(" in board: ").arg(game->board).toStdString());
+//                    if (dealer != game->dealer)
+//                        throw PlayException(QString("PBN - Illegal dealer: %1 %2 %3").arg(dealer).arg(" in board: ").arg(game->board).toStdString());
                 }
                     break;
 
@@ -1129,23 +1121,21 @@ int CGamesDoc::preloadPBNFile(QTextStream &PBNFile, QString event, QStringList &
 //Search for the given event in the given line. Also take care of header (##) and substitution (#).
 bool CGamesDoc::searchGame(QString &line, QString &event)
 {
-    static QString curEvent;
+    if (line.indexOf("[EVENT", 0, Qt::CaseInsensitive) != 0)
+        return false;
 
-    if (line.indexOf("[EVENT", 0, Qt::CaseInsensitive) == 0)
-    {
-        int firstInx = line.indexOf('"');
-        int lastInx = line.lastIndexOf('"');
+    int firstInx = line.indexOf('"');
+    int lastInx = line.lastIndexOf('"');
 
-        //Check for syntax (silently discard in case of syntax error).
-        if ((firstInx == -1) || (firstInx == lastInx))
-            return false;
+    //Check for syntax (silently discard in case of syntax error).
+    if ((firstInx == -1) || (firstInx == lastInx))
+        return false;
 
-        //Handle header (##) and substitution (#).
-        if (line.indexOf("##", firstInx + 1) == (firstInx + 1))
-            curEvent = line.mid(firstInx + 3, lastInx - (firstInx + 3));
-        else if (line.indexOf('#', firstInx + 1) != (firstInx + 1))
-            curEvent = line.mid(firstInx + 1, lastInx - (firstInx + 1));
-    }
+    //Handle header (##) and substitution (#).
+    if (line.indexOf("##", firstInx + 1) == (firstInx + 1))
+        curEvent = line.mid(firstInx + 3, lastInx - (firstInx + 3));
+    else if (line.indexOf('#', firstInx + 1) != (firstInx + 1))
+        curEvent = line.mid(firstInx + 1, lastInx - (firstInx + 1));
 
     return ((curEvent == event) || ((event.isEmpty() && curEvent == "?")));
 }
