@@ -153,22 +153,12 @@ void CTblMngrServer::serverActions()
         Seat seat = (Seat)zBridgeServerIface_get_seated_value(&handle);
 
         //The actor is seated.
-        char * teamName = (seat == WEST_SEAT) ? zBridgeServerIface_get_wTeamName(&handle) :
-                          (seat == NORTH_SEAT) ? zBridgeServerIface_get_nTeamName(&handle) :
-                          (seat == EAST_SEAT) ? zBridgeServerIface_get_eTeamName(&handle) :
-                           zBridgeServerIface_get_nTeamName(&handle);
-
-        actors[seat]->seated(QString(teamName));
+        actors[seat]->seated(teamNames[seat]);
     }
 
     else if (zBridgeServerIface_israised_teamNames(&handle))
     {
         //All actors have connected and their team names are set.
-        teamNames[WEST_SEAT] = QString(zBridgeServerIface_get_wTeamName(&handle));
-        teamNames[NORTH_SEAT] = QString(zBridgeServerIface_get_nTeamName(&handle));
-        teamNames[EAST_SEAT] = QString(zBridgeServerIface_get_eTeamName(&handle));
-        teamNames[SOUTH_SEAT] = QString(zBridgeServerIface_get_sTeamName(&handle));
-
         QString nsTeamName = teamNames[NORTH_SEAT];
         QString ewTeamName = teamNames[EAST_SEAT];
 
@@ -268,7 +258,7 @@ void CTblMngrServer::serverActions()
         }
 
         //Set bid in bid history.
-        CBid bidEntry(bidder, bid, "alert");
+        CBid bidEntry(bidder, bid, "");
         bidHistory.appendBid(bidEntry);
 
         //First assure server goes to the next wait state to be able to handle client signals.
@@ -855,11 +845,11 @@ void CTblMngrServer::dummyToLead()
  * @param seat Seat for actor.
  * @param protocol Protocol to use.
  *
- * The name is set in the statechart and connect is signalled to the statechart.
+ * The name is saved and connect is signalled to the statechart.
  */
 void CTblMngrServer::sConnect(QString teamName, Seat seat, int protocol)
 {
-    zBridgeServerIface_set_name(&handle, teamName.toLatin1().data());
+    teamNames[seat] = teamName;
     zBridgeServerIface_raise_connect(&handle, seat);
     serverRunCycle();
 }
@@ -1043,6 +1033,9 @@ void CTblMngrServer::sEnableContinueLeader()
     {
         waiting = true;
 
+        games->setPlayedResult(bidHistory, playHistory, teamNames[WEST_SEAT], teamNames[NORTH_SEAT],
+                               teamNames[EAST_SEAT], teamNames[SOUTH_SEAT]);
+
         //Waiting time must be less than one second.
         leaderButton->start(700);
 
@@ -1102,7 +1095,26 @@ void CTblMngrServer::sEnableContinueSync(int syncState)
             games->setPlayedResult(bidHistory, playHistory, teamNames[WEST_SEAT], teamNames[NORTH_SEAT],
                                    teamNames[EAST_SEAT], teamNames[SOUTH_SEAT]);
 
-            QMessageBox::information(0, tr("ZBridge"), tr("South made 6 in 2spx -300."));
+            if (playHistory.getResult() != -1)
+            {
+                //EAK Temporary.
+                Seat declarer = playHistory.getDeclarer();
+                Bids contract = playHistory.getContract();
+                Suit suit = BID_SUIT(contract);
+                int level = BID_LEVEL(contract);
+                Bids contractModifier = playHistory.getContractModifier();
+                bool doubleBid = IS_DOUBLE_BID(contractModifier);
+                bool redoubleBid = IS_REDOUBLE_BID(contractModifier);
+                int result = playHistory.getResult();
+
+                QString play = SEAT_NAMES[declarer] + tr(" made ") + QString::number(result) + tr(" in ") +
+                        QString::number(level) + SUIT_NAMES[suit];
+                if (doubleBid)
+                    play += "X";
+                else if (redoubleBid)
+                    play += "XX";
+                QMessageBox::information(0, tr("ZBridge"), play);
+            }
 
             playView->showInfoNextButton(true, BUTTON_DEAL);
             break;

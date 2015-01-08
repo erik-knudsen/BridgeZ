@@ -51,6 +51,16 @@ const char * const SEAT_NAMES[4] =
     QT_TR_NOOP("South")
 };
 
+//Suit names (indexed by enum Suit).
+const char * const SUIT_NAMES[5] =
+{
+    QT_TR_NOOP("C"),
+    QT_TR_NOOP("D"),
+    QT_TR_NOOP("H"),
+    QT_TR_NOOP("S"),
+    QT_TR_NOOP("NT")
+};
+
 //Suit, position and vulnerability. MUST NOT be changed (used as index).
 enum Suit { ANY=-1, CLUBS=0, DIAMONDS=1, HEARTS=2, SPADES=3, NOTRUMP=4 };
 enum Position { LEFT_POS=0, TOP_POS=1, RIGHT_POS=2, BOTTOM_POS=3};
@@ -677,27 +687,29 @@ const int BID_VER_SIZE = 12;
                                   IS_HEARTS(card) ? (card - SUIT_INTERVAL[HEARTS][0]) :\
                                    IS_SPADES(card) ? (card - SUIT_INTERVAL[SPADES][0]) : -1)
 
-//#define ISMAJOR(suit)	(((suit == HEARTS) || (suit == SPADES)) ? TRUE : FALSE)
-//#define ISMINOR(suit)	(((suit == CLUBS) || (suit == DIAMONDS)) ? TRUE : FALSE)
-//#define ISNOTRUMP(suit)((suit == NOTRUMP) ? TRUE : FALSE)
+#define ISMAJOR(suit)	(((suit == HEARTS) || (suit == SPADES)) ? TRUE : FALSE)
+#define ISMINOR(suit)	(((suit == CLUBS) || (suit == DIAMONDS)) ? TRUE : FALSE)
+#define ISNOTRUMP(suit)((suit == NOTRUMP) ? TRUE : FALSE)
 
 #define MAKE_BID(suit, level) (Bids)(BID_PASS + (level-1)*5 + suit + 1)
 #define BID_SUIT(bid)  (Suit)(((bid <= BID_PASS) || (bid >= BID_DOUBLE)) ? -1 : (((bid-1) % 5)))
 #define BID_LEVEL(bid) ( ((bid <= BID_PASS) || (bid >= BID_DOUBLE)) ? -1 : (((bid-1) / 5) + 1) )
 
-//#define IS_BID(bid) ((bid >= BID_1C) && (bid <= BID_7NT))
-//#define IS_SUIT(suit) ((suit >= CLUBS) && (suit <= SPADES))
-//#define IS_CARD(card) ((card >= 0) && (card <= 51))
-//#define IS_FACE(face) ((face >= 0) && (face <= ACE))
-//#define IS_POSITION(position) ((position >= LEFT_POS) && (position <= BOTTOM_POS))
-//#define IS_PLAYER(seat) ((seat >= WEST_SEAT) && (seat <= SOUTH_SEAT))
-//#define IS_TEAM(team) ((team == NORTH_SOUTH) || (team == EAST_WEST))
+#define IS_BID(bid) ((bid >= BID_1C) && (bid <= BID_7NT))
+#define IS_DOUBLE_BID(bid) (bid == BID_DOUBLE)
+#define IS_REDOUBLE_BID(bid) (bid == BID_REDOUBLE)
+#define IS_SUIT(suit) ((suit >= CLUBS) && (suit <= SPADES))
+#define IS_CARD(card) ((card >= 0) && (card <= 51))
+#define IS_FACE(face) ((face >= 0) && (face <= ACE))
+#define IS_POSITION(position) ((position >= LEFT_POS) && (position <= BOTTOM_POS))
+#define IS_PLAYER(seat) ((seat >= WEST_SEAT) && (seat <= SOUTH_SEAT))
+#define IS_TEAM(team) ((team == NORTH_SOUTH) || (team == EAST_WEST))
 
-//#define OTHER_MAJOR(suit) 	((suit == HEARTS) ? SPADES : HEARTS)
-//#define OTHER_MINOR(suit) 	((suit == CLUBS) ? DIAMONDS : CLUBS)
+#define OTHER_MAJOR(suit) 	((suit == HEARTS) ? SPADES : HEARTS)
+#define OTHER_MINOR(suit) 	((suit == CLUBS) ? DIAMONDS : CLUBS)
 
-//#define MIN(a,b) ( ((a) <= (b))? (a): (b) )
-//#define MAX(a,b) ( ((a) >= (b))? (a): (b) )
+#define MIN(a,b) ( ((a) <= (b))? (a): (b) )
+#define MAX(a,b) ( ((a) >= (b))? (a): (b) )
 
 
 #include <QEvent>

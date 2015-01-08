@@ -164,11 +164,11 @@ void CGamesDoc::getNextDeal(int *board, int cards[][13], Seat *dealer, Team *vul
         int cardDeck[52];
 
         //Info about board.
-        int boardNo = currentGameIndex;
+        int boardNo = currentGameIndex + 1;
 
         *board = boardNo;
-        *dealer = DEALER[boardNo%4];
-        *vulnerable = VULNERABLE[(boardNo%4 + boardNo/4)%4];
+        *dealer = DEALER[(boardNo - 1) % 4];
+        *vulnerable = VULNERABLE[((boardNo - 1) % 4 + boardNo/4)%4];
 
         currentGame->board = *board;
         currentGame->dealer = *dealer;

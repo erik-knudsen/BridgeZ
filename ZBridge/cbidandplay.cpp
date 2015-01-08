@@ -51,6 +51,14 @@ Bids CBidAndPlay::getNextBid(Seat seat)
     if (bidHistory.bidList.last().bid == BID_7NT)
         return BID_PASS;
 
+    if (bidHistory.bidList.last().bid == BID_DOUBLE)
+    return BID_PASS;
+//        return (Bids)(bidHistory.bidList[bidHistory.bidList.size() - 2].bid + 1);
+
+//    if (bidHistory.bidList.last().bid == BID_REDOUBLE)
+//        return BID_PASS;
+//        return (Bids)(bidHistory.bidList[bidHistory.bidList.size() - 3].bid + 1);
+
     return (Bids)(bidHistory.bidList.last().bid + 1);
 }
 

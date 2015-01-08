@@ -129,11 +129,6 @@ void zBridgeServer_init(ZBridgeServer* handle)
 	handle->internal.leader = 0;
 	handle->internal.playNo = 0;
 	handle->iface.noOfBoards = 0;
-	handle->iface.name = "";
-	handle->iface.wTeamName = "";
-	handle->iface.nTeamName = "";
-	handle->iface.eTeamName = "";
-	handle->iface.sTeamName = "";
 	handle->iface.dealer = 0;
 	handle->iface.bidVal = 0;
 	handle->iface.bidder = 0;
@@ -1141,36 +1136,6 @@ sc_integer zBridgeServerIface_get_noOfBoards(ZBridgeServer* handle) {
 void zBridgeServerIface_set_noOfBoards(ZBridgeServer* handle, sc_integer value) {
 	handle->iface.noOfBoards = value;
 }
-sc_string zBridgeServerIface_get_name(ZBridgeServer* handle) {
-	return handle->iface.name;
-}
-void zBridgeServerIface_set_name(ZBridgeServer* handle, sc_string value) {
-	handle->iface.name = value;
-}
-sc_string zBridgeServerIface_get_wTeamName(ZBridgeServer* handle) {
-	return handle->iface.wTeamName;
-}
-void zBridgeServerIface_set_wTeamName(ZBridgeServer* handle, sc_string value) {
-	handle->iface.wTeamName = value;
-}
-sc_string zBridgeServerIface_get_nTeamName(ZBridgeServer* handle) {
-	return handle->iface.nTeamName;
-}
-void zBridgeServerIface_set_nTeamName(ZBridgeServer* handle, sc_string value) {
-	handle->iface.nTeamName = value;
-}
-sc_string zBridgeServerIface_get_eTeamName(ZBridgeServer* handle) {
-	return handle->iface.eTeamName;
-}
-void zBridgeServerIface_set_eTeamName(ZBridgeServer* handle, sc_string value) {
-	handle->iface.eTeamName = value;
-}
-sc_string zBridgeServerIface_get_sTeamName(ZBridgeServer* handle) {
-	return handle->iface.sTeamName;
-}
-void zBridgeServerIface_set_sTeamName(ZBridgeServer* handle, sc_string value) {
-	handle->iface.sTeamName = value;
-}
 sc_integer zBridgeServerIface_get_dealer(ZBridgeServer* handle) {
 	return handle->iface.dealer;
 }
@@ -1410,7 +1375,6 @@ static void zBridgeServer_react_entry__Connect_West_Connect(ZBridgeServer* handl
 		/* Default exit sequence for state Connect */
 		handle->stateConfVector[0] = ZBridgeServer_last_state;
 		handle->stateConfVectorPosition = 0;
-		handle->iface.wTeamName = handle->iface.name;
 		handle->iface.seated_value = handle->internal.W;
 		handle->iface.seated_raised = bool_true;
 		/* 'default' enter sequence for state Seated */
@@ -1587,7 +1551,6 @@ static void zBridgeServer_react_entry__Connect_North_Connect(ZBridgeServer* hand
 		/* Default exit sequence for state Connect */
 		handle->stateConfVector[1] = ZBridgeServer_last_state;
 		handle->stateConfVectorPosition = 1;
-		handle->iface.nTeamName = handle->iface.name;
 		handle->iface.seated_value = handle->internal.N;
 		handle->iface.seated_raised = bool_true;
 		/* 'default' enter sequence for state Seated */
@@ -1764,7 +1727,6 @@ static void zBridgeServer_react_entry__Connect_East_Connect(ZBridgeServer* handl
 		/* Default exit sequence for state Connect */
 		handle->stateConfVector[2] = ZBridgeServer_last_state;
 		handle->stateConfVectorPosition = 2;
-		handle->iface.eTeamName = handle->iface.name;
 		handle->iface.seated_value = handle->internal.E;
 		handle->iface.seated_raised = bool_true;
 		/* 'default' enter sequence for state Seated */
@@ -1941,7 +1903,6 @@ static void zBridgeServer_react_entry__Connect_South_Connect(ZBridgeServer* hand
 		/* Default exit sequence for state Connect */
 		handle->stateConfVector[3] = ZBridgeServer_last_state;
 		handle->stateConfVectorPosition = 3;
-		handle->iface.sTeamName = handle->iface.name;
 		handle->iface.seated_value = handle->internal.S;
 		handle->iface.seated_raised = bool_true;
 		/* 'default' enter sequence for state Seated */
