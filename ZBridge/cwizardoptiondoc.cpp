@@ -39,8 +39,7 @@ CWizardOptionDoc::CWizardOptionDoc()
     showDummyTrumpsOnLeft = true;
 
     //Game Options.
-    useDuplicateScoring = true;
-    scoreHonorsBonuses = false;
+    scoringMethod = DUPLICATE_MP;
 
     //Pauses.
     insertBiddingPause = true;
@@ -70,8 +69,7 @@ void CWizardOptionDoc::WriteSettings()
     settings.setValue("showDummyTrumpsOnLeft", showDummyTrumpsOnLeft);
 
     //Game Options.
-    settings.setValue("useDuplicateScoring", useDuplicateScoring);
-    settings.setValue("scoreHonorsBonuses", scoreHonorsBonuses);
+    settings.setValue("scoringMethod", scoringMethod);
 
     //Pauses.
     settings.setValue("insertBiddingPause", insertBiddingPause);
@@ -101,8 +99,7 @@ void CWizardOptionDoc::ReadSettings()
     showDummyTrumpsOnLeft = settings.value("showDummyTrumpsOnLeft", true).toBool();
 
     //Game Options.
-    useDuplicateScoring = settings.value("useDuplicateScoring", true).toBool();
-    scoreHonorsBonuses = settings.value("scoreHonorsBonuses", false).toBool();
+    scoringMethod = settings.value("scoringMethod", DUPLICATE_MP).toInt();
 
     //Pauses.
     insertBiddingPause = settings.value("insertBiddingPause", true).toBool();

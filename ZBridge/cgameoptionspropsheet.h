@@ -63,9 +63,10 @@ private slots:
     void on_allowRebidPassedHands_clicked(bool checked);
     void on_gorenValuationMode_clicked();
     void on_ginsburgValuationMode_clicked();
-    void on_customValuationMode_clicked();
-    void on_useDuplicateScoring_clicked(bool checked);
-    void on_scoreHonorsBonuses_clicked(bool checked);
+    void on_customValuationMode_clicked();    
+    void on_teamsIMP_clicked();
+    void on_duplicateMP_clicked();
+    void on_RubberBridge_clicked();
     void on_saveIntermediatePositions_clicked(bool checked);
     void on_exposePBNGameCards_clicked(bool checked);
 

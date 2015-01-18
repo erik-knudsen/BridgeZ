@@ -631,6 +631,11 @@ const int GOREN_VALUATION_MODE = 0;
 const int GINSBURG_VALUATION_MODE = 1;
 const int CUSTOM_VALUATION_MODE = 3;
 
+//Scoring.
+const int TEAMS_IMP = 0;
+const int DUPLICATE_MP = 1;
+const int RUBBER_BRIDGE = 2;
+
 //----------------------------- Wizard. -------------------------------
 //Help Level.
 const int BEGIN_HELP_LEVEL = 0;

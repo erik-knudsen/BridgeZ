@@ -62,8 +62,7 @@ public:
     float tenValue;
 
     //Scoring.
-    bool useDuplicateScoring;
-    bool scoreHonorsBonuses;
+    int scoringMethod;
 
     //Files.
     bool saveIntermediatePositions;

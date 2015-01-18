@@ -48,8 +48,7 @@ public:
     bool showDummyTrumpsOnLeft;
 
     //Game Options.
-    bool useDuplicateScoring;
-    bool scoreHonorsBonuses;
+    int scoringMethod;
 
     //Pauses.
     bool insertBiddingPause;

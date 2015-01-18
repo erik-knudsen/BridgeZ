@@ -81,8 +81,12 @@ CGameOptionsPropSheet::CGameOptionsPropSheet(CZBridgeApp *app, CZBridgeDoc *doc,
         enableValues(false);
 
     //Scoring.
-    ui->useDuplicateScoring->setChecked(gameOptionDoc.useDuplicateScoring);
-    ui->scoreHonorsBonuses->setChecked(gameOptionDoc.scoreHonorsBonuses);
+    if (gameOptionDoc.scoringMethod == TEAMS_IMP)
+        ui->teamsIMP->setChecked(true);
+    else if (gameOptionDoc.scoringMethod == DUPLICATE_MP)
+        ui->duplicateMP->setChecked(true);
+    else
+        ui->RubberBridge->setChecked(true);
 
     //Files.
     ui->saveIntermediatePositions->setChecked(gameOptionDoc.saveIntermediatePositions);
@@ -205,14 +209,19 @@ void CGameOptionsPropSheet::enableValues(bool enable)
     ui->tenValue->setEnabled(enable);
 }
 
-void CGameOptionsPropSheet::on_useDuplicateScoring_clicked(bool checked)
+void CGameOptionsPropSheet::on_teamsIMP_clicked()
 {
-    gameOptionDoc.useDuplicateScoring = checked;
+    gameOptionDoc.scoringMethod = TEAMS_IMP;
 }
 
-void CGameOptionsPropSheet::on_scoreHonorsBonuses_clicked(bool checked)
+void CGameOptionsPropSheet::on_duplicateMP_clicked()
 {
-    gameOptionDoc.scoreHonorsBonuses = checked;
+    gameOptionDoc.scoringMethod = DUPLICATE_MP;
+}
+
+void CGameOptionsPropSheet::on_RubberBridge_clicked()
+{
+    gameOptionDoc.scoringMethod = RUBBER_BRIDGE;
 }
 
 void CGameOptionsPropSheet::on_saveIntermediatePositions_clicked(bool checked)

@@ -74,8 +74,12 @@ CProgramConfigWizard::CProgramConfigWizard(CZBridgeApp *app, CZBridgeDoc *doc, Q
     ui->progConfigSuitsDisplayPage->ui->showDummyTrumpsOnLeft->setChecked(wizardOptionDoc.showDummyTrumpsOnLeft);
 
     //Game Options page.
-    ui->progConfigGameMechanicsPage->ui->usingDuplicateScoring->setChecked(wizardOptionDoc.useDuplicateScoring);
-    ui->progConfigGameMechanicsPage->ui->scoreHonorsBonuses->setChecked(wizardOptionDoc.scoreHonorsBonuses);
+    if (wizardOptionDoc.scoringMethod == TEAMS_IMP)
+        ui->progConfigGameMechanicsPage->ui->teamsIMP->setChecked(true);
+    else if (wizardOptionDoc.scoringMethod == DUPLICATE_MP)
+        ui->progConfigGameMechanicsPage->ui->duplicateMP->setChecked(true);
+    else
+        ui->progConfigGameMechanicsPage->ui->rubberBridge->setChecked(true);
 
     //Pauses page.
     QString text;
@@ -140,8 +144,12 @@ void CProgramConfigWizard::accept()
     wizardOptionDoc.showDummyTrumpsOnLeft = ui->progConfigSuitsDisplayPage->ui->showDummyTrumpsOnLeft->isChecked();
 
     //Game Options page.
-    wizardOptionDoc.useDuplicateScoring = ui->progConfigGameMechanicsPage->ui->usingDuplicateScoring->isChecked();
-    wizardOptionDoc.scoreHonorsBonuses = ui->progConfigGameMechanicsPage->ui->scoreHonorsBonuses->isChecked();
+    if (ui->progConfigGameMechanicsPage->ui->teamsIMP->isChecked())
+        wizardOptionDoc.scoringMethod = TEAMS_IMP;
+    if (ui->progConfigGameMechanicsPage->ui->duplicateMP->isChecked())
+        wizardOptionDoc.scoringMethod = DUPLICATE_MP;
+    else
+        wizardOptionDoc.scoringMethod = RUBBER_BRIDGE;
 
     //Pauses page.
     wizardOptionDoc.insertBiddingPause = ui->progConfigPausesPage->ui->insertBiddingPause->isChecked();

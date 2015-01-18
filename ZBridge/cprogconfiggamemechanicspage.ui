@@ -37,7 +37,7 @@
           </size>
          </property>
          <property name="text">
-          <string>While practice hands are normally not scored, you can choose to score them using the rules of using duplicate bridge.  If you have never played duplicate bridge before, you can skip this option.</string>
+          <string>There are two main categories of scoring: dupilcate and rubber scoring. Duplicate scoring can be either Matchpoint (MP) scoring or International Matchpoint (IMP) scoring. Matchpoint scoring is normally used for pair events. International Match Point scoring is normally used for team events.</string>
          </property>
          <property name="wordWrap">
           <bool>true</bool>
@@ -48,63 +48,44 @@
         </widget>
        </item>
        <item>
-        <widget class="QCheckBox" name="usingDuplicateScoring">
-         <property name="text">
-          <string>Yes, score my practice hands using duplicate rules</string>
+        <widget class="QGroupBox" name="groupBox">
+         <property name="title">
+          <string>Scoring Method</string>
          </property>
+         <widget class="QWidget" name="">
+          <property name="geometry">
+           <rect>
+            <x>20</x>
+            <y>30</y>
+            <width>93</width>
+            <height>68</height>
+           </rect>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_3">
+           <item>
+            <widget class="QRadioButton" name="teamsIMP">
+             <property name="text">
+              <string>Teams IMP</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="duplicateMP">
+             <property name="text">
+              <string>Duplicate MP</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="rubberBridge">
+             <property name="text">
+              <string>Rubber Bridge</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
         </widget>
-       </item>
-       <item>
-        <spacer name="verticalSpacer">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
-        <widget class="QLabel" name="label_3">
-         <property name="maximumSize">
-          <size>
-           <width>310</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="text">
-          <string>Some people who play rubber bridge choose to ignore honors bonuses since they are based solely on luck rather than skill.  If you wish to skip honors bonuses, check the box below.</string>
-         </property>
-         <property name="wordWrap">
-          <bool>true</bool>
-         </property>
-         <property name="indent">
-          <number>9</number>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="scoreHonorsBonuses">
-         <property name="text">
-          <string>Yes, ignore honors bonuses in rubber play.</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <spacer name="verticalSpacer_2">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
        </item>
       </layout>
      </item>

@@ -24,6 +24,7 @@
 #include <QObject>
 #include <QTextStream>
 #include <QMap>
+#include <QStringList>
 
 #include "ZBridgeException.h"
 #include "cbidhistory.h"

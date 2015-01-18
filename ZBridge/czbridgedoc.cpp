@@ -68,8 +68,7 @@ void CZBridgeDoc::synchronizeOptions(bool all)
         //Game options.
         gameOptions.helpLevel = wizardOptions.helpLevel;
         gameOptions.enableTracing = wizardOptions.enableTracing;
-        gameOptions.useDuplicateScoring = wizardOptions.useDuplicateScoring;
-        gameOptions.scoreHonorsBonuses = wizardOptions.scoreHonorsBonuses;
+        gameOptions.scoringMethod = wizardOptions.scoringMethod;
         gameOptions.insertBiddingPause = wizardOptions.insertBiddingPause;
         gameOptions.biddingPause = wizardOptions.biddingPauseLength;
         gameOptions.insertPlayPause = wizardOptions.insertPlayPause;

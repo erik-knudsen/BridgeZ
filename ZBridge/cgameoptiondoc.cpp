@@ -55,8 +55,7 @@ CGameOptionDoc::CGameOptionDoc()
    tenValue = 0.0;
 
    //Scoring.
-   useDuplicateScoring = true;
-   scoreHonorsBonuses = false;
+   scoringMethod = DUPLICATE_MP;
 
    //Files.
    saveIntermediatePositions = false;
@@ -91,8 +90,7 @@ void CGameOptionDoc::WriteSettings()
     settings.setValue("jackValue", jackValue);
     settings.setValue("tenValue", tenValue);
 
-    settings.setValue("useDuplicateScoring", useDuplicateScoring);
-    settings.setValue("scoreHonorsBonuses", scoreHonorsBonuses);
+    settings.setValue("scoringMethod", scoringMethod);
 
     settings.setValue("saveIntermediatePositions", saveIntermediatePositions);
     settings.setValue("exposePBNGameCards", exposePBNGameCards);
@@ -126,8 +124,7 @@ void CGameOptionDoc::ReadSettings()
     jackValue = settings.value("jackValue", 1.0).toFloat();
     tenValue =settings.value("tenValue", 0.0).toFloat();
 
-    useDuplicateScoring = settings.value("useDuplicateScoring", true).toBool();
-    scoreHonorsBonuses = settings.value("scoreHonorsBonuses", false).toBool();
+    scoringMethod = settings.value("scoringMethod", DUPLICATE_MP).toInt();
 
     saveIntermediatePositions = settings.value("saveIntermediatePositions", false).toBool();
     exposePBNGameCards = settings.value("exposePBNGameCards", false).toBool();
