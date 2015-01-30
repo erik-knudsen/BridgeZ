@@ -21,22 +21,27 @@
 #ifndef CRUBBERSCOREDIALOG_H
 #define CRUBBERSCOREDIALOG_H
 
-#include <QWidget>
+#include <QDialog>
+
+class CGamesDoc;
 
 namespace Ui {
 class CRubberScoreDialog;
 }
 
-class CRubberScoreDialog : public QWidget
+class CRubberScoreDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit CRubberScoreDialog(QWidget *parent = 0);
+    explicit CRubberScoreDialog(CGamesDoc *games, int index, QWidget *parent = 0);
     ~CRubberScoreDialog();
 
 private:
     Ui::CRubberScoreDialog *ui;
+
+    CGamesDoc *games;
+    int index;
 };
 
 #endif // CRUBBERSCOREDIALOG_H

@@ -52,6 +52,7 @@
 #include "ctblmngrserver.h"
 #include "ctblmngrclient.h"
 #include "cmainscoredialog.h"
+#include "crubberscoredialog.h"
 
 //Static pointer to mainframe singleton.
 CMainFrame *CMainFrame::m_pInstance = 0;
@@ -569,7 +570,7 @@ void CMainFrame::on_actionBidding_Play_History_triggered()
 void CMainFrame::on_action_Score_triggered()
 {
     //Show score dialog.
-    CMainScoreDialog mainScoreDialog(games);
+    CMainScoreDialog mainScoreDialog(games, doc->getGameOptions().scoringMethod);
     mainScoreDialog.exec();
 }
 

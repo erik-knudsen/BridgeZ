@@ -335,6 +335,26 @@ void CGamesDoc::determineEvents(QTextStream &original, QStringList &events)
     }
 }
 
+int CGamesDoc::getNumberPlayedGivenGame(int gameInx)
+{
+
+}
+
+void CGamesDoc::getGame(int gameIndex, int *board, int wCards[], int nCards[], int eCards[], int sCards[], Seat *dealer, Team *vulnerable)
+{
+
+}
+
+void CGamesDoc::getAuction(int gameIndex, int auctionIndex, GameType *gameType, CBidHistory *bidHistory, CPlayHistory *playHistory, QString *westName, QString *northName, QString *eastName, QString *southName, Seat *declarer, Bids *contract, Bids *contractModifier, int *result)
+{
+
+}
+
+void CGamesDoc::getPlayedAuction(int gameIndex, GameType *gameType, CBidHistory *bidHistory, CPlayHistory *playHistory, QString *westName, QString *northName, QString *eastName, QString *southName, Seat *declarer, Bids *contract, Bids *contractModifier, int *result)
+{
+
+}
+
 /**
  * @brief Read games from a pbn file.
  * @param[in] pbnText The stream to read from.

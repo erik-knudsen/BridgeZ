@@ -34,13 +34,17 @@ class CMainScoreDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit CMainScoreDialog(CGamesDoc *games, QWidget *parent = 0);
+    explicit CMainScoreDialog(CGamesDoc *games, int scoringMethod, QWidget *parent = 0);
     ~CMainScoreDialog();
+
+private slots:
+    void rowClicked(int index);
 
 private:
     Ui::CMainScoreDialog *ui;
 
     CGamesDoc *games;
+    int scoringMethod;
 };
 
 #endif // CMAINSCOREDIALOG_H

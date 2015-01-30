@@ -35,6 +35,10 @@ enum MsgType { CONNECT_MSG, SEATED_MSG, RTNAMES_MSG, TEAMNAMES_MSG, RSBOARD_MSG,
                READYFORDUMMYCARDS_MSG, DUMMYCARDS_MSG, ENDOFSESSION_MSG, UNKNOWN_MSG, UNDOBID_MSG, UNDOTRICK_MSG,
                REBID_MSG, REPLAY_MSG, ATTEMPT_SYNCHRONIZE_MSG, CONFIRM_SYNCHRONIZE_MSG, ALL_SYNCHRONIZED_MSG};
 
+//Deal and game types.
+enum DealType { ORIGINAL_DEAL, RANDOM_DEAL };               /**< The two types of game sets. */
+enum GameType { ORIGINAL_GAME, PLAYED_GAME, AUTO_GAME };    /**< The three types of games in a game set. */
+
 //Honor card values
 const int TEN =   8;
 const int JACK =  9;

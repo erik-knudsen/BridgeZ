@@ -18,14 +18,18 @@
  * The file implements the definition of the rubber score dialog class.
  */
 
+#include "cgameoptiondoc.h"
 #include "crubberscoredialog.h"
 #include "ui_crubberscoredialog.h"
 
-CRubberScoreDialog::CRubberScoreDialog(QWidget *parent) :
-    QWidget(parent),
+CRubberScoreDialog::CRubberScoreDialog(CGamesDoc *games, int index, QWidget *parent) :
+    QDialog(parent),
     ui(new Ui::CRubberScoreDialog)
 {
     ui->setupUi(this);
+
+    this->games = games;
+    this->index = index;
 }
 
 CRubberScoreDialog::~CRubberScoreDialog()

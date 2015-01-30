@@ -65,14 +65,25 @@ public:
     void setAutoResult(CBidHistory &bidHistory, CPlayHistory &playHistory, QString &westName, QString &northName,
                    QString &eastName, QString &southName);
     void determineEvents(QTextStream &original, QStringList &events);
+
+    int getNumberPlayedBoards() { return currentGameIndex + 1; }
+    int getNumberPlayedGivenGame(int gameInx);
+    void getGame(int gameIndex, int *board, int wCards[13], int nCards[13], int eCards[13],
+                int sCards[13], Seat *dealer, Team*vulnerable);
+    void getAuction(int gameIndex, int auctionIndex,
+                    GameType *gameType, CBidHistory *bidHistory, CPlayHistory *playHistory,
+                    QString *westName, QString *northName, QString * eastName, QString * southName,
+                    Seat *declarer, Bids *contract, Bids *contractModifier, int *result);
+    void getPlayedAuction(int gameIndex,
+                    GameType *gameType, CBidHistory *bidHistory, CPlayHistory *playHistory,
+                    QString *westName, QString *northName, QString * eastName, QString * southName,
+                    Seat *declarer, Bids *contract, Bids *contractModifier, int *result);
+
 signals:
 
 public slots:
 
 private:
-    enum DealType { ORIGINAL_DEAL, RANDOM_DEAL };               /**< The two types of game sets. */
-    enum GameType { ORIGINAL_GAME, PLAYED_GAME, AUTO_GAME };    /**< The three types of games in a game set. */
-
     /**
      * @brief Structure with info for auction and play of how a game was played (auction and play).
      */
