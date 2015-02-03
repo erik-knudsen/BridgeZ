@@ -69,7 +69,7 @@ public:
     int getNumberPlayedBoards() { return currentGameIndex + 1; }
     int getNumberPlayedGivenGame(int gameInx);
     void getGame(int gameIndex, int *board, int wCards[13], int nCards[13], int eCards[13],
-                int sCards[13], Seat *dealer, Team*vulnerable);
+                int sCards[13], Seat *dealer, Team *vulnerable);
     void getAuction(int gameIndex, int auctionIndex,
                     GameType *gameType, CBidHistory *bidHistory, CPlayHistory *playHistory,
                     QString *westName, QString *northName, QString * eastName, QString * southName,
@@ -78,6 +78,14 @@ public:
                     GameType *gameType, CBidHistory *bidHistory, CPlayHistory *playHistory,
                     QString *westName, QString *northName, QString * eastName, QString * southName,
                     Seat *declarer, Bids *contract, Bids *contractModifier, int *result);
+    void getGame(int gameIndex, int auctionIndex,
+                       int *board, Seat *dealer, Team *vulnerable,
+                       QString *westName, QString *northName, QString *eastName, QString *southName,
+                       Seat *declarer, Bids *contract, Bids *contractmodifier, int *result);
+    void getPlayedGame(int gameIndex,
+                       int *board, Seat *dealer, Team *vulnerable,
+                       QString *westName, QString *northName, QString *eastName, QString *southName,
+                       Seat *declarer, Bids *contract, Bids *contractmodifier, int *result);
 
 signals:
 

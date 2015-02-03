@@ -18,7 +18,7 @@
  * The file implements the definition of the rubber score dialog class.
  */
 
-#include "cgameoptiondoc.h"
+#include "cgamesdoc.h"
 #include "crubberscoredialog.h"
 #include "ui_crubberscoredialog.h"
 

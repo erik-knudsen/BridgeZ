@@ -38,7 +38,7 @@ public:
     ~CMainScoreDialog();
 
 private slots:
-    void rowClicked(int index);
+    void cellClicked(int row, int column);
 
 private:
     Ui::CMainScoreDialog *ui;

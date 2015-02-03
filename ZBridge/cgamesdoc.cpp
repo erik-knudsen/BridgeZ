@@ -355,6 +355,16 @@ void CGamesDoc::getPlayedAuction(int gameIndex, GameType *gameType, CBidHistory 
 
 }
 
+void CGamesDoc::getGame(int gameIndex, int auctionIndex, int *board, Seat *dealer, Team *vulnerable, QString *westName, QString *northName, QString *eastName, QString *southName, Seat *declarer, Bids *contract, Bids *contractmodifier, int *result)
+{
+
+}
+
+void CGamesDoc::getPlayedGame(int gameIndex, int *board, Seat *dealer, Team *vulnerable, QString *westName, QString *northName, QString *eastName, QString *southName, Seat *declarer, Bids *contract, Bids *contractmodifier, int *result)
+{
+
+}
+
 /**
  * @brief Read games from a pbn file.
  * @param[in] pbnText The stream to read from.
