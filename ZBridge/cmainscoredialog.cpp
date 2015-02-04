@@ -60,7 +60,7 @@ CMainScoreDialog::CMainScoreDialog(CGamesDoc *games, int scoringMethod, QWidget 
     ui->scoreTable->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
     //Fill table.
-    int noPlayed = games->getNumberPlayedBoards();
+    int noPlayed = games->getNumberPlayedGames();
     for (int gameIndex = 0; gameIndex < noPlayed; gameIndex++)
     {
         //First board, vulnerability, contract and tricks (common for all scoring methods).
@@ -69,11 +69,14 @@ CMainScoreDialog::CMainScoreDialog(CGamesDoc *games, int scoringMethod, QWidget 
         Team vulnerable;
         QString westName, northName, eastName, southName;
         Seat declarer;
-        Bids contract, contractmodifier;
+        Bids contract, contractModifier;
         int result;
-        games->getPlayedGame(gameIndex, &board, &dealer, &vulnerable, &westName, &northName,
-                             &eastName, &southName, &declarer, &contract, &contractmodifier, &result);
 
+        int playedAuctionAndPlayIndex = games->getPlayedAuctionAndPlayIndex(gameIndex);
+        games->getGame(gameIndex, &board, &dealer, &vulnerable);
+        games->getAuctionAndPlay(gameIndex, playedAuctionAndPlayIndex,
+                        &westName, &northName, &eastName, &southName,
+                        &declarer, &contract, &contractModifier, &result);
 
         if (scoringMethod == RUBBER_BRIDGE)
         {
@@ -100,7 +103,8 @@ void CMainScoreDialog::cellClicked(int row, int column)
     if (column <= 4)
     {
         //Show play dialog.
-        CPlayDialog playDialog(games, row);
+        int playedAuctionAndPlayIndex = games->getPlayedAuctionAndPlayIndex(row);
+        CPlayDialog playDialog(games, row, playedAuctionAndPlayIndex);
         playDialog.exec();
     }
     else if ((column == 5) && (scoringMethod == RUBBER_BRIDGE))

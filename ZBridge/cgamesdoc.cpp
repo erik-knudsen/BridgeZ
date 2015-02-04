@@ -21,6 +21,7 @@
 #include <QMap>
 #include <QTime>
 #include <QtDebug>
+#include <cassert>
 
 #include "cgamesdoc.h"
 
@@ -335,34 +336,69 @@ void CGamesDoc::determineEvents(QTextStream &original, QStringList &events)
     }
 }
 
-int CGamesDoc::getNumberPlayedGivenGame(int gameInx)
+int CGamesDoc::getNumberAuctionAndPlay(int gameIndex)
 {
+    assert(gameIndex < games.size());
 
+    return (games[gameIndex]->auctionAndPlay.size());
 }
 
-void CGamesDoc::getGame(int gameIndex, int *board, int wCards[], int nCards[], int eCards[], int sCards[], Seat *dealer, Team *vulnerable)
+int CGamesDoc::getPlayedAuctionAndPlayIndex(int gameIndex)
 {
+    int auctionAndPlayIndex;
+    int numberAuctionAndPlay = getNumberAuctionAndPlay(gameIndex);
 
+    for (auctionAndPlayIndex = 0; auctionAndPlayIndex < numberAuctionAndPlay; auctionAndPlayIndex++)
+        if (games[gameIndex]->auctionAndPlay[auctionAndPlayIndex]->gameType == PLAYED_GAME)
+            break;
+
+    assert(auctionAndPlayIndex < numberAuctionAndPlay);
+
+    return auctionAndPlayIndex;
 }
 
-void CGamesDoc::getAuction(int gameIndex, int auctionIndex, GameType *gameType, CBidHistory *bidHistory, CPlayHistory *playHistory, QString *westName, QString *northName, QString *eastName, QString *southName, Seat *declarer, Bids *contract, Bids *contractModifier, int *result)
+void CGamesDoc::getGame(int gameIndex, int *board, Seat *dealer, Team *vulnerable,
+             int *wCards, int *nCards, int *eCards, int *sCards)
 {
+    assert(gameIndex < games.size());
 
+    *board = games[gameIndex]->board;
+    *dealer = games[gameIndex]->dealer;
+    *vulnerable = games[gameIndex]->vulnerable;
+    if (wCards != 0)
+    {
+        assert ((nCards != 0) && (eCards != 0) && (sCards != 0));
+        for (int i = 0; i < 13; i++)
+        {
+            wCards[i] = games[gameIndex]->wCards[i];
+            nCards[i] = games[gameIndex]->nCards[i];
+            eCards[i] = games[gameIndex]->eCards[i];
+            sCards[i] = games[gameIndex]->sCards[i];
+        }
+    }
 }
 
-void CGamesDoc::getPlayedAuction(int gameIndex, GameType *gameType, CBidHistory *bidHistory, CPlayHistory *playHistory, QString *westName, QString *northName, QString *eastName, QString *southName, Seat *declarer, Bids *contract, Bids *contractModifier, int *result)
+void CGamesDoc::getAuctionAndPlay(int gameIndex, int auctionAndPlayIndex,
+                                  QString *westName, QString *northName, QString *eastName,
+                                  QString *southName, Seat *declarer, Bids *contract,
+                                  Bids *contractModifier, int *result,
+                                  CBidHistory *bidHistory, CPlayHistory *playHistory)
 {
+    assert(gameIndex < games.size());
+    assert(auctionAndPlayIndex < games[gameIndex]->auctionAndPlay.size());
 
-}
-
-void CGamesDoc::getGame(int gameIndex, int auctionIndex, int *board, Seat *dealer, Team *vulnerable, QString *westName, QString *northName, QString *eastName, QString *southName, Seat *declarer, Bids *contract, Bids *contractmodifier, int *result)
-{
-
-}
-
-void CGamesDoc::getPlayedGame(int gameIndex, int *board, Seat *dealer, Team *vulnerable, QString *westName, QString *northName, QString *eastName, QString *southName, Seat *declarer, Bids *contract, Bids *contractmodifier, int *result)
-{
-
+    *westName = games[gameIndex]->auctionAndPlay[auctionAndPlayIndex]->westName;
+    *northName = games[gameIndex]->auctionAndPlay[auctionAndPlayIndex]->northName;
+    *eastName = games[gameIndex]->auctionAndPlay[auctionAndPlayIndex]->eastName;
+    *southName = games[gameIndex]->auctionAndPlay[auctionAndPlayIndex]->southName;
+    *declarer = games[gameIndex]->auctionAndPlay[auctionAndPlayIndex]->declarer;
+    *contract =games[gameIndex]->auctionAndPlay[auctionAndPlayIndex]->contract;
+    *contractModifier = games[gameIndex]->auctionAndPlay[auctionAndPlayIndex]->contractModifier;
+    *result = games[gameIndex]->auctionAndPlay[auctionAndPlayIndex]->result;
+    if (bidHistory != 0)
+        *bidHistory = games[gameIndex]->auctionAndPlay[auctionAndPlayIndex]->bidHistory;
+    if (playHistory != 0)
+        *playHistory = games[gameIndex]->auctionAndPlay[auctionAndPlayIndex]->playHistory;
 }
 
 /**

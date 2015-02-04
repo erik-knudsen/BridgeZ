@@ -66,26 +66,15 @@ public:
                    QString &eastName, QString &southName);
     void determineEvents(QTextStream &original, QStringList &events);
 
-    int getNumberPlayedBoards() { return currentGameIndex + 1; }
-    int getNumberPlayedGivenGame(int gameInx);
-    void getGame(int gameIndex, int *board, int wCards[13], int nCards[13], int eCards[13],
-                int sCards[13], Seat *dealer, Team *vulnerable);
-    void getAuction(int gameIndex, int auctionIndex,
-                    GameType *gameType, CBidHistory *bidHistory, CPlayHistory *playHistory,
-                    QString *westName, QString *northName, QString * eastName, QString * southName,
-                    Seat *declarer, Bids *contract, Bids *contractModifier, int *result);
-    void getPlayedAuction(int gameIndex,
-                    GameType *gameType, CBidHistory *bidHistory, CPlayHistory *playHistory,
-                    QString *westName, QString *northName, QString * eastName, QString * southName,
-                    Seat *declarer, Bids *contract, Bids *contractModifier, int *result);
-    void getGame(int gameIndex, int auctionIndex,
-                       int *board, Seat *dealer, Team *vulnerable,
-                       QString *westName, QString *northName, QString *eastName, QString *southName,
-                       Seat *declarer, Bids *contract, Bids *contractmodifier, int *result);
-    void getPlayedGame(int gameIndex,
-                       int *board, Seat *dealer, Team *vulnerable,
-                       QString *westName, QString *northName, QString *eastName, QString *southName,
-                       Seat *declarer, Bids *contract, Bids *contractmodifier, int *result);
+    int getNumberPlayedGames() { return currentGameIndex + 1; }
+    int getNumberAuctionAndPlay(int gameIndex);
+    int getPlayedAuctionAndPlayIndex(int gameIndex);
+    void getGame(int gameIndex, int *board, Seat *dealer, Team *vulnerable,
+                 int *wCards = 0, int *nCards = 0, int *eCards = 0, int *sCards = 0);
+    void getAuctionAndPlay(int gameIndex, int auctionAndPlayIndex,
+                    QString *westName, QString *northName, QString *eastName, QString *southName,
+                    Seat *declarer, Bids *contract, Bids *contractModifier, int *result,
+                    CBidHistory *bidHistory = 0, CPlayHistory *playHistory = 0);
 
 signals:
 
