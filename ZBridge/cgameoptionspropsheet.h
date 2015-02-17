@@ -67,6 +67,7 @@ private slots:
     void on_teamsIMP_clicked();
     void on_duplicateMP_clicked();
     void on_RubberBridge_clicked();
+    void on_practice_clicked();
     void on_saveIntermediatePositions_clicked(bool checked);
     void on_exposePBNGameCards_clicked(bool checked);
 

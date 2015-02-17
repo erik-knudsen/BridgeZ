@@ -41,6 +41,8 @@ public:
 
     Ui::CProgConfigGameMechanicsPage *ui;
 
+private slots:
+
 private:
 };
 

@@ -52,13 +52,13 @@
          <property name="title">
           <string>Scoring Method</string>
          </property>
-         <widget class="QWidget" name="">
+         <widget class="QWidget" name="layoutWidget">
           <property name="geometry">
            <rect>
             <x>20</x>
             <y>30</y>
             <width>93</width>
-            <height>68</height>
+            <height>88</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -80,6 +80,13 @@
             <widget class="QRadioButton" name="rubberBridge">
              <property name="text">
               <string>Rubber Bridge</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="practice">
+             <property name="text">
+              <string>Practice</string>
              </property>
             </widget>
            </item>

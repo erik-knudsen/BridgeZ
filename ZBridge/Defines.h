@@ -65,6 +65,15 @@ const char * const SUIT_NAMES[5] =
     QT_TR_NOOP("NT")
 };
 
+//Team names (indexed by enum Team).
+const char * const TEAM_NAMES[4] =
+{
+    QT_TR_NOOP("Neither"),
+    QT_TR_NOOP("North-South"),
+    QT_TR_NOOP("East-West"),
+    QT_TR_NOOP("All")
+};
+
 //Suit, position and vulnerability. MUST NOT be changed (used as index).
 enum Suit { ANY=-1, CLUBS=0, DIAMONDS=1, HEARTS=2, SPADES=3, NOTRUMP=4 };
 enum Position { LEFT_POS=0, TOP_POS=1, RIGHT_POS=2, BOTTOM_POS=3};
@@ -639,6 +648,7 @@ const int CUSTOM_VALUATION_MODE = 3;
 const int TEAMS_IMP = 0;
 const int DUPLICATE_MP = 1;
 const int RUBBER_BRIDGE = 2;
+const int PRACTICE = 3;
 
 //----------------------------- Wizard. -------------------------------
 //Help Level.

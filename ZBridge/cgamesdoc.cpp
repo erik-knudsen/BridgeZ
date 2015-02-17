@@ -336,6 +336,11 @@ void CGamesDoc::determineEvents(QTextStream &original, QStringList &events)
     }
 }
 
+int CGamesDoc::getNumberPlayedGames()
+{
+    return currentGameIndex;
+}
+
 int CGamesDoc::getNumberAuctionAndPlay(int gameIndex)
 {
     assert(gameIndex < games.size());
@@ -378,11 +383,8 @@ void CGamesDoc::getGame(int gameIndex, int *board, Seat *dealer, Team *vulnerabl
     }
 }
 
-void CGamesDoc::getAuctionAndPlay(int gameIndex, int auctionAndPlayIndex,
-                                  QString *westName, QString *northName, QString *eastName,
-                                  QString *southName, Seat *declarer, Bids *contract,
-                                  Bids *contractModifier, int *result,
-                                  CBidHistory *bidHistory, CPlayHistory *playHistory)
+void CGamesDoc::getActorNames(int gameIndex, int auctionAndPlayIndex,
+                              QString *westName, QString *northName, QString *eastName, QString *southName)
 {
     assert(gameIndex < games.size());
     assert(auctionAndPlayIndex < games[gameIndex]->auctionAndPlay.size());
@@ -391,6 +393,15 @@ void CGamesDoc::getAuctionAndPlay(int gameIndex, int auctionAndPlayIndex,
     *northName = games[gameIndex]->auctionAndPlay[auctionAndPlayIndex]->northName;
     *eastName = games[gameIndex]->auctionAndPlay[auctionAndPlayIndex]->eastName;
     *southName = games[gameIndex]->auctionAndPlay[auctionAndPlayIndex]->southName;
+}
+
+void CGamesDoc::getAuctionAndPlay(int gameIndex, int auctionAndPlayIndex, Seat *declarer, Bids *contract,
+                                  Bids *contractModifier, int *result,
+                                  CBidHistory *bidHistory, CPlayHistory *playHistory)
+{
+    assert(gameIndex < games.size());
+    assert(auctionAndPlayIndex < games[gameIndex]->auctionAndPlay.size());
+
     *declarer = games[gameIndex]->auctionAndPlay[auctionAndPlayIndex]->declarer;
     *contract =games[gameIndex]->auctionAndPlay[auctionAndPlayIndex]->contract;
     *contractModifier = games[gameIndex]->auctionAndPlay[auctionAndPlayIndex]->contractModifier;
@@ -399,6 +410,25 @@ void CGamesDoc::getAuctionAndPlay(int gameIndex, int auctionAndPlayIndex,
         *bidHistory = games[gameIndex]->auctionAndPlay[auctionAndPlayIndex]->bidHistory;
     if (playHistory != 0)
         *playHistory = games[gameIndex]->auctionAndPlay[auctionAndPlayIndex]->playHistory;
+}
+
+int CGamesDoc::getScore(int gameIndex, int auctionAndPlayIndex)
+{
+    assert(gameIndex < games.size());
+    assert(auctionAndPlayIndex < games[gameIndex]->auctionAndPlay.size());
+
+    return 410;
+}
+
+bool CGamesDoc::practice()
+{
+    int i;
+
+    for (i = 0; i < games.size(); i++)
+        if (games[i]->auctionAndPlay.size() > 1)
+            break;
+
+    return (i != games.size());
 }
 
 /**

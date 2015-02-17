@@ -20,6 +20,7 @@
 
 #include <QGraphicsSimpleTextItem>
 
+#include "Defines.h"
 #include "ctopinfoauction.h"
 
 CTopInfoAuction::CTopInfoAuction(QGraphicsWidget *parent) :
@@ -67,24 +68,10 @@ void CTopInfoAuction::setBoardId(QString board)
 
 void CTopInfoAuction::setVulnerability(Team team)
 {
-    if (team == NORTH_SOUTH)
-        vulnerabel->setText(tr("North-South"));
-    else if (team == EAST_WEST)
-        vulnerabel->setText(tr("East-West"));
-    else if (team == BOTH)
-        vulnerabel->setText(tr("All"));
-    else
-        vulnerabel->setText(tr("Neither"));
+    vulnerabel->setText(tr(TEAM_NAMES[team]));
 }
 
 void CTopInfoAuction::setDealer(Seat seat)
 {
-    if (seat == NORTH_SEAT)
-        dealer->setText(tr("North"));
-    else if (seat == EAST_SEAT)
-        dealer->setText(tr("East"));
-    else if (seat == SOUTH_SEAT)
-        dealer->setText(tr("South"));
-    else
-        dealer->setText(tr("West"));
+    dealer->setText(tr(SEAT_NAMES[seat]));
 }

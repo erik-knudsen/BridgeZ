@@ -18,6 +18,7 @@
  * Shows information for top info play widget (definition).
  */
 
+#include "Defines.h"
 #include "ctopinfoplay.h"
 
 CTopInfoPlay::CTopInfoPlay(QGraphicsWidget *parent) :
@@ -86,36 +87,17 @@ void CTopInfoPlay::setBoardId(QString board)
 
 void CTopInfoPlay::setVulnerability(Team team)
 {
-    if (team == NORTH_SOUTH)
-        vulnerabel->setText(tr("North-South"));
-    else if (team == EAST_WEST)
-        vulnerabel->setText(tr("East-West"));
-    else
-        vulnerabel->setText(tr("None"));
+    vulnerabel->setText(tr(TEAM_NAMES[team]));
 }
 
 void CTopInfoPlay::setDealer(Seat seat)
 {
-    if (seat == NORTH_SEAT)
-        dealer->setText(tr("North"));
-    else if (seat == EAST_SEAT)
-        dealer->setText(tr("East"));
-    else if (seat == SOUTH_SEAT)
-        dealer->setText(tr("South"));
-    else
-        dealer->setText(tr("West"));
+    dealer->setText(tr(SEAT_NAMES[seat]));
 }
 
 void CTopInfoPlay::setDeclarer(Seat seat)
 {
-    if (seat == NORTH_SEAT)
-        declarer->setText(tr("North"));
-    else if (seat == EAST_SEAT)
-        declarer->setText(tr("East"));
-    else if (seat == SOUTH_SEAT)
-        declarer->setText(tr("South"));
-    else
-        declarer->setText(tr("West"));
+    declarer->setText(tr(SEAT_NAMES[seat]));
 }
 
 void CTopInfoPlay::setContract(Bids bid, Bids dbl)

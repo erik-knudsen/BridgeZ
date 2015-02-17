@@ -1107,8 +1107,8 @@ void CTblMngrServer::sEnableContinueSync(int syncState)
                 bool redoubleBid = IS_REDOUBLE_BID(contractModifier);
                 int result = playHistory.getResult();
 
-                QString play = SEAT_NAMES[declarer] + tr(" made ") + QString::number(result) + tr(" in ") +
-                        QString::number(level) + SUIT_NAMES[suit];
+                QString play = tr(SEAT_NAMES[declarer]) + tr(" made ") + QString::number(result) + tr(" in ") +
+                        QString::number(level) + tr(SUIT_NAMES[suit]);
                 if (doubleBid)
                     play += "X";
                 else if (redoubleBid)

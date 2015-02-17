@@ -78,8 +78,10 @@ CProgramConfigWizard::CProgramConfigWizard(CZBridgeApp *app, CZBridgeDoc *doc, Q
         ui->progConfigGameMechanicsPage->ui->teamsIMP->setChecked(true);
     else if (wizardOptionDoc.scoringMethod == DUPLICATE_MP)
         ui->progConfigGameMechanicsPage->ui->duplicateMP->setChecked(true);
-    else
+    else if (wizardOptionDoc.scoringMethod == RUBBER_BRIDGE)
         ui->progConfigGameMechanicsPage->ui->rubberBridge->setChecked(true);
+    else
+        ui->progConfigGameMechanicsPage->ui->practice->setChecked(true);
 
     //Pauses page.
     QString text;
@@ -146,10 +148,12 @@ void CProgramConfigWizard::accept()
     //Game Options page.
     if (ui->progConfigGameMechanicsPage->ui->teamsIMP->isChecked())
         wizardOptionDoc.scoringMethod = TEAMS_IMP;
-    if (ui->progConfigGameMechanicsPage->ui->duplicateMP->isChecked())
+    else if (ui->progConfigGameMechanicsPage->ui->duplicateMP->isChecked())
         wizardOptionDoc.scoringMethod = DUPLICATE_MP;
-    else
+    else if (ui->progConfigGameMechanicsPage->ui->rubberBridge->isChecked())
         wizardOptionDoc.scoringMethod = RUBBER_BRIDGE;
+    else
+        wizardOptionDoc.scoringMethod = PRACTICE;
 
     //Pauses page.
     wizardOptionDoc.insertBiddingPause = ui->progConfigPausesPage->ui->insertBiddingPause->isChecked();

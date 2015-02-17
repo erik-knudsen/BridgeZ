@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>357</width>
-    <height>405</height>
+    <height>338</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -498,6 +498,13 @@
                    <widget class="QRadioButton" name="RubberBridge">
                     <property name="text">
                      <string>Rubber Bridge</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QRadioButton" name="practice">
+                    <property name="text">
+                     <string>Practice</string>
                     </property>
                    </widget>
                   </item>

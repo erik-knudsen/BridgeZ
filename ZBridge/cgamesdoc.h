@@ -66,15 +66,18 @@ public:
                    QString &eastName, QString &southName);
     void determineEvents(QTextStream &original, QStringList &events);
 
-    int getNumberPlayedGames() { return currentGameIndex + 1; }
+    int getNumberPlayedGames();
     int getNumberAuctionAndPlay(int gameIndex);
     int getPlayedAuctionAndPlayIndex(int gameIndex);
     void getGame(int gameIndex, int *board, Seat *dealer, Team *vulnerable,
                  int *wCards = 0, int *nCards = 0, int *eCards = 0, int *sCards = 0);
+    void getActorNames(int gameIndex, int auctionAndPlayIndex,
+            QString *westName, QString *northName, QString *eastName, QString *southName);
     void getAuctionAndPlay(int gameIndex, int auctionAndPlayIndex,
-                    QString *westName, QString *northName, QString *eastName, QString *southName,
                     Seat *declarer, Bids *contract, Bids *contractModifier, int *result,
                     CBidHistory *bidHistory = 0, CPlayHistory *playHistory = 0);
+    int getScore(int gameIndex, int auctionAndPlayIndex);
+    bool practice();
 
 signals:
 
