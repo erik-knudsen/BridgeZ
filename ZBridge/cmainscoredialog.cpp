@@ -60,14 +60,14 @@ CMainScoreDialog::CMainScoreDialog(CGamesDoc *games, int scoringMethod, QWidget 
         ui->scoreTable->setColumnCount(7);
         horizontalHeader << tr("Board") << tr("Vulnerability") << tr("Contract") <<
                             tr("Tricks") << tr("Score") << tr("Board") << tr("All");
-        ui->ScoringMethod->setText(tr("Scoring method is IMP. Ranked NS/EW/All"));
+        ui->ScoringMethod->setText(tr("Scoring method is IMP. Rank NS/EW/All"));
 }
     else if (scoringMethod == DUPLICATE_MP)
     {
         ui->scoreTable->setColumnCount(7);
         horizontalHeader << tr("Board") << tr("Vulnerability") << tr("Contract") <<
                             tr("Tricks") << tr("Score") << tr("Board") << tr("All");
-        ui->ScoringMethod->setText(tr("Scoring method is MP. Ranked NS/EW/All"));
+        ui->ScoringMethod->setText(tr("Scoring method is MP. Rank NS/EW/All"));
     }
     int noPlayed = games->getNumberPlayedGames();
     ui->scoreTable->setRowCount(noPlayed);
@@ -84,7 +84,7 @@ CMainScoreDialog::CMainScoreDialog(CGamesDoc *games, int scoringMethod, QWidget 
         ui->nsNames->setText(nsNames);
     }
 
-    ui->scoreTable->horizontalHeader()->stretchLastSection();
+//    ui->scoreTable->horizontalHeader()->stretchLastSection();
     ui->scoreTable->horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
     ui->scoreTable->horizontalHeader()->setVisible(true);
     ui->scoreTable->setHorizontalHeaderLabels(horizontalHeader);
@@ -112,7 +112,7 @@ CMainScoreDialog::CMainScoreDialog(CGamesDoc *games, int scoringMethod, QWidget 
         //Board.
         QTableWidgetItem *boardItem = new QTableWidgetItem(tr("%1").arg(board));
         boardItem->setTextAlignment(Qt::AlignCenter);
-        boardItem->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
+        boardItem->setFlags(Qt::ItemIsEnabled);
         ui->scoreTable->setItem(gameIndex, 0, boardItem);
 
         //Vulnerability.
@@ -175,8 +175,15 @@ CMainScoreDialog::CMainScoreDialog(CGamesDoc *games, int scoringMethod, QWidget 
     }
     ui->scoreTable->resizeColumnsToContents();
 
+    //Make vertical sections clickable.
+    ui->scoreTable->verticalHeader()->setVisible(true);
+    ui->scoreTable->verticalHeader()->setSectionsClickable(true);
+
     //Respond to click of cell.
     connect(ui->scoreTable, &QTableWidget::cellClicked, this, &CMainScoreDialog::cellClicked);
+
+    //Respond to click on row.
+    connect(ui->scoreTable->verticalHeader(), &QHeaderView::sectionClicked, this, &CMainScoreDialog::rowClicked);
 }
 
 CMainScoreDialog::~CMainScoreDialog()
@@ -189,14 +196,7 @@ void CMainScoreDialog::cellClicked(int row, int column)
 {
     QTableWidgetItem *item = ui->scoreTable->item(row, column);
     item->setSelected(false);
-    if (column == 0)
-    {
-        //Show play dialog.
-        int playedAuctionAndPlayIndex = games->getPlayedAuctionAndPlayIndex(row);
-        CPlayDialog playDialog(games, row, playedAuctionAndPlayIndex);
-        playDialog.exec();
-    }
-    else if ((column == 4) && (scoringMethod == RUBBER_BRIDGE))
+    if ((column == 4) && (scoringMethod == RUBBER_BRIDGE))
     {
         //Show rubber score dialog.
         CRubberScoreDialog rubberScoreDialog(games, row);
@@ -214,4 +214,15 @@ void CMainScoreDialog::cellClicked(int row, int column)
         CRankScoreDialog rankScoreDialog(games, scoringMethod, row);
         rankScoreDialog.exec();
     }
+}
+
+//User clicked a row in the table.
+void CMainScoreDialog::rowClicked(int row)
+{
+    ui->scoreTable->verticalHeader()->reset();
+
+    //Show play dialog.
+    int playedAuctionAndPlayIndex = games->getPlayedAuctionAndPlayIndex(row);
+    CPlayDialog playDialog(games, row, playedAuctionAndPlayIndex);
+    playDialog.exec();
 }

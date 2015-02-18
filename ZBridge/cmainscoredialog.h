@@ -39,6 +39,7 @@ public:
 
 private slots:
     void cellClicked(int row, int column);
+    void rowClicked(int row);
 
 private:
     Ui::CMainScoreDialog *ui;
