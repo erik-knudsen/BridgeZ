@@ -105,7 +105,7 @@ CPointScoreDialog::CPointScoreDialog(CGamesDoc *games, int scoringMethod, int in
         ui->pointScoreTable->setItem(auctionAndPlayIndex, 2, resultItem);
 
         //Score.
-        int score = games->getScore(index, auctionAndPlayIndex);
+        int score = games->getDuplicateScore(index, auctionAndPlayIndex);
         QTableWidgetItem *scoreItem = new QTableWidgetItem(tr("%1").arg(score));
         scoreItem->setTextAlignment(Qt::AlignCenter);
         scoreItem->setFlags(Qt::ItemIsEnabled);

@@ -706,9 +706,9 @@ const int BID_VER_SIZE = 12;
                                   IS_HEARTS(card) ? (card - SUIT_INTERVAL[HEARTS][0]) :\
                                    IS_SPADES(card) ? (card - SUIT_INTERVAL[SPADES][0]) : -1)
 
-#define ISMAJOR(suit)	(((suit == HEARTS) || (suit == SPADES)) ? TRUE : FALSE)
-#define ISMINOR(suit)	(((suit == CLUBS) || (suit == DIAMONDS)) ? TRUE : FALSE)
-#define ISNOTRUMP(suit)((suit == NOTRUMP) ? TRUE : FALSE)
+#define ISMAJOR(suit)	(((suit == HEARTS) || (suit == SPADES)) ? true : false)
+#define ISMINOR(suit)	(((suit == CLUBS) || (suit == DIAMONDS)) ? true : false)
+#define ISNOTRUMP(suit)((suit == NOTRUMP) ? true : false)
 
 #define MAKE_BID(suit, level) (Bids)(BID_PASS + (level-1)*5 + suit + 1)
 #define BID_SUIT(bid)  (Suit)(((bid <= BID_PASS) || (bid >= BID_DOUBLE)) ? -1 : (((bid-1) % 5)))

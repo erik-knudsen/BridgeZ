@@ -153,7 +153,7 @@ CMainScoreDialog::CMainScoreDialog(CGamesDoc *games, int scoringMethod, QWidget 
             int score;
 
             //Score.
-            score = games->getScore(gameIndex, playedAuctionAndPlayIndex);
+            score = games->getDuplicateScore(gameIndex, playedAuctionAndPlayIndex);
             QTableWidgetItem *scoreItem = new QTableWidgetItem(tr("%1").arg(score));
             scoreItem->setTextAlignment(Qt::AlignCenter);
             scoreItem->setFlags(Qt::ItemIsEnabled);
@@ -161,12 +161,16 @@ CMainScoreDialog::CMainScoreDialog(CGamesDoc *games, int scoringMethod, QWidget 
 
             if (scoringMethod != PRACTICE)
             {
-                QTableWidgetItem *gameItem = new QTableWidgetItem("2/3/6");
+                int nsRank, ewRank, nrPlayed;
+
+                games->getDuplicateRankBoard(gameIndex, playedAuctionAndPlayIndex, scoringMethod, &nsRank, &ewRank, &nrPlayed);
+                QTableWidgetItem *gameItem = new QTableWidgetItem(tr("%1/%2/%3").arg(nsRank).arg(ewRank).arg(nrPlayed));
                 gameItem->setTextAlignment(Qt::AlignCenter);
                 gameItem->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
                 ui->scoreTable->setItem(gameIndex, 5, gameItem);
 
-                QTableWidgetItem *allItem = new QTableWidgetItem("2/4/6");
+                games->getDuplicateRankAll(gameIndex, playedAuctionAndPlayIndex, scoringMethod, &nsRank, &ewRank, &nrPlayed);
+                QTableWidgetItem *allItem = new QTableWidgetItem(tr("%1/%2/%3").arg(nsRank).arg(ewRank).arg(nrPlayed));
                 allItem->setTextAlignment(Qt::AlignCenter);
                 allItem->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
                 ui->scoreTable->setItem(gameIndex, 6, allItem);

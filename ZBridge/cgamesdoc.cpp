@@ -412,12 +412,123 @@ void CGamesDoc::getAuctionAndPlay(int gameIndex, int auctionAndPlayIndex, Seat *
         *playHistory = games[gameIndex]->auctionAndPlay[auctionAndPlayIndex]->playHistory;
 }
 
-int CGamesDoc::getScore(int gameIndex, int auctionAndPlayIndex)
+int CGamesDoc::getDuplicateScore(int gameIndex, int auctionAndPlayIndex)
 {
     assert(gameIndex < games.size());
     assert(auctionAndPlayIndex < games[gameIndex]->auctionAndPlay.size());
 
-    return 410;
+    Seat dealer, declarer;
+    Team vulnerable;
+    Bids contract, contractModifier;
+    int result;
+    int duplicateScore;
+
+    dealer = games[gameIndex]->dealer;
+    vulnerable = games[gameIndex]->vulnerable;
+    declarer = games[gameIndex]->auctionAndPlay[auctionAndPlayIndex]->declarer;
+    contract = games[gameIndex]->auctionAndPlay[auctionAndPlayIndex]->contract;
+    contractModifier = games[gameIndex]->auctionAndPlay[auctionAndPlayIndex]->contractModifier;
+    result = games[gameIndex]->auctionAndPlay[auctionAndPlayIndex]->result;
+
+    Suit suit = BID_SUIT(contract);
+    int level = BID_LEVEL(contract);
+
+    bool declarerVulnerable = (vulnerable == BOTH) ||
+           ((vulnerable == NORTH_SOUTH) && (declarer == SOUTH_SEAT) || (declarer == NORTH_SEAT)) ||
+          ((vulnerable ==EAST_WEST) && (declarer == EAST_SEAT) || (declarer == WEST_SEAT));
+
+    //Contract made?
+    if (result >= (level + 6))
+    {
+        //Contract points.
+        int contractPoints = ISNOTRUMP(suit) ? (40) : ISMAJOR(suit) ? (30) : (20);
+        if (result > 7)
+            contractPoints += (ISMINOR(suit) ? (20) : (30)) * (result - 7);
+        if (IS_DOUBLE_BID(contractModifier))
+            contractPoints *=2;
+        else if (IS_REDOUBLE_BID(contractModifier))
+            contractPoints *=4;
+
+        //Overtrick points.
+        int prTrick;
+        if (IS_DOUBLE_BID(contractModifier))
+            prTrick = declarerVulnerable ? (200) : (100);
+        else if (IS_REDOUBLE_BID(contractModifier))
+            prTrick = declarerVulnerable ? (400) : (200);
+        else
+            prTrick = ISMINOR(suit) ? (20) : (30);
+        int overtrickPoints = prTrick * (result - (level + 6));
+
+        //Slam bonus.
+        int slamBonus;
+        slamBonus = (level >= 6) ? (declarerVulnerable ? (750) : (500)) : (0);
+        if (level == 7)
+            slamBonus *= 2;
+
+        //Doubled or redoubled bonus.
+        int doubleBonus = IS_DOUBLE_BID(contractModifier) ? (50) : IS_REDOUBLE_BID(contractModifier) ? (100) :(0);
+
+        //Game or part game bonus.
+        int gameBonus = (contractPoints < 100) ? (50) : declarerVulnerable ? (500) : (300);
+
+        duplicateScore = contractPoints + overtrickPoints + slamBonus + gameBonus;
+    }
+
+    //Contract not made.
+    else
+    {
+        int underTrick_1, underTrick_2_3, underTrick_4_;
+
+        if (declarerVulnerable)
+        {
+            if (IS_DOUBLE_BID(contractModifier))
+            {
+                underTrick_1 = 200;
+                underTrick_2_3 = 300;
+                underTrick_4_ = 300;
+            }
+            else if (IS_REDOUBLE_BID(contractModifier))
+            {
+                underTrick_1 = 400;
+                underTrick_2_3 = 600;
+                underTrick_4_ = 600;
+            }
+            else
+                underTrick_1 = underTrick_2_3 = underTrick_4_ = 100;
+        }
+        else
+        {
+            if (IS_DOUBLE_BID(contractModifier))
+            {
+                underTrick_1 = 100;
+                underTrick_2_3 = 200;
+                underTrick_4_ = 300;
+            }
+            else if (IS_REDOUBLE_BID(contractModifier))
+            {
+                underTrick_1 = 200;
+                underTrick_2_3 = 400;
+                underTrick_4_ = 600;
+            }
+            else
+                underTrick_1 = underTrick_2_3 = underTrick_4_ = 50;
+        }
+
+        int noUnderTricks = (level + 6) - result;
+        if (noUnderTricks == 1)
+            duplicateScore = underTrick_1;
+        else if ((noUnderTricks == 2) || (noUnderTricks == 3))
+            duplicateScore = underTrick_1 + (noUnderTricks - 1) * underTrick_2_3;
+        else
+            duplicateScore = underTrick_1 + 2 * underTrick_2_3 + (noUnderTricks - 3) * underTrick_4_;
+
+        duplicateScore = -duplicateScore;
+    }
+
+    if ((declarer == WEST_SEAT) || (declarer == EAST_SEAT))
+            duplicateScore = -duplicateScore;
+
+    return duplicateScore;
 }
 
 bool CGamesDoc::practice()
@@ -429,6 +540,64 @@ bool CGamesDoc::practice()
             break;
 
     return (i != games.size());
+}
+
+void CGamesDoc::getDuplicateRankBoard(int gameIndex, int playedAuctionAndPlayIndex, int scoringMethod, int *nsRank, int *ewRank, int *nrPlayed)
+{
+    assert(gameIndex < games.size());
+    assert(playedAuctionAndPlayIndex < games[gameIndex]->auctionAndPlay.size());
+
+    *nrPlayed = games[gameIndex]->auctionAndPlay.size();
+
+    int *scores = new int[*nrPlayed];
+    int *points = new int[*nrPlayed];
+    int *gt = new int[*nrPlayed];
+    int *eq = new int[*nrPlayed];
+
+    for (int i = 0; i < *nrPlayed; i++)
+    {
+        scores[i] = getDuplicateScore(gameIndex, i);
+        points[i] = gt[i] = eq[i] = 0;
+    }
+
+    for (int i = 0; i < *nrPlayed; i++)
+        for (int j = 0; j < *nrPlayed; j++)
+        {
+            if (scores[i] > scores[j])
+                gt[i]++;
+            else if (scores[i] == scores[j])
+                eq[i]++;
+        }
+    for (int i = 0; i < *nrPlayed; i++)
+    {
+        for (int j = 0; j < eq[i]; j++)
+            points[i] += 2*(*nrPlayed) - 2 * (gt[i] + 1 + j);
+        points[i] /= eq[i];
+    }
+
+    int playedPoint = points[playedAuctionAndPlayIndex];
+    int k;
+    for (int i = 0, k = 1; i < *nrPlayed; i++)
+       if (points[i] > playedPoint)
+           k++;
+
+    *nsRank = k;
+    *ewRank = *nrPlayed - k;
+
+    delete []eq;
+    delete []gt;
+    delete []points;
+    delete []scores;
+}
+
+void CGamesDoc::getDuplicateRankAll(int gameIndex, int playedAuctionAndPlayIndex, int scoringMethod, int *nsRank, int *ewRank, int *nrPlayed)
+{
+    assert(gameIndex < games.size());
+    assert(playedAuctionAndPlayIndex < games[gameIndex]->auctionAndPlay.size());
+
+    *nsRank = 4;
+    *ewRank = 6;
+    *nrPlayed = 10;
 }
 
 /**

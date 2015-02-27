@@ -76,8 +76,10 @@ public:
     void getAuctionAndPlay(int gameIndex, int auctionAndPlayIndex,
                     Seat *declarer, Bids *contract, Bids *contractModifier, int *result,
                     CBidHistory *bidHistory = 0, CPlayHistory *playHistory = 0);
-    int getScore(int gameIndex, int auctionAndPlayIndex);
+    int getDuplicateScore(int gameIndex, int auctionAndPlayIndex);
     bool practice();
+    void getDuplicateRankBoard(int gameIndex, int playedAuctionAndPlayIndex, int scoringMethod, int *nsRank, int *ewRank, int *nrPlayed);
+    void getDuplicateRankAll(int gameIndex, int playedAuctionAndPlayIndex, int scoringMethod, int *nsRank, int *ewRank, int *nrPlayed);
 
 signals:
 
