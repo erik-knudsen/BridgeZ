@@ -6,7 +6,7 @@
   Developers: eak
 
   Revision History:
-  3-feb-2015 eak: Original
+  4-feb-2015 eak: Original
 
   Abstract: Show play for a given board.
 
