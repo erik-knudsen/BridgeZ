@@ -48,14 +48,14 @@ CPointScoreDialog::CPointScoreDialog(CGamesDoc *games, int scoringMethod, int in
 
     //Scoring method.
     if (scoringMethod == TEAMS_IMP)
-        ui->scoringMethod->setText(tr("Scoring method is IMP."));
+        ui->scoringMethod->setText(tr("Scoring method is IMP"));
     else
-        ui->scoringMethod->setText(tr("Scoring method is MP."));
+        ui->scoringMethod->setText(tr("Scoring method is MP"));
 
     //Headline for table.
     QStringList horizontalHeader;
     ui->pointScoreTable->setColumnCount(5);
-    horizontalHeader << tr("Name NS/EW") << tr("Contract") << tr("Tricks") << tr("Score") << tr("Point NS/EW");
+    horizontalHeader << tr("Name NS/EW") << tr("Contract") << tr("Tricks") << tr("Score") << tr("Point");
 
 //    ui->pointScoreTable->horizontalHeader()->stretchLastSection();
     ui->pointScoreTable->horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
@@ -112,7 +112,8 @@ CPointScoreDialog::CPointScoreDialog(CGamesDoc *games, int scoringMethod, int in
         ui->pointScoreTable->setItem(auctionAndPlayIndex, 3, scoreItem);
 
         //Points (MP or IMP).
-        QTableWidgetItem *nsewPointItem = new QTableWidgetItem("140/210");
+        float point = games->getDuplicatePointBoard(index,auctionAndPlayIndex, scoringMethod);
+        QTableWidgetItem *nsewPointItem = new QTableWidgetItem(tr("%1").arg(point, 0, 'f', 1));
         nsewPointItem->setTextAlignment(Qt::AlignCenter);
         nsewPointItem->setFlags(Qt::ItemIsEnabled);
         ui->pointScoreTable->setItem(auctionAndPlayIndex, 4, nsewPointItem);

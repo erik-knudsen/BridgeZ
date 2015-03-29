@@ -1210,7 +1210,7 @@ static void zBridgeServer_exact_SequenceImpl(ZBridgeServer* handle) {
 /* The reactions of state Seated. */
 static void zBridgeServer_react_entry__Connect_West_Seated(ZBridgeServer* handle) {
 	/* The reactions of state Seated. */
-	if (handle->iface.rTNames_raised && handle->iface.rTNames_value == handle->internal.W) { 
+	if ((handle->iface.rTNames_raised) && handle->iface.rTNames_value == handle->internal.W) { 
 		/* Default exit sequence for state Seated */
 		handle->stateConfVector[0] = ZBridgeServer_last_state;
 		handle->stateConfVectorPosition = 0;
@@ -1228,7 +1228,7 @@ static void zBridgeServer_react_entry__Connect_West_Seated(ZBridgeServer* handle
 /* The reactions of state TeamNames. */
 static void zBridgeServer_react_entry__Connect_West_TeamNames(ZBridgeServer* handle) {
 	/* The reactions of state TeamNames. */
-	if (handle->iface.rSBoard_raised && handle->iface.rSBoard_value == handle->internal.W) { 
+	if ((handle->iface.rSBoard_raised) && handle->iface.rSBoard_value == handle->internal.W) { 
 		/* Default exit sequence for state TeamNames */
 		handle->stateConfVector[0] = ZBridgeServer_last_state;
 		handle->stateConfVectorPosition = 0;
@@ -1371,7 +1371,7 @@ static void zBridgeServer_react_entry__Connect_West_StartOfBoard(ZBridgeServer* 
 /* The reactions of state Connect. */
 static void zBridgeServer_react_entry__Connect_West_Connect(ZBridgeServer* handle) {
 	/* The reactions of state Connect. */
-	if (handle->iface.connect_raised && handle->iface.connect_value == handle->internal.W) { 
+	if ((handle->iface.connect_raised) && handle->iface.connect_value == handle->internal.W) { 
 		/* Default exit sequence for state Connect */
 		handle->stateConfVector[0] = ZBridgeServer_last_state;
 		handle->stateConfVectorPosition = 0;
@@ -1386,7 +1386,7 @@ static void zBridgeServer_react_entry__Connect_West_Connect(ZBridgeServer* handl
 /* The reactions of state Seated. */
 static void zBridgeServer_react_entry__Connect_North_Seated(ZBridgeServer* handle) {
 	/* The reactions of state Seated. */
-	if (handle->iface.rTNames_raised && handle->iface.rTNames_value == handle->internal.N) { 
+	if ((handle->iface.rTNames_raised) && handle->iface.rTNames_value == handle->internal.N) { 
 		/* Default exit sequence for state Seated */
 		handle->stateConfVector[1] = ZBridgeServer_last_state;
 		handle->stateConfVectorPosition = 1;
@@ -1404,7 +1404,7 @@ static void zBridgeServer_react_entry__Connect_North_Seated(ZBridgeServer* handl
 /* The reactions of state TeamNames. */
 static void zBridgeServer_react_entry__Connect_North_TeamNames(ZBridgeServer* handle) {
 	/* The reactions of state TeamNames. */
-	if (handle->iface.rSBoard_raised && handle->iface.rSBoard_value == handle->internal.N) { 
+	if ((handle->iface.rSBoard_raised) && handle->iface.rSBoard_value == handle->internal.N) { 
 		/* Default exit sequence for state TeamNames */
 		handle->stateConfVector[1] = ZBridgeServer_last_state;
 		handle->stateConfVectorPosition = 1;
@@ -1547,7 +1547,7 @@ static void zBridgeServer_react_entry__Connect_North_StartOfBoard(ZBridgeServer*
 /* The reactions of state Connect. */
 static void zBridgeServer_react_entry__Connect_North_Connect(ZBridgeServer* handle) {
 	/* The reactions of state Connect. */
-	if (handle->iface.connect_raised && handle->iface.connect_value == handle->internal.N) { 
+	if ((handle->iface.connect_raised) && handle->iface.connect_value == handle->internal.N) { 
 		/* Default exit sequence for state Connect */
 		handle->stateConfVector[1] = ZBridgeServer_last_state;
 		handle->stateConfVectorPosition = 1;
@@ -1562,7 +1562,7 @@ static void zBridgeServer_react_entry__Connect_North_Connect(ZBridgeServer* hand
 /* The reactions of state Seated. */
 static void zBridgeServer_react_entry__Connect_East_Seated(ZBridgeServer* handle) {
 	/* The reactions of state Seated. */
-	if (handle->iface.rTNames_raised && handle->iface.rTNames_value == handle->internal.E) { 
+	if ((handle->iface.rTNames_raised) && handle->iface.rTNames_value == handle->internal.E) { 
 		/* Default exit sequence for state Seated */
 		handle->stateConfVector[2] = ZBridgeServer_last_state;
 		handle->stateConfVectorPosition = 2;
@@ -1580,7 +1580,7 @@ static void zBridgeServer_react_entry__Connect_East_Seated(ZBridgeServer* handle
 /* The reactions of state TeamNames. */
 static void zBridgeServer_react_entry__Connect_East_TeamNames(ZBridgeServer* handle) {
 	/* The reactions of state TeamNames. */
-	if (handle->iface.rSBoard_raised && handle->iface.rSBoard_value == handle->internal.E) { 
+	if ((handle->iface.rSBoard_raised) && handle->iface.rSBoard_value == handle->internal.E) { 
 		/* Default exit sequence for state TeamNames */
 		handle->stateConfVector[2] = ZBridgeServer_last_state;
 		handle->stateConfVectorPosition = 2;
@@ -1723,7 +1723,7 @@ static void zBridgeServer_react_entry__Connect_East_StartOfBoard(ZBridgeServer* 
 /* The reactions of state Connect. */
 static void zBridgeServer_react_entry__Connect_East_Connect(ZBridgeServer* handle) {
 	/* The reactions of state Connect. */
-	if (handle->iface.connect_raised && handle->iface.connect_value == handle->internal.E) { 
+	if ((handle->iface.connect_raised) && handle->iface.connect_value == handle->internal.E) { 
 		/* Default exit sequence for state Connect */
 		handle->stateConfVector[2] = ZBridgeServer_last_state;
 		handle->stateConfVectorPosition = 2;
@@ -1738,7 +1738,7 @@ static void zBridgeServer_react_entry__Connect_East_Connect(ZBridgeServer* handl
 /* The reactions of state Seated. */
 static void zBridgeServer_react_entry__Connect_South_Seated(ZBridgeServer* handle) {
 	/* The reactions of state Seated. */
-	if (handle->iface.rTNames_raised && handle->iface.rTNames_value == handle->internal.S) { 
+	if ((handle->iface.rTNames_raised) && handle->iface.rTNames_value == handle->internal.S) { 
 		/* Default exit sequence for state Seated */
 		handle->stateConfVector[3] = ZBridgeServer_last_state;
 		handle->stateConfVectorPosition = 3;
@@ -1756,7 +1756,7 @@ static void zBridgeServer_react_entry__Connect_South_Seated(ZBridgeServer* handl
 /* The reactions of state TeamNames. */
 static void zBridgeServer_react_entry__Connect_South_TeamNames(ZBridgeServer* handle) {
 	/* The reactions of state TeamNames. */
-	if (handle->iface.rSBoard_raised && handle->iface.rSBoard_value == handle->internal.S) { 
+	if ((handle->iface.rSBoard_raised) && handle->iface.rSBoard_value == handle->internal.S) { 
 		/* Default exit sequence for state TeamNames */
 		handle->stateConfVector[3] = ZBridgeServer_last_state;
 		handle->stateConfVectorPosition = 3;
@@ -1899,7 +1899,7 @@ static void zBridgeServer_react_entry__Connect_South_StartOfBoard(ZBridgeServer*
 /* The reactions of state Connect. */
 static void zBridgeServer_react_entry__Connect_South_Connect(ZBridgeServer* handle) {
 	/* The reactions of state Connect. */
-	if (handle->iface.connect_raised && handle->iface.connect_value == handle->internal.S) { 
+	if ((handle->iface.connect_raised) && handle->iface.connect_value == handle->internal.S) { 
 		/* Default exit sequence for state Connect */
 		handle->stateConfVector[3] = ZBridgeServer_last_state;
 		handle->stateConfVectorPosition = 3;
@@ -1914,7 +1914,7 @@ static void zBridgeServer_react_entry__Connect_South_Connect(ZBridgeServer* hand
 /* The reactions of state Info. */
 static void zBridgeServer_react_entry__Deal_West_Info(ZBridgeServer* handle) {
 	/* The reactions of state Info. */
-	if (handle->iface.rDealInfo_raised && handle->iface.rDealInfo_value == handle->internal.W) { 
+	if ((handle->iface.rDealInfo_raised) && handle->iface.rDealInfo_value == handle->internal.W) { 
 		/* Default exit sequence for state Info */
 		handle->stateConfVector[0] = ZBridgeServer_last_state;
 		handle->stateConfVectorPosition = 0;
@@ -1929,7 +1929,7 @@ static void zBridgeServer_react_entry__Deal_West_Info(ZBridgeServer* handle) {
 /* The reactions of state Cards. */
 static void zBridgeServer_react_entry__Deal_West_Cards(ZBridgeServer* handle) {
 	/* The reactions of state Cards. */
-	if (handle->iface.rCards_raised && handle->iface.rCards_value == handle->internal.W) { 
+	if ((handle->iface.rCards_raised) && handle->iface.rCards_value == handle->internal.W) { 
 		/* Default exit sequence for state Cards */
 		handle->stateConfVector[0] = ZBridgeServer_last_state;
 		handle->stateConfVectorPosition = 0;
@@ -2048,7 +2048,7 @@ static void zBridgeServer_react_entry__Deal_West_Sync(ZBridgeServer* handle) {
 /* The reactions of state Info. */
 static void zBridgeServer_react_entry__Deal_North_Info(ZBridgeServer* handle) {
 	/* The reactions of state Info. */
-	if (handle->iface.rDealInfo_raised && handle->iface.rDealInfo_value == handle->internal.N) { 
+	if ((handle->iface.rDealInfo_raised) && handle->iface.rDealInfo_value == handle->internal.N) { 
 		/* Default exit sequence for state Info */
 		handle->stateConfVector[1] = ZBridgeServer_last_state;
 		handle->stateConfVectorPosition = 1;
@@ -2063,7 +2063,7 @@ static void zBridgeServer_react_entry__Deal_North_Info(ZBridgeServer* handle) {
 /* The reactions of state Cards. */
 static void zBridgeServer_react_entry__Deal_North_Cards(ZBridgeServer* handle) {
 	/* The reactions of state Cards. */
-	if (handle->iface.rCards_raised && handle->iface.rCards_value == handle->internal.N) { 
+	if ((handle->iface.rCards_raised) && handle->iface.rCards_value == handle->internal.N) { 
 		/* Default exit sequence for state Cards */
 		handle->stateConfVector[1] = ZBridgeServer_last_state;
 		handle->stateConfVectorPosition = 1;
@@ -2182,7 +2182,7 @@ static void zBridgeServer_react_entry__Deal_North_Sync(ZBridgeServer* handle) {
 /* The reactions of state Info. */
 static void zBridgeServer_react_entry__Deal_East_Info(ZBridgeServer* handle) {
 	/* The reactions of state Info. */
-	if (handle->iface.rDealInfo_raised && handle->iface.rDealInfo_value == handle->internal.E) { 
+	if ((handle->iface.rDealInfo_raised) && handle->iface.rDealInfo_value == handle->internal.E) { 
 		/* Default exit sequence for state Info */
 		handle->stateConfVector[2] = ZBridgeServer_last_state;
 		handle->stateConfVectorPosition = 2;
@@ -2197,7 +2197,7 @@ static void zBridgeServer_react_entry__Deal_East_Info(ZBridgeServer* handle) {
 /* The reactions of state Cards. */
 static void zBridgeServer_react_entry__Deal_East_Cards(ZBridgeServer* handle) {
 	/* The reactions of state Cards. */
-	if (handle->iface.rCards_raised && handle->iface.rCards_value == handle->internal.E) { 
+	if ((handle->iface.rCards_raised) && handle->iface.rCards_value == handle->internal.E) { 
 		/* Default exit sequence for state Cards */
 		handle->stateConfVector[2] = ZBridgeServer_last_state;
 		handle->stateConfVectorPosition = 2;
@@ -2316,7 +2316,7 @@ static void zBridgeServer_react_entry__Deal_East_Sync(ZBridgeServer* handle) {
 /* The reactions of state Info. */
 static void zBridgeServer_react_entry__Deal_South_Info(ZBridgeServer* handle) {
 	/* The reactions of state Info. */
-	if (handle->iface.rDealInfo_raised && handle->iface.rDealInfo_value == handle->internal.S) { 
+	if ((handle->iface.rDealInfo_raised) && handle->iface.rDealInfo_value == handle->internal.S) { 
 		/* Default exit sequence for state Info */
 		handle->stateConfVector[3] = ZBridgeServer_last_state;
 		handle->stateConfVectorPosition = 3;
@@ -2331,7 +2331,7 @@ static void zBridgeServer_react_entry__Deal_South_Info(ZBridgeServer* handle) {
 /* The reactions of state Cards. */
 static void zBridgeServer_react_entry__Deal_South_Cards(ZBridgeServer* handle) {
 	/* The reactions of state Cards. */
-	if (handle->iface.rCards_raised && handle->iface.rCards_value == handle->internal.S) { 
+	if ((handle->iface.rCards_raised) && handle->iface.rCards_value == handle->internal.S) { 
 		/* Default exit sequence for state Cards */
 		handle->stateConfVector[3] = ZBridgeServer_last_state;
 		handle->stateConfVectorPosition = 3;
@@ -2450,7 +2450,7 @@ static void zBridgeServer_react_entry__Deal_South_Sync(ZBridgeServer* handle) {
 /* The reactions of state Wait. */
 static void zBridgeServer_react_entry__Bidding_West_Wait(ZBridgeServer* handle) {
 	/* The reactions of state Wait. */
-	if (handle->iface.undo_raised && handle->iface.undo_value >= 0) { 
+	if ((handle->iface.undo_raised) && handle->iface.undo_value >= 0) { 
 		/* Default exit sequence for state Bidding */
 		/* Default exit sequence for region West */
 		/* Handle exit of all possible states (of West) at position 0... */
@@ -2563,7 +2563,7 @@ static void zBridgeServer_react_entry__Bidding_West_Wait(ZBridgeServer* handle) 
 		handle->stateConfVector[3] = ZBridgeServer_entry__Bidding_South_Wait;
 		handle->stateConfVectorPosition = 3;
 	}  else {
-		if (handle->iface.undo_raised && handle->iface.undo_value == handle->internal.REBID) { 
+		if ((handle->iface.undo_raised) && handle->iface.undo_value == handle->internal.REBID) { 
 			/* Default exit sequence for state Bidding */
 			/* Default exit sequence for region West */
 			/* Handle exit of all possible states (of West) at position 0... */
@@ -2850,7 +2850,7 @@ static void zBridgeServer_react_entry__Bidding_West_Wait(ZBridgeServer* handle) 
 					handle->stateConfVector[0] = ZBridgeServer_entry__Exit2;
 					handle->stateConfVectorPosition = 0;
 				}  else {
-					if (handle->iface.bid_raised && handle->iface.bid_value == handle->internal.W) { 
+					if ((handle->iface.bid_raised) && handle->iface.bid_value == handle->internal.W) { 
 						/* Default exit sequence for state Wait */
 						handle->stateConfVector[0] = ZBridgeServer_last_state;
 						handle->stateConfVectorPosition = 0;
@@ -2865,7 +2865,7 @@ static void zBridgeServer_react_entry__Bidding_West_Wait(ZBridgeServer* handle) 
 						handle->stateConfVector[0] = ZBridgeServer_entry__Bidding_West_Sync;
 						handle->stateConfVectorPosition = 0;
 					}  else {
-						if (handle->iface.rBid_raised && handle->iface.rBid_value == handle->internal.W) { 
+						if ((handle->iface.rBid_raised) && handle->iface.rBid_value == handle->internal.W) { 
 							/* Default exit sequence for state Wait */
 							handle->stateConfVector[0] = ZBridgeServer_last_state;
 							handle->stateConfVectorPosition = 0;
@@ -2890,7 +2890,7 @@ static void zBridgeServer_react_entry__Bidding_West_Wait(ZBridgeServer* handle) 
 /* The reactions of state Sync. */
 static void zBridgeServer_react_entry__Bidding_West_Sync(ZBridgeServer* handle) {
 	/* The reactions of state Sync. */
-	if (handle->iface.undo_raised && handle->iface.undo_value >= 0) { 
+	if ((handle->iface.undo_raised) && handle->iface.undo_value >= 0) { 
 		/* Default exit sequence for state Bidding */
 		/* Default exit sequence for region West */
 		/* Handle exit of all possible states (of West) at position 0... */
@@ -3003,7 +3003,7 @@ static void zBridgeServer_react_entry__Bidding_West_Sync(ZBridgeServer* handle) 
 		handle->stateConfVector[3] = ZBridgeServer_entry__Bidding_South_Wait;
 		handle->stateConfVectorPosition = 3;
 	}  else {
-		if (handle->iface.undo_raised && handle->iface.undo_value == handle->internal.REBID) { 
+		if ((handle->iface.undo_raised) && handle->iface.undo_value == handle->internal.REBID) { 
 			/* Default exit sequence for state Bidding */
 			/* Default exit sequence for region West */
 			/* Handle exit of all possible states (of West) at position 0... */
@@ -3379,7 +3379,7 @@ static void zBridgeServer_react_entry__Bidding_West_Sync(ZBridgeServer* handle) 
 /* The reactions of state Wait. */
 static void zBridgeServer_react_entry__Bidding_North_Wait(ZBridgeServer* handle) {
 	/* The reactions of state Wait. */
-	if (handle->iface.rBid_raised && handle->iface.rBid_value == handle->internal.N) { 
+	if ((handle->iface.rBid_raised) && handle->iface.rBid_value == handle->internal.N) { 
 		/* Default exit sequence for state Wait */
 		handle->stateConfVector[1] = ZBridgeServer_last_state;
 		handle->stateConfVectorPosition = 1;
@@ -3394,7 +3394,7 @@ static void zBridgeServer_react_entry__Bidding_North_Wait(ZBridgeServer* handle)
 		handle->stateConfVector[1] = ZBridgeServer_entry__Bidding_North_Sync;
 		handle->stateConfVectorPosition = 1;
 	}  else {
-		if (handle->iface.bid_raised && handle->iface.bid_value == handle->internal.N) { 
+		if ((handle->iface.bid_raised) && handle->iface.bid_value == handle->internal.N) { 
 			/* Default exit sequence for state Wait */
 			handle->stateConfVector[1] = ZBridgeServer_last_state;
 			handle->stateConfVectorPosition = 1;
@@ -3500,7 +3500,7 @@ static void zBridgeServer_react_entry__Bidding_North_Sync(ZBridgeServer* handle)
 /* The reactions of state Wait. */
 static void zBridgeServer_react_entry__Bidding_East_Wait(ZBridgeServer* handle) {
 	/* The reactions of state Wait. */
-	if (handle->iface.rBid_raised && handle->iface.rBid_value == handle->internal.E) { 
+	if ((handle->iface.rBid_raised) && handle->iface.rBid_value == handle->internal.E) { 
 		/* Default exit sequence for state Wait */
 		handle->stateConfVector[2] = ZBridgeServer_last_state;
 		handle->stateConfVectorPosition = 2;
@@ -3515,7 +3515,7 @@ static void zBridgeServer_react_entry__Bidding_East_Wait(ZBridgeServer* handle) 
 		handle->stateConfVector[2] = ZBridgeServer_entry__Bidding_East_Sync;
 		handle->stateConfVectorPosition = 2;
 	}  else {
-		if (handle->iface.bid_raised && handle->iface.bid_value == handle->internal.E) { 
+		if ((handle->iface.bid_raised) && handle->iface.bid_value == handle->internal.E) { 
 			/* Default exit sequence for state Wait */
 			handle->stateConfVector[2] = ZBridgeServer_last_state;
 			handle->stateConfVectorPosition = 2;
@@ -3621,7 +3621,7 @@ static void zBridgeServer_react_entry__Bidding_East_Sync(ZBridgeServer* handle) 
 /* The reactions of state Wait. */
 static void zBridgeServer_react_entry__Bidding_South_Wait(ZBridgeServer* handle) {
 	/* The reactions of state Wait. */
-	if (handle->iface.rBid_raised && handle->iface.rBid_value == handle->internal.S) { 
+	if ((handle->iface.rBid_raised) && handle->iface.rBid_value == handle->internal.S) { 
 		/* Default exit sequence for state Wait */
 		handle->stateConfVector[3] = ZBridgeServer_last_state;
 		handle->stateConfVectorPosition = 3;
@@ -3636,7 +3636,7 @@ static void zBridgeServer_react_entry__Bidding_South_Wait(ZBridgeServer* handle)
 		handle->stateConfVector[3] = ZBridgeServer_entry__Bidding_South_Sync;
 		handle->stateConfVectorPosition = 3;
 	}  else {
-		if (handle->iface.bid_raised && handle->iface.bid_value == handle->internal.S) { 
+		if ((handle->iface.bid_raised) && handle->iface.bid_value == handle->internal.S) { 
 			/* Default exit sequence for state Wait */
 			handle->stateConfVector[3] = ZBridgeServer_last_state;
 			handle->stateConfVectorPosition = 3;
@@ -3742,7 +3742,7 @@ static void zBridgeServer_react_entry__Bidding_South_Sync(ZBridgeServer* handle)
 /* The reactions of state Wait. */
 static void zBridgeServer_react_entry__Playing_West_Wait(ZBridgeServer* handle) {
 	/* The reactions of state Wait. */
-	if (handle->iface.undo_raised && handle->iface.undo_value == handle->internal.REBID) { 
+	if ((handle->iface.undo_raised) && handle->iface.undo_value == handle->internal.REBID) { 
 		/* Default exit sequence for state Playing */
 		/* Default exit sequence for region West */
 		/* Handle exit of all possible states (of West) at position 0... */
@@ -4032,7 +4032,7 @@ static void zBridgeServer_react_entry__Playing_West_Wait(ZBridgeServer* handle) 
 				handle->stateConfVector[0] = ZBridgeServer_entry__Exit3;
 				handle->stateConfVectorPosition = 0;
 			}  else {
-				if (handle->iface.undo_raised && handle->iface.undo_value == handle->internal.REPLAY) { 
+				if ((handle->iface.undo_raised) && handle->iface.undo_value == handle->internal.REPLAY) { 
 					/* Default exit sequence for state Playing */
 					/* Default exit sequence for region West */
 					/* Handle exit of all possible states (of West) at position 0... */
@@ -4122,7 +4122,7 @@ static void zBridgeServer_react_entry__Playing_West_Wait(ZBridgeServer* handle) 
 					handle->stateConfVector[0] = ZBridgeServer_entry__SyncReplay;
 					handle->stateConfVectorPosition = 0;
 				}  else {
-					if (handle->iface.undo_raised && handle->iface.undo_value >= 0) { 
+					if ((handle->iface.undo_raised) && handle->iface.undo_value >= 0) { 
 						/* Default exit sequence for state Playing */
 						/* Default exit sequence for region West */
 						/* Handle exit of all possible states (of West) at position 0... */
@@ -4211,7 +4211,7 @@ static void zBridgeServer_react_entry__Playing_West_Wait(ZBridgeServer* handle) 
 						handle->stateConfVector[0] = ZBridgeServer_entry__SyncLeader;
 						handle->stateConfVectorPosition = 0;
 					}  else {
-						if (handle->iface.playerPlays_raised && handle->iface.playerPlays_value == handle->internal.W) { 
+						if ((handle->iface.playerPlays_raised) && handle->iface.playerPlays_value == handle->internal.W) { 
 							/* Default exit sequence for state Wait */
 							handle->stateConfVector[0] = ZBridgeServer_last_state;
 							handle->stateConfVectorPosition = 0;
@@ -4226,7 +4226,7 @@ static void zBridgeServer_react_entry__Playing_West_Wait(ZBridgeServer* handle) 
 							handle->stateConfVector[0] = ZBridgeServer_entry__Playing_West_Sync;
 							handle->stateConfVectorPosition = 0;
 						}  else {
-							if (handle->iface.readyForPlayer_raised && (handle->iface.readyForPlayer_value == handle->internal.W)) { 
+							if ((handle->iface.readyForPlayer_raised) && (handle->iface.readyForPlayer_value == handle->internal.W)) { 
 								/* Default exit sequence for state Wait */
 								handle->stateConfVector[0] = ZBridgeServer_last_state;
 								handle->stateConfVectorPosition = 0;
@@ -4241,7 +4241,7 @@ static void zBridgeServer_react_entry__Playing_West_Wait(ZBridgeServer* handle) 
 								handle->stateConfVector[0] = ZBridgeServer_entry__Playing_West_Sync;
 								handle->stateConfVectorPosition = 0;
 							}  else {
-								if (handle->iface.readyForDummy_raised && handle->iface.readyForDummy_value == handle->internal.W) { 
+								if ((handle->iface.readyForDummy_raised) && handle->iface.readyForDummy_value == handle->internal.W) { 
 									/* Default exit sequence for state Wait */
 									handle->stateConfVector[0] = ZBridgeServer_last_state;
 									handle->stateConfVectorPosition = 0;
@@ -4256,7 +4256,7 @@ static void zBridgeServer_react_entry__Playing_West_Wait(ZBridgeServer* handle) 
 									handle->stateConfVector[0] = ZBridgeServer_entry__Playing_West_Sync;
 									handle->stateConfVectorPosition = 0;
 								}  else {
-									if (handle->iface.readyForDummyCards_raised && handle->iface.readyForDummyCards_value == handle->internal.W) { 
+									if ((handle->iface.readyForDummyCards_raised) && handle->iface.readyForDummyCards_value == handle->internal.W) { 
 										/* Default exit sequence for state Wait */
 										handle->stateConfVector[0] = ZBridgeServer_last_state;
 										handle->stateConfVectorPosition = 0;
@@ -4283,7 +4283,7 @@ static void zBridgeServer_react_entry__Playing_West_Wait(ZBridgeServer* handle) 
 /* The reactions of state Sync. */
 static void zBridgeServer_react_entry__Playing_West_Sync(ZBridgeServer* handle) {
 	/* The reactions of state Sync. */
-	if (handle->iface.undo_raised && handle->iface.undo_value == handle->internal.REBID) { 
+	if ((handle->iface.undo_raised) && handle->iface.undo_value == handle->internal.REBID) { 
 		/* Default exit sequence for state Playing */
 		/* Default exit sequence for region West */
 		/* Handle exit of all possible states (of West) at position 0... */
@@ -4573,7 +4573,7 @@ static void zBridgeServer_react_entry__Playing_West_Sync(ZBridgeServer* handle) 
 				handle->stateConfVector[0] = ZBridgeServer_entry__Exit3;
 				handle->stateConfVectorPosition = 0;
 			}  else {
-				if (handle->iface.undo_raised && handle->iface.undo_value == handle->internal.REPLAY) { 
+				if ((handle->iface.undo_raised) && handle->iface.undo_value == handle->internal.REPLAY) { 
 					/* Default exit sequence for state Playing */
 					/* Default exit sequence for region West */
 					/* Handle exit of all possible states (of West) at position 0... */
@@ -4663,7 +4663,7 @@ static void zBridgeServer_react_entry__Playing_West_Sync(ZBridgeServer* handle) 
 					handle->stateConfVector[0] = ZBridgeServer_entry__SyncReplay;
 					handle->stateConfVectorPosition = 0;
 				}  else {
-					if (handle->iface.undo_raised && handle->iface.undo_value >= 0) { 
+					if ((handle->iface.undo_raised) && handle->iface.undo_value >= 0) { 
 						/* Default exit sequence for state Playing */
 						/* Default exit sequence for region West */
 						/* Handle exit of all possible states (of West) at position 0... */
@@ -4842,7 +4842,7 @@ static void zBridgeServer_react_entry__Playing_West_Sync(ZBridgeServer* handle) 
 /* The reactions of state Wait. */
 static void zBridgeServer_react_entry__Playing_North_Wait(ZBridgeServer* handle) {
 	/* The reactions of state Wait. */
-	if (handle->iface.playerPlays_raised && handle->iface.playerPlays_value == handle->internal.N) { 
+	if ((handle->iface.playerPlays_raised) && handle->iface.playerPlays_value == handle->internal.N) { 
 		/* Default exit sequence for state Wait */
 		handle->stateConfVector[1] = ZBridgeServer_last_state;
 		handle->stateConfVectorPosition = 1;
@@ -4857,7 +4857,7 @@ static void zBridgeServer_react_entry__Playing_North_Wait(ZBridgeServer* handle)
 		handle->stateConfVector[1] = ZBridgeServer_entry__Playing_North_Sync;
 		handle->stateConfVectorPosition = 1;
 	}  else {
-		if (handle->iface.readyForPlayer_raised && handle->iface.readyForPlayer_value == handle->internal.N) { 
+		if ((handle->iface.readyForPlayer_raised) && handle->iface.readyForPlayer_value == handle->internal.N) { 
 			/* Default exit sequence for state Wait */
 			handle->stateConfVector[1] = ZBridgeServer_last_state;
 			handle->stateConfVectorPosition = 1;
@@ -4872,7 +4872,7 @@ static void zBridgeServer_react_entry__Playing_North_Wait(ZBridgeServer* handle)
 			handle->stateConfVector[1] = ZBridgeServer_entry__Playing_North_Sync;
 			handle->stateConfVectorPosition = 1;
 		}  else {
-			if (handle->iface.readyForDummy_raised && handle->iface.readyForDummy_value == handle->internal.N) { 
+			if ((handle->iface.readyForDummy_raised) && handle->iface.readyForDummy_value == handle->internal.N) { 
 				/* Default exit sequence for state Wait */
 				handle->stateConfVector[1] = ZBridgeServer_last_state;
 				handle->stateConfVectorPosition = 1;
@@ -4887,7 +4887,7 @@ static void zBridgeServer_react_entry__Playing_North_Wait(ZBridgeServer* handle)
 				handle->stateConfVector[1] = ZBridgeServer_entry__Playing_North_Sync;
 				handle->stateConfVectorPosition = 1;
 			}  else {
-				if (handle->iface.readyForDummyCards_raised && handle->iface.readyForDummyCards_value == handle->internal.N) { 
+				if ((handle->iface.readyForDummyCards_raised) && handle->iface.readyForDummyCards_value == handle->internal.N) { 
 					/* Default exit sequence for state Wait */
 					handle->stateConfVector[1] = ZBridgeServer_last_state;
 					handle->stateConfVectorPosition = 1;
@@ -4994,7 +4994,7 @@ static void zBridgeServer_react_entry__Playing_North_Sync(ZBridgeServer* handle)
 /* The reactions of state Wait. */
 static void zBridgeServer_react_entry__Playing_East_Wait(ZBridgeServer* handle) {
 	/* The reactions of state Wait. */
-	if (handle->iface.playerPlays_raised && handle->iface.playerPlays_value == handle->internal.E) { 
+	if ((handle->iface.playerPlays_raised) && handle->iface.playerPlays_value == handle->internal.E) { 
 		/* Default exit sequence for state Wait */
 		handle->stateConfVector[2] = ZBridgeServer_last_state;
 		handle->stateConfVectorPosition = 2;
@@ -5009,7 +5009,7 @@ static void zBridgeServer_react_entry__Playing_East_Wait(ZBridgeServer* handle) 
 		handle->stateConfVector[2] = ZBridgeServer_entry__Playing_East_Sync;
 		handle->stateConfVectorPosition = 2;
 	}  else {
-		if (handle->iface.readyForPlayer_raised && handle->iface.readyForPlayer_value == handle->internal.E) { 
+		if ((handle->iface.readyForPlayer_raised) && handle->iface.readyForPlayer_value == handle->internal.E) { 
 			/* Default exit sequence for state Wait */
 			handle->stateConfVector[2] = ZBridgeServer_last_state;
 			handle->stateConfVectorPosition = 2;
@@ -5024,7 +5024,7 @@ static void zBridgeServer_react_entry__Playing_East_Wait(ZBridgeServer* handle) 
 			handle->stateConfVector[2] = ZBridgeServer_entry__Playing_East_Sync;
 			handle->stateConfVectorPosition = 2;
 		}  else {
-			if (handle->iface.readyForDummy_raised && handle->iface.readyForDummy_value == handle->internal.E) { 
+			if ((handle->iface.readyForDummy_raised) && handle->iface.readyForDummy_value == handle->internal.E) { 
 				/* Default exit sequence for state Wait */
 				handle->stateConfVector[2] = ZBridgeServer_last_state;
 				handle->stateConfVectorPosition = 2;
@@ -5039,7 +5039,7 @@ static void zBridgeServer_react_entry__Playing_East_Wait(ZBridgeServer* handle) 
 				handle->stateConfVector[2] = ZBridgeServer_entry__Playing_East_Sync;
 				handle->stateConfVectorPosition = 2;
 			}  else {
-				if (handle->iface.readyForDummyCards_raised && handle->iface.readyForDummyCards_value == handle->internal.E) { 
+				if ((handle->iface.readyForDummyCards_raised) && handle->iface.readyForDummyCards_value == handle->internal.E) { 
 					/* Default exit sequence for state Wait */
 					handle->stateConfVector[2] = ZBridgeServer_last_state;
 					handle->stateConfVectorPosition = 2;
@@ -5146,7 +5146,7 @@ static void zBridgeServer_react_entry__Playing_East_Sync(ZBridgeServer* handle) 
 /* The reactions of state Wait. */
 static void zBridgeServer_react_entry__Playing_South_Wait(ZBridgeServer* handle) {
 	/* The reactions of state Wait. */
-	if (handle->iface.playerPlays_raised && handle->iface.playerPlays_value == handle->internal.S) { 
+	if ((handle->iface.playerPlays_raised) && handle->iface.playerPlays_value == handle->internal.S) { 
 		/* Default exit sequence for state Wait */
 		handle->stateConfVector[3] = ZBridgeServer_last_state;
 		handle->stateConfVectorPosition = 3;
@@ -5161,7 +5161,7 @@ static void zBridgeServer_react_entry__Playing_South_Wait(ZBridgeServer* handle)
 		handle->stateConfVector[3] = ZBridgeServer_entry__Playing_South_Sync;
 		handle->stateConfVectorPosition = 3;
 	}  else {
-		if (handle->iface.readyForPlayer_raised && handle->iface.readyForPlayer_value == handle->internal.S) { 
+		if ((handle->iface.readyForPlayer_raised) && handle->iface.readyForPlayer_value == handle->internal.S) { 
 			/* Default exit sequence for state Wait */
 			handle->stateConfVector[3] = ZBridgeServer_last_state;
 			handle->stateConfVectorPosition = 3;
@@ -5176,7 +5176,7 @@ static void zBridgeServer_react_entry__Playing_South_Wait(ZBridgeServer* handle)
 			handle->stateConfVector[3] = ZBridgeServer_entry__Playing_South_Sync;
 			handle->stateConfVectorPosition = 3;
 		}  else {
-			if (handle->iface.readyForDummy_raised && handle->iface.readyForDummy_value == handle->internal.S) { 
+			if ((handle->iface.readyForDummy_raised) && handle->iface.readyForDummy_value == handle->internal.S) { 
 				/* Default exit sequence for state Wait */
 				handle->stateConfVector[3] = ZBridgeServer_last_state;
 				handle->stateConfVectorPosition = 3;
@@ -5191,7 +5191,7 @@ static void zBridgeServer_react_entry__Playing_South_Wait(ZBridgeServer* handle)
 				handle->stateConfVector[3] = ZBridgeServer_entry__Playing_South_Sync;
 				handle->stateConfVectorPosition = 3;
 			}  else {
-				if (handle->iface.readyForDummyCards_raised && handle->iface.readyForDummyCards_value == handle->internal.S) { 
+				if ((handle->iface.readyForDummyCards_raised) && handle->iface.readyForDummyCards_value == handle->internal.S) { 
 					/* Default exit sequence for state Wait */
 					handle->stateConfVector[3] = ZBridgeServer_last_state;
 					handle->stateConfVectorPosition = 3;
@@ -5629,7 +5629,7 @@ static void zBridgeServer_react_entry__SyncLeader(ZBridgeServer* handle) {
 				handle->stateConfVectorPosition = 0;
 			}
 		}  else {
-			if (handle->iface.undo_raised && handle->iface.undo_value == handle->internal.REPLAY) { 
+			if ((handle->iface.undo_raised) && handle->iface.undo_value == handle->internal.REPLAY) { 
 				/* Default exit sequence for state SyncLeader */
 				handle->stateConfVector[0] = ZBridgeServer_last_state;
 				handle->stateConfVectorPosition = 0;
@@ -5645,7 +5645,7 @@ static void zBridgeServer_react_entry__SyncLeader(ZBridgeServer* handle) {
 				handle->stateConfVector[0] = ZBridgeServer_entry__SyncReplay;
 				handle->stateConfVectorPosition = 0;
 			}  else {
-				if (handle->iface.undo_raised && handle->iface.undo_value >= 0) { 
+				if ((handle->iface.undo_raised) && handle->iface.undo_value >= 0) { 
 					/* Default exit sequence for state SyncLeader */
 					handle->stateConfVector[0] = ZBridgeServer_last_state;
 					handle->stateConfVectorPosition = 0;
@@ -5661,7 +5661,7 @@ static void zBridgeServer_react_entry__SyncLeader(ZBridgeServer* handle) {
 					handle->stateConfVector[0] = ZBridgeServer_entry__SyncLeader;
 					handle->stateConfVectorPosition = 0;
 				}  else {
-					if (handle->iface.undo_raised && handle->iface.undo_value == handle->internal.REBID) { 
+					if ((handle->iface.undo_raised) && handle->iface.undo_value == handle->internal.REBID) { 
 						/* Default exit sequence for state SyncLeader */
 						handle->stateConfVector[0] = ZBridgeServer_last_state;
 						handle->stateConfVectorPosition = 0;

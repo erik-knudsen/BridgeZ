@@ -60,14 +60,14 @@ CMainScoreDialog::CMainScoreDialog(CGamesDoc *games, int scoringMethod, QWidget 
         ui->scoreTable->setColumnCount(7);
         horizontalHeader << tr("Board") << tr("Vulnerability") << tr("Contract") <<
                             tr("Tricks") << tr("Score") << tr("Board") << tr("All");
-        ui->ScoringMethod->setText(tr("Scoring method is IMP. Rank NS/EW/All"));
+        ui->ScoringMethod->setText(tr("Scoring method is IMP"));
 }
     else if (scoringMethod == DUPLICATE_MP)
     {
         ui->scoreTable->setColumnCount(7);
         horizontalHeader << tr("Board") << tr("Vulnerability") << tr("Contract") <<
                             tr("Tricks") << tr("Score") << tr("Board") << tr("All");
-        ui->ScoringMethod->setText(tr("Scoring method is MP. Rank NS/EW/All"));
+        ui->ScoringMethod->setText(tr("Scoring method is MP"));
     }
     int noPlayed = games->getNumberPlayedGames();
     ui->scoreTable->setRowCount(noPlayed);
@@ -161,16 +161,28 @@ CMainScoreDialog::CMainScoreDialog(CGamesDoc *games, int scoringMethod, QWidget 
 
             if (scoringMethod != PRACTICE)
             {
-                int nsRank, ewRank, nrPlayed;
-
-                games->getDuplicateRankBoard(gameIndex, playedAuctionAndPlayIndex, scoringMethod, &nsRank, &ewRank, &nrPlayed);
-                QTableWidgetItem *gameItem = new QTableWidgetItem(tr("%1/%2/%3").arg(nsRank).arg(ewRank).arg(nrPlayed));
+                float result = games->getDuplicatePointBoard(gameIndex, playedAuctionAndPlayIndex,
+                                             scoringMethod);
+                if (scoringMethod == DUPLICATE_MP)
+                    result = result * 100 / (2 * games->getNumberAuctionAndPlay(gameIndex) - 2);
+                QTableWidgetItem *gameItem = new QTableWidgetItem(tr("%1").arg(result, 0, 'f', 1));
                 gameItem->setTextAlignment(Qt::AlignCenter);
                 gameItem->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
                 ui->scoreTable->setItem(gameIndex, 5, gameItem);
 
-                games->getDuplicateRankAll(gameIndex, playedAuctionAndPlayIndex, scoringMethod, &nsRank, &ewRank, &nrPlayed);
-                QTableWidgetItem *allItem = new QTableWidgetItem(tr("%1/%2/%3").arg(nsRank).arg(ewRank).arg(nrPlayed));
+                QString name1, name2;
+                if ((declarer == WEST_SEAT) || (declarer == EAST_SEAT))
+                {
+                    name1 = westName;
+                    name2 = eastName;
+                }
+                else
+                {
+                    name1 = northName;
+                    name2 = southName;
+                }
+                result = games->getDuplicateResultAll(gameIndex, name1, name2, scoringMethod);
+                QTableWidgetItem *allItem = new QTableWidgetItem(tr("%1").arg(result, 0, 'f', 1));
                 allItem->setTextAlignment(Qt::AlignCenter);
                 allItem->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
                 ui->scoreTable->setItem(gameIndex, 6, allItem);

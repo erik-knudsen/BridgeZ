@@ -807,7 +807,7 @@ static void zBridgeClient_react_main_region_Bid(ZBridgeClient* handle) {
 			}
 		}
 	}  else {
-		if (handle->iface.undo_raised && handle->iface.undo_value >= 0) { 
+		if ((handle->iface.undo_raised) && handle->iface.undo_value >= 0) { 
 			/* Default exit sequence for state Bid */
 			handle->stateConfVector[0] = ZBridgeClient_last_state;
 			handle->stateConfVectorPosition = 0;
@@ -831,7 +831,7 @@ static void zBridgeClient_react_main_region_Bid(ZBridgeClient* handle) {
 				handle->stateConfVectorPosition = 0;
 			}
 		}  else {
-			if (handle->iface.undo_raised && handle->iface.undo_value == handle->internal.REBID) { 
+			if ((handle->iface.undo_raised) && handle->iface.undo_value == handle->internal.REBID) { 
 				/* Default exit sequence for state Bid */
 				handle->stateConfVector[0] = ZBridgeClient_last_state;
 				handle->stateConfVectorPosition = 0;
@@ -888,7 +888,7 @@ static void zBridgeClient_react_main_region_Bid(ZBridgeClient* handle) {
 /* The reactions of state Lead. */
 static void zBridgeClient_react_main_region_Lead(ZBridgeClient* handle) {
 	/* The reactions of state Lead. */
-	if (handle->iface.playerToLead_raised && handle->iface.player != handle->iface.dummy) { 
+	if ((handle->iface.playerToLead_raised) && handle->iface.player != handle->iface.dummy) { 
 		/* Default exit sequence for state Lead */
 		handle->stateConfVector[0] = ZBridgeClient_last_state;
 		handle->stateConfVectorPosition = 0;
@@ -898,7 +898,7 @@ static void zBridgeClient_react_main_region_Lead(ZBridgeClient* handle) {
 		handle->stateConfVector[0] = ZBridgeClient_main_region_Play;
 		handle->stateConfVectorPosition = 0;
 	}  else {
-		if (handle->iface.dummyToLead_raised && handle->iface.player == handle->iface.dummy) { 
+		if ((handle->iface.dummyToLead_raised) && handle->iface.player == handle->iface.dummy) { 
 			/* Default exit sequence for state Lead */
 			handle->stateConfVector[0] = ZBridgeClient_last_state;
 			handle->stateConfVectorPosition = 0;
@@ -1074,7 +1074,7 @@ static void zBridgeClient_react_main_region_Play(ZBridgeClient* handle) {
 				handle->stateConfVector[0] = ZBridgeClient_main_region_Connecting;
 				handle->stateConfVectorPosition = 0;
 			}  else {
-				if (handle->iface.undo_raised && handle->iface.undo_value == handle->internal.REPLAY) { 
+				if ((handle->iface.undo_raised) && handle->iface.undo_value == handle->internal.REPLAY) { 
 					/* Default exit sequence for state Play */
 					handle->stateConfVector[0] = ZBridgeClient_last_state;
 					handle->stateConfVectorPosition = 0;
@@ -1093,7 +1093,7 @@ static void zBridgeClient_react_main_region_Play(ZBridgeClient* handle) {
 					handle->stateConfVector[0] = ZBridgeClient_main_region_SyncReplay;
 					handle->stateConfVectorPosition = 0;
 				}  else {
-					if (handle->iface.undo_raised && handle->iface.undo_value == handle->internal.REBID) { 
+					if ((handle->iface.undo_raised) && handle->iface.undo_value == handle->internal.REBID) { 
 						/* Default exit sequence for state Play */
 						handle->stateConfVector[0] = ZBridgeClient_last_state;
 						handle->stateConfVectorPosition = 0;
@@ -1119,7 +1119,7 @@ static void zBridgeClient_react_main_region_Play(ZBridgeClient* handle) {
 							handle->stateConfVectorPosition = 0;
 						}
 					}  else {
-						if (handle->iface.undo_raised && handle->iface.undo_value >= 0) { 
+						if ((handle->iface.undo_raised) && handle->iface.undo_value >= 0) { 
 							/* Default exit sequence for state Play */
 							handle->stateConfVector[0] = ZBridgeClient_last_state;
 							handle->stateConfVectorPosition = 0;
@@ -1261,7 +1261,7 @@ static void zBridgeClient_react_main_region_SyncLeader(ZBridgeClient* handle) {
 				handle->stateConfVector[0] = ZBridgeClient_main_region_Connecting;
 				handle->stateConfVectorPosition = 0;
 			}  else {
-				if (handle->iface.undo_raised && handle->iface.undo_value == handle->internal.REPLAY) { 
+				if ((handle->iface.undo_raised) && handle->iface.undo_value == handle->internal.REPLAY) { 
 					/* Default exit sequence for state SyncLeader */
 					handle->stateConfVector[0] = ZBridgeClient_last_state;
 					handle->stateConfVectorPosition = 0;
@@ -1280,7 +1280,7 @@ static void zBridgeClient_react_main_region_SyncLeader(ZBridgeClient* handle) {
 					handle->stateConfVector[0] = ZBridgeClient_main_region_SyncReplay;
 					handle->stateConfVectorPosition = 0;
 				}  else {
-					if (handle->iface.undo_raised && handle->iface.undo_value == handle->internal.REBID) { 
+					if ((handle->iface.undo_raised) && handle->iface.undo_value == handle->internal.REBID) { 
 						/* Default exit sequence for state SyncLeader */
 						handle->stateConfVector[0] = ZBridgeClient_last_state;
 						handle->stateConfVectorPosition = 0;
@@ -1306,7 +1306,7 @@ static void zBridgeClient_react_main_region_SyncLeader(ZBridgeClient* handle) {
 							handle->stateConfVectorPosition = 0;
 						}
 					}  else {
-						if (handle->iface.undo_raised && handle->iface.undo_value >= 0) { 
+						if ((handle->iface.undo_raised) && handle->iface.undo_value >= 0) { 
 							/* Default exit sequence for state SyncLeader */
 							handle->stateConfVector[0] = ZBridgeClient_last_state;
 							handle->stateConfVectorPosition = 0;

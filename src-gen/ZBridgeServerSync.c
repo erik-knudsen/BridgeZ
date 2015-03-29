@@ -412,7 +412,7 @@ static void zBridgeServerSync_exact_SequenceImpl(ZBridgeServerSync* handle) {
 /* The reactions of state WaitForAttemptSync. */
 static void zBridgeServerSync_react_entry_SynChronizeServer_West_WaitForAttemptSync(ZBridgeServerSync* handle) {
 	/* The reactions of state WaitForAttemptSync. */
-	if (handle->iface.attemptSync_raised && handle->iface.attemptSync_value == handle->internal.W) { 
+	if ((handle->iface.attemptSync_raised) && handle->iface.attemptSync_value == handle->internal.W) { 
 		/* Default exit sequence for state WaitForAttemptSync */
 		handle->stateConfVector[0] = ZBridgeServerSync_last_state;
 		handle->stateConfVectorPosition = 0;
@@ -509,7 +509,7 @@ static void zBridgeServerSync_react_entry_SynChronizeServer_West_waitForConfirmS
 /* The reactions of state WaitForAttemptSync. */
 static void zBridgeServerSync_react_entry_SynChronizeServer_North_WaitForAttemptSync(ZBridgeServerSync* handle) {
 	/* The reactions of state WaitForAttemptSync. */
-	if (handle->iface.attemptSync_raised && handle->iface.attemptSync_value == handle->internal.N) { 
+	if ((handle->iface.attemptSync_raised) && handle->iface.attemptSync_value == handle->internal.N) { 
 		/* Default exit sequence for state WaitForAttemptSync */
 		handle->stateConfVector[1] = ZBridgeServerSync_last_state;
 		handle->stateConfVectorPosition = 1;
@@ -606,7 +606,7 @@ static void zBridgeServerSync_react_entry_SynChronizeServer_North_waitForConfirm
 /* The reactions of state WaitForAttemptSync. */
 static void zBridgeServerSync_react_entry_SynChronizeServer_East_WaitForAttemptSync(ZBridgeServerSync* handle) {
 	/* The reactions of state WaitForAttemptSync. */
-	if (handle->iface.attemptSync_raised && handle->iface.attemptSync_value == handle->internal.E) { 
+	if ((handle->iface.attemptSync_raised) && handle->iface.attemptSync_value == handle->internal.E) { 
 		/* Default exit sequence for state WaitForAttemptSync */
 		handle->stateConfVector[2] = ZBridgeServerSync_last_state;
 		handle->stateConfVectorPosition = 2;
@@ -703,7 +703,7 @@ static void zBridgeServerSync_react_entry_SynChronizeServer_East_waitForConfirmS
 /* The reactions of state WaitForAttemptSync. */
 static void zBridgeServerSync_react_entry_SynChronizeServer_South_WaitForAttemptSync(ZBridgeServerSync* handle) {
 	/* The reactions of state WaitForAttemptSync. */
-	if (handle->iface.attemptSync_raised && handle->iface.attemptSync_value == handle->internal.S) { 
+	if ((handle->iface.attemptSync_raised) && handle->iface.attemptSync_value == handle->internal.S) { 
 		/* Default exit sequence for state WaitForAttemptSync */
 		handle->stateConfVector[3] = ZBridgeServerSync_last_state;
 		handle->stateConfVectorPosition = 3;
@@ -877,7 +877,7 @@ static void zBridgeServerSync_react_entry_ClientConfirm_West_WaitForConfirmSync(
 /* The reactions of state WaitForSync. */
 static void zBridgeServerSync_react_entry_ClientConfirm_West_WaitForSync(ZBridgeServerSync* handle) {
 	/* The reactions of state WaitForSync. */
-	if (handle->iface.confirmSync_raised && handle->iface.confirmSync_value == handle->internal.W) { 
+	if ((handle->iface.confirmSync_raised) && handle->iface.confirmSync_value == handle->internal.W) { 
 		/* Default exit sequence for state WaitForSync */
 		handle->stateConfVector[0] = ZBridgeServerSync_last_state;
 		handle->stateConfVectorPosition = 0;
@@ -972,7 +972,7 @@ static void zBridgeServerSync_react_entry_ClientConfirm_North_WaitForConfirmSync
 /* The reactions of state WaitForSync. */
 static void zBridgeServerSync_react_entry_ClientConfirm_North_WaitForSync(ZBridgeServerSync* handle) {
 	/* The reactions of state WaitForSync. */
-	if (handle->iface.confirmSync_raised && handle->iface.confirmSync_value == handle->internal.N) { 
+	if ((handle->iface.confirmSync_raised) && handle->iface.confirmSync_value == handle->internal.N) { 
 		/* Default exit sequence for state WaitForSync */
 		handle->stateConfVector[1] = ZBridgeServerSync_last_state;
 		handle->stateConfVectorPosition = 1;
@@ -1067,7 +1067,7 @@ static void zBridgeServerSync_react_entry_ClientConfirm_East_WaitForConfirmSync(
 /* The reactions of state WaitForSync. */
 static void zBridgeServerSync_react_entry_ClientConfirm_East_WaitForSync(ZBridgeServerSync* handle) {
 	/* The reactions of state WaitForSync. */
-	if (handle->iface.confirmSync_raised && handle->iface.confirmSync_value == handle->internal.E) { 
+	if ((handle->iface.confirmSync_raised) && handle->iface.confirmSync_value == handle->internal.E) { 
 		/* Default exit sequence for state WaitForSync */
 		handle->stateConfVector[2] = ZBridgeServerSync_last_state;
 		handle->stateConfVectorPosition = 2;
@@ -1162,7 +1162,7 @@ static void zBridgeServerSync_react_entry_ClientConfirm_South_WaitForConfirmSync
 /* The reactions of state WaitForSync. */
 static void zBridgeServerSync_react_entry_ClientConfirm_South_WaitForSync(ZBridgeServerSync* handle) {
 	/* The reactions of state WaitForSync. */
-	if (handle->iface.confirmSync_raised && handle->iface.confirmSync_value == handle->internal.S) { 
+	if ((handle->iface.confirmSync_raised) && handle->iface.confirmSync_value == handle->internal.S) { 
 		/* Default exit sequence for state WaitForSync */
 		handle->stateConfVector[3] = ZBridgeServerSync_last_state;
 		handle->stateConfVectorPosition = 3;

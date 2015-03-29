@@ -76,10 +76,12 @@ public:
     void getAuctionAndPlay(int gameIndex, int auctionAndPlayIndex,
                     Seat *declarer, Bids *contract, Bids *contractModifier, int *result,
                     CBidHistory *bidHistory = 0, CPlayHistory *playHistory = 0);
-    int getDuplicateScore(int gameIndex, int auctionAndPlayIndex);
+    int getDuplicateScore(int gameIndex, int auctionAndPlayIndex, bool ns = false);
     bool practice();
-    void getDuplicateRankBoard(int gameIndex, int playedAuctionAndPlayIndex, int scoringMethod, int *nsRank, int *ewRank, int *nrPlayed);
-    void getDuplicateRankAll(int gameIndex, int playedAuctionAndPlayIndex, int scoringMethod, int *nsRank, int *ewRank, int *nrPlayed);
+    float getDuplicatePointBoard(int gameIndex, int auctionAndPlayIndex,
+                                  int scoringMethod, bool ns = false);
+    float getDuplicateResultAll(int gameIndex, QString &name1, QString &name2,
+                               int scoringMethod);
 
 signals:
 
@@ -138,6 +140,7 @@ private:
     QString &setContract(Bids contract, Bids contractModifier, QString &line);
     void makeAuction(QTextStream &stream, CBidHistory &bidHistory);
     void makePlay(QTextStream &stream, CPlayHistory &playHistory);
+    int getIndexAndSeat(int gameIndex, QString &name1, QString &name2, Seat *seat);
 
     QString event;              /**< The current game event. */
     QList<CGame *> games;       /**< List with all games. */
@@ -145,7 +148,6 @@ private:
     DealType dealType;          /**< Type of current game set (original or random). */
 
     QString curEvent;           /**< Current event while processing pbn file (also with regards to # and ##). */
-
 };
 
 #endif // CGAMESDOC_H

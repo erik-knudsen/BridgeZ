@@ -28,6 +28,10 @@
 //Context for the processing of a pbn file.
 enum PBNContext { TAG_CONTEXT, AUCTION_CONTEXT, PLAY_CONTEXT};
 
+//IMP table.
+const int IMP_TABLE[] = { 20, 50, 90, 130, 170, 220, 270, 320, 370, 430, 500, 600, 750, 900,
+                          1100, 1300, 1500, 1750, 2000, 2250, 2500, 3000, 3500, 4000, 100000 };
+
 //PBN values.
 static const QString PBN_SEAT_NAMES[4] = {"W", "N", "E", "S"};
 static const QString PBN_CARD = "23456789TJQKA";
@@ -412,7 +416,7 @@ void CGamesDoc::getAuctionAndPlay(int gameIndex, int auctionAndPlayIndex, Seat *
         *playHistory = games[gameIndex]->auctionAndPlay[auctionAndPlayIndex]->playHistory;
 }
 
-int CGamesDoc::getDuplicateScore(int gameIndex, int auctionAndPlayIndex)
+int CGamesDoc::getDuplicateScore(int gameIndex, int auctionAndPlayIndex, bool ns)
 {
     assert(gameIndex < games.size());
     assert(auctionAndPlayIndex < games[gameIndex]->auctionAndPlay.size());
@@ -525,7 +529,7 @@ int CGamesDoc::getDuplicateScore(int gameIndex, int auctionAndPlayIndex)
         duplicateScore = -duplicateScore;
     }
 
-    if ((declarer == WEST_SEAT) || (declarer == EAST_SEAT))
+    if (ns & ((declarer == WEST_SEAT) || (declarer == EAST_SEAT)))
             duplicateScore = -duplicateScore;
 
     return duplicateScore;
@@ -539,65 +543,102 @@ bool CGamesDoc::practice()
         if (games[i]->auctionAndPlay.size() > 1)
             break;
 
-    return (i != games.size());
+    return (i == games.size());
 }
 
-void CGamesDoc::getDuplicateRankBoard(int gameIndex, int playedAuctionAndPlayIndex, int scoringMethod, int *nsRank, int *ewRank, int *nrPlayed)
+float CGamesDoc::getDuplicatePointBoard(int gameIndex, int auctionAndPlayIndex,
+                                        int scoringMethod, bool ns)
 {
+    float point = 0;
+
     assert(gameIndex < games.size());
-    assert(playedAuctionAndPlayIndex < games[gameIndex]->auctionAndPlay.size());
+    assert(auctionAndPlayIndex < games[gameIndex]->auctionAndPlay.size());
 
-    *nrPlayed = games[gameIndex]->auctionAndPlay.size();
+    int nrPlayed = games[gameIndex]->auctionAndPlay.size();
+    Seat declarer = games[gameIndex]->auctionAndPlay[auctionAndPlayIndex]->declarer;
 
-    int *scores = new int[*nrPlayed];
-    int *points = new int[*nrPlayed];
-    int *gt = new int[*nrPlayed];
-    int *eq = new int[*nrPlayed];
+    int *scores = new int[nrPlayed];
 
-    for (int i = 0; i < *nrPlayed; i++)
+    for (int i = 0; i < nrPlayed; i++)
+        scores[i] = getDuplicateScore(gameIndex, i, true);
+
+    if (scoringMethod == DUPLICATE_MP)
     {
-        scores[i] = getDuplicateScore(gameIndex, i);
-        points[i] = gt[i] = eq[i] = 0;
-    }
+        int *gt = new int[nrPlayed];
+        int *eq = new int[nrPlayed];
 
-    for (int i = 0; i < *nrPlayed; i++)
-        for (int j = 0; j < *nrPlayed; j++)
-        {
-            if (scores[i] > scores[j])
-                gt[i]++;
-            else if (scores[i] == scores[j])
-                eq[i]++;
-        }
-    for (int i = 0; i < *nrPlayed; i++)
+        for (int i = 0; i < nrPlayed; i++)
+            gt[i] = eq[i] = 0;
+
+        for (int i = 0; i < nrPlayed; i++)
+            for (int j = 0; j < nrPlayed; j++)
+            {
+                if (scores[i] < scores[j])
+                    gt[i]++;
+                else if (scores[i] == scores[j])
+                    eq[i]++;
+            }
+
+        point = 2*nrPlayed - 2 * (gt[auctionAndPlayIndex] + 1);
+        for (int j = 1; j < eq[auctionAndPlayIndex]; j++)
+            point += 2*nrPlayed - 2 * (gt[auctionAndPlayIndex] + 1 + j);
+        point = point / eq[auctionAndPlayIndex];
+        if (!ns && ((declarer == WEST_SEAT) || (declarer == EAST_SEAT)))
+            point = 2*nrPlayed - 2 - point;
+
+        delete []eq;
+        delete []gt;
+    }
+    else
     {
-        for (int j = 0; j < eq[i]; j++)
-            points[i] += 2*(*nrPlayed) - 2 * (gt[i] + 1 + j);
-        points[i] /= eq[i];
+            for (int i = 0; i < nrPlayed; i++)
+            if (auctionAndPlayIndex != i)
+            {
+                int diff = scores[auctionAndPlayIndex] - scores[i];
+                int k = -1;
+                while (abs(diff) > IMP_TABLE[++k]) ;
+                point += (diff > 0) ? k : -k;
+            }
+            point /= nrPlayed - 1;
+            if (!ns &&((declarer == WEST_SEAT) || (declarer == EAST_SEAT)))
+                point = -point;
     }
-
-    int playedPoint = points[playedAuctionAndPlayIndex];
-    int k;
-    for (int i = 0, k = 1; i < *nrPlayed; i++)
-       if (points[i] > playedPoint)
-           k++;
-
-    *nsRank = k;
-    *ewRank = *nrPlayed - k;
-
-    delete []eq;
-    delete []gt;
-    delete []points;
     delete []scores;
+
+    return point;
 }
 
-void CGamesDoc::getDuplicateRankAll(int gameIndex, int playedAuctionAndPlayIndex, int scoringMethod, int *nsRank, int *ewRank, int *nrPlayed)
+float CGamesDoc::getDuplicateResultAll(int gameIndex, QString &name1, QString &name2,
+                                     int scoringMethod)
 {
     assert(gameIndex < games.size());
-    assert(playedAuctionAndPlayIndex < games[gameIndex]->auctionAndPlay.size());
 
-    *nsRank = 4;
-    *ewRank = 6;
-    *nrPlayed = 10;
+    float result = 0;
+    int no = 0;
+
+    for (int i = 0; i <= gameIndex; i++)
+    {
+        Seat seat;
+        int auctionAndPlayIndex = getIndexAndSeat(i, name1, name2, &seat);
+        if (auctionAndPlayIndex >= 0)
+        {
+            float point;
+            no++;
+            point = getDuplicatePointBoard(i, auctionAndPlayIndex, scoringMethod, true);
+            if ((scoringMethod == DUPLICATE_MP) && ((seat == WEST_SEAT) || (seat == EAST_SEAT)))
+                point = 2*getNumberAuctionAndPlay(i) - 2 - point;
+            else if ((scoringMethod == TEAMS_IMP) && ((seat == WEST_SEAT) || (seat == EAST_SEAT)))
+                point = -point;
+
+            if (scoringMethod == DUPLICATE_MP)
+                point = point * 100 / (2 * getNumberAuctionAndPlay(i) - 2);
+            result += point;
+        }
+    }
+    if (no > 0)
+        result /=no;
+
+    return result;
 }
 
 /**
@@ -698,30 +739,32 @@ void CGamesDoc::readGames(QTextStream &pbnText, QString &event, bool originalGam
                         if (!auctionAndPlay->westName.isEmpty() && !auctionAndPlay->northName.isEmpty() &&
                                 !auctionAndPlay->eastName.isEmpty() && !auctionAndPlay->southName.isEmpty())
                         {
-                            bool foundPlayed = false;
+                            GameType gameType = ORIGINAL_GAME;
                             if (!originalGames)
                             {
                                 //In case we are processing (by this program) played games, then the first game
                                 //is a manually played game and the next (if existing) is an automatically
                                 //played game (there will at most be two played games).
+                                gameType = PLAYED_GAME;
                                 QListIterator<CAuctionAndPlay *> auctionAndPlayItr(nextGame->auctionAndPlay);
-                                while (!foundPlayed && auctionAndPlayItr.hasNext())
+                                while (auctionAndPlayItr.hasNext())
                                 {
                                     CAuctionAndPlay *nextAuctionAndPlay = auctionAndPlayItr.next();
                                     if (nextAuctionAndPlay->gameType == PLAYED_GAME)
-                                        foundPlayed = true;
+                                        gameType = AUTO_GAME;
                                 }
+                                if (gameType == PLAYED_GAME)
+                                    currentGameIndex = gameInx;
                             }
-                            auctionAndPlay->gameType = (originalGames) ? (ORIGINAL_GAME) : (foundPlayed) ? (AUTO_GAME) : (PLAYED_GAME);
+                            auctionAndPlay->gameType = gameType;
                             nextGame->auctionAndPlay.append(auctionAndPlay);
-                            if (foundPlayed)
-                                currentGameIndex = gameInx;
                         }
                         else
                             delete auctionAndPlay;
 
                         delete game;
                         game = 0;
+                        break;
                     }
                 }
             }
@@ -1884,4 +1927,35 @@ void CGamesDoc::makePlay(QTextStream &stream, CPlayHistory &playHistory)
         if (noTrick < 13)
             stream << "*\n";
     }
+}
+
+int CGamesDoc::getIndexAndSeat(int gameIndex, QString &name1, QString &name2, Seat *seat)
+{
+    assert(gameIndex < games.size());
+
+    int i;
+    for (i = 0; i <= games[gameIndex]->auctionAndPlay.size(); i++)
+    {
+        QString westName = games[gameIndex]->auctionAndPlay[i]->westName;
+        QString northName = games[gameIndex]->auctionAndPlay[i]->northName;
+        QString eastName = games[gameIndex]->auctionAndPlay[i]->eastName;
+        QString southName = games[gameIndex]->auctionAndPlay[i]->southName;
+
+        if (((name1 == westName) && (name2 == eastName)) ||
+            ((name1 == eastName) && (name2 == westName)))
+        {
+            *seat = WEST_SEAT;
+            break;
+        }
+        else if (((name1 == northName) && (name2 == southName)) ||
+                 ((name1 == southName) && (name2 == northName)))
+        {
+            *seat = NORTH_SEAT;
+            break;
+        }
+    }
+    if (i > games[gameIndex]->auctionAndPlay.size())
+        i = -1;
+
+    return i;
 }
