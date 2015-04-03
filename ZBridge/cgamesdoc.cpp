@@ -608,7 +608,7 @@ float CGamesDoc::getDuplicatePointBoard(int gameIndex, int auctionAndPlayIndex,
     return point;
 }
 
-float CGamesDoc::getDuplicateResultAll(int gameIndex, QString &name1, QString &name2,
+float CGamesDoc::getDuplicateResultAll(int gameIndex, QString &nameWN, QString &nameES,
                                      int scoringMethod)
 {
     assert(gameIndex < games.size());
@@ -619,7 +619,7 @@ float CGamesDoc::getDuplicateResultAll(int gameIndex, QString &name1, QString &n
     for (int i = 0; i <= gameIndex; i++)
     {
         Seat seat;
-        int auctionAndPlayIndex = getIndexAndSeat(i, name1, name2, &seat);
+        int auctionAndPlayIndex = getIndexAndSeat(i, nameWN, nameES, &seat);
         if (auctionAndPlayIndex >= 0)
         {
             float point;
@@ -639,6 +639,35 @@ float CGamesDoc::getDuplicateResultAll(int gameIndex, QString &name1, QString &n
         result /=no;
 
     return result;
+}
+
+int CGamesDoc::getPairs(int gameIndex, QStringList &pairWN, QStringList &pairES)
+{
+    assert(gameIndex < games.size());
+
+    int noPairs = 0;
+
+    for (int i = 0; i <= gameIndex; i++)
+    {
+        for (int j = 0; j < games[i]->auctionAndPlay.size(); j++)
+        {
+            if (!(pairWN.contains(games[i]->auctionAndPlay[j]->westName, Qt::CaseInsensitive)) ||
+                (!pairES.contains(games[i]->auctionAndPlay[j]->eastName, Qt::CaseInsensitive)))
+            {
+                pairWN.append(games[i]->auctionAndPlay[j]->westName);
+                pairES.append(games[i]->auctionAndPlay[j]->eastName);
+                noPairs++;
+            }
+            if (!(pairWN.contains(games[i]->auctionAndPlay[j]->northName, Qt::CaseInsensitive)) ||
+                (!pairES.contains(games[i]->auctionAndPlay[j]->southName, Qt::CaseInsensitive)))
+            {
+                pairWN.append(games[i]->auctionAndPlay[j]->northName);
+                pairES.append(games[i]->auctionAndPlay[j]->southName);
+                noPairs++;
+            }
+        }
+    }
+    return noPairs;
 }
 
 /**
@@ -1929,7 +1958,7 @@ void CGamesDoc::makePlay(QTextStream &stream, CPlayHistory &playHistory)
     }
 }
 
-int CGamesDoc::getIndexAndSeat(int gameIndex, QString &name1, QString &name2, Seat *seat)
+int CGamesDoc::getIndexAndSeat(int gameIndex, QString &nameWN, QString &nameES, Seat *seat)
 {
     assert(gameIndex < games.size());
 
@@ -1941,14 +1970,14 @@ int CGamesDoc::getIndexAndSeat(int gameIndex, QString &name1, QString &name2, Se
         QString eastName = games[gameIndex]->auctionAndPlay[i]->eastName;
         QString southName = games[gameIndex]->auctionAndPlay[i]->southName;
 
-        if (((name1 == westName) && (name2 == eastName)) ||
-            ((name1 == eastName) && (name2 == westName)))
+        if ((nameWN.compare(westName, Qt::CaseInsensitive) == 0) &&
+              (nameES.compare(eastName, Qt::CaseInsensitive) == 0))
         {
             *seat = WEST_SEAT;
             break;
         }
-        else if (((name1 == northName) && (name2 == southName)) ||
-                 ((name1 == southName) && (name2 == northName)))
+        if ((nameWN.compare(northName, Qt::CaseInsensitive) == 0) &&
+              (nameES.compare(southName, Qt::CaseInsensitive) == 0))
         {
             *seat = NORTH_SEAT;
             break;

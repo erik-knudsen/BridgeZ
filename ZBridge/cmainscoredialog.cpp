@@ -84,8 +84,8 @@ CMainScoreDialog::CMainScoreDialog(CGamesDoc *games, int scoringMethod, QWidget 
         ui->nsNames->setText(nsNames);
     }
 
-//    ui->scoreTable->horizontalHeader()->stretchLastSection();
-    ui->scoreTable->horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
+    ui->scoreTable->horizontalHeader()->setStretchLastSection(true);
+    ui->scoreTable->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     ui->scoreTable->horizontalHeader()->setVisible(true);
     ui->scoreTable->setHorizontalHeaderLabels(horizontalHeader);
     ui->scoreTable->horizontalHeader()->setSectionsClickable(false);
@@ -170,18 +170,18 @@ CMainScoreDialog::CMainScoreDialog(CGamesDoc *games, int scoringMethod, QWidget 
                 gameItem->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
                 ui->scoreTable->setItem(gameIndex, 5, gameItem);
 
-                QString name1, name2;
+                QString nameWN, nameES;
                 if ((declarer == WEST_SEAT) || (declarer == EAST_SEAT))
                 {
-                    name1 = westName;
-                    name2 = eastName;
+                    nameWN = westName;
+                    nameES = eastName;
                 }
                 else
                 {
-                    name1 = northName;
-                    name2 = southName;
+                    nameWN = northName;
+                    nameES = southName;
                 }
-                result = games->getDuplicateResultAll(gameIndex, name1, name2, scoringMethod);
+                result = games->getDuplicateResultAll(gameIndex, nameWN, nameES, scoringMethod);
                 QTableWidgetItem *allItem = new QTableWidgetItem(tr("%1").arg(result, 0, 'f', 1));
                 allItem->setTextAlignment(Qt::AlignCenter);
                 allItem->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);

@@ -57,8 +57,8 @@ CPointScoreDialog::CPointScoreDialog(CGamesDoc *games, int scoringMethod, int in
     ui->pointScoreTable->setColumnCount(5);
     horizontalHeader << tr("Name NS/EW") << tr("Contract") << tr("Tricks") << tr("Score") << tr("Point");
 
-//    ui->pointScoreTable->horizontalHeader()->stretchLastSection();
-    ui->pointScoreTable->horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
+    ui->pointScoreTable->horizontalHeader()->setStretchLastSection(true);
+    ui->pointScoreTable->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     ui->pointScoreTable->horizontalHeader()->setVisible(true);
     ui->pointScoreTable->setHorizontalHeaderLabels(horizontalHeader);
     ui->pointScoreTable->horizontalHeader()->setSectionsClickable(false);

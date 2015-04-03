@@ -32,6 +32,51 @@ CRankScoreDialog::CRankScoreDialog(CGamesDoc *games, int scoringMethod, int inde
     this->index = index;
 
     ui->setupUi(this);
+
+    //Scoring method.
+    if (scoringMethod == TEAMS_IMP)
+        ui->scoringMethod->setText(tr("Scoring method is IMP"));
+    else
+        ui->scoringMethod->setText(tr("Scoring method is MP"));
+
+    //Headline for table.
+    QStringList horizontalHeader;
+    ui->rankScoreTable->setColumnCount(2);
+    horizontalHeader << tr("Name") << tr("Point");
+
+    ui->rankScoreTable->horizontalHeader()->setStretchLastSection(true);
+    ui->rankScoreTable->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+    ui->rankScoreTable->horizontalHeader()->setVisible(true);
+    ui->rankScoreTable->setHorizontalHeaderLabels(horizontalHeader);
+    ui->rankScoreTable->horizontalHeader()->setSectionsClickable(false);
+
+    QStringList pairWN;
+    QStringList pairES;
+    int noPairs = games->getPairs(index, pairWN, pairES);
+    ui->rankScoreTable->setRowCount(noPairs);
+
+    //Fill table.
+    for (int pairIndex = 0; pairIndex < noPairs; pairIndex++)
+    {
+        //Pair.
+        QString pair = QString("%1-%2").arg(pairWN[pairIndex]).arg(pairES[pairIndex]);
+        QTableWidgetItem *pairItem = new QTableWidgetItem(pair);
+        pairItem->setTextAlignment(Qt::AlignCenter);
+        pairItem->setFlags(Qt::ItemIsEnabled);
+        ui->rankScoreTable->setItem(pairIndex, 0, pairItem);
+
+        //Result.
+        float result = games->getDuplicateResultAll(index, pairWN[pairIndex], pairES[pairIndex],
+                                             scoringMethod);
+        QTableWidgetItem *resultItem = new QTableWidgetItem;
+        result = (result > 0.) ? (((int)(result * 10. + 0.5)) / 10.) : (((int)(result * 10. - 0.5)) / 10.);
+        resultItem->setData(Qt::EditRole, result);
+        resultItem->setTextAlignment(Qt::AlignCenter);
+        resultItem->setFlags(Qt::ItemIsEnabled);
+        ui->rankScoreTable->setItem(pairIndex, 1, resultItem);
+    }
+    ui->rankScoreTable->setSortingEnabled(true);
+    ui->rankScoreTable->sortByColumn(1);
 }
 
 CRankScoreDialog::~CRankScoreDialog()

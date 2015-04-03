@@ -80,8 +80,9 @@ public:
     bool practice();
     float getDuplicatePointBoard(int gameIndex, int auctionAndPlayIndex,
                                   int scoringMethod, bool ns = false);
-    float getDuplicateResultAll(int gameIndex, QString &name1, QString &name2,
+    float getDuplicateResultAll(int gameIndex, QString &nameWN, QString &nameES,
                                int scoringMethod);
+    int getPairs(int gameIndex, QStringList &pairWN, QStringList &pairES);
 
 signals:
 
@@ -140,7 +141,7 @@ private:
     QString &setContract(Bids contract, Bids contractModifier, QString &line);
     void makeAuction(QTextStream &stream, CBidHistory &bidHistory);
     void makePlay(QTextStream &stream, CPlayHistory &playHistory);
-    int getIndexAndSeat(int gameIndex, QString &name1, QString &name2, Seat *seat);
+    int getIndexAndSeat(int gameIndex, QString &nameWN, QString &nameES, Seat *seat);
 
     QString event;              /**< The current game event. */
     QList<CGame *> games;       /**< List with all games. */
