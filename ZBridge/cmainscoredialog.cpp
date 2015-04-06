@@ -43,9 +43,9 @@ CMainScoreDialog::CMainScoreDialog(CGamesDoc *games, int scoringMethod, QWidget 
     QStringList horizontalHeader;
     if (scoringMethod == RUBBER_BRIDGE)
     {
-        ui->scoreTable->setColumnCount(5);
+        ui->scoreTable->setColumnCount(6);
         horizontalHeader << tr("Board") << tr("Vulnerability") << tr("Contract") <<
-                            tr("Tricks") << tr("Rubber");
+                            tr("Tricks") << tr("NS") << tr("EW");
         ui->ScoringMethod->setText(tr("Scoring method is Rubber."));
     }
     else if (scoringMethod == PRACTICE)
@@ -142,11 +142,22 @@ CMainScoreDialog::CMainScoreDialog(CGamesDoc *games, int scoringMethod, QWidget 
 
         if (scoringMethod == RUBBER_BRIDGE)
         {
-            //Next fill in rubber bridge column.
-            QTableWidgetItem *rubberItem = new QTableWidgetItem("Rubber");
-            rubberItem->setTextAlignment(Qt::AlignCenter);
-            rubberItem->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
-            ui->scoreTable->setItem(gameIndex, 4, rubberItem);
+            //Next fill in rubber bridge columns.
+            int belowTheLine = games->getBelowTheLine(gameIndex, playedAuctionAndPlayIndex);
+
+            if (belowTheLine > 0)
+            {
+                QTableWidgetItem *belowTheLineNSItem = new QTableWidgetItem(tr("%1").arg(belowTheLine));
+                belowTheLineNSItem->setTextAlignment(Qt::AlignCenter);
+                belowTheLineNSItem->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
+                ui->scoreTable->setItem(gameIndex, 4, belowTheLineNSItem);
+            } else if (belowTheLine < 0)
+            {
+                QTableWidgetItem *belowTheLineEWItem = new QTableWidgetItem(tr("%1").arg(-belowTheLine));
+                belowTheLineEWItem->setTextAlignment(Qt::AlignCenter);
+                belowTheLineEWItem->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
+                ui->scoreTable->setItem(gameIndex, 5, belowTheLineEWItem);
+            }
         }
         else
         {
@@ -212,7 +223,7 @@ void CMainScoreDialog::cellClicked(int row, int column)
 {
     QTableWidgetItem *item = ui->scoreTable->item(row, column);
     item->setSelected(false);
-    if ((column == 4) && (scoringMethod == RUBBER_BRIDGE))
+    if (((column == 4) || (column == 5)) && (scoringMethod == RUBBER_BRIDGE))
     {
         //Show rubber score dialog.
         CRubberScoreDialog rubberScoreDialog(games, row);

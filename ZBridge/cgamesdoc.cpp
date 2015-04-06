@@ -475,7 +475,7 @@ int CGamesDoc::getDuplicateScore(int gameIndex, int auctionAndPlayIndex, bool ns
         //Game or part game bonus.
         int gameBonus = (contractPoints < 100) ? (50) : declarerVulnerable ? (500) : (300);
 
-        duplicateScore = contractPoints + overtrickPoints + slamBonus + gameBonus;
+        duplicateScore = contractPoints + overtrickPoints + slamBonus + doubleBonus + gameBonus;
     }
 
     //Contract not made.
@@ -668,6 +668,226 @@ int CGamesDoc::getPairs(int gameIndex, QStringList &pairWN, QStringList &pairES)
         }
     }
     return noPairs;
+}
+
+int CGamesDoc::getBelowTheLine(int gameIndex, int auctionAndPlayIndex)
+{
+    assert(gameIndex < games.size());
+    assert(auctionAndPlayIndex < games[gameIndex]->auctionAndPlay.size());
+
+    int result = games[gameIndex]->auctionAndPlay[auctionAndPlayIndex]->result;
+    Bids contract = games[gameIndex]->auctionAndPlay[auctionAndPlayIndex]->contract;
+    int level = BID_LEVEL(contract);
+    int contractPoints = 0;
+
+    //Contract made?
+    if (result >= (level + 6))
+    {
+        Seat declarer = games[gameIndex]->auctionAndPlay[auctionAndPlayIndex]->declarer;
+        Suit suit = BID_SUIT(contract);
+        Bids contractModifier = games[gameIndex]->auctionAndPlay[auctionAndPlayIndex]->contractModifier;
+
+        //Contract points.
+        contractPoints = ISNOTRUMP(suit) ? (40) : ISMAJOR(suit) ? (30) : (20);
+        if (result > 7)
+            contractPoints += (ISMINOR(suit) ? (20) : (30)) * (result - 7);
+        if (IS_DOUBLE_BID(contractModifier))
+            contractPoints *=2;
+        else if (IS_REDOUBLE_BID(contractModifier))
+            contractPoints *=4;
+
+        if ((declarer == WEST_SEAT) || (declarer == EAST_SEAT))
+                contractPoints = -contractPoints;
+    }
+
+    return contractPoints;
+}
+
+int CGamesDoc::getAboveTheLine(int gameIndex, int auctionAndPlayIndex)
+{
+    assert(gameIndex < games.size());
+    assert(auctionAndPlayIndex < games[gameIndex]->auctionAndPlay.size());
+
+    Seat dealer, declarer;
+    Team vulnerable;
+    Bids contract, contractModifier;
+    int result;
+    int aboveTheLineScore;
+
+    dealer = games[gameIndex]->dealer;
+    vulnerable = games[gameIndex]->vulnerable;
+    declarer = games[gameIndex]->auctionAndPlay[auctionAndPlayIndex]->declarer;
+    contract = games[gameIndex]->auctionAndPlay[auctionAndPlayIndex]->contract;
+    contractModifier = games[gameIndex]->auctionAndPlay[auctionAndPlayIndex]->contractModifier;
+    result = games[gameIndex]->auctionAndPlay[auctionAndPlayIndex]->result;
+
+    Suit suit = BID_SUIT(contract);
+    int level = BID_LEVEL(contract);
+
+    bool declarerVulnerable = (vulnerable == BOTH) ||
+           ((vulnerable == NORTH_SOUTH) && (declarer == SOUTH_SEAT) || (declarer == NORTH_SEAT)) ||
+          ((vulnerable ==EAST_WEST) && (declarer == EAST_SEAT) || (declarer == WEST_SEAT));
+
+    //Contract made?
+    if (result >= (level + 6))
+    {
+        //Overtrick points.
+        int prTrick;
+        if (IS_DOUBLE_BID(contractModifier))
+            prTrick = declarerVulnerable ? (200) : (100);
+        else if (IS_REDOUBLE_BID(contractModifier))
+            prTrick = declarerVulnerable ? (400) : (200);
+        else
+            prTrick = ISMINOR(suit) ? (20) : (30);
+        int overtrickPoints = prTrick * (result - (level + 6));
+
+        //Slam bonus.
+        int slamBonus;
+        slamBonus = (level >= 6) ? (declarerVulnerable ? (750) : (500)) : (0);
+        if (level == 7)
+            slamBonus *= 2;
+
+        //Doubled or redoubled bonus.
+        int doubleBonus = IS_DOUBLE_BID(contractModifier) ? (50) : IS_REDOUBLE_BID(contractModifier) ? (100) :(0);
+
+        aboveTheLineScore = overtrickPoints + slamBonus + doubleBonus;
+    }
+
+    //Contract not made.
+    else
+    {
+        int underTrick_1, underTrick_2_3, underTrick_4_;
+
+        if (declarerVulnerable)
+        {
+            if (IS_DOUBLE_BID(contractModifier))
+            {
+                underTrick_1 = 200;
+                underTrick_2_3 = 300;
+                underTrick_4_ = 300;
+            }
+            else if (IS_REDOUBLE_BID(contractModifier))
+            {
+                underTrick_1 = 400;
+                underTrick_2_3 = 600;
+                underTrick_4_ = 600;
+            }
+            else
+                underTrick_1 = underTrick_2_3 = underTrick_4_ = 100;
+        }
+        else
+        {
+            if (IS_DOUBLE_BID(contractModifier))
+            {
+                underTrick_1 = 100;
+                underTrick_2_3 = 200;
+                underTrick_4_ = 300;
+            }
+            else if (IS_REDOUBLE_BID(contractModifier))
+            {
+                underTrick_1 = 200;
+                underTrick_2_3 = 400;
+                underTrick_4_ = 600;
+            }
+            else
+                underTrick_1 = underTrick_2_3 = underTrick_4_ = 50;
+        }
+
+        int noUnderTricks = (level + 6) - result;
+        if (noUnderTricks == 1)
+            aboveTheLineScore = underTrick_1;
+        else if ((noUnderTricks == 2) || (noUnderTricks == 3))
+            aboveTheLineScore = underTrick_1 + (noUnderTricks - 1) * underTrick_2_3;
+        else
+            aboveTheLineScore = underTrick_1 + 2 * underTrick_2_3 + (noUnderTricks - 3) * underTrick_4_;
+
+        aboveTheLineScore = -aboveTheLineScore;
+    }
+
+    if ((declarer == WEST_SEAT) || (declarer == EAST_SEAT))
+            aboveTheLineScore = -aboveTheLineScore;
+
+    return aboveTheLineScore;
+}
+
+int CGamesDoc::getHonorBonus(int gameIndex, int auctionAndPlayIndex)
+{
+    assert(gameIndex < games.size());
+
+    Bids contract = games[gameIndex]->auctionAndPlay[auctionAndPlayIndex]->contract;
+    Suit suit = BID_SUIT(contract);
+
+
+    if (suit != NOTRUMP)
+    {
+        int ace = SUIT_INTERVAL[suit][2];
+        int king = SUIT_INTERVAL[suit][2] - 1;
+        int queen = SUIT_INTERVAL[suit][2] - 2;
+        int jack = SUIT_INTERVAL[suit][2] - 3;
+        int ten = SUIT_INTERVAL[suit][2] - 4;
+
+        int west, north, east, south;
+        west = north = east = south = 0;
+
+        for (int i = 0; i < 13; i++)
+        {
+            int wCard = games[gameIndex]->wCards[i];
+            int eCard = games[gameIndex]->eCards[i];
+            int nCard = games[gameIndex]->nCards[i];
+            int sCard = games[gameIndex]->sCards[i];
+            if ((wCard == ace) || (wCard == king) || (wCard == queen) ||
+                    (wCard == jack) || (wCard == ten))
+                west ++;
+            if ((eCard == ace) || (eCard == king) || (eCard == queen) ||
+                    (eCard == jack) || (eCard == ten))
+                east ++;
+            if ((nCard == ace) || (nCard == king) || (nCard == queen) ||
+                    (nCard == jack) || (nCard == ten))
+                north ++;
+            if ((sCard == ace) || (sCard == king) || (sCard == queen) ||
+                    (sCard == jack) || (sCard == ten))
+                south ++;
+        }
+        if ((north = 5) || (south == 5))
+            return 150;
+        if ((west == 5) || (east == 5))
+            return -150;
+        if ((north == 4) || (south == 4))
+            return 100;
+        if ((west == 4) || (east == 4))
+            return -100;
+    }
+    else
+    {
+        int aceS = SUIT_INTERVAL[SPADES][2];
+        int aceH = SUIT_INTERVAL[HEARTS][2];
+        int aceD = SUIT_INTERVAL[DIAMONDS][2];
+        int aceC = SUIT_INTERVAL[CLUBS][2];
+
+        int west, north, east, south;
+        west = north = east = south = 0;
+
+        for (int i = 0; i < 13; i++)
+        {
+            int wCard = games[gameIndex]->wCards[i];
+            int eCard = games[gameIndex]->eCards[i];
+            int nCard = games[gameIndex]->nCards[i];
+            int sCard = games[gameIndex]->sCards[i];
+            if ((wCard == aceS) || (wCard == aceH) || (wCard == aceD) || (wCard == aceC))
+                west ++;
+            if ((nCard == aceS) || (nCard == aceH) || (nCard == aceD) || (nCard == aceC))
+                north ++;
+            if ((eCard == aceS) || (eCard == aceH) || (eCard == aceD) || (eCard == aceC))
+                east ++;
+            if ((sCard == aceS) || (sCard == aceH) || (sCard == aceD) || (sCard == aceC))
+                south ++;
+        }
+        if ((north == 4) || (south == 4))
+            return 150;
+        if ((west == 4) || (east == 4))
+            return -150;
+    }
+    return 0;
 }
 
 /**

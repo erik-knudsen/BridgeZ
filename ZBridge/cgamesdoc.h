@@ -82,8 +82,10 @@ public:
                                   int scoringMethod, bool ns = false);
     float getDuplicateResultAll(int gameIndex, QString &nameWN, QString &nameES,
                                int scoringMethod);
-    int getPairs(int gameIndex, QStringList &pairWN, QStringList &pairES);
-
+    int getPairs(int gameIndex, QStringList &pairWN, QStringList &pairES);    
+    int getBelowTheLine(int gameIndex, int auctionAndPlayIndex);
+    int getAboveTheLine(int gameIndex, int auctionAndPlayIndex);
+    int getHonorBonus(int gameIndex, int auctionAndPlayIndex);
 signals:
 
 public slots:
