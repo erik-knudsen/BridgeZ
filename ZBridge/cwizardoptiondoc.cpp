@@ -21,7 +21,6 @@
 #include <QSettings>
 
 #include "cwizardoptiondoc.h"
-#include "Defines.h"
 
 CWizardOptionDoc::CWizardOptionDoc()
 {    
@@ -39,7 +38,7 @@ CWizardOptionDoc::CWizardOptionDoc()
     showDummyTrumpsOnLeft = true;
 
     //Game Options.
-    scoringMethod = DUPLICATE_MP;
+    scoringMethod = MP;
 
     //Pauses.
     insertBiddingPause = true;
@@ -98,8 +97,9 @@ void CWizardOptionDoc::ReadSettings()
     suitSequence = settings.value("suitSequence", SHDC_SUIT_SEQUENCE).toInt();
     showDummyTrumpsOnLeft = settings.value("showDummyTrumpsOnLeft", true).toBool();
 
-    //Game Options.
-    scoringMethod = settings.value("scoringMethod", DUPLICATE_MP).toInt();
+    //Game Options. 
+    int tmp = settings.value("scoringMethod", MP).toInt();
+    scoringMethod = ((tmp >= IMP) && (tmp <= PRACTICE)) ? (ScoringMethod)tmp : MP;
 
     //Pauses.
     insertBiddingPause = settings.value("insertBiddingPause", true).toBool();

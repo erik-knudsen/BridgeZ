@@ -34,7 +34,7 @@ CRankScoreDialog::CRankScoreDialog(CGamesDoc *games, int scoringMethod, int inde
     ui->setupUi(this);
 
     //Scoring method.
-    if (scoringMethod == TEAMS_IMP)
+    if (scoringMethod == IMP)
         ui->scoringMethod->setText(tr("Scoring method is IMP"));
     else
         ui->scoringMethod->setText(tr("Scoring method is MP"));

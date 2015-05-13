@@ -21,6 +21,8 @@
 #ifndef CWIZARDOPTIONDOC_H
 #define CWIZARDOPTIONDOC_H
 
+#include "Defines.h"
+
 /**
  * @brief Wizard options.
  *
@@ -48,7 +50,7 @@ public:
     bool showDummyTrumpsOnLeft;
 
     //Game Options.
-    int scoringMethod;
+    ScoringMethod scoringMethod;
 
     //Pauses.
     bool insertBiddingPause;

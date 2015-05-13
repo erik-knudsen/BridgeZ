@@ -18,7 +18,6 @@
  * The file implements the definition of the main score dialog class.
  */
 
-#include "Defines.h"
 #include "cpointscoredialog.h"
 #include "crubberscoredialog.h"
 #include "crankscoredialog.h"
@@ -27,7 +26,7 @@
 #include "cmainscoredialog.h"
 #include "ui_cmainscoredialog.h"
 
-CMainScoreDialog::CMainScoreDialog(CGamesDoc *games, int scoringMethod, QWidget *parent) :
+CMainScoreDialog::CMainScoreDialog(CGamesDoc *games, ScoringMethod scoringMethod, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::CMainScoreDialog)
 {
@@ -36,12 +35,12 @@ CMainScoreDialog::CMainScoreDialog(CGamesDoc *games, int scoringMethod, QWidget 
 
     ui->setupUi(this);
 
-    if (((scoringMethod == DUPLICATE_MP) || (scoringMethod == TEAMS_IMP)) && games->practice())
+    if (((scoringMethod == MP) || (scoringMethod == IMP)) && games->practice())
             scoringMethod = PRACTICE;
 
     //Headline for table.
     QStringList horizontalHeader;
-    if (scoringMethod == RUBBER_BRIDGE)
+    if (scoringMethod == RUBBER)
     {
         ui->scoreTable->setColumnCount(6);
         horizontalHeader << tr("Board") << tr("Vulnerability") << tr("Contract") <<
@@ -55,14 +54,14 @@ CMainScoreDialog::CMainScoreDialog(CGamesDoc *games, int scoringMethod, QWidget 
                             tr("Tricks") << tr("Score");
         ui->ScoringMethod->setText(tr("Scoring method is Practice."));
     }
-    else if (scoringMethod == TEAMS_IMP)
+    else if (scoringMethod == IMP)
     {
         ui->scoreTable->setColumnCount(7);
         horizontalHeader << tr("Board") << tr("Vulnerability") << tr("Contract") <<
                             tr("Tricks") << tr("Score") << tr("Board") << tr("All");
         ui->ScoringMethod->setText(tr("Scoring method is IMP"));
 }
-    else if (scoringMethod == DUPLICATE_MP)
+    else if (scoringMethod == MP)
     {
         ui->scoreTable->setColumnCount(7);
         horizontalHeader << tr("Board") << tr("Vulnerability") << tr("Contract") <<
@@ -89,6 +88,9 @@ CMainScoreDialog::CMainScoreDialog(CGamesDoc *games, int scoringMethod, QWidget 
     ui->scoreTable->horizontalHeader()->setVisible(true);
     ui->scoreTable->setHorizontalHeaderLabels(horizontalHeader);
     ui->scoreTable->horizontalHeader()->setSectionsClickable(false);
+
+    int belowTheLineNSGamePoint = 0, belowTheLineEWGamePoint = 0;
+    int belowTheLineNSGame = 0, belowTheLineEWGame = 0;
 
     //Fill table.
     for (int gameIndex = 0; gameIndex < noPlayed; gameIndex++)
@@ -140,22 +142,49 @@ CMainScoreDialog::CMainScoreDialog(CGamesDoc *games, int scoringMethod, QWidget 
         resultItem->setFlags(Qt::ItemIsEnabled);
         ui->scoreTable->setItem(gameIndex, 3, resultItem);
 
-        if (scoringMethod == RUBBER_BRIDGE)
+        if (scoringMethod == RUBBER)
         {
             //Next fill in rubber bridge columns.
-            int belowTheLine = games->getBelowTheLine(gameIndex, playedAuctionAndPlayIndex);
+            int belowTheLinePoint = games->getBelowTheLine(gameIndex, playedAuctionAndPlayIndex);
 
-            if (belowTheLine > 0)
+            if (belowTheLinePoint > 0)
             {
-                QTableWidgetItem *belowTheLineNSItem = new QTableWidgetItem(tr("%1").arg(belowTheLine));
+                belowTheLineNSGamePoint += belowTheLinePoint;
+                QTableWidgetItem *belowTheLineNSItem = new QTableWidgetItem(tr("%1").arg(belowTheLinePoint));
                 belowTheLineNSItem->setTextAlignment(Qt::AlignCenter);
                 belowTheLineNSItem->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
+                if (belowTheLineNSGamePoint >= 100)
+                {
+                    belowTheLineNSGame++;
+                    if (belowTheLineNSGame == 2)
+                    {
+                      belowTheLineNSItem->setForeground(QBrush(Qt::green));
+                      belowTheLineNSGame = belowTheLineEWGame = 0;
+                    }
+                    else
+                        belowTheLineNSItem->setForeground(QBrush(Qt::red));
+                    belowTheLineNSGamePoint = belowTheLineEWGamePoint = 0;
+                }
                 ui->scoreTable->setItem(gameIndex, 4, belowTheLineNSItem);
-            } else if (belowTheLine < 0)
+            }
+            else if (belowTheLinePoint < 0)
             {
-                QTableWidgetItem *belowTheLineEWItem = new QTableWidgetItem(tr("%1").arg(-belowTheLine));
+                belowTheLineEWGamePoint -= belowTheLinePoint;
+                QTableWidgetItem *belowTheLineEWItem = new QTableWidgetItem(tr("%1").arg(-belowTheLinePoint));
                 belowTheLineEWItem->setTextAlignment(Qt::AlignCenter);
                 belowTheLineEWItem->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
+                if (belowTheLineEWGamePoint >= 100)
+                {
+                    belowTheLineEWGame++;
+                    if (belowTheLineEWGame == 2)
+                    {
+                      belowTheLineEWItem->setForeground(QBrush(Qt::green));
+                      belowTheLineNSGame = belowTheLineEWGame = 0;
+                    }
+                    else
+                        belowTheLineEWItem->setForeground(QBrush(Qt::red));
+                    belowTheLineNSGamePoint = belowTheLineEWGamePoint = 0;
+                }
                 ui->scoreTable->setItem(gameIndex, 5, belowTheLineEWItem);
             }
         }
@@ -174,7 +203,7 @@ CMainScoreDialog::CMainScoreDialog(CGamesDoc *games, int scoringMethod, QWidget 
             {
                 float result = games->getDuplicatePointBoard(gameIndex, playedAuctionAndPlayIndex,
                                              scoringMethod);
-                if (scoringMethod == DUPLICATE_MP)
+                if (scoringMethod == MP)
                     result = result * 100 / (2 * games->getNumberAuctionAndPlay(gameIndex) - 2);
                 QTableWidgetItem *gameItem = new QTableWidgetItem(tr("%1").arg(result, 0, 'f', 1));
                 gameItem->setTextAlignment(Qt::AlignCenter);
@@ -222,8 +251,9 @@ CMainScoreDialog::~CMainScoreDialog()
 void CMainScoreDialog::cellClicked(int row, int column)
 {
     QTableWidgetItem *item = ui->scoreTable->item(row, column);
-    item->setSelected(false);
-    if (((column == 4) || (column == 5)) && (scoringMethod == RUBBER_BRIDGE))
+    if (item != 0)
+        item->setSelected(false);
+    if (((column == 4) || (column == 5)) && (scoringMethod == RUBBER))
     {
         //Show rubber score dialog.
         CRubberScoreDialog rubberScoreDialog(games, row);

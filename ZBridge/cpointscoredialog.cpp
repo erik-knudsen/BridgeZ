@@ -47,7 +47,7 @@ CPointScoreDialog::CPointScoreDialog(CGamesDoc *games, int scoringMethod, int in
     ui->vulnerability->setText(tr("Vulnerability %1").arg(TEAM_NAMES[vulnerable]));
 
     //Scoring method.
-    if (scoringMethod == TEAMS_IMP)
+    if (scoringMethod == IMP)
         ui->scoringMethod->setText(tr("Scoring method is IMP"));
     else
         ui->scoringMethod->setText(tr("Scoring method is MP"));

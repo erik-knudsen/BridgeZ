@@ -81,11 +81,11 @@ CGameOptionsPropSheet::CGameOptionsPropSheet(CZBridgeApp *app, CZBridgeDoc *doc,
         enableValues(false);
 
     //Scoring.
-    if (gameOptionDoc.scoringMethod == TEAMS_IMP)
+    if (gameOptionDoc.scoringMethod == IMP)
         ui->teamsIMP->setChecked(true);
-    else if (gameOptionDoc.scoringMethod == DUPLICATE_MP)
+    else if (gameOptionDoc.scoringMethod == MP)
         ui->duplicateMP->setChecked(true);
-    else if (gameOptionDoc.scoringMethod == RUBBER_BRIDGE)
+    else if (gameOptionDoc.scoringMethod == RUBBER)
         ui->RubberBridge->setChecked(true);
     else
         ui->practice->setChecked(true);
@@ -213,17 +213,17 @@ void CGameOptionsPropSheet::enableValues(bool enable)
 
 void CGameOptionsPropSheet::on_teamsIMP_clicked()
 {
-    gameOptionDoc.scoringMethod = TEAMS_IMP;
+    gameOptionDoc.scoringMethod = IMP;
 }
 
 void CGameOptionsPropSheet::on_duplicateMP_clicked()
 {
-    gameOptionDoc.scoringMethod = DUPLICATE_MP;
+    gameOptionDoc.scoringMethod = MP;
 }
 
 void CGameOptionsPropSheet::on_RubberBridge_clicked()
 {
-    gameOptionDoc.scoringMethod = RUBBER_BRIDGE;
+    gameOptionDoc.scoringMethod = RUBBER;
 }
 
 void CGameOptionsPropSheet::on_practice_clicked()

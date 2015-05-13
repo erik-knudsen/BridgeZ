@@ -22,7 +22,6 @@
 #include <QSettings>
 
 #include "cgameoptiondoc.h"
-#include "Defines.h"
 
 CGameOptionDoc::CGameOptionDoc()
 {
@@ -55,7 +54,7 @@ CGameOptionDoc::CGameOptionDoc()
    tenValue = 0.0;
 
    //Scoring.
-   scoringMethod = DUPLICATE_MP;
+   scoringMethod = MP;
 
    //Files.
    saveIntermediatePositions = false;
@@ -124,7 +123,8 @@ void CGameOptionDoc::ReadSettings()
     jackValue = settings.value("jackValue", 1.0).toFloat();
     tenValue =settings.value("tenValue", 0.0).toFloat();
 
-    scoringMethod = settings.value("scoringMethod", DUPLICATE_MP).toInt();
+    int tmp = settings.value("scoringMethod", MP).toInt();
+    scoringMethod = ((tmp >= IMP) && (tmp <= PRACTICE)) ? (ScoringMethod)tmp : MP;
 
     saveIntermediatePositions = settings.value("saveIntermediatePositions", false).toBool();
     exposePBNGameCards = settings.value("exposePBNGameCards", false).toBool();

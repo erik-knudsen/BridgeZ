@@ -46,6 +46,7 @@ CGamesDoc::CGamesDoc(QObject *parent) :
     QObject(parent)
 {
     dealType = RANDOM_DEAL;
+    scoringMethod = PRACTICE;
 }
 
 /**
@@ -53,14 +54,16 @@ CGamesDoc::CGamesDoc(QObject *parent) :
  * @param[in] original The stream from which to read original games.
  * @param[in] played The stream from which to read already played games (auto and played).
  * @param[in] event The event to read (in case there are more events in a pbn file; have never seen that though).
+ * @param[in] ScoringMethod Type of scoring method in configuration.
  *
  * Reads original games in case there are any and determines whether this game set is original or random. Then
  * read alredy played games in case there are any.
  */
-void CGamesDoc::readGames(QTextStream &original, QTextStream &played, QString &event) throw(PlayException)
+void CGamesDoc::readGames(QTextStream &original, QTextStream &played,
+                          QString &event, ScoringMethod scoringMethod) throw(PlayException)
 {
     //Clean up for new game.
-    clearGames();
+    clearGames(scoringMethod);
 
     this->event = event;
 
@@ -127,8 +130,9 @@ void CGamesDoc::writePlayedGames(QTextStream &stream)
 
 /**
  * @brief Clear all games and prepare initially for a new set of random games.
+ * @param[in] ScoringMethod Type of scoring method in configuration.
  */
-void CGamesDoc::clearGames()
+void CGamesDoc::clearGames(ScoringMethod scoringMethod)
 {
     //Clean up for new (random) game.
     while (!games.isEmpty())
@@ -142,6 +146,8 @@ void CGamesDoc::clearGames()
     curEvent.clear();
     currentGameIndex = -1;
     dealType = RANDOM_DEAL;
+    this->scoringMethod = scoringMethod;
+    computerPlays = ((scoringMethod == MP) || (scoringMethod == IMP));
 }
 
 /**
@@ -163,7 +169,6 @@ void CGamesDoc::getNextDeal(int *board, int cards[][13], Seat *dealer, Team *vul
     {
         CGame *currentGame = new CGame();
 
-        const Team VULNERABLE[4] = { NEITHER, NORTH_SOUTH, EAST_WEST, BOTH };
         const Seat DEALER[4] = { NORTH_SEAT, EAST_SEAT, SOUTH_SEAT, WEST_SEAT };
         int i, j, inx;
         int cardDeck[52];
@@ -173,7 +178,21 @@ void CGamesDoc::getNextDeal(int *board, int cards[][13], Seat *dealer, Team *vul
 
         *board = boardNo;
         *dealer = DEALER[(boardNo - 1) % 4];
-        *vulnerable = VULNERABLE[((boardNo - 1) % 4 + boardNo/4)%4];
+
+        if (scoringMethod != RUBBER)
+        {
+            const Team VULNERABLE[4] = { NEITHER, NORTH_SOUTH, EAST_WEST, BOTH };
+            *vulnerable = VULNERABLE[((boardNo - 1) % 4 + boardNo/4)%4];
+        }
+        else
+        {
+            *vulnerable = NEITHER;
+            if (currentGameIndex > 0)
+            {
+                int playedAuctionAndPlayIndex = getPlayedAuctionAndPlayIndex(currentGameIndex - 1);
+                *vulnerable = getRubberVulnerable(currentGameIndex - 1, playedAuctionAndPlayIndex);
+            }
+        }
 
         currentGame->board = *board;
         currentGame->dealer = *dealer;
@@ -219,7 +238,18 @@ void CGamesDoc::getNextDeal(int *board, int cards[][13], Seat *dealer, Team *vul
             CGame *currentGame = games[currentGameIndex];
             *board = currentGame->board;
             *dealer = currentGame->dealer;
-            *vulnerable = currentGame->vulnerable;
+            if (scoringMethod != RUBBER)
+                *vulnerable = currentGame->vulnerable;
+            else
+            {
+                *vulnerable = NEITHER;
+                if (currentGameIndex > 0)
+                {
+                    int playedAuctionAndPlayIndex = getPlayedAuctionAndPlayIndex(currentGameIndex - 1);
+                    *vulnerable = getRubberVulnerable(currentGameIndex - 1, playedAuctionAndPlayIndex);
+                }
+                currentGame->vulnerable = *vulnerable;
+            }
             for (int i = 0; i < 13; i++)
             {
                 cards[WEST_SEAT][i] = currentGame->wCards[i];
@@ -416,6 +446,14 @@ void CGamesDoc::getAuctionAndPlay(int gameIndex, int auctionAndPlayIndex, Seat *
         *playHistory = games[gameIndex]->auctionAndPlay[auctionAndPlayIndex]->playHistory;
 }
 
+/**
+ * @brief Calculate the duplicate score for the given game/play.
+ * @param gameIndex[in] Index of the given game.
+ * @param auctionAndPlayIndex[in] Index of the given play.
+ * @param ns[i] If true then calculate relative to NS else calculate relative to declarer.
+ * @return The calculated duplicate score. The value is negative if the score belongs to
+ *         the opponent.
+ */
 int CGamesDoc::getDuplicateScore(int gameIndex, int auctionAndPlayIndex, bool ns)
 {
     assert(gameIndex < games.size());
@@ -535,6 +573,10 @@ int CGamesDoc::getDuplicateScore(int gameIndex, int auctionAndPlayIndex, bool ns
     return duplicateScore;
 }
 
+/**
+ * @brief Determine if the game is a practice game.
+ * @return true if the game is a practice game. False otherwise.
+ */
 bool CGamesDoc::practice()
 {
     int i;
@@ -546,6 +588,15 @@ bool CGamesDoc::practice()
     return (i == games.size());
 }
 
+/**
+ * @brief Calculate duplicate points for a given game/play.
+ * @param gameIndex[i] Index of the game.
+ * @param auctionAndPlayIndex[i] Index of the play.
+ * @param scoringMethod[i] Scoring method is either MP or IMP.
+ * @param ns[i] If true then calculate relative to NS else calculate relative to declarer.
+ * @return The calculated duplicate point. The value is negative if the point belongs to
+ *         the opponent.
+ */
 float CGamesDoc::getDuplicatePointBoard(int gameIndex, int auctionAndPlayIndex,
                                         int scoringMethod, bool ns)
 {
@@ -557,13 +608,14 @@ float CGamesDoc::getDuplicatePointBoard(int gameIndex, int auctionAndPlayIndex,
     int nrPlayed = games[gameIndex]->auctionAndPlay.size();
     Seat declarer = games[gameIndex]->auctionAndPlay[auctionAndPlayIndex]->declarer;
 
+    //Allocate score table and get duplicate scores.
     int *scores = new int[nrPlayed];
-
     for (int i = 0; i < nrPlayed; i++)
         scores[i] = getDuplicateScore(gameIndex, i, true);
 
-    if (scoringMethod == DUPLICATE_MP)
+    if (scoringMethod == MP)
     {
+        //Calculate point based on MP.
         int *gt = new int[nrPlayed];
         int *eq = new int[nrPlayed];
 
@@ -591,7 +643,8 @@ float CGamesDoc::getDuplicatePointBoard(int gameIndex, int auctionAndPlayIndex,
     }
     else
     {
-            for (int i = 0; i < nrPlayed; i++)
+        //Calculate point based on IMP.
+        for (int i = 0; i < nrPlayed; i++)
             if (auctionAndPlayIndex != i)
             {
                 int diff = scores[auctionAndPlayIndex] - scores[i];
@@ -599,15 +652,24 @@ float CGamesDoc::getDuplicatePointBoard(int gameIndex, int auctionAndPlayIndex,
                 while (abs(diff) > IMP_TABLE[++k]) ;
                 point += (diff > 0) ? k : -k;
             }
-            point /= nrPlayed - 1;
-            if (!ns &&((declarer == WEST_SEAT) || (declarer == EAST_SEAT)))
-                point = -point;
+        point /= nrPlayed - 1;
+        if (!ns &&((declarer == WEST_SEAT) || (declarer == EAST_SEAT)))
+            point = -point;
     }
     delete []scores;
 
     return point;
 }
 
+/**
+ * @brief Calculate total duplicate points for a given pair of players.
+ * @param gameIndex[in] Calculate until and including the game with this index.
+ * @param nameWN[in] Name of West (or North).
+ * @param nameES[in] Name of East (or South).
+ * @param scoringMethod[in] Scoring method is either MP or IMP.
+ * @return  The calculated total duplicate point. The value is negative if the point
+ *          belongs to the opponent.
+ */
 float CGamesDoc::getDuplicateResultAll(int gameIndex, QString &nameWN, QString &nameES,
                                      int scoringMethod)
 {
@@ -625,12 +687,12 @@ float CGamesDoc::getDuplicateResultAll(int gameIndex, QString &nameWN, QString &
             float point;
             no++;
             point = getDuplicatePointBoard(i, auctionAndPlayIndex, scoringMethod, true);
-            if ((scoringMethod == DUPLICATE_MP) && ((seat == WEST_SEAT) || (seat == EAST_SEAT)))
+            if ((scoringMethod == MP) && ((seat == WEST_SEAT) || (seat == EAST_SEAT)))
                 point = 2*getNumberAuctionAndPlay(i) - 2 - point;
-            else if ((scoringMethod == TEAMS_IMP) && ((seat == WEST_SEAT) || (seat == EAST_SEAT)))
+            else if ((scoringMethod == IMP) && ((seat == WEST_SEAT) || (seat == EAST_SEAT)))
                 point = -point;
 
-            if (scoringMethod == DUPLICATE_MP)
+            if (scoringMethod == MP)
                 point = point * 100 / (2 * getNumberAuctionAndPlay(i) - 2);
             result += point;
         }
@@ -641,19 +703,29 @@ float CGamesDoc::getDuplicateResultAll(int gameIndex, QString &nameWN, QString &
     return result;
 }
 
+/**
+ * @brief Get pairs of players in the games.
+ * @param gameIndex{[in] Until and including the game with this index.
+ * @param pairWN[out] List of names west/north.
+ * @param pairES[out] List of names east/south.
+ * @return Number of pairs.
+ */
 int CGamesDoc::getPairs(int gameIndex, QStringList &pairWN, QStringList &pairES)
 {
     assert(gameIndex < games.size());
 
     int noPairs = 0;
 
+    //Search all games.
     for (int i = 0; i <= gameIndex; i++)
     {
+        //Search all plays (of this game).
         for (int j = 0; j < games[i]->auctionAndPlay.size(); j++)
         {
             if (!(pairWN.contains(games[i]->auctionAndPlay[j]->westName, Qt::CaseInsensitive)) ||
                 (!pairES.contains(games[i]->auctionAndPlay[j]->eastName, Qt::CaseInsensitive)))
             {
+                //Found a new west/east pair.
                 pairWN.append(games[i]->auctionAndPlay[j]->westName);
                 pairES.append(games[i]->auctionAndPlay[j]->eastName);
                 noPairs++;
@@ -661,6 +733,7 @@ int CGamesDoc::getPairs(int gameIndex, QStringList &pairWN, QStringList &pairES)
             if (!(pairWN.contains(games[i]->auctionAndPlay[j]->northName, Qt::CaseInsensitive)) ||
                 (!pairES.contains(games[i]->auctionAndPlay[j]->southName, Qt::CaseInsensitive)))
             {
+                //Found a new north/south pair.
                 pairWN.append(games[i]->auctionAndPlay[j]->northName);
                 pairES.append(games[i]->auctionAndPlay[j]->southName);
                 noPairs++;
@@ -670,6 +743,12 @@ int CGamesDoc::getPairs(int gameIndex, QStringList &pairWN, QStringList &pairES)
     return noPairs;
 }
 
+/**
+ * @brief Get below the line points for a given game/play in rubber play.
+ * @param gameIndex[in] Index of the game
+ * @param auctionAndPlayIndex[in] Index of the play.
+ * @return Below the line points. Relative to NS.
+ */
 int CGamesDoc::getBelowTheLine(int gameIndex, int auctionAndPlayIndex)
 {
     assert(gameIndex < games.size());
@@ -703,6 +782,12 @@ int CGamesDoc::getBelowTheLine(int gameIndex, int auctionAndPlayIndex)
     return contractPoints;
 }
 
+/**
+ * @brief Get above the line points for a given game/play in rubber play.
+ * @param gameIndex[in] Index of the game
+ * @param auctionAndPlayIndex[in] Index of the play.
+ * @return Above the line points. Relative to NS.
+ */
 int CGamesDoc::getAboveTheLine(int gameIndex, int auctionAndPlayIndex)
 {
     assert(gameIndex < games.size());
@@ -810,6 +895,12 @@ int CGamesDoc::getAboveTheLine(int gameIndex, int auctionAndPlayIndex)
     return aboveTheLineScore;
 }
 
+/**
+ * @brief Get honor bonus points for a given game/play in rubber play.
+ * @param gameIndex[in] Index of the game
+ * @param auctionAndPlayIndex[in] Index of the play.
+ * @return Honor bonus points. Relative to NS.
+ */
 int CGamesDoc::getHonorBonus(int gameIndex, int auctionAndPlayIndex)
 {
     assert(gameIndex < games.size());
@@ -888,6 +979,156 @@ int CGamesDoc::getHonorBonus(int gameIndex, int auctionAndPlayIndex)
             return -150;
     }
     return 0;
+}
+
+/**
+ * @brief Calculate rubber points for a given game/play.
+ * @param gameIndex[in] Index of the game.
+ * @param auctionAndPlayIndex[in] Index of the play.
+ * @param nsAbove[out] Above points for NS until now.
+ * @param nsBelow[out] Below points for NS until now.
+ * @param nsTotal[out] Total points for NS until now.
+ * @param nsLedger[out] Ledger points for NS until now.
+ * @param ewAbove[out] Above points for EW until now.
+ * @param ewBelow[out] Below points for EW until now.
+ * @param ewTotal[out] Total points for EW until now.
+ * @param ewLedger[out] Ledger points for EW until now.
+ * @return True if NS or EW just won a rubber. Otherwise false.
+ */
+bool CGamesDoc::getRubberPoints(int gameIndex, int auctionAndPlayIndex, bool *gameDone,
+                                int *nsAbove, int *nsBelow, int *nsTotal, int *nsLedger,
+                                int *ewAbove, int *ewBelow, int *ewTotal, int *ewLedger)
+{
+    assert(gameIndex < games.size());
+    assert(auctionAndPlayIndex < games[gameIndex]->auctionAndPlay.size());
+
+    int belowTheLineNSPoint, belowTheLineEWPoint, aboveTheLineNSPoint, aboveTheLineEWPoint;
+
+    int belowTheLineNSTotal = 0, belowTheLineEWTotal = 0;
+    int aboveTheLineNSTotal = 0, aboveTheLineEWTotal = 0;
+    int belowTheLineNSLedger = 0, belowTheLineEWLedger = 0;
+    int aboveTheLineNSLedger = 0, aboveTheLineEWLedger = 0;
+
+    int belowTheLineNSGamePoint = 0, belowTheLineEWGamePoint = 0;
+    int belowTheLineNSGame = 0, belowTheLineEWGame = 0;
+    bool game = false, rubberDone = false;
+
+    //Begin with the first play.
+    for (int i = 0; i <= gameIndex; i++)
+    {
+        //Assure initialized for each play.
+        belowTheLineNSPoint = belowTheLineEWPoint = aboveTheLineNSPoint = aboveTheLineEWPoint = 0;
+
+        //Reset when a rubber (NS or EW) is done.
+        if (rubberDone)
+        {
+            belowTheLineNSTotal = belowTheLineEWTotal = 0;
+            aboveTheLineNSTotal = aboveTheLineEWTotal = 0;
+            rubberDone = false;
+        }
+        if (game)
+            game = false;
+
+        //Calculation related to below the line points.
+        int belowTheLinePoint = getBelowTheLine(i, auctionAndPlayIndex);
+        if (belowTheLinePoint > 0)
+        {
+            //Update NS below the line points.
+            belowTheLineNSPoint = belowTheLinePoint;
+            belowTheLineNSGamePoint += belowTheLinePoint;
+            belowTheLineNSTotal += belowTheLinePoint;
+            belowTheLineNSLedger += belowTheLinePoint;
+            if (belowTheLineNSGamePoint >= 100)
+            {
+                //Rubber game for NS.
+                game = true;
+                belowTheLineNSGame++;
+                if (belowTheLineNSGame == 2)
+                {
+                    //Rubber is done. Update NS above the line points with rubber bonus points
+                    aboveTheLineNSPoint += (belowTheLineEWGame == 0) ? (700) : (500);
+                    aboveTheLineNSTotal += (belowTheLineEWGame == 0) ? (700) : (500);
+                    aboveTheLineNSLedger += (belowTheLineEWGame == 0) ? (700) : (500);
+                    belowTheLineNSGame = belowTheLineEWGame = 0;
+                    rubberDone = true;
+                }
+                //Initialize for new rubber game (NS or EW).
+                belowTheLineNSGamePoint = belowTheLineEWGamePoint = 0;
+            }
+        }
+        else if (belowTheLinePoint < 0)
+        {
+            //Update EW below the line points.
+            belowTheLineEWPoint = -belowTheLinePoint;
+            belowTheLineEWGamePoint -= belowTheLinePoint;
+            belowTheLineEWTotal -= belowTheLinePoint;
+            belowTheLineEWLedger -= belowTheLinePoint;
+            if (belowTheLineEWGamePoint >= 100)
+            {
+                //Rubber game for EW.
+                game = true;
+                belowTheLineEWGame++;
+                if (belowTheLineEWGame == 2)
+                {
+                    //Rubber is done. Update EW above the line points with rubber bonus points
+                    aboveTheLineEWPoint += (belowTheLineNSGame == 0) ? (700) : (500);
+                    aboveTheLineEWTotal += (belowTheLineNSGame == 0) ? (700) : (500);
+                    aboveTheLineEWLedger += (belowTheLineNSGame == 0) ? (700) : (500);
+                    belowTheLineNSGame = belowTheLineEWGame = 0;
+                    rubberDone = true;
+                }
+                //Initialize for new rubber game (NS or EW).
+                belowTheLineNSGamePoint = belowTheLineEWGamePoint = 0;
+            }
+        }
+
+        //Calculation related to above the line points.
+        int aboveTheLinePoint = getAboveTheLine(i, auctionAndPlayIndex);
+        if (aboveTheLinePoint > 0)
+        {
+            //Update NS above the line points.
+            aboveTheLineNSPoint += aboveTheLinePoint;
+            aboveTheLineNSTotal += aboveTheLinePoint;
+            aboveTheLineNSLedger += aboveTheLinePoint;
+        }
+        else if (aboveTheLinePoint < 0)
+        {
+            //Update EW above the line points.
+            aboveTheLineEWPoint -= aboveTheLinePoint;
+            aboveTheLineEWTotal -= aboveTheLinePoint;
+            aboveTheLineEWLedger -= aboveTheLinePoint;
+        }
+
+        //Calculation related to honor bonus.
+        int honorBonus = getHonorBonus(i, auctionAndPlayIndex);
+        if (honorBonus > 0)
+        {
+            //Update NS above the line points.
+            aboveTheLineNSPoint += honorBonus;
+            aboveTheLineNSTotal += honorBonus;
+            aboveTheLineNSLedger += honorBonus;
+        }
+        else if (honorBonus < 0)
+        {
+            //Update EW above the line points.
+            aboveTheLineEWPoint -= honorBonus;
+            aboveTheLineEWTotal -= honorBonus;
+            aboveTheLineEWLedger -= honorBonus;
+        }
+    }
+
+    //Return calculate values.
+    *gameDone = game;
+    *nsAbove = aboveTheLineNSPoint;
+    *ewAbove = aboveTheLineEWPoint;
+    *nsBelow = belowTheLineNSPoint;
+    *ewBelow = belowTheLineEWPoint;
+    *nsTotal = aboveTheLineNSTotal + belowTheLineNSTotal;
+    *ewTotal = aboveTheLineEWTotal + belowTheLineEWTotal;
+    *nsLedger = aboveTheLineNSLedger + belowTheLineNSLedger;
+    *ewLedger = aboveTheLineEWLedger + belowTheLineEWLedger;
+
+    return rubberDone;
 }
 
 /**
@@ -982,7 +1223,7 @@ void CGamesDoc::readGames(QTextStream &pbnText, QString &event, bool originalGam
                             if ((nextGame->wCards[i] != game->wCards[i]) || (nextGame->nCards[i] != game->nCards[i]) ||
                                     (nextGame->eCards[i] != game->eCards[i]) || (nextGame->sCards[i] != game->sCards[i]))
                                 error = true;
-                        if ((nextGame->dealer != game->dealer) || (nextGame->vulnerable != game->vulnerable) || error)
+                        if ((nextGame->dealer != game->dealer) || error)
                             throw PlayException(QString("PBN - Illegal redundant info in games with board: %1").arg(game->board).toStdString());
 
                         if (!auctionAndPlay->westName.isEmpty() && !auctionAndPlay->northName.isEmpty() &&
@@ -2207,4 +2448,69 @@ int CGamesDoc::getIndexAndSeat(int gameIndex, QString &nameWN, QString &nameES, 
         i = -1;
 
     return i;
+}
+
+/**
+ * @brief Calculate rubber vulnerability for the next play after a given game/play.
+ * @param gameIndex[i] Index of the game.
+ * @param auctionAndPlayIndex[i] Index of the play.
+ * @return Calculate rubber vulnerability for next play.
+ */
+Team CGamesDoc::getRubberVulnerable(int gameIndex, int auctionAndPlayIndex)
+{
+    assert(gameIndex < games.size());
+    assert(auctionAndPlayIndex < games[gameIndex]->auctionAndPlay.size());
+
+    Team vulnerable = NEITHER;
+    int belowTheLineNSPoint = 0, belowTheLineEWPoint = 0;
+    int belowTheLineNSGame = 0, belowTheLineEWGame = 0;
+
+    //Start from the first play.
+    for (int i = 0; i <= gameIndex; i++)
+    {
+        int belowTheLinePoint = getBelowTheLine(i, auctionAndPlayIndex);
+
+        if (belowTheLinePoint > 0)
+        {
+            //Points for NS.
+            belowTheLineNSPoint += belowTheLinePoint;
+            if (belowTheLineNSPoint >= 100)
+            {
+                //NS won a game.
+                belowTheLineNSGame++;
+                if (belowTheLineNSGame == 2)
+                {
+                    //NS won a rubber.
+                    vulnerable = NEITHER;
+                    belowTheLineNSGame = belowTheLineEWGame = 0;
+                }
+                else
+                    vulnerable = (vulnerable == NEITHER) ? (NORTH_SOUTH) : (BOTH);
+
+                belowTheLineNSPoint = belowTheLineEWPoint = 0;
+            }
+        }
+        else if (belowTheLinePoint < 0)
+        {
+            //Points for EW.
+            belowTheLineEWPoint -= belowTheLinePoint;
+            if (belowTheLineEWPoint >= 100)
+            {
+                //EW won a game.
+                belowTheLineEWGame++;
+                if (belowTheLineEWGame == 2)
+                {
+                    //EW won a rubber.
+                    vulnerable = NEITHER;
+                    belowTheLineNSGame = belowTheLineEWGame = 0;
+                }
+                else
+                    vulnerable = (vulnerable == NEITHER) ? (EAST_WEST) : (BOTH);
+
+                belowTheLineNSPoint = belowTheLineEWPoint = 0;
+            }
+        }
+    }
+
+    return vulnerable;
 }

@@ -22,6 +22,8 @@
 #ifndef CGAMEOPTIONDOC_H
 #define CGAMEOPTIONDOC_H
 
+#include "Defines.h"
+
 /**
  * @brief Holds the game options and methods to store/restore the options.
  */
@@ -62,7 +64,7 @@ public:
     float tenValue;
 
     //Scoring.
-    int scoringMethod;
+    ScoringMethod scoringMethod;
 
     //Files.
     bool saveIntermediatePositions;

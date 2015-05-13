@@ -400,7 +400,7 @@ void CMainFrame::on_actionOpen_triggered()
 
     //Read games.
     original.seek(0);
-    games->readGames(original, played, event);
+    games->readGames(original, played, event, doc->getGameOptions().scoringMethod);
 
     playedFile.close();
     originalFile.close();
@@ -604,7 +604,7 @@ void CMainFrame::on_action_Refresh_Screen_triggered()
  */
 void CMainFrame::on_actionNew_Session_triggered()
 {
-    games->clearGames();
+    games->clearGames(doc->getGameOptions().scoringMethod);
     fileName.clear();
     eventIndex = 0;
 

@@ -645,10 +645,7 @@ const int GINSBURG_VALUATION_MODE = 1;
 const int CUSTOM_VALUATION_MODE = 3;
 
 //Scoring.
-const int TEAMS_IMP = 0;
-const int DUPLICATE_MP = 1;
-const int RUBBER_BRIDGE = 2;
-const int PRACTICE = 3;
+enum ScoringMethod { IMP=0, MP=1, RUBBER=2, PRACTICE=3 };
 
 //----------------------------- Wizard. -------------------------------
 //Help Level.

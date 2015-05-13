@@ -55,10 +55,11 @@ class CGamesDoc : public QObject
     Q_OBJECT
 public:
     explicit CGamesDoc(QObject *parent = 0);
-    void readGames(QTextStream &original, QTextStream &played, QString &event) throw(PlayException);
+    void readGames(QTextStream &original, QTextStream &played, QString &event,
+                   ScoringMethod scoringMethod) throw(PlayException);
     void writeOriginalGames(QTextStream &stream);
     void writePlayedGames(QTextStream &stream);
-    void clearGames();
+    void clearGames(ScoringMethod scoringMethod);
     void getNextDeal(int *board, int cards[][13], Seat *dealer, Team *vulnerable);
     void setPlayedResult(CBidHistory &bidHistory, CPlayHistory &playHistory, QString &westName, QString &northName,
                    QString &eastName, QString &southName);
@@ -86,6 +87,11 @@ public:
     int getBelowTheLine(int gameIndex, int auctionAndPlayIndex);
     int getAboveTheLine(int gameIndex, int auctionAndPlayIndex);
     int getHonorBonus(int gameIndex, int auctionAndPlayIndex);
+    void setScoringMethod(ScoringMethod scoringMethod) { this->scoringMethod = scoringMethod; }
+    bool getComputerPlays() { return computerPlays; }
+    bool getRubberPoints(int gameIndex, int auctionAndPlayIndex, bool *gameDone,
+                         int *nsAbove, int *nsBelow, int *nsTotal, int *nsLedger,
+                         int *ewAbove, int *ewBelow, int *ewTotal, int *ewLedger);
 signals:
 
 public slots:
@@ -108,6 +114,7 @@ private:
         Bids contractModifier;
         int result;
     };
+
 
     /**
      * @brief Structure for one game with a list of how the game was played by different players.
@@ -144,11 +151,15 @@ private:
     void makeAuction(QTextStream &stream, CBidHistory &bidHistory);
     void makePlay(QTextStream &stream, CPlayHistory &playHistory);
     int getIndexAndSeat(int gameIndex, QString &nameWN, QString &nameES, Seat *seat);
+    Team getRubberVulnerable(int gameIndex, int auctionAndPlayIndex);
 
     QString event;              /**< The current game event. */
     QList<CGame *> games;       /**< List with all games. */
     int currentGameIndex;       /**< Index (into the games list) of the game currently being played. */
     DealType dealType;          /**< Type of current game set (original or random). */
+
+    ScoringMethod scoringMethod;/**< Type of scoring method for this game. */
+    bool computerPlays;
 
     QString curEvent;           /**< Current event while processing pbn file (also with regards to # and ##). */
 };

@@ -74,11 +74,11 @@ CProgramConfigWizard::CProgramConfigWizard(CZBridgeApp *app, CZBridgeDoc *doc, Q
     ui->progConfigSuitsDisplayPage->ui->showDummyTrumpsOnLeft->setChecked(wizardOptionDoc.showDummyTrumpsOnLeft);
 
     //Game Options page.
-    if (wizardOptionDoc.scoringMethod == TEAMS_IMP)
+    if (wizardOptionDoc.scoringMethod == IMP)
         ui->progConfigGameMechanicsPage->ui->teamsIMP->setChecked(true);
-    else if (wizardOptionDoc.scoringMethod == DUPLICATE_MP)
+    else if (wizardOptionDoc.scoringMethod == MP)
         ui->progConfigGameMechanicsPage->ui->duplicateMP->setChecked(true);
-    else if (wizardOptionDoc.scoringMethod == RUBBER_BRIDGE)
+    else if (wizardOptionDoc.scoringMethod == RUBBER)
         ui->progConfigGameMechanicsPage->ui->rubberBridge->setChecked(true);
     else
         ui->progConfigGameMechanicsPage->ui->practice->setChecked(true);
@@ -147,11 +147,11 @@ void CProgramConfigWizard::accept()
 
     //Game Options page.
     if (ui->progConfigGameMechanicsPage->ui->teamsIMP->isChecked())
-        wizardOptionDoc.scoringMethod = TEAMS_IMP;
+        wizardOptionDoc.scoringMethod = IMP;
     else if (ui->progConfigGameMechanicsPage->ui->duplicateMP->isChecked())
-        wizardOptionDoc.scoringMethod = DUPLICATE_MP;
+        wizardOptionDoc.scoringMethod = MP;
     else if (ui->progConfigGameMechanicsPage->ui->rubberBridge->isChecked())
-        wizardOptionDoc.scoringMethod = RUBBER_BRIDGE;
+        wizardOptionDoc.scoringMethod = RUBBER;
     else
         wizardOptionDoc.scoringMethod = PRACTICE;
 
