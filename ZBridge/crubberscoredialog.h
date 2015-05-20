@@ -23,6 +23,8 @@
 
 #include <QDialog>
 
+#include "Defines.h"
+
 class CGamesDoc;
 
 namespace Ui {
@@ -38,7 +40,23 @@ public:
     ~CRubberScoreDialog();
 
 private:
+    void paintEvent(QPaintEvent *);
+
     Ui::CRubberScoreDialog *ui;
+
+    struct rubberPoint
+    {
+        bool gameDone, rubberDone;
+        int board;
+        Bids contract, contractModifier;
+        int tricks;
+        Seat declarer;
+        Team vulnerable;
+        int nsAbove, nsBelow, nsTotal, nsLedger;
+        int ewAbove, ewBelow, ewTotal, ewLedger;
+    };
+
+    rubberPoint *rubberPoints;
 
     CGamesDoc *games;
     int index;

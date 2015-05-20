@@ -996,6 +996,8 @@ int CGamesDoc::getHonorBonus(int gameIndex, int auctionAndPlayIndex)
  * @return True if NS or EW just won a rubber. Otherwise false.
  */
 bool CGamesDoc::getRubberPoints(int gameIndex, int auctionAndPlayIndex, bool *gameDone,
+                                int *board, Bids *contract, Bids *contractModifier,
+                                int *tricks, Seat *declarer, Team *vulnerable,
                                 int *nsAbove, int *nsBelow, int *nsTotal, int *nsLedger,
                                 int *ewAbove, int *ewBelow, int *ewTotal, int *ewLedger)
 {
@@ -1117,8 +1119,14 @@ bool CGamesDoc::getRubberPoints(int gameIndex, int auctionAndPlayIndex, bool *ga
         }
     }
 
-    //Return calculate values.
+    //Return values.
     *gameDone = game;
+    *board = games[gameIndex]->board;
+    *contract = games[gameIndex]->auctionAndPlay[auctionAndPlayIndex]->contract;
+    *contractModifier = games[gameIndex]->auctionAndPlay[auctionAndPlayIndex]->contractModifier;
+    *tricks = games[gameIndex]->auctionAndPlay[auctionAndPlayIndex]->result;
+    *declarer = games[gameIndex]->auctionAndPlay[auctionAndPlayIndex]->declarer;
+    *vulnerable = games[gameIndex]->vulnerable;
     *nsAbove = aboveTheLineNSPoint;
     *ewAbove = aboveTheLineEWPoint;
     *nsBelow = belowTheLineNSPoint;

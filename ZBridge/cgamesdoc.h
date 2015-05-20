@@ -90,6 +90,8 @@ public:
     void setScoringMethod(ScoringMethod scoringMethod) { this->scoringMethod = scoringMethod; }
     bool getComputerPlays() { return computerPlays; }
     bool getRubberPoints(int gameIndex, int auctionAndPlayIndex, bool *gameDone,
+                         int *board, Bids *contract, Bids *contractModifier, int *tricks,
+                         Seat *declarer, Team *vulnerable,
                          int *nsAbove, int *nsBelow, int *nsTotal, int *nsLedger,
                          int *ewAbove, int *ewBelow, int *ewTotal, int *ewLedger);
 signals:
