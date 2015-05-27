@@ -939,7 +939,7 @@ int CGamesDoc::getHonorBonus(int gameIndex, int auctionAndPlayIndex)
                     (sCard == jack) || (sCard == ten))
                 south ++;
         }
-        if ((north = 5) || (south == 5))
+        if ((north == 5) || (south == 5))
             return 150;
         if ((west == 5) || (east == 5))
             return -150;
