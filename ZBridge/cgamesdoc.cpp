@@ -37,6 +37,7 @@ static const QString PBN_SEAT_NAMES[4] = {"W", "N", "E", "S"};
 static const QString PBN_CARD = "23456789TJQKA";
 static const QString PBN_SUIT_NAMES[5] = { "C", "D", "H", "S", "NT" };
 static const QString PBN_VULNERABILITY_NAMES[4] = {"None", "NS", "EW", "All"};
+static const QString PBN_SCORING_NAMES[5] = {"IMP", "MP", "RUBBER", "PRACTICE", "NOSCORE"};
 
 /**
  * @brief Constructor for the games class.
@@ -62,8 +63,10 @@ CGamesDoc::CGamesDoc(QObject *parent) :
 void CGamesDoc::readGames(QTextStream &original, QTextStream &played,
                           QString &event, ScoringMethod scoringMethod) throw(PlayException)
 {
+    ScoringMethod originalScoringMethod = NOSCORE;
+
     //Clean up for new game.
-    clearGames(scoringMethod);
+    clearGames(NOSCORE);
 
     this->event = event;
 
@@ -72,12 +75,27 @@ void CGamesDoc::readGames(QTextStream &original, QTextStream &played,
     {
         readGames(original, event, true);
         if (games.size() > 0)
+        {
             dealType = ORIGINAL_DEAL;
+            if ((this->scoringMethod == RUBBER) || (this->scoringMethod == PRACTICE))
+                this->scoringMethod = NOSCORE;
+            originalScoringMethod = this->scoringMethod;
+        }
     }
 
     //Played games (check that there are played games).
     if (played.device() != 0)
+    {
         readGames(played, event, false);
+    }
+
+    if (this->scoringMethod == NOSCORE)
+    {
+        this->scoringMethod = scoringMethod;
+    }
+
+    if ((dealType != ORIGINAL_DEAL) || ((dealType == ORIGINAL_DEAL) && originalScoringMethod == NOSCORE))
+        computerPlays =((this->scoringMethod == MP) || (this->scoringMethod == IMP));
 }
 
 /**
@@ -1468,6 +1486,8 @@ void CGamesDoc::readGames(QTextStream &pbnText, QString &event, bool originalGam
                     game->board = -1;
                     game->dealer = NO_SEAT;
                     game->vulnerable = NONE;
+                    for (int i = 0; i < 13; i++)
+                        game->wCards[i] = game->nCards[i] = game->eCards[i] = game->sCards[i] = -1;
                     auctionAndPlay = new CAuctionAndPlay;
                     auctionAndPlay->declarer = NO_SEAT;
                     auctionAndPlay->contract = BID_NONE;
@@ -1551,6 +1571,26 @@ void CGamesDoc::readGames(QTextStream &pbnText, QString &event, bool originalGam
 //                        throw PlayException(QString("PBN - Illegal dealer: %1 %2 %3").arg(dealer).arg(" in board: ").arg(game->board).toStdString());
                 }
                     break;
+
+                //Scoring tag.
+                case TAG_SCORING:
+                {
+                    ScoringMethod currentScoringMethod = NOSCORE;
+                    if (QString::compare(strValue, "IMP", Qt::CaseInsensitive) == 0)
+                        currentScoringMethod = IMP;
+                    else if (QString::compare(strValue, "MP", Qt::CaseInsensitive) == 0)
+                        currentScoringMethod = MP;
+                    else if (QString::compare(strValue, "RUBBER", Qt::CaseInsensitive) == 0)
+                        currentScoringMethod = RUBBER;
+                    else if (QString::compare(strValue, "PRACTICE", Qt::CaseInsensitive) == 0)
+                        currentScoringMethod = PRACTICE;
+
+                    if ((scoringMethod != NOSCORE) && (currentScoringMethod != scoringMethod))
+                        throw PlayException(QString("PBN - Illegal scoring method: %1 %2 %3").arg(currentScoringMethod).arg(" in board: ").arg(game->board).toStdString());
+
+                    scoringMethod = currentScoringMethod;
+                }
+
 
                 //Declarer tag.
                 case TAG_DECLARER:
@@ -1699,6 +1739,132 @@ void CGamesDoc::readGames(QTextStream &pbnText, QString &event, bool originalGam
             }
         }
     }
+
+    //First check consistency of original pbn file.
+    if (originalGames)
+    {
+        //First check for scoring method.
+        if (games.size() > 0)
+        {
+            //Check that boards have been played the same number of times.
+            int noPlays = games[0]->auctionAndPlay.size();
+            for (int i = 1; i < games.size(); i++)
+                if (noPlays != games[i]->auctionAndPlay.size())
+                    throw PlayException(QString("PBN - Consistency error in original games (boards played unequal number of times)").toStdString());
+
+            //Scoring method are not always explicitly stated in pbn files.
+            if ((scoringMethod == NOSCORE) && (noPlays >= 1))
+                scoringMethod = ((noPlays == 2) || (noPlays == 1)) ? (IMP) : (MP);
+        }
+
+        //Consistency check.
+        QListIterator<CGame *> gameItr(games);
+        while (gameItr.hasNext())
+        {
+            //Check proper board, dealer and vulnerability.
+            CGame *nextGame = gameItr.next();
+            if ((nextGame->board <= 0) || (nextGame->dealer == NO_SEAT) ||
+                    (nextGame->vulnerable == NONE))
+                throw PlayException(QString("PBN - Consistency error in original games (Dealer, Board or vulnerability) in board: %1").arg(nextGame->board).toStdString());
+
+            //Check cards.
+            for (int i = 0; i < 13; i++)
+                if ((nextGame->wCards[i] <= 0) || (nextGame->nCards[i] <= 0) ||
+                        (nextGame->eCards[i] <= 0) || (nextGame->sCards[i] <= 0))
+                    throw PlayException(QString("PBN - Consistency error in original games (Cards missing in Deal) in board: %1").arg(nextGame->board).toStdString());
+
+            //Check auction and play.
+            QListIterator<CAuctionAndPlay *> auctionAndPlayItr(nextGame->auctionAndPlay);
+            while (auctionAndPlayItr.hasNext())
+            {
+                CAuctionAndPlay *nextAuctionAndPlay = auctionAndPlayItr.next();
+                if ((nextAuctionAndPlay->declarer == NO_SEAT) ||
+                        (nextAuctionAndPlay->contract == BID_NONE) ||
+                        (nextAuctionAndPlay->result < 0) ||
+                        (nextAuctionAndPlay->westName.size() == 0) ||
+                        (nextAuctionAndPlay->northName.size() == 0) ||
+                        (nextAuctionAndPlay->eastName.size() == 0) ||
+                        (nextAuctionAndPlay->southName.size() == 0))
+                    throw PlayException(QString("PBN - Consistency error in original games (auction and play) in board: %1").arg(nextGame->board).toStdString());
+            }
+        }
+    }
+
+    //Check played and auto games.
+    else
+    {
+        //Are there any originals.
+        QListIterator<CGame *> gameItr(games);
+        bool found = false;
+        while (gameItr.hasNext())
+        {
+            CGame *nextGame = gameItr.next();
+            if ((nextGame->auctionAndPlay.size() > 0) && (nextGame->auctionAndPlay[0]->gameType == ORIGINAL_GAME))
+                found = true;
+        }
+
+        //If there are originals then there must be originals in all.
+        if (found)
+        {
+            found = false;
+            gameItr.toFront();
+            while (gameItr.hasNext())
+            {
+                CGame *nextGame = gameItr.next();
+
+                //Is there an inconsistency (no original)?
+                if ((nextGame->auctionAndPlay.size() == 0) ||
+                        ((nextGame->auctionAndPlay.size() > 0) && (nextGame->auctionAndPlay[0]->gameType != ORIGINAL_GAME)))
+                    throw PlayException(QString("PBN - Consistency error in played games (no original) in board: %1").arg(nextGame->board).toStdString());
+            }
+        }
+
+        //If no originals then dealtype must be random.
+        if (!found)
+        {
+            //Scoring method must be given for played games.
+            if ((games.size() > 0) && (scoringMethod == NOSCORE))
+                throw PlayException(QString("PBN - Consistency error in played games (no scoring method)").toStdString());
+
+            gameItr.toFront();
+            while (gameItr.hasNext())
+            {
+                //Check proper board, dealer and vulnerability.
+                CGame *nextGame = gameItr.next();
+                if ((nextGame->board <= 0) || (nextGame->dealer == NO_SEAT) ||
+                        (nextGame->vulnerable == NONE))
+                    throw PlayException(QString("PBN - Consistency error in played games (Dealer, Board or Vulnerability) in board: %1").arg(nextGame->board).toStdString());
+
+                //Check cards.
+                for (int i = 0; i < 13; i++)
+                    if ((nextGame->wCards[i] <= 0) || (nextGame->nCards[i] <= 0) ||
+                            (nextGame->eCards[i] <= 0) || (nextGame->sCards[i] <= 0))
+                        throw PlayException(QString("PBN - Consistency error in played games (Cards missing in Deal) in board: %1").arg(nextGame->board).toStdString());
+            }
+        }
+
+        //Check consistency of played/auto games.
+        gameItr.toFront();
+        while (gameItr.hasNext())
+        {
+            CGame *nextGame = gameItr.next();
+            QListIterator<CAuctionAndPlay *> auctionAndPlayItr(nextGame->auctionAndPlay);
+            while (auctionAndPlayItr.hasNext())
+            {
+                CAuctionAndPlay *nextAuctionAndPlay = auctionAndPlayItr.next();
+                if (((nextAuctionAndPlay->gameType == PLAYED_GAME) ||
+                     (nextAuctionAndPlay->gameType == AUTO_GAME)) &&
+                        ((nextAuctionAndPlay->declarer == NO_SEAT) ||
+                         (nextAuctionAndPlay->contract == BID_NONE) ||
+                         (nextAuctionAndPlay->result < 0) ||
+                         (nextAuctionAndPlay->westName.size() == 0) ||
+                         (nextAuctionAndPlay->northName.size() == 0) ||
+                         (nextAuctionAndPlay->eastName.size() == 0) ||
+                         (nextAuctionAndPlay->southName.size() == 0)))
+                    throw PlayException(QString("PBN - Consistency error in played games (auction and play) in board: %1").arg(nextGame->board).toStdString());
+            }
+        }
+    }
 }
 
 /**
@@ -1730,6 +1896,7 @@ void CGamesDoc::writeGame(QTextStream &stream, CGame *game, GameType gameType, Q
             stream << QString("[Dealer \"%1\"]\n").arg(PBN_SEAT_NAMES[game->dealer]);
             stream << QString("[Vulnerable \"%1\"]\n").arg(PBN_VULNERABILITY_NAMES[game->vulnerable]);
             stream << setCards(game->dealer, game->wCards, game->nCards, game->eCards, game->sCards, line).toLatin1();
+            stream << QString("[Scoring \"%1\"]\n").arg(PBN_SCORING_NAMES[scoringMethod]);
             stream << QString("[Declarer \"%1\"]\n").arg(PBN_SEAT_NAMES[nextAuctionAndPlay->declarer]);
             stream << setContract(nextAuctionAndPlay->contract, nextAuctionAndPlay->contractModifier, line);
             stream << QString("[Result \"%1\"]\n").arg(nextAuctionAndPlay->result);

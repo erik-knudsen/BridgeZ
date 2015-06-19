@@ -55,8 +55,7 @@ class CGamesDoc : public QObject
     Q_OBJECT
 public:
     explicit CGamesDoc(QObject *parent = 0);
-    void readGames(QTextStream &original, QTextStream &played, QString &event,
-                   ScoringMethod scoringMethod) throw(PlayException);
+    void readGames(QTextStream &original, QTextStream &played, QString &event, ScoringMethod scoringMethod) throw(PlayException);
     void writeOriginalGames(QTextStream &stream);
     void writePlayedGames(QTextStream &stream);
     void clearGames(ScoringMethod scoringMethod);
