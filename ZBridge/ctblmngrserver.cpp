@@ -1097,6 +1097,10 @@ void CTblMngrServer::sEnableContinueSync(int syncState)
 
             if (playHistory.getResult() != -1)
             {
+                //Non saved played games does now exist.
+                QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_SAVE , true));
+                QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_SAVEAS , true));
+
                 //EAK Temporary.
                 Seat declarer = playHistory.getDeclarer();
                 Bids contract = playHistory.getContract();

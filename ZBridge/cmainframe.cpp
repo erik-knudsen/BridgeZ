@@ -182,6 +182,21 @@ void CMainFrame::customEvent(QEvent *event)
             enableUIActionsClient(param);
             break;
 
+            //Enable/Disable save menu entry.
+        case UPDATE_UI_SAVE:
+            ui->actionSave->setEnabled(param);
+            break;
+
+            //Enable/Disable save as menu entry.
+        case UPDATE_UI_SAVEAS:
+            ui->actionSave_As->setEnabled(param);
+            break;
+
+            //Enable/Disable delete menu entry.
+        case UPDATE_UI_DELETE:
+            ui->actionDelete->setEnabled(param);
+            break;
+
             //Enable/Disable new session menu entry.
         case UPDATE_UI_NEW_SESSION:
             ui->actionNew_Session->setEnabled(param);
@@ -263,8 +278,6 @@ void CMainFrame::enableUIActionsClient(bool advProtocol)
 void CMainFrame::enableUIActions(actionIndicator actions, bool advProtocol)
 {
     ui->actionOpen->setEnabled((actions == INITIAL_ACTIONS) || (actions == SERVER_ACTIONS));
-    ui->actionSave->setEnabled(actions == SERVER_ACTIONS);
-    ui->actionSave_As->setEnabled(actions == SERVER_ACTIONS);
     ui->actionRecent_File->setEnabled((actions == INITIAL_ACTIONS) || (actions == SERVER_ACTIONS));
     ui->actionClear_All->setEnabled((actions == SERVER_ACTIONS) || (actions == CLIENT_ACTIONS));
     ui->actionBidding_Play_History->setEnabled((actions == SERVER_ACTIONS) || (actions == CLIENT_ACTIONS));
@@ -277,6 +290,9 @@ void CMainFrame::enableUIActions(actionIndicator actions, bool advProtocol)
     ui->actionAuto_Play_All_Cards->setEnabled((actions == SERVER_ACTIONS) || (actions == CLIENT_ACTIONS));
     ui->actionAuto_Play_to_Completion->setEnabled((actions == SERVER_ACTIONS) || (actions == CLIENT_ACTIONS));
 
+    ui->actionSave->setEnabled(false);
+    ui->actionSave_As->setEnabled(false);
+    ui->actionDelete->setEnabled(false);
 
     ui->actionNew_Session->setEnabled(true);
     ui->action_Deal_New_Hand->setEnabled(false);
@@ -357,6 +373,12 @@ void CMainFrame::ResetStatusText()
  */
 void CMainFrame::on_actionOpen_triggered()
 {
+    //If non saved game then ask if it should be saved (save can only be enabled on server).
+    if ((ui->actionSave->isEnabled()) &&
+        (QMessageBox::question(0, tr("ZBridge"),
+               tr("Do you want to save played games?")) == QMessageBox::Yes))
+        on_actionSave_triggered();
+
     try
     {
     //Determine pbn file to read games from.
@@ -394,6 +416,7 @@ void CMainFrame::on_actionOpen_triggered()
     QString playedFilename = originalFileName.left(originalFileName.indexOf(".pbn", 0, Qt::CaseInsensitive)) +
             "_" + QString::number(inx) + ".zbr";
     QFile playedFile(playedFilename);
+
     //None might be played.
     if (playedFile.open(QIODevice::ReadOnly | QIODevice::Text))
         played.setDevice(&playedFile);
@@ -402,7 +425,6 @@ void CMainFrame::on_actionOpen_triggered()
     original.seek(0);
     games->readGames(original, played, event, doc->getGameOptions().scoringMethod);
 
-    playedFile.close();
     originalFile.close();
 
     //Save info about pbn file.
@@ -411,6 +433,12 @@ void CMainFrame::on_actionOpen_triggered()
 
     //Start session.
     tableManager->newSession();
+    if (played.device() != 0)
+    {
+        playedFile.close();
+        QApplication::postEvent(this, new UPDATE_UI_ACTION_Event(UPDATE_UI_DELETE , true));
+    }
+    QApplication::postEvent(this, new UPDATE_UI_ACTION_Event(UPDATE_UI_SAVEAS , true));
     }
     catch (PlayException &e)
     {
@@ -444,6 +472,9 @@ void CMainFrame::on_actionSave_triggered()
         games->writePlayedGames(played);
 
         playedFile.close();
+
+        QApplication::postEvent(this, new UPDATE_UI_ACTION_Event(UPDATE_UI_SAVE , false));
+        QApplication::postEvent(this, new UPDATE_UI_ACTION_Event(UPDATE_UI_DELETE , true));
     }
 }
 
@@ -491,6 +522,24 @@ void CMainFrame::on_actionSave_As_triggered()
 
     originalFile.close();
     playedFile.close();
+
+    QApplication::postEvent(this, new UPDATE_UI_ACTION_Event(UPDATE_UI_SAVE , false));
+    QApplication::postEvent(this, new UPDATE_UI_ACTION_Event(UPDATE_UI_DELETE , true));
+}
+
+void CMainFrame::on_actionDelete_triggered()
+{
+    if (QMessageBox::question(0, tr("ZBridge"),
+           tr("Do you want to delete played games?")) == QMessageBox::Yes)
+    {
+        //Delete (by this program) played games.
+        QString playedFilename = fileName.left(fileName.indexOf(".pbn", 0, Qt::CaseInsensitive)) +
+                "_" + QString::number(eventIndex) + ".zbr";
+        QFile playedFile(playedFilename);
+        playedFile.remove();
+
+        QApplication::postEvent(this, new UPDATE_UI_ACTION_Event(UPDATE_UI_DELETE , false));
+    }
 }
 
 void CMainFrame::on_actionPrint_triggered()
@@ -604,6 +653,12 @@ void CMainFrame::on_action_Refresh_Screen_triggered()
  */
 void CMainFrame::on_actionNew_Session_triggered()
 {
+    //If non saved game then ask if it should be saved (save can only be enabled on server).
+    if ((ui->actionSave->isEnabled()) &&
+        (QMessageBox::question(0, tr("ZBridge"),
+               tr("Do you want to save played games?")) == QMessageBox::Yes))
+        on_actionSave_triggered();
+
     games->clearGames(doc->getGameOptions().scoringMethod);
     fileName.clear();
     eventIndex = 0;

@@ -26,7 +26,7 @@
 //Update (enable/disable) UI (mostly menues) actions.
 enum UpdateUIAction { UPDATE_UI_INITIAL, UPDATE_UI_SERVER, UPDATE_UI_CLIENT, UPDATE_UI_NEW_SESSION,
                     UPDATE_UI_NEW_DEAL, UPDATE_UI_UNDO, UPDATE_UI_REBID, UPDATE_UI_REPLAY, UPDATE_UI_SHOW_ALL,
-                    UPDATE_UI_SCORE};
+                    UPDATE_UI_SCORE, UPDATE_UI_DELETE, UPDATE_UI_SAVE, UPDATE_UI_SAVEAS};
 
 //Message type in network protocol.
 enum MsgType { CONNECT_MSG, SEATED_MSG, RTNAMES_MSG, TEAMNAMES_MSG, RSBOARD_MSG, STARTOFBOARD_MSG, RDEALINFO_MSG,
@@ -645,7 +645,7 @@ const int GINSBURG_VALUATION_MODE = 1;
 const int CUSTOM_VALUATION_MODE = 3;
 
 //Scoring.
-enum ScoringMethod { IMP=0, MP=1, RUBBER=2, PRACTICE=3, NOSCORE=4};
+enum ScoringMethod { IMP=0, MP=1, RUBBER=2, PRACTICE=3, NOSCORE=4, FORSCORE=5};
 
 //----------------------------- Wizard. -------------------------------
 //Help Level.

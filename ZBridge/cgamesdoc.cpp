@@ -1463,7 +1463,7 @@ void CGamesDoc::readGames(QTextStream &pbnText, QString &event, bool originalGam
             {
                 QString strValue;
 
-                //Parse for relevant tags.
+                //Parse for relevant tags. Skip empty and non relevant tags.
                 tagIds tag = parsePBNLine(currentLine, strValue, tagName);
                 if ((tag == TAG_NONE) || strValue.isEmpty() || (strValue == "?"))
                     continue;
@@ -1505,7 +1505,7 @@ void CGamesDoc::readGames(QTextStream &pbnText, QString &event, bool originalGam
                     if (board > 0)
                         game->board = board;
                     else
-                    throw PlayException(QString("PBN - Illegal board value: %1").arg(strValue).toStdString());
+                        throw PlayException(QString("PBN - Illegal board value: %1").arg(strValue).toStdString());
                 }
                     break;
 
@@ -1575,7 +1575,7 @@ void CGamesDoc::readGames(QTextStream &pbnText, QString &event, bool originalGam
                 //Scoring tag.
                 case TAG_SCORING:
                 {
-                    ScoringMethod currentScoringMethod = NOSCORE;
+                    ScoringMethod currentScoringMethod;
                     if (QString::compare(strValue, "IMP", Qt::CaseInsensitive) == 0)
                         currentScoringMethod = IMP;
                     else if (QString::compare(strValue, "MP", Qt::CaseInsensitive) == 0)
@@ -1584,12 +1584,15 @@ void CGamesDoc::readGames(QTextStream &pbnText, QString &event, bool originalGam
                         currentScoringMethod = RUBBER;
                     else if (QString::compare(strValue, "PRACTICE", Qt::CaseInsensitive) == 0)
                         currentScoringMethod = PRACTICE;
+                    else
+                        currentScoringMethod = FORSCORE;
 
                     if ((scoringMethod != NOSCORE) && (currentScoringMethod != scoringMethod))
                         throw PlayException(QString("PBN - Illegal scoring method: %1 %2 %3").arg(currentScoringMethod).arg(" in board: ").arg(game->board).toStdString());
 
                     scoringMethod = currentScoringMethod;
                 }
+                    break;
 
 
                 //Declarer tag.
@@ -1740,7 +1743,7 @@ void CGamesDoc::readGames(QTextStream &pbnText, QString &event, bool originalGam
         }
     }
 
-    //First check consistency of original pbn file.
+    //Check consistency of original pbn file (played/auto games are not read yet).
     if (originalGames)
     {
         //First check for scoring method.
@@ -1755,6 +1758,15 @@ void CGamesDoc::readGames(QTextStream &pbnText, QString &event, bool originalGam
             //Scoring method are not always explicitly stated in pbn files.
             if ((scoringMethod == NOSCORE) && (noPlays >= 1))
                 scoringMethod = ((noPlays == 2) || (noPlays == 1)) ? (IMP) : (MP);
+
+            //Not known scoring method (and rubber) does not use auction and play.
+            if ((scoringMethod == FORSCORE) || (scoringMethod == RUBBER))
+            {
+                for (int i = 0; i < games.size(); i++)
+                    while (!games[i]->auctionAndPlay.isEmpty())
+                        delete(game->auctionAndPlay.takeFirst());
+                scoringMethod = NOSCORE;
+            }
         }
 
         //Consistency check.
@@ -1769,8 +1781,8 @@ void CGamesDoc::readGames(QTextStream &pbnText, QString &event, bool originalGam
 
             //Check cards.
             for (int i = 0; i < 13; i++)
-                if ((nextGame->wCards[i] <= 0) || (nextGame->nCards[i] <= 0) ||
-                        (nextGame->eCards[i] <= 0) || (nextGame->sCards[i] <= 0))
+                if ((nextGame->wCards[i] < 0) || (nextGame->nCards[i] < 0) ||
+                        (nextGame->eCards[i] < 0) || (nextGame->sCards[i] < 0))
                     throw PlayException(QString("PBN - Consistency error in original games (Cards missing in Deal) in board: %1").arg(nextGame->board).toStdString());
 
             //Check auction and play.
@@ -1790,7 +1802,7 @@ void CGamesDoc::readGames(QTextStream &pbnText, QString &event, bool originalGam
         }
     }
 
-    //Check played and auto games.
+    //Check played and auto games (original games, played/auto games are all read now).
     else
     {
         //Are there any originals.
@@ -1819,11 +1831,11 @@ void CGamesDoc::readGames(QTextStream &pbnText, QString &event, bool originalGam
             }
         }
 
-        //If no originals then dealtype must be random.
+        //If no originals then dealtype is random. Check scoring methor, board, dealer, vulnerability and cards.
         if (!found)
         {
-            //Scoring method must be given for played games.
-            if ((games.size() > 0) && (scoringMethod == NOSCORE))
+            //Scoring method are always given for played games.
+            if ((games.size() > 0) && ((scoringMethod == NOSCORE) || (scoringMethod == FORSCORE)))
                 throw PlayException(QString("PBN - Consistency error in played games (no scoring method)").toStdString());
 
             gameItr.toFront();
@@ -1837,13 +1849,13 @@ void CGamesDoc::readGames(QTextStream &pbnText, QString &event, bool originalGam
 
                 //Check cards.
                 for (int i = 0; i < 13; i++)
-                    if ((nextGame->wCards[i] <= 0) || (nextGame->nCards[i] <= 0) ||
-                            (nextGame->eCards[i] <= 0) || (nextGame->sCards[i] <= 0))
+                    if ((nextGame->wCards[i] < 0) || (nextGame->nCards[i] < 0) ||
+                            (nextGame->eCards[i] < 0) || (nextGame->sCards[i] < 0))
                         throw PlayException(QString("PBN - Consistency error in played games (Cards missing in Deal) in board: %1").arg(nextGame->board).toStdString());
             }
         }
 
-        //Check consistency of played/auto games.
+        //Check consistency of played/auto games. Has been checked for original games.
         gameItr.toFront();
         while (gameItr.hasNext())
         {

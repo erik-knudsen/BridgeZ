@@ -99,6 +99,7 @@ private slots:
     void on_actionOpen_triggered();
     void on_actionSave_triggered();
     void on_actionSave_As_triggered();
+    void on_actionDelete_triggered();
     void on_actionPrint_triggered();
     void on_actionPrint_PreView_triggered();
     void on_actionProperties_triggered();
