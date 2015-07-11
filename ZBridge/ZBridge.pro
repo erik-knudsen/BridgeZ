@@ -89,7 +89,8 @@ SOURCES +=\
     cgamesdoc.cpp \
     cpointscoredialog.cpp \
     crankscoredialog.cpp \
-    cplaydialog.cpp
+    cplaydialog.cpp \
+    cplayshow.cpp
 
 HEADERS  += cmainframe.h \
     czbridgedoc.h \
@@ -171,7 +172,8 @@ HEADERS  += cmainframe.h \
     cgamesdoc.h \
     cpointscoredialog.h \
     crankscoredialog.h \
-    cplaydialog.h
+    cplaydialog.h \
+    cplayshow.h
 
 FORMS    += cmainframe.ui \
     cfilepropertiesdialog.ui \
@@ -202,6 +204,7 @@ FORMS    += cmainframe.ui \
     ccomparescoredialog.ui \
     cpointscoredialog.ui \
     cplaydialog.ui \
-    crankscoredialog.ui
+    crankscoredialog.ui \
+    cplayshow.ui
 
 RESOURCES = images.qrc

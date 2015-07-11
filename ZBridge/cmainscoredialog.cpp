@@ -26,17 +26,14 @@
 #include "cmainscoredialog.h"
 #include "ui_cmainscoredialog.h"
 
-CMainScoreDialog::CMainScoreDialog(CGamesDoc *games, ScoringMethod scoringMethod, QWidget *parent) :
+CMainScoreDialog::CMainScoreDialog(CGamesDoc *games, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::CMainScoreDialog)
 {
-    this->scoringMethod = scoringMethod;
     this->games = games;
+    scoringMethod = games->getScoringMethod();
 
     ui->setupUi(this);
-
-    if (((scoringMethod == MP) || (scoringMethod == IMP)) && games->practice())
-            scoringMethod = PRACTICE;
 
     //Headline for table.
     QStringList horizontalHeader;
@@ -256,19 +253,19 @@ void CMainScoreDialog::cellClicked(int row, int column)
     if (((column == 4) || (column == 5)) && (scoringMethod == RUBBER))
     {
         //Show rubber score dialog.
-        CRubberScoreDialog rubberScoreDialog(games, row);
+        CRubberScoreDialog rubberScoreDialog(games, row, this);
         rubberScoreDialog.exec();
     }
     else if (column == 5)
     {
         //Show point score dialog (MP or IMP).
-        CPointScoreDialog pointScoreDialog(games, scoringMethod, row);
+        CPointScoreDialog pointScoreDialog(games, scoringMethod, row, this);
         pointScoreDialog.exec();
     }
     else if (column == 6)
     {
         //Show rank dialog.
-        CRankScoreDialog rankScoreDialog(games, scoringMethod, row);
+        CRankScoreDialog rankScoreDialog(games, scoringMethod, row, this);
         rankScoreDialog.exec();
     }
 }
@@ -280,6 +277,6 @@ void CMainScoreDialog::rowClicked(int row)
 
     //Show play dialog.
     int playedAuctionAndPlayIndex = games->getPlayedAuctionAndPlayIndex(row);
-    CPlayDialog playDialog(games, row, playedAuctionAndPlayIndex);
+    CPlayDialog playDialog(games, row, playedAuctionAndPlayIndex, this);
     playDialog.exec();
 }

@@ -409,6 +409,7 @@ int CGamesDoc::getPlayedAuctionAndPlayIndex(int gameIndex)
         if (games[gameIndex]->auctionAndPlay[auctionAndPlayIndex]->gameType == PLAYED_GAME)
             break;
 
+    //Must exist.
     assert(auctionAndPlayIndex < numberAuctionAndPlay);
 
     return auctionAndPlayIndex;

@@ -527,6 +527,9 @@ void CMainFrame::on_actionSave_As_triggered()
     QApplication::postEvent(this, new UPDATE_UI_ACTION_Event(UPDATE_UI_DELETE , true));
 }
 
+/**
+ * @brief Delete the current games (only played part - not original).
+ */
 void CMainFrame::on_actionDelete_triggered()
 {
     if (QMessageBox::question(0, tr("ZBridge"),
@@ -619,7 +622,7 @@ void CMainFrame::on_actionBidding_Play_History_triggered()
 void CMainFrame::on_action_Score_triggered()
 {
     //Show score dialog.
-    CMainScoreDialog mainScoreDialog(games, doc->getGameOptions().scoringMethod);
+    CMainScoreDialog mainScoreDialog(games);
     mainScoreDialog.exec();
 }
 

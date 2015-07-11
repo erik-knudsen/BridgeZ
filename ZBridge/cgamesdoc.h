@@ -86,6 +86,7 @@ public:
     int getBelowTheLine(int gameIndex, int auctionAndPlayIndex);
     int getAboveTheLine(int gameIndex, int auctionAndPlayIndex);
     int getHonorBonus(int gameIndex, int auctionAndPlayIndex);
+    ScoringMethod getScoringMethod() { return scoringMethod; }
     void setScoringMethod(ScoringMethod scoringMethod) { this->scoringMethod = scoringMethod; }
     bool getComputerPlays() { return computerPlays; }
     bool getRubberPoints(int gameIndex, int auctionAndPlayIndex, bool *gameDone,

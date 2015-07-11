@@ -36,7 +36,7 @@ class CMainScoreDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit CMainScoreDialog(CGamesDoc *games, ScoringMethod scoringMethod, QWidget *parent = 0);
+    explicit CMainScoreDialog(CGamesDoc *games, QWidget *parent = 0);
     ~CMainScoreDialog();
 
 private slots:

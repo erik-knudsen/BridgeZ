@@ -20,6 +20,7 @@
 
 #include "Defines.h"
 #include "cgamesdoc.h"
+#include "cplaydialog.h"
 #include "crankscoredialog.h"
 #include "ui_crankscoredialog.h"
 
@@ -77,9 +78,26 @@ CRankScoreDialog::CRankScoreDialog(CGamesDoc *games, int scoringMethod, int inde
     }
     ui->rankScoreTable->setSortingEnabled(true);
     ui->rankScoreTable->sortByColumn(1);
+
+    //Make vertical sections clickable.
+    ui->rankScoreTable->verticalHeader()->setVisible(true);
+    ui->rankScoreTable->verticalHeader()->setSectionsClickable(true);
+
+    //Respond to click on row.
+    connect(ui->rankScoreTable->verticalHeader(), &QHeaderView::sectionClicked, this, &CRankScoreDialog::rowClicked);
 }
 
 CRankScoreDialog::~CRankScoreDialog()
 {
     delete ui;
+}
+
+//User clicked a row in the table.
+void CRankScoreDialog::rowClicked(int row)
+{
+    ui->rankScoreTable->verticalHeader()->reset();
+
+    //Show play dialog.
+    CPlayDialog playDialog(games, index, row, this);
+    playDialog.exec();
 }

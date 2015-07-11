@@ -140,6 +140,6 @@ void CPointScoreDialog::rowClicked(int row)
     ui->pointScoreTable->verticalHeader()->reset();
 
     //Show play dialog.
-    CPlayDialog playDialog(games, index, row);
+    CPlayDialog playDialog(games, index, row, this);
     playDialog.exec();
 }
