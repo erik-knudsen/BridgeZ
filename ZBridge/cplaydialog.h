@@ -68,6 +68,11 @@ private:
 
     CPlayView *playView;
     CPlayShow *playShow;
+
+    Seat player;
+    int playNo;
+    int trickNo;
+    int trick[4];
 };
 
 #endif // CPLAYDIALOG_H

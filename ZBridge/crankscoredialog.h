@@ -37,9 +37,6 @@ public:
     explicit CRankScoreDialog(CGamesDoc *games, int scoringMethod, int index, QWidget *parent = 0);
     ~CRankScoreDialog();
 
-private slots:
-    void rowClicked(int row);
-
 private:
     Ui::CRankScoreDialog *ui;
 

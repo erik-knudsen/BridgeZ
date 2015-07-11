@@ -452,6 +452,26 @@ void CPlayView::showInfoPlay(bool show)
 }
 
 /**
+ * @brief Show or hide the info auction andplay widget.
+ * @param show If (true) then show the widget else hide the widget.
+ */
+void CPlayView::showInfoAuctionPlay(bool show)
+{
+    if (show)
+    {
+        topInfoPlay->show();
+        midInfoAuction->show();
+        bottomInfoPlay->show();
+    }
+    else
+    {
+        topInfoPlay->hide();
+        midInfoAuction->hide();
+        bottomInfoPlay->hide();
+    }
+}
+
+/**
  * @brief Show number of tricks taken by the North/South partners.
  * @param tricks Nuber of tricks.
  *

@@ -33,9 +33,9 @@ CMidInfoAuction::CMidInfoAuction(QGraphicsWidget *parent) :
     bidSignalStrategy = 0;
 
     horInc = 2.3 * BID_HOR_SIZE;
-    verInc = 2 * BID_VER_SIZE;
+    verInc = 1.5 * BID_VER_SIZE;
     startX = (INF_HOR_SIZE - horInc * 4) / 2;
-    startY = 30;
+    startY = 40;
 
     line = 0;
 
@@ -43,22 +43,22 @@ CMidInfoAuction::CMidInfoAuction(QGraphicsWidget *parent) :
     QBrush brush(Qt::darkRed);
 
     west = new QGraphicsSimpleTextItem(tr("West"), this);
-    west->setPos(startX - 10 + 0 * horInc, 0);
+    west->setPos(startX - 10 + 0 * horInc, 20);
     west->setFont(font);
     west->setBrush(brush);
 
     north = new QGraphicsSimpleTextItem(tr("North"), this);
-    north->setPos(startX - 10 + 1 * horInc, 0);
+    north->setPos(startX - 10 + 1 * horInc, 20);
     north->setFont(font);
     north->setBrush(brush);
 
     east = new QGraphicsSimpleTextItem(tr("East"), this);
-    east->setPos(startX - 10 + 2 * horInc, 0);
+    east->setPos(startX - 10 + 2 * horInc, 20);
     east->setFont(font);
     east->setBrush(brush);
 
     south = new QGraphicsSimpleTextItem(tr("South"), this);
-    south->setPos(startX - 10 + 3 * horInc, 0);
+    south->setPos(startX - 10 + 3 * horInc, 20);
     south->setFont(font);
     south->setBrush(brush);
 

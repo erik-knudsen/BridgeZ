@@ -49,6 +49,7 @@ public:
     Bids getContractModifier() { return bidDouble; }
     int getResult();
     void getTrick(int trickNo, int trick[]);
+    void getTrickInfo(int trickNo, int &ewTricks, int &nsTricks, Seat &nextLeader);
 
 private:
     int noTrick;

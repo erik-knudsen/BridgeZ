@@ -90,6 +90,7 @@ public:
     void showInfoAuction(bool show);
     void setInfoPlay(QString board, Team team, Seat dealer, Seat declarer, Bids contract, Bids dbl);
     void showInfoPlay(bool show);
+    void showInfoAuctionPlay(bool show);
     void showNSTricks(int tricks);
     void showEWTricks(int tricks);
     void showInfoAuctionButton(bool show, int id = 0);

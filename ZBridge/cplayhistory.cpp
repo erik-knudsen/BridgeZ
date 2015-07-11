@@ -270,3 +270,12 @@ void CPlayHistory::getTrick(int trickNo, int trick[])
     trick[EAST_SEAT] = play[EAST_SEAT][trickNo];
     trick[SOUTH_SEAT] = play[SOUTH_SEAT][trickNo];
 }
+
+void CPlayHistory::getTrickInfo(int trickNo, int &ewTricks, int &nsTricks, Seat &nextLeader)
+{
+    assert ((trickNo >= 0) && (trickNo <= 12));
+
+    ewTricks = playStack[trickNo].ewTricks;
+    nsTricks = playStack[trickNo].nsTricks;
+    nextLeader = playStack[trickNo].nextLeader;
+}

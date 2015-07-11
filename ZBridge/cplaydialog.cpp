@@ -42,6 +42,13 @@ CPlayDialog::CPlayDialog(CGamesDoc *games, int gameIndex, int auctionIndex, QWid
     //Customize window.
     setWindowFlags(Qt::Window | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint);
 
+    //Set window title.
+    QString westName, northName, eastName, southName;
+    games->getActorNames(gameIndex, auctionIndex,
+                         &westName, &northName, &eastName, &southName);
+    QString players = QString("%1-%2 / %3-%4").arg(northName).arg(southName).arg(eastName).arg(westName);
+    setWindowTitle(tr("Players (N-S / E-W: ") + players);
+
     //Allocate view for showing the auction and play.
     playView = new CPlayView(this);
 
@@ -60,7 +67,7 @@ CPlayDialog::CPlayDialog(CGamesDoc *games, int gameIndex, int auctionIndex, QWid
     playView->setInfoPlay(str, vulnerable, dealer, declarer, contract, dbl);
     playView->showNSTricks(0);
     playView->showEWTricks(0);
-    playView->showInfoPlay(true);
+    playView->showInfoAuctionPlay(true);
 
     //Show center widget.
     playView->showEWNSTextOnTable();
@@ -80,16 +87,25 @@ CPlayDialog::CPlayDialog(CGamesDoc *games, int gameIndex, int auctionIndex, QWid
     //Rearrange display of cards for the contracts trumpsuit.
     playView->setTrumpSuit(BID_SUIT(contract));
 
-//    for (int i = 0; i < bidHistory.bidList.size(); i++)
-//    {
-//        playView->showBid(seat, bid);
-//    }
+    //Show bids.
+    QListIterator<CBid> bidItr(bidHistory.bidList);
+    while (bidItr.hasNext())
+    {
+        CBid bid = bidItr.next();
+        playView->showBid(bid.bidder, bid.bid);
+        playView->showBid((Seat)((bid.bidder + 1) & 3), BID_PLAYER);
+    }
 
     //Dialog for traversing play of cards.
     playShow = new CPlayShow(this);
     playShow->show();
     connect(playShow, &CPlayShow::playValue, this, &CPlayDialog::playValue);
     connect(playShow, &CPlayShow::playClose, this, &CPlayDialog::playClose);
+
+    //Initialize for traversing cards (first player is leader). No cards played yet and no tricks taken yet.
+    player = (Seat)((declarer + 1) & 3);
+    playNo = trickNo = 0;
+    playHistory.getTrick(trickNo, trick);
 }
 
 CPlayDialog::~CPlayDialog()
@@ -117,8 +133,23 @@ void CPlayDialog::resizeEvent(QResizeEvent *resizeEvent)
 
 void CPlayDialog::playValue(ReviewVal reviewVal)
 {
-    playView->showCardOnTable(player, card);
-    playView->clearCard(player, card);
+    if (playNo == 4)
+    {
+        int ewTricks, nsTricks;
+
+        if (trickNo == 12)
+            return;
+        playHistory.getTrickInfo(trickNo, ewTricks, nsTricks, player);
+        trickNo++;
+        playHistory.getTrick(trickNo, trick);
+        playView->clearCardsOnTable();
+        playNo = 0;
+    }
+
+    playView->showCardOnTable(player, trick[player]);
+    playView->clearCard(player, trick[player]);
+    player = (Seat)((player + 1) & 3);
+    playNo++;
 }
 
 void CPlayDialog::playClose()
