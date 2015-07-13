@@ -713,6 +713,46 @@ void CPlayView::undoTrick(int noTrick, int nsTricks, int ewTricks, Seat dummy, b
 }
 
 /**
+ * @brief Undo card.
+ * @param seat Player seat to undo one card from.
+ * @param unstack if true unstack. Otherwise just show top four cards in center display.
+ *
+ * Step back one card in play view. The card is unstacked and
+ * returned to the hand from where it came. The card is also cleared
+ * from the center display. In case the stack size now is the same for
+ * all seats (all cards cleared from the center display), then the four
+ * top cards are shown in the center  display.
+ *
+ */
+void CPlayView::undoCard(Seat seat, bool unstack)
+{
+    if (unstack)
+    {
+        Position pos = seatToPos[seat];
+
+        //Unstack trick and return to hand.
+        actorCards[pos]->showTopClearedCard();
+
+        //Clear card in center  display.
+        centerCards->clearCardOnTable(pos);
+    }
+
+    //Show previous trick in center display?
+    int size_0 = actorCards[0]->getNotVisibleValuesSize();
+    int size_1 = actorCards[1]->getNotVisibleValuesSize();
+    int size_2 = actorCards[2]->getNotVisibleValuesSize();
+    int size_3 = actorCards[3]->getNotVisibleValuesSize();
+    if ((size_0 != 0) &&  ((size_0 == size_1) && (size_1 == size_2) && (size_2 == size_3)))
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            int card = actorCards[i]->getTopCard();
+            centerCards->showCardOnTable((Position)i, card);
+        }
+    }
+}
+
+/**
  * @brief Show/hide the bid dialog.
  * @param show if (true) then show the dialog else hide the dialog.
  */

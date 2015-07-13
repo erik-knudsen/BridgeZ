@@ -37,6 +37,12 @@ namespace Ui {
 class CPlayDialog;
 }
 
+/**
+ * @brief One hand of cards.
+ *
+ * The class controls the display of one board (auction and play). The CPlayView class is used for the
+ * actual display and the CPlayShow class is used for traversing the play.
+ */
 class CPlayDialog : public QDialog
 {
     Q_OBJECT

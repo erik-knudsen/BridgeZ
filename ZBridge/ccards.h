@@ -51,6 +51,8 @@ public:
     void connectCards(QObject *cardSignalStrategy);
     void clearCard(int cardValue);
     void showClearedCard(int noTrick);
+    void showTopClearedCard();
+    int getNotVisibleValuesSize() { return notVisibleValues.size(); }
     int getTopCard() { return notVisibleValues.last(); }
 
 protected:

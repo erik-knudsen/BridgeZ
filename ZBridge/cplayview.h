@@ -112,6 +112,7 @@ public:
     void enablePlayer(Seat player);
     void disablePlayer(Seat player);
     void undoTrick(int noTrick, int nsTricks, int ewTricks, Seat dummy, bool hide);
+    void undoCard(Seat seat, bool unstack);
     /*@}*/
 
     /** @name Bid dialog group

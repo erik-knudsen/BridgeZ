@@ -1,3 +1,23 @@
+/* Erik Aagaard Knudsen.
+  Copyright © 2015 - All Rights Reserved
+
+  Project: ZBridge
+  File: CPlayShow.cpp
+  Developers: eak
+
+  Revision History:
+  13-jul-2015 eak: Original
+
+  Abstract: Dialog for traversing card play.
+
+  Platforms: Qt.
+  */
+
+/**
+ * \file
+ * The file implements the definition of a class for traversing the play for one board.
+ */
+
 #include "cplayshow.h"
 #include "ui_cplayshow.h"
 
@@ -13,6 +33,28 @@ CPlayShow::CPlayShow(QWidget *parent) :
 CPlayShow::~CPlayShow()
 {
     delete ui;
+}
+
+/**
+ * @brief Enable or disable one of the two buttons.
+ */
+void CPlayShow::setEnabled(ReviewVal reviewVal, bool enabled)
+{
+    if (reviewVal == REVIEW_PREV)
+        ui->reviewPrev->setEnabled(enabled);
+    else if (reviewVal == REVIEW_NEXT)
+        ui->reviewNext->setEnabled(enabled);
+}
+
+/**
+ * @brief Get enable/disable status of one of the two buttons.
+ */
+bool CPlayShow::isEnabled(ReviewVal reviewVal)
+{
+    if (reviewVal == REVIEW_PREV)
+        return ui->reviewPrev->isEnabled();
+    else
+        return ui->reviewNext->isEnabled();
 }
 
 /**
@@ -33,22 +75,18 @@ void CPlayShow::reject()
     close();
 }
 
-void CPlayShow::on_reviewFirst_clicked()
-{
-    emit playValue(REVIEW_FIRST);
-}
-
+/**
+ * @brief Backward button was clicked. Emit REVIEW_PREV signal.
+ */
 void CPlayShow::on_reviewPrev_clicked()
 {
     emit playValue(REVIEW_PREV);
 }
 
+/**
+ * @brief Forward button was clicked. Emit REVIEW_NEXT signal.
+ */
 void CPlayShow::on_reviewNext_clicked()
 {
     emit playValue(REVIEW_NEXT);
-}
-
-void CPlayShow::on_reviewLast_clicked()
-{
-    emit playValue(REVIEW_LAST);
 }

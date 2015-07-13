@@ -15,7 +15,7 @@
 
 /**
  * \file
- * The file implements the declaration of a class for showing the play
+ * The file implements the definition of a class for showing the play
  * (auction and play) for one board.
  */
 
@@ -27,6 +27,12 @@
 #include "cplaydialog.h"
 #include "ui_cplaydialog.h"
 
+/**
+ * @brief The constructor sets up the display.
+ *
+ * Set window title.Allocate view, show auction and play info, show the cards of the 4 hands,
+ * show the bids, initialize for traversing the play.
+ */
 CPlayDialog::CPlayDialog(CGamesDoc *games, int gameIndex, int auctionIndex, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::CPlayDialog)
@@ -101,6 +107,7 @@ CPlayDialog::CPlayDialog(CGamesDoc *games, int gameIndex, int auctionIndex, QWid
     playShow->show();
     connect(playShow, &CPlayShow::playValue, this, &CPlayDialog::playValue);
     connect(playShow, &CPlayShow::playClose, this, &CPlayDialog::playClose);
+    playShow->setEnabled(REVIEW_PREV, false);
 
     //Initialize for traversing cards (first player is leader). No cards played yet and no tricks taken yet.
     player = (Seat)((declarer + 1) & 3);
@@ -131,25 +138,104 @@ void CPlayDialog::resizeEvent(QResizeEvent *resizeEvent)
     }
 }
 
+/**
+ * @brief Slot for forward, backward signal. Shows the card play sequentially on the CPlayView view.
+ */
 void CPlayDialog::playValue(ReviewVal reviewVal)
 {
-    if (playNo == 4)
+    //Step forward?
+    if (reviewVal == REVIEW_NEXT)
     {
-        int ewTricks, nsTricks;
+        //Complete trick already shown?
+        if (playNo == 4)
+        {
+            int ewTricks, nsTricks;
 
-        if (trickNo == 12)
-            return;
-        playHistory.getTrickInfo(trickNo, ewTricks, nsTricks, player);
-        trickNo++;
-        playHistory.getTrick(trickNo, trick);
-        playView->clearCardsOnTable();
-        playNo = 0;
+            //Get info for the trick. Clear trick from center display and show trick info.
+            playHistory.getTrickInfo(trickNo, ewTricks, nsTricks, player);
+            playView->clearCardsOnTable();
+            playView->showNSTricks(nsTricks);
+            playView->showEWTricks(ewTricks);
+
+            //Is this the last trick?
+            if (trickNo == 12)
+            {
+                playShow->setEnabled(REVIEW_NEXT, false);
+                return;
+            }
+
+            //Update for the next trick.
+            trickNo++;
+            playHistory.getTrick(trickNo, trick);
+            playNo = 0;
+        }
+
+        //Reached the first play?
+        if ((playNo == 0) && (trickNo == 0))
+            playShow->setEnabled(REVIEW_PREV, true);
+
+        //Show played card on center display.
+        playView->showCardOnTable(player, trick[player]);
+
+        //Clear played card from hand.
+        playView->clearCard(player, trick[player]);
+
+        //Update for next player.
+        player = (Seat)((player + 1) & 3);
+        playNo++;
     }
 
-    playView->showCardOnTable(player, trick[player]);
-    playView->clearCard(player, trick[player]);
-    player = (Seat)((player + 1) & 3);
-    playNo++;
+    //Step backward.
+    else
+    {
+        //Backward step from last position.
+        if (!playShow->isEnabled(REVIEW_NEXT))
+        {
+            int ewTricks, nsTricks;
+            playShow->setEnabled(REVIEW_NEXT, true);
+
+            //Show the 4 cards of the last trick on center display.
+            //Get trick info and show the trick.
+            playView->undoCard(player, false);
+            playHistory.getTrickInfo(trickNo - 1, ewTricks, nsTricks, player);
+            playView->showNSTricks(nsTricks);
+            playView->showEWTricks(ewTricks);
+            return;
+        }
+
+        //Update for previous player and unstack played card.
+        player = (Seat)((player - 1) & 3);
+        playNo--;
+        playView->undoCard(player, true);
+
+        //At the end?
+        if ((playNo == 0) && (trickNo == 0))
+        {
+            playShow->setEnabled(REVIEW_PREV, false);
+            return;
+        }
+
+        //Previous trick?
+        if (playNo == 0)
+        {
+            int ewTricks, nsTricks;
+
+            //Get trick info.
+                trickNo--;
+                if (trickNo > 0)
+                    playHistory.getTrickInfo(trickNo - 1, ewTricks, nsTricks, player);
+                else
+                {
+                    ewTricks = nsTricks = 0;
+                    player = declarer;
+                }
+                //Show trick and get trick.
+                playView->showNSTricks(nsTricks);
+                playView->showEWTricks(ewTricks);
+                playHistory.getTrick(trickNo, trick);
+                playNo = 4;
+        }
+    }
 }
 
 void CPlayDialog::playClose()

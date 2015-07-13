@@ -186,6 +186,24 @@ void CCards::showClearedCard(int noTrick)
 }
 
 /**
+ * @brief Show top cleared card again after having been cleared
+ */
+void CCards::showTopClearedCard()
+{
+    //Unstack card and return card to hand.
+    if (notVisibleValues.size() > 0)
+    {
+        int cardValue = notVisibleValues.last();
+        int i = showBack ? notVisibleValues.size() : getCardIndex(cardValue);
+        if ( i < 13)
+        {
+            cards[i].setVisible(true);
+            notVisibleValues.pop_back();
+        }
+    }
+}
+
+/**
  * @brief Set the parent of all cards widgets.
  * @param widget If 0 then clear the card.
  */

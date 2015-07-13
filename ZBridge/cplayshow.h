@@ -1,3 +1,23 @@
+/* Erik Aagaard Knudsen.
+  Copyright © 2015 - All Rights Reserved
+
+  Project: ZBridge
+  File: CPlayShow.h
+  Developers: eak
+
+  Revision History:
+  13-jul-2015 eak: Original
+
+  Abstract: Dialog for traversing card play.
+
+  Platforms: Qt.
+  */
+
+/**
+ * \file
+ * The file implements the declaration of a class for traversing the play for one board.
+ */
+
 #ifndef CPLAYSHOW_H
 #define CPLAYSHOW_H
 
@@ -7,8 +27,15 @@ namespace Ui {
 class CPlayShow;
 }
 
-enum ReviewVal { REVIEW_FIRST, REVIEW_PREV, REVIEW_NEXT, REVIEW_LAST};
+enum ReviewVal { REVIEW_PREV, REVIEW_NEXT};
 
+/**
+ * @brief This class implements a dialog with two buttons for traversing a card play.
+ *
+ * The class has:
+ *   - one button for forward move. When clicked a next signal is emitted.
+ *   - Another button for backward move. When clicked a previous signal is emitted.
+  */
 class CPlayShow : public QDialog
 {
     Q_OBJECT
@@ -16,6 +43,9 @@ class CPlayShow : public QDialog
 public:
     explicit CPlayShow(QWidget *parent = 0);
     ~CPlayShow();
+
+    void setEnabled(ReviewVal reviewVal, bool enabled);
+    bool isEnabled(ReviewVal reviewVal);
 
     void closeEvent(QCloseEvent *event);
     void reject();
@@ -25,10 +55,8 @@ signals:
     void playClose();
 
 private slots:
-    void on_reviewFirst_clicked();
     void on_reviewPrev_clicked();
     void on_reviewNext_clicked();
-    void on_reviewLast_clicked();
 
 private:
     Ui::CPlayShow *ui;
