@@ -31,6 +31,12 @@ namespace Ui {
 class CRubberScoreDialog;
 }
 
+/**
+ * @brief The CRubberScoreDialog class shows in a drawing  the we/they rubber table for a given rubber.
+ *
+ * The drawing shows the well known we/they, above the line/below the line table. In addition to the results
+ * for the current rubber, then there is also a ledger line showing the total result for all rubbers untill now.
+ */
 class CRubberScoreDialog : public QDialog
 {
     Q_OBJECT

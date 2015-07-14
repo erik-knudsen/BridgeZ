@@ -29,6 +29,11 @@ namespace Ui {
 class CRankScoreDialog;
 }
 
+/**
+ * @brief The CRankScoreDialog class shows a table with the rank of pairs until now.
+ *
+ * The table has one line for each pair. The columns shows name and total point (IMP or % MP).
+ */
 class CRankScoreDialog : public QDialog
 {
     Q_OBJECT

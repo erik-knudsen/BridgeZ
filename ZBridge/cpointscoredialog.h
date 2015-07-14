@@ -29,6 +29,13 @@ namespace Ui {
 class CPointScoreDialog;
 }
 
+/**
+ * @brief The CPointScoreDialog class shows a table with results for a given game.
+ *
+ * The table has one line for each play of a given game. The columns shows name N-S / E-W, contract,
+ * tricks, score and point (IMP or MP). If the user clicks a row then the play clicked (auction and play)
+ * is shown in a separate dialog.
+ */
 class CPointScoreDialog : public QDialog
 {
     Q_OBJECT
