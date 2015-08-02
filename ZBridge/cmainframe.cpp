@@ -442,7 +442,7 @@ void CMainFrame::on_actionOpen_triggered()
     }
     catch (PlayException &e)
     {
-        //There was an error in proceesing of pbn file.
+        //There was an error in processing of pbn file.
         QMessageBox::critical(0, tr("ZBridge"), e.what());
     }
 }

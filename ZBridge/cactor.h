@@ -23,6 +23,7 @@
 #define CACTOR_H
 
 #include <QObject>
+#include <QTextStream>
 
 #include "Defines.h"
 
@@ -45,6 +46,7 @@ public:
     CActor(CTblMngr *tableManager);
     virtual ~CActor();
 
+    virtual void xmitPBNFiles(QTextStream &originalStream, QTextStream &playedStream) { }
     virtual void startNewSession() = 0;
 
     virtual void bidValue(Bids bid) {}

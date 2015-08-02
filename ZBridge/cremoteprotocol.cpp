@@ -1379,3 +1379,87 @@ void CAllSynchronizedMsg::lineToMsg() throw (NetProtocolException)
 
     seat = getSeat(line);
 }
+
+
+COriginalPBNStartMsg::COriginalPBNStartMsg()
+{
+    msgType = ORIGINAL_PBN_START_MSG;
+
+    msgToLine();
+}
+
+COriginalPBNStartMsg::COriginalPBNStartMsg(QString line) throw (NetProtocolException)
+{
+    msgType = ORIGINAL_PBN_START_MSG;
+
+    this->line = line;
+
+    lineToMsg();
+}
+
+void COriginalPBNStartMsg::msgToLine()
+{
+    line = QString("Original PBN Stream Start\r\n");
+}
+
+void COriginalPBNStartMsg::lineToMsg() throw (NetProtocolException)
+{
+    if (!line.contains("Original PBN Stream Start", Qt::CaseInsensitive))
+        throw NetProtocolException("Net - Original PBN Start: " + line.toStdString());
+}
+
+
+CPlayedPBNStartMsg::CPlayedPBNStartMsg()
+{
+    msgType = PLAYED_PBN_START_MSG;
+
+    msgToLine();
+}
+
+CPlayedPBNStartMsg::CPlayedPBNStartMsg(QString line) throw (NetProtocolException)
+{
+    msgType = PLAYED_PBN_START_MSG;
+
+    this->line = line;
+
+    lineToMsg();
+}
+
+void CPlayedPBNStartMsg::msgToLine()
+{
+    line = QString("Played PBN Stream Start\r\n");
+}
+
+void CPlayedPBNStartMsg::lineToMsg() throw (NetProtocolException)
+{
+    if (!line.contains("Played PBN Stream Start", Qt::CaseInsensitive))
+        throw NetProtocolException("Net - Played PBN Start: " + line.toStdString());
+}
+
+
+CEscapePBNMsg::CEscapePBNMsg()
+{
+    msgType = ESCAPE_MSG;
+
+    msgToLine();
+}
+
+CEscapePBNMsg::CEscapePBNMsg(QString line) throw (NetProtocolException)
+{
+    msgType = ESCAPE_MSG;
+
+    this->line = line;
+
+    lineToMsg();
+}
+
+void CEscapePBNMsg::msgToLine()
+{
+    line = QString("Escape PBN Stream\r\n");
+}
+
+void CEscapePBNMsg::lineToMsg() throw (NetProtocolException)
+{
+    if (!line.contains("Escape PBN Stream", Qt::CaseInsensitive))
+        throw NetProtocolException("Net - Escape PBN: " + line.toStdString());
+}

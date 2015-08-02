@@ -30,6 +30,10 @@
 #include "cremoteprotocol.h"
 #include "ctblmngrclient.h"
 
+//Communication mode constants.
+const int ORIGINAL_PBN_STREAM_MODE = 1;
+const int PLAYED_PBN_STREAM_MODE = 2;
+const int NORMAL_MODE = 3;
 
 /**
  * @brief Constructor for table manager client.
@@ -136,6 +140,9 @@ void CTblMngrClient::newSession()
 
     //Determine protocol.
     protocol = doc->getSeatOptions().protocol;
+
+    //Communication mode.
+    comMode = NORMAL_MODE;
 
     //Enable/disable relevant menu actions.
     QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_CLIENT , protocol == ADVANCED_PROTOCOL));
@@ -565,7 +572,13 @@ void CTblMngrClient::receiveLine(QString line)
     try
     {
     //Get the message type.
-    MsgType msgType = ::getMessageType(line);
+    MsgType msgType;
+    if (comMode == NORMAL_MODE)
+        msgType = ::getMessageType(line);
+    else if (line.contains("Escape PBN Stream", Qt::CaseInsensitive))
+        msgType = ESCAPE_MSG;
+    else
+        msgType = PBN_LINE_MSG;
 
     switch (msgType)
     {
@@ -792,6 +805,66 @@ void CTblMngrClient::receiveLine(QString line)
         CAllSynchronizedMsg allSynchronized(line);
         actor->allSyncFromServerToClient();
         break;
+    }
+
+    case ORIGINAL_PBN_START_MSG:
+    {
+        //Start of original PBN stream (comes allways before played PBN stream).
+        originalBytes.open(QIODevice::ReadWrite);
+        originalStream.setDevice(&originalBytes);
+        comMode = ORIGINAL_PBN_STREAM_MODE;
+    }
+
+    case PLAYED_PBN_START_MSG:
+    {
+        //Start of played PBN stream (comes allways after original PBN stream).
+        playedBytes.open(QIODevice::ReadWrite);
+        playedStream.setDevice(&playedBytes);
+        comMode = PLAYED_PBN_STREAM_MODE;
+    }
+
+    case PBN_LINE_MSG:
+    {
+        //Receiving a PBN file.
+        if (comMode == ORIGINAL_PBN_STREAM_MODE)
+            originalStream << line;
+        else if (comMode == PLAYED_PBN_STREAM_MODE)
+            playedStream << line;
+    }
+
+    case ESCAPE_MSG:
+    {
+        if (comMode == PLAYED_PBN_STREAM_MODE)
+        {
+            //Has now received Original and Played pbn data.            
+            originalStream.flush();
+            playedStream.flush();
+
+            //Determine event (only one event is present).
+            QStringList strLines;
+            originalStream.seek(0);
+            games->determineEvents(originalStream, strLines);
+            QString event = strLines.at(0);
+
+            //Read games.
+            originalStream.seek(0);
+            playedStream.seek(0);
+            try
+            {
+            games->readGames(originalStream, playedStream, event, NOSCORE);
+            }
+            catch (PlayException &e)
+            {
+                //There was an error in processing of pbn data.
+                QMessageBox::critical(0, tr("ZBridge"), e.what());
+            }
+
+            //Close buffers.
+            originalBytes.close();
+            playedBytes.close();
+
+            comMode = NORMAL_MODE;
+        }
     }
 
     default:

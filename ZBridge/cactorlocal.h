@@ -22,6 +22,7 @@
 #define CACTORLOCAL_H
 
 #include <QObject>
+#include <QTextStream>
 
 #include "../src-gen/ZBridgeClient.h"
 #include "../src-gen/ZBridgeClientSync.h"

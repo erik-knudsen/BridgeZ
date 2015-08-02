@@ -22,6 +22,8 @@
 #define CTBLMNGRCLIENT_H
 
 #include <QTimer>
+#include <QBuffer>
+#include <QTextStream>
 
 #include "CTblMngr.h"
 #include "../src-gen/ZBridgeClient.h"
@@ -120,6 +122,12 @@ private:
     CRemoteActorClient *remoteActorClient;
 
     int protocol;
+
+    int comMode;
+    QBuffer originalBytes;
+    QTextStream originalStream;
+    QBuffer playedBytes;
+    QTextStream playedStream;
 
     int noHands;
     int currentCards[4][13];

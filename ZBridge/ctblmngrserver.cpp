@@ -605,6 +605,33 @@ void CTblMngrServer::newSession()
 
     setShowUser(showAll);
 
+    //Transfer game data to clients.
+    if ((protocol == ADVANCED_PROTOCOL) && (remoteActorServer != 0) &&
+            (remoteActorServer->isConnected(WEST_SEAT) ||
+             remoteActorServer->isConnected(NORTH_SEAT) ||
+             remoteActorServer->isConnected(EAST_SEAT) ||
+             remoteActorServer->isConnected(SOUTH_SEAT)))
+    {
+        QBuffer originalBytes;
+        originalBytes.open(QIODevice::ReadWrite);
+        QTextStream originalStream(&originalBytes);
+        QBuffer playedBytes;
+        playedBytes.open(QIODevice::ReadWrite);
+        QTextStream playedStream(&playedBytes);
+
+        games->writeOriginalGames(originalStream);
+        games->writePlayedGames(playedStream);
+
+        actors[WEST_SEAT]->xmitPBNFiles(originalStream, playedStream);
+        actors[NORTH_SEAT]->xmitPBNFiles(originalStream, playedStream);
+        actors[EAST_SEAT]->xmitPBNFiles(originalStream, playedStream);
+        actors[SOUTH_SEAT]->xmitPBNFiles(originalStream, playedStream);
+
+        originalBytes.close();
+        playedBytes.close();
+    }
+
+    //Start server state table.
     zBridgeServer_init(&handle);
     zBridgeServerIface_set_noOfBoards(&handle, 512);
     zBridgeServer_enter(&handle);

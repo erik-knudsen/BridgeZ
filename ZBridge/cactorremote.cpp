@@ -46,6 +46,36 @@ CActorRemote::CActorRemote(Seat seat, int protocol, CRemoteActorFrontEnd *frontE
 }
 
 /**
+ * @brief Xmit PBN files to remote client (only used with advanced protocol).
+ * @param originalStream Original PBN data.
+ * @param playedStream Played PBN data.
+ */
+void CActorRemote::xmitPBNFiles(QTextStream &originalStream, QTextStream &playedStream)
+{
+    originalStream.seek(0);
+    playedStream.seek(0);
+
+    //First transmit original data.
+    COriginalPBNStartMsg originalPBNStartMsg;
+    emit sendLine(originalPBNStartMsg.line);
+
+    while (!originalStream.atEnd())
+        emit sendLine(originalStream.readLine());
+
+    CEscapePBNMsg escapePBNMsg;
+    emit sendLine(escapePBNMsg.line);
+
+    //Next transmit played data.
+    CPlayedPBNStartMsg playedPBNStartMsg;
+    emit sendLine(playedPBNStartMsg.line);
+
+    while (!playedStream.atEnd())
+        emit sendLine(playedStream.readLine());
+
+    emit sendLine(escapePBNMsg.line);
+}
+
+/**
  * @brief Start a new session with the remote client.
  *
  * The client has already connected and exchanged the first connect message with the server. This

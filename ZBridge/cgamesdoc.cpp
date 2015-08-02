@@ -161,6 +161,7 @@ void CGamesDoc::clearGames(ScoringMethod scoringMethod)
         delete game;
 
     }
+    event.clear();
     curEvent.clear();
     currentGameIndex = -1;
     dealType = RANDOM_DEAL;

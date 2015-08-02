@@ -523,4 +523,49 @@ public:
 };
 
 
+class COriginalPBNStartMsg : public CMsg
+{
+public:
+    COriginalPBNStartMsg();
+    COriginalPBNStartMsg(QString line) throw (NetProtocolException);
+
+private:
+    void msgToLine();
+    void lineToMsg() throw (NetProtocolException);
+
+public:
+    QString line;
+};
+
+
+class CPlayedPBNStartMsg : public CMsg
+{
+public:
+    CPlayedPBNStartMsg();
+    CPlayedPBNStartMsg(QString line) throw (NetProtocolException);
+
+private:
+    void msgToLine();
+    void lineToMsg() throw (NetProtocolException);
+
+public:
+    QString line;
+};
+
+
+class CEscapePBNMsg : public CMsg
+{
+public:
+    CEscapePBNMsg();
+    CEscapePBNMsg(QString line) throw (NetProtocolException);
+
+private:
+    void msgToLine();
+    void lineToMsg() throw (NetProtocolException);
+
+public:
+    QString line;
+};
+
+
 #endif // CREMOTEPROTOCOL_H
