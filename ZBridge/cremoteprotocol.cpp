@@ -135,6 +135,10 @@ MsgType getMessageType(QString line) throw(NetProtocolException)
         return CONFIRM_SYNCHRONIZE_MSG;
     if (line.contains("all synchronized", Qt::CaseInsensitive))
         return ALL_SYNCHRONIZED_MSG;
+    if (line.contains("Original PBN Stream Start", Qt::CaseInsensitive))
+        return ORIGINAL_PBN_START_MSG;
+    if (line.contains("Played PBN Stream Start", Qt::CaseInsensitive))
+        return PLAYED_PBN_START_MSG;
 
     throw NetProtocolException("Net - Unknown message: " + line.toStdString());
 }

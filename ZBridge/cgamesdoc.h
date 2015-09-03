@@ -60,6 +60,8 @@ public:
     void writePlayedGames(QTextStream &stream);
     void clearGames(ScoringMethod scoringMethod);
     void getNextDeal(int *board, int cards[][13], Seat *dealer, Team *vulnerable);
+    void setNextDeal(int board, Seat dealer, Team vulnerable);
+    void setNextDeal(int cards[][13]);
     void setPlayedResult(CBidHistory &bidHistory, CPlayHistory &playHistory, QString &westName, QString &northName,
                    QString &eastName, QString &southName);
     void setAutoResult(CBidHistory &bidHistory, CPlayHistory &playHistory, QString &westName, QString &northName,

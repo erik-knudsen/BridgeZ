@@ -69,6 +69,8 @@ public:
     int playUndo(int val) { return playHistory.undo(val); }
     int getNoTrick() { return playHistory.getNoTrick(); }
     int getNextPlay(Seat player, Seat dummySeat);
+    CBidHistory &getBidHistory() { return bidHistory; }
+    CPlayHistory &getPlayHistory() { return playHistory; }
 
 private:
     CBidHistory bidHistory;

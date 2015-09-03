@@ -60,6 +60,9 @@ public:
 
     void setShowUser(bool showUser) { this->showUser = showUser; }
 
+    CBidHistory &getBidHistory() { return bidAndPlay.getBidHistory(); }
+    CPlayHistory &getPlayHistory() { return bidAndPlay.getPlayHistory(); }
+
     void seated(QString teamName);
     void teamNames(QString nsTeamName, QString ewTeamName);
     void startOfBoard();

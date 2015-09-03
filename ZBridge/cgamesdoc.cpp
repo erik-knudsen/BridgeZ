@@ -170,7 +170,7 @@ void CGamesDoc::clearGames(ScoringMethod scoringMethod)
 }
 
 /**
- * @brief Retrieve the next game in the current game set.
+ * @brief Retrieve the next game in the current game set (server only).
  * @param[out] board Board number for the next game.
  * @param[out] cards The cards for the next game.
  * @param[out] dealer The dealer for the next game.
@@ -276,6 +276,58 @@ void CGamesDoc::getNextDeal(int *board, int cards[][13], Seat *dealer, Team *vul
                 cards[EAST_SEAT][i] = currentGame->eCards[i];
                 cards[SOUTH_SEAT][i] = currentGame->sCards[i];
             }
+        }
+    }
+}
+
+/**
+ * @brief Set info for the next game in the current game set (client only).
+ * @param[in] board Board number for the next game.
+ * @param[in] dealer The dealer for the next game.
+ * @param[in] vulnerable The vulnerability for the next game.
+ *
+ * Sets info for the next game in the current game set. Only info for random generated games need
+ * to be set.
+ */
+void CGamesDoc::setNextDeal(int board, Seat dealer, Team vulnerable)
+{
+    currentGameIndex++;
+
+    //Random card distribution?
+    if (dealType == RANDOM_DEAL)
+    {
+        CGame *currentGame = new CGame();
+
+        currentGame->board = board;
+        currentGame->dealer = dealer;
+        currentGame->vulnerable = vulnerable;
+
+        //Append to already played games.
+        games.append(currentGame);
+    }
+}
+
+/**
+ * @brief Set cards for the next game in the current game set (client only).
+ * @param[in] cards The cards for the next game.
+ *
+ * Sets cards for the next game in the current game set. Only cards for random generated games
+ * need to be set.
+ */
+void CGamesDoc::setNextDeal(int cards[][13])
+{
+    //Give random card distribution etc.?
+    if (dealType == RANDOM_DEAL)
+    {
+        CGame *currentGame = games[currentGameIndex];
+
+        //Save game.
+        for (int i = 0; i < 13; i++)
+        {
+            currentGame->wCards[i] = cards[WEST_SEAT][i];
+            currentGame->nCards[i] = cards[NORTH_SEAT][i];
+            currentGame->eCards[i] = cards[EAST_SEAT][i];
+            currentGame->sCards[i] = cards[SOUTH_SEAT][i];
         }
     }
 }

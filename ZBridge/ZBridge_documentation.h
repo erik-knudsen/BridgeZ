@@ -207,6 +207,11 @@
  * \n
  * <b>Dealing</b>\n
  *
+ *   0. The advanced protocol makes scoring information for a set of games for Table Manager and clients
+ *      complete and identical. To achieve this the protocol is enhanced with protocol messages to transfer
+ *      Portable Bridge Notation files from Table Manager to clients. This part of the advanced protocol
+ *      is described in the appendix @ref PBNProtocol "PBN Protocol"
+ *
  *   1. At the start of each board, the Table Manager sends to each player "Start of board".\n
  *      <i><b>The advanced protocol inserts a synchronization point for rounds following the first. This might
  *      be when a round is finished and the next round is about to be started or when the user decides that a
@@ -540,6 +545,18 @@
  * "[Hand] ALL SYNCHRONIZED" to the clients. And it also relies on that the Table Managers next state does not
  * have an entry action that sends to any of the clients. After "[Hand] ALL SYNCHRONIZED" is sent to the clients
  * the Table Manager may perform actions which involve sending to clients.
+
+ * @anchor PBNProtocol
+ * <b>PORTABLE BRIDGE NOTATION PROTOCOL</b>\n
+ *
+ * The purpose of the PBN protocol is to make scoring information possible for both Table Manager and clients.
+ * To make this possible a few communication messages are used.\n\n
+ *
+ * When a new session is started the Table Manager sends "Original PBN Stream Start" to clients and after that
+ * the original PBN file (if any) is sent one line at a time. The end of the PBN file is signalled with a
+ * "Escape PBN Stream" message. Then a "Played PBN Stream Start" message is sent from Table Manager to
+ * clients followed with PBN data for the until now played game data. The end of this PBN file is also
+ * signalled with a "Escape PBN Stream" message.
  */
 
 /** @page exceptions Exceptions and asserts

@@ -460,6 +460,31 @@ void CTblMngrClient::sEnableContinueSync(int syncState)
         //Disable Show All menu actions.
         QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_SHOW_ALL , false));
 
+        //Update current game.
+        games->setPlayedResult(actor->getBidHistory(), actor->getPlayHistory(), teamNames[WEST_SEAT],
+                               teamNames[NORTH_SEAT], teamNames[EAST_SEAT], teamNames[SOUTH_SEAT]);
+
+        if (actor->getPlayHistory().getResult() != -1)
+        {
+            //EAK Temporary.
+            Seat declarer = actor->getPlayHistory().getDeclarer();
+            Bids contract = actor->getPlayHistory().getContract();
+            Suit suit = BID_SUIT(contract);
+            int level = BID_LEVEL(contract);
+            Bids contractModifier = actor->getPlayHistory().getContractModifier();
+            bool doubleBid = IS_DOUBLE_BID(contractModifier);
+            bool redoubleBid = IS_REDOUBLE_BID(contractModifier);
+            int result = actor->getPlayHistory().getResult();
+
+            QString play = tr(SEAT_NAMES[declarer]) + tr(" made ") + QString::number(result) + tr(" in ") +
+                    QString::number(level) + tr(SUIT_NAMES[suit]);
+            if (doubleBid)
+                play += "X";
+            else if (redoubleBid)
+                play += "XX";
+            QMessageBox::information(0, tr("ZBridge"), play);
+        }
+
         playView->showInfoNextButton(true, BUTTON_DEAL);
         break;
 
@@ -629,6 +654,8 @@ void CTblMngrClient::receiveLine(QString line)
         //Deal info message was received.
         CDealInfoMsg dealInfoMsg(line);
         actor->dealInfo(dealInfoMsg.boardNumber, dealInfoMsg.dealer, dealInfoMsg.vulnerability);
+        if (protocol == ADVANCED_PROTOCOL)
+            games->setNextDeal(dealInfoMsg.boardNumber, dealInfoMsg.dealer, dealInfoMsg.vulnerability);
         noHands = 0;
         break;
     }
@@ -655,7 +682,7 @@ void CTblMngrClient::receiveLine(QString line)
         //Have we received all hands?
         if (noHands == 4)
         {
-            //Determine which cards to show.
+            //Determine which cards to show and for the advanced protocol also save cards.
             bool hasWest, showWest, hasNorth, showNorth, hasEast, showEast, hasSouth, showSouth;
 
             if (protocol == ADVANCED_PROTOCOL)
@@ -668,6 +695,8 @@ void CTblMngrClient::receiveLine(QString line)
                 showNorth = showAll || ((actor->getSeat() == NORTH_SEAT) && (actor->getActorType() == MANUAL_ACTOR));
                 showEast = showAll || ((actor->getSeat() == EAST_SEAT) && (actor->getActorType() == MANUAL_ACTOR));
                 showSouth = showAll || ((actor->getSeat() == SOUTH_SEAT) && (actor->getActorType() == MANUAL_ACTOR));
+
+                games->setNextDeal(currentCards);
             }
             else
             {
