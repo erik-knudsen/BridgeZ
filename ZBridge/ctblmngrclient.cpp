@@ -838,7 +838,10 @@ void CTblMngrClient::receiveLine(QString line)
 
     case ORIGINAL_PBN_START_MSG:
     {
-        //Start of original PBN stream (comes allways before played PBN stream).
+        //Start of original PBN stream (comes always before played PBN stream).
+        COriginalPBNStartMsg originalPBNStartMsg(line);
+        games->clearGames(originalPBNStartMsg.scoringMethod);
+
         originalBytes.open(QIODevice::ReadWrite);
         originalStream.setDevice(&originalBytes);
         comMode = ORIGINAL_PBN_STREAM_MODE;
@@ -868,29 +871,34 @@ void CTblMngrClient::receiveLine(QString line)
             //Has now received Original and Played pbn data.            
             originalStream.flush();
             playedStream.flush();
-
-            //Determine event (only one event is present).
-            QStringList strLines;
-            originalStream.seek(0);
-            games->determineEvents(originalStream, strLines);
-            QString event = strLines.at(0);
-
-            //Read games.
             originalStream.seek(0);
             playedStream.seek(0);
-            try
-            {
-            games->readGames(originalStream, playedStream, event, NOSCORE);
-            }
-            catch (PlayException &e)
-            {
-                //There was an error in processing of pbn data.
-                QMessageBox::critical(0, tr("ZBridge"), e.what());
-            }
 
-            //Close buffers.
-            originalBytes.close();
-            playedBytes.close();
+            if ((!originalStream.atEnd()) || !playedStream.atEnd())
+            {
+                //Determine event (only one event might be present).
+                QStringList strLines;
+                games->determineEvents(originalStream, strLines);
+                originalStream.seek(0);
+                QString event;
+                if (strLines.size() != 0)
+                    event = strLines.at(0);
+
+                //Read games.
+                try
+                {
+                    games->readGames(originalStream, playedStream, event, NOSCORE);
+                }
+                catch (PlayException &e)
+                {
+                    //There was an error in processing of pbn data.
+                    QMessageBox::critical(0, tr("ZBridge"), e.what());
+                }
+
+                //Close buffers.
+                originalBytes.close();
+                playedBytes.close();
+            }
 
             comMode = NORMAL_MODE;
         }

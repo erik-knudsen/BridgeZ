@@ -622,10 +622,10 @@ void CTblMngrServer::newSession()
         games->writeOriginalGames(originalStream);
         games->writePlayedGames(playedStream);
 
-        actors[WEST_SEAT]->xmitPBNFiles(originalStream, playedStream);
-        actors[NORTH_SEAT]->xmitPBNFiles(originalStream, playedStream);
-        actors[EAST_SEAT]->xmitPBNFiles(originalStream, playedStream);
-        actors[SOUTH_SEAT]->xmitPBNFiles(originalStream, playedStream);
+        actors[WEST_SEAT]->xmitPBNFiles(originalStream, playedStream, doc->getGameOptions().scoringMethod);
+        actors[NORTH_SEAT]->xmitPBNFiles(originalStream, playedStream, doc->getGameOptions().scoringMethod);
+        actors[EAST_SEAT]->xmitPBNFiles(originalStream, playedStream, doc->getGameOptions().scoringMethod);
+        actors[SOUTH_SEAT]->xmitPBNFiles(originalStream, playedStream, doc->getGameOptions().scoringMethod);
 
         originalBytes.close();
         playedBytes.close();

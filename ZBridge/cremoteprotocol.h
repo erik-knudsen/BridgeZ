@@ -526,7 +526,7 @@ public:
 class COriginalPBNStartMsg : public CMsg
 {
 public:
-    COriginalPBNStartMsg();
+    COriginalPBNStartMsg(ScoringMethod scoringMethod);
     COriginalPBNStartMsg(QString line) throw (NetProtocolException);
 
 private:
@@ -534,6 +534,8 @@ private:
     void lineToMsg() throw (NetProtocolException);
 
 public:
+    ScoringMethod scoringMethod;
+
     QString line;
 };
 

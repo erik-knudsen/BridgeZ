@@ -50,17 +50,18 @@ CActorRemote::CActorRemote(Seat seat, int protocol, CRemoteActorFrontEnd *frontE
  * @param originalStream Original PBN data.
  * @param playedStream Played PBN data.
  */
-void CActorRemote::xmitPBNFiles(QTextStream &originalStream, QTextStream &playedStream)
+void CActorRemote::xmitPBNFiles(QTextStream &originalStream, QTextStream &playedStream,
+                                ScoringMethod scoringMethod)
 {
     originalStream.seek(0);
     playedStream.seek(0);
 
     //First transmit original data.
-    COriginalPBNStartMsg originalPBNStartMsg;
+    COriginalPBNStartMsg originalPBNStartMsg(scoringMethod);
     emit sendLine(originalPBNStartMsg.line);
 
     while (!originalStream.atEnd())
-        emit sendLine(originalStream.readLine());
+        emit sendLine(originalStream.readLine() + "\r\n");
 
     CEscapePBNMsg escapePBNMsg;
     emit sendLine(escapePBNMsg.line);
@@ -70,7 +71,7 @@ void CActorRemote::xmitPBNFiles(QTextStream &originalStream, QTextStream &played
     emit sendLine(playedPBNStartMsg.line);
 
     while (!playedStream.atEnd())
-        emit sendLine(playedStream.readLine());
+        emit sendLine(playedStream.readLine() + "\r\n");
 
     emit sendLine(escapePBNMsg.line);
 }

@@ -46,7 +46,8 @@ public:
     CActor(CTblMngr *tableManager);
     virtual ~CActor();
 
-    virtual void xmitPBNFiles(QTextStream &originalStream, QTextStream &playedStream) { }
+    virtual void xmitPBNFiles(QTextStream &originalStream, QTextStream &playedStream,
+                              ScoringMethod scoringMethod) { }
     virtual void startNewSession() = 0;
 
     virtual void bidValue(Bids bid) {}

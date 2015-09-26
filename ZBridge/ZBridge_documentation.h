@@ -538,13 +538,18 @@
  *
  * When entering a synchronization point each client sends "[Hand] ATTEMPT SYNCHRONIZE" to the Table Manager. Each
  * client then awaits a "[Hand] ATTEMPT SYNCHRONIZE" from the Table Manager. When the Table Manager has responded
+ * with this, each client sends "[Hand]ATTEMP SYNCHRONIZE" to the Table Manager. The client then awaits a
+ * "[Hand]CONFIRM SYNCHRONIZE" from the Table Manager. When the Table Manager has responded with this
  * each client sends "[Hand] CONFIRM SYNCHRONIZE" to the Table Manager. The client may make a pause before sending
  * "[Hand] CONFIRM SYNCHRONIZE". The client then awaits a "[Hand] ALL SYNCHRONIZED" from the Table Manager.\n\n
+ *
+ * The protocol takes into account that it is not known whic of Table Manager or client enters the synchronization
+ * point first.\n\n
  *
  * For this protocol to work it relies on that the Table Manager continues to its next state before sending the
  * "[Hand] ALL SYNCHRONIZED" to the clients. And it also relies on that the Table Managers next state does not
  * have an entry action that sends to any of the clients. After "[Hand] ALL SYNCHRONIZED" is sent to the clients
- * the Table Manager may perform actions which involve sending to clients.
+ * the Table Manager may perform actions which involve sending to clients.\n\n
 
  * @anchor PBNProtocol
  * <b>PORTABLE BRIDGE NOTATION PROTOCOL</b>\n
@@ -552,11 +557,13 @@
  * The purpose of the PBN protocol is to make scoring information possible for both Table Manager and clients.
  * To make this possible a few communication messages are used.\n\n
  *
- * When a new session is started the Table Manager sends "Original PBN Stream Start" to clients and after that
- * the original PBN file (if any) is sent one line at a time. The end of the PBN file is signalled with a
- * "Escape PBN Stream" message. Then a "Played PBN Stream Start" message is sent from Table Manager to
- * clients followed with PBN data for the until now played game data. The end of this PBN file is also
- * signalled with a "Escape PBN Stream" message.
+ * When a new session is started the Table Manager sends "Original PBN Stream Start. Default scoring
+ * is: [Scoring method]" to clients. The scoring method is one of "IMP", "MP", "RUBBER", "PRACTICE",
+ * "NOSCORE" or "FORSCORE". After that the original PBN file (if any) is sent one line at a time. The
+ * end of the PBN file is signalled with a "Escape PBN Stream" message. Then a "Played PBN Stream Start"
+ * message is sent from Table Manager to clients followed with PBN data for the until now played game
+ * data. The end of this PBN file is also signalled with a "Escape PBN Stream" message. The two files
+ * might be empty.
  */
 
 /** @page exceptions Exceptions and asserts

@@ -44,7 +44,7 @@ class CActorRemote : public CActor
 public:
     CActorRemote(Seat seat, int protocol, CRemoteActorFrontEnd *frontEnd, CTblMngr *tableManager);
 
-    void xmitPBNFiles(QTextStream &originalStream, QTextStream &playedStream);
+    void xmitPBNFiles(QTextStream &originalStream, QTextStream &playedStream, ScoringMethod scoringMethod);
 
     void startNewSession();
 

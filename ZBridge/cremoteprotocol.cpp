@@ -60,6 +60,17 @@ const QString SUITS_NET[5] =
     "NT"
 };
 
+//Indexed with enum ScoringMethod values.
+const QString SCORINGMETHODS_NET[6] =
+{
+    "IMP",
+    "MP",
+    "RUBBER",
+    "PRACTICE",
+    "NOSCORE",
+    "FORSCORE"
+};
+
 
 /**
  * @brief Get the message type from a line received.
@@ -1385,9 +1396,11 @@ void CAllSynchronizedMsg::lineToMsg() throw (NetProtocolException)
 }
 
 
-COriginalPBNStartMsg::COriginalPBNStartMsg()
+COriginalPBNStartMsg::COriginalPBNStartMsg(ScoringMethod scoringMethod)
 {
     msgType = ORIGINAL_PBN_START_MSG;
+
+    this->scoringMethod = scoringMethod;
 
     msgToLine();
 }
@@ -1403,13 +1416,29 @@ COriginalPBNStartMsg::COriginalPBNStartMsg(QString line) throw (NetProtocolExcep
 
 void COriginalPBNStartMsg::msgToLine()
 {
-    line = QString("Original PBN Stream Start\r\n");
+    line = QString("Original PBN Stream Start. Default scoringmethod is: %1\r\n").arg(SCORINGMETHODS_NET[scoringMethod]);
 }
 
 void COriginalPBNStartMsg::lineToMsg() throw (NetProtocolException)
 {
-    if (!line.contains("Original PBN Stream Start", Qt::CaseInsensitive))
+    if (!line.contains("Original PBN Stream Start", Qt::CaseInsensitive) ||
+            !line.contains("Default scoringmethod is", Qt::CaseInsensitive))
         throw NetProtocolException("Net - Original PBN Start: " + line.toStdString());
+
+    if (line.contains(SCORINGMETHODS_NET[IMP], Qt::CaseInsensitive))
+        scoringMethod = IMP;
+    else if (line.contains(SCORINGMETHODS_NET[MP], Qt::CaseInsensitive))
+        scoringMethod = MP;
+    else if (line.contains(SCORINGMETHODS_NET[RUBBER], Qt::CaseInsensitive))
+        scoringMethod = RUBBER;
+    else if (line.contains(SCORINGMETHODS_NET[PRACTICE], Qt::CaseInsensitive))
+        scoringMethod = PRACTICE;
+    else if (line.contains(SCORINGMETHODS_NET[NOSCORE], Qt::CaseInsensitive))
+        scoringMethod = NOSCORE;
+    else if (line.contains(SCORINGMETHODS_NET[FORSCORE], Qt::CaseInsensitive))
+        scoringMethod = FORSCORE;
+    else
+        throw NetProtocolException("Net - No default scoring method: " + line.toStdString());
 }
 
 
