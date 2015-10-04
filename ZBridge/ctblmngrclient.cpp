@@ -877,16 +877,13 @@ void CTblMngrClient::receiveLine(QString line)
     {
         if (comMode == PLAYED_PBN_STREAM_MODE)
         {
-            int orgSize = originalBytes.size();
-            int plSize = playedBytes.size();
-
-            //Has now received Original and Played pbn data.            
+            //Has now received Original and Played pbn data.
             originalStream.flush();
             playedStream.flush();
             originalStream.seek(0);
             playedStream.seek(0);
 
-            if ((!originalStream.atEnd()) || !playedStream.atEnd())
+            if (!originalStream.atEnd() || !playedStream.atEnd())
             {
                 //Determine event (only one event might be present).
                 QStringList strLines;
