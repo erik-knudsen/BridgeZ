@@ -148,6 +148,9 @@ void CTblMngrClient::newSession()
     QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_CLIENT , protocol == ADVANCED_PROTOCOL));
     QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_NEW_SESSION , false));
 
+    //EAK TEMPORARY.
+    QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_SCORE , true));
+
     //Set up actor.
     if (doc->getSeatOptions().seat == WEST_SEAT)
         actor = new CActorLocal((doc->getSeatOptions().westActor == MANUAL_ACTOR), doc->getSeatOptions().westName,
@@ -594,6 +597,8 @@ void CTblMngrClient::clientDisConnected()
  */
 void CTblMngrClient::receiveLine(QString line)
 {
+    qDebug() << line;
+
     try
     {
     //Get the message type.
@@ -845,6 +850,7 @@ void CTblMngrClient::receiveLine(QString line)
         originalBytes.open(QIODevice::ReadWrite);
         originalStream.setDevice(&originalBytes);
         comMode = ORIGINAL_PBN_STREAM_MODE;
+        break;
     }
 
     case PLAYED_PBN_START_MSG:
@@ -853,6 +859,8 @@ void CTblMngrClient::receiveLine(QString line)
         playedBytes.open(QIODevice::ReadWrite);
         playedStream.setDevice(&playedBytes);
         comMode = PLAYED_PBN_STREAM_MODE;
+        break;
+
     }
 
     case PBN_LINE_MSG:
@@ -862,12 +870,16 @@ void CTblMngrClient::receiveLine(QString line)
             originalStream << line;
         else if (comMode == PLAYED_PBN_STREAM_MODE)
             playedStream << line;
+        break;
     }
 
     case ESCAPE_MSG:
     {
         if (comMode == PLAYED_PBN_STREAM_MODE)
         {
+            int orgSize = originalBytes.size();
+            int plSize = playedBytes.size();
+
             //Has now received Original and Played pbn data.            
             originalStream.flush();
             playedStream.flush();
@@ -900,8 +912,10 @@ void CTblMngrClient::receiveLine(QString line)
                 playedBytes.close();
             }
 
-            comMode = NORMAL_MODE;
+
         }
+        comMode = NORMAL_MODE;
+        break;
     }
 
     default:
