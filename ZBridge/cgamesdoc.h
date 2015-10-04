@@ -80,6 +80,7 @@ public:
                     CBidHistory *bidHistory = 0, CPlayHistory *playHistory = 0);
     int getDuplicateScore(int gameIndex, int auctionAndPlayIndex, bool ns = false);
     bool practice();
+    bool checkDuplicate();
     float getDuplicatePointBoard(int gameIndex, int auctionAndPlayIndex,
                                   int scoringMethod, bool ns = false);
     float getDuplicateResultAll(int gameIndex, QString &nameWN, QString &nameES,

@@ -401,8 +401,8 @@ void CGamesDoc::setResult(GameType gameType, CBidHistory &bidHistory, CPlayHisto
 
 /**
  * @brief Determine the events in a pbn file.
- * @param original[in] The stream to read the pbn file from.
- * @param events[out] The events found.
+ * @param [in] original The stream to read the pbn file from.
+ * @param [out] events The events found.
  *
  * Determine the pbn events in a pbn file (I have never seen more than one event in a pbn file).
  */
@@ -520,9 +520,9 @@ void CGamesDoc::getAuctionAndPlay(int gameIndex, int auctionAndPlayIndex, Seat *
 
 /**
  * @brief Calculate the duplicate score for the given game/play.
- * @param gameIndex[in] Index of the given game.
- * @param auctionAndPlayIndex[in] Index of the given play.
- * @param ns[i] If true then calculate relative to NS else calculate relative to declarer.
+ * @param [in] gameIndex Index of the given game.
+ * @param [in] auctionAndPlayIndex Index of the given play.
+ * @param [in] ns If true then calculate relative to NS else calculate relative to declarer.
  * @return The calculated duplicate score. The value is negative if the score belongs to
  *         the opponent.
  */
@@ -661,11 +661,23 @@ bool CGamesDoc::practice()
 }
 
 /**
+ * @brief Check consistency of duplicate play.
+ * @return true if ok. Otherwise false.
+ */
+bool CGamesDoc::checkDuplicate()
+{
+    for (int i = 0; i < games.size(); i++)
+        if (games[i]->auctionAndPlay.size() < 2)
+            return false;
+    return true;
+}
+
+/**
  * @brief Calculate duplicate points for a given game/play.
- * @param gameIndex[i] Index of the game.
- * @param auctionAndPlayIndex[i] Index of the play.
- * @param scoringMethod[i] Scoring method is either MP or IMP.
- * @param ns[i] If true then calculate relative to NS else calculate relative to declarer.
+ * @param [in]gameIndex Index of the game.
+ * @param [in] auctionAndPlayIndex Index of the play.
+ * @param [in] scoringMethod Scoring method is either MP or IMP.
+ * @param [in] ns If true then calculate relative to NS else calculate relative to declarer.
  * @return The calculated duplicate point. The value is negative if the point belongs to
  *         the opponent.
  */
@@ -735,10 +747,10 @@ float CGamesDoc::getDuplicatePointBoard(int gameIndex, int auctionAndPlayIndex,
 
 /**
  * @brief Calculate total duplicate points for a given pair of players.
- * @param gameIndex[in] Calculate until and including the game with this index.
- * @param nameWN[in] Name of West (or North).
- * @param nameES[in] Name of East (or South).
- * @param scoringMethod[in] Scoring method is either MP or IMP.
+ * @param [in] gameIndex Calculate until and including the game with this index.
+ * @param [in] nameWN Name of West (or North).
+ * @param [in] nameES Name of East (or South).
+ * @param [in] scoringMethod Scoring method is either MP or IMP.
  * @return  The calculated total duplicate point. The value is negative if the point
  *          belongs to the opponent.
  */
@@ -777,9 +789,9 @@ float CGamesDoc::getDuplicateResultAll(int gameIndex, QString &nameWN, QString &
 
 /**
  * @brief Get pairs of players in the games.
- * @param gameIndex{[in] Until and including the game with this index.
- * @param pairWN[out] List of names west/north.
- * @param pairES[out] List of names east/south.
+ * @param [in] gameIndex Until and including the game with this index.
+ * @param [out] pairWN List of names west/north.
+ * @param [out] pairES List of names east/south.
  * @return Number of pairs.
  */
 int CGamesDoc::getPairs(int gameIndex, QStringList &pairWN, QStringList &pairES)
@@ -817,8 +829,8 @@ int CGamesDoc::getPairs(int gameIndex, QStringList &pairWN, QStringList &pairES)
 
 /**
  * @brief Get below the line points for a given game/play in rubber play.
- * @param gameIndex[in] Index of the game
- * @param auctionAndPlayIndex[in] Index of the play.
+ * @param [in] gameIndex Index of the game
+ * @param [in] auctionAndPlayIndex Index of the play.
  * @return Below the line points. Relative to NS.
  */
 int CGamesDoc::getBelowTheLine(int gameIndex, int auctionAndPlayIndex)
@@ -856,8 +868,8 @@ int CGamesDoc::getBelowTheLine(int gameIndex, int auctionAndPlayIndex)
 
 /**
  * @brief Get above the line points for a given game/play in rubber play.
- * @param gameIndex[in] Index of the game
- * @param auctionAndPlayIndex[in] Index of the play.
+ * @param [in] gameIndex Index of the game
+ * @param [in] auctionAndPlayIndex Index of the play.
  * @return Above the line points. Relative to NS.
  */
 int CGamesDoc::getAboveTheLine(int gameIndex, int auctionAndPlayIndex)
@@ -969,8 +981,8 @@ int CGamesDoc::getAboveTheLine(int gameIndex, int auctionAndPlayIndex)
 
 /**
  * @brief Get honor bonus points for a given game/play in rubber play.
- * @param gameIndex[in] Index of the game
- * @param auctionAndPlayIndex[in] Index of the play.
+ * @param [in] gameIndex Index of the game
+ * @param [in] auctionAndPlayIndex Index of the play.
  * @return Honor bonus points. Relative to NS.
  */
 int CGamesDoc::getHonorBonus(int gameIndex, int auctionAndPlayIndex)
@@ -1055,16 +1067,16 @@ int CGamesDoc::getHonorBonus(int gameIndex, int auctionAndPlayIndex)
 
 /**
  * @brief Calculate rubber points for a given game/play.
- * @param gameIndex[in] Index of the game.
- * @param auctionAndPlayIndex[in] Index of the play.
- * @param nsAbove[out] Above points for NS until now.
- * @param nsBelow[out] Below points for NS until now.
- * @param nsTotal[out] Total points for NS until now.
- * @param nsLedger[out] Ledger points for NS until now.
- * @param ewAbove[out] Above points for EW until now.
- * @param ewBelow[out] Below points for EW until now.
- * @param ewTotal[out] Total points for EW until now.
- * @param ewLedger[out] Ledger points for EW until now.
+ * @param [in] gameIndex Index of the game.
+ * @param [in] auctionAndPlayIndex Index of the play.
+ * @param [out] nsAbove Above points for NS until now.
+ * @param [out] nsBelow Below points for NS until now.
+ * @param [out] nsTotal Total points for NS until now.
+ * @param [out] nsLedger Ledger points for NS until now.
+ * @param [out] ewAbove Above points for EW until now.
+ * @param [out] ewBelow Below points for EW until now.
+ * @param [out] ewTotal Total points for EW until now.
+ * @param[out]  ewLedger Ledger points for EW until now.
  * @return True if NS or EW just won a rubber. Otherwise false.
  */
 bool CGamesDoc::getRubberPoints(int gameIndex, int auctionAndPlayIndex, bool *gameDone,

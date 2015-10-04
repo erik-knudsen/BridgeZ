@@ -44,7 +44,7 @@ CMainScoreDialog::CMainScoreDialog(CGamesDoc *games, QWidget *parent) :
                             tr("Tricks") << tr("NS") << tr("EW");
         ui->ScoringMethod->setText(tr("Scoring method is Rubber."));
     }
-    else if (scoringMethod == PRACTICE)
+    else if ((scoringMethod == PRACTICE) || !games->checkDuplicate())
     {
         ui->scoreTable->setColumnCount(5);
         horizontalHeader << tr("Board") << tr("Vulnerability") << tr("Contract") <<
@@ -196,7 +196,7 @@ CMainScoreDialog::CMainScoreDialog(CGamesDoc *games, QWidget *parent) :
             scoreItem->setFlags(Qt::ItemIsEnabled);
             ui->scoreTable->setItem(gameIndex, 4, scoreItem);
 
-            if (scoringMethod != PRACTICE)
+            if ((scoringMethod != PRACTICE) && games->checkDuplicate())
             {
                 float result = games->getDuplicatePointBoard(gameIndex, playedAuctionAndPlayIndex,
                                              scoringMethod);
