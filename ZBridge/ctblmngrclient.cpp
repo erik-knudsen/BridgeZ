@@ -597,8 +597,6 @@ void CTblMngrClient::clientDisConnected()
  */
 void CTblMngrClient::receiveLine(QString line)
 {
-    qDebug() << line;
-
     try
     {
     //Get the message type.
