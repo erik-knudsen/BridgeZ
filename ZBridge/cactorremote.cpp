@@ -286,6 +286,8 @@ void CActorRemote::allSyncFromServerToClient()
  */
 void CActorRemote::receiveLine(QString line, bool connected)
 {
+    qDebug() << line;
+
     try
     {
     //Determine type.

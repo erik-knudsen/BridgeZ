@@ -461,15 +461,14 @@ void CTblMngrServer::serverSyncActions()
     else if (zBridgeServerSyncIface_israised_sendAllSync(&syncHandle))
     {
         zBridgeServerSyncIface_raise_continue(&syncHandle);
-        serverSyncRunCycle();
+        serverSyncRunCycle();        
+        synchronizing = false;
 
         zBridgeServerIface_raise_allSync(&handle);
         serverRunCycle();
 
         for (int i = 0; i < 4; i++)
             actors[i]->allSyncFromServerToClient();
-
-        synchronizing = false;
     }
 
     //Comes together with and after sendAttemptSync (gets cleared in some cases by sendAttemptSync).
