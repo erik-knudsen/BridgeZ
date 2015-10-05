@@ -59,6 +59,7 @@ public:
     void writeOriginalGames(QTextStream &stream);
     void writePlayedGames(QTextStream &stream);
     void clearGames(ScoringMethod scoringMethod);
+    void prepNextDeal() { currentGameIndex++; }
     void getNextDeal(int *board, int cards[][13], Seat *dealer, Team *vulnerable);
     void setNextDeal(int board, Seat dealer, Team vulnerable);
     void setNextDeal(int cards[][13]);

@@ -1120,6 +1120,7 @@ void CTblMngrServer::sEnableContinueSync(int syncState)
 
             games->setPlayedResult(bidHistory, playHistory, teamNames[WEST_SEAT], teamNames[NORTH_SEAT],
                                    teamNames[EAST_SEAT], teamNames[SOUTH_SEAT]);
+            games->prepNextDeal();
 
             if (playHistory.getResult() != -1)
             {

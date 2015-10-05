@@ -466,6 +466,7 @@ void CTblMngrClient::sEnableContinueSync(int syncState)
         //Update current game.
         games->setPlayedResult(actor->getBidHistory(), actor->getPlayHistory(), teamNames[WEST_SEAT],
                                teamNames[NORTH_SEAT], teamNames[EAST_SEAT], teamNames[SOUTH_SEAT]);
+        games->prepNextDeal();
 
         if (actor->getPlayHistory().getResult() != -1)
         {
