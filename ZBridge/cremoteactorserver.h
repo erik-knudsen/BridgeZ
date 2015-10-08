@@ -30,6 +30,7 @@
 #include <QString>
 #include <QMessageBox>
 
+#include "ZBridgeException.h"
 #include "Defines.h"
 
 /**
@@ -76,7 +77,8 @@ class CRemoteActorServer : public QTcpServer
 {
     Q_OBJECT
 public:
-    explicit CRemoteActorServer(Protocol protocol, QHostAddress hostAddress, quint16 port, QObject *parent = 0);
+    explicit CRemoteActorServer(Protocol protocol, QHostAddress hostAddress, quint16 port,
+                                QObject *parent = 0) throw(NetProtocolException);
     ~CRemoteActorServer();
 
     void incomingConnection(qintptr socketDescriptor);

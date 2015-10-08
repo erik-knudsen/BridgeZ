@@ -87,6 +87,8 @@ CTblMngrServer::CTblMngrServer(CZBridgeDoc *doc, CGamesDoc *games, CPlayView *pl
                 QMessageBox::warning(0, tr("ZBridge"), tr("Could not determine IP address."));
             else
             {
+                try
+                {
                 remoteActorServer = new CRemoteActorServer(doc->getSeatOptions().protocol,
                                                hostAddresses.at(hostInx),
                                                doc->getSeatOptions().portServer.toInt(), this);
@@ -98,6 +100,11 @@ CTblMngrServer::CTblMngrServer(CZBridgeDoc *doc, CGamesDoc *games, CPlayView *pl
                 connect(remoteActorServer, &CRemoteActorServer::connectInfo, this, &CTblMngrServer::connectInfo);
                 connect(remoteActorServer, &CRemoteActorServer::connectWarning, this, &CTblMngrServer::connectWarning);
                 connect(remoteActorServer, &CRemoteActorServer::connectError, this, &CTblMngrServer::connectError);
+                }
+                catch (NetProtocolException &e)
+                {
+                    QMessageBox::warning(0, tr("ZBridge"), e.what());
+                }
             }
         }
     }

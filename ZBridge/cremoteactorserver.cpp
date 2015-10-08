@@ -110,7 +110,8 @@ void CRemoteActorFrontEnd::disConnect()
  *
  * Starts listening for a connect from a remote actor.
  */
-CRemoteActorServer::CRemoteActorServer(Protocol protocol, QHostAddress hostAddress, quint16 port, QObject *parent) :
+CRemoteActorServer::CRemoteActorServer(Protocol protocol, QHostAddress hostAddress,
+              quint16 port, QObject *parent) throw(NetProtocolException) :
     QTcpServer(parent)
 {
     this->protocol = protocol;
@@ -119,7 +120,7 @@ CRemoteActorServer::CRemoteActorServer(Protocol protocol, QHostAddress hostAddre
         remoteConnects[i].isConnected = false;
 
     if (!listen(hostAddress, port))
-        emit connectWarning(errorString());
+        throw NetProtocolException(errorString().toStdString());
 }
 
 CRemoteActorServer::~CRemoteActorServer()
