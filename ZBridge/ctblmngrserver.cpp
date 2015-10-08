@@ -93,10 +93,10 @@ CTblMngrServer::CTblMngrServer(CZBridgeDoc *doc, CGamesDoc *games, CPlayView *pl
                                                hostAddresses.at(hostInx),
                                                doc->getSeatOptions().portServer.toInt(), this);
 
-                //Connect for disconnect of remote client.
+                //Connect for disconnect of remote client(s).
                 connect(remoteActorServer, &CRemoteActorServer::clientDisconnected, this, &CTblMngrServer::cleanTableManager);
 
-                //Connect for info, warning and error messages for server/client connection.
+                //Connect for info, warning and error messages for server/client connection(s).
                 connect(remoteActorServer, &CRemoteActorServer::connectInfo, this, &CTblMngrServer::connectInfo);
                 connect(remoteActorServer, &CRemoteActorServer::connectWarning, this, &CTblMngrServer::connectWarning);
                 connect(remoteActorServer, &CRemoteActorServer::connectError, this, &CTblMngrServer::connectError);
