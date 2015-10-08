@@ -97,16 +97,13 @@ void CRemoteActorClient::disConnected()
  */
 void CRemoteActorClient::socketError(QAbstractSocket::SocketError error)
 {
-    QString err;
-    QString str;
     switch (error)
     {
     case QAbstractSocket::RemoteHostClosedError:
         break;
 
     default:
-        err = tr("Server connection error.");
-        emit sSocketError(err);
+        emit sSocketError(tr("Server connection error."));
         break;
     }
 }

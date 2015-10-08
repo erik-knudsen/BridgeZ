@@ -88,6 +88,9 @@ public:
 signals:
     void stopFrontEnds();
     void clientDisconnected();
+    void connectError(QString text);
+    void connectWarning(QString text);
+    void connectInfo(QString text);
 
 public slots:
     void disConnectSeat(Seat seat);

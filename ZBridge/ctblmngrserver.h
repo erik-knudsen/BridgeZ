@@ -128,6 +128,11 @@ public slots:
     //Reset table manager (used as slot when a remote client disconnects).
     void cleanTableManager();
 
+    //Info, warning and error slots regarding server/client connection.
+    void connectInfo(QString text);
+    void connectWarning(QString text);
+    void connectError(QString text);
+
 private:
     void giveNewDeal();
 

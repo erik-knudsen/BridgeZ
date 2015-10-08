@@ -119,7 +119,7 @@ CRemoteActorServer::CRemoteActorServer(Protocol protocol, QHostAddress hostAddre
         remoteConnects[i].isConnected = false;
 
     if (!listen(hostAddress, port))
-        QMessageBox::warning(0, tr("ZBridge"), errorString());
+        emit connectWarning(errorString());
 }
 
 CRemoteActorServer::~CRemoteActorServer()
@@ -145,7 +145,7 @@ void CRemoteActorServer::incomingConnection(qintptr socketDescriptor)
     //Check for reading (connect message).
     if (!socket->waitForReadyRead(10000))
     {
-        QMessageBox::warning(0, tr("ZBridge"), tr("Timeout on client connection."));
+        emit connectWarning(tr("Timeout on client connection."));
         delete socket;
         return;
     }
@@ -155,7 +155,7 @@ void CRemoteActorServer::incomingConnection(qintptr socketDescriptor)
     int length = socket->read(buf, 200);
     if (length > 175)
     {
-        QMessageBox::warning(0, tr("ZBridge"), tr("Connecting message from client is too long."));
+        emit connectWarning(tr("Connecting message from client is too long."));
         delete socket;
         return;
     }
@@ -184,7 +184,7 @@ void CRemoteActorServer::incomingConnection(qintptr socketDescriptor)
              !connectLine.contains("South", Qt::CaseInsensitive)) ||
             (connectLine.count(QChar('"')) != 2))
     {
-        QMessageBox::warning(0, tr("ZBridge"), tr("Syntax error on connecting message from client."));
+        emit connectWarning(tr("Syntax error on connecting message from client."));
         delete socket;
         return;
     }
@@ -199,7 +199,7 @@ void CRemoteActorServer::incomingConnection(qintptr socketDescriptor)
     //Check that the seat is not already connected.
     if (remoteConnects[seat].isConnected)
     {
-        QMessageBox::warning(0, tr("ZBridge"), tr("Client tries to connect as already connected hand."));
+        emit connectWarning(tr("Client tries to connect as already connected hand."));
         delete socket;
         return;
     }
@@ -221,7 +221,7 @@ void CRemoteActorServer::incomingConnection(qintptr socketDescriptor)
     remoteConnects[seat].frontEnd = frontEnd;
     remoteConnects[seat].isConnected = true;
 
-    QMessageBox::information(0, tr("ZBridge"), connectLine);
+    emit connectInfo(connectLine);
 
     thread->start();
 }
@@ -245,7 +245,6 @@ void CRemoteActorServer::disConnectSeat(Seat seat)
 {
     remoteConnects[seat].isConnected = false;
 
-    QMessageBox::critical(0, tr("ZBridge"), tr(SEAT_NAMES[seat]) + tr(" has disconnected."));
-
+    emit connectError(tr(SEAT_NAMES[seat]) + tr(" has disconnected."));
     emit clientDisconnected();
 }

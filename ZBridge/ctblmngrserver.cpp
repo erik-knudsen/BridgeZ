@@ -93,6 +93,11 @@ CTblMngrServer::CTblMngrServer(CZBridgeDoc *doc, CGamesDoc *games, CPlayView *pl
 
                 //Connect for disconnect of remote client.
                 connect(remoteActorServer, &CRemoteActorServer::clientDisconnected, this, &CTblMngrServer::cleanTableManager);
+
+                //Connect for info, warning and error messages for server/client connection.
+                connect(remoteActorServer, &CRemoteActorServer::connectInfo, this, &CTblMngrServer::connectInfo);
+                connect(remoteActorServer, &CRemoteActorServer::connectWarning, this, &CTblMngrServer::connectWarning);
+                connect(remoteActorServer, &CRemoteActorServer::connectError, this, &CTblMngrServer::connectError);
             }
         }
     }
@@ -517,6 +522,21 @@ void CTblMngrServer::cleanTableManager()
     actors[NORTH_SEAT] = 0;
     actors[EAST_SEAT] = 0;
     actors[SOUTH_SEAT] = 0;
+}
+
+void CTblMngrServer::connectInfo(QString text)
+{
+    QMessageBox::information(0, tr("ZBridge"), text);
+}
+
+void CTblMngrServer::connectWarning(QString text)
+{
+    QMessageBox::warning(0, tr("ZBridge"), text);
+}
+
+void CTblMngrServer::connectError(QString text)
+{
+    QMessageBox::critical(0, tr("ZBridge"), text);
 }
 
 /**
