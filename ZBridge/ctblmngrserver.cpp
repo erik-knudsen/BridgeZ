@@ -37,12 +37,13 @@
 /**
  * @brief Constructor for table manager server.
  * @param doc Pointer to model data.
+ * @param hostAddress Host address.
  * @param playView Pointer to play view.
  * @param parent Pointer to parent.
  *
  * The constructor can set up the table management server in two different modes:
  *
- *   - Standalone. In this case all actors are on the local computer.
+ *   - Standalone. In this case all actors are on the local computer (hostAddress is null).
  *   - Server. In this case some of the actors can be on remote computers.
  *
  * The constructor:
@@ -50,7 +51,8 @@
  *   - In server mode it sets up a tcp server for remote actors.
  *   - Enables/disables relevant main menu entries.
  */
-CTblMngrServer::CTblMngrServer(CZBridgeDoc *doc, CGamesDoc *games, CPlayView *playView, QObject *parent) :
+CTblMngrServer::CTblMngrServer(CZBridgeDoc *doc, CGamesDoc *games, QHostAddress hostAddress,
+                               CPlayView *playView, QObject *parent) :
     CTblMngr(playView, parent)
 {
     this->doc = doc;
@@ -68,44 +70,25 @@ CTblMngrServer::CTblMngrServer(CZBridgeDoc *doc, CGamesDoc *games, CPlayView *pl
 
     //Start tcp server for remote clients.
     remoteActorServer = 0;
-    if (doc->getSeatOptions().role == SERVER_ROLE)
+    if (!hostAddress.isNull())
     {
-        //Determine IP address.
-        QHostInfo hostInfo = QHostInfo::fromName(doc->getSeatOptions().hostServer);
-        if (hostInfo.addresses().isEmpty())
-            QMessageBox::warning(0, tr("ZBridge"), tr("Could not determine IP address."));
-        else
+        try
         {
-            QList<QHostAddress> hostAddresses = hostInfo.addresses();
-            int hostInx;
-            for (hostInx = 0; hostInx < hostAddresses.size(); hostInx++)
-            {
-                if (hostAddresses.at(hostInx).protocol() == QAbstractSocket::IPv4Protocol)
-                    break;
-            }
-            if (hostInx == hostAddresses.size())
-                QMessageBox::warning(0, tr("ZBridge"), tr("Could not determine IP address."));
-            else
-            {
-                try
-                {
-                remoteActorServer = new CRemoteActorServer(doc->getSeatOptions().protocol,
-                                               hostAddresses.at(hostInx),
-                                               doc->getSeatOptions().portServer.toInt(), this);
+            remoteActorServer = new CRemoteActorServer(doc->getSeatOptions().protocol,
+                                                       hostAddress,
+                                                       doc->getSeatOptions().portServer.toInt(), this);
 
-                //Connect for disconnect of remote client(s).
-                connect(remoteActorServer, &CRemoteActorServer::clientDisconnected, this, &CTblMngrServer::cleanTableManager);
+            //Connect for disconnect of remote client(s).
+            connect(remoteActorServer, &CRemoteActorServer::clientDisconnected, this, &CTblMngrServer::cleanTableManager);
 
-                //Connect for info, warning and error messages for server/client connection(s).
-                connect(remoteActorServer, &CRemoteActorServer::connectInfo, this, &CTblMngrServer::connectInfo);
-                connect(remoteActorServer, &CRemoteActorServer::connectWarning, this, &CTblMngrServer::connectWarning);
-                connect(remoteActorServer, &CRemoteActorServer::connectError, this, &CTblMngrServer::connectError);
-                }
-                catch (NetProtocolException &e)
-                {
-                    QMessageBox::warning(0, tr("ZBridge"), e.what());
-                }
-            }
+            //Connect for info, warning and error messages for server/client connection(s).
+            connect(remoteActorServer, &CRemoteActorServer::connectInfo, this, &CTblMngrServer::connectInfo);
+            connect(remoteActorServer, &CRemoteActorServer::connectWarning, this, &CTblMngrServer::connectWarning);
+            connect(remoteActorServer, &CRemoteActorServer::connectError, this, &CTblMngrServer::connectError);
+        }
+        catch (NetProtocolException &e)
+        {
+            QMessageBox::warning(0, tr("ZBridge"), e.what());
         }
     }
 

@@ -22,6 +22,7 @@
 #define CTBLMNGRSERVER_H
 
 #include <QTimer>
+#include <QHostAddress>
 
 #include "CTblMngr.h"
 #include "../src-gen/ZBridgeServer.h"
@@ -54,7 +55,8 @@ class CTblMngrServer : public CTblMngr
     Q_OBJECT
 
 public:
-    CTblMngrServer(CZBridgeDoc *doc, CGamesDoc *games, CPlayView *playView, QObject *parent = 0);
+    CTblMngrServer(CZBridgeDoc *doc, CGamesDoc *games, QHostAddress hostAddress,
+                   CPlayView *playView, QObject *parent = 0);
     ~CTblMngrServer();
 
     //Run cycle for the server statechart.

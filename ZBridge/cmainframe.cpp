@@ -24,6 +24,7 @@
 #include <QFileDialog>
 #include <QFile>
 #include <QFileInfo>
+#include <QHostInfo>
 #include <QStringList>
 #include <QString>
 #include <QTextStream>
@@ -87,10 +88,19 @@ CMainFrame::CMainFrame(CZBridgeApp *app, CZBridgeDoc *doc, CGamesDoc *games) :
     playView = new CPlayView(this);
 
     //Determine, allocate and initialize table manager.
-    if ((doc->getSeatOptions().role == STANDALONE_ROLE) || (doc->getSeatOptions().role == SERVER_ROLE))
-        tableManager = new CTblMngrServer(doc, games, playView, this);
+    hostAddress.clear();
+    if ((doc->getSeatOptions().role == SERVER_ROLE) || (doc->getSeatOptions().role == CLIENT_ROLE))
+    {
+        QString host = (doc->getSeatOptions().role == SERVER_ROLE) ? (doc->getSeatOptions().hostServer) :
+                                                                     (doc->getSeatOptions().hostClient);
+        hostAddress = getHostAddress(host);
+        if (hostAddress.isNull())
+            QMessageBox::warning(0, tr("ZBridge"), tr("Could not determine IP address."));
+    }
+    if (hostAddress.isNull() || (doc->getSeatOptions().role == SERVER_ROLE))
+        tableManager = new CTblMngrServer(doc, games, hostAddress, playView, this);
     else
-        tableManager = new CTblMngrClient(doc, games, playView, this);
+        tableManager = new CTblMngrClient(doc, games, hostAddress, playView, this);
 
     //Initialization of main frame window.
     setCentralWidget(playView);
@@ -147,6 +157,27 @@ void CMainFrame::resizeEvent(QResizeEvent *resizeEvent)
        float scaleYFactor = float(size.height() - 130)/(oldSize.height() - 130);
        playView->scale(scaleXFactor, scaleYFactor);
     }
+}
+
+QHostAddress CMainFrame::getHostAddress(QString host)
+{
+    QHostAddress hostAddress;
+
+    //Determine IP address.
+    QHostInfo hostInfo = QHostInfo::fromName(host);
+    if (!hostInfo.addresses().isEmpty())
+    {
+        QList<QHostAddress> hostAddresses = hostInfo.addresses();
+        int hostInx;
+        for (hostInx = 0; hostInx < hostAddresses.size(); hostInx++)
+        {
+            if (hostAddresses.at(hostInx).protocol() == QAbstractSocket::IPv4Protocol)
+                break;
+        }
+        if (hostInx < hostAddresses.size())
+            hostAddress = hostAddresses.at(hostInx);
+    }
+    return hostAddress;
 }
 
 /**
@@ -872,10 +903,19 @@ void CMainFrame::on_actionSeat_Configuration_triggered()
         doc->WriteSeatOptions();
 
         delete tableManager;
-        if ((doc->getSeatOptions().role == STANDALONE_ROLE) || (doc->getSeatOptions().role == SERVER_ROLE))
-            tableManager = new CTblMngrServer(doc, games, playView, this);
+        hostAddress.clear();
+        if ((doc->getSeatOptions().role == SERVER_ROLE) || (doc->getSeatOptions().role == CLIENT_ROLE))
+        {
+            QString host = (doc->getSeatOptions().role == SERVER_ROLE) ? (doc->getSeatOptions().hostServer) :
+                                                                         (doc->getSeatOptions().hostClient);
+            hostAddress = getHostAddress(host);
+            if (hostAddress.isNull())
+                QMessageBox::warning(0, tr("ZBridge"), tr("Could not determine IP address."));
+        }
+        if (hostAddress.isNull() || (doc->getSeatOptions().role == SERVER_ROLE))
+            tableManager = new CTblMngrServer(doc, games, hostAddress,  playView, this);
         else
-            tableManager = new CTblMngrClient(doc, games, playView, this);
+            tableManager = new CTblMngrClient(doc, games, hostAddress, playView, this);
     }
 
 }

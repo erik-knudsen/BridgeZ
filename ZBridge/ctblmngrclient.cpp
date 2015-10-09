@@ -44,12 +44,14 @@ const int NORMAL_MODE = 3;
  * The constructor initialize the table management client. It Enables/disables relevant main
  * menu entries.
  */
-CTblMngrClient::CTblMngrClient(CZBridgeDoc *doc, CGamesDoc *games, CPlayView *playView, QObject *parent) :
+CTblMngrClient::CTblMngrClient(CZBridgeDoc *doc, CGamesDoc *games, QHostAddress hostAddress,
+                               CPlayView *playView, QObject *parent) :
     CTblMngr(playView, parent)
 {
     this->doc = doc;
     this->games = games;
     this->playView = playView;
+    this->hostAddress = hostAddress;
 
     //Enable/disable relevant menu actions.
     QApplication::postEvent(parent, new UPDATE_UI_ACTION_Event(UPDATE_UI_INITIAL, false));
@@ -114,27 +116,6 @@ void CTblMngrClient::cleanTableManager()
  */
 void CTblMngrClient::newSession()
 {
-    //Determine IP address.
-    QHostInfo hostInfo = QHostInfo::fromName(doc->getSeatOptions().hostClient);
-    if (hostInfo.addresses().isEmpty())
-    {
-        QMessageBox::warning(0, tr("ZBridge"), tr("Could not determine IP address."));
-        return;
-    }
-
-    QList<QHostAddress> hostAddresses = hostInfo.addresses();
-    int hostInx;
-    for (hostInx = 0; hostInx < hostAddresses.size(); hostInx++)
-    {
-        if (hostAddresses.at(hostInx).protocol() == QAbstractSocket::IPv4Protocol)
-           break;
-    }
-    if (hostInx == hostAddresses.size())
-    {
-        QMessageBox::warning(0, tr("ZBridge"), tr("Could not determine IP address."));
-        return;
-    }
-
     //Prepare for new session.
     cleanTableManager();
 
@@ -168,7 +149,7 @@ void CTblMngrClient::newSession()
     actor->setShowUser((actor->getActorType() == MANUAL_ACTOR) || showAll);
 
     //Start tcp/ip interface to server.
-    remoteActorClient = new CRemoteActorClient(hostAddresses.at(hostInx).toString(),
+    remoteActorClient = new CRemoteActorClient(hostAddress.toString(),
                                                doc->getSeatOptions().portClient.toInt(), this);
 
     //Make relevant connects to tcp/ip interface.

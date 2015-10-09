@@ -23,6 +23,7 @@
 #define CMAINFRAME_H
 
 #include <QMainWindow>
+#include <QHostAddress>
 
 namespace Ui {
 class CMainFrame;
@@ -70,6 +71,7 @@ protected:
     virtual void resizeEvent(QResizeEvent *resizeEvent);
 
 private:
+    QHostAddress getHostAddress(QString host);
     virtual void customEvent(QEvent *event);
 
     void enableUIActions(actionIndicator actions, bool advProtocol);
@@ -89,6 +91,7 @@ private:
 
     int eventIndex;             //PBN event index.
     QString fileName;           //PBN file name.
+    QHostAddress hostAddress;
 
 private slots:
     void OnUpdateViewFileComments();

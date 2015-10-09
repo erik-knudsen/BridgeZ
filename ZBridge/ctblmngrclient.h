@@ -24,6 +24,7 @@
 #include <QTimer>
 #include <QBuffer>
 #include <QTextStream>
+#include <QHostAddress>
 
 #include "CTblMngr.h"
 #include "../src-gen/ZBridgeClient.h"
@@ -49,7 +50,8 @@ class CTblMngrClient : public CTblMngr
     Q_OBJECT
 
 public:
-    CTblMngrClient(CZBridgeDoc *doc, CGamesDoc *games, CPlayView *playView, QObject *parent = 0);
+    CTblMngrClient(CZBridgeDoc *doc, CGamesDoc *games, QHostAddress hostAddress,
+                   CPlayView *playView, QObject *parent = 0);
     ~CTblMngrClient();
 
 
@@ -137,6 +139,8 @@ private:
     CZBridgeDoc *doc;
     CGamesDoc *games;
     CPlayView *playView;
+
+    QHostAddress hostAddress;
 
     ZBridgeClient *handle;
 };
