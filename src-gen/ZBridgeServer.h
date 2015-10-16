@@ -75,6 +75,11 @@ typedef enum {
 
 //! Type definition of the data structure for the ZBridgeServerInternal interface scope.
 typedef struct {
+	sc_integer SS;
+	sc_integer SA;
+	sc_integer SP;
+	sc_integer SL;
+	sc_integer SR;
 	sc_integer BID_NONE;
 	sc_integer BID_PASS;
 	sc_integer BID_DOUBLE;
@@ -192,6 +197,7 @@ typedef struct {
 	sc_integer player;
 	sc_integer noTrick;
 	sc_integer cardVal;
+	sc_integer syncState;
 } ZBridgeServerIface;
 
 
@@ -403,6 +409,10 @@ extern void zBridgeServerIface_set_noTrick(ZBridgeServer* handle, sc_integer val
 extern sc_integer zBridgeServerIface_get_cardVal(ZBridgeServer* handle);
 /*! Sets the value of the variable 'cardVal' that is defined in the default interface scope. */ 
 extern void zBridgeServerIface_set_cardVal(ZBridgeServer* handle, sc_integer value);
+/*! Gets the value of the variable 'syncState' that is defined in the default interface scope. */ 
+extern sc_integer zBridgeServerIface_get_syncState(ZBridgeServer* handle);
+/*! Sets the value of the variable 'syncState' that is defined in the default interface scope. */ 
+extern void zBridgeServerIface_set_syncState(ZBridgeServer* handle, sc_integer value);
 
 
 /*! Checks if the specified state is active. */

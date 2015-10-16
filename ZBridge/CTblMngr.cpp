@@ -27,10 +27,10 @@
  * @brief Constructor for table manager.
  * @param parent Pointer to the parent.
  *
- * The constructor creates connections common to all table managers.
+ * The constructor creates connections common to all table managers (server and clients).
  */
 CTblMngr::CTblMngr(CPlayView *playView, QObject *parent) :
-    QObject(parent)
+    CTblMngrBase(parent)
 {
     this->playView = playView;
 

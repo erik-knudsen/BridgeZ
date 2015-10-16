@@ -94,6 +94,7 @@ public slots:
     void sReadyForDummyCards(Seat seat);
     void sAttemptSyncFromClientToServer(Seat syncher);
     void sConfirmSyncFromClientToServer(Seat syncher);
+    void sUpdateGame();
 
     void sShowAuction();
     void sShowPlay();

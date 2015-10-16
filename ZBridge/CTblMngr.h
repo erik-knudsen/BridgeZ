@@ -25,19 +25,20 @@
 #include <QObject>
 
 #include "Defines.h"
+#include "ctblmngrbase.h"
 
 class CPlayView;
 
 /**
  * \brief This abstract class implements the declaration of the generic strategy
- * for table manager classes (server and clients).
+ * for table manager classes (server and clients - not auto).
  *
  * Table manager strategy classes have a common method interface. The interface is
- * defined by means of the virtual methods in this class. And by means of the
+ * defined partly by means of virtual methods in this class. And partly by means of
  * methods, which are common for all table managers (Server and Client). These
  * methods are implemented in this class.
  */
-class CTblMngr : public QObject
+class CTblMngr : public CTblMngrBase
 {
     Q_OBJECT
 
@@ -58,6 +59,7 @@ public:
     /*@}*/
 
 signals:
+    void sShowScore();
 
 public slots:
     /** @name Play view slots.
@@ -75,20 +77,6 @@ public slots:
      * These slot methods are signalled from the actors.
      */
     /*@{*/
-    virtual void sConnect(QString name, Seat seat, int protocol) = 0;
-    virtual void sRTNames(Seat seat) = 0;
-    virtual void sRSBoard(Seat seat) = 0;
-    virtual void sRDealInfo(Seat seat) = 0;
-    virtual void sRCards(Seat seat) = 0;
-    virtual void sRBid(Seat player, Seat bidder) = 0;
-    virtual void sBid(Seat player, Bids bid) = 0;
-    virtual void sPlayerPlays(Seat player, int card) = 0;
-    virtual void sReadyForPlayer(Seat seat, Seat player, int trick) = 0;
-    virtual void sReadyForDummy(Seat seat, int trick) = 0;
-    virtual void sReadyForDummyCards(Seat seat) = 0;
-    virtual void sAttemptSyncFromClientToServer(Seat syncher) = 0;
-    virtual void sConfirmSyncFromClientToServer(Seat syncher) = 0;
-
     virtual void sShowAuction() = 0;
     virtual void sShowPlay() = 0;
     void sShowBidDialog(bool show);
@@ -121,7 +109,6 @@ protected:
     bool showAll;
     bool showDummy;
     Seat dummy;
-    QString teamNames[4];
 
 private:
     void createConnections();

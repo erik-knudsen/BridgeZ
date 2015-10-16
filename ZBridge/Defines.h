@@ -23,6 +23,9 @@
 
 #include <QString>
 
+//Port offset for automatic play.
+const int AUTOPORTOFFSET = 10;
+
 //Update (enable/disable) UI (mostly menues) actions.
 enum UpdateUIAction { UPDATE_UI_INITIAL, UPDATE_UI_SERVER, UPDATE_UI_CLIENT, UPDATE_UI_NEW_SESSION,
                     UPDATE_UI_NEW_DEAL, UPDATE_UI_UNDO, UPDATE_UI_REBID, UPDATE_UI_REPLAY, UPDATE_UI_SHOW_ALL,

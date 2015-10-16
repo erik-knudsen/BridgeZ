@@ -102,6 +102,8 @@ CMainFrame::CMainFrame(CZBridgeApp *app, CZBridgeDoc *doc, CGamesDoc *games) :
     else
         tableManager = new CTblMngrClient(doc, games, hostAddress, playView, this);
 
+    connect(tableManager, &CTblMngr::sShowScore, this, &CMainFrame::on_action_Score_triggered);
+
     //Initialization of main frame window.
     setCentralWidget(playView);
     setWindowIcon(QIcon(":/newPrefix/resources/ZBridgeICN.bmp"));
@@ -916,6 +918,8 @@ void CMainFrame::on_actionSeat_Configuration_triggered()
             tableManager = new CTblMngrServer(doc, games, hostAddress,  playView, this);
         else
             tableManager = new CTblMngrClient(doc, games, hostAddress, playView, this);
+
+        connect(tableManager, &CTblMngr::sShowScore, this, &CMainFrame::on_action_Score_triggered);
     }
 
 }

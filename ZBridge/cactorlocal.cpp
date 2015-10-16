@@ -53,6 +53,7 @@ CActorLocal::CActorLocal(bool manual, QString teamName, Seat seat, int protocol,
     bidAndPlay.generateEngines(bidOptionDocOwn, bidOptionDocOpp);
     this->tableManager = tableManager;
     showUser = false;
+    updateGameInfo = false;
     synchronizing = false;
 
     zBridgeClient_init(&handle);
@@ -314,7 +315,12 @@ void CActorLocal::clientSyncActions()
 
     else if (zBridgeClientSyncIface_israised_sendConfirmSync(&syncHandle))
     {
+        //Update Table Manager game info (might also pause here).
         int syncState = zBridgeClientSyncIface_get_syncState(&syncHandle);
+        if (updateGameInfo && (syncState == SS))
+            emit sUpdateGame();
+
+        //Might pause here (show button etc.).
         if (manual && ((syncState == SA) || (syncState == SP) || (syncState == SS) || (syncState == SL)))
             emit sEnableContinueSync(zBridgeClientSyncIface_get_syncState(&syncHandle));
         else

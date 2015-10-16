@@ -104,6 +104,7 @@ public slots:
     void sReadyForDummyCards(Seat seat);
     void sAttemptSyncFromClientToServer(Seat syncher);
     void sConfirmSyncFromClientToServer(Seat syncher);
+    void sUpdateGame();
 
     void sShowAuction();
     void sShowPlay();
@@ -141,6 +142,7 @@ private:
     void serverActions();
     void serverSyncActions();
     void setShowUser(bool showAll);
+    void setUpdateGameInfo();
 
     ZBridgeServer handle;
     ZBridgeServerSync syncHandle;
@@ -163,6 +165,7 @@ private:
 
     int currentCards[4][13];
     bool showUser;      /**< If true then the server handles the play view. */
+    bool updateGameInfo;/**< If true then update of game info is handle by Table Manager. */
     bool waiting;
 
     QTimer *leaderButton;

@@ -469,11 +469,18 @@ void CTblMngrServer::serverSyncActions()
     //Comes together with and after sendAttemptSync (gets cleared in some cases by sendAttemptSync).
     if (israised_sendConfirmSync)
     {
+        //Continue.
         zBridgeServerSyncIface_raise_continue(&syncHandle);
         serverSyncRunCycle();
 
+        //Check if game info should be updated (can only happen with 4 remote clients).
+        int syncState = zBridgeServerIface_get_syncState(&handle);
+        if (updateGameInfo && (syncState == SS))
+            sUpdateGame();
+
+        //Tell clients.
         for (int i = 0; i < 4; i++)
-         actors[i]->confirmSyncFromServerToClient();
+            actors[i]->confirmSyncFromServerToClient();
     }
 }
 
@@ -613,6 +620,7 @@ void CTblMngrServer::newSession()
     actors[SOUTH_SEAT] = actor;
 
     setShowUser(showAll);
+    setUpdateGameInfo();
 
     //Transfer game data to clients.
     if ((protocol == ADVANCED_PROTOCOL) && (remoteActorServer != 0) &&
@@ -775,6 +783,26 @@ void CTblMngrServer::setShowUser(bool showAll)
         showUser = true;
 }
 
+void CTblMngrServer::setUpdateGameInfo()
+{
+    updateGameInfo = false;
+    actors[WEST_SEAT]->setUpdateGameInfo(false);
+    actors[NORTH_SEAT]->setUpdateGameInfo(false);
+    actors[EAST_SEAT]->setUpdateGameInfo(false);
+    actors[SOUTH_SEAT]->setUpdateGameInfo(false);
+
+    if (actors[WEST_SEAT]->getActorType() != REMOTE_ACTOR)
+        actors[WEST_SEAT]->setUpdateGameInfo(true);
+    else if (actors[NORTH_SEAT]->getActorType() != REMOTE_ACTOR)
+        actors[NORTH_SEAT]->setUpdateGameInfo(true);
+    else if (actors[EAST_SEAT]->getActorType() != REMOTE_ACTOR)
+        actors[EAST_SEAT]->setUpdateGameInfo(true);
+    else if (actors[SOUTH_SEAT]->getActorType() != REMOTE_ACTOR)
+        actors[SOUTH_SEAT]->setUpdateGameInfo(true);
+    else
+        updateGameInfo = true;
+}
+
 //Slots for play view.
 //-----------------------------------------------------------------------------
 /**
@@ -851,8 +879,8 @@ void CTblMngrServer::startOfBoard()
 /**
  * @brief Player to lead next trick.
  *
- * Send "player to lead" to the relevant client. This routine is called after a one second delay.
- * It is a requirement of the protocol to have this one second delay.
+ * Send "player to lead" to the relevant client. For the basic protocol this routine is called
+ * after a one second delay. It is a requirement of the protocol to have this one second delay.
  *
  */
 void CTblMngrServer::playerToLead()
@@ -864,8 +892,8 @@ void CTblMngrServer::playerToLead()
 /**
  * @brief Dummy to lead the next trick.
  *
- * Send "dummy to lead" to the relevant client. This routine is called after a one second delay.
- * It is a requirement of the protocol to have this one second delay.
+ * Send "dummy to lead" to the relevant client. For the basic protocol this routine is called
+ * after a one second delay. It is a requirement of the protocol to have this one second delay.
  */
 void CTblMngrServer::dummyToLead()
 {
@@ -1017,6 +1045,25 @@ void CTblMngrServer::sConfirmSyncFromClientToServer(Seat syncher)
     serverSyncRunCycle();
 }
 
+void CTblMngrServer::sUpdateGame()
+{
+    games->setPlayedResult(bidHistory, playHistory, teamNames[WEST_SEAT], teamNames[NORTH_SEAT],
+                           teamNames[EAST_SEAT], teamNames[SOUTH_SEAT]);
+
+    //Auto play?
+
+
+    //Prepare for next deal.
+    games->prepNextDeal();
+
+    if (playHistory.getResult() != -1)
+    {
+        //Non saved played games does now exist.
+        QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_SAVE , true));
+        QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_SAVEAS , true));
+    }
+}
+
 /**
  * @brief Show auction info widgets in play view (actor slot).
  */
@@ -1128,34 +1175,7 @@ void CTblMngrServer::sEnableContinueSync(int syncState)
             QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_NEW_DEAL , false));
             QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_SHOW_ALL , false));
 
-            games->setPlayedResult(bidHistory, playHistory, teamNames[WEST_SEAT], teamNames[NORTH_SEAT],
-                                   teamNames[EAST_SEAT], teamNames[SOUTH_SEAT]);
-            games->prepNextDeal();
-
-            if (playHistory.getResult() != -1)
-            {
-                //Non saved played games does now exist.
-                QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_SAVE , true));
-                QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_SAVEAS , true));
-
-                //EAK Temporary.
-                Seat declarer = playHistory.getDeclarer();
-                Bids contract = playHistory.getContract();
-                Suit suit = BID_SUIT(contract);
-                int level = BID_LEVEL(contract);
-                Bids contractModifier = playHistory.getContractModifier();
-                bool doubleBid = IS_DOUBLE_BID(contractModifier);
-                bool redoubleBid = IS_REDOUBLE_BID(contractModifier);
-                int result = playHistory.getResult();
-
-                QString play = tr(SEAT_NAMES[declarer]) + tr(" made ") + QString::number(result) + tr(" in ") +
-                        QString::number(level) + tr(SUIT_NAMES[suit]);
-                if (doubleBid)
-                    play += "X";
-                else if (redoubleBid)
-                    play += "XX";
-                QMessageBox::information(0, tr("ZBridge"), play);
-            }
+            emit sShowScore();
 
             playView->showInfoNextButton(true, BUTTON_DEAL);
             break;

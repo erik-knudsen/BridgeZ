@@ -27,6 +27,7 @@
 #include "cactor.h"
 
 class CRemoteActorFrontEnd;
+class CTblMngr;
 
 /**
  * @brief This class implements the actor remote class.
@@ -68,7 +69,6 @@ public:
 
     Actor getActorType() { return REMOTE_ACTOR; }
     Seat getSeat() { return seat; }
-    bool isWaiting() { return false; }
 
 public slots:
     void receiveLine(QString line, bool connected);     /**< Receive a line from the client. */

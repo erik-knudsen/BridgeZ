@@ -90,7 +90,13 @@ SOURCES +=\
     cpointscoredialog.cpp \
     crankscoredialog.cpp \
     cplaydialog.cpp \
-    cplayshow.cpp
+    cplayshow.cpp \
+    ctblmngrbase.cpp \
+    cactorbase.cpp \
+    cactorlocalauto.cpp \
+    cactorremoteauto.cpp \
+    ctblmngrserverauto.cpp \
+    ctblmngrclientauto.cpp
 
 HEADERS  += cmainframe.h \
     czbridgedoc.h \
@@ -173,7 +179,13 @@ HEADERS  += cmainframe.h \
     cpointscoredialog.h \
     crankscoredialog.h \
     cplaydialog.h \
-    cplayshow.h
+    cplayshow.h \
+    ctblmngrbase.h \
+    cactorbase.h \
+    cactorlocalauto.h \
+    cactorremoteauto.h \
+    ctblmngrserverauto.h \
+    ctblmngrclientauto.h
 
 FORMS    += cmainframe.ui \
     cfilepropertiesdialog.ui \

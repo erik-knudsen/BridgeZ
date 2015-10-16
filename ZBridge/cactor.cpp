@@ -16,36 +16,20 @@
 /**
  * \file
  * The file implements the definition of the generic strategy for actor
- * strategy classes.
+ * strategy classes (local and remote - not auto).
  */
 
-#include "CTblMngr.h"
+#include "CTblMngrBase.h"
 #include "cactor.h"
 
 /**
  * @brief Constructor for actor.
- * @param tableManager Pointer to the table manager for the actor..
+ * @param tableManager Pointer to the table manager for the actor.
  *
- * The constructor creates common connections from the actor to the controlling table manager.
  */
-CActor::CActor(CTblMngr *tableManager) :
-    QObject(tableManager)
+CActor::CActor(CTblMngrBase *tableManager) :
+    CActorBase(tableManager)
 {
-    this->tableManager = tableManager;
-
-    connect(this, &CActor::sConnect, tableManager, &CTblMngr::sConnect);
-    connect(this, &CActor::sRTNames, tableManager, &CTblMngr::sRTNames);
-    connect(this, &CActor::sRSBoard, tableManager, &CTblMngr::sRSBoard);
-    connect(this, &CActor::sRDealInfo, tableManager, &CTblMngr::sRDealInfo);
-    connect(this, &CActor::sRCards, tableManager, &CTblMngr::sRCards);
-    connect(this, &CActor::sRBid, tableManager, &CTblMngr::sRBid);
-    connect(this, &CActor::sBid, tableManager, &CTblMngr::sBid);
-    connect(this, &CActor::sPlayerPlays, tableManager, &CTblMngr::sPlayerPlays);
-    connect(this, &CActor::sReadyForPlayer, tableManager, &CTblMngr::sReadyForPlayer);
-    connect(this, &CActor::sReadyForDummy, tableManager, &CTblMngr::sReadyForDummy);
-    connect(this, &CActor::sReadyForDummyCards, tableManager, &CTblMngr::sReadyForDummyCards);
-    connect(this, &CActor::sAttemptSyncFromClientToServer, tableManager, &CTblMngr::sAttemptSyncFromClientToServer);
-    connect(this, &CActor::sConfirmSyncFromClientToServer, tableManager, &CTblMngr::sConfirmSyncFromClientToServer);
 }
 
 CActor::~CActor()

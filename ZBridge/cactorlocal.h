@@ -32,6 +32,7 @@
 #include "cactor.h"
 
 class CBidOptionDoc;
+class CTblMngr;
 
 /**
  * @brief This class implements the actor local class.
@@ -59,6 +60,7 @@ public:
     void continueSync();
 
     void setShowUser(bool showUser) { this->showUser = showUser; }
+    void setUpdateGameInfo(bool updateGameInfo) { this->updateGameInfo = updateGameInfo; }
 
     CBidHistory &getBidHistory() { return bidAndPlay.getBidHistory(); }
     CPlayHistory &getPlayHistory() { return bidAndPlay.getPlayHistory(); }
@@ -84,7 +86,6 @@ public:
 
     Actor getActorType() { return (manual ? MANUAL_ACTOR : AUTO_ACTOR); }
     Seat getSeat() {return (Seat)zBridgeClientIface_get_client(&handle); }
-    bool isWaiting() { return waiting; }
 
     ZBridgeClient *getHandle() { return &handle; }
 
@@ -123,7 +124,7 @@ private:
 
     bool manual;        /**< Automatic or Manual actor ? */
     bool showUser;      /**< Control what is shown to the user? */
-    bool waiting;
+    bool updateGameInfo;/**< Control who updates game info? */
 
     QString teamName;   /**< Team name. */
     int protocol;       /**< Protocol (Advanced or Basic). */

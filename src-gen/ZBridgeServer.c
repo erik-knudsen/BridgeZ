@@ -85,6 +85,11 @@ void zBridgeServer_init(ZBridgeServer* handle)
 	zBridgeServer_clearOutEvents(handle);
 
 	/* Default init sequence for statechart ZBridgeServer */
+	handle->internal.SS = 1;
+	handle->internal.SA = 2;
+	handle->internal.SP = 3;
+	handle->internal.SL = 4;
+	handle->internal.SR = 5;
 	handle->internal.BID_NONE = - 1;
 	handle->internal.BID_PASS = 0;
 	handle->internal.BID_DOUBLE = 36;
@@ -139,6 +144,7 @@ void zBridgeServer_init(ZBridgeServer* handle)
 	handle->iface.player = 0;
 	handle->iface.noTrick = 0;
 	handle->iface.cardVal = 0;
+	handle->iface.syncState = 0;
 
 }
 
@@ -1195,6 +1201,12 @@ sc_integer zBridgeServerIface_get_cardVal(ZBridgeServer* handle) {
 }
 void zBridgeServerIface_set_cardVal(ZBridgeServer* handle, sc_integer value) {
 	handle->iface.cardVal = value;
+}
+sc_integer zBridgeServerIface_get_syncState(ZBridgeServer* handle) {
+	return handle->iface.syncState;
+}
+void zBridgeServerIface_set_syncState(ZBridgeServer* handle, sc_integer value) {
+	handle->iface.syncState = value;
 }
 
 // implementations of all internal functions
@@ -2763,6 +2775,8 @@ static void zBridgeServer_react_entry__Bidding_West_Wait(ZBridgeServer* handle) 
 				}  else {
 					handle->iface.synchronize_raised = bool_true;
 					/* 'default' enter sequence for state SyncSB */
+					/* Entry action for state 'SyncSB'. */
+					handle->iface.syncState = handle->internal.SS;
 					handle->stateConfVector[0] = ZBridgeServer_entry__SyncSB;
 					handle->stateConfVectorPosition = 0;
 				}
@@ -3203,6 +3217,8 @@ static void zBridgeServer_react_entry__Bidding_West_Sync(ZBridgeServer* handle) 
 				}  else {
 					handle->iface.synchronize_raised = bool_true;
 					/* 'default' enter sequence for state SyncSB */
+					/* Entry action for state 'SyncSB'. */
+					handle->iface.syncState = handle->internal.SS;
 					handle->stateConfVector[0] = ZBridgeServer_entry__SyncSB;
 					handle->stateConfVectorPosition = 0;
 				}
@@ -3945,6 +3961,8 @@ static void zBridgeServer_react_entry__Playing_West_Wait(ZBridgeServer* handle) 
 			}  else {
 				handle->iface.synchronize_raised = bool_true;
 				/* 'default' enter sequence for state SyncSB */
+				/* Entry action for state 'SyncSB'. */
+				handle->iface.syncState = handle->internal.SS;
 				handle->stateConfVector[0] = ZBridgeServer_entry__SyncSB;
 				handle->stateConfVectorPosition = 0;
 			}
@@ -4119,6 +4137,8 @@ static void zBridgeServer_react_entry__Playing_West_Wait(ZBridgeServer* handle) 
 					handle->iface.undoTrick_raised = bool_true;
 					handle->iface.synchronize_raised = bool_true;
 					/* 'default' enter sequence for state SyncReplay */
+					/* Entry action for state 'SyncReplay'. */
+					handle->iface.syncState = handle->internal.SR;
 					handle->stateConfVector[0] = ZBridgeServer_entry__SyncReplay;
 					handle->stateConfVectorPosition = 0;
 				}  else {
@@ -4208,6 +4228,8 @@ static void zBridgeServer_react_entry__Playing_West_Wait(ZBridgeServer* handle) 
 						handle->internal.playNo = 0;
 						handle->iface.synchronize_raised = bool_true;
 						/* 'default' enter sequence for state SyncLeader */
+						/* Entry action for state 'SyncLeader'. */
+						handle->iface.syncState = handle->internal.SL;
 						handle->stateConfVector[0] = ZBridgeServer_entry__SyncLeader;
 						handle->stateConfVectorPosition = 0;
 					}  else {
@@ -4486,6 +4508,8 @@ static void zBridgeServer_react_entry__Playing_West_Sync(ZBridgeServer* handle) 
 			}  else {
 				handle->iface.synchronize_raised = bool_true;
 				/* 'default' enter sequence for state SyncSB */
+				/* Entry action for state 'SyncSB'. */
+				handle->iface.syncState = handle->internal.SS;
 				handle->stateConfVector[0] = ZBridgeServer_entry__SyncSB;
 				handle->stateConfVectorPosition = 0;
 			}
@@ -4660,6 +4684,8 @@ static void zBridgeServer_react_entry__Playing_West_Sync(ZBridgeServer* handle) 
 					handle->iface.undoTrick_raised = bool_true;
 					handle->iface.synchronize_raised = bool_true;
 					/* 'default' enter sequence for state SyncReplay */
+					/* Entry action for state 'SyncReplay'. */
+					handle->iface.syncState = handle->internal.SR;
 					handle->stateConfVector[0] = ZBridgeServer_entry__SyncReplay;
 					handle->stateConfVectorPosition = 0;
 				}  else {
@@ -4749,6 +4775,8 @@ static void zBridgeServer_react_entry__Playing_West_Sync(ZBridgeServer* handle) 
 						handle->internal.playNo = 0;
 						handle->iface.synchronize_raised = bool_true;
 						/* 'default' enter sequence for state SyncLeader */
+						/* Entry action for state 'SyncLeader'. */
+						handle->iface.syncState = handle->internal.SL;
 						handle->stateConfVector[0] = ZBridgeServer_entry__SyncLeader;
 						handle->stateConfVectorPosition = 0;
 					}  else {
@@ -5322,6 +5350,8 @@ static void zBridgeServer_react_entry__WaitLeader(ZBridgeServer* handle) {
 		handle->internal.playNo = 0;
 		handle->iface.synchronize_raised = bool_true;
 		/* 'default' enter sequence for state SyncLeader */
+		/* Entry action for state 'SyncLeader'. */
+		handle->iface.syncState = handle->internal.SL;
 		handle->stateConfVector[0] = ZBridgeServer_entry__SyncLeader;
 		handle->stateConfVectorPosition = 0;
 	} 
@@ -5413,6 +5443,8 @@ static void zBridgeServer_react_entry__SyncAuction(ZBridgeServer* handle) {
 			}  else {
 				handle->iface.synchronize_raised = bool_true;
 				/* 'default' enter sequence for state SyncSB */
+				/* Entry action for state 'SyncSB'. */
+				handle->iface.syncState = handle->internal.SS;
 				handle->stateConfVector[0] = ZBridgeServer_entry__SyncSB;
 				handle->stateConfVectorPosition = 0;
 			}
@@ -5511,6 +5543,8 @@ static void zBridgeServer_react_entry__SyncPlay(ZBridgeServer* handle) {
 			}  else {
 				handle->iface.synchronize_raised = bool_true;
 				/* 'default' enter sequence for state SyncSB */
+				/* Entry action for state 'SyncSB'. */
+				handle->iface.syncState = handle->internal.SS;
 				handle->stateConfVector[0] = ZBridgeServer_entry__SyncSB;
 				handle->stateConfVectorPosition = 0;
 			}
@@ -5537,6 +5571,8 @@ static void zBridgeServer_react_entry__SyncLeader(ZBridgeServer* handle) {
 			}  else {
 				handle->iface.synchronize_raised = bool_true;
 				/* 'default' enter sequence for state SyncSB */
+				/* Entry action for state 'SyncSB'. */
+				handle->iface.syncState = handle->internal.SS;
 				handle->stateConfVector[0] = ZBridgeServer_entry__SyncSB;
 				handle->stateConfVectorPosition = 0;
 			}
@@ -5625,6 +5661,8 @@ static void zBridgeServer_react_entry__SyncLeader(ZBridgeServer* handle) {
 			}  else {
 				handle->iface.synchronize_raised = bool_true;
 				/* 'default' enter sequence for state SyncSB */
+				/* Entry action for state 'SyncSB'. */
+				handle->iface.syncState = handle->internal.SS;
 				handle->stateConfVector[0] = ZBridgeServer_entry__SyncSB;
 				handle->stateConfVectorPosition = 0;
 			}
@@ -5642,6 +5680,8 @@ static void zBridgeServer_react_entry__SyncLeader(ZBridgeServer* handle) {
 				handle->iface.undoTrick_raised = bool_true;
 				handle->iface.synchronize_raised = bool_true;
 				/* 'default' enter sequence for state SyncReplay */
+				/* Entry action for state 'SyncReplay'. */
+				handle->iface.syncState = handle->internal.SR;
 				handle->stateConfVector[0] = ZBridgeServer_entry__SyncReplay;
 				handle->stateConfVectorPosition = 0;
 			}  else {
@@ -5658,6 +5698,8 @@ static void zBridgeServer_react_entry__SyncLeader(ZBridgeServer* handle) {
 					handle->internal.playNo = 0;
 					handle->iface.synchronize_raised = bool_true;
 					/* 'default' enter sequence for state SyncLeader */
+					/* Entry action for state 'SyncLeader'. */
+					handle->iface.syncState = handle->internal.SL;
 					handle->stateConfVector[0] = ZBridgeServer_entry__SyncLeader;
 					handle->stateConfVectorPosition = 0;
 				}  else {
@@ -5725,6 +5767,8 @@ static void zBridgeServer_react_entry__SyncReplay(ZBridgeServer* handle) {
 			}  else {
 				handle->iface.synchronize_raised = bool_true;
 				/* 'default' enter sequence for state SyncSB */
+				/* Entry action for state 'SyncSB'. */
+				handle->iface.syncState = handle->internal.SS;
 				handle->stateConfVector[0] = ZBridgeServer_entry__SyncSB;
 				handle->stateConfVectorPosition = 0;
 			}
@@ -5839,6 +5883,8 @@ static void zBridgeServer_react_entry___sync1(ZBridgeServer* handle) {
 	handle->internal.noPasses = 0;
 	handle->iface.synchronize_raised = bool_true;
 	/* 'default' enter sequence for state SyncAuction */
+	/* Entry action for state 'SyncAuction'. */
+	handle->iface.syncState = handle->internal.SA;
 	handle->stateConfVector[0] = ZBridgeServer_entry__SyncAuction;
 	handle->stateConfVectorPosition = 0;
 }
@@ -5862,6 +5908,8 @@ static void zBridgeServer_react_entry___sync2(ZBridgeServer* handle) {
 			handle->internal.playNo = 0;
 			handle->iface.synchronize_raised = bool_true;
 			/* 'default' enter sequence for state SyncPlay */
+			/* Entry action for state 'SyncPlay'. */
+			handle->iface.syncState = handle->internal.SP;
 			handle->stateConfVector[0] = ZBridgeServer_entry__SyncPlay;
 			handle->stateConfVectorPosition = 0;
 		}  else {
@@ -5876,6 +5924,8 @@ static void zBridgeServer_react_entry___sync2(ZBridgeServer* handle) {
 				}  else {
 					handle->iface.synchronize_raised = bool_true;
 					/* 'default' enter sequence for state SyncSB */
+					/* Entry action for state 'SyncSB'. */
+					handle->iface.syncState = handle->internal.SS;
 					handle->stateConfVector[0] = ZBridgeServer_entry__SyncSB;
 					handle->stateConfVectorPosition = 0;
 				}

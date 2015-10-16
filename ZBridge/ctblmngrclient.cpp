@@ -147,6 +147,7 @@ void CTblMngrClient::newSession()
                                 SOUTH_SEAT, protocol, doc->getNSBidOptions(), doc->getEWBidOptions(), this);
 
     actor->setShowUser((actor->getActorType() == MANUAL_ACTOR) || showAll);
+    actor->setUpdateGameInfo(true);
 
     //Start tcp/ip interface to server.
     remoteActorClient = new CRemoteActorClient(hostAddress.toString(),
@@ -360,6 +361,18 @@ void CTblMngrClient::sConfirmSyncFromClientToServer(Seat syncher)
     remoteActorClient->sendLine(confirmSynchronizeMsg.line);
 }
 
+void CTblMngrClient::sUpdateGame()
+{    
+    //Update current game.
+    games->setPlayedResult(actor->getBidHistory(), actor->getPlayHistory(), teamNames[WEST_SEAT],
+                           teamNames[NORTH_SEAT], teamNames[EAST_SEAT], teamNames[SOUTH_SEAT]);
+
+    //Auto play?
+
+    //Prepare for next game.
+    games->prepNextDeal();
+}
+
 /**
  * @brief Show auction info widgets in play view (actor slot).
  */
@@ -444,31 +457,7 @@ void CTblMngrClient::sEnableContinueSync(int syncState)
         //Disable Show All menu actions.
         QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_SHOW_ALL , false));
 
-        //Update current game.
-        games->setPlayedResult(actor->getBidHistory(), actor->getPlayHistory(), teamNames[WEST_SEAT],
-                               teamNames[NORTH_SEAT], teamNames[EAST_SEAT], teamNames[SOUTH_SEAT]);
-        games->prepNextDeal();
-
-        if (actor->getPlayHistory().getResult() != -1)
-        {
-            //EAK Temporary.
-            Seat declarer = actor->getPlayHistory().getDeclarer();
-            Bids contract = actor->getPlayHistory().getContract();
-            Suit suit = BID_SUIT(contract);
-            int level = BID_LEVEL(contract);
-            Bids contractModifier = actor->getPlayHistory().getContractModifier();
-            bool doubleBid = IS_DOUBLE_BID(contractModifier);
-            bool redoubleBid = IS_REDOUBLE_BID(contractModifier);
-            int result = actor->getPlayHistory().getResult();
-
-            QString play = tr(SEAT_NAMES[declarer]) + tr(" made ") + QString::number(result) + tr(" in ") +
-                    QString::number(level) + tr(SUIT_NAMES[suit]);
-            if (doubleBid)
-                play += "X";
-            else if (redoubleBid)
-                play += "XX";
-            QMessageBox::information(0, tr("ZBridge"), play);
-        }
+        emit sShowScore();
 
         playView->showInfoNextButton(true, BUTTON_DEAL);
         break;
