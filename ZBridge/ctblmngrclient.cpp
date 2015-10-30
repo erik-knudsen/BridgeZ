@@ -162,6 +162,7 @@ void CTblMngrClient::newSession()
     handle = actor->getHandle();
 }
 
+//Only used with advanced protocol.
 void CTblMngrClient::showAllCards()
 {
     if (protocol == BASIC_PROTOCOL)
@@ -349,28 +350,41 @@ void CTblMngrClient::sReadyForDummyCards(Seat seat)
     remoteActorClient->sendLine(readyForDummyCardsMsg.line);
 }
 
+/**
+ * @brief Synchronization signal from client to the server.
+ * @param syncher The clients seat.
+ *
+ * Only used with advanced protocol.
+ */
 void CTblMngrClient::sAttemptSyncFromClientToServer(Seat syncher)
 {
     CAttemptSynchronizeMsg attemptSynchronizeMsg(syncher);
     remoteActorClient->sendLine(attemptSynchronizeMsg.line);
 }
 
+/**
+ * @brief Synchronization signal from client to the server.
+ * @param syncher The clients seat.
+ *
+ * Only used with advanced protocol.
+ */
 void CTblMngrClient::sConfirmSyncFromClientToServer(Seat syncher)
 {
+    games->prepNextDeal();
+
     CConfirmSynchronizeMsg confirmSynchronizeMsg(syncher);
     remoteActorClient->sendLine(confirmSynchronizeMsg.line);
 }
 
+//Only relevant with advanced protocol.
 void CTblMngrClient::sUpdateGame()
-{    
-    //Update current game.
+{
+    if (protocol == BASIC_PROTOCOL)
+        return;
+
+    //Update game info.
     games->setPlayedResult(actor->getBidHistory(), actor->getPlayHistory(), teamNames[WEST_SEAT],
                            teamNames[NORTH_SEAT], teamNames[EAST_SEAT], teamNames[SOUTH_SEAT]);
-
-    //Auto play?
-
-    //Prepare for next game.
-    games->prepNextDeal();
 }
 
 /**
@@ -457,7 +471,8 @@ void CTblMngrClient::sEnableContinueSync(int syncState)
         //Disable Show All menu actions.
         QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_SHOW_ALL , false));
 
-        emit sShowScore();
+        if (protocol == ADVANCED_PROTOCOL)
+            emit sShowScore();
 
         playView->showInfoNextButton(true, BUTTON_DEAL);
         break;
@@ -748,7 +763,7 @@ void CTblMngrClient::receiveLine(QString line)
 
     case UNDOBID_MSG:
     {
-        //Undo bid message was received.
+        //Undo bid message was received (only advanced protocol).
         CUndoBidMsg undoBidMsg(line);
         actor->undoBid(false);
         break;
@@ -756,7 +771,7 @@ void CTblMngrClient::receiveLine(QString line)
 
     case  UNDOTRICK_MSG:
     {
-        //Undo trick message was received.
+        //Undo trick message was received (only advanced protocol).
         CUndoTrickMsg undoTrickMsg(line);
         actor->undoTrick(false);
         break;
@@ -764,7 +779,7 @@ void CTblMngrClient::receiveLine(QString line)
 
     case REBID_MSG:
     {
-        //Rebid message was received.
+        //Rebid message was received (only advanced protocol).
         CReBidMsg reBidMsg(line);
         actor->undoBid(true);
         break;
@@ -772,7 +787,7 @@ void CTblMngrClient::receiveLine(QString line)
 
     case REPLAY_MSG:
     {
-        //Replay message was received.
+        //Replay message was received (only advanced protocol).
         CRePlayMsg rePlayMsg(line);
         actor->undoTrick(true);
         break;
@@ -788,7 +803,7 @@ void CTblMngrClient::receiveLine(QString line)
 
     case ATTEMPT_SYNCHRONIZE_MSG:
     {
-        //Attempt synchronize message was received.
+        //Attempt synchronize message was received (only advanced protocol).
         CAttemptSynchronizeMsg attemptSynchronize(line);
         actor->attemptSyncFromServerToClient();
         break;
@@ -796,7 +811,7 @@ void CTblMngrClient::receiveLine(QString line)
 
     case CONFIRM_SYNCHRONIZE_MSG:
     {
-        //Confirm synchronize message was received.
+        //Confirm synchronize message was received (only advanced protocol).
         CConfirmSynchronizeMsg confirmSynchronize(line);
         actor->confirmSyncFromServerToClient();
         break;
@@ -812,7 +827,7 @@ void CTblMngrClient::receiveLine(QString line)
 
     case ORIGINAL_PBN_START_MSG:
     {
-        //Start of original PBN stream (comes always before played PBN stream).
+        //Start of original PBN stream (comes always before played PBN stream - only advanced protocol).
         COriginalPBNStartMsg originalPBNStartMsg(line);
         games->clearGames(originalPBNStartMsg.scoringMethod);
 
@@ -824,7 +839,7 @@ void CTblMngrClient::receiveLine(QString line)
 
     case PLAYED_PBN_START_MSG:
     {
-        //Start of played PBN stream (comes allways after original PBN stream).
+        //Start of played PBN stream (comes allways after original PBN stream - only advanced protocol).
         playedBytes.open(QIODevice::ReadWrite);
         playedStream.setDevice(&playedBytes);
         comMode = PLAYED_PBN_STREAM_MODE;
@@ -834,7 +849,7 @@ void CTblMngrClient::receiveLine(QString line)
 
     case PBN_LINE_MSG:
     {
-        //Receiving a PBN file.
+        //Receiving a PBN file  (only advanced protocol).
         if (comMode == ORIGINAL_PBN_STREAM_MODE)
             originalStream << line;
         else if (comMode == PLAYED_PBN_STREAM_MODE)
@@ -846,7 +861,7 @@ void CTblMngrClient::receiveLine(QString line)
     {
         if (comMode == PLAYED_PBN_STREAM_MODE)
         {
-            //Has now received Original and Played pbn data.
+            //Has now received Original and Played pbn data (only advanced protocol).
             originalStream.flush();
             playedStream.flush();
             originalStream.seek(0);
@@ -870,15 +885,13 @@ void CTblMngrClient::receiveLine(QString line)
                 catch (PlayException &e)
                 {
                     //There was an error in processing of pbn data.
-                    QMessageBox::critical(0, tr("ZBridge"), e.what());
+                    throw NetProtocolException("Net - PBN data error: " + QString(e.what()).toStdString());
                 }
 
                 //Close buffers.
                 originalBytes.close();
                 playedBytes.close();
             }
-
-
         }
         comMode = NORMAL_MODE;
         break;

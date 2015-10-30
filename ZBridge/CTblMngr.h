@@ -50,7 +50,6 @@ public:
      * These methods are activated via the applications main menu.
      */
     /*@{*/
-    virtual void newSession() = 0;
     virtual void newDeal();
     virtual void showAllCards() = 0;
     virtual void reBid();

@@ -24,6 +24,7 @@
 
 #include <QMainWindow>
 #include <QHostAddress>
+#include <QSemaphore>
 
 namespace Ui {
 class CMainFrame;
@@ -33,6 +34,7 @@ class CZBridgeDoc;
 class CGamesDoc;
 class CPlayView;
 class CTblMngr;
+class CTblMngrBase;
 class CFileCommentsDialog;
 class CStatusWnd;
 class CHistoryWnd;
@@ -67,6 +69,13 @@ public:
     void enableUIActionsServer(bool advProtocol);   //Server mode.
     void enableUIActionsClient(bool advProtocol);   //Client mode.
 
+signals:
+    void sAutoQuit();
+    void sNewSession();
+
+public slots:
+    void sStatusText(QString text);
+
 protected:
     virtual void resizeEvent(QResizeEvent *resizeEvent);
 
@@ -82,7 +91,7 @@ private:
     CGamesDoc *games;
     CPlayView *playView;
     CTblMngr *tableManager;
-
+    CTblMngrBase *tableManagerAuto;
     static CMainFrame* m_pInstance;
 
     CFileCommentsDialog *m_pFileCommentsDlg;
@@ -92,6 +101,7 @@ private:
     int eventIndex;             //PBN event index.
     QString fileName;           //PBN file name.
     QHostAddress hostAddress;
+    QSemaphore sem1, sem2;
 
 private slots:
     void OnUpdateViewFileComments();

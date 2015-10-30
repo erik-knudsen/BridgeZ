@@ -28,6 +28,7 @@
 #include "../src-gen/ZBridgeServer.h"
 #include "../src-gen/ZBridgeServerSync.h"
 
+#include "ZBridgeException.h"
 #include "Defines.h"
 #include "cbidhistory.h"
 #include "cplayhistory.h"
@@ -55,8 +56,8 @@ class CTblMngrServer : public CTblMngr
     Q_OBJECT
 
 public:
-    CTblMngrServer(CZBridgeDoc *doc, CGamesDoc *games, QHostAddress hostAddress,
-                   CPlayView *playView, QObject *parent = 0);
+    CTblMngrServer(CZBridgeDoc *doc, CGamesDoc *games, QHostAddress hostAddress, CPlayView *playView,
+                   QObject *parent = 0) throw(NetProtocolException);
     ~CTblMngrServer();
 
     //Run cycle for the server statechart.
@@ -117,8 +118,6 @@ public slots:
     void sContinueSync();
     /*@}*/
 
-
-
     /** @name Delay slots.
      * These slot methods are internal slots used for delays.
      */
@@ -126,6 +125,13 @@ public slots:
     void startOfBoard();
     void playerToLead();
     void dummyToLead();
+    /*@}*/
+
+    /** @name Synchronize slot.
+     * This slot method is used for synchronizing auto play and ordinary play.
+     */
+    /*@{*/
+    void sltPlayStart();
     /*@}*/
 
     //Reset table manager (used as slot when a remote client disconnects).

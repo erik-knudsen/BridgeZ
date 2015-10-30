@@ -99,6 +99,7 @@ private:
     void clientSyncActions();
 
     bool updateGameInfo;/**< Control who updates game info? */
+    bool updateCurrentGameInfo;
 
     QString teamName;   /**< Team name. */
 

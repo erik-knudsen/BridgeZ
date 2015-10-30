@@ -76,12 +76,12 @@ void CTblMngrClientAuto::cleanTableManager()
     }
 }
 
-//Method activated by user through main frame menus.
+//Method activated by user through main frame menus (via a signal).
 //-----------------------------------------------------------------------------
 /**
- * @brief Start a new session (from main menu).
+ * @brief Start a new session (from main menu and through a signal).
  *
- * This method is activated externally. It starts a new session by trying to connect
+ * This slot starts a new session by trying to connect
  * to a table manager server.
  *
  *   - Determine IP address (must be IPV4 address).
@@ -90,23 +90,22 @@ void CTblMngrClientAuto::cleanTableManager()
  *   - Start tcp/ip interface to server and try to connect.
  *   - Make relevant connects to tcp/ip interface.
  */
-void CTblMngrClientAuto::newSession()
+void CTblMngrClientAuto::sNewSession()
 {
     //Prepare for new session.
     cleanTableManager();
-
     //Set up actor.
     if (doc->getSeatOptions().seat == WEST_SEAT)
-        actor = new CActorLocalAuto(doc->getSeatOptions().westName,
+        actor = new CActorLocalAuto(tr(AUTO_SEAT_NAMES[WEST_SEAT]),
                                 WEST_SEAT, doc->getNSBidOptions(), doc->getEWBidOptions(), this);
     else if (doc->getSeatOptions().seat == NORTH_SEAT)
-        actor = new CActorLocalAuto(doc->getSeatOptions().northName,
+        actor = new CActorLocalAuto(tr(AUTO_SEAT_NAMES[NORTH_SEAT]),
                                 NORTH_SEAT, doc->getNSBidOptions(), doc->getEWBidOptions(), this);
     else if (doc->getSeatOptions().seat == EAST_SEAT)
-        actor = new CActorLocalAuto(doc->getSeatOptions().eastName,
+        actor = new CActorLocalAuto(tr(AUTO_SEAT_NAMES[EAST_SEAT]),
                                 EAST_SEAT, doc->getNSBidOptions(), doc->getEWBidOptions(), this);
     else
-        actor = new CActorLocalAuto(doc->getSeatOptions().southName,
+        actor = new CActorLocalAuto(tr(AUTO_SEAT_NAMES[SOUTH_SEAT]),
                                 SOUTH_SEAT, doc->getNSBidOptions(), doc->getEWBidOptions(), this);
 
     //Only for update of Table Manager game info.
@@ -276,12 +275,9 @@ void CTblMngrClientAuto::sUpdateGame()
  */
 void CTblMngrClientAuto::sSocketError(QString err)
 {
-    QMessageBox::information(0, tr("ZBridge"), err);
+    QMessageBox::information(0, tr("ZBridge"), tr("Auto client: ") + err);
 
     cleanTableManager();
-
-    //Enable new session action.
-    QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_NEW_SESSION , true));
 }
 
 /**
@@ -293,8 +289,6 @@ void CTblMngrClientAuto::clientConnected()
 {
     //Start actor.
     actor->startNewSession();
-
-    QMessageBox::information(0, tr("ZBridge"), tr("Client connected."));
 }
 
 /**
@@ -304,7 +298,7 @@ void CTblMngrClientAuto::clientConnected()
  */
 void CTblMngrClientAuto::clientDisConnected()
 {
-    QMessageBox::information(0, tr("ZBridge"), tr("Client disconnected."));
+    QMessageBox::information(0, tr("ZBridge"), tr("Auto client disconnected."));
 
     cleanTableManager();
 }
@@ -361,7 +355,6 @@ void CTblMngrClientAuto::receiveLine(QString line)
         //Deal info message was received.
         CDealInfoMsg dealInfoMsg(line);
         actor->dealInfo(dealInfoMsg.boardNumber, dealInfoMsg.dealer, dealInfoMsg.vulnerability);
-        games->setNextDeal(dealInfoMsg.boardNumber, dealInfoMsg.dealer, dealInfoMsg.vulnerability);
         noHands = 0;
         break;
     }
@@ -378,8 +371,6 @@ void CTblMngrClientAuto::receiveLine(QString line)
         //Have we received all hands?
         if (noHands == 4)
         {
-            games->setNextDeal(currentCards);
-
             //Set actor cards.
             actor->cards(currentCards);
         }
@@ -513,5 +504,11 @@ void CTblMngrClientAuto::receiveLine(QString line)
 
         cleanTableManager();
     }
+}
+
+void CTblMngrClientAuto::sAutoQuit()
+{
+    deleteLater();
+    thread()->quit();
 }
 

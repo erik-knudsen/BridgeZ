@@ -49,7 +49,7 @@
  *   - In server mode it sets up a tcp server for remote actors.
  */
 CTblMngrServerAuto::CTblMngrServerAuto(CZBridgeDoc *doc, CGamesDoc *games, QHostAddress hostAddress,
-                                QObject *parent) :
+                                       QObject *parent) throw(NetProtocolException) :
     CTblMngrBase(parent)
 {
     this->doc = doc;
@@ -68,23 +68,16 @@ CTblMngrServerAuto::CTblMngrServerAuto(CZBridgeDoc *doc, CGamesDoc *games, QHost
     remoteActorServer = 0;
     if (!hostAddress.isNull())
     {
-        try
-        {
-            remoteActorServer = new CRemoteActorServer(doc->getSeatOptions().protocol,
-                 hostAddress, doc->getSeatOptions().portServer.toInt() + AUTOPORTOFFSET, this);
+        remoteActorServer = new CRemoteActorServer(doc->getSeatOptions().protocol,
+                                                   hostAddress, doc->getSeatOptions().portServer.toInt() + AUTOPORTOFFSET, this);
 
-            //Connect for disconnect of remote client(s).
-            connect(remoteActorServer, &CRemoteActorServer::clientDisconnected, this, &CTblMngrServerAuto::cleanTableManager);
+        //Connect for disconnect of remote client(s).
+        connect(remoteActorServer, &CRemoteActorServer::clientDisconnected, this, &CTblMngrServerAuto::cleanTableManager);
 
-            //Connect for info, warning and error messages for server/client connection(s).
-            connect(remoteActorServer, &CRemoteActorServer::connectInfo, this, &CTblMngrServerAuto::connectInfo);
-            connect(remoteActorServer, &CRemoteActorServer::connectWarning, this, &CTblMngrServerAuto::connectWarning);
-            connect(remoteActorServer, &CRemoteActorServer::connectError, this, &CTblMngrServerAuto::connectError);
-        }
-        catch (NetProtocolException &e)
-        {
-            QMessageBox::warning(0, tr("ZBridge"), e.what());
-        }
+        //Connect for info, warning and error messages for server/client connection(s).
+        connect(remoteActorServer, &CRemoteActorServer::connectInfo, this, &CTblMngrServerAuto::connectInfo);
+        connect(remoteActorServer, &CRemoteActorServer::connectWarning, this, &CTblMngrServerAuto::connectWarning);
+        connect(remoteActorServer, &CRemoteActorServer::connectError, this, &CTblMngrServerAuto::connectError);
     }
 
     waiting = false;
@@ -261,7 +254,7 @@ void CTblMngrServerAuto::serverActions()
 
     else if (zBridgeServerIface_israised_undoPlay(&handle) || zBridgeServerIface_israised_undoBid(&handle))
     {
-        //Undo bid always follows undo play.
+        //Undo bid always follows undo play - not used with auto play.
         int val = zBridgeServerIface_get_undoBid_value(&handle);
         actors[WEST_SEAT]->undoBid(val == REBID);
         actors[NORTH_SEAT]->undoBid(val == REBID);
@@ -271,7 +264,7 @@ void CTblMngrServerAuto::serverActions()
 
     else if (zBridgeServerIface_israised_undoTrick(&handle))
     {
-        //Undo trick.
+        //Undo trick - not used with auto play.
         int val = zBridgeServerIface_get_undoTrick_value(&handle);
         actors[WEST_SEAT]->undoTrick(val == REPLAY);
         actors[NORTH_SEAT]->undoTrick(val == REPLAY);
@@ -290,11 +283,6 @@ void CTblMngrServerAuto::serverActions()
     else if (zBridgeServerIface_israised_endOfSession(&handle))
     {
         //End of session.
-        actors[WEST_SEAT]->endOfSession();
-        actors[NORTH_SEAT]->endOfSession();
-        actors[EAST_SEAT]->endOfSession();
-        actors[SOUTH_SEAT]->endOfSession();
-
         cleanTableManager();
     }
 
@@ -373,9 +361,22 @@ void CTblMngrServerAuto::serverSyncActions()
         if (updateGameInfo && (syncState == SS))
             sUpdateGame();
 
-        //Tell clients.
-        for (int i = 0; i < 4; i++)
-         actors[i]->confirmSyncFromServerToClient();
+        //Tell ordinary play that we are ready for the next game.
+        if (syncState == SS)
+            emit sigPlayStart();
+
+        //Wait for ordinary play?
+        if ((syncState == SS) && !playContinue)
+            playWaiting = true;
+        else
+        {
+            if (syncState == SS)
+                playContinue = false;
+
+            //Tell clients.
+            for (int i = 0; i < 4; i++)
+                actors[i]->confirmSyncFromServerToClient();
+        }
     }
 }
 
@@ -416,17 +417,14 @@ void CTblMngrServerAuto::cleanTableManager()
 
 void CTblMngrServerAuto::connectInfo(QString text)
 {
-    QMessageBox::information(0, tr("ZBridge"), text);
 }
 
 void CTblMngrServerAuto::connectWarning(QString text)
 {
-    QMessageBox::warning(0, tr("ZBridge"), text);
 }
 
 void CTblMngrServerAuto::connectError(QString text)
 {
-    QMessageBox::critical(0, tr("ZBridge"), text);
 }
 
 /**
@@ -436,7 +434,7 @@ void CTblMngrServerAuto::giveNewDeal()
 {
     Seat currentDealer;
 
-    games->getNextDeal(&currentBoardNo, currentCards, &currentDealer, &currentVulnerable);
+    games->getCurrentDeal(&currentBoardNo, currentCards, &currentDealer, &currentVulnerable);
     zBridgeServerIface_set_dealer(&handle, currentDealer);
 }
 
@@ -445,13 +443,13 @@ void CTblMngrServerAuto::giveNewDeal()
 /**
  * @brief Start a new session.
  *
- * This method is activated externally. It starts a new session.
+ * This slot starts a new session.
  *
  *   - Prepare for a new session.
  *   - Set up actors (local or remote etc.).
  *   - Start all actors with a new session.
  */
-void CTblMngrServerAuto::newSession()
+void CTblMngrServerAuto::sNewSession()
 {
     CActorBase *actor;
 
@@ -460,32 +458,35 @@ void CTblMngrServerAuto::newSession()
     waiting = false;
     boardNo = 0;
 
+    playWaiting = playContinue = false;
+    firstAutoSync = true;
+
     //Set up actors.
     if ((remoteActorServer != 0) && remoteActorServer->isConnected(WEST_SEAT))
         actor = new CActorRemoteAuto(WEST_SEAT,  remoteActorServer->getFrontend(WEST_SEAT), this);
     else
-        actor = new CActorLocalAuto(doc->getSeatOptions().westName, WEST_SEAT,
+        actor = new CActorLocalAuto(tr(AUTO_SEAT_NAMES[WEST_SEAT]), WEST_SEAT,
                 doc->getNSBidOptions(), doc->getEWBidOptions(), this);
     actors[WEST_SEAT] = actor;
 
     if ((remoteActorServer != 0) && remoteActorServer->isConnected(NORTH_SEAT))
         actor = new CActorRemoteAuto(NORTH_SEAT, remoteActorServer->getFrontend(NORTH_SEAT), this);
     else
-        actor = new CActorLocalAuto(doc->getSeatOptions().northName, NORTH_SEAT,
+        actor = new CActorLocalAuto(tr(AUTO_SEAT_NAMES[NORTH_SEAT]), NORTH_SEAT,
                 doc->getNSBidOptions(), doc->getEWBidOptions(), this);
     actors[NORTH_SEAT] = actor;
 
     if ((remoteActorServer != 0) && remoteActorServer->isConnected(EAST_SEAT))
         actor = new CActorRemoteAuto(EAST_SEAT, remoteActorServer->getFrontend(EAST_SEAT), this);
     else
-        actor = new CActorLocalAuto(doc->getSeatOptions().eastName, EAST_SEAT,
+        actor = new CActorLocalAuto(tr(AUTO_SEAT_NAMES[EAST_SEAT]), EAST_SEAT,
                 doc->getNSBidOptions(), doc->getEWBidOptions(), this);
     actors[EAST_SEAT] = actor;
 
     if ((remoteActorServer != 0) && remoteActorServer->isConnected(SOUTH_SEAT))
         actor = new CActorRemoteAuto(SOUTH_SEAT, remoteActorServer->getFrontend(SOUTH_SEAT), this);
     else
-        actor = new CActorLocalAuto(doc->getSeatOptions().southName, SOUTH_SEAT,
+        actor = new CActorLocalAuto(tr(AUTO_SEAT_NAMES[SOUTH_SEAT]), SOUTH_SEAT,
                 doc->getNSBidOptions(), doc->getEWBidOptions(), this);
     actors[SOUTH_SEAT] = actor;
 
@@ -497,11 +498,17 @@ void CTblMngrServerAuto::newSession()
     zBridgeServer_enter(&handle);
     serverActions();
 
-    //Start actors.
-    actors[WEST_SEAT]->startNewSession();
-    actors[NORTH_SEAT]->startNewSession();
-    actors[EAST_SEAT]->startNewSession();
-    actors[SOUTH_SEAT]->startNewSession();
+    if (!playContinue)
+        playWaiting = true;
+    else
+    {
+        playContinue = firstAutoSync = false;
+        //Start actors.
+        actors[WEST_SEAT]->startNewSession();
+        actors[NORTH_SEAT]->startNewSession();
+        actors[EAST_SEAT]->startNewSession();
+        actors[SOUTH_SEAT]->startNewSession();
+    }
 }
 
 /**
@@ -574,6 +581,37 @@ void CTblMngrServerAuto::dummyToLead()
 {
     Seat declarer = (Seat)zBridgeServerIface_get_dummyToLead_value(&handle);
     actors[declarer]->dummyToLead();
+}
+
+void CTblMngrServerAuto::sltPlayStart()
+{
+    //Waiting for synchronization signal from auto play?
+    if (playWaiting)
+    {
+        playWaiting = false;
+        if (firstAutoSync)
+        {
+            firstAutoSync = false;
+            //Start actors.
+            actors[WEST_SEAT]->startNewSession();
+            actors[NORTH_SEAT]->startNewSession();
+            actors[EAST_SEAT]->startNewSession();
+            actors[SOUTH_SEAT]->startNewSession();
+        }
+        else
+        {
+            //Tell clients to continue synchronization with server.
+            for (int i = 0; i < 4; i++)
+                actors[i]->confirmSyncFromServerToClient();
+        }
+    }
+    else
+        playContinue = true;
+}
+
+void CTblMngrServerAuto::sAutoQuit()
+{
+    thread()->quit();
 }
 
 //Slots for actors.
@@ -723,5 +761,5 @@ void CTblMngrServerAuto::sConfirmSyncFromClientToServer(Seat syncher)
 void CTblMngrServerAuto::sUpdateGame()
 {
     games->setAutoResult(bidHistory, playHistory, teamNames[WEST_SEAT], teamNames[NORTH_SEAT],
-                           teamNames[EAST_SEAT], teamNames[SOUTH_SEAT]);
+                         teamNames[EAST_SEAT], teamNames[SOUTH_SEAT]);
 }

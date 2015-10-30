@@ -21,6 +21,7 @@
 #include <QMap>
 #include <QTime>
 #include <QtDebug>
+#include <QMutexLocker>
 #include <cassert>
 
 #include "cgamesdoc.h"
@@ -279,6 +280,34 @@ void CGamesDoc::getNextDeal(int *board, int cards[][13], Seat *dealer, Team *vul
 }
 
 /**
+ * @brief Retrieve the current game in the current game set (server only).
+ * @param[out] board Board number for the current game.
+ * @param[out] cards The cards for the current game.
+ * @param[out] dealer The dealer for the current game.
+ * @param[out] vulnerable The vulnerability for the current game.
+ *
+ * Retrieves the current game in the current game set.
+ */
+void CGamesDoc::getCurrentDeal(int *board, int cards[][13], Seat *dealer, Team *vulnerable)
+{
+    //Take card distribution etc. from current game.
+    if (games.size() > currentGameIndex)
+    {
+        CGame *currentGame = games[currentGameIndex];
+        *board = currentGame->board;
+        *dealer = currentGame->dealer;
+        *vulnerable = currentGame->vulnerable;
+        for (int i = 0; i < 13; i++)
+        {
+            cards[WEST_SEAT][i] = currentGame->wCards[i];
+            cards[NORTH_SEAT][i] = currentGame->nCards[i];
+            cards[EAST_SEAT][i] = currentGame->eCards[i];
+            cards[SOUTH_SEAT][i] = currentGame->sCards[i];
+        }
+    }
+}
+
+/**
  * @brief Set info for the next game in the current game set (client only).
  * @param[in] board Board number for the next game.
  * @param[in] dealer The dealer for the next game.
@@ -392,6 +421,7 @@ void CGamesDoc::setResult(GameType gameType, CBidHistory &bidHistory, CPlayHisto
     auctionAndPlay->contractModifier = playHistory.getContractModifier();
     auctionAndPlay->result = playHistory.getResult();
 
+    QMutexLocker locker(&lock);
     games[currentGameIndex]->auctionAndPlay.append(auctionAndPlay);
 }
 
@@ -435,6 +465,13 @@ void CGamesDoc::determineEvents(QTextStream &original, QStringList &events)
                 events.append(event);
         }
     }
+}
+
+int CGamesDoc::getNumberOfNotPlayedGames()
+{
+    int noGames = (dealType == RANDOM_DEAL) ? (NO_RANDOM_DEALS) : (games.size());
+
+    return (noGames - getNumberPlayedGames());
 }
 
 int CGamesDoc::getNumberPlayedGames()
@@ -1332,7 +1369,7 @@ void CGamesDoc::readGames(QTextStream &pbnText, QString &event, bool originalGam
                                         gameType = AUTO_GAME;
                                 }
                                 if (gameType == PLAYED_GAME)
-                                    currentGameIndex = gameInx;
+                                    currentGameIndex = gameInx + 1;
                             }
                             auctionAndPlay->gameType = gameType;
                             nextGame->auctionAndPlay.append(auctionAndPlay);

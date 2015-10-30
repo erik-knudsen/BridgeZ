@@ -30,6 +30,7 @@
 #include <QTextStream>
 #include <QInputDialog>
 #include <QMessageBox>
+#include <QThread>
 
 #include "ZBridgeException.h"
 #include "cmainframe.h"
@@ -51,7 +52,9 @@
 #include "cbiddialog.h"
 #include "cseatconfiguration.h"
 #include "ctblmngrserver.h"
+#include "ctblmngrserverauto.h"
 #include "ctblmngrclient.h"
+#include "ctblmngrclientauto.h"
 #include "cmainscoredialog.h"
 #include "crubberscoredialog.h"
 
@@ -81,6 +84,8 @@ CMainFrame::CMainFrame(CZBridgeApp *app, CZBridgeDoc *doc, CGamesDoc *games) :
     this->doc = doc;
     this->games = games;
 
+    tableManager = 0;
+
     //Set up user interface (main menu etc.)
     ui->setupUi(this);
 
@@ -97,10 +102,46 @@ CMainFrame::CMainFrame(CZBridgeApp *app, CZBridgeDoc *doc, CGamesDoc *games) :
         if (hostAddress.isNull())
             QMessageBox::warning(0, tr("ZBridge"), tr("Could not determine IP address."));
     }
-    if (hostAddress.isNull() || (doc->getSeatOptions().role == SERVER_ROLE))
+
+    //Table manager server?
+    if((doc->getSeatOptions().role == SERVER_ROLE) && !hostAddress.isNull())
+    {
+        try
+        {
         tableManager = new CTblMngrServer(doc, games, hostAddress, playView, this);
-    else
+        tableManagerAuto = new CTblMngrServerAuto(doc, games, hostAddress, 0);
+        }
+        catch (NetProtocolException &e)
+        {
+            QMessageBox::warning(0, tr("ZBridge"), e.what());
+
+            if (tableManager != 0)
+                delete tableManager;
+            hostAddress.clear();
+        }
+    }
+
+    //Table manager client?
+    else if((doc->getSeatOptions().role == CLIENT_ROLE) && !hostAddress.isNull())
+    {
         tableManager = new CTblMngrClient(doc, games, hostAddress, playView, this);
+        tableManagerAuto = new CTblMngrClientAuto(doc, games, hostAddress, 0);
+    }
+
+    //Table manager standalone?
+    if (hostAddress.isNull())
+    {
+        tableManager = new CTblMngrServer(doc, games, hostAddress, playView, this);
+        tableManagerAuto = new CTblMngrServerAuto(doc, games, hostAddress, 0);
+    }
+
+    QThread *thread = new QThread();
+    tableManagerAuto->moveToThread(thread);
+    connect(thread, &QThread::finished, thread, &QThread::deleteLater);
+    connect(this, &CMainFrame::sAutoQuit, tableManagerAuto, &CTblMngrBase::sAutoQuit);
+    connect(this, &CMainFrame::sNewSession, tableManagerAuto, &CTblMngrBase::sNewSession);
+    connect(tableManager, &CTblMngrBase::sStatusText , this, &CMainFrame::sStatusText);
+    thread->start();
 
     connect(tableManager, &CTblMngr::sShowScore, this, &CMainFrame::on_action_Score_triggered);
 
@@ -298,6 +339,14 @@ void CMainFrame::enableUIActionsClient(bool advProtocol)
     enableUIActions(CLIENT_ACTIONS, advProtocol);
 }
 
+void CMainFrame::sStatusText(QString text)
+{
+    if (text.size() > 0)
+        SetStatusText(text);
+    else
+        ResetStatusText();
+}
+
 /**
  * @brief Enable/disable main menu entries.
  *
@@ -464,8 +513,21 @@ void CMainFrame::on_actionOpen_triggered()
     eventIndex = inx;
     fileName = originalFileName;
 
-    //Start session.
+    //Set up synchronization (auto play or not).
+    disconnect(tableManager, &CTblMngrBase::sigPlayStart, 0, 0);
+    disconnect(tableManagerAuto, &CTblMngrBase::sigPlayStart, 0, 0);
+    if ((doc->getSeatOptions().protocol == ADVANCED_PROTOCOL) && games->getComputerPlays())
+    {
+        connect(tableManager, &CTblMngrBase::sigPlayStart, tableManagerAuto, &CTblMngrBase::sltPlayStart);
+        connect(tableManagerAuto, &CTblMngrBase::sigPlayStart, tableManager, &CTblMngrBase::sltPlayStart);
+        emit sNewSession();
+    }
+    else
+        connect(tableManager, &CTblMngrBase::sigPlayStart, tableManager, &CTblMngrBase::sltPlayStart);
+
+    //Start new session.
     tableManager->newSession();
+
     if (played.device() != 0)
     {
         playedFile.close();
@@ -699,6 +761,19 @@ void CMainFrame::on_actionNew_Session_triggered()
     fileName.clear();
     eventIndex = 0;
 
+    //Set up synchronization (auto play or not).
+    disconnect(tableManager, &CTblMngrBase::sigPlayStart, 0, 0);
+    disconnect(tableManagerAuto, &CTblMngrBase::sigPlayStart, 0, 0);
+    if ((doc->getSeatOptions().protocol == ADVANCED_PROTOCOL) && games->getComputerPlays())
+    {
+        connect(tableManager, &CTblMngrBase::sigPlayStart, tableManagerAuto, &CTblMngrBase::sltPlayStart);
+        connect(tableManagerAuto, &CTblMngrBase::sigPlayStart, tableManager, &CTblMngrBase::sltPlayStart);
+        emit sNewSession();
+    }
+    else
+        connect(tableManager, &CTblMngrBase::sigPlayStart, tableManager, &CTblMngrBase::sltPlayStart);
+
+    //Start new session.
     tableManager->newSession();
 }
 
@@ -905,6 +980,10 @@ void CMainFrame::on_actionSeat_Configuration_triggered()
         doc->WriteSeatOptions();
 
         delete tableManager;
+        tableManager = 0;
+        emit sAutoQuit();
+        tableManagerAuto = 0;
+
         hostAddress.clear();
         if ((doc->getSeatOptions().role == SERVER_ROLE) || (doc->getSeatOptions().role == CLIENT_ROLE))
         {
@@ -914,14 +993,49 @@ void CMainFrame::on_actionSeat_Configuration_triggered()
             if (hostAddress.isNull())
                 QMessageBox::warning(0, tr("ZBridge"), tr("Could not determine IP address."));
         }
-        if (hostAddress.isNull() || (doc->getSeatOptions().role == SERVER_ROLE))
-            tableManager = new CTblMngrServer(doc, games, hostAddress,  playView, this);
-        else
+
+        //Table manager server?
+        if((doc->getSeatOptions().role == SERVER_ROLE) && !hostAddress.isNull())
+        {
+            try
+            {
+            tableManager = new CTblMngrServer(doc, games, hostAddress, playView, this);
+            tableManagerAuto = new CTblMngrServerAuto(doc, games, hostAddress, 0);
+            }
+            catch (NetProtocolException &e)
+            {
+                QMessageBox::warning(0, tr("ZBridge"), e.what());
+
+                if (tableManager != 0)
+                    delete tableManager;
+                hostAddress.clear();
+            }
+        }
+
+        //Table manager client?
+        else if((doc->getSeatOptions().role == CLIENT_ROLE) && !hostAddress.isNull())
+        {
             tableManager = new CTblMngrClient(doc, games, hostAddress, playView, this);
+            tableManagerAuto = new CTblMngrClientAuto(doc, games, hostAddress, 0);
+        }
+
+        //Table manager standalone?
+        if (hostAddress.isNull())
+        {
+            tableManager = new CTblMngrServer(doc, games, hostAddress, playView, this);
+            tableManagerAuto = new CTblMngrServerAuto(doc, games, hostAddress, 0);
+        }
+
+        QThread *thread = new QThread();
+        tableManagerAuto->moveToThread(thread);
+        connect(thread, &QThread::finished, thread, &QThread::deleteLater);
+        connect(this, &CMainFrame::sAutoQuit, tableManagerAuto, &CTblMngrBase::sAutoQuit);
+        connect(this, &CMainFrame::sNewSession, tableManagerAuto, &CTblMngrBase::sNewSession);
+        connect(tableManager, &CTblMngrBase::sStatusText , this, &CMainFrame::sStatusText);
+        thread->start();
 
         connect(tableManager, &CTblMngr::sShowScore, this, &CMainFrame::on_action_Score_triggered);
     }
-
 }
 
 /**

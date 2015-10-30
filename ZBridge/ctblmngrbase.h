@@ -43,7 +43,23 @@ public:
     CTblMngrBase(QObject *parent);
     virtual ~CTblMngrBase();
 
-public slots:
+    /** @name Main menu activated methods.
+     * This method is activated via the applications main menu.
+     */
+    /*@{*/
+    virtual void newSession(){}
+    /*@}*/
+
+signals:
+    /** @name Synchronization and status text signal.
+     *
+     */
+    /*@{*/
+    void sigPlayStart();            /**< Used for synchronizing ordinary and auto play. */
+    void sStatusText(QString text); /**< Used for displaying a status text. */
+    /*@}*/
+
+public slots:   
     /** @name Actor slots.
      * These slot methods are signalled from the actors.
      */
@@ -64,8 +80,18 @@ public slots:
     virtual void sUpdateGame() = 0;
     /*@}*/
 
+    /** @name Synchronization, auto quit and new session slots.
+     */
+    /*@{*/
+    virtual void sltPlayStart() {}    /**< Synchronize auto and ordinary play. */
+    virtual void sAutoQuit() {}       /**< Quit the auto thread and delete the auto object (and children). */
+    virtual void sNewSession() {}     /**< Start a new auto session. */
+    /*@}*/
+
 protected:
     QString teamNames[4];
+    bool playContinue;           //Used for synchronizing auto play and ordinary play.
+    bool playWaiting;           //Also used for synchronizing auto play and ordinary play.
 };
 
 #endif // CTBLMNGRBASE_H

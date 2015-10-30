@@ -125,6 +125,7 @@ private:
     bool manual;        /**< Automatic or Manual actor ? */
     bool showUser;      /**< Control what is shown to the user? */
     bool updateGameInfo;/**< Control who updates game info? */
+    bool updateCurrentGameInfo;
 
     QString teamName;   /**< Team name. */
     int protocol;       /**< Protocol (Advanced or Basic). */

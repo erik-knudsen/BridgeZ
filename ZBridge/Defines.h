@@ -26,6 +26,9 @@
 //Port offset for automatic play.
 const int AUTOPORTOFFSET = 10;
 
+//Number of random deals in a random session.
+const int NO_RANDOM_DEALS = 32;
+
 //Update (enable/disable) UI (mostly menues) actions.
 enum UpdateUIAction { UPDATE_UI_INITIAL, UPDATE_UI_SERVER, UPDATE_UI_CLIENT, UPDATE_UI_NEW_SESSION,
                     UPDATE_UI_NEW_DEAL, UPDATE_UI_UNDO, UPDATE_UI_REBID, UPDATE_UI_REPLAY, UPDATE_UI_SHOW_ALL,
@@ -57,6 +60,15 @@ const char * const SEAT_NAMES[4] =
     QT_TR_NOOP("North"),
     QT_TR_NOOP("East"),
     QT_TR_NOOP("South")
+};
+
+//Auto seat names (indexed by enum Seat).
+const char * const AUTO_SEAT_NAMES[4] =
+{
+    QT_TR_NOOP("Z-West"),
+    QT_TR_NOOP("Z-North"),
+    QT_TR_NOOP("Z-East"),
+    QT_TR_NOOP("Z-South")
 };
 
 //Suit names (indexed by enum Suit).

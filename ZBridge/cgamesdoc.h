@@ -25,6 +25,7 @@
 #include <QTextStream>
 #include <QMap>
 #include <QStringList>
+#include <QMutex>
 
 #include "ZBridgeException.h"
 #include "cbidhistory.h"
@@ -61,6 +62,7 @@ public:
     void clearGames(ScoringMethod scoringMethod);
     void prepNextDeal() { currentGameIndex++; }
     void getNextDeal(int *board, int cards[][13], Seat *dealer, Team *vulnerable);
+    void getCurrentDeal(int *board, int cards[][13], Seat *dealer, Team *vulnerable);
     void setNextDeal(int board, Seat dealer, Team vulnerable);
     void setNextDeal(int cards[][13]);
     void setPlayedResult(CBidHistory &bidHistory, CPlayHistory &playHistory, QString &westName, QString &northName,
@@ -69,6 +71,7 @@ public:
                    QString &eastName, QString &southName);
     void determineEvents(QTextStream &original, QStringList &events);
 
+    int getNumberOfNotPlayedGames();
     int getNumberPlayedGames();
     int getNumberAuctionAndPlay(int gameIndex);
     int getPlayedAuctionAndPlayIndex(int gameIndex);
@@ -168,6 +171,7 @@ private:
     bool computerPlays;
 
     QString curEvent;           /**< Current event while processing pbn file (also with regards to # and ##). */
+    QMutex lock;
 };
 
 #endif // CGAMESDOC_H

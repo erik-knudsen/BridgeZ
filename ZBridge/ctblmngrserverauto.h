@@ -28,6 +28,7 @@
 #include "../src-gen/ZBridgeServer.h"
 #include "../src-gen/ZBridgeServerSync.h"
 
+#include "ZBridgeException.h"
 #include "Defines.h"
 #include "cbidhistory.h"
 #include "cplayhistory.h"
@@ -53,19 +54,13 @@ class CTblMngrServerAuto : public CTblMngrBase
     Q_OBJECT
 
 public:
-    CTblMngrServerAuto(CZBridgeDoc *doc, CGamesDoc *games, QHostAddress hostAddress, QObject *parent = 0);
+    CTblMngrServerAuto(CZBridgeDoc *doc, CGamesDoc *games, QHostAddress hostAddress,
+                       QObject *parent = 0) throw(NetProtocolException);
     ~CTblMngrServerAuto();
 
     //Run cycle for the server statechart.
     void serverRunCycle();
     void serverSyncRunCycle();
-
-    /** @name External activated methods.
-     * These methods are activated via external calls.
-     */
-    /*@{*/
-    void newSession();
-    /*@}*/
 
 public slots:
     /** @name Actor slots.
@@ -95,6 +90,14 @@ public slots:
     void startOfBoard();
     void playerToLead();
     void dummyToLead();
+    /*@}*/
+
+    /** @name Synchronization, auto quit and new session slots..
+     */
+    /*@{*/
+    void sltPlayStart();    /**< Synchronize auto and ordinary play. */
+    void sAutoQuit();       /**< Quit the auto thread and delete the auto object (and children). */
+    void sNewSession();     /**< Start a new session. */
     /*@}*/
 
     //Reset table manager (used as slot when a remote client disconnects).
@@ -132,6 +135,8 @@ private:
     int currentCards[4][13];
     bool updateGameInfo;
     bool waiting;
+
+    bool firstAutoSync;
 
     CZBridgeDoc *doc;
     CGamesDoc *games;

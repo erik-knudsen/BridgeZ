@@ -102,6 +102,8 @@ void CActorLocalAuto::clientActions()
     {
         //Actor has received deal information and is ready for cards.
         emit sRCards((Seat)zBridgeClientIface_get_client(&handle));
+
+        updateCurrentGameInfo = updateGameInfo;
     }
 
     else if (zBridgeClientIface_israised_bidInfo(&handle))
@@ -190,17 +192,20 @@ void CActorLocalAuto::clientSyncActions()
     //React to sync client out events.
     if (zBridgeClientSyncIface_israised_sendAttemptSync(&syncHandle))
     {
+        //Update Table Manager game info.
+        int syncState = zBridgeClientSyncIface_get_syncState(&syncHandle);
+        if (updateCurrentGameInfo && (syncState == SS))
+        {
+            emit sUpdateGame();
+            updateCurrentGameInfo = false;
+        }
+
         Seat seat = (Seat)zBridgeClientIface_get_client(&handle);
         emit sAttemptSyncFromClientToServer(seat);
     }
 
     else if (zBridgeClientSyncIface_israised_sendConfirmSync(&syncHandle))
     {
-        //Update Table Manager game info.
-        int syncState = zBridgeClientSyncIface_get_syncState(&syncHandle);
-        if (updateGameInfo && (syncState == SS))
-            emit sUpdateGame();
-
         //Continue.
         continueSync();
     }

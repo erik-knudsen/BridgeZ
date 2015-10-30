@@ -57,15 +57,6 @@ public:
     CTblMngrClientAuto(CZBridgeDoc *doc, CGamesDoc *games, QHostAddress hostAddress, QObject *parent = 0);
     ~CTblMngrClientAuto();
 
-
-    /** @name Main menu activated methods.
-     * These methods are activated externally.
-     */
-    /*@{*/
-    void newSession();
-    /*@}*/
-
-
 public slots:
     /** @name Actor slots.
      * These slot methods are signalled from the actors.
@@ -95,6 +86,13 @@ public slots:
     void clientConnected();
     void clientDisConnected();
     void receiveLine(QString line);
+    /*@}*/
+
+    /** @name Synchronization etc. slots.
+     */
+    /*@{*/
+    void sAutoQuit();       /**< Quit the auto thread and delete the auto object (and children). */
+    void sNewSession();     /**< Start a new auto session. */
     /*@}*/
 
 private:
