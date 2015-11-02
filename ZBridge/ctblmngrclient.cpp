@@ -540,6 +540,7 @@ void CTblMngrClient::sSocketError(QString err)
     QMessageBox::information(0, tr("ZBridge"), err);
 
     cleanTableManager();
+    emit sigDisconnect();
 
     //Enable new session action.
     QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_NEW_SESSION , true));
@@ -568,6 +569,7 @@ void CTblMngrClient::clientDisConnected()
     QMessageBox::information(0, tr("ZBridge"), tr("Client disconnected."));
 
     cleanTableManager();
+    emit sigDisconnect();
 
     //Enable new session action.
     QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_NEW_SESSION , true));

@@ -126,6 +126,8 @@ CMainFrame::CMainFrame(CZBridgeApp *app, CZBridgeDoc *doc, CGamesDoc *games) :
     {
         tableManager = new CTblMngrClient(doc, games, hostAddress, playView, this);
         tableManagerAuto = new CTblMngrClientAuto(doc, games, hostAddress, 0);
+        connect(tableManager, &CTblMngrBase::sigDisconnect, tableManagerAuto, &CTblMngrBase::sltDisconnect);
+        connect(tableManagerAuto, &CTblMngrBase::sigDisconnect, tableManager, &CTblMngrBase::sltDisconnect);
     }
 
     //Table manager standalone?
@@ -1025,6 +1027,8 @@ void CMainFrame::on_actionSeat_Configuration_triggered()
         {
             tableManager = new CTblMngrClient(doc, games, hostAddress, playView, this);
             tableManagerAuto = new CTblMngrClientAuto(doc, games, hostAddress, 0);
+            connect(tableManager, &CTblMngrBase::sigDisconnect, tableManagerAuto, &CTblMngrBase::sltDisconnect);
+            connect(tableManagerAuto, &CTblMngrBase::sigDisconnect, tableManager, &CTblMngrBase::sltDisconnect);
         }
 
         //Table manager standalone?

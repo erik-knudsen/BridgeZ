@@ -281,6 +281,7 @@ void CTblMngrClientAuto::sUpdateGame()
 void CTblMngrClientAuto::sSocketError(QString err)
 {
     cleanTableManager();
+    emit sigDisconnect();
 }
 
 /**
@@ -302,6 +303,7 @@ void CTblMngrClientAuto::clientConnected()
 void CTblMngrClientAuto::clientDisConnected()
 {
     cleanTableManager();
+    emit sigDisconnect();
 }
 
 /**
