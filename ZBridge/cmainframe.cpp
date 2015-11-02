@@ -781,7 +781,7 @@ void CMainFrame::on_actionNew_Session_triggered()
         }
     }
 
-    //Start new session (client or server).
+    //Start new session (client or server) .
     tableManager->newSession();
 }
 

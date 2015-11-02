@@ -280,8 +280,6 @@ void CTblMngrClientAuto::sUpdateGame()
  */
 void CTblMngrClientAuto::sSocketError(QString err)
 {
-    QMessageBox::information(0, tr("ZBridge"), tr("Auto client: ") + err);
-
     cleanTableManager();
 }
 
@@ -303,8 +301,6 @@ void CTblMngrClientAuto::clientConnected()
  */
 void CTblMngrClientAuto::clientDisConnected()
 {
-    QMessageBox::information(0, tr("ZBridge"), tr("Auto client disconnected."));
-
     cleanTableManager();
 }
 
