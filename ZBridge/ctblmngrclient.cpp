@@ -914,3 +914,8 @@ void CTblMngrClient::receiveLine(QString line)
     }
 }
 
+void CTblMngrClient::sltDisconnect()
+{
+    cleanTableManager();
+}
+

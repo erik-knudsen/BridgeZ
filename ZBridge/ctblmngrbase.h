@@ -55,7 +55,8 @@ signals:
      *
      */
     /*@{*/
-    void sigPlayStart();            /**< Used for synchronizing ordinary and auto play. */
+    void sigPlayStart();            /**< Used for synchronizing (server) ordinary and auto play. */
+    void sigDisconnect();           /**< Used for relaying disconnect (client) ordinary and auto play. */
     void sStatusText(QString text); /**< Used for displaying a status text. */
     /*@}*/
 
@@ -83,7 +84,8 @@ public slots:
     /** @name Synchronization, auto quit and new session slots.
      */
     /*@{*/
-    virtual void sltPlayStart() {}    /**< Synchronize auto and ordinary play. */
+    virtual void sltPlayStart() {}    /**< Synchronize (server) auto and ordinary play. */
+    virtual void sltDisconnect() {}   /**< Relay disconnect (client) auto and  ordinary play. */
     virtual void sAutoQuit() {}       /**< Quit the auto thread and delete the auto object (and children). */
     virtual void sNewSession() {}     /**< Start a new auto session. */
     /*@}*/

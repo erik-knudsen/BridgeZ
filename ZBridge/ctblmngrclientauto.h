@@ -93,6 +93,7 @@ public slots:
     /*@{*/
     void sAutoQuit();       /**< Quit the auto thread and delete the auto object (and children). */
     void sNewSession();     /**< Start a new auto session. */
+    void sltDisconnect();   /**< Disconnect and prepare for new session. */
     /*@}*/
 
 private:

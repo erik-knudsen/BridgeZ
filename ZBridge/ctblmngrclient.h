@@ -117,6 +117,12 @@ public slots:
     void receiveLine(QString line);
     /*@}*/
 
+    /** @name Disconnect slot.
+     */
+    /*@{*/
+    void sltDisconnect();   /**< Disconnect and prepare for new session. */
+    /*@}*/
+
 private:
     //Reset table manager.
     void cleanTableManager();

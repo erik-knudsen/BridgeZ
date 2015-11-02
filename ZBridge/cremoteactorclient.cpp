@@ -47,7 +47,7 @@ CRemoteActorClient::CRemoteActorClient(QString hostAddress, quint16 port, QObjec
 
 CRemoteActorClient::~CRemoteActorClient()
 {
-   delete socket;
+    delete socket;
 }
 
 /**

@@ -124,6 +124,11 @@ void CTblMngrClientAuto::sNewSession()
     handle = actor->getHandle();
 }
 
+void CTblMngrClientAuto::sltDisconnect()
+{
+    cleanTableManager();
+}
+
 //Slots for actor.
 //-----------------------------------------------------------------------------
 /**

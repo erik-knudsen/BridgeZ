@@ -513,19 +513,20 @@ void CMainFrame::on_actionOpen_triggered()
     eventIndex = inx;
     fileName = originalFileName;
 
-    //Set up synchronization (auto play or not).
+    //Set up synchronization (auto play or not)-
+    //Open is not available on client, i.e table manager is either server or standalone.
     disconnect(tableManager, &CTblMngrBase::sigPlayStart, 0, 0);
     disconnect(tableManagerAuto, &CTblMngrBase::sigPlayStart, 0, 0);
-    if ((doc->getSeatOptions().protocol == ADVANCED_PROTOCOL) && games->getComputerPlays())
+    if ((doc->getSeatOptions().protocol == BASIC_PROTOCOL) || !games->getComputerPlays())
+        connect(tableManager, &CTblMngrBase::sigPlayStart, tableManager, &CTblMngrBase::sltPlayStart);
+    else
     {
         connect(tableManager, &CTblMngrBase::sigPlayStart, tableManagerAuto, &CTblMngrBase::sltPlayStart);
         connect(tableManagerAuto, &CTblMngrBase::sigPlayStart, tableManager, &CTblMngrBase::sltPlayStart);
-        emit sNewSession();
+        emit sNewSession();     //To start new session for table manager auto.
     }
-    else
-        connect(tableManager, &CTblMngrBase::sigPlayStart, tableManager, &CTblMngrBase::sltPlayStart);
 
-    //Start new session.
+    //Start new session for table manager.
     tableManager->newSession();
 
     if (played.device() != 0)
@@ -762,18 +763,25 @@ void CMainFrame::on_actionNew_Session_triggered()
     eventIndex = 0;
 
     //Set up synchronization (auto play or not).
-    disconnect(tableManager, &CTblMngrBase::sigPlayStart, 0, 0);
-    disconnect(tableManagerAuto, &CTblMngrBase::sigPlayStart, 0, 0);
-    if ((doc->getSeatOptions().protocol == ADVANCED_PROTOCOL) && games->getComputerPlays())
-    {
-        connect(tableManager, &CTblMngrBase::sigPlayStart, tableManagerAuto, &CTblMngrBase::sltPlayStart);
-        connect(tableManagerAuto, &CTblMngrBase::sigPlayStart, tableManager, &CTblMngrBase::sltPlayStart);
-        emit sNewSession();
-    }
+    if (!hostAddress.isNull() && !(doc->getSeatOptions().protocol == BASIC_PROTOCOL) &&
+            (doc->getSeatOptions().role == CLIENT_ROLE))
+        emit sNewSession();     //To start new client session for table manager auto.
     else
-        connect(tableManager, &CTblMngrBase::sigPlayStart, tableManager, &CTblMngrBase::sltPlayStart);
+    {
+        //Implicit standalone or server session.
+        disconnect(tableManager, &CTblMngrBase::sigPlayStart, 0, 0);
+        disconnect(tableManagerAuto, &CTblMngrBase::sigPlayStart, 0, 0);
+        if ((doc->getSeatOptions().protocol == BASIC_PROTOCOL) || !games->getComputerPlays())
+            connect(tableManager, &CTblMngrBase::sigPlayStart, tableManager, &CTblMngrBase::sltPlayStart);
+        else
+        {
+            connect(tableManager, &CTblMngrBase::sigPlayStart, tableManagerAuto, &CTblMngrBase::sltPlayStart);
+            connect(tableManagerAuto, &CTblMngrBase::sigPlayStart, tableManager, &CTblMngrBase::sltPlayStart);
+            emit sNewSession();     //To start new standalone or server session for table manager auto.
+        }
+    }
 
-    //Start new session.
+    //Start new session (client or server).
     tableManager->newSession();
 }
 
