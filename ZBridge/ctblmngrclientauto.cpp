@@ -32,6 +32,8 @@
 /**
  * @brief Constructor for table manager client.
  * @param doc Pointer to model data.
+ * @param games Pointer to game data.
+ * @param hostAddress Host address.
  * @param parent Pointer to parent.
  *
  * The constructor initialize the table management client.
@@ -251,18 +253,29 @@ void CTblMngrClientAuto::sReadyForDummyCards(Seat seat)
     remoteActorClient->sendLine(readyForDummyCardsMsg.line);
 }
 
+/**
+ * @brief Synchronization signal from client to the server.
+ * @param syncher The clients seat.
+ */
 void CTblMngrClientAuto::sAttemptSyncFromClientToServer(Seat syncher)
 {
     CAttemptSynchronizeMsg attemptSynchronizeMsg(syncher);
     remoteActorClient->sendLine(attemptSynchronizeMsg.line);
 }
 
+/**
+ * @brief Synchronization signal from client to the server.
+ * @param syncher The clients seat.
+ */
 void CTblMngrClientAuto::sConfirmSyncFromClientToServer(Seat syncher)
 {
     CConfirmSynchronizeMsg confirmSynchronizeMsg(syncher);
     remoteActorClient->sendLine(confirmSynchronizeMsg.line);
 }
 
+/**
+ * @brief Update game info.
+ */
 void CTblMngrClientAuto::sUpdateGame()
 {
     //Update current game.
@@ -323,7 +336,6 @@ void CTblMngrClientAuto::receiveLine(QString line)
 
     switch (msgType)
     {
-
     case SEATED_MSG:
     {
         //Seated message was received.
@@ -509,6 +521,9 @@ void CTblMngrClientAuto::receiveLine(QString line)
     }
 }
 
+/**
+ * @brief Quit the auto play thread and clean up.
+ */
 void CTblMngrClientAuto::sAutoQuit()
 {
     deleteLater();

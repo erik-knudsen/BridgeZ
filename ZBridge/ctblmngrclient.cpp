@@ -38,6 +38,8 @@ const int NORMAL_MODE = 3;
 /**
  * @brief Constructor for table manager client.
  * @param doc Pointer to model data.
+ * @param games Pointer to game data.
+ * @param hostAddress Host address.
  * @param playView Pointer to play view.
  * @param parent Pointer to parent.
  *
@@ -374,7 +376,9 @@ void CTblMngrClient::sConfirmSyncFromClientToServer(Seat syncher)
     remoteActorClient->sendLine(confirmSynchronizeMsg.line);
 }
 
-//Only relevant with advanced protocol.
+/**
+ * @brief Update game info.
+ */
 void CTblMngrClient::sUpdateGame()
 {
     //Update game info.
@@ -382,6 +386,9 @@ void CTblMngrClient::sUpdateGame()
                            teamNames[NORTH_SEAT], teamNames[EAST_SEAT], teamNames[SOUTH_SEAT]);
 }
 
+/**
+ * @brief Prepare game info for next deal.
+ */
 void CTblMngrClient::sUpdateGameToNextDeal()
 {
     //Prepare for next game.

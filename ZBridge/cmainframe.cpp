@@ -76,6 +76,7 @@ CMainFrame *CMainFrame::m_pInstance = 0;
  *
  * @param app Pointer to application.
  * @param doc Pointer to data container.
+ * @param games Pointer to game data.
  */
 CMainFrame::CMainFrame(CZBridgeApp *app, CZBridgeDoc *doc, CGamesDoc *games) :
     ui(new Ui::CMainFrame)
@@ -204,6 +205,12 @@ void CMainFrame::resizeEvent(QResizeEvent *resizeEvent)
     }
 }
 
+/**
+ * @brief Get host address.
+ *
+ * @param host The name of the host.
+ * @return the host address.
+ */
 QHostAddress CMainFrame::getHostAddress(QString host)
 {
     QHostAddress hostAddress;

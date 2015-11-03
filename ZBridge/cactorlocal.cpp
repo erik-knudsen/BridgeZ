@@ -726,12 +726,20 @@ void CActorLocal::endOfSession()
     clientRunCycle();
 }
 
+/**
+ * @brief Restart message from table manager.
+ */
 void CActorLocal::reStart()
 {
     zBridgeClientIface_raise_reStart(&handle);
     clientRunCycle();
 }
 
+/**
+ * @brief Synchronization signal from server to client.
+ *
+ * Only used with advanced protocol.
+ */
 void CActorLocal::attemptSyncFromServerToClient()
 {
     if (synchronizing)
@@ -741,12 +749,22 @@ void CActorLocal::attemptSyncFromServerToClient()
     }
 }
 
+/**
+ * @brief Synchronization signal from server to client.
+ *
+ * Only used with advanced protocol.
+ */
 void CActorLocal::confirmSyncFromServerToClient()
 {
     zBridgeClientSyncIface_raise_confirmSync(&syncHandle);
     clientSyncRunCycle();
 }
 
+/**
+ * @brief Synchronization signal from server to client.
+ *
+ * Only used with advanced protocol.
+ */
 void CActorLocal::allSyncFromServerToClient()
 {
     zBridgeClientSyncIface_raise_allSync(&syncHandle);

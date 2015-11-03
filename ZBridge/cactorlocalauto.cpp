@@ -244,7 +244,6 @@ void CActorLocalAuto::clientSyncRunCycle()
 
 /**
  * @brief Get next bid automatically.
- *
  */
 void CActorLocalAuto::bidValue()
 {
@@ -267,7 +266,6 @@ void CActorLocalAuto::bidValue(Bids bid)
 
 /**
  * @brief Get next play automatically.
- *
  */
 void CActorLocalAuto::playValue()
 {
@@ -501,12 +499,20 @@ void CActorLocalAuto::endOfSession()
     clientRunCycle();
 }
 
+/**
+ * @brief Restart message from table manager.
+ */
 void CActorLocalAuto::reStart()
 {
     zBridgeClientIface_raise_reStart(&handle);
     clientRunCycle();
 }
 
+/**
+ * @brief Synchronization signal from server to client.
+ *
+ * Only used with advanced protocol.
+ */
 void CActorLocalAuto::attemptSyncFromServerToClient()
 {
     if (synchronizing)
@@ -516,12 +522,22 @@ void CActorLocalAuto::attemptSyncFromServerToClient()
     }
 }
 
+/**
+ * @brief Synchronization signal from server to client.
+ *
+ * Only used with advanced protocol.
+ */
 void CActorLocalAuto::confirmSyncFromServerToClient()
 {
     zBridgeClientSyncIface_raise_confirmSync(&syncHandle);
     clientSyncRunCycle();
 }
 
+/**
+ * @brief Synchronization signal from server to client.
+ *
+ * Only used with advanced protocol.
+ */
 void CActorLocalAuto::allSyncFromServerToClient()
 {
     zBridgeClientSyncIface_raise_allSync(&syncHandle);

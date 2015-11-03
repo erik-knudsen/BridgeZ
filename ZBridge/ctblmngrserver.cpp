@@ -37,6 +37,7 @@
 /**
  * @brief Constructor for table manager server.
  * @param doc Pointer to model data.
+ * @param games Pointer to game data.
  * @param hostAddress Host address.
  * @param playView Pointer to play view.
  * @param parent Pointer to parent.
@@ -429,7 +430,11 @@ void CTblMngrServer::serverActions()
     }
 }
 
-//Only used with advanced protocol.
+/**
+ * @brief Synchronization between server and clients.
+ *
+ * Only used with the advanced protocol.
+ */
 void CTblMngrServer::serverSyncActions()
 {
     bool israised_sendConfirmSync = zBridgeServerSyncIface_israised_sendConfirmSync (&syncHandle);
@@ -796,6 +801,9 @@ void CTblMngrServer::setShowUser(bool showAll)
         showUser = true;
 }
 
+/**
+ * @brief Determine who updates game info.
+ */
 void CTblMngrServer::setUpdateGameInfo()
 {
     updateGameInfo = false;
@@ -878,7 +886,7 @@ void CTblMngrServer::startOfBoard()
     //wanted a new deal.
     giveNewDeal();
 
-    //Tell ordinary play that we are ready for the next game.
+    //Tell auto play that game info is now ready for the current play.
     if (protocol == ADVANCED_PROTOCOL)
         emit sigPlayStart();
 
@@ -918,7 +926,12 @@ void CTblMngrServer::dummyToLead()
     actors[declarer]->dummyToLead();
 }
 
-//Only used with advanced protocol.
+/**
+ * @brief Synchronization with auto play (only advanced protocol).
+ *
+ * Is called (via a signal) from auto play to tell auto play has now
+ * played the current game.
+ */
 void CTblMngrServer::sltPlayStart()
 {
     //Waiting for synchronization signal from auto play?
@@ -1087,6 +1100,9 @@ void CTblMngrServer::sConfirmSyncFromClientToServer(Seat syncher)
     serverSyncRunCycle();
 }
 
+/**
+ * @brief Update game info and activate relevant main menu entries.
+ */
 void CTblMngrServer::sUpdateGame()
 {
     //Update game info.
@@ -1101,6 +1117,9 @@ void CTblMngrServer::sUpdateGame()
     }
 }
 
+/**
+ * @brief Prepare game info for next deal.
+ */
 void CTblMngrServer::sUpdateGameToNextDeal()
 {
     //Prepare for next game.

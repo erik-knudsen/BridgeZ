@@ -36,6 +36,7 @@
 /**
  * @brief Constructor for table manager server.
  * @param doc Pointer to model data.
+ * @param games Pointer to game data.
  * @param hostAddress Host address.
  * @param parent Pointer to parent.
  *
@@ -320,6 +321,11 @@ void CTblMngrServerAuto::serverActions()
     }
 }
 
+/**
+ * @brief Synchronization between server and clients.
+ *
+ * Only used with the advanced protocol.
+ */
 void CTblMngrServerAuto::serverSyncActions()
 {
     bool israised_sendConfirmSync = zBridgeServerSyncIface_israised_sendConfirmSync (&syncHandle);
@@ -513,7 +519,6 @@ void CTblMngrServerAuto::sNewSession()
 
 /**
  * @brief Determine who updates game info.
- * @param showAll If true Table Manager updates game info..
  */
 void CTblMngrServerAuto::setUpdateGameInfo()
 {
@@ -583,9 +588,15 @@ void CTblMngrServerAuto::dummyToLead()
     actors[declarer]->dummyToLead();
 }
 
+/**
+ * @brief Synchronization with ordinary play.
+ *
+ * Is called (via a signal) from ordinary play to tell ordinary play has now
+ * updated game info. So the next game can now be played by auto play.
+ */
 void CTblMngrServerAuto::sltPlayStart()
 {
-    //Waiting for synchronization signal from auto play?
+    //Waiting for synchronization signal from ordinary play?
     if (playWaiting)
     {
         playWaiting = false;
@@ -609,6 +620,9 @@ void CTblMngrServerAuto::sltPlayStart()
         playContinue = true;
 }
 
+/**
+ * @brief Quit the auto play thread and clean up.
+ */
 void CTblMngrServerAuto::sAutoQuit()
 {
     thread()->quit();
@@ -752,12 +766,19 @@ void CTblMngrServerAuto::sAttemptSyncFromClientToServer(Seat syncher)
     }
 }
 
+/**
+ * @brief Synchronization signal from one of the four clients to the server.
+ * @param syncher The clients seat.
+ */
 void CTblMngrServerAuto::sConfirmSyncFromClientToServer(Seat syncher)
 {
     zBridgeServerSyncIface_raise_confirmSync(&syncHandle, syncher);
     serverSyncRunCycle();
 }
 
+/**
+ * @brief Update game info.
+ */
 void CTblMngrServerAuto::sUpdateGame()
 {
     games->setAutoResult(bidHistory, playHistory, teamNames[WEST_SEAT], teamNames[NORTH_SEAT],
