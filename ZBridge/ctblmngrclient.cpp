@@ -160,6 +160,7 @@ void CTblMngrClient::newSession()
     connect(remoteActorClient, &CRemoteActorClient::sSocketError, this, &CTblMngrClient::sSocketError, Qt::QueuedConnection);
 
     handle = actor->getHandle();
+    syncHandle = actor->getSyncHandle();
 }
 
 //Only used with advanced protocol.
@@ -370,7 +371,8 @@ void CTblMngrClient::sAttemptSyncFromClientToServer(Seat syncher)
  */
 void CTblMngrClient::sConfirmSyncFromClientToServer(Seat syncher)
 {
-    games->prepNextDeal();
+    if (zBridgeClientSyncIface_get_syncState(syncHandle) == SS)
+        games->prepNextDeal();
 
     CConfirmSynchronizeMsg confirmSynchronizeMsg(syncher);
     remoteActorClient->sendLine(confirmSynchronizeMsg.line);

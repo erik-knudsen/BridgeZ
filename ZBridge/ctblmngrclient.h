@@ -28,6 +28,7 @@
 
 #include "CTblMngr.h"
 #include "../src-gen/ZBridgeClient.h"
+#include "../src-gen/ZBridgeClientSync.h"
 
 #include "Defines.h"
 
@@ -150,6 +151,7 @@ private:
     QHostAddress hostAddress;
 
     ZBridgeClient *handle;
+    ZBridgeClientSync *syncHandle;
 };
 
 #endif // CTBLMNGRCLIENT_H
