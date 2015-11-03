@@ -699,7 +699,7 @@ bool CGamesDoc::practice()
  */
 bool CGamesDoc::checkDuplicate()
 {
-    for (int i = 0; i < games.size(); i++)
+    for (int i = 0; i < (games.size() - 1); i++)
         if (games[i]->auctionAndPlay.size() < 2)
             return false;
     return true;
