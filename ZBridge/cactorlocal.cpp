@@ -327,6 +327,8 @@ void CActorLocal::clientSyncActions()
     {
         //Might pause here (show button etc.).
         int syncState = zBridgeClientSyncIface_get_syncState(&syncHandle);
+        if (updateGameInfo && (syncState == SS))
+            emit sUpdateGameToNextDeal();
         if (manual && ((syncState == SA) || (syncState == SP) || (syncState == SS) || (syncState == SL)))
             emit sEnableContinueSync(zBridgeClientSyncIface_get_syncState(&syncHandle));
         else

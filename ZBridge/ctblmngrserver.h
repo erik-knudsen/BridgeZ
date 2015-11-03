@@ -106,6 +106,7 @@ public slots:
     void sAttemptSyncFromClientToServer(Seat syncher);
     void sConfirmSyncFromClientToServer(Seat syncher);
     void sUpdateGame();
+    void sUpdateGameToNextDeal();
 
     void sShowAuction();
     void sShowPlay();

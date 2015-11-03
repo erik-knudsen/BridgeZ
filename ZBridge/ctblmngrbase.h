@@ -79,6 +79,7 @@ public slots:
     virtual void sAttemptSyncFromClientToServer(Seat syncher) = 0;
     virtual void sConfirmSyncFromClientToServer(Seat syncher) = 0;
     virtual void sUpdateGame() = 0;
+    virtual void sUpdateGameToNextDeal() {}
     /*@}*/
 
     /** @name Synchronization, auto quit and new session slots.

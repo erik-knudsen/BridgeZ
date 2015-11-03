@@ -471,9 +471,6 @@ void CTblMngrServer::serverSyncActions()
         if (updateGameInfo && (syncState == SS))
             sUpdateGame();
 
-        if ((syncState == SS) && playContinue)
-            games->prepNextDeal();
-
         //Wait for auto play?
         if ((syncState == SS) && !playContinue)
         {
@@ -930,8 +927,6 @@ void CTblMngrServer::sltPlayStart()
         emit sStatusText(QString(""));
         playWaiting = false;
 
-        games->prepNextDeal();
-
         //Tell clients to continue synchronization with server.
         for (int i = 0; i < 4; i++)
             actors[i]->confirmSyncFromServerToClient();
@@ -1104,6 +1099,12 @@ void CTblMngrServer::sUpdateGame()
         QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_SAVE , true));
         QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_SAVEAS , true));
     }
+}
+
+void CTblMngrServer::sUpdateGameToNextDeal()
+{
+    //Prepare for next game.
+    games->prepNextDeal();
 }
 
 /**

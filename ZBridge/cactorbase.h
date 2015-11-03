@@ -83,6 +83,7 @@ signals:
     void sAttemptSyncFromClientToServer(Seat syncher);
     void sConfirmSyncFromClientToServer(Seat syncher);
     void sUpdateGame();
+    void sUpdateGameToNextDeal();
 };
 
 #endif // CACTORBASE_H

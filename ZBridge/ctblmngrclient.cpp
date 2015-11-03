@@ -160,7 +160,6 @@ void CTblMngrClient::newSession()
     connect(remoteActorClient, &CRemoteActorClient::sSocketError, this, &CTblMngrClient::sSocketError, Qt::QueuedConnection);
 
     handle = actor->getHandle();
-    syncHandle = actor->getSyncHandle();
 }
 
 //Only used with advanced protocol.
@@ -371,9 +370,6 @@ void CTblMngrClient::sAttemptSyncFromClientToServer(Seat syncher)
  */
 void CTblMngrClient::sConfirmSyncFromClientToServer(Seat syncher)
 {
-    if (zBridgeClientSyncIface_get_syncState(syncHandle) == SS)
-        games->prepNextDeal();
-
     CConfirmSynchronizeMsg confirmSynchronizeMsg(syncher);
     remoteActorClient->sendLine(confirmSynchronizeMsg.line);
 }
@@ -381,12 +377,15 @@ void CTblMngrClient::sConfirmSyncFromClientToServer(Seat syncher)
 //Only relevant with advanced protocol.
 void CTblMngrClient::sUpdateGame()
 {
-    if (protocol == BASIC_PROTOCOL)
-        return;
-
     //Update game info.
     games->setPlayedResult(actor->getBidHistory(), actor->getPlayHistory(), teamNames[WEST_SEAT],
                            teamNames[NORTH_SEAT], teamNames[EAST_SEAT], teamNames[SOUTH_SEAT]);
+}
+
+void CTblMngrClient::sUpdateGameToNextDeal()
+{
+    //Prepare for next game.
+    games->prepNextDeal();
 }
 
 /**

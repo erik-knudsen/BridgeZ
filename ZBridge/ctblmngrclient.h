@@ -96,6 +96,7 @@ public slots:
     void sAttemptSyncFromClientToServer(Seat syncher);
     void sConfirmSyncFromClientToServer(Seat syncher);
     void sUpdateGame();
+    void sUpdateGameToNextDeal();
 
     void sShowAuction();
     void sShowPlay();
@@ -151,7 +152,6 @@ private:
     QHostAddress hostAddress;
 
     ZBridgeClient *handle;
-    ZBridgeClientSync *syncHandle;
 };
 
 #endif // CTBLMNGRCLIENT_H

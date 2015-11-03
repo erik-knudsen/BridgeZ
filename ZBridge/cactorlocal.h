@@ -88,7 +88,6 @@ public:
     Seat getSeat() {return (Seat)zBridgeClientIface_get_client(&handle); }
 
     ZBridgeClient *getHandle() { return &handle; }
-    ZBridgeClientSync *getSyncHandle() { return &syncHandle; }
 
 public slots:
     void bidValue();

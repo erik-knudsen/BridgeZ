@@ -45,6 +45,7 @@ CActorBase::CActorBase(CTblMngrBase *tableManager) :
     connect(this, &CActorBase::sAttemptSyncFromClientToServer, tableManager, &CTblMngrBase::sAttemptSyncFromClientToServer);
     connect(this, &CActorBase::sConfirmSyncFromClientToServer, tableManager, &CTblMngrBase::sConfirmSyncFromClientToServer);
     connect(this, &CActorBase::sUpdateGame, tableManager, &CTblMngrBase::sUpdateGame);
+    connect(this, &CActorBase::sUpdateGameToNextDeal, tableManager, &CTblMngrBase::sUpdateGameToNextDeal);
 }
 
 CActorBase::~CActorBase()
