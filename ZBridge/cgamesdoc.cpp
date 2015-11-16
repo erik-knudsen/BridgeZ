@@ -370,8 +370,16 @@ void CGamesDoc::setNextDeal(int cards[][13])
 void CGamesDoc::setPlayedResult(CBidHistory &bidHistory, CPlayHistory &playHistory, QString &westName,
                                 QString &northName, QString &eastName, QString &southName)
 {
+    //In case names deviate from already defined player names, then use already defined names.
+    QString wN, nN, eN, sN;
+    wN = westName;
+    nN = northName;
+    eN = eastName;
+    sN = southName;
+    getPlayerNames(PLAYED_GAME, &wN, &nN, &eN, &sN);
+
     //Set result of manually played game.
-    setResult(PLAYED_GAME, bidHistory, playHistory, westName, northName, eastName, southName);
+    setResult(PLAYED_GAME, bidHistory, playHistory, wN, nN, eN, sN);
 }
 
 /**
@@ -393,8 +401,16 @@ void CGamesDoc::setPlayedResult(CBidHistory &bidHistory, CPlayHistory &playHisto
 void CGamesDoc::setAutoResult(CBidHistory &bidHistory, CPlayHistory &playHistory, QString &westName,
                               QString &northName, QString &eastName, QString &southName)
 {
+    //In case names deviate from already defined auto names, then use already defined names.
+    QString wN, nN, eN, sN;
+    wN = westName;
+    nN = northName;
+    eN = eastName;
+    sN = southName;
+    getPlayerNames(AUTO_GAME, &wN, &nN, &eN, &sN);
+
     //Set result af automatically played game.
-    setResult(AUTO_GAME, bidHistory, playHistory, westName, northName, eastName, southName);
+    setResult(AUTO_GAME, bidHistory, playHistory, wN, nN, eN, sN);
 }
 
 void CGamesDoc::setResult(GameType gameType, CBidHistory &bidHistory, CPlayHistory &playHistory, QString &westName,

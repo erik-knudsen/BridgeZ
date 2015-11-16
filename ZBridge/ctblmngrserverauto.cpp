@@ -458,7 +458,6 @@ void CTblMngrServerAuto::giveNewDeal()
 void CTblMngrServerAuto::sNewSession()
 {
     CActorBase *actor;
-    QString westName, northName, eastName, southName;
 
     cleanTableManager();
 
@@ -469,36 +468,31 @@ void CTblMngrServerAuto::sNewSession()
     firstAutoSync = true;
 
     //Set up actors.
-    westName = AUTO_SEAT_NAME_PREFIX + SEAT_NAMES[WEST_SEAT];
-    northName = AUTO_SEAT_NAME_PREFIX + SEAT_NAMES[NORTH_SEAT];
-    eastName = AUTO_SEAT_NAME_PREFIX + SEAT_NAMES[EAST_SEAT];
-    southName = AUTO_SEAT_NAME_PREFIX + SEAT_NAMES[SOUTH_SEAT];
-    games->getPlayerNames(AUTO_GAME, &westName, &northName, &eastName, &southName);
     if ((remoteActorServer != 0) && remoteActorServer->isConnected(WEST_SEAT))
         actor = new CActorRemoteAuto(WEST_SEAT,  remoteActorServer->getFrontend(WEST_SEAT), this);
     else
-        actor = new CActorLocalAuto(westName, WEST_SEAT,
+        actor = new CActorLocalAuto(AUTO_SEAT_NAME_PREFIX + SEAT_NAMES[WEST_SEAT], WEST_SEAT,
                 doc->getNSBidOptions(), doc->getEWBidOptions(), this);
     actors[WEST_SEAT] = actor;
 
     if ((remoteActorServer != 0) && remoteActorServer->isConnected(NORTH_SEAT))
         actor = new CActorRemoteAuto(NORTH_SEAT, remoteActorServer->getFrontend(NORTH_SEAT), this);
     else
-        actor = new CActorLocalAuto(northName, NORTH_SEAT,
+        actor = new CActorLocalAuto(AUTO_SEAT_NAME_PREFIX + SEAT_NAMES[NORTH_SEAT], NORTH_SEAT,
                 doc->getNSBidOptions(), doc->getEWBidOptions(), this);
     actors[NORTH_SEAT] = actor;
 
     if ((remoteActorServer != 0) && remoteActorServer->isConnected(EAST_SEAT))
         actor = new CActorRemoteAuto(EAST_SEAT, remoteActorServer->getFrontend(EAST_SEAT), this);
     else
-        actor = new CActorLocalAuto(eastName, EAST_SEAT,
+        actor = new CActorLocalAuto(AUTO_SEAT_NAME_PREFIX + SEAT_NAMES[EAST_SEAT], EAST_SEAT,
                 doc->getNSBidOptions(), doc->getEWBidOptions(), this);
     actors[EAST_SEAT] = actor;
 
     if ((remoteActorServer != 0) && remoteActorServer->isConnected(SOUTH_SEAT))
         actor = new CActorRemoteAuto(SOUTH_SEAT, remoteActorServer->getFrontend(SOUTH_SEAT), this);
     else
-        actor = new CActorLocalAuto(southName, SOUTH_SEAT,
+        actor = new CActorLocalAuto(AUTO_SEAT_NAME_PREFIX + SEAT_NAMES[SOUTH_SEAT], SOUTH_SEAT,
                 doc->getNSBidOptions(), doc->getEWBidOptions(), this);
     actors[SOUTH_SEAT] = actor;
 

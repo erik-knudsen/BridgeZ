@@ -118,8 +118,6 @@ void CTblMngrClient::cleanTableManager()
  */
 void CTblMngrClient::newSession()
 {
-    QString westName, northName, eastName, southName;
-
     //Prepare for new session.
     cleanTableManager();
 
@@ -137,22 +135,17 @@ void CTblMngrClient::newSession()
     QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_SCORE , true));
 
     //Set up actor.
-    westName = doc->getSeatOptions().westName;
-    northName = doc->getSeatOptions().northName;
-    eastName = doc->getSeatOptions().eastName;
-    southName = doc->getSeatOptions().southName;
-    games->getPlayerNames(PLAYED_GAME, &westName, &northName, &eastName, &southName);
     if (doc->getSeatOptions().seat == WEST_SEAT)
-        actor = new CActorLocal((doc->getSeatOptions().westActor == MANUAL_ACTOR), westName,
+        actor = new CActorLocal((doc->getSeatOptions().westActor == MANUAL_ACTOR), doc->getSeatOptions().westName,
                                 WEST_SEAT, protocol, doc->getNSBidOptions(), doc->getEWBidOptions(), this);
     else if (doc->getSeatOptions().seat == NORTH_SEAT)
-        actor = new CActorLocal((doc->getSeatOptions().northActor == MANUAL_ACTOR), northName,
+        actor = new CActorLocal((doc->getSeatOptions().northActor == MANUAL_ACTOR), doc->getSeatOptions().northName,
                                 NORTH_SEAT, protocol, doc->getNSBidOptions(), doc->getEWBidOptions(), this);
     else if (doc->getSeatOptions().seat == EAST_SEAT)
-        actor = new CActorLocal((doc->getSeatOptions().eastActor == MANUAL_ACTOR), eastName,
+        actor = new CActorLocal((doc->getSeatOptions().eastActor == MANUAL_ACTOR), doc->getSeatOptions().eastName,
                                 EAST_SEAT, protocol, doc->getNSBidOptions(), doc->getEWBidOptions(), this);
     else
-        actor = new CActorLocal((doc->getSeatOptions().southActor == MANUAL_ACTOR), southName,
+        actor = new CActorLocal((doc->getSeatOptions().southActor == MANUAL_ACTOR), doc->getSeatOptions().southName,
                                 SOUTH_SEAT, protocol, doc->getNSBidOptions(), doc->getEWBidOptions(), this);
 
     actor->setShowUser((actor->getActorType() == MANUAL_ACTOR) || showAll);

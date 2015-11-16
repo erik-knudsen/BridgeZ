@@ -94,27 +94,20 @@ void CTblMngrClientAuto::cleanTableManager()
  */
 void CTblMngrClientAuto::sNewSession()
 {
-    QString westName, northName, eastName, southName;
-
     //Prepare for new session.
     cleanTableManager();
     //Set up actor.
-    westName = AUTO_SEAT_NAME_PREFIX + SEAT_NAMES[WEST_SEAT];
-    northName = AUTO_SEAT_NAME_PREFIX + SEAT_NAMES[NORTH_SEAT];
-    eastName = AUTO_SEAT_NAME_PREFIX + SEAT_NAMES[EAST_SEAT];
-    southName = AUTO_SEAT_NAME_PREFIX + SEAT_NAMES[SOUTH_SEAT];
-    games->getPlayerNames(AUTO_GAME, &westName, &northName, &eastName, &southName);
     if (doc->getSeatOptions().seat == WEST_SEAT)
-        actor = new CActorLocalAuto(westName,
+        actor = new CActorLocalAuto(AUTO_SEAT_NAME_PREFIX + SEAT_NAMES[WEST_SEAT],
                                 WEST_SEAT, doc->getNSBidOptions(), doc->getEWBidOptions(), this);
     else if (doc->getSeatOptions().seat == NORTH_SEAT)
-        actor = new CActorLocalAuto(northName,
+        actor = new CActorLocalAuto(AUTO_SEAT_NAME_PREFIX + SEAT_NAMES[NORTH_SEAT],
                                 NORTH_SEAT, doc->getNSBidOptions(), doc->getEWBidOptions(), this);
     else if (doc->getSeatOptions().seat == EAST_SEAT)
-        actor = new CActorLocalAuto(eastName,
+        actor = new CActorLocalAuto(AUTO_SEAT_NAME_PREFIX + SEAT_NAMES[EAST_SEAT],
                                 EAST_SEAT, doc->getNSBidOptions(), doc->getEWBidOptions(), this);
     else
-        actor = new CActorLocalAuto(southName,
+        actor = new CActorLocalAuto(AUTO_SEAT_NAME_PREFIX + SEAT_NAMES[SOUTH_SEAT],
                                 SOUTH_SEAT, doc->getNSBidOptions(), doc->getEWBidOptions(), this);
 
     //Only for update of Table Manager game info.
