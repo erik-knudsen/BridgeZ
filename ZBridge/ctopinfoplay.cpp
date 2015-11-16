@@ -97,14 +97,18 @@ void CTopInfoPlay::setDealer(Seat seat)
 
 void CTopInfoPlay::setDeclarer(Seat seat)
 {
-    declarer->setText(tr(SEAT_NAMES[seat]));
+    if (seat != NO_SEAT)
+        declarer->setText(tr(SEAT_NAMES[seat]));
 }
 
 void CTopInfoPlay::setContract(Bids bid, Bids dbl)
 {
-    contract->setPixmap(BIDS[bid]);
-    if (dbl != BID_NONE)
-        contract_dbl->setPixmap(BIDS[dbl]);
-    else
-        contract_dbl->setPixmap(BIDS[BID_BLANK]);
+    if (bid != BID_NONE)
+    {
+        contract->setPixmap(BIDS[bid]);
+        if (dbl != BID_NONE)
+            contract_dbl->setPixmap(BIDS[dbl]);
+        else
+            contract_dbl->setPixmap(BIDS[BID_BLANK]);
+    }
 }

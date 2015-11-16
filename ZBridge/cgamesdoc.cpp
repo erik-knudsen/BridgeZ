@@ -206,10 +206,7 @@ void CGamesDoc::getNextDeal(int *board, int cards[][13], Seat *dealer, Team *vul
         {
             *vulnerable = NEITHER;
             if (currentGameIndex > 0)
-            {
-                int playedAuctionAndPlayIndex = getPlayedAuctionAndPlayIndex(currentGameIndex - 1);
-                *vulnerable = getRubberVulnerable(currentGameIndex - 1, playedAuctionAndPlayIndex);
-            }
+                *vulnerable = getRubberVulnerable(currentGameIndex - 1);
         }
 
         currentGame->board = *board;
@@ -262,10 +259,7 @@ void CGamesDoc::getNextDeal(int *board, int cards[][13], Seat *dealer, Team *vul
             {
                 *vulnerable = NEITHER;
                 if (currentGameIndex > 0)
-                {
-                    int playedAuctionAndPlayIndex = getPlayedAuctionAndPlayIndex(currentGameIndex - 1);
-                    *vulnerable = getRubberVulnerable(currentGameIndex - 1, playedAuctionAndPlayIndex);
-                }
+                    *vulnerable = getRubberVulnerable(currentGameIndex - 1);
                 currentGame->vulnerable = *vulnerable;
             }
             for (int i = 0; i < 13; i++)
@@ -406,23 +400,40 @@ void CGamesDoc::setAutoResult(CBidHistory &bidHistory, CPlayHistory &playHistory
 void CGamesDoc::setResult(GameType gameType, CBidHistory &bidHistory, CPlayHistory &playHistory, QString &westName,
                                 QString &northName, QString &eastName, QString &southName)
 {
-    //Set result of manually played game.
-    CAuctionAndPlay * auctionAndPlay = new CAuctionAndPlay();
+    //Check for passed out games.
+    if (bidHistory.passedOut())
+            playHistory.setBidInfo(BID_PASS, BID_NONE, NO_SEAT);
 
-    auctionAndPlay->gameType = gameType;
-    auctionAndPlay->bidHistory = bidHistory;
-    auctionAndPlay->playHistory = playHistory;
-    auctionAndPlay->westName = westName;
-    auctionAndPlay->northName = northName;
-    auctionAndPlay->eastName = eastName;
-    auctionAndPlay->southName = southName;
-    auctionAndPlay->declarer = playHistory.getDeclarer();
-    auctionAndPlay->contract = playHistory.getContract();
-    auctionAndPlay->contractModifier = playHistory.getContractModifier();
-    auctionAndPlay->result = playHistory.getResult();
+    //Check for not or partially played games.
+    if (((playHistory.getContract() != BID_NONE) && (playHistory.getResult() != -1)) ||
+        (playHistory.getContract() == BID_PASS))
+    {
+        CAuctionAndPlay * auctionAndPlay = new CAuctionAndPlay();
 
-    QMutexLocker locker(&lock);
-    games[currentGameIndex]->auctionAndPlay.append(auctionAndPlay);
+        auctionAndPlay->gameType = gameType;
+        auctionAndPlay->bidHistory = bidHistory;
+        auctionAndPlay->playHistory = playHistory;
+        auctionAndPlay->westName = westName;
+        auctionAndPlay->northName = northName;
+        auctionAndPlay->eastName = eastName;
+        auctionAndPlay->southName = southName;
+        if (playHistory.getContract() == BID_PASS)
+        {
+            auctionAndPlay->declarer = NO_SEAT;
+            auctionAndPlay->contract = BID_PASS;
+            auctionAndPlay->contractModifier = BID_NONE;
+        }
+        else
+        {
+            auctionAndPlay->declarer = playHistory.getDeclarer();
+            auctionAndPlay->contract = playHistory.getContract();
+            auctionAndPlay->contractModifier = playHistory.getContractModifier();
+        }
+        auctionAndPlay->result = playHistory.getResult();
+
+        QMutexLocker locker(&lock);
+        games[currentGameIndex]->auctionAndPlay.append(auctionAndPlay);
+    }
 }
 
 /**
@@ -486,6 +497,17 @@ int CGamesDoc::getNumberAuctionAndPlay(int gameIndex)
     return (games[gameIndex]->auctionAndPlay.size());
 }
 
+int CGamesDoc::getMaxNumberAuctionAndPlay()
+{
+    int maxNuberAuctionAndPlay = 0;
+
+    for (int i = 0; i < games.size(); i++)
+        if (games[i]->auctionAndPlay.size() > maxNuberAuctionAndPlay)
+            maxNuberAuctionAndPlay = games[i]->auctionAndPlay.size();
+
+    return maxNuberAuctionAndPlay;
+}
+
 int CGamesDoc::getPlayedAuctionAndPlayIndex(int gameIndex)
 {
     int auctionAndPlayIndex;
@@ -495,8 +517,8 @@ int CGamesDoc::getPlayedAuctionAndPlayIndex(int gameIndex)
         if (games[gameIndex]->auctionAndPlay[auctionAndPlayIndex]->gameType == PLAYED_GAME)
             break;
 
-    //Must exist.
-    assert(auctionAndPlayIndex < numberAuctionAndPlay);
+    if (auctionAndPlayIndex >= numberAuctionAndPlay)
+        auctionAndPlayIndex = -1;
 
     return auctionAndPlayIndex;
 }
@@ -522,11 +544,38 @@ void CGamesDoc::getGame(int gameIndex, int *board, Seat *dealer, Team *vulnerabl
     }
 }
 
+void CGamesDoc::getPlayerNames(GameType gameType, QString *westName, QString *northName, QString *eastName, QString *southName)
+{
+    assert((gameType == PLAYED_GAME) || (gameType == AUTO_GAME));
+
+    QListIterator<CGame *> gameItr(games);
+    while (gameItr.hasNext())
+    {
+        CGame *nextGame = gameItr.next();
+        QListIterator<CAuctionAndPlay *> auctionAndPlayItr(nextGame->auctionAndPlay);
+        while (auctionAndPlayItr.hasNext())
+        {
+            CAuctionAndPlay *nextAuctionAndPlay = auctionAndPlayItr.next();
+            if (nextAuctionAndPlay->gameType == gameType)
+            {
+                *westName = nextAuctionAndPlay->westName;
+                *northName = nextAuctionAndPlay->northName;
+                *eastName = nextAuctionAndPlay->eastName;
+                *southName = nextAuctionAndPlay->southName;
+
+                return;
+            }
+        }
+    }
+}
+
 void CGamesDoc::getActorNames(int gameIndex, int auctionAndPlayIndex,
                               QString *westName, QString *northName, QString *eastName, QString *southName)
 {
     assert(gameIndex < games.size());
-    assert(auctionAndPlayIndex < games[gameIndex]->auctionAndPlay.size());
+
+    if ((auctionAndPlayIndex < 0) || (auctionAndPlayIndex >= games[gameIndex]->auctionAndPlay.size()))
+        return;
 
     *westName = games[gameIndex]->auctionAndPlay[auctionAndPlayIndex]->westName;
     *northName = games[gameIndex]->auctionAndPlay[auctionAndPlayIndex]->northName;
@@ -539,16 +588,23 @@ void CGamesDoc::getAuctionAndPlay(int gameIndex, int auctionAndPlayIndex, Seat *
                                   CBidHistory *bidHistory, CPlayHistory *playHistory)
 {
     assert(gameIndex < games.size());
-    assert(auctionAndPlayIndex < games[gameIndex]->auctionAndPlay.size());
 
-    *declarer = games[gameIndex]->auctionAndPlay[auctionAndPlayIndex]->declarer;
-    *contract =games[gameIndex]->auctionAndPlay[auctionAndPlayIndex]->contract;
-    *contractModifier = games[gameIndex]->auctionAndPlay[auctionAndPlayIndex]->contractModifier;
-    *result = games[gameIndex]->auctionAndPlay[auctionAndPlayIndex]->result;
-    if (bidHistory != 0)
-        *bidHistory = games[gameIndex]->auctionAndPlay[auctionAndPlayIndex]->bidHistory;
-    if (playHistory != 0)
-        *playHistory = games[gameIndex]->auctionAndPlay[auctionAndPlayIndex]->playHistory;
+    *declarer = NO_SEAT;
+    *contract = BID_NONE;
+    *contractModifier = BID_NONE;
+    *result = -1;
+
+    if ((auctionAndPlayIndex >= 0) && (auctionAndPlayIndex < games[gameIndex]->auctionAndPlay.size()))
+    {
+        *declarer = games[gameIndex]->auctionAndPlay[auctionAndPlayIndex]->declarer;
+        *contract =games[gameIndex]->auctionAndPlay[auctionAndPlayIndex]->contract;
+        *contractModifier = games[gameIndex]->auctionAndPlay[auctionAndPlayIndex]->contractModifier;
+        *result = games[gameIndex]->auctionAndPlay[auctionAndPlayIndex]->result;
+        if (bidHistory != 0)
+            *bidHistory = games[gameIndex]->auctionAndPlay[auctionAndPlayIndex]->bidHistory;
+        if (playHistory != 0)
+            *playHistory = games[gameIndex]->auctionAndPlay[auctionAndPlayIndex]->playHistory;
+    }
 }
 
 /**
@@ -576,6 +632,10 @@ int CGamesDoc::getDuplicateScore(int gameIndex, int auctionAndPlayIndex, bool ns
     contract = games[gameIndex]->auctionAndPlay[auctionAndPlayIndex]->contract;
     contractModifier = games[gameIndex]->auctionAndPlay[auctionAndPlayIndex]->contractModifier;
     result = games[gameIndex]->auctionAndPlay[auctionAndPlayIndex]->result;
+
+    //Was it a pass game?
+    if (contract == BID_PASS)
+        return 0;
 
     Suit suit = BID_SUIT(contract);
     int level = BID_LEVEL(contract);
@@ -679,33 +739,6 @@ int CGamesDoc::getDuplicateScore(int gameIndex, int auctionAndPlayIndex, bool ns
 }
 
 /**
- * @brief Determine if the game is a practice game.
- * @return true if the game is a practice game. False otherwise.
- */
-bool CGamesDoc::practice()
-{
-    int i;
-
-    for (i = 0; i < games.size(); i++)
-        if (games[i]->auctionAndPlay.size() > 1)
-            break;
-
-    return (i == games.size());
-}
-
-/**
- * @brief Check consistency of duplicate play.
- * @return true if ok. Otherwise false.
- */
-bool CGamesDoc::checkDuplicate()
-{
-    for (int i = 0; i < (games.size() - 1); i++)
-        if (games[i]->auctionAndPlay.size() < 2)
-            return false;
-    return true;
-}
-
-/**
  * @brief Calculate duplicate points for a given game/play.
  * @param[in]gameIndex Index of the game.
  * @param[in] auctionAndPlayIndex Index of the play.
@@ -720,9 +753,20 @@ float CGamesDoc::getDuplicatePointBoard(int gameIndex, int auctionAndPlayIndex,
     float point = 0;
 
     assert(gameIndex < games.size());
+
+    int maxNumberAuctionAndPlay = getMaxNumberAuctionAndPlay();
+    assert(maxNumberAuctionAndPlay >= 2);
+
+    //Has the game been played?
+    if (auctionAndPlayIndex == -1)
+        return (scoringMethod == MP) ? (maxNumberAuctionAndPlay - 1) : (0);
+
     assert(auctionAndPlayIndex < games[gameIndex]->auctionAndPlay.size());
 
     int nrPlayed = games[gameIndex]->auctionAndPlay.size();
+    if (nrPlayed == 1)
+        return (scoringMethod == MP) ? (maxNumberAuctionAndPlay - 1) : (0);
+
     Seat declarer = games[gameIndex]->auctionAndPlay[auctionAndPlayIndex]->declarer;
 
     //Allocate score table and get duplicate scores.
@@ -757,10 +801,17 @@ float CGamesDoc::getDuplicatePointBoard(int gameIndex, int auctionAndPlayIndex,
 
         delete []eq;
         delete []gt;
+
+        //Correct for non played games.
+        if (maxNumberAuctionAndPlay > nrPlayed)
+            point += (maxNumberAuctionAndPlay - nrPlayed);
+
+        //Normalize to %.
+        point = point * 100 / (2 * maxNumberAuctionAndPlay - 2);
     }
     else
     {
-        //Calculate point based on IMP.
+        //Calculate point based on IMP. First played games.
         for (int i = 0; i < nrPlayed; i++)
             if (auctionAndPlayIndex != i)
             {
@@ -769,9 +820,20 @@ float CGamesDoc::getDuplicatePointBoard(int gameIndex, int auctionAndPlayIndex,
                 while (abs(diff) > IMP_TABLE[++k]) ;
                 point += (diff > 0) ? k : -k;
             }
-        point /= nrPlayed - 1;
+        //Next non played games (IMP is 0 for non played games).
+        for (int i = nrPlayed; i < maxNumberAuctionAndPlay; i++)
+        {
+            int diff = scores[auctionAndPlayIndex] - 0;
+            int k = -1;
+            while (abs(diff) > IMP_TABLE[++k]) ;
+            point += (diff > 0) ? k : -k;
+
+        }
         if (!ns &&((declarer == WEST_SEAT) || (declarer == EAST_SEAT)))
             point = -point;
+
+        //Normalize.
+        point /= maxNumberAuctionAndPlay;
     }
     delete []scores;
 
@@ -792,27 +854,26 @@ float CGamesDoc::getDuplicateResultAll(int gameIndex, QString &nameWN, QString &
 {
     assert(gameIndex < games.size());
 
+    int maxNumberAuctionAndPlay = getMaxNumberAuctionAndPlay();
+
+    assert(maxNumberAuctionAndPlay >= 2);
+
     float result = 0;
     int no = 0;
 
     for (int i = 0; i <= gameIndex; i++)
     {
         Seat seat;
+        float point;
         int auctionAndPlayIndex = getIndexAndSeat(i, nameWN, nameES, &seat);
-        if (auctionAndPlayIndex >= 0)
-        {
-            float point;
-            no++;
-            point = getDuplicatePointBoard(i, auctionAndPlayIndex, scoringMethod, true);
+        no++;
+        point = getDuplicatePointBoard(i, auctionAndPlayIndex, scoringMethod, true);
             if ((scoringMethod == MP) && ((seat == WEST_SEAT) || (seat == EAST_SEAT)))
-                point = 2*getNumberAuctionAndPlay(i) - 2 - point;
+                point = 100 - point;
             else if ((scoringMethod == IMP) && ((seat == WEST_SEAT) || (seat == EAST_SEAT)))
                 point = -point;
 
-            if (scoringMethod == MP)
-                point = point * 100 / (2 * getNumberAuctionAndPlay(i) - 2);
             result += point;
-        }
     }
     if (no > 0)
         result /=no;
@@ -861,18 +922,29 @@ int CGamesDoc::getPairs(int gameIndex, QStringList &pairWN, QStringList &pairES)
 }
 
 /**
- * @brief Get below the line points for a given game/play in rubber play.
+ * @brief Get below the line points for a given (user) played game/play in rubber play.
  * @param[in] gameIndex Index of the game
- * @param[in] auctionAndPlayIndex Index of the play.
  * @return Below the line points. Relative to NS.
  */
-int CGamesDoc::getBelowTheLine(int gameIndex, int auctionAndPlayIndex)
+int CGamesDoc::getBelowTheLine(int gameIndex)
 {
     assert(gameIndex < games.size());
+
+    int auctionAndPlayIndex = getPlayedAuctionAndPlayIndex(gameIndex);
+
+    //Has the game been played?
+    if (auctionAndPlayIndex == -1)
+        return 0;
+
     assert(auctionAndPlayIndex < games[gameIndex]->auctionAndPlay.size());
 
     int result = games[gameIndex]->auctionAndPlay[auctionAndPlayIndex]->result;
     Bids contract = games[gameIndex]->auctionAndPlay[auctionAndPlayIndex]->contract;
+
+    //Was it a pass game?
+    if (contract == BID_PASS)
+        return 0;
+
     int level = BID_LEVEL(contract);
     int contractPoints = 0;
 
@@ -902,13 +974,17 @@ int CGamesDoc::getBelowTheLine(int gameIndex, int auctionAndPlayIndex)
 /**
  * @brief Get above the line points for a given game/play in rubber play.
  * @param[in] gameIndex Index of the game
- * @param[in] auctionAndPlayIndex Index of the play.
  * @return Above the line points. Relative to NS.
  */
-int CGamesDoc::getAboveTheLine(int gameIndex, int auctionAndPlayIndex)
+int CGamesDoc::getAboveTheLine(int gameIndex)
 {
     assert(gameIndex < games.size());
-    assert(auctionAndPlayIndex < games[gameIndex]->auctionAndPlay.size());
+
+    int auctionAndPlayIndex = getPlayedAuctionAndPlayIndex(gameIndex);
+
+    //Has the game been played?
+    if (auctionAndPlayIndex == -1)
+        return 0;
 
     Seat dealer, declarer;
     Team vulnerable;
@@ -1098,10 +1174,17 @@ int CGamesDoc::getHonorBonus(int gameIndex, int auctionAndPlayIndex)
     return 0;
 }
 
+ScoringMethod CGamesDoc::getScoringMethod()
+{
+    if (((scoringMethod == MP) || (scoringMethod == IMP)) && (getMaxNumberAuctionAndPlay() < 2))
+        return PRACTICE;
+
+    return scoringMethod;
+}
+
 /**
  * @brief Calculate rubber points for a given game/play.
  * @param[in] gameIndex Index of the game.
- * @param[in] auctionAndPlayIndex Index of the play.
  * @param[out] nsAbove Above points for NS until now.
  * @param[out] nsBelow Below points for NS until now.
  * @param[out] nsTotal Total points for NS until now.
@@ -1112,14 +1195,15 @@ int CGamesDoc::getHonorBonus(int gameIndex, int auctionAndPlayIndex)
  * @param[out]  ewLedger Ledger points for EW until now.
  * @return True if NS or EW just won a rubber. Otherwise false.
  */
-bool CGamesDoc::getRubberPoints(int gameIndex, int auctionAndPlayIndex, bool *gameDone,
+bool CGamesDoc::getRubberPoints(int gameIndex, bool *gameDone,
                                 int *board, Bids *contract, Bids *contractModifier,
                                 int *tricks, Seat *declarer, Team *vulnerable,
                                 int *nsAbove, int *nsBelow, int *nsTotal, int *nsLedger,
                                 int *ewAbove, int *ewBelow, int *ewTotal, int *ewLedger)
 {
     assert(gameIndex < games.size());
-    assert(auctionAndPlayIndex < games[gameIndex]->auctionAndPlay.size());
+
+    int auctionAndPlayIndex = getPlayedAuctionAndPlayIndex(gameIndex);
 
     int belowTheLineNSPoint, belowTheLineEWPoint, aboveTheLineNSPoint, aboveTheLineEWPoint;
 
@@ -1149,7 +1233,7 @@ bool CGamesDoc::getRubberPoints(int gameIndex, int auctionAndPlayIndex, bool *ga
             game = false;
 
         //Calculation related to below the line points.
-        int belowTheLinePoint = getBelowTheLine(i, auctionAndPlayIndex);
+        int belowTheLinePoint = getBelowTheLine(i);
         if (belowTheLinePoint > 0)
         {
             //Update NS below the line points.
@@ -1202,7 +1286,7 @@ bool CGamesDoc::getRubberPoints(int gameIndex, int auctionAndPlayIndex, bool *ga
         }
 
         //Calculation related to above the line points.
-        int aboveTheLinePoint = getAboveTheLine(i, auctionAndPlayIndex);
+        int aboveTheLinePoint = getAboveTheLine(i);
         if (aboveTheLinePoint > 0)
         {
             //Update NS above the line points.
@@ -1239,10 +1323,17 @@ bool CGamesDoc::getRubberPoints(int gameIndex, int auctionAndPlayIndex, bool *ga
     //Return values.
     *gameDone = game;
     *board = games[gameIndex]->board;
-    *contract = games[gameIndex]->auctionAndPlay[auctionAndPlayIndex]->contract;
-    *contractModifier = games[gameIndex]->auctionAndPlay[auctionAndPlayIndex]->contractModifier;
-    *tricks = games[gameIndex]->auctionAndPlay[auctionAndPlayIndex]->result;
-    *declarer = games[gameIndex]->auctionAndPlay[auctionAndPlayIndex]->declarer;
+    *contract = BID_NONE;
+    *contractModifier = BID_NONE;
+    *tricks = -1;
+    *declarer = NO_SEAT;
+    if (auctionAndPlayIndex != -1)
+    {
+        *contract = games[gameIndex]->auctionAndPlay[auctionAndPlayIndex]->contract;
+        *contractModifier = games[gameIndex]->auctionAndPlay[auctionAndPlayIndex]->contractModifier;
+        *tricks = games[gameIndex]->auctionAndPlay[auctionAndPlayIndex]->result;
+        *declarer = games[gameIndex]->auctionAndPlay[auctionAndPlayIndex]->declarer;
+    }
     *vulnerable = games[gameIndex]->vulnerable;
     *nsAbove = aboveTheLineNSPoint;
     *ewAbove = aboveTheLineEWPoint;
@@ -1357,19 +1448,15 @@ void CGamesDoc::readGames(QTextStream &pbnText, QString &event, bool originalGam
                             GameType gameType = ORIGINAL_GAME;
                             if (!originalGames)
                             {
-                                //In case we are processing (by this program) played games, then the first game
-                                //is a manually played game and the next (if existing) is an automatically
-                                //played game (there will at most be two played games).
+                                //In case we are processing (by this program) played games, then automatically                                //is a manually played game and the next (if existing) is an automatically
+                                //played games are identified by the same prefix in all actor names.
                                 gameType = PLAYED_GAME;
-                                QListIterator<CAuctionAndPlay *> auctionAndPlayItr(nextGame->auctionAndPlay);
-                                while (auctionAndPlayItr.hasNext())
-                                {
-                                    CAuctionAndPlay *nextAuctionAndPlay = auctionAndPlayItr.next();
-                                    if (nextAuctionAndPlay->gameType == PLAYED_GAME)
-                                        gameType = AUTO_GAME;
-                                }
-                                if (gameType == PLAYED_GAME)
-                                    currentGameIndex = gameInx + 1;
+                                if ((auctionAndPlay->westName.indexOf(AUTO_SEAT_NAME_PREFIX) == 0) &&
+                                    (auctionAndPlay->northName.indexOf(AUTO_SEAT_NAME_PREFIX) == 0) &&
+                                    (auctionAndPlay->eastName.indexOf(AUTO_SEAT_NAME_PREFIX) == 0) &&
+                                    (auctionAndPlay->southName.indexOf(AUTO_SEAT_NAME_PREFIX) == 0))
+                                    gameType = AUTO_GAME;
+                                currentGameIndex = gameInx + 1;
                             }
                             auctionAndPlay->gameType = gameType;
                             nextGame->auctionAndPlay.append(auctionAndPlay);
@@ -1390,7 +1477,15 @@ void CGamesDoc::readGames(QTextStream &pbnText, QString &event, bool originalGam
                 if (!auctionAndPlay->westName.isEmpty() && !auctionAndPlay->northName.isEmpty() &&
                         !auctionAndPlay->eastName.isEmpty() && !auctionAndPlay->southName.isEmpty())
                 {
-                    auctionAndPlay->gameType = (originalGames) ? (ORIGINAL_GAME) : (PLAYED_GAME);
+                    if (originalGames)
+                        auctionAndPlay->gameType = ORIGINAL_GAME;
+                    else if ((auctionAndPlay->westName.indexOf(AUTO_SEAT_NAME_PREFIX) == 0) &&
+                        (auctionAndPlay->northName.indexOf(AUTO_SEAT_NAME_PREFIX) == 0) &&
+                        (auctionAndPlay->eastName.indexOf(AUTO_SEAT_NAME_PREFIX) == 0) &&
+                        (auctionAndPlay->southName.indexOf(AUTO_SEAT_NAME_PREFIX) == 0))
+                        auctionAndPlay->gameType = AUTO_GAME;
+                    else
+                        auctionAndPlay->gameType = PLAYED_GAME;
                     game->auctionAndPlay.append(auctionAndPlay);
 
                     //Update the current game index to the next game. We do not want to play already played games.
@@ -1705,7 +1800,7 @@ void CGamesDoc::readGames(QTextStream &pbnText, QString &event, bool originalGam
                     else if (QString::compare(strValue, "S", Qt::CaseInsensitive) == 0)
                         auctionAndPlay->declarer = SOUTH_SEAT;
                     else
-                        throw PlayException(QString("PBN - Illegal declarer: %1 %2 %3").arg(strValue).arg(" in board: ").arg(game->board).toStdString());
+                        auctionAndPlay->declarer = NO_SEAT;
                     break;
 
                 //Contract tag.
@@ -1765,6 +1860,9 @@ void CGamesDoc::readGames(QTextStream &pbnText, QString &event, bool originalGam
                     for (int i = 0; i < strValue.size(); i++)
                         if (!strValue[i].isDigit())
                             throw PlayException(QString("PBN - Illegal result: %1 %2 %3").arg(strValue).arg(" in board: ").arg(game->board).toStdString());
+                    if (strValue.size() == 0)
+                        auctionAndPlay->result = -1;
+                    else
                         auctionAndPlay->result = strValue.toInt();
                 }
                     break;
@@ -1848,13 +1946,8 @@ void CGamesDoc::readGames(QTextStream &pbnText, QString &event, bool originalGam
         //First check for scoring method.
         if (games.size() > 0)
         {
-            //Check that boards have been played the same number of times.
-            int noPlays = games[0]->auctionAndPlay.size();
-            for (int i = 1; i < games.size(); i++)
-                if (noPlays != games[i]->auctionAndPlay.size())
-                    throw PlayException(QString("PBN - Consistency error in original games (boards played unequal number of times)").toStdString());
-
             //Scoring method are not always explicitly stated in pbn files.
+            int noPlays = games[0]->auctionAndPlay.size();
             if ((scoringMethod == NOSCORE) && (noPlays >= 1))
                 scoringMethod = ((noPlays == 2) || (noPlays == 1)) ? (IMP) : (MP);
 
@@ -1889,13 +1982,9 @@ void CGamesDoc::readGames(QTextStream &pbnText, QString &event, bool originalGam
             while (auctionAndPlayItr.hasNext())
             {
                 CAuctionAndPlay *nextAuctionAndPlay = auctionAndPlayItr.next();
-                if ((nextAuctionAndPlay->declarer == NO_SEAT) ||
+                if (((nextAuctionAndPlay->declarer == NO_SEAT) && (nextAuctionAndPlay->contract != BID_PASS)) ||
                         (nextAuctionAndPlay->contract == BID_NONE) ||
-                        (nextAuctionAndPlay->result < 0) ||
-                        (nextAuctionAndPlay->westName.size() == 0) ||
-                        (nextAuctionAndPlay->northName.size() == 0) ||
-                        (nextAuctionAndPlay->eastName.size() == 0) ||
-                        (nextAuctionAndPlay->southName.size() == 0))
+                        ((nextAuctionAndPlay->result < 0) && (nextAuctionAndPlay->contract != BID_PASS)))
                     throw PlayException(QString("PBN - Consistency error in original games (auction and play) in board: %1").arg(nextGame->board).toStdString());
             }
         }
@@ -1917,7 +2006,6 @@ void CGamesDoc::readGames(QTextStream &pbnText, QString &event, bool originalGam
         //If there are originals then there must be originals in all.
         if (found)
         {
-            found = false;
             gameItr.toFront();
             while (gameItr.hasNext())
             {
@@ -1931,7 +2019,7 @@ void CGamesDoc::readGames(QTextStream &pbnText, QString &event, bool originalGam
         }
 
         //If no originals then dealtype is random. Check scoring methor, board, dealer, vulnerability and cards.
-        if (!found)
+        else
         {
             //Scoring method are always given for played games.
             if ((games.size() > 0) && ((scoringMethod == NOSCORE) || (scoringMethod == FORSCORE)))
@@ -1956,22 +2044,60 @@ void CGamesDoc::readGames(QTextStream &pbnText, QString &event, bool originalGam
 
         //Check consistency of played/auto games. Has been checked for original games.
         gameItr.toFront();
+        QString pW, pN, pE, pS, aW, aN, aE, aS;
         while (gameItr.hasNext())
         {
             CGame *nextGame = gameItr.next();
             QListIterator<CAuctionAndPlay *> auctionAndPlayItr(nextGame->auctionAndPlay);
+            bool foundPlay, foundAuto;
+            foundPlay = foundAuto = false;
             while (auctionAndPlayItr.hasNext())
             {
                 CAuctionAndPlay *nextAuctionAndPlay = auctionAndPlayItr.next();
-                if (((nextAuctionAndPlay->gameType == PLAYED_GAME) ||
-                     (nextAuctionAndPlay->gameType == AUTO_GAME)) &&
-                        ((nextAuctionAndPlay->declarer == NO_SEAT) ||
+                if (nextAuctionAndPlay->gameType == ORIGINAL_GAME)
+                    continue;
+
+                if ((foundPlay &&(nextAuctionAndPlay->gameType == PLAYED_GAME)) ||
+                    (foundAuto &&(nextAuctionAndPlay->gameType == AUTO_GAME)))
+                    throw PlayException(QString("PBN - Consistency error in played games (auction and play) in board: %1").arg(nextGame->board).toStdString());
+                if (nextAuctionAndPlay->gameType == PLAYED_GAME)
+                {
+                    foundPlay = true;
+                    if (pW == "")
+                    {
+                        pW = nextAuctionAndPlay->westName;
+                        pN = nextAuctionAndPlay->northName;
+                        pE = nextAuctionAndPlay->eastName;
+                        pS = nextAuctionAndPlay->southName;
+                    }
+                    else if ((pW != nextAuctionAndPlay->westName) ||
+                             (pN != nextAuctionAndPlay->northName) ||
+                             (pE != nextAuctionAndPlay->eastName) ||
+                             (pS != nextAuctionAndPlay->southName))
+                        throw PlayException(QString("PBN - Consistency error in played games (auction and play) in board: %1").arg(nextGame->board).toStdString());
+                }
+                else if (nextAuctionAndPlay->gameType == AUTO_GAME)
+                {
+                    foundAuto = true;
+                    if (aW == "")
+                    {
+                        aW = nextAuctionAndPlay->westName;
+                        aN = nextAuctionAndPlay->northName;
+                        aE = nextAuctionAndPlay->eastName;
+                        aS = nextAuctionAndPlay->southName;
+                    }
+                    else if ((aW != nextAuctionAndPlay->westName) ||
+                             (aN != nextAuctionAndPlay->northName) ||
+                             (aE != nextAuctionAndPlay->eastName) ||
+                             (aS != nextAuctionAndPlay->southName))
+                        throw PlayException(QString("PBN - Consistency error in played games (auction and play) in board: %1").arg(nextGame->board).toStdString());
+                }
+                else
+                    throw PlayException(QString("PBN - Consistency error in played games (auction and play) in board: %1").arg(nextGame->board).toStdString());
+
+                if (((nextAuctionAndPlay->declarer == NO_SEAT) && (nextAuctionAndPlay->contract != BID_PASS)) ||
                          (nextAuctionAndPlay->contract == BID_NONE) ||
-                         (nextAuctionAndPlay->result < 0) ||
-                         (nextAuctionAndPlay->westName.size() == 0) ||
-                         (nextAuctionAndPlay->northName.size() == 0) ||
-                         (nextAuctionAndPlay->eastName.size() == 0) ||
-                         (nextAuctionAndPlay->southName.size() == 0)))
+                         ((nextAuctionAndPlay->result < 0) && (nextAuctionAndPlay->contract != BID_PASS)))
                     throw PlayException(QString("PBN - Consistency error in played games (auction and play) in board: %1").arg(nextGame->board).toStdString());
             }
         }
@@ -1991,29 +2117,69 @@ void CGamesDoc::writeGame(QTextStream &stream, CGame *game, GameType gameType, Q
 {
     QString ev = event;
     QString line;
+
+    //Random deals have no originals.
+    if ((dealType == RANDOM_DEAL) && (gameType == ORIGINAL_GAME))
+        return;
+
+    //Are there any games with the required game type?
     QListIterator<CAuctionAndPlay *> auctionAndPlayItr(game->auctionAndPlay);
+    bool found = false;
     while (auctionAndPlayItr.hasNext())
     {
         CAuctionAndPlay *nextAuctionAndPlay = auctionAndPlayItr.next();
         if (nextAuctionAndPlay->gameType == gameType)
+            found = true;
+    }
+    auctionAndPlayItr.toFront();
+
+    //Original games must always be written (even if not played).
+    if (!found && (gameType == ORIGINAL_GAME))
+    {
+        stream << "[Event \"" << ev << "\"]\n";
+        stream << QString("[Board \"%1\"]\n").arg(game->board).toLatin1();
+        stream << QString("[Dealer \"%1\"]\n").arg(PBN_SEAT_NAMES[game->dealer]);
+        stream << QString("[Vulnerable \"%1\"]\n").arg(PBN_VULNERABILITY_NAMES[game->vulnerable]);
+        stream << setCards(game->dealer, game->wCards, game->nCards, game->eCards, game->sCards, line).toLatin1();
+        stream << QString("[Scoring \"%1\"]\n").arg(PBN_SCORING_NAMES[scoringMethod]);
+    }
+
+    //Have we found games with the required game type?
+    else if (found)
+    {
+        QListIterator<CAuctionAndPlay *> auctionAndPlayItr(game->auctionAndPlay);
+        while (auctionAndPlayItr.hasNext())
         {
-            stream << "[Event \"" << ev << "\"]\n";
-            ev = "#";       //Following events are written as inheritance of first event.
-            stream << QString("[Board \"%1\"]\n").arg(game->board).toLatin1();
-            stream << QString("[West \"%1\"]\n").arg(nextAuctionAndPlay->westName);
-            stream << QString("[North \"%1\"]\n").arg(nextAuctionAndPlay->northName);
-            stream << QString("[East \"%1\"]\n").arg(nextAuctionAndPlay->eastName);
-            stream << QString("[South \"%1\"]\n").arg(nextAuctionAndPlay->southName);
-            stream << QString("[Dealer \"%1\"]\n").arg(PBN_SEAT_NAMES[game->dealer]);
-            stream << QString("[Vulnerable \"%1\"]\n").arg(PBN_VULNERABILITY_NAMES[game->vulnerable]);
-            stream << setCards(game->dealer, game->wCards, game->nCards, game->eCards, game->sCards, line).toLatin1();
-            stream << QString("[Scoring \"%1\"]\n").arg(PBN_SCORING_NAMES[scoringMethod]);
-            stream << QString("[Declarer \"%1\"]\n").arg(PBN_SEAT_NAMES[nextAuctionAndPlay->declarer]);
-            stream << setContract(nextAuctionAndPlay->contract, nextAuctionAndPlay->contractModifier, line);
-            stream << QString("[Result \"%1\"]\n").arg(nextAuctionAndPlay->result);
-            makeAuction(stream, nextAuctionAndPlay->bidHistory);
-            makePlay(stream, nextAuctionAndPlay->playHistory);
-            stream << QString("\n");
+            CAuctionAndPlay *nextAuctionAndPlay = auctionAndPlayItr.next();
+            if (nextAuctionAndPlay->gameType == gameType)
+            {
+                stream << "[Event \"" << ev << "\"]\n";
+                ev = "#";       //Following events are written as inheritance of first event.
+                stream << QString("[Board \"%1\"]\n").arg(game->board).toLatin1();
+                stream << QString("[West \"%1\"]\n").arg(nextAuctionAndPlay->westName);
+                stream << QString("[North \"%1\"]\n").arg(nextAuctionAndPlay->northName);
+                stream << QString("[East \"%1\"]\n").arg(nextAuctionAndPlay->eastName);
+                stream << QString("[South \"%1\"]\n").arg(nextAuctionAndPlay->southName);
+                stream << QString("[Dealer \"%1\"]\n").arg(PBN_SEAT_NAMES[game->dealer]);
+                stream << QString("[Vulnerable \"%1\"]\n").arg(PBN_VULNERABILITY_NAMES[game->vulnerable]);
+                stream << setCards(game->dealer, game->wCards, game->nCards, game->eCards, game->sCards, line).toLatin1();
+                stream << QString("[Scoring \"%1\"]\n").arg(PBN_SCORING_NAMES[scoringMethod]);
+                if (nextAuctionAndPlay->contract == BID_PASS)
+                {
+                    stream << QString("[Declarer \"\"]\n");
+                    stream << QString("[Contract \"PASS\"]\n");
+                    stream << QString("[Result \"\"]\n");
+                }
+                else
+                {
+                    stream << QString("[Declarer \"%1\"]\n").arg(PBN_SEAT_NAMES[nextAuctionAndPlay->declarer]);
+                    stream << setContract(nextAuctionAndPlay->contract, nextAuctionAndPlay->contractModifier, line);
+                    stream << QString("[Result \"%1\"]\n").arg(nextAuctionAndPlay->result);
+                }
+                makeAuction(stream, nextAuctionAndPlay->bidHistory);
+                makePlay(stream, nextAuctionAndPlay->playHistory);
+                stream << QString("\n");
+            }
         }
     }
 }
@@ -2710,7 +2876,7 @@ int CGamesDoc::getIndexAndSeat(int gameIndex, QString &nameWN, QString &nameES, 
     assert(gameIndex < games.size());
 
     int i;
-    for (i = 0; i <= games[gameIndex]->auctionAndPlay.size(); i++)
+    for (i = 0; i < games[gameIndex]->auctionAndPlay.size(); i++)
     {
         QString westName = games[gameIndex]->auctionAndPlay[i]->westName;
         QString northName = games[gameIndex]->auctionAndPlay[i]->northName;
@@ -2730,22 +2896,20 @@ int CGamesDoc::getIndexAndSeat(int gameIndex, QString &nameWN, QString &nameES, 
             break;
         }
     }
-    if (i > games[gameIndex]->auctionAndPlay.size())
+    if (i >= games[gameIndex]->auctionAndPlay.size())
         i = -1;
 
     return i;
 }
 
 /**
- * @brief Calculate rubber vulnerability for the next play after a given game/play.
+ * @brief Calculate rubber vulnerability for the next play after a given (user) played game/play.
  * @param[in] gameIndex Index of the game.
- * @param[in] auctionAndPlayIndex Index of the play.
  * @return Calculate rubber vulnerability for next play.
  */
-Team CGamesDoc::getRubberVulnerable(int gameIndex, int auctionAndPlayIndex)
+Team CGamesDoc::getRubberVulnerable(int gameIndex)
 {
     assert(gameIndex < games.size());
-    assert(auctionAndPlayIndex < games[gameIndex]->auctionAndPlay.size());
 
     Team vulnerable = NEITHER;
     int belowTheLineNSPoint = 0, belowTheLineEWPoint = 0;
@@ -2754,7 +2918,7 @@ Team CGamesDoc::getRubberVulnerable(int gameIndex, int auctionAndPlayIndex)
     //Start from the first play.
     for (int i = 0; i <= gameIndex; i++)
     {
-        int belowTheLinePoint = getBelowTheLine(i, auctionAndPlayIndex);
+        int belowTheLinePoint = getBelowTheLine(i);
 
         if (belowTheLinePoint > 0)
         {

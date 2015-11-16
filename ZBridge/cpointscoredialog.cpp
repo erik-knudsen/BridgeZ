@@ -86,27 +86,39 @@ CPointScoreDialog::CPointScoreDialog(CGamesDoc *games, int scoringMethod, int in
         ui->pointScoreTable->setItem(auctionAndPlayIndex, 0, playersItem);
 
         //Contract.
-        Suit suit = BID_SUIT(contract);
-        int level = BID_LEVEL(contract);
-        QString cntr = QString("%1 %2%3").arg(tr(SEAT_NAMES[declarer])[0]).arg(level).arg(tr(SUIT_NAMES[suit]));
-        if (contractModifier == BID_DOUBLE)
-            cntr += " X";
-        else if (contractModifier == BID_REDOUBLE)
-            cntr += " XX";
+        QString cntr;
+        if (contract == BID_PASS)
+            cntr = tr("P");
+        else
+        {
+            Suit suit = BID_SUIT(contract);
+            int level = BID_LEVEL(contract);
+            cntr = QString("%1 %2%3").arg(tr(SEAT_NAMES[declarer])[0]).arg(level).arg(tr(SUIT_NAMES[suit]));
+            if (contractModifier == BID_DOUBLE)
+                cntr += " X";
+            else if (contractModifier == BID_REDOUBLE)
+                cntr += " XX";
+        }
         QTableWidgetItem *contractItem = new QTableWidgetItem(cntr);
         contractItem->setTextAlignment(Qt::AlignCenter);
         contractItem->setFlags(Qt::ItemIsEnabled);
         ui->pointScoreTable->setItem(auctionAndPlayIndex, 1, contractItem);
 
         //Result.
-        QTableWidgetItem *resultItem = new QTableWidgetItem(tr("%1").arg(result));
+        QString res;
+        if (declarer == NO_SEAT)
+            res = tr("-");
+        else
+            res = tr("%1").arg(result);
+        QTableWidgetItem *resultItem = new QTableWidgetItem(res);
         resultItem->setTextAlignment(Qt::AlignCenter);
         resultItem->setFlags(Qt::ItemIsEnabled);
         ui->pointScoreTable->setItem(auctionAndPlayIndex, 2, resultItem);
 
         //Score.
+        QTableWidgetItem *scoreItem;
         int score = games->getDuplicateScore(index, auctionAndPlayIndex);
-        QTableWidgetItem *scoreItem = new QTableWidgetItem(tr("%1").arg(score));
+        scoreItem = new QTableWidgetItem(tr("%1").arg(score));
         scoreItem->setTextAlignment(Qt::AlignCenter);
         scoreItem->setFlags(Qt::ItemIsEnabled);
         ui->pointScoreTable->setItem(auctionAndPlayIndex, 3, scoreItem);

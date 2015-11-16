@@ -25,13 +25,6 @@
 
 CPlayHistory::CPlayHistory()
 {
-    noTrick = 0;
-    ewTricks = 0;
-    nsTricks = 0;
-
-    for (int i = 0; i < 4; i++)
-        for (int j = 0; j < 13; j++)
-            play[i][j] = -1;
 }
 
 void CPlayHistory::resetPlayHistory()
@@ -39,6 +32,9 @@ void CPlayHistory::resetPlayHistory()
     noTrick = 0;
     ewTricks = 0;
     nsTricks = 0;
+
+    bid = BID_NONE;
+    bidDouble = BID_NONE;
 
     for (int i = 0; i < 4; i++)
         for (int j = 0; j < 13; j++)
@@ -55,15 +51,15 @@ void CPlayHistory::resetPlayHistory()
  */
 void CPlayHistory::setBidInfo(Bids bid, Bids bidDouble, Seat openLeader)
 {
+    this->openLeader = openLeader;
+
+    resetPlayHistory();
 
     this->bid = bid;
     trumpSuit = BID_SUIT(bid);
     level = BID_LEVEL(bid);
-
     this->bidDouble = bidDouble;
-    this->openLeader = openLeader;
 
-    resetPlayHistory();
 }
 
 /**

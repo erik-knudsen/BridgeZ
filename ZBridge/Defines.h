@@ -62,14 +62,8 @@ const char * const SEAT_NAMES[4] =
     QT_TR_NOOP("South")
 };
 
-//Auto seat names (indexed by enum Seat).
-const char * const AUTO_SEAT_NAMES[4] =
-{
-    QT_TR_NOOP("Z-West"),
-    QT_TR_NOOP("Z-North"),
-    QT_TR_NOOP("Z-East"),
-    QT_TR_NOOP("Z-South")
-};
+//Auto seat names prefix.
+const QString AUTO_SEAT_NAME_PREFIX = "AUTO_";
 
 //Suit names (indexed by enum Suit).
 const char * const SUIT_NAMES[5] =

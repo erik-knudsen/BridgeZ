@@ -74,29 +74,29 @@ public:
     int getNumberOfNotPlayedGames();
     int getNumberPlayedGames();
     int getNumberAuctionAndPlay(int gameIndex);
+    int getMaxNumberAuctionAndPlay();
     int getPlayedAuctionAndPlayIndex(int gameIndex);
     void getGame(int gameIndex, int *board, Seat *dealer, Team *vulnerable,
                  int *wCards = 0, int *nCards = 0, int *eCards = 0, int *sCards = 0);
+    void getPlayerNames(GameType gameType, QString *westName, QString *northName, QString *eastName, QString *southName);
     void getActorNames(int gameIndex, int auctionAndPlayIndex,
             QString *westName, QString *northName, QString *eastName, QString *southName);
     void getAuctionAndPlay(int gameIndex, int auctionAndPlayIndex,
                     Seat *declarer, Bids *contract, Bids *contractModifier, int *result,
                     CBidHistory *bidHistory = 0, CPlayHistory *playHistory = 0);
     int getDuplicateScore(int gameIndex, int auctionAndPlayIndex, bool ns = false);
-    bool practice();
-    bool checkDuplicate();
     float getDuplicatePointBoard(int gameIndex, int auctionAndPlayIndex,
                                   int scoringMethod, bool ns = false);
     float getDuplicateResultAll(int gameIndex, QString &nameWN, QString &nameES,
                                int scoringMethod);
     int getPairs(int gameIndex, QStringList &pairWN, QStringList &pairES);    
-    int getBelowTheLine(int gameIndex, int auctionAndPlayIndex);
-    int getAboveTheLine(int gameIndex, int auctionAndPlayIndex);
+    int getBelowTheLine(int gameIndex);
+    int getAboveTheLine(int gameIndex);
     int getHonorBonus(int gameIndex, int auctionAndPlayIndex);
-    ScoringMethod getScoringMethod() { return scoringMethod; }
+    ScoringMethod getScoringMethod();
     void setScoringMethod(ScoringMethod scoringMethod) { this->scoringMethod = scoringMethod; }
     bool getComputerPlays() { return computerPlays; }
-    bool getRubberPoints(int gameIndex, int auctionAndPlayIndex, bool *gameDone,
+    bool getRubberPoints(int gameIndex, bool *gameDone,
                          int *board, Bids *contract, Bids *contractModifier, int *tricks,
                          Seat *declarer, Team *vulnerable,
                          int *nsAbove, int *nsBelow, int *nsTotal, int *nsLedger,
@@ -160,7 +160,7 @@ private:
     void makeAuction(QTextStream &stream, CBidHistory &bidHistory);
     void makePlay(QTextStream &stream, CPlayHistory &playHistory);
     int getIndexAndSeat(int gameIndex, QString &nameWN, QString &nameES, Seat *seat);
-    Team getRubberVulnerable(int gameIndex, int auctionAndPlayIndex);
+    Team getRubberVulnerable(int gameIndex);
 
     QString event;              /**< The current game event. */
     QList<CGame *> games;       /**< List with all games. */

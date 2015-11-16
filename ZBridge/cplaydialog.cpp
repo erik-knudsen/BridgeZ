@@ -53,7 +53,7 @@ CPlayDialog::CPlayDialog(CGamesDoc *games, int gameIndex, int auctionIndex, QWid
     games->getActorNames(gameIndex, auctionIndex,
                          &westName, &northName, &eastName, &southName);
     QString players = QString("%1-%2 / %3-%4").arg(northName).arg(southName).arg(eastName).arg(westName);
-    setWindowTitle(tr("Players (N-S / E-W: ") + players);
+    setWindowTitle(tr("Players (N-S / E-W): ") + players);
 
     //Allocate view for showing the auction and play.
     playView = new CPlayView(this);
@@ -90,29 +90,38 @@ CPlayDialog::CPlayDialog(CGamesDoc *games, int gameIndex, int auctionIndex, QWid
     playView->setAndShowAllCards(true, showWest, wCards, true, showNorth, nCards,
                         true, showEast, eCards, true, showSouth, sCards);
 
-    //Rearrange display of cards for the contracts trumpsuit.
-    playView->setTrumpSuit(BID_SUIT(contract));
-
-    //Show bids.
-    QListIterator<CBid> bidItr(bidHistory.bidList);
-    while (bidItr.hasNext())
+    if (contract != BID_NONE)
     {
-        CBid bid = bidItr.next();
-        playView->showBid(bid.bidder, bid.bid);
-        playView->showBid((Seat)((bid.bidder + 1) & 3), BID_PLAYER);
+        //Show bids.
+        QListIterator<CBid> bidItr(bidHistory.bidList);
+        while (bidItr.hasNext())
+        {
+            CBid bid = bidItr.next();
+            playView->showBid(bid.bidder, bid.bid);
+            playView->showBid((Seat)((bid.bidder + 1) & 3), BID_PLAYER);
+        }
+        if (contract != BID_PASS)
+        {
+            //Rearrange display of cards for the contracts trumpsuit.
+            playView->setTrumpSuit(BID_SUIT(contract));
+
+            //Initialize for traversing cards (first player is leader). No cards played yet and no tricks taken yet.
+            player = (Seat)((declarer + 1) & 3);
+            playNo = trickNo = 0;
+            playHistory.getTrick(trickNo, trick);
+
+            //Are there any cards to traverse?
+            if (trick[player] != -1)
+            {
+                //Dialog for traversing play of cards.
+                playShow = new CPlayShow(this);
+                playShow->show();
+                connect(playShow, &CPlayShow::playValue, this, &CPlayDialog::playValue);
+                connect(playShow, &CPlayShow::playClose, this, &CPlayDialog::playClose);
+                playShow->setEnabled(REVIEW_PREV, false);
+            }
+        }
     }
-
-    //Dialog for traversing play of cards.
-    playShow = new CPlayShow(this);
-    playShow->show();
-    connect(playShow, &CPlayShow::playValue, this, &CPlayDialog::playValue);
-    connect(playShow, &CPlayShow::playClose, this, &CPlayDialog::playClose);
-    playShow->setEnabled(REVIEW_PREV, false);
-
-    //Initialize for traversing cards (first player is leader). No cards played yet and no tricks taken yet.
-    player = (Seat)((declarer + 1) & 3);
-    playNo = trickNo = 0;
-    playHistory.getTrick(trickNo, trick);
 }
 
 CPlayDialog::~CPlayDialog()
@@ -158,7 +167,7 @@ void CPlayDialog::playValue(ReviewVal reviewVal)
             playView->showEWTricks(ewTricks);
 
             //Is this the last trick?
-            if (trickNo == 12)
+            if (trickNo == (playHistory.getNoTrick() - 1))
             {
                 playShow->setEnabled(REVIEW_NEXT, false);
                 return;
@@ -170,19 +179,23 @@ void CPlayDialog::playValue(ReviewVal reviewVal)
             playNo = 0;
         }
 
-        //Reached the first play?
-        if ((playNo == 0) && (trickNo == 0))
-            playShow->setEnabled(REVIEW_PREV, true);
+        //Check that the next card is actually played.
+        if (trick[player] != -1)
+        {
+            //Reached the first play?
+            if ((playNo == 0) && (trickNo == 0))
+                playShow->setEnabled(REVIEW_PREV, true);
 
-        //Show played card on center display.
-        playView->showCardOnTable(player, trick[player]);
+            //Show played card on center display.
+            playView->showCardOnTable(player, trick[player]);
 
-        //Clear played card from hand.
-        playView->clearCard(player, trick[player]);
+            //Clear played card from hand.
+            playView->clearCard(player, trick[player]);
 
-        //Update for next player.
-        player = (Seat)((player + 1) & 3);
-        playNo++;
+            //Update for next player.
+            player = (Seat)((player + 1) & 3);
+            playNo++;
+        }
     }
 
     //Step backward.

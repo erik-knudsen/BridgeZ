@@ -30,6 +30,8 @@ CMainScoreDialog::CMainScoreDialog(CGamesDoc *games, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::CMainScoreDialog)
 {
+    QString westName, northName, eastName, southName;
+
     this->games = games;
     scoringMethod = games->getScoringMethod();
 
@@ -44,7 +46,7 @@ CMainScoreDialog::CMainScoreDialog(CGamesDoc *games, QWidget *parent) :
                             tr("Tricks") << tr("NS") << tr("EW");
         ui->ScoringMethod->setText(tr("Scoring method is Rubber."));
     }
-    else if ((scoringMethod == PRACTICE) || !games->checkDuplicate())
+    else if (scoringMethod == PRACTICE)
     {
         ui->scoreTable->setColumnCount(5);
         horizontalHeader << tr("Board") << tr("Vulnerability") << tr("Contract") <<
@@ -69,11 +71,9 @@ CMainScoreDialog::CMainScoreDialog(CGamesDoc *games, QWidget *parent) :
     ui->scoreTable->setRowCount(noPlayed);
     if (noPlayed > 0)
     {
-        QString westName, northName, eastName, southName;
         QString nsNames, ewNames;
 
-        int playedAuctionAndPlayIndex = games->getPlayedAuctionAndPlayIndex(0);
-        games->getActorNames(0, playedAuctionAndPlayIndex, &westName, &northName, &eastName, &southName);
+        games->getPlayerNames(PLAYED_GAME, &westName, &northName, &eastName, &southName);
         nsNames = northName + " / " + southName;
         ewNames = eastName + " / " + westName;
         ui->ewNames->setText(ewNames);
@@ -96,15 +96,12 @@ CMainScoreDialog::CMainScoreDialog(CGamesDoc *games, QWidget *parent) :
         int board;
         Seat dealer;
         Team vulnerable;
-        QString westName, northName, eastName, southName;
         Seat declarer;
         Bids contract, contractModifier;
         int result;
 
-        int playedAuctionAndPlayIndex = games->getPlayedAuctionAndPlayIndex(gameIndex);
         games->getGame(gameIndex, &board, &dealer, &vulnerable);
-        games->getActorNames(gameIndex, playedAuctionAndPlayIndex,
-                             &westName, &northName, &eastName, &southName);
+        int playedAuctionAndPlayIndex = games->getPlayedAuctionAndPlayIndex(gameIndex);
         games->getAuctionAndPlay(gameIndex, playedAuctionAndPlayIndex,
                         &declarer, &contract, &contractModifier, &result);
 
@@ -121,20 +118,36 @@ CMainScoreDialog::CMainScoreDialog(CGamesDoc *games, QWidget *parent) :
         ui->scoreTable->setItem(gameIndex, 1, vulnerabilityItem);
 
         //Contract.
-        Suit suit = BID_SUIT(contract);
-        int level = BID_LEVEL(contract);
-        QString cntr = QString("%1 %2%3").arg(tr(SEAT_NAMES[declarer])[0]).arg(level).arg(tr(SUIT_NAMES[suit]));
-        if (contractModifier == BID_DOUBLE)
-            cntr += " X";
-        else if (contractModifier == BID_REDOUBLE)
-            cntr += " XX";
+        QString cntr;
+        //Has the game been played?
+        if (contract == BID_NONE)
+            cntr = tr("NP");
+        //Was it a pass game?
+        else if (contract == BID_PASS)
+            cntr = tr("P");
+        //It is a played game.
+        else
+        {
+            Suit suit = BID_SUIT(contract);
+            int level = BID_LEVEL(contract);
+            cntr = QString("%1 %2%3").arg(tr(SEAT_NAMES[declarer])[0]).arg(level).arg(tr(SUIT_NAMES[suit]));
+            if (contractModifier == BID_DOUBLE)
+                cntr += " X";
+            else if (contractModifier == BID_REDOUBLE)
+                cntr += " XX";
+        }
         QTableWidgetItem *contractItem = new QTableWidgetItem(cntr);
         contractItem->setFlags(Qt::ItemIsEnabled);
         contractItem->setTextAlignment(Qt::AlignCenter);
         ui->scoreTable->setItem(gameIndex, 2, contractItem);
 
         //Result.
-        QTableWidgetItem *resultItem = new QTableWidgetItem(tr("%1").arg(result));
+        QString res;
+        if (declarer == NO_SEAT)
+            res = tr("-");
+        else
+            res = tr("%1").arg(result);
+        QTableWidgetItem *resultItem = new QTableWidgetItem(res);
         resultItem->setTextAlignment(Qt::AlignCenter);
         resultItem->setFlags(Qt::ItemIsEnabled);
         ui->scoreTable->setItem(gameIndex, 3, resultItem);
@@ -142,7 +155,7 @@ CMainScoreDialog::CMainScoreDialog(CGamesDoc *games, QWidget *parent) :
         if (scoringMethod == RUBBER)
         {
             //Next fill in rubber bridge columns.
-            int belowTheLinePoint = games->getBelowTheLine(gameIndex, playedAuctionAndPlayIndex);
+            int belowTheLinePoint = games->getBelowTheLine(gameIndex);
 
             if (belowTheLinePoint > 0)
             {
@@ -190,18 +203,22 @@ CMainScoreDialog::CMainScoreDialog(CGamesDoc *games, QWidget *parent) :
             int score;
 
             //Score.
-            score = games->getDuplicateScore(gameIndex, playedAuctionAndPlayIndex);
-            QTableWidgetItem *scoreItem = new QTableWidgetItem(tr("%1").arg(score));
+            QTableWidgetItem *scoreItem;
+            if (playedAuctionAndPlayIndex != -1)
+            {
+                score = games->getDuplicateScore(gameIndex, playedAuctionAndPlayIndex);
+                scoreItem = new QTableWidgetItem(tr("%1").arg(score));
+            }
+            else
+                scoreItem = new QTableWidgetItem(tr("-"));
             scoreItem->setTextAlignment(Qt::AlignCenter);
             scoreItem->setFlags(Qt::ItemIsEnabled);
             ui->scoreTable->setItem(gameIndex, 4, scoreItem);
 
-            if ((scoringMethod != PRACTICE) && games->checkDuplicate())
+            if (scoringMethod != PRACTICE)
             {
                 float result = games->getDuplicatePointBoard(gameIndex, playedAuctionAndPlayIndex,
                                              scoringMethod);
-                if (scoringMethod == MP)
-                    result = result * 100 / (2 * games->getNumberAuctionAndPlay(gameIndex) - 2);
                 QTableWidgetItem *gameItem = new QTableWidgetItem(tr("%1").arg(result, 0, 'f', 1));
                 gameItem->setTextAlignment(Qt::AlignCenter);
                 gameItem->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);

@@ -33,8 +33,6 @@ CRubberScoreDialog::CRubberScoreDialog(CGamesDoc *games, int index, QWidget *par
     this->games = games;
     this->index = index;
 
-    int playedAuctionAndPlayIndex = games->getPlayedAuctionAndPlayIndex(index);
-
     rubberPoints = new rubberPoint[index + 1];
 
     for (int i = 0; i <= index; i++)
@@ -47,7 +45,7 @@ CRubberScoreDialog::CRubberScoreDialog(CGamesDoc *games, int index, QWidget *par
         int nsAbove, nsBelow, nsTotal, nsLedger;
         int ewAbove, ewBelow, ewTotal, ewLedger;
         bool game, rubberDone;
-        rubberDone = games->getRubberPoints(i, playedAuctionAndPlayIndex, &game,
+        rubberDone = games->getRubberPoints(i, &game,
                                             &board, &contract, &contractModifier, &tricks,
                                             &declarer, &vulnerable,
                                             &nsAbove, &nsBelow, &nsTotal, &nsLedger,
@@ -204,6 +202,7 @@ void CRubberScoreDialog::paintEvent(QPaintEvent * /* event */)
     painter.setPen(pen);
     int nsAboveY = 0, ewAboveY = 0, nsBelowY = 0, ewBelowY = 0;
     for (int i = firstPlay; i <= lastPlay; i++)
+    if (rubberPoints[i].declarer != NO_SEAT)
     {
         //Contract etc..
         Team vulnerable = rubberPoints[i].vulnerable;

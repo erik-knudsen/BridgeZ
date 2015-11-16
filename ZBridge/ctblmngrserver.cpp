@@ -568,6 +568,7 @@ void CTblMngrServer::giveNewDeal()
 void CTblMngrServer::newSession()
 {
     CActor *actor;
+    QString westName, northName, eastName, southName;
 
     cleanTableManager();
 
@@ -587,43 +588,48 @@ void CTblMngrServer::newSession()
     QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_SCORE , true));
 
     //Set up actors.
+    westName = doc->getSeatOptions().westName;
+    northName = doc->getSeatOptions().northName;
+    eastName = doc->getSeatOptions().eastName;
+    southName = doc->getSeatOptions().southName;
+    games->getPlayerNames(PLAYED_GAME, &westName, &northName, &eastName, &southName);
     if (doc->getSeatOptions().westActor == MANUAL_ACTOR)
-        actor = new CActorLocal(true, doc->getSeatOptions().westName, WEST_SEAT, protocol,
+        actor = new CActorLocal(true, westName, WEST_SEAT, protocol,
                 doc->getNSBidOptions(), doc->getEWBidOptions(), this);
     else if ((remoteActorServer != 0) && remoteActorServer->isConnected(WEST_SEAT))
         actor = new CActorRemote(WEST_SEAT, protocol, remoteActorServer->getFrontend(WEST_SEAT), this);
     else
-        actor = new CActorLocal(false, doc->getSeatOptions().westName, WEST_SEAT, protocol,
+        actor = new CActorLocal(false, westName, WEST_SEAT, protocol,
                 doc->getNSBidOptions(), doc->getEWBidOptions(), this);
     actors[WEST_SEAT] = actor;
 
     if (doc->getSeatOptions().northActor == MANUAL_ACTOR)
-        actor = new CActorLocal(true, doc->getSeatOptions().northName, NORTH_SEAT, protocol,
+        actor = new CActorLocal(true, northName, NORTH_SEAT, protocol,
                 doc->getNSBidOptions(), doc->getEWBidOptions(), this);
     else if ((remoteActorServer != 0) && remoteActorServer->isConnected(NORTH_SEAT))
         actor = new CActorRemote(NORTH_SEAT, protocol, remoteActorServer->getFrontend(NORTH_SEAT), this);
     else
-        actor = new CActorLocal(false, doc->getSeatOptions().northName, NORTH_SEAT, protocol,
+        actor = new CActorLocal(false, northName, NORTH_SEAT, protocol,
                 doc->getNSBidOptions(), doc->getEWBidOptions(), this);
     actors[NORTH_SEAT] = actor;
 
     if (doc->getSeatOptions().eastActor == MANUAL_ACTOR)
-        actor = new CActorLocal(true, doc->getSeatOptions().eastName, EAST_SEAT, protocol,
+        actor = new CActorLocal(true, eastName, EAST_SEAT, protocol,
                 doc->getNSBidOptions(), doc->getEWBidOptions(), this);
     else if ((remoteActorServer != 0) && remoteActorServer->isConnected(EAST_SEAT))
         actor = new CActorRemote(EAST_SEAT, protocol, remoteActorServer->getFrontend(EAST_SEAT), this);
     else
-        actor = new CActorLocal(false, doc->getSeatOptions().eastName, EAST_SEAT, protocol,
+        actor = new CActorLocal(false, eastName, EAST_SEAT, protocol,
                 doc->getNSBidOptions(), doc->getEWBidOptions(), this);
     actors[EAST_SEAT] = actor;
 
     if (doc->getSeatOptions().southActor == MANUAL_ACTOR)
-        actor = new CActorLocal(true, doc->getSeatOptions().southName, SOUTH_SEAT, protocol,
+        actor = new CActorLocal(true, southName, SOUTH_SEAT, protocol,
                 doc->getNSBidOptions(), doc->getEWBidOptions(), this);
     else if ((remoteActorServer != 0) && remoteActorServer->isConnected(SOUTH_SEAT))
         actor = new CActorRemote(SOUTH_SEAT, protocol, remoteActorServer->getFrontend(SOUTH_SEAT), this);
     else
-        actor = new CActorLocal(false, doc->getSeatOptions().southName, SOUTH_SEAT, protocol,
+        actor = new CActorLocal(false, southName, SOUTH_SEAT, protocol,
                 doc->getNSBidOptions(), doc->getEWBidOptions(), this);
     actors[SOUTH_SEAT] = actor;
 
@@ -1109,12 +1115,9 @@ void CTblMngrServer::sUpdateGame()
     games->setPlayedResult(bidHistory, playHistory, teamNames[WEST_SEAT], teamNames[NORTH_SEAT],
                            teamNames[EAST_SEAT], teamNames[SOUTH_SEAT]);
 
-    if (playHistory.getResult() != -1)
-    {
-        //Non saved played games does now exist.
-        QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_SAVE , true));
-        QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_SAVEAS , true));
-    }
+    //Non saved games does now exist.
+    QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_SAVE , true));
+    QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_SAVEAS , true));
 }
 
 /**
@@ -1182,12 +1185,9 @@ void CTblMngrServer::sEnableContinueLeader()
                                teamNames[EAST_SEAT], teamNames[SOUTH_SEAT]);
         games->prepNextDeal();
 
-        if (playHistory.getResult() != -1)
-        {
-            //Non saved played games does now exist.
-            QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_SAVE , true));
-            QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_SAVEAS , true));
-        }
+        //Non saved games does now exist.
+        QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_SAVE , true));
+        QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_SAVEAS , true));
 
         //Waiting time must be less than one second.
         leaderButton->start(700);

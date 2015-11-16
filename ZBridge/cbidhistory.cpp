@@ -87,3 +87,11 @@ int CBidHistory::undo(Bids *bid)
     *bid = bidList.last().bid;
     return bidList.size() - 1;
 }
+
+bool CBidHistory::passedOut()
+{
+    return ((bidList.size() == 4) && (bidList[0].bid == BID_PASS) &&
+                                     (bidList[1].bid == BID_PASS) &&
+                                     (bidList[2].bid == BID_PASS) &&
+                                     (bidList[3].bid == BID_PASS));
+}

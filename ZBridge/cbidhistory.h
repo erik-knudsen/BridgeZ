@@ -39,6 +39,7 @@ public:
     void removeBid();
     void resetBidHistory();
     int undo(Bids *bid);
+    bool passedOut();
 
     QList<CBid> bidList;
 };
