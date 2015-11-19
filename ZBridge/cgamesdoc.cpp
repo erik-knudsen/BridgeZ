@@ -1429,15 +1429,21 @@ void CGamesDoc::readGames(QTextStream &pbnText, QString &event, bool originalGam
     gameNo = 0;
     context = TAG_CONTEXT;
     QListIterator<QString> lineItr(strLines);
-    while (lineItr.hasNext())
+    bool endOfFile = false;
+    bool hasNext;
+    while ((hasNext = lineItr.hasNext()) || !endOfFile)
     {
-        QString currentLine = lineItr.next();
+        QString currentLine;
+        if (hasNext)
+            currentLine= lineItr.next().trimmed();
+        else
+            endOfFile = true;
 
-        //Check for end of game (blank line).
+        //Check for end of game (blank line - or could be end of file).
         if (currentLine.isEmpty())
         {
             gameNo++;
-            //Check for multiple empty lines (should never happen - be tolerant though!).
+            //Check for multiple empty lines or end of file.
             if (game != 0)
             {
                 //Check for already found game, but new auction and play.
