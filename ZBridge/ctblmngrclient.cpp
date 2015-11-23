@@ -898,8 +898,10 @@ void CTblMngrClient::receiveLine(QString line)
                     throw NetProtocolException("Net - PBN data error: " + QString(e.what()).toStdString());
                 }
 
-                //Close buffers.
+                //Close and clear buffers.
+                originalBytes.buffer().clear();
                 originalBytes.close();
+                playedBytes.buffer().clear();
                 playedBytes.close();
             }
         }
