@@ -40,6 +40,7 @@ class CStatusWnd;
 class CHistoryWnd;
 class CSeatConfiguration;
 class CBidDialog;
+class CMainScoreDialog;
 
 //Enums for initial enable/disable of menu items.
 enum actionIndicator { INITIAL_ACTIONS, SERVER_ACTIONS, CLIENT_ACTIONS };
@@ -97,6 +98,7 @@ private:
     CFileCommentsDialog *m_pFileCommentsDlg;
     CStatusWnd *m_pWndStatus;
     CHistoryWnd *m_pWndHistory;
+    CMainScoreDialog *mainScoreDialog;
 
     int eventIndex;             //PBN event index.
     QString fileName;           //PBN file name.

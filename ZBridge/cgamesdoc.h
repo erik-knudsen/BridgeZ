@@ -102,6 +102,7 @@ public:
                          int *nsAbove, int *nsBelow, int *nsTotal, int *nsLedger,
                          int *ewAbove, int *ewBelow, int *ewTotal, int *ewLedger);
 signals:
+    void sUpdateGame();
 
 public slots:
 

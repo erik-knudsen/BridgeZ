@@ -45,6 +45,9 @@ public:
     explicit CRubberScoreDialog(CGamesDoc *games, int index, QWidget *parent = 0);
     ~CRubberScoreDialog();
 
+public slots:
+    void sUpdateTable();
+
 private:
     void paintEvent(QPaintEvent *);
 

@@ -49,6 +49,8 @@ CGamesDoc::CGamesDoc(QObject *parent) :
 {
     dealType = RANDOM_DEAL;
     scoringMethod = PRACTICE;
+
+    clearGames(scoringMethod);
 }
 
 /**
@@ -168,6 +170,8 @@ void CGamesDoc::clearGames(ScoringMethod scoringMethod)
     dealType = RANDOM_DEAL;
     this->scoringMethod = scoringMethod;
     computerPlays = ((scoringMethod == MP) || (scoringMethod == IMP));
+
+    emit sUpdateGame();
 }
 
 /**
@@ -450,6 +454,7 @@ void CGamesDoc::setResult(GameType gameType, CBidHistory &bidHistory, CPlayHisto
         QMutexLocker locker(&lock);
         games[currentGameIndex]->auctionAndPlay.append(auctionAndPlay);
     }
+    emit sUpdateGame();
 }
 
 /**
@@ -1435,7 +1440,7 @@ void CGamesDoc::readGames(QTextStream &pbnText, QString &event, bool originalGam
     {
         QString currentLine;
         if (hasNext)
-            currentLine= lineItr.next().trimmed();
+            currentLine = lineItr.next().trimmed();
         else
             endOfFile = true;
 

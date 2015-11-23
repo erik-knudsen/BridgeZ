@@ -30,12 +30,47 @@ CMainScoreDialog::CMainScoreDialog(CGamesDoc *games, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::CMainScoreDialog)
 {
-    QString westName, northName, eastName, southName;
-
     this->games = games;
-    scoringMethod = games->getScoringMethod();
 
     ui->setupUi(this);
+    setWindowFlags(Qt::Window | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint);
+
+    sUpdateTable();
+
+    //Make vertical sections clickable.
+    ui->scoreTable->verticalHeader()->setVisible(true);
+    ui->scoreTable->verticalHeader()->setSectionsClickable(true);
+
+    //Respond to update of games.
+    connect(games, &CGamesDoc::sUpdateGame, this, &CMainScoreDialog::sUpdateTable, Qt::QueuedConnection);
+
+    //Respond to click of cell.
+    connect(ui->scoreTable, &QTableWidget::cellClicked, this, &CMainScoreDialog::cellClicked);
+
+    //Respond to click on row.
+    connect(ui->scoreTable->verticalHeader(), &QHeaderView::sectionClicked, this, &CMainScoreDialog::rowClicked);
+}
+
+CMainScoreDialog::~CMainScoreDialog()
+{
+    delete ui;
+}
+
+void CMainScoreDialog::closeEvent(QCloseEvent *event)
+{
+    hide();
+    event->ignore();
+}
+
+void CMainScoreDialog::reject()
+{
+    hide();
+}
+
+void CMainScoreDialog::sUpdateTable()
+{
+    QString westName, northName, eastName, southName;
+    scoringMethod = games->getScoringMethod();
 
     //Headline for table.
     QStringList horizontalHeader;
@@ -244,21 +279,6 @@ CMainScoreDialog::CMainScoreDialog(CGamesDoc *games, QWidget *parent) :
         }
     }
     ui->scoreTable->resizeColumnsToContents();
-
-    //Make vertical sections clickable.
-    ui->scoreTable->verticalHeader()->setVisible(true);
-    ui->scoreTable->verticalHeader()->setSectionsClickable(true);
-
-    //Respond to click of cell.
-    connect(ui->scoreTable, &QTableWidget::cellClicked, this, &CMainScoreDialog::cellClicked);
-
-    //Respond to click on row.
-    connect(ui->scoreTable->verticalHeader(), &QHeaderView::sectionClicked, this, &CMainScoreDialog::rowClicked);
-}
-
-CMainScoreDialog::~CMainScoreDialog()
-{
-    delete ui;
 }
 
 //User clicked a cell in the score table.

@@ -137,6 +137,9 @@ CPointScoreDialog::CPointScoreDialog(CGamesDoc *games, int scoringMethod, int in
     ui->pointScoreTable->verticalHeader()->setVisible(true);
     ui->pointScoreTable->verticalHeader()->setSectionsClickable(true);
 
+    //Respond to update of games
+    connect(games, &CGamesDoc::sUpdateGame, this, &CPointScoreDialog::sUpdateTable, Qt::QueuedConnection);
+
     //Respond to click on row.
     connect(ui->pointScoreTable->verticalHeader(), &QHeaderView::sectionClicked, this, &CPointScoreDialog::rowClicked);
 }
@@ -144,6 +147,11 @@ CPointScoreDialog::CPointScoreDialog(CGamesDoc *games, int scoringMethod, int in
 CPointScoreDialog::~CPointScoreDialog()
 {
     delete ui;
+}
+
+void CPointScoreDialog::sUpdateTable()
+{
+    close();
 }
 
 //User clicked a row in the table.

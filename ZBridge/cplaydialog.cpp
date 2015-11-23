@@ -122,6 +122,9 @@ CPlayDialog::CPlayDialog(CGamesDoc *games, int gameIndex, int auctionIndex, QWid
             }
         }
     }
+
+    //Respond to update of games.
+    connect(games, &CGamesDoc::sUpdateGame, this, &CPlayDialog::playClose, Qt::QueuedConnection);
 }
 
 CPlayDialog::~CPlayDialog()

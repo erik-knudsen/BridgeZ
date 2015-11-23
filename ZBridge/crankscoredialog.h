@@ -42,6 +42,9 @@ public:
     explicit CRankScoreDialog(CGamesDoc *games, int scoringMethod, int index, QWidget *parent = 0);
     ~CRankScoreDialog();
 
+public slots:
+    void sUpdateTable();
+
 private:
     Ui::CRankScoreDialog *ui;
 

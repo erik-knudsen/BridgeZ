@@ -78,9 +78,17 @@ CRankScoreDialog::CRankScoreDialog(CGamesDoc *games, int scoringMethod, int inde
     }
     ui->rankScoreTable->setSortingEnabled(true);
     ui->rankScoreTable->sortByColumn(1);
+
+    //Respond to update of games
+    connect(games, &CGamesDoc::sUpdateGame, this, &CRankScoreDialog::sUpdateTable, Qt::QueuedConnection);
 }
 
 CRankScoreDialog::~CRankScoreDialog()
 {
     delete ui;
+}
+
+void CRankScoreDialog::sUpdateTable()
+{
+    close();
 }

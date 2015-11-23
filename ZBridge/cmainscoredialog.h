@@ -55,6 +55,12 @@ public:
     explicit CMainScoreDialog(CGamesDoc *games, QWidget *parent = 0);
     ~CMainScoreDialog();
 
+    void closeEvent(QCloseEvent *event);
+    void reject();
+
+public slots:
+    void sUpdateTable();
+
 private slots:
     void cellClicked(int row, int column);
     void rowClicked(int row);

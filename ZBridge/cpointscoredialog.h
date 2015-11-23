@@ -44,6 +44,9 @@ public:
     explicit CPointScoreDialog(CGamesDoc *games, int scoringMethod, int index, QWidget *parent = 0);
     ~CPointScoreDialog();
 
+public slots:
+    void sUpdateTable();
+
 private slots:
     void rowClicked(int row);
 

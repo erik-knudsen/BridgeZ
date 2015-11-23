@@ -67,12 +67,20 @@ CRubberScoreDialog::CRubberScoreDialog(CGamesDoc *games, int index, QWidget *par
         rubberPoints[i].ewTotal = ewTotal;
         rubberPoints[i].ewLedger = ewLedger;
     }
+
+    //Respond to update of games
+    connect(games, &CGamesDoc::sUpdateGame, this, &CRubberScoreDialog::sUpdateTable, Qt::QueuedConnection);
 }
 
 CRubberScoreDialog::~CRubberScoreDialog()
 {
     delete [] rubberPoints;
     delete ui;
+}
+
+void CRubberScoreDialog::sUpdateTable()
+{
+    close();
 }
 
 void CRubberScoreDialog::paintEvent(QPaintEvent * /* event */)

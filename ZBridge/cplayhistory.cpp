@@ -25,6 +25,8 @@
 
 CPlayHistory::CPlayHistory()
 {
+    openLeader = NO_SEAT;
+    resetPlayHistory();
 }
 
 void CPlayHistory::resetPlayHistory()

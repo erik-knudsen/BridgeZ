@@ -171,6 +171,9 @@ CMainFrame::CMainFrame(CZBridgeApp *app, CZBridgeDoc *doc, CGamesDoc *games) :
     addDockWidget(Qt::LeftDockWidgetArea, m_pWndHistory);
     m_pWndHistory->hide();
     connect(m_pWndHistory, &CHistoryWnd::UpdateViewHistory, this, &CMainFrame::OnUpdateViewHistory);
+
+    //Main score dialog.
+    mainScoreDialog = new CMainScoreDialog(games, this);
  }
 
 CMainFrame::~CMainFrame()
@@ -726,9 +729,7 @@ void CMainFrame::on_actionBidding_Play_History_triggered()
 
 void CMainFrame::on_action_Score_triggered()
 {
-    //Show score dialog.
-    CMainScoreDialog mainScoreDialog(games);
-    mainScoreDialog.exec();
+    mainScoreDialog->show();
 }
 
 void CMainFrame::on_action_Toolbar_triggered()
