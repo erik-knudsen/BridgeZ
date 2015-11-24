@@ -1055,6 +1055,16 @@ void CMainFrame::on_actionSeat_Configuration_triggered()
         thread->start();
 
         connect(tableManager, &CTblMngr::sShowScore, this, &CMainFrame::on_action_Score_triggered);
+
+        //If non saved game then ask if it should be saved (save can only be enabled on server).
+        if ((ui->actionSave->isEnabled()) &&
+            (QMessageBox::question(0, tr("ZBridge"),
+                   tr("Do you want to save played games?")) == QMessageBox::Yes))
+            on_actionSave_triggered();
+
+        //Hide score table in case it is shown and clear games.
+        mainScoreDialog->hide();
+        games->clearGames(doc->getGameOptions().scoringMethod);
     }
 }
 

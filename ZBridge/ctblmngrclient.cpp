@@ -55,6 +55,8 @@ CTblMngrClient::CTblMngrClient(CZBridgeDoc *doc, CGamesDoc *games, QHostAddress 
     this->playView = playView;
     this->hostAddress = hostAddress;
 
+    playView->resetView();
+
     //Enable/disable relevant menu actions.
     QApplication::postEvent(parent, new UPDATE_UI_ACTION_Event(UPDATE_UI_INITIAL, false));
 

@@ -61,6 +61,8 @@ CTblMngrServer::CTblMngrServer(CZBridgeDoc *doc, CGamesDoc *games, QHostAddress 
     this->games = games;
     this->playView = playView;
 
+    playView->resetView();
+
     synchronizing = false;
 
     boardNo = -1;

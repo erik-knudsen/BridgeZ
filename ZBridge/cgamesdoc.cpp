@@ -174,6 +174,12 @@ void CGamesDoc::clearGames(ScoringMethod scoringMethod)
     emit sUpdateGame();
 }
 
+void CGamesDoc::prepNextDeal()
+{
+    currentGameIndex++;
+    emit sUpdateGame();
+}
+
 /**
  * @brief Retrieve the next game in the current game set (server only).
  * @param[out] board Board number for the next game.
@@ -454,7 +460,6 @@ void CGamesDoc::setResult(GameType gameType, CBidHistory &bidHistory, CPlayHisto
         QMutexLocker locker(&lock);
         games[currentGameIndex]->auctionAndPlay.append(auctionAndPlay);
     }
-    emit sUpdateGame();
 }
 
 /**
