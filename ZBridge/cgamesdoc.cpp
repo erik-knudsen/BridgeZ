@@ -2018,7 +2018,7 @@ void CGamesDoc::readGames(QTextStream &pbnText, QString &event, bool originalGam
     }
 
     //Check played and auto games (original games, played/auto games are all read now).
-    else
+    else if (getNumberPlayedGames() > 0)
     {
         //Are there any originals.
         QListIterator<CGame *> gameItr(games);
@@ -2168,7 +2168,7 @@ void CGamesDoc::writeGame(QTextStream &stream, CGame *game, GameType gameType, Q
         stream << QString("[Dealer \"%1\"]\n").arg(PBN_SEAT_NAMES[game->dealer]);
         stream << QString("[Vulnerable \"%1\"]\n").arg(PBN_VULNERABILITY_NAMES[game->vulnerable]);
         stream << setCards(game->dealer, game->wCards, game->nCards, game->eCards, game->sCards, line).toLatin1();
-        stream << QString("[Scoring \"%1\"]\n").arg(PBN_SCORING_NAMES[scoringMethod]);
+        stream << QString("[Scoring \"%1\"]\n\n").arg(PBN_SCORING_NAMES[scoringMethod]);
     }
 
     //Have we found games with the required game type?
