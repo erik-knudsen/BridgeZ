@@ -81,7 +81,7 @@ CTblMngrServer::CTblMngrServer(CZBridgeDoc *doc, CGamesDoc *games, QHostAddress 
                                                    doc->getSeatOptions().portServer.toInt(), this);
 
         //Connect for disconnect of remote client(s).
-        connect(remoteActorServer, &CRemoteActorServer::clientDisconnected, this, &CTblMngrServer::cleanTableManager);
+        connect(remoteActorServer, &CRemoteActorServer::clientDisconnected, this, &CTblMngrServer::clientDisconnected);
 
         //Connect for info, warning and error messages for server/client connection(s).
         connect(remoteActorServer, &CRemoteActorServer::connectInfo, this, &CTblMngrServer::connectInfo);
@@ -375,6 +375,12 @@ void CTblMngrServer::serverActions()
     else if (zBridgeServerIface_israised_endOfSession(&handle))
     {
         //End of session.
+        if (protocol == ADVANCED_PROTOCOL)
+        {
+            //Disable New Deal and Show All menu actions (still possible to save the game).
+            QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_NEW_DEAL , false));
+            QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_SHOW_ALL , false));
+        }
         cleanTableManager();
         QMessageBox::information(0, tr("ZBridge"), tr("Session finished."));
         emit sShowScore();
@@ -495,7 +501,7 @@ void CTblMngrServer::serverSyncActions()
  * @brief Clean table manager so that it can start a new session.
  */
 void CTblMngrServer::cleanTableManager()
-{
+{    
     playView->resetView();
 
     if (actors[WEST_SEAT] != 0)
@@ -526,6 +532,22 @@ void CTblMngrServer::cleanTableManager()
     actors[NORTH_SEAT] = 0;
     actors[EAST_SEAT] = 0;
     actors[SOUTH_SEAT] = 0;
+}
+
+/**
+ * @brief A client has disconnected.
+ */
+void CTblMngrServer::clientDisconnected()
+{
+    if (protocol == ADVANCED_PROTOCOL)
+    {
+        //Disable New Deal and Show All menu actions (still possible to save the game).
+        QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_NEW_DEAL , false));
+        QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_SHOW_ALL , false));
+    }
+
+    //Prepare for a new session.
+    cleanTableManager();
 }
 
 void CTblMngrServer::connectInfo(QString text)

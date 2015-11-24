@@ -135,15 +135,16 @@ public slots:
     void sltPlayStart();
     /*@}*/
 
-    //Reset table manager (used as slot when a remote client disconnects).
-    void cleanTableManager();
+    //Client has disconnected.
+    void clientDisconnected();
 
     //Info, warning and error slots regarding server/client connection.
     void connectInfo(QString text);
     void connectWarning(QString text);
     void connectError(QString text);
 
-private:
+private:    
+    void cleanTableManager();
     void giveNewDeal();
 
     void serverActions();
