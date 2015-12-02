@@ -130,22 +130,25 @@ void CGamesDoc::writeOriginalGames(QTextStream &stream)
  * Writes all played games to the given stream. The event name of the games are only written for the
  * first game. Replication symbol is used for the following games. The sequence of games written is always
  * first played game then auto game. Each game might have been played in two ways, played game and auto
- * game.
+ * game. The last game  is the current game and it has not been played yet.
  */
 void CGamesDoc::writePlayedGames(QTextStream &stream)
 {
     QListIterator<CGame *> gameItr(games);
-    if (gameItr.hasNext())
+    int gameIndex = 0;
+    if (gameItr.hasNext() && (currentGameIndex > 0))
     {
         CGame *nextGame = gameItr.next();
         writeGame(stream, nextGame, PLAYED_GAME, event);
         writeGame(stream, nextGame, AUTO_GAME, "#");
+        gameIndex++;
     }
-    while (gameItr.hasNext())
+    while (gameItr.hasNext() && (currentGameIndex > gameIndex))
     {
         CGame *nextGame = gameItr.next();
         writeGame(stream, nextGame, PLAYED_GAME, "#");
         writeGame(stream, nextGame, AUTO_GAME, "#");
+        gameIndex++;
     }
 }
 
@@ -1117,12 +1120,17 @@ int CGamesDoc::getAboveTheLine(int gameIndex)
 /**
  * @brief Get honor bonus points for a given game/play in rubber play.
  * @param[in] gameIndex Index of the game
- * @param[in] auctionAndPlayIndex Index of the play.
  * @return Honor bonus points. Relative to NS.
  */
-int CGamesDoc::getHonorBonus(int gameIndex, int auctionAndPlayIndex)
+int CGamesDoc::getHonorBonus(int gameIndex)
 {
     assert(gameIndex < games.size());
+
+    int auctionAndPlayIndex = getPlayedAuctionAndPlayIndex(gameIndex);
+
+    //Has the game been played?
+    if (auctionAndPlayIndex == -1)
+        return 0;
 
     Bids contract = games[gameIndex]->auctionAndPlay[auctionAndPlayIndex]->contract;
     Suit suit = BID_SUIT(contract);
@@ -1229,8 +1237,6 @@ bool CGamesDoc::getRubberPoints(int gameIndex, bool *gameDone,
 {
     assert(gameIndex < games.size());
 
-    int auctionAndPlayIndex = getPlayedAuctionAndPlayIndex(gameIndex);
-
     int belowTheLineNSPoint, belowTheLineEWPoint, aboveTheLineNSPoint, aboveTheLineEWPoint;
 
     int belowTheLineNSTotal = 0, belowTheLineEWTotal = 0;
@@ -1329,7 +1335,7 @@ bool CGamesDoc::getRubberPoints(int gameIndex, bool *gameDone,
         }
 
         //Calculation related to honor bonus.
-        int honorBonus = getHonorBonus(i, auctionAndPlayIndex);
+        int honorBonus = getHonorBonus(i);
         if (honorBonus > 0)
         {
             //Update NS above the line points.
@@ -1353,6 +1359,8 @@ bool CGamesDoc::getRubberPoints(int gameIndex, bool *gameDone,
     *contractModifier = BID_NONE;
     *tricks = -1;
     *declarer = NO_SEAT;
+
+    int auctionAndPlayIndex = getPlayedAuctionAndPlayIndex(gameIndex);
     if (auctionAndPlayIndex != -1)
     {
         *contract = games[gameIndex]->auctionAndPlay[auctionAndPlayIndex]->contract;
@@ -1519,16 +1527,16 @@ void CGamesDoc::readGames(QTextStream &pbnText, QString &event, bool originalGam
                     else
                         auctionAndPlay->gameType = PLAYED_GAME;
                     game->auctionAndPlay.append(auctionAndPlay);
-
-                    //Update the current game index to the next game. We do not want to play already played games.
-                    if (!originalGames)
-                        currentGameIndex = games.size();
                 }
                 else
                     delete auctionAndPlay;
 
                 games.append(game);
                 game = 0;
+
+                //Update the current game index to the next game.
+                if (!originalGames)
+                    currentGameIndex = games.size();
             }
 
             //Not accepted?
@@ -2018,6 +2026,18 @@ void CGamesDoc::readGames(QTextStream &pbnText, QString &event, bool originalGam
                         (nextAuctionAndPlay->contract == BID_NONE) ||
                         ((nextAuctionAndPlay->result < 0) && (nextAuctionAndPlay->contract != BID_PASS)))
                     throw PlayException(QString("PBN - Consistency error in original games (auction and play) in board: %1").arg(nextGame->board).toStdString());
+
+                if (nextAuctionAndPlay->contract == BID_PASS)
+                {
+                    nextAuctionAndPlay->bidHistory.resetBidHistory();
+                    //Append 4 consecutive passes.
+                    for (int i = 0; i < 4; i++)
+                    {
+                        Seat actor = (Seat)((nextGame->dealer + i) % 4);
+                        CBid bid(actor, BID_PASS, "");
+                        nextAuctionAndPlay->bidHistory.appendBid(bid);
+                    }
+                }
             }
         }
     }
@@ -2131,6 +2151,18 @@ void CGamesDoc::readGames(QTextStream &pbnText, QString &event, bool originalGam
                          (nextAuctionAndPlay->contract == BID_NONE) ||
                          ((nextAuctionAndPlay->result < 0) && (nextAuctionAndPlay->contract != BID_PASS)))
                     throw PlayException(QString("PBN - Consistency error in played games (auction and play) in board: %1").arg(nextGame->board).toStdString());
+
+                if (nextAuctionAndPlay->contract == BID_PASS)
+                {
+                    nextAuctionAndPlay->bidHistory.resetBidHistory();
+                    //Append 4 consecutive passes.
+                    for (int i = 0; i < 4; i++)
+                    {
+                        Seat actor = (Seat)((nextGame->dealer + i) % 4);
+                        CBid bid(actor, BID_PASS, "");
+                        nextAuctionAndPlay->bidHistory.appendBid(bid);
+                    }
+                }
             }
         }
     }
@@ -2150,23 +2182,32 @@ void CGamesDoc::writeGame(QTextStream &stream, CGame *game, GameType gameType, Q
     QString ev = event;
     QString line;
 
-    //Random deals have no originals.
-    if ((dealType == RANDOM_DEAL) && (gameType == ORIGINAL_GAME))
-        return;
-
-    //Are there any games with the required game type?
     QListIterator<CAuctionAndPlay *> auctionAndPlayItr(game->auctionAndPlay);
     bool found = false;
+    bool foundOriginal = false;
+    bool foundPlayed = false;
+    bool foundAuto = false;
     while (auctionAndPlayItr.hasNext())
     {
         CAuctionAndPlay *nextAuctionAndPlay = auctionAndPlayItr.next();
         if (nextAuctionAndPlay->gameType == gameType)
             found = true;
+        if (nextAuctionAndPlay->gameType == ORIGINAL_GAME)
+            foundOriginal = true;
+        if (nextAuctionAndPlay->gameType == PLAYED_GAME)
+            foundPlayed = true;
+        if (nextAuctionAndPlay->gameType == AUTO_GAME)
+            foundAuto = true;
     }
     auctionAndPlayItr.toFront();
 
-    //Original games must always be written (even if not played).
-    if (!found && (gameType == ORIGINAL_GAME))
+    bool writeEmpty = false;
+    if (!foundOriginal && !foundPlayed && !foundAuto)
+        writeEmpty = ((gameType == ORIGINAL_GAME) && (dealType != RANDOM_DEAL)) ||
+                ((gameType == PLAYED_GAME) && (dealType == RANDOM_DEAL));
+
+    //Some games must be written even if not played.
+    if (writeEmpty)
     {
         stream << "[Event \"" << ev << "\"]\n";
         stream << QString("[Board \"%1\"]\n").arg(game->board).toLatin1();

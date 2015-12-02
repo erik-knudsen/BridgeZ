@@ -92,7 +92,7 @@ public:
     int getPairs(int gameIndex, QStringList &pairWN, QStringList &pairES);    
     int getBelowTheLine(int gameIndex);
     int getAboveTheLine(int gameIndex);
-    int getHonorBonus(int gameIndex, int auctionAndPlayIndex);
+    int getHonorBonus(int gameIndex);
     ScoringMethod getScoringMethod();
     void setScoringMethod(ScoringMethod scoringMethod) { this->scoringMethod = scoringMethod; }
     bool getComputerPlays() { return computerPlays; }

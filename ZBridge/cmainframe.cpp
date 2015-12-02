@@ -372,6 +372,7 @@ void CMainFrame::sStatusText(QString text)
 void CMainFrame::enableUIActions(actionIndicator actions, bool advProtocol)
 {
     ui->actionOpen->setEnabled((actions == INITIAL_ACTIONS) || (actions == SERVER_ACTIONS));
+
     ui->actionRecent_File->setEnabled((actions == INITIAL_ACTIONS) || (actions == SERVER_ACTIONS));
     ui->actionClear_All->setEnabled((actions == SERVER_ACTIONS) || (actions == CLIENT_ACTIONS));
     ui->actionBidding_Play_History->setEnabled((actions == SERVER_ACTIONS) || (actions == CLIENT_ACTIONS));
@@ -397,7 +398,7 @@ void CMainFrame::enableUIActions(actionIndicator actions, bool advProtocol)
 
     ui->action_Expose_All_Cards->setEnabled(false);
 
-    ui->action_Score->setEnabled(false);
+    ui->action_Score->setEnabled((actions == SERVER_ACTIONS) || ((actions == CLIENT_ACTIONS) && advProtocol));
 }
 
 /**

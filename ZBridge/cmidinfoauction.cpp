@@ -67,6 +67,11 @@ CMidInfoAuction::CMidInfoAuction(QGraphicsWidget *parent) :
 
 /**
  * @brief Show the next bid.
+ *
+ * It is assumed that bids are shown in the sequence they are given. The bid BID_PLAYER indicates
+ * the next bidder and must be shown before the next bid is shown.
+ *
+ * must be shown
  * @param seat The seat.
  * @param bid The bid.
  */

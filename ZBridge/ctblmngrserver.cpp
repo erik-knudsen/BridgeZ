@@ -176,6 +176,17 @@ void CTblMngrServer::serverActions()
     {        
         int delay = (protocol == BASIC_PROTOCOL) ? 1000 : 10;
 
+        if (protocol == BASIC_PROTOCOL)
+        {
+            games->setPlayedResult(bidHistory, playHistory, teamNames[WEST_SEAT], teamNames[NORTH_SEAT],
+                                   teamNames[EAST_SEAT], teamNames[SOUTH_SEAT]);
+            games->prepNextDeal();
+
+            //Non saved games does now exist.
+            QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_SAVE , true));
+            QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_SAVEAS , true));
+        }
+
         //For synchronization reasons start of board must be time delayed in some cases.
         QTimer::singleShot(delay, this, SLOT(startOfBoard()));
     }
@@ -209,12 +220,9 @@ void CTblMngrServer::serverActions()
         playView->setAndShowAllCards(true, showWest, currentCards[WEST_SEAT], true, showNorth, currentCards[NORTH_SEAT],
                             true, showEast, currentCards[EAST_SEAT], true, showSouth, currentCards[SOUTH_SEAT]);
 
-        if (protocol == ADVANCED_PROTOCOL)
-        {
-            //Enable New Deal and Show All menu actions.
-            QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_NEW_DEAL , true));
-            QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_SHOW_ALL , true));
-        }
+        //Enable New Deal and Show All menu actions.
+        QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_NEW_DEAL , true));
+        QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_SHOW_ALL , true));
 
 
         bidHistory.resetBidHistory();
@@ -375,12 +383,9 @@ void CTblMngrServer::serverActions()
     else if (zBridgeServerIface_israised_endOfSession(&handle))
     {
         //End of session.
-        if (protocol == ADVANCED_PROTOCOL)
-        {
-            //Disable New Deal and Show All menu actions (still possible to save the game).
-            QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_NEW_DEAL , false));
-            QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_SHOW_ALL , false));
-        }
+        //Disable New Deal and Show All menu actions (still possible to save the game).
+        QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_NEW_DEAL , false));
+        QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_SHOW_ALL , false));
         cleanTableManager();
         QMessageBox::information(0, tr("ZBridge"), tr("Session finished."));
         emit sShowScore();
@@ -539,12 +544,9 @@ void CTblMngrServer::cleanTableManager()
  */
 void CTblMngrServer::clientDisconnected()
 {
-    if (protocol == ADVANCED_PROTOCOL)
-    {
-        //Disable New Deal and Show All menu actions (still possible to save the game).
-        QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_NEW_DEAL , false));
-        QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_SHOW_ALL , false));
-    }
+    //Disable New Deal and Show All menu actions (still possible to save the game).
+    QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_NEW_DEAL , false));
+    QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_SHOW_ALL , false));
 
     //Prepare for a new session.
     cleanTableManager();
@@ -602,13 +604,9 @@ void CTblMngrServer::newSession()
     emit sStatusText(QString(""));
 
     protocol = doc->getSeatOptions().protocol;
-//EAK    protocol = (remoteActorServer != 0) ? doc->getSeatOptions().protocol : ADVANCED_PROTOCOL;
 
     //Enable/disable relevant menu actions.
     QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_SERVER , protocol == ADVANCED_PROTOCOL));
-
-    //EAK TEMPORARY.
-    QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_SCORE , true));
 
     //Set up actors.
     if (doc->getSeatOptions().westActor == MANUAL_ACTOR)
@@ -709,9 +707,6 @@ void CTblMngrServer::newDeal()
 //Only used with advanced protocol.
 void CTblMngrServer::showAllCards()
 {
-    if (protocol == BASIC_PROTOCOL)
-        return;
-
     showAll = !showAll;
 
     //Determine which cards to show in play view.
@@ -735,9 +730,6 @@ void CTblMngrServer::showAllCards()
  */
 void CTblMngrServer::reBid()
 {
-    if (protocol == BASIC_PROTOCOL)
-        return;
-
     assert(zBridgeServer_isActive(&handle, ZBridgeServer_entry__Bidding) ||
         zBridgeServer_isActive(&handle, ZBridgeServer_entry__Playing) ||
         zBridgeServer_isActive(&handle, ZBridgeServer_entry__SyncLeader));
@@ -754,9 +746,6 @@ void CTblMngrServer::reBid()
  */
 void CTblMngrServer::rePlay()
 {
-    if (protocol == BASIC_PROTOCOL)
-        return;
-
     assert(zBridgeServer_isActive(&handle, ZBridgeServer_entry__Playing) ||
            zBridgeServer_isActive(&handle, ZBridgeServer_entry__SyncLeader));
 
@@ -771,9 +760,6 @@ void CTblMngrServer::rePlay()
  */
 void CTblMngrServer::undo()
 {
-    if (protocol == BASIC_PROTOCOL)
-        return;
-
     assert(zBridgeServer_isActive(&handle, ZBridgeServer_entry__Bidding) ||
            zBridgeServer_isActive(&handle, ZBridgeServer_entry__Playing) ||
            zBridgeServer_isActive(&handle, ZBridgeServer_entry__SyncLeader));
@@ -803,7 +789,7 @@ void CTblMngrServer::undo()
 
 /**
  * @brief Determine who controls the play view.
- * @param showAll If true all cards should be shown in the play view (only advanced protocol).
+ * @param showAll If true all cards should be shown in the play view.
  */
 void CTblMngrServer::setShowUser(bool showAll)
 {
@@ -905,12 +891,12 @@ void CTblMngrServer::startOfBoard()
     //Prepare play view.
     playView->resetView();
 
-    //EAK WAIT At this point we must intiate a new deal.
+    //At this point we must intiate a new deal.
     //We could be here because of first play in a session, pass out, play finished or user
     //wanted a new deal.
     giveNewDeal();
 
-    //Tell auto play that game info is now ready for the current play.
+    //Tell auto play that game info is now ready for the current play (only used with advanced protocol).
     if (protocol == ADVANCED_PROTOCOL)
         emit sigPlayStart();
 
@@ -1126,6 +1112,8 @@ void CTblMngrServer::sConfirmSyncFromClientToServer(Seat syncher)
 
 /**
  * @brief Update game info and activate relevant main menu entries.
+ *
+ * Only used with advanced protocol.
  */
 void CTblMngrServer::sUpdateGame()
 {
@@ -1140,6 +1128,8 @@ void CTblMngrServer::sUpdateGame()
 
 /**
  * @brief Prepare game info for next deal.
+ *
+ * Only used with advanced protocol.
  */
 void CTblMngrServer::sUpdateGameToNextDeal()
 {
@@ -1198,14 +1188,6 @@ void CTblMngrServer::sEnableContinueLeader()
     if (!waiting)
     {
         waiting = true;
-
-        games->setPlayedResult(bidHistory, playHistory, teamNames[WEST_SEAT], teamNames[NORTH_SEAT],
-                               teamNames[EAST_SEAT], teamNames[SOUTH_SEAT]);
-        games->prepNextDeal();
-
-        //Non saved games does now exist.
-        QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_SAVE , true));
-        QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_SAVEAS , true));
 
         //Waiting time must be less than one second.
         leaderButton->start(700);

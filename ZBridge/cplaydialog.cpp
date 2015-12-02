@@ -97,8 +97,8 @@ CPlayDialog::CPlayDialog(CGamesDoc *games, int gameIndex, int auctionIndex, QWid
         while (bidItr.hasNext())
         {
             CBid bid = bidItr.next();
+            playView->showBid(bid.bidder, BID_PLAYER);
             playView->showBid(bid.bidder, bid.bid);
-            playView->showBid((Seat)((bid.bidder + 1) & 3), BID_PLAYER);
         }
         if (contract != BID_PASS)
         {
