@@ -85,7 +85,6 @@ SOURCES +=\
     cmainscoredialog.cpp \
     cauctionandplaydialog.cpp \
     crubberscoredialog.cpp \
-    ccomparescoredialog.cpp \
     cgamesdoc.cpp \
     cpointscoredialog.cpp \
     crankscoredialog.cpp \
@@ -174,7 +173,6 @@ HEADERS  += cmainframe.h \
     cmainscoredialog.h \
     cauctionandplaydialog.h \
     crubberscoredialog.h \
-    ccomparescoredialog.h \
     cgamesdoc.h \
     cpointscoredialog.h \
     crankscoredialog.h \
@@ -213,7 +211,6 @@ FORMS    += cmainframe.ui \
     cmainscoredialog.ui \
     cauctionandplaydialog.ui \
     crubberscoredialog.ui \
-    ccomparescoredialog.ui \
     cpointscoredialog.ui \
     cplaydialog.ui \
     crankscoredialog.ui \

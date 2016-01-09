@@ -770,6 +770,10 @@ void CMainFrame::on_actionNew_Session_triggered()
         on_actionSave_triggered();
 
     games->clearGames(doc->getGameOptions().scoringMethod);
+    if (ui->action_deal_Num_bered_Hand->isChecked())
+        games->setDealOptions(doc->getDealOptions());
+    else
+        games->clearDealOptions();
     fileName.clear();
     eventIndex = 0;
 
@@ -876,7 +880,10 @@ void CMainFrame::on_actionAuto_Test_triggered()
 
 void CMainFrame::on_action_deal_Num_bered_Hand_triggered()
 {
-
+    if (ui->action_deal_Num_bered_Hand->isChecked())
+        games->setDealOptions(doc->getDealOptions());
+    else
+        games->clearDealOptions();
 }
 
 void CMainFrame::on_actionDeal_Game_Hands_triggered()

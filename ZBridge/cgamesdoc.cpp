@@ -197,12 +197,111 @@ void CGamesDoc::getNextDeal(int *board, int cards[][13], Seat *dealer, Team *vul
 {
     //Give random card distribution etc.?
     if (dealType == RANDOM_DEAL)
-    {
+    {       
+        //Get card deck as prescribed (it has been checked that it is always possible).
+        bool found = false;
+        while (!found)
+        {
+            int i, j, inx;
+            int cardDeck[52];
+            int cardValues[52];
+
+            //Deal card deck.
+            //i is card number.
+            for (i = 0; i < 52; i++)
+                cardValues[i] = i;
+            QTime cur;
+            qsrand(cur.currentTime().msec());
+            for (i = 51; i >= 0; i--)
+            {
+                inx = rand()%(i + 1);
+                cardDeck[i] = cardValues[inx];
+                for (j = inx; j < i; j++)
+                    cardValues[j] = cardValues[j + 1];
+            }
+
+            //Shuffle card deck.
+    /*        for (int l = 0; l < 10; l++)
+            for (i = 0; i < 52; i++)
+            {
+                inx = rand()%52;
+                j = cardDeck[i];
+                cardDeck[i] = cardDeck[inx];
+                cardDeck[inx] = j;
+            }
+    */
+            //Give cards.
+            //j is seat and i is card.
+            for (j = 0; j < 4; j++)
+                for (i = 0; i < 13; i++)
+                    cards[j][i] = cardDeck[j * 13 + i];
+
+            //Calculate hand characteristica.
+            //suit first then seat.
+            int hcp[5][4];
+            int suitSize[4][4];
+            int dp[4];
+            //i is suit and j is seat.
+            for (i = 0; i < 5; i++)
+                for (j = 0; j < 4; j++)
+                    hcp[i][j] = 0;
+            for (j = 0; j < 4; j++)
+            {
+                dp[j] = 0;
+                for (i = 0; i < 4; i++)
+                    suitSize[i][j] = 0;
+            }
+
+            //j is seat.
+            for (j = 0; j < 4; j++)
+            {
+                //i is card.
+                for (i = 0; i < 13; i++)
+                {
+                    int card = cards[j][i];
+                    Suit suit = CARD_SUIT(card);
+                    int face = CARD_FACE(card);
+                    if (face > 8)
+                    {
+                        hcp[suit][j] += (face - 8);
+                        hcp[NOTRUMP][j] += (face - 8);
+                    }
+                    suitSize[suit][j]++;
+                }
+                //i is suit.
+                for (i = 0; i < 4; i++)
+                    if (suitSize[i][j] <= 2)
+                        dp[j] += (3 - suitSize[i][j]);
+            }
+
+            //Check deck of cards.
+            //j is seat and i is suit.
+            bool cont = true;
+            for (j = 0; j < 4; j++)
+            {
+                for (i = 0; i < 4; i++)
+                    if ((dealOptionDoc.suitSize[0][i][j] > suitSize[i][j]) ||
+                            (dealOptionDoc.suitSize[1][i][j] < suitSize[i][j]))
+                        cont = false;
+                if (!cont)
+                    break;
+                for (i = 0; i < 5; i++)
+                    if ((dealOptionDoc.hcp[0][i][j] > hcp[i][j]) ||
+                            (dealOptionDoc.hcp[1][i][j] < hcp[i][j]))
+                        cont = false;
+                if (!cont)
+                    break;
+                if ((dealOptionDoc.dp[0][j] > dp[j]) || (dealOptionDoc.dp[1][j] < dp[j]))
+                    cont = false;
+                if (!cont)
+                    break;
+            }
+            found = cont;
+        }
+
         CGame *currentGame = new CGame();
 
         const Seat DEALER[4] = { NORTH_SEAT, EAST_SEAT, SOUTH_SEAT, WEST_SEAT };
-        int i, j, inx;
-        int cardDeck[52];
 
         //Info about board.
         int boardNo = currentGameIndex + 1;
@@ -226,26 +325,8 @@ void CGamesDoc::getNextDeal(int *board, int cards[][13], Seat *dealer, Team *vul
         currentGame->dealer = *dealer;
         currentGame->vulnerable = *vulnerable;
 
-        //Shuffle card deck.
-        for (i = 0; i < 52; i++)
-            cardDeck[i] = i;
-        QTime cur;
-        qsrand(cur.currentTime().msec());
-        for (i = 0; i < 52; i++)
-        {
-            inx = rand()%52;
-            j = cardDeck[i];
-            cardDeck[i] = cardDeck[inx];
-            cardDeck[inx] = j;
-        }
-
-        //Give cards.
-        for (j = 0; j < 4; j++)
-            for (i = 0; i < 13; i++)
-                cards[j][i] = cardDeck[j * 13 + i];
-
         //Save game.
-        for (i = 0; i < 13; i++)
+        for (int i = 0; i < 13; i++)
         {
             currentGame->wCards[i] = cards[WEST_SEAT][i];
             currentGame->nCards[i] = cards[NORTH_SEAT][i];

@@ -564,51 +564,10 @@ const int TNxX_E_NT = 2;
 const int TNXx_E_NT = 3;
 
 //---------------------------- Deal Options -------------------
-//Minors.
-const int SEVEN_MIN_CARDS_IN_MINOR = 7;
-const int EIGHT_MIN_CARDS_IN_MINOR = 8;
-const int NINE_MIN_CARDS_IN_MINOR = 9;
-
-const int ACE_MIN_TOP_MINOR_CARD = 13;
-const int KING_MIN_TOP_MINOR_CARD = 12;
-const int QUEEN_MIN_TOP_MINOR_CARD = 11;
-
-const int FOUR_THREE_MIN_SUIT_DIST_MINOR = 0;
-const int FOUR_FOUR_MIN_SUIT_DIST_MINOR = 1;
-const int FIVE_THREE_MIN_SUIT_DIST_MINOR = 2;
-const int FIVE_FOUR_MIN_SUIT_DIST_MINOR = 3;
-
-//Majors.
-const int SEVEN_MIN_CARDS_IN_MAJOR = 7;
-const int EIGHT_MIN_CARDS_IN_MAJOR = 8;
-const int NINE_MIN_CARDS_IN_MAJOR = 9;
-
-const int ACE_MIN_TOP_MAJOR_CARD = 13;
-const int KING_MIN_TOP_MAJOR_CARD = 12;
-const int QUEEN_MIN_TOP_MAJOR_CARD = 11;
-
-const int FOUR_THREE_MIN_SUIT_DIST_MAJOR = 0;
-const int FOUR_FOUR_MIN_SUIT_DIST_MAJOR = 1;
-const int FIVE_THREE_MIN_SUIT_DIST_MAJOR = 2;
-const int FIVE_FOUR_MIN_SUIT_DIST_MAJOR = 3;
-
-//Slam.
-const int FOUR_ACES_NEEDED_FOR_SLAM = 0;
-const int THREE_ACES_NEEDED_FOR_SLAM = 1;
-
-const int FOUR_ACES_NEEDED_FOR_SMALL_SLAM = 0;
-const int THREE_ACES_NEEDED_FOR_SMALL_SLAM = 1;
-
-const int FOUR_KINGS_NEEDED_FOR_SLAM = 0;
-const int THREE_KINGS_NEEDED_FOR_SLAM = 1;
-const int TWO_KINGS_NEEDED_FOR_SLAM = 2;
-
-const int FOUR_KINGS_NEEDED_FOR_SMALL_SLAM = 0;
-const int THREE_KINGS_NEEDED_FOR_SMALL_SLAM = 1;
-const int TWO_KINGS_NEEDED_FOR_SMALL_SLAM = 2;
-
-const int FOUR_KINGS_NEEDED_FOR_GRAND_SLAM = 0;
-const int THREE_KINGS_NEEDED_FOR_GRAND_SLAM = 1;
+const int MAX_SUIT_HCP = 10;
+const int MAX_TOT_HCP = 37;
+const int MAX_TOT_DP = 9;
+const int MAX_SUIT_SIZE = 13;
 
 //------------------------- Display options. ------------------------
 //Suits.

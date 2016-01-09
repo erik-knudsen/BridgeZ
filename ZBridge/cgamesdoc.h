@@ -30,6 +30,7 @@
 #include "ZBridgeException.h"
 #include "cbidhistory.h"
 #include "cplayhistory.h"
+#include "cdealoptiondoc.h"
 
 //PBN tags.
 enum tagIds { TAG_EVENT = 0, TAG_SITE, TAG_DATE, TAG_ROUND, TAG_BOARD, TAG_WEST, TAG_NORTH, TAG_EAST, TAG_SOUTH,
@@ -101,6 +102,8 @@ public:
                          Seat *declarer, Team *vulnerable,
                          int *nsAbove, int *nsBelow, int *nsTotal, int *nsLedger,
                          int *ewAbove, int *ewBelow, int *ewTotal, int *ewLedger);
+    void setDealOptions(CDealOptionDoc dealOptionDoc) { this->dealOptionDoc = dealOptionDoc; }
+    void clearDealOptions() { dealOptionDoc.Initialize(); }
 signals:
     void sUpdateGame();
 
@@ -173,6 +176,8 @@ private:
 
     QString curEvent;           /**< Current event while processing pbn file (also with regards to # and ##). */
     QMutex lock;
+
+    CDealOptionDoc dealOptionDoc;
 };
 
 #endif // CGAMESDOC_H

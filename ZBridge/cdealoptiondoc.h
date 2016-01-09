@@ -34,46 +34,16 @@ public:
 
     void WriteSettings();
     void ReadSettings();
+    void Initialize();
 
-    //Points
-    int minGamePts;
-    int maxGamePts;
-    int minMinorGamePts;
-    int maxMinorGamePts;
-    int minMajorGamePts;
-    int maxMajorGamePts;
-    int minNoTrumpGamePts;
-    int maxNoTrumpGamePts;
-    int minSlamPts;
-    int maxSlamPts;
-    int minSmallSlamPts;
-    int maxSmallSlamPts;
-    int minGrandSlamPts;
-    int maxGrandSlamPts;
+    //High Card Points. Indexed by [low/high, suit, seat].
+    int hcp[2][5][4];
 
-    //Minors and Majors
-    int minCardsInMajor;
-    int minCardsInMinor;
-    int minSuitDistMinor;
-    int minSuitDistMajor;
-    int minTopMajorCard;
-    int minTopMinorCard;
+    //Distribution points. Indexed by [low/high, seat].
+    int dp[2][4];
 
-    //NT
-    bool needTwoBalancedHandsForNT;
-
-    ////Slam.
-    int acesNeededForSlam;
-    int acesNeededForSmallSlam;
-    int acesNeededForGrandSlam;
-    int kingsNeededForSlam;
-    int kingsNeededForSmallSlam;
-    int kingsNeededForGrandSlam;
-
-    //Misc.
-    bool giveSouthBestHand;
-    bool balancedHands;
-    bool enableDealNumbering;
+    //Suit size. Indexed by [low/high, suit, seat].
+    int suitSize[2][4][4];
 };
 
 #endif // CDEALOPTIONDOC_H

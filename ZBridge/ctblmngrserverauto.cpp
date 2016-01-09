@@ -2,7 +2,7 @@
   Copyright © 2015 - All Rights Reserved
 
   Project: ZBridge
-  File: CTblMngrServerAutoAuto.cpp
+  File: CTblMngrServerAuto.cpp
   Developers: eak
 
   Revision History:

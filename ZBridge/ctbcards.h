@@ -2,7 +2,7 @@
   Copyright © 2013 - All Rights Reserved
 
   Project: ZBridge
-  File: CLRCards.h
+  File: CTBCards.h
   Developers: eak
 
   Revision History:

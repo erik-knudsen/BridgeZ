@@ -698,6 +698,9 @@
    </property>
   </action>
   <action name="action_deal_Num_bered_Hand">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="icon">
     <iconset resource="images.qrc">
      <normaloff>:/newPrefix/resources/numbered.bmp</normaloff>:/newPrefix/resources/numbered.bmp</iconset>
