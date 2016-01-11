@@ -948,6 +948,9 @@ void CMainFrame::on_actionSeat_Configuration_triggered()
         //Hide score table in case it is shown and clear games.
         mainScoreDialog->hide();
         games->clearGames(doc->getGameOptions().scoringMethod);
+
+        //Clear expose all cards.
+        ui->action_Expose_All_Cards->setChecked(false);
     }
 }
 
