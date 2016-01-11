@@ -20,8 +20,10 @@
  */
 
 #include <QAbstractSocket>
+#include <QTime>
 
 #include "czbridgeapp.h"
+#include "mt19937ar.h"
 #include "cmainframe.h"
 #include "czbridgedoc.h"
 #include "cgamesdoc.h"
@@ -41,6 +43,8 @@ int main(int argc, char *argv[])
 
     qRegisterMetaType<QAbstractSocket::SocketError>();
     qRegisterMetaType<Seat>();
+
+    init_genrand(QTime::currentTime().msecsSinceStartOfDay());
 
     return app.exec();
 }

@@ -20,7 +20,9 @@
  */
 
 #include <QSettings>
+#include <QTime>
 
+#include "mt19937ar.h"
 #include "cdealoptiondoc.h"
 #include "Defines.h"
 
@@ -225,9 +227,12 @@ void CDealOptionDoc::ReadSettings()
     suitSize[1][SPADES][SOUTH_SEAT] = settings.value("suitSizeHighSpadesSouth", MAX_SUIT_SIZE).toInt();
 }
 
+/**
+ * @brief Initialize deal options so wide that there are no limitiations on deals.
+ */
 void CDealOptionDoc::Initialize()
 {
-    //Min low linmit (zero for all).
+    //Min low limit (zero for all).
     for (int i = 0; i < 5; i++)
         for (int j = 0; j < 4; j++)
             hcp[0][i][j] = 0;
@@ -253,4 +258,135 @@ void CDealOptionDoc::Initialize()
     for (int i = 0; i < 4; i++)
         for (int j = 0; j < 4; j++)
             suitSize[1][i][j] = MAX_SUIT_SIZE;
+}
+
+/**
+ * @brief Check deal options to assure that deals exist.
+ * @param[in] noDeals Number of random deals to check.
+ * @return Number of deals found. Could be zero if none is found.
+ *
+ * Checks ramdom deals against deal options.
+ */
+int CDealOptionDoc::checkDealOptions(int noDeals)
+{
+    int cards[4][13];
+
+    return (deal(cards, noDeals));
+}
+
+/**
+ * @brief Get deal.
+ * @param[out] cards The found deal.
+ *
+ * It is assumed that it has been checked (by checkDealOptions) that deals actually exist.
+ */
+void CDealOptionDoc::getDeal(int cards[][13])
+{
+    deal(cards, 0);
+}
+
+int CDealOptionDoc::deal(int cards[][13], int noDeals)
+{
+    int noOk = 0;
+    int k = 0;
+    while (((noDeals == 0) && (noOk == 0)) || (k <= noDeals))
+    {
+        k++;
+        int i, j, inx;
+        int cardDeck[52];
+        int cardValues[52];
+
+        //Deal card deck.
+        //i is card number.
+        for (i = 0; i < 52; i++)
+            cardValues[i] = i;
+        for (i = 51; i >= 0; i--)
+        {
+            inx = genrand_int32()%(i + 1);
+            cardDeck[i] = cardValues[inx];
+            for (j = inx; j < i; j++)
+                cardValues[j] = cardValues[j + 1];
+        }
+
+        //Shuffle card deck.
+        /*
+        for (int l = 0; l < 10; l++)
+        for (i = 0; i < 52; i++)
+        {
+            inx = rand()%52;
+            j = cardDeck[i];
+            cardDeck[i] = cardDeck[inx];
+            cardDeck[inx] = j;
+        }
+        */
+        //Give cards.
+        //j is seat and i is card.
+        for (j = 0; j < 4; j++)
+            for (i = 0; i < 13; i++)
+                cards[j][i] = cardDeck[j * 13 + i];
+
+        //Calculate hand characteristica.
+        //suit first then seat.
+        int hcp[5][4];
+        int suitSize[4][4];
+        int dp[4];
+        //i is suit and j is seat.
+        for (i = 0; i < 5; i++)
+            for (j = 0; j < 4; j++)
+                hcp[i][j] = 0;
+        for (j = 0; j < 4; j++)
+        {
+            dp[j] = 0;
+            for (i = 0; i < 4; i++)
+                suitSize[i][j] = 0;
+        }
+
+        //j is seat.
+        for (j = 0; j < 4; j++)
+        {
+            //i is card.
+            for (i = 0; i < 13; i++)
+            {
+                int card = cards[j][i];
+                Suit suit = CARD_SUIT(card);
+                int face = CARD_FACE(card);
+                if (face > 8)
+                {
+                    hcp[suit][j] += (face - 8);
+                    hcp[NOTRUMP][j] += (face - 8);
+                }
+                suitSize[suit][j]++;
+            }
+            //i is suit.
+            for (i = 0; i < 4; i++)
+                if (suitSize[i][j] <= 2)
+                    dp[j] += (3 - suitSize[i][j]);
+        }
+
+        //Check deck of cards.
+        //j is seat and i is suit.
+        bool cont = true;
+        for (j = 0; j < 4; j++)
+        {
+            for (i = 0; i < 4; i++)
+                if ((this->suitSize[0][i][j] > suitSize[i][j]) ||
+                        (this->suitSize[1][i][j] < suitSize[i][j]))
+                    cont = false;
+            if (!cont)
+                break;
+            for (i = 0; i < 5; i++)
+                if ((this->hcp[0][i][j] > hcp[i][j]) ||
+                        (this->hcp[1][i][j] < hcp[i][j]))
+                    cont = false;
+            if (!cont)
+                break;
+            if ((this->dp[0][j] > dp[j]) || (this->dp[1][j] < dp[j]))
+                cont = false;
+            if (!cont)
+                break;
+        }
+        if (cont)
+            noOk++;
+    }
+    return noOk;
 }

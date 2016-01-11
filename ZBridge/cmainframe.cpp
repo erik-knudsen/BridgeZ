@@ -374,7 +374,6 @@ void CMainFrame::enableUIActions(actionIndicator actions, bool advProtocol)
     ui->actionOpen->setEnabled((actions == INITIAL_ACTIONS) || (actions == SERVER_ACTIONS));
 
     ui->actionRecent_File->setEnabled((actions == INITIAL_ACTIONS) || (actions == SERVER_ACTIONS));
-    ui->actionClear_All->setEnabled((actions == SERVER_ACTIONS) || (actions == CLIENT_ACTIONS));
     ui->actionBidding_Play_History->setEnabled((actions == SERVER_ACTIONS) || (actions == CLIENT_ACTIONS));
     ui->actionClaim_All->setEnabled(((actions == SERVER_ACTIONS) || (actions == CLIENT_ACTIONS)) && advProtocol);
     ui->actionClaim_Contract->setEnabled(((actions == SERVER_ACTIONS) || (actions == CLIENT_ACTIONS)) && advProtocol);
@@ -684,6 +683,11 @@ void CMainFrame::on_actionExit_triggered()
 
 }
 
+void CMainFrame::on_action_Lay_Out_Cards_triggered()
+{
+
+}
+
 void CMainFrame::on_actionCu_t_triggered()
 {
 
@@ -699,9 +703,14 @@ void CMainFrame::on_action_Paste_triggered()
 
 }
 
-void CMainFrame::on_actionClear_All_triggered()
+void CMainFrame::on_action_Expose_All_Cards_triggered()
 {
+    tableManager->showAllCards();
+}
 
+void CMainFrame::on_action_Score_triggered()
+{
+    mainScoreDialog->show();
 }
 
 /**
@@ -728,11 +737,6 @@ void CMainFrame::on_actionBidding_Play_History_triggered()
         m_pWndHistory->show();
 }
 
-void CMainFrame::on_action_Score_triggered()
-{
-    mainScoreDialog->show();
-}
-
 void CMainFrame::on_action_Toolbar_triggered()
 {
 
@@ -743,17 +747,7 @@ void CMainFrame::on_actionSecondary_Toolbar_triggered()
 
 }
 
-void CMainFrame::on_actionTest_Toolbar_triggered()
-{
-
-}
-
 void CMainFrame::on_actionStatus_Bar_triggered()
-{
-
-}
-
-void CMainFrame::on_action_Refresh_Screen_triggered()
 {
 
 }
@@ -770,7 +764,7 @@ void CMainFrame::on_actionNew_Session_triggered()
         on_actionSave_triggered();
 
     games->clearGames(doc->getGameOptions().scoringMethod);
-    if (ui->action_deal_Num_bered_Hand->isChecked())
+    if (ui->actionActivate_Deal_Profile->isChecked())
         games->setDealOptions(doc->getDealOptions());
     else
         games->clearDealOptions();
@@ -808,9 +802,12 @@ void CMainFrame::on_action_Deal_New_Hand_triggered()
     tableManager->newDeal();
 }
 
-void CMainFrame::on_action_Play_Rubber_triggered()
+void CMainFrame::on_actionActivate_Deal_Profile_triggered()
 {
-
+    if (ui->actionActivate_Deal_Profile->isChecked())
+        games->setDealOptions(doc->getDealOptions());
+    else
+        games->clearDealOptions();
 }
 
 void CMainFrame::on_actionUndo_triggered()
@@ -868,129 +865,6 @@ void CMainFrame::on_actionAuto_Play_to_Completion_triggered()
 
 }
 
-void CMainFrame::on_actionReview_Game_triggered()
-{
-
-}
-
-void CMainFrame::on_actionAuto_Test_triggered()
-{
-
-}
-
-void CMainFrame::on_action_deal_Num_bered_Hand_triggered()
-{
-    if (ui->action_deal_Num_bered_Hand->isChecked())
-        games->setDealOptions(doc->getDealOptions());
-    else
-        games->clearDealOptions();
-}
-
-void CMainFrame::on_actionDeal_Game_Hands_triggered()
-{
-
-}
-
-void CMainFrame::on_actionDeal_Major_Suit_Game_triggered()
-{
-
-}
-
-void CMainFrame::on_actionDeal_Mi_nor_Suit_Game_triggered()
-{
-
-}
-
-void CMainFrame::on_actionDeal_No_Trump_Game_triggered()
-{
-
-}
-
-void CMainFrame::on_actionDeal_Game_Hands_to_East_West_triggered()
-{
-
-}
-
-void CMainFrame::on_actionDeal_Minor_Suit_Game_to_East_West_triggered()
-{
-
-}
-
-void CMainFrame::on_actionDeal_No_Trump_Game_to_East_West_triggered()
-{
-
-}
-
-void CMainFrame::on_actionDeal_Slam_Hands_triggered()
-{
-
-}
-
-void CMainFrame::on_actionDeal_Sma_ll_Slam_triggered()
-{
-
-}
-
-void CMainFrame::on_actionDeal_Gran_d_Slam_triggered()
-{
-
-}
-
-void CMainFrame::on_actionDeal_Slam_Hands_to_East_West_triggered()
-{
-
-}
-
-void CMainFrame::on_actionDeal_Small_Slam_to_East_West_triggered()
-{
-
-}
-
-void CMainFrame::on_actionDeal_Grand_Slam_to_East_West_triggered()
-{
-
-}
-
-void CMainFrame::on_actionWest_3_triggered()
-{
-
-}
-
-void CMainFrame::on_actionNorth_3_triggered()
-{
-
-}
-
-void CMainFrame::on_actionEast_3_triggered()
-{
-
-}
-
-void CMainFrame::on_actionSwap_Cards_Clockwisr_triggered()
-{
-
-}
-
-void CMainFrame::on_actionSwap_Cards_Coun_terclockwise_triggered()
-{
-
-}
-
-void CMainFrame::on_action_Lay_Out_Cards_triggered()
-{
-
-}
-
-void CMainFrame::on_action_Edit_Existing_Hands_triggered()
-{
-
-}
-
-void CMainFrame::on_action_Distribute_Remaining_Cards_triggered()
-{
-
-}
-
 /**
  * @brief Main menu seat configuration triggered.
  *
@@ -998,6 +872,7 @@ void CMainFrame::on_action_Distribute_Remaining_Cards_triggered()
  */
 void CMainFrame::on_actionSeat_Configuration_triggered()
 {
+
     CSeatConfiguration seatConfiguration(app, doc, this);
     if (seatConfiguration.exec() == QDialog::Accepted)
     {
@@ -1025,8 +900,8 @@ void CMainFrame::on_actionSeat_Configuration_triggered()
         {
             try
             {
-            tableManager = new CTblMngrServer(doc, games, hostAddress, playView, this);
-            tableManagerAuto = new CTblMngrServerAuto(doc, games, hostAddress, 0);
+                tableManager = new CTblMngrServer(doc, games, hostAddress, playView, this);
+                tableManagerAuto = new CTblMngrServerAuto(doc, games, hostAddress, 0);
             }
             catch (NetProtocolException &e)
             {
@@ -1066,8 +941,8 @@ void CMainFrame::on_actionSeat_Configuration_triggered()
 
         //If non saved game then ask if it should be saved (save can only be enabled on server).
         if ((ui->actionSave->isEnabled()) &&
-            (QMessageBox::question(0, tr("ZBridge"),
-                   tr("Do you want to save played games?")) == QMessageBox::Yes))
+                (QMessageBox::question(0, tr("ZBridge"),
+                                       tr("Do you want to save played games?")) == QMessageBox::Yes))
             on_actionSave_triggered();
 
         //Hide score table in case it is shown and clear games.
@@ -1139,11 +1014,6 @@ void CMainFrame::on_actionConfiguration_Wizard_triggered()
     }
 }
 
-void CMainFrame::on_action_Expose_All_Cards_triggered()
-{
-    tableManager->showAllCards();
-}
-
 void CMainFrame::on_actionEnable_Analysis_Tracing_triggered()
 {
 
@@ -1155,46 +1025,6 @@ void CMainFrame::on_actionShow_Player_Analyses_triggered()
         m_pWndStatus->hide();
     else
         m_pWndStatus->show();
-}
-
-void CMainFrame::on_actionManual_Play_triggered()
-{
-
-}
-
-void CMainFrame::on_actionManual_Defend_triggered()
-{
-
-}
-
-void CMainFrame::on_action_Normal_Play_Mode_triggered()
-{
-
-}
-
-void CMainFrame::on_actionManual_Play_Mode_triggered()
-{
-
-}
-
-void CMainFrame::on_actionManual_Defend_2_triggered()
-{
-
-}
-
-void CMainFrame::on_actionAuto_Play_Mode_triggered()
-{
-
-}
-
-void CMainFrame::on_actionLock_Play_Mode_triggered()
-{
-
-}
-
-void CMainFrame::on_actionShow_Comment_IDs_triggered()
-{
-
 }
 
 void CMainFrame::on_action_Contents_triggered()
@@ -1256,14 +1086,4 @@ void CMainFrame::on_action_About_ZBridge_triggered()
 {
     CAboutDlg about(app, doc, this);
     about.exec();
-}
-
-void CMainFrame::on_actionDeal_Major_Suit_Game_to_East_West_triggered()
-{
-
-}
-
-void CMainFrame::on_actionManual_Bidding_triggered()
-{
-
 }

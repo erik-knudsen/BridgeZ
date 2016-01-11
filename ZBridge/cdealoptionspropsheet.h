@@ -95,7 +95,6 @@ private slots:
 
 private:
     bool getValues(QString &text, int max, int *low, int *high);
-    int checkDealOptions(int noDeals);
 
     Ui::CDealOptionsPropSheet *ui;
     CZBridgeApp *app;

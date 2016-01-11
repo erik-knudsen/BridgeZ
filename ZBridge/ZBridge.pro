@@ -95,7 +95,8 @@ SOURCES +=\
     cactorlocalauto.cpp \
     cactorremoteauto.cpp \
     ctblmngrserverauto.cpp \
-    ctblmngrclientauto.cpp
+    ctblmngrclientauto.cpp \
+    mt19937ar.cpp
 
 HEADERS  += cmainframe.h \
     czbridgedoc.h \
@@ -183,7 +184,8 @@ HEADERS  += cmainframe.h \
     cactorlocalauto.h \
     cactorremoteauto.h \
     ctblmngrserverauto.h \
-    ctblmngrclientauto.h
+    ctblmngrclientauto.h \
+    mt19937ar.h
 
 FORMS    += cmainframe.ui \
     cfilepropertiesdialog.ui \
