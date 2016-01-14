@@ -20,7 +20,6 @@
  */
 
 #include <QMessageBox>
-#include <QTime>
 
 #include "cdealoptionspropsheet.h"
 #include "ui_cdealoptionspropsheet.h"

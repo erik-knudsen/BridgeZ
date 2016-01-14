@@ -19,7 +19,6 @@
  */
 
 #include <QMap>
-#include <QTime>
 #include <QtDebug>
 #include <QMutexLocker>
 #include <cassert>

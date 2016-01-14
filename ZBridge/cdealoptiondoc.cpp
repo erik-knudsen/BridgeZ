@@ -20,7 +20,6 @@
  */
 
 #include <QSettings>
-#include <QTime>
 
 #include "mt19937ar.h"
 #include "cdealoptiondoc.h"
