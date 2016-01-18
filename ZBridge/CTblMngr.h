@@ -52,6 +52,7 @@ public:
     /*@{*/
     virtual void newDeal();
     virtual void showAllCards() = 0;
+    virtual void showDoubleDummyResults() = 0;
     virtual void reBid();
     virtual void rePlay();
     virtual void undo();

@@ -59,6 +59,7 @@
     </property>
     <addaction name="action_Expose_All_Cards"/>
     <addaction name="action_Score"/>
+    <addaction name="actionDouble_Dummy_Results"/>
     <addaction name="action_File_Comments"/>
     <addaction name="actionBidding_Play_History"/>
     <addaction name="separator"/>
@@ -182,6 +183,7 @@
    <addaction name="action_Expose_All_Cards"/>
    <addaction name="separator"/>
    <addaction name="action_Score"/>
+   <addaction name="actionDouble_Dummy_Results"/>
    <addaction name="action_File_Comments"/>
    <addaction name="separator"/>
   </widget>
@@ -780,6 +782,15 @@
   <action name="actionSeat_Configuration">
    <property name="text">
     <string>Seat Configuration</string>
+   </property>
+  </action>
+  <action name="actionDouble_Dummy_Results">
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/newPrefix/resources/ViewPlayHistory.bmp</normaloff>:/newPrefix/resources/ViewPlayHistory.bmp</iconset>
+   </property>
+   <property name="text">
+    <string>Double Dummy Results</string>
    </property>
   </action>
  </widget>

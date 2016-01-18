@@ -32,7 +32,7 @@ const int NO_RANDOM_DEALS = 32;
 //Update (enable/disable) UI (mostly menues) actions.
 enum UpdateUIAction { UPDATE_UI_INITIAL, UPDATE_UI_SERVER, UPDATE_UI_CLIENT, UPDATE_UI_NEW_SESSION,
                     UPDATE_UI_NEW_DEAL, UPDATE_UI_UNDO, UPDATE_UI_REBID, UPDATE_UI_REPLAY, UPDATE_UI_SHOW_ALL,
-                    UPDATE_UI_SCORE, UPDATE_UI_DELETE, UPDATE_UI_SAVE, UPDATE_UI_SAVEAS};
+                    UPDATE_UI_SCORE, UPDATE_UI_DELETE, UPDATE_UI_SAVE, UPDATE_UI_SAVEAS, UPDATE_UI_PAR};
 
 //Message type in network protocol.
 enum MsgType { CONNECT_MSG, SEATED_MSG, RTNAMES_MSG, TEAMNAMES_MSG, RSBOARD_MSG, STARTOFBOARD_MSG, RDEALINFO_MSG,
@@ -228,6 +228,7 @@ const int BUTTON_AUCTION = SA;
 const int BUTTON_PLAY = SP;
 const int BUTTON_LEADER = SL;
 const int BUTTON_DEAL = SS;
+const int BUTTON_DD = 10;
 
 //UNDO values (must be the same as in the Yakindu synchronization statecharts.
 //These values are used as undo values to determine the undo type (rebid, replay, complete trick or partial trick).

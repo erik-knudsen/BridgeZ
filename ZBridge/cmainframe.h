@@ -128,6 +128,7 @@ private slots:
 
     void on_action_Expose_All_Cards_triggered();
     void on_action_Score_triggered();
+    void on_actionDouble_Dummy_Results_triggered();
     void on_action_File_Comments_triggered();
     void on_actionBidding_Play_History_triggered();
     void on_action_Toolbar_triggered();

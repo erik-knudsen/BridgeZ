@@ -28,6 +28,7 @@
 #include "cactorlocal.h"
 #include "cremoteactorclient.h"
 #include "cremoteprotocol.h"
+#include "cddtable.h"
 #include "ctblmngrclient.h"
 
 //Communication mode constants.
@@ -184,6 +185,12 @@ void CTblMngrClient::showAllCards()
     playView->showCards(NORTH_SEAT, showNorth);
     playView->showCards(EAST_SEAT, showEast);
     playView->showCards(SOUTH_SEAT, showSouth);
+}
+
+void CTblMngrClient::showDoubleDummyResults()
+{
+    CDDTable ddTable(currentCards, (Team)zBridgeClientIface_get_vulnerability(handle));
+    ddTable.exec();
 }
 
 //Slots for play view.
@@ -475,8 +482,9 @@ void CTblMngrClient::sEnableContinueSync(int syncState)
         break;
 
     case BUTTON_DEAL:
-        //Disable Show All menu actions.
+        //Disable Show All and Double Dummy Results menu actions.
         QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_SHOW_ALL , false));
+        QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_PAR , false));
 
         if (protocol == ADVANCED_PROTOCOL)
             emit sShowScore();
@@ -709,9 +717,12 @@ void CTblMngrClient::receiveLine(QString line)
             playView->setAndShowAllCards(hasWest, showWest, currentCards[WEST_SEAT], hasNorth, showNorth, currentCards[NORTH_SEAT],
                        hasEast, showEast, currentCards[EAST_SEAT], hasSouth, showSouth, currentCards[SOUTH_SEAT]);
 
-            //Enable Show All menu actions.
+            //Enable Show All and Double Dummy Results menu actions.
             if (protocol == ADVANCED_PROTOCOL)
+            {
                 QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_SHOW_ALL , true));
+                QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_PAR , true));
+            }
 
             //Set actor cards.
             actor->cards(currentCards);

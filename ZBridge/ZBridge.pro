@@ -10,6 +10,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = ZBridge
 TEMPLATE = app
+LIBS += c:\Projects\qt\Zbridge\ZBridge\dds.dll
 
 
 SOURCES +=\
@@ -96,7 +97,8 @@ SOURCES +=\
     cactorremoteauto.cpp \
     ctblmngrserverauto.cpp \
     ctblmngrclientauto.cpp \
-    mt19937ar.cpp
+    mt19937ar.cpp \
+    cddtable.cpp
 
 HEADERS  += cmainframe.h \
     czbridgedoc.h \
@@ -185,7 +187,8 @@ HEADERS  += cmainframe.h \
     cactorremoteauto.h \
     ctblmngrserverauto.h \
     ctblmngrclientauto.h \
-    mt19937ar.h
+    mt19937ar.h \
+    cddtable.h
 
 FORMS    += cmainframe.ui \
     cfilepropertiesdialog.ui \
@@ -216,6 +219,7 @@ FORMS    += cmainframe.ui \
     cpointscoredialog.ui \
     cplaydialog.ui \
     crankscoredialog.ui \
-    cplayshow.ui
+    cplayshow.ui \
+    cddtable.ui
 
 RESOURCES = images.qrc

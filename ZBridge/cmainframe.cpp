@@ -313,6 +313,11 @@ void CMainFrame::customEvent(QEvent *event)
             ui->action_Expose_All_Cards->setEnabled(param);
             break;
 
+            //Enable/Disable Double Dummy Results.
+        case UPDATE_UI_PAR:
+            ui->actionDouble_Dummy_Results->setEnabled(param);
+            break;
+
             //Enable/Disable score dialogs.
         case UPDATE_UI_SCORE:
             ui->action_Score->setEnabled(param);
@@ -396,6 +401,7 @@ void CMainFrame::enableUIActions(actionIndicator actions, bool advProtocol)
     ui->actionUndo->setEnabled(false);
 
     ui->action_Expose_All_Cards->setEnabled(false);
+    ui->actionDouble_Dummy_Results->setEnabled(false);
 
     ui->action_Score->setEnabled((actions == SERVER_ACTIONS) || ((actions == CLIENT_ACTIONS) && advProtocol));
 }
@@ -711,6 +717,11 @@ void CMainFrame::on_action_Expose_All_Cards_triggered()
 void CMainFrame::on_action_Score_triggered()
 {
     mainScoreDialog->show();
+}
+
+void CMainFrame::on_actionDouble_Dummy_Results_triggered()
+{
+    tableManager->showDoubleDummyResults();
 }
 
 /**

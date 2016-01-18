@@ -54,6 +54,7 @@ public:
 public slots:
     void playValue(ReviewVal reviewVal);
     void playClose();
+    void buttonClicked(int button);
 
 protected:
     virtual void resizeEvent(QResizeEvent *resizeEvent);
@@ -64,7 +65,7 @@ private:
     CGamesDoc *games;
     int gameIndex, auctionIndex;
     int board;
-    int wCards[13], nCards[13], eCards[13], sCards[13];
+    int cards[4][13];
     Seat dealer, declarer;
     Team vulnerable;
     Bids contract, dbl;

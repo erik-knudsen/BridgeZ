@@ -24,6 +24,7 @@
 #include "cgamesdoc.h"
 #include "cbidhistory.h"
 #include "cplayhistory.h"
+#include "cddtable.h"
 #include "cplaydialog.h"
 #include "ui_cplaydialog.h"
 
@@ -65,7 +66,8 @@ CPlayDialog::CPlayDialog(CGamesDoc *games, int gameIndex, int auctionIndex, QWid
     setMaximumSize(QSize(SCENE_HOR_SIZE * 1.25, SCENE_VER_SIZE * 1.25));
 
     //Get and show auction and play info for current game.
-    games->getGame(gameIndex, &board, &dealer, &vulnerable, wCards, nCards, eCards, sCards);
+    games->getGame(gameIndex, &board, &dealer, &vulnerable, cards[WEST_SEAT], cards[NORTH_SEAT],
+                   cards[EAST_SEAT], cards[SOUTH_SEAT]);
     QString str;
     str.setNum(board);
     games->getAuctionAndPlay(gameIndex, auctionIndex,
@@ -74,6 +76,10 @@ CPlayDialog::CPlayDialog(CGamesDoc *games, int gameIndex, int auctionIndex, QWid
     playView->showNSTricks(0);
     playView->showEWTricks(0);
     playView->showInfoAuctionPlay(true);
+
+    //Show DD button.
+    playView->showInfoDDButton(true, BUTTON_DD);
+    connect(playView, &CPlayView::buttonClicked, this, &CPlayDialog::buttonClicked);
 
     //Show center widget.
     playView->showEWNSTextOnTable();
@@ -87,8 +93,8 @@ CPlayDialog::CPlayDialog(CGamesDoc *games, int gameIndex, int auctionIndex, QWid
     //Show the cards in play view.
     bool showWest, showNorth, showEast, showSouth;
     showWest = showNorth = showEast = showSouth = true;
-    playView->setAndShowAllCards(true, showWest, wCards, true, showNorth, nCards,
-                        true, showEast, eCards, true, showSouth, sCards);
+    playView->setAndShowAllCards(true, showWest, cards[WEST_SEAT], true, showNorth, cards[NORTH_SEAT],
+                        true, showEast, cards[EAST_SEAT], true, showSouth, cards[SOUTH_SEAT]);
 
     if (contract != BID_NONE)
     {
@@ -257,4 +263,10 @@ void CPlayDialog::playValue(ReviewVal reviewVal)
 void CPlayDialog::playClose()
 {
     close();
+}
+
+void CPlayDialog::buttonClicked(int button)
+{
+    CDDTable ddTable(cards, vulnerable);
+    ddTable.exec();
 }

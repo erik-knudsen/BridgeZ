@@ -62,6 +62,7 @@ public:
     /*@{*/
     void newSession();
     void showAllCards();
+    void showDoubleDummyResults();
     /*@}*/
 
 

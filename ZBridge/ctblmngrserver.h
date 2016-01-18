@@ -71,6 +71,7 @@ public:
     void newSession();
     void newDeal();
     void showAllCards();
+    void showDoubleDummyResults();
     void reBid();
     void rePlay();
     void undo();

@@ -30,6 +30,7 @@
 #include "cactorremote.h"
 #include "cbidengine.h"
 #include "cplayengine.h"
+#include "cddtable.h"
 #include "ctblmngrserver.h"
 #include "cremoteactorserver.h"
 
@@ -220,9 +221,10 @@ void CTblMngrServer::serverActions()
         playView->setAndShowAllCards(true, showWest, currentCards[WEST_SEAT], true, showNorth, currentCards[NORTH_SEAT],
                             true, showEast, currentCards[EAST_SEAT], true, showSouth, currentCards[SOUTH_SEAT]);
 
-        //Enable New Deal and Show All menu actions.
+        //Enable New Deal, Show All and Double Dummy Results menu actions.
         QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_NEW_DEAL , true));
         QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_SHOW_ALL , true));
+        QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_PAR , true));
 
 
         bidHistory.resetBidHistory();
@@ -383,9 +385,10 @@ void CTblMngrServer::serverActions()
     else if (zBridgeServerIface_israised_endOfSession(&handle))
     {
         //End of session.
-        //Disable New Deal and Show All menu actions (still possible to save the game).
+        //Disable New Deal, Show All and Double Dummy Results menu actions (still possible to save the game).
         QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_NEW_DEAL , false));
         QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_SHOW_ALL , false));
+        QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_PAR , false));
         cleanTableManager();
         QMessageBox::information(0, tr("ZBridge"), tr("Session finished."));
         emit sShowScore();
@@ -544,9 +547,10 @@ void CTblMngrServer::cleanTableManager()
  */
 void CTblMngrServer::clientDisconnected()
 {
-    //Disable New Deal and Show All menu actions (still possible to save the game).
+    //Disable New Deal, Show All and Double Dummy Results menu actions (still possible to save the game).
     QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_NEW_DEAL , false));
     QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_SHOW_ALL , false));
+    QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_PAR , false));
 
     //Prepare for a new session.
     cleanTableManager();
@@ -723,6 +727,12 @@ void CTblMngrServer::showAllCards()
     playView->showCards(NORTH_SEAT, showNorth);
     playView->showCards(EAST_SEAT, showEast);
     playView->showCards(SOUTH_SEAT, showSouth);
+}
+
+void CTblMngrServer::showDoubleDummyResults()
+{
+    CDDTable ddTable(currentCards, currentVulnerable);
+    ddTable.exec();
 }
 
 /**
@@ -1238,12 +1248,13 @@ void CTblMngrServer::sEnableContinueSync(int syncState)
             break;
 
         case BUTTON_DEAL:          
-            //Disable Undo and Rebid and replay and New Deal and Show All menu actions.
+            //Disable Undo and Rebid and replay and New Deal and Show All and Double Dummy Results menu actions.
             QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_UNDO , false));
             QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_REBID , false));
             QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_REPLAY , false));
             QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_NEW_DEAL , false));
             QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_SHOW_ALL , false));
+            QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_PAR , false));
 
             emit sShowScore();
 

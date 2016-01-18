@@ -225,6 +225,14 @@ void CPlayView::createChildren()
     bottomInfoNextButton->connectButton(this);
     bottomInfoNextButton->setParentItem(bottomInfo);
     bottomInfoNextButton->hide();
+
+    //Double Dummy Results button to display in bottom info.
+    bottomInfoDDButton = new CBottomInfoButton(INF_HOR_SIZE, TB_CARD_VER_SIZE, "DD\nResults");
+    bottomInfoDDButton->setPreferredSize(QSizeF(INF_HOR_SIZE, TB_CARD_VER_SIZE));
+    bottomInfoDDButton->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+    bottomInfoDDButton->connectButton(this);
+    bottomInfoDDButton->setParentItem(bottomInfo);
+    bottomInfoDDButton->hide();
 }
 
 /**
@@ -546,6 +554,24 @@ void CPlayView::showInfoNextButton(bool show, int id)
     }
     else
         bottomInfoNextButton->hide();
+}
+
+/**
+ * @brief Activate and show/hide the DD button.
+ * @param show if (true) then show the button else hide the button.
+ * @param id Identification of the button.
+ *
+ * The button is shown in the bottom info widget of the scene.
+ */
+void CPlayView::showInfoDDButton(bool show, int id)
+{
+    if (show)
+    {
+        bottomInfoDDButton->show();
+        bottomInfoDDButton->setButtonId(id);
+    }
+    else
+        bottomInfoDDButton->hide();
 }
 
 /**
