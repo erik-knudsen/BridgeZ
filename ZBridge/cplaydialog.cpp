@@ -267,6 +267,6 @@ void CPlayDialog::playClose()
 
 void CPlayDialog::buttonClicked(int button)
 {
-    CDDTable ddTable(cards, vulnerable);
+    CDDTable ddTable(cards, dealer, vulnerable);
     ddTable.exec();
 }

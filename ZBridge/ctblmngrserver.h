@@ -169,8 +169,8 @@ private:
     Team currentVulnerable;
 
     int boardNo;
-    Team vulnerable[4] = { NEITHER, NORTH_SOUTH, EAST_WEST, BOTH };
-    Seat dealer[4] = { NORTH_SEAT, EAST_SEAT, SOUTH_SEAT, WEST_SEAT };
+//    Team vulnerable[4] = { NEITHER, NORTH_SOUTH, EAST_WEST, BOTH };
+//    Seat dealer[4] = { NORTH_SEAT, EAST_SEAT, SOUTH_SEAT, WEST_SEAT };
 
     int currentCards[4][13];
     bool showUser;      /**< If true then the server handles the play view. */

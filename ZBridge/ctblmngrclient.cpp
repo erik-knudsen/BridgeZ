@@ -189,7 +189,8 @@ void CTblMngrClient::showAllCards()
 
 void CTblMngrClient::showDoubleDummyResults()
 {
-    CDDTable ddTable(currentCards, (Team)zBridgeClientIface_get_vulnerability(handle));
+    CDDTable ddTable(currentCards, (Seat)zBridgeClientIface_get_dealer(handle),
+                     (Team)zBridgeClientIface_get_vulnerability(handle));
     ddTable.exec();
 }
 

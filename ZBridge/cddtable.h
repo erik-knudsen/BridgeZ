@@ -35,7 +35,7 @@ class CDDTable : public QDialog
     Q_OBJECT
 
 public:
-    explicit CDDTable(int cards[][13], Team vulnerable, QWidget *parent = 0);
+    explicit CDDTable(int cards[][13], Seat dealer, Team vulnerable, QWidget *parent = 0);
     ~CDDTable();
 
 private:

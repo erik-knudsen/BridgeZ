@@ -731,7 +731,7 @@ void CTblMngrServer::showAllCards()
 
 void CTblMngrServer::showDoubleDummyResults()
 {
-    CDDTable ddTable(currentCards, currentVulnerable);
+    CDDTable ddTable(currentCards, (Seat)zBridgeServerIface_get_dealer(&handle), currentVulnerable);
     ddTable.exec();
 }
 

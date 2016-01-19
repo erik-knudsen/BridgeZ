@@ -26,7 +26,7 @@
 #include "cddtable.h"
 #include "ui_cddtable.h"
 
-CDDTable::CDDTable(int cards[][13], Team vulnerable, QWidget *parent) :
+CDDTable::CDDTable(int cards[][13], Seat dealer, Team vulnerable, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::CDDTable)
 {
@@ -34,7 +34,7 @@ CDDTable::CDDTable(int cards[][13], Team vulnerable, QWidget *parent) :
 
     ddTableDeal tableDeal;
     ddTableResults table;
-    parResults pRes;
+    parResultsDealer pRes;
 
     for (int h = 0; h < DDS_HANDS; h++)
       for (int s = 0; s < DDS_SUITS; s++)
@@ -62,7 +62,9 @@ CDDTable::CDDTable(int cards[][13], Team vulnerable, QWidget *parent) :
 
     int vul = (vulnerable == NEITHER) ? (0) : (vulnerable == NORTH_SOUTH) ? (2) :
               (vulnerable == EAST_WEST) ? (3) : (1);
-    res = Par(&table, &pRes, vul);
+    int deal = (dealer == WEST_SEAT) ? (3) : (dealer == NORTH_SEAT) ? (0) :
+               (dealer == EAST_SEAT) ? (1) : (2);
+    res = DealerPar(&table, &pRes, deal, vul);
 
     QString txt;
 
@@ -136,13 +138,15 @@ CDDTable::CDDTable(int cards[][13], Team vulnerable, QWidget *parent) :
         txt = QString("%1 - %2").arg(table.resTable[3][1]).arg(table.resTable[3][3]);
     ui->tricksCEW->setText(txt);
 
-    //Par contract.
-    txt = QString(pRes.parContractsString[0]);
-    ui->parContract->setText(txt);
-
     //Par score.
-    txt = QString(pRes.parScore[0]);
+    txt = QString("Score: %1").arg(pRes.score);
     ui->parScore->setText(txt);
+
+    //Par contract.
+    txt = QString("Par: %1").arg(pRes.contracts[0]);
+    for (int i = 1; i < pRes.number; i++)
+        txt += QString(" ; %1").arg(pRes.contracts[i]);
+    ui->parContract->setText(txt);
 }
 
 CDDTable::~CDDTable()
