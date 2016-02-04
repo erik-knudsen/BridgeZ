@@ -57,6 +57,7 @@
 #include "ctblmngrclientauto.h"
 #include "cmainscoredialog.h"
 #include "crubberscoredialog.h"
+#include "clayoutcardsdialog.h"
 
 //Static pointer to mainframe singleton.
 CMainFrame *CMainFrame::m_pInstance = 0;
@@ -86,6 +87,7 @@ CMainFrame::CMainFrame(CZBridgeApp *app, CZBridgeDoc *doc, CGamesDoc *games) :
     this->games = games;
 
     tableManager = 0;
+    tableManagerAuto = 0;
 
     //Set up user interface (main menu etc.)
     ui->setupUi(this);
@@ -93,60 +95,11 @@ CMainFrame::CMainFrame(CZBridgeApp *app, CZBridgeDoc *doc, CGamesDoc *games) :
     //Allocate and initialize play view.
     playView = new CPlayView(this);
 
-    //Determine, allocate and initialize table manager.
-    hostAddress.clear();
-    if ((doc->getSeatOptions().role == SERVER_ROLE) || (doc->getSeatOptions().role == CLIENT_ROLE))
-    {
-        QString host = (doc->getSeatOptions().role == SERVER_ROLE) ? (doc->getSeatOptions().hostServer) :
-                                                                     (doc->getSeatOptions().hostClient);
-        hostAddress = getHostAddress(host);
-        if (hostAddress.isNull())
-            QMessageBox::warning(0, tr("ZBridge"), tr("Could not determine IP address."));
-    }
+    //Main score dialog.
+    mainScoreDialog = new CMainScoreDialog(games, this);
 
-    //Table manager server?
-    if((doc->getSeatOptions().role == SERVER_ROLE) && !hostAddress.isNull())
-    {
-        try
-        {
-        tableManager = new CTblMngrServer(doc, games, hostAddress, playView, this);
-        tableManagerAuto = new CTblMngrServerAuto(doc, games, hostAddress, 0);
-        }
-        catch (NetProtocolException &e)
-        {
-            QMessageBox::warning(0, tr("ZBridge"), e.what());
-
-            if (tableManager != 0)
-                delete tableManager;
-            hostAddress.clear();
-        }
-    }
-
-    //Table manager client?
-    else if((doc->getSeatOptions().role == CLIENT_ROLE) && !hostAddress.isNull())
-    {
-        tableManager = new CTblMngrClient(doc, games, hostAddress, playView, this);
-        tableManagerAuto = new CTblMngrClientAuto(doc, games, hostAddress, 0);
-        connect(tableManager, &CTblMngrBase::sigDisconnect, tableManagerAuto, &CTblMngrBase::sltDisconnect);
-        connect(tableManagerAuto, &CTblMngrBase::sigDisconnect, tableManager, &CTblMngrBase::sltDisconnect);
-    }
-
-    //Table manager standalone?
-    if (hostAddress.isNull())
-    {
-        tableManager = new CTblMngrServer(doc, games, hostAddress, playView, this);
-        tableManagerAuto = new CTblMngrServerAuto(doc, games, hostAddress, 0);
-    }
-
-    QThread *thread = new QThread();
-    tableManagerAuto->moveToThread(thread);
-    connect(thread, &QThread::finished, thread, &QThread::deleteLater);
-    connect(this, &CMainFrame::sAutoQuit, tableManagerAuto, &CTblMngrBase::sAutoQuit);
-    connect(this, &CMainFrame::sNewSession, tableManagerAuto, &CTblMngrBase::sNewSession);
-    connect(tableManager, &CTblMngrBase::sStatusText , this, &CMainFrame::sStatusText);
-    thread->start();
-
-    connect(tableManager, &CTblMngr::sShowScore, this, &CMainFrame::on_action_Score_triggered);
+    //Reset play.
+    resetPlay();
 
     //Initialization of main frame window.
     setCentralWidget(playView);
@@ -171,9 +124,6 @@ CMainFrame::CMainFrame(CZBridgeApp *app, CZBridgeDoc *doc, CGamesDoc *games) :
     addDockWidget(Qt::LeftDockWidgetArea, m_pWndHistory);
     m_pWndHistory->hide();
     connect(m_pWndHistory, &CHistoryWnd::UpdateViewHistory, this, &CMainFrame::OnUpdateViewHistory);
-
-    //Main score dialog.
-    mainScoreDialog = new CMainScoreDialog(games, this);
  }
 
 CMainFrame::~CMainFrame()
@@ -406,6 +356,168 @@ void CMainFrame::enableUIActions(actionIndicator actions, bool advProtocol)
     ui->action_Score->setEnabled((actions == SERVER_ACTIONS) || ((actions == CLIENT_ACTIONS) && advProtocol));
 }
 
+void CMainFrame::resetPlay()
+{
+    if (tableManager != 0)
+        delete tableManager;
+    tableManager = 0;
+    if (tableManagerAuto != 0)
+        emit sAutoQuit();
+    tableManagerAuto = 0;
+
+    hostAddress.clear();
+    if ((doc->getSeatOptions().role == SERVER_ROLE) || (doc->getSeatOptions().role == CLIENT_ROLE))
+    {
+        QString host = (doc->getSeatOptions().role == SERVER_ROLE) ? (doc->getSeatOptions().hostServer) :
+                                                                     (doc->getSeatOptions().hostClient);
+        hostAddress = getHostAddress(host);
+        if (hostAddress.isNull())
+            QMessageBox::warning(0, tr("ZBridge"), tr("Could not determine IP address."));
+    }
+
+    //Table manager server?
+    if((doc->getSeatOptions().role == SERVER_ROLE) && !hostAddress.isNull())
+    {
+        try
+        {
+            tableManager = new CTblMngrServer(doc, games, hostAddress, playView, this);
+            tableManagerAuto = new CTblMngrServerAuto(doc, games, hostAddress, 0);
+        }
+        catch (NetProtocolException &e)
+        {
+            QMessageBox::warning(0, tr("ZBridge"), e.what());
+
+            if (tableManager != 0)
+                delete tableManager;
+            hostAddress.clear();
+        }
+    }
+
+    //Table manager client?
+    else if((doc->getSeatOptions().role == CLIENT_ROLE) && !hostAddress.isNull())
+    {
+        tableManager = new CTblMngrClient(doc, games, hostAddress, playView, this);
+        tableManagerAuto = new CTblMngrClientAuto(doc, games, hostAddress, 0);
+        connect(tableManager, &CTblMngrBase::sigDisconnect, tableManagerAuto, &CTblMngrBase::sltDisconnect);
+        connect(tableManagerAuto, &CTblMngrBase::sigDisconnect, tableManager, &CTblMngrBase::sltDisconnect);
+    }
+
+    //Table manager standalone?
+    if (hostAddress.isNull())
+    {
+        tableManager = new CTblMngrServer(doc, games, hostAddress, playView, this);
+        tableManagerAuto = new CTblMngrServerAuto(doc, games, hostAddress, 0);
+    }
+
+    QThread *thread = new QThread();
+    tableManagerAuto->moveToThread(thread);
+    connect(thread, &QThread::finished, thread, &QThread::deleteLater);
+    connect(this, &CMainFrame::sAutoQuit, tableManagerAuto, &CTblMngrBase::sAutoQuit);
+    connect(this, &CMainFrame::sNewSession, tableManagerAuto, &CTblMngrBase::sNewSession);
+    connect(tableManager, &CTblMngrBase::sStatusText , this, &CMainFrame::sStatusText);
+    thread->start();
+
+    connect(tableManager, &CTblMngr::sShowScore, this, &CMainFrame::on_action_Score_triggered);
+
+    //If non saved game then ask if it should be saved (save can only be enabled on server).
+    if ((ui->actionSave->isEnabled()) &&
+            (QMessageBox::question(0, tr("ZBridge"),
+                                   tr("Do you want to save played games?")) == QMessageBox::Yes))
+        on_actionSave_triggered();
+
+    //Hide score table in case it is shown and clear games.
+    mainScoreDialog->hide();
+    games->clearGames(doc->getGameOptions().scoringMethod);
+
+    //Clear expose all cards.
+    ui->action_Expose_All_Cards->setChecked(false);
+
+    //No current file.
+    fileName = "";
+    eventIndex = 0;
+}
+
+void CMainFrame::open(QString &originalFileName)
+{
+    try
+    {
+    QFile originalFile(originalFileName);
+    if (!originalFile.open(QIODevice::ReadOnly | QIODevice::Text))
+        return;
+    QTextStream original(&originalFile);
+
+    QTextStream played;
+    QString event;
+
+    //Determine events.
+    QStringList strLines;
+    games->determineEvents(original, strLines);
+
+    if (strLines.size() > 1)
+    {
+        bool ok;
+        event = QInputDialog::getItem(this, tr("Select Event"), tr("Event"), strLines, 0, false, &ok);
+        if (!ok)
+            return;
+    }
+    else if (strLines.size() == 1)
+        event = strLines.at(0);
+
+    //Determine event index.
+    int inx;
+    for (inx = 0; inx < strLines.size(); inx++)
+        if (strLines.at(inx) == event)
+            break;
+
+    //Open file with already (in this program) played games.
+    QString playedFilename = originalFileName.left(originalFileName.indexOf(".pbn", 0, Qt::CaseInsensitive)) +
+            "_" + QString::number(inx) + ".zbr";
+    QFile playedFile(playedFilename);
+
+    //None might be played.
+    if (playedFile.open(QIODevice::ReadOnly | QIODevice::Text))
+        played.setDevice(&playedFile);
+
+    //Read games.
+    original.seek(0);
+    games->readGames(original, played, event, doc->getGameOptions().scoringMethod);
+
+    originalFile.close();
+
+    //Save info about pbn file.
+    eventIndex = inx;
+    fileName = originalFileName;
+
+    //Set up synchronization (auto play or not).
+    //Open is not available on client, i.e table manager is either server or standalone.
+    disconnect(tableManager, &CTblMngrBase::sigPlayStart, 0, 0);
+    disconnect(tableManagerAuto, &CTblMngrBase::sigPlayStart, 0, 0);
+    if ((doc->getSeatOptions().protocol == BASIC_PROTOCOL) || !games->getComputerPlays())
+        connect(tableManager, &CTblMngrBase::sigPlayStart, tableManager, &CTblMngrBase::sltPlayStart);
+    else
+    {
+        connect(tableManager, &CTblMngrBase::sigPlayStart, tableManagerAuto, &CTblMngrBase::sltPlayStart);
+        connect(tableManagerAuto, &CTblMngrBase::sigPlayStart, tableManager, &CTblMngrBase::sltPlayStart);
+        emit sNewSession();     //To start new session for table manager auto.
+    }
+
+    //Start new session for table manager.
+    tableManager->newSession();
+
+    if (played.device() != 0)
+    {
+        playedFile.close();
+        QApplication::postEvent(this, new UPDATE_UI_ACTION_Event(UPDATE_UI_DELETE , true));
+    }
+    QApplication::postEvent(this, new UPDATE_UI_ACTION_Event(UPDATE_UI_SAVEAS , true));
+    }
+    catch (PlayException &e)
+    {
+        //There was an error in processing of pbn file.
+        QMessageBox::critical(0, tr("ZBridge"), e.what());
+    }
+}
+
 /**
  * @brief CMainFrame::OnUpdateViewFileComments
  * EAK
@@ -479,86 +591,14 @@ void CMainFrame::on_actionOpen_triggered()
                tr("Do you want to save played games?")) == QMessageBox::Yes))
         on_actionSave_triggered();
 
-    try
-    {
     //Determine pbn file to read games from.
     QString originalFileName = QFileDialog::getOpenFileName(this,
         tr("Open Portable Bridge Notation file"), "", tr("Portable Bridge Notation (*.pbn)"));
-    QFile originalFile(originalFileName);
-    if (!originalFile.open(QIODevice::ReadOnly | QIODevice::Text))
+    if (originalFileName.size() == 0)
         return;
-    QTextStream original(&originalFile);
 
-    QTextStream played;
-    QString event;
-
-    //Determine events.
-    QStringList strLines;
-    games->determineEvents(original, strLines);
-
-    if (strLines.size() > 1)
-    {
-        bool ok;
-        event = QInputDialog::getItem(this, tr("Select Event"), tr("Event"), strLines, 0, false, &ok);
-        if (!ok)
-            return;
-    }
-    else if (strLines.size() == 1)
-        event = strLines.at(0);
-
-    //Determine event index.
-    int inx;
-    for (inx = 0; inx < strLines.size(); inx++)
-        if (strLines.at(inx) == event)
-            break;
-
-    //Open file with already (in this program) played games.
-    QString playedFilename = originalFileName.left(originalFileName.indexOf(".pbn", 0, Qt::CaseInsensitive)) +
-            "_" + QString::number(inx) + ".zbr";
-    QFile playedFile(playedFilename);
-
-    //None might be played.
-    if (playedFile.open(QIODevice::ReadOnly | QIODevice::Text))
-        played.setDevice(&playedFile);
-
-    //Read games.
-    original.seek(0);
-    games->readGames(original, played, event, doc->getGameOptions().scoringMethod);
-
-    originalFile.close();
-
-    //Save info about pbn file.
-    eventIndex = inx;
-    fileName = originalFileName;
-
-    //Set up synchronization (auto play or not)-
-    //Open is not available on client, i.e table manager is either server or standalone.
-    disconnect(tableManager, &CTblMngrBase::sigPlayStart, 0, 0);
-    disconnect(tableManagerAuto, &CTblMngrBase::sigPlayStart, 0, 0);
-    if ((doc->getSeatOptions().protocol == BASIC_PROTOCOL) || !games->getComputerPlays())
-        connect(tableManager, &CTblMngrBase::sigPlayStart, tableManager, &CTblMngrBase::sltPlayStart);
-    else
-    {
-        connect(tableManager, &CTblMngrBase::sigPlayStart, tableManagerAuto, &CTblMngrBase::sltPlayStart);
-        connect(tableManagerAuto, &CTblMngrBase::sigPlayStart, tableManager, &CTblMngrBase::sltPlayStart);
-        emit sNewSession();     //To start new session for table manager auto.
-    }
-
-    //Start new session for table manager.
-    tableManager->newSession();
-
-    if (played.device() != 0)
-    {
-        playedFile.close();
-        QApplication::postEvent(this, new UPDATE_UI_ACTION_Event(UPDATE_UI_DELETE , true));
-    }
-    QApplication::postEvent(this, new UPDATE_UI_ACTION_Event(UPDATE_UI_SAVEAS , true));
-    }
-    catch (PlayException &e)
-    {
-        //There was an error in processing of pbn file.
-        QMessageBox::critical(0, tr("ZBridge"), e.what());
-    }
+    //Open file and prepare for play.
+    open(originalFileName);
 }
 
 /**
@@ -608,6 +648,9 @@ void CMainFrame::on_actionSave_As_triggered()
     //Determine pbn file to write to.
     originalFileName = QFileDialog::getSaveFileName(this,
         tr("Save Portable Bridge Notation file"), "", tr("Portable Bridge Notation (*.pbn)"));
+    if (originalFileName.size() == 0)
+        return;
+
     if (originalFileName.indexOf(".pbn", Qt::CaseInsensitive) == -1)
         originalFileName += ".pbn";
 
@@ -628,7 +671,7 @@ void CMainFrame::on_actionSave_As_triggered()
     playedFile.resize(0);
     QTextStream played(&playedFile);
 
-    //Save original games (in case of random generated games there is no original games).
+    //Save original games (in case of random generated games there are no original games).
     games->writeOriginalGames(original);
 
     //Save (by this program) played games.
@@ -691,7 +734,34 @@ void CMainFrame::on_actionExit_triggered()
 
 void CMainFrame::on_action_Lay_Out_Cards_triggered()
 {
+    //Check if there are any original or random non saved games played in the current game deal.
+    if ((games->anyOriginalPlayed() || (games->getDealType() == RANDOM_DEAL)))
+    {
+        if (ui->actionSave->isEnabled())
+        {
+            if (QMessageBox::question(0, tr("ZBridge"),
+                   tr("Current game set will be cleared if you continue.\n You will be asked if you want to save played games.\n Do you want to continue?")) == QMessageBox::No)
+                return;
 
+            //Do you want to save played games?
+            if (QMessageBox::question(0, tr("ZBridge"),
+                   tr("Do you want to save played games?")) == QMessageBox::Yes)
+                on_actionSave_triggered();
+        }
+
+        //Reset play.
+        resetPlay();
+    }
+
+    //Show Lay Out Cards dialog.
+    CLayoutCardsDialog layOutCards(games);
+    if ((layOutCards.exec() == QDialog::Accepted))
+        on_actionSave_As_triggered();
+
+    if (fileName.size() != 0)
+        open(fileName);
+    else
+        games->clearGames(doc->getGameOptions().scoringMethod);
 }
 
 void CMainFrame::on_actionCu_t_triggered()
@@ -891,77 +961,8 @@ void CMainFrame::on_actionSeat_Configuration_triggered()
         //and a new table manager (server or client) is allocated and initialized.
         doc->WriteSeatOptions();
 
-        delete tableManager;
-        tableManager = 0;
-        emit sAutoQuit();
-        tableManagerAuto = 0;
-
-        hostAddress.clear();
-        if ((doc->getSeatOptions().role == SERVER_ROLE) || (doc->getSeatOptions().role == CLIENT_ROLE))
-        {
-            QString host = (doc->getSeatOptions().role == SERVER_ROLE) ? (doc->getSeatOptions().hostServer) :
-                                                                         (doc->getSeatOptions().hostClient);
-            hostAddress = getHostAddress(host);
-            if (hostAddress.isNull())
-                QMessageBox::warning(0, tr("ZBridge"), tr("Could not determine IP address."));
-        }
-
-        //Table manager server?
-        if((doc->getSeatOptions().role == SERVER_ROLE) && !hostAddress.isNull())
-        {
-            try
-            {
-                tableManager = new CTblMngrServer(doc, games, hostAddress, playView, this);
-                tableManagerAuto = new CTblMngrServerAuto(doc, games, hostAddress, 0);
-            }
-            catch (NetProtocolException &e)
-            {
-                QMessageBox::warning(0, tr("ZBridge"), e.what());
-
-                if (tableManager != 0)
-                    delete tableManager;
-                hostAddress.clear();
-            }
-        }
-
-        //Table manager client?
-        else if((doc->getSeatOptions().role == CLIENT_ROLE) && !hostAddress.isNull())
-        {
-            tableManager = new CTblMngrClient(doc, games, hostAddress, playView, this);
-            tableManagerAuto = new CTblMngrClientAuto(doc, games, hostAddress, 0);
-            connect(tableManager, &CTblMngrBase::sigDisconnect, tableManagerAuto, &CTblMngrBase::sltDisconnect);
-            connect(tableManagerAuto, &CTblMngrBase::sigDisconnect, tableManager, &CTblMngrBase::sltDisconnect);
-        }
-
-        //Table manager standalone?
-        if (hostAddress.isNull())
-        {
-            tableManager = new CTblMngrServer(doc, games, hostAddress, playView, this);
-            tableManagerAuto = new CTblMngrServerAuto(doc, games, hostAddress, 0);
-        }
-
-        QThread *thread = new QThread();
-        tableManagerAuto->moveToThread(thread);
-        connect(thread, &QThread::finished, thread, &QThread::deleteLater);
-        connect(this, &CMainFrame::sAutoQuit, tableManagerAuto, &CTblMngrBase::sAutoQuit);
-        connect(this, &CMainFrame::sNewSession, tableManagerAuto, &CTblMngrBase::sNewSession);
-        connect(tableManager, &CTblMngrBase::sStatusText , this, &CMainFrame::sStatusText);
-        thread->start();
-
-        connect(tableManager, &CTblMngr::sShowScore, this, &CMainFrame::on_action_Score_triggered);
-
-        //If non saved game then ask if it should be saved (save can only be enabled on server).
-        if ((ui->actionSave->isEnabled()) &&
-                (QMessageBox::question(0, tr("ZBridge"),
-                                       tr("Do you want to save played games?")) == QMessageBox::Yes))
-            on_actionSave_triggered();
-
-        //Hide score table in case it is shown and clear games.
-        mainScoreDialog->hide();
-        games->clearGames(doc->getGameOptions().scoringMethod);
-
-        //Clear expose all cards.
-        ui->action_Expose_All_Cards->setChecked(false);
+        //Reset play.
+        resetPlay();
     }
 }
 

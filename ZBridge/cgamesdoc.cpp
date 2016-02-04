@@ -518,6 +518,16 @@ int CGamesDoc::getMaxNumberAuctionAndPlay()
     return maxNuberAuctionAndPlay;
 }
 
+bool CGamesDoc::anyOriginalPlayed()
+{
+    for (int i = 0; i < games.size(); i++)
+        for (int j = 0; j < games[i]->auctionAndPlay.size(); j++)
+            if (games[i]->auctionAndPlay[j]->gameType == ORIGINAL_GAME)
+                return true;
+
+    return false;
+}
+
 int CGamesDoc::getPlayedAuctionAndPlayIndex(int gameIndex)
 {
     int auctionAndPlayIndex;

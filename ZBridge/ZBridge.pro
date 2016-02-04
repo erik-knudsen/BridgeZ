@@ -98,7 +98,8 @@ SOURCES +=\
     ctblmngrserverauto.cpp \
     ctblmngrclientauto.cpp \
     mt19937ar.cpp \
-    cddtable.cpp
+    cddtable.cpp \
+    clayoutcardsdialog.cpp
 
 HEADERS  += cmainframe.h \
     czbridgedoc.h \
@@ -188,7 +189,8 @@ HEADERS  += cmainframe.h \
     ctblmngrserverauto.h \
     ctblmngrclientauto.h \
     mt19937ar.h \
-    cddtable.h
+    cddtable.h \
+    clayoutcardsdialog.h
 
 FORMS    += cmainframe.ui \
     cfilepropertiesdialog.ui \
@@ -220,6 +222,7 @@ FORMS    += cmainframe.ui \
     cplaydialog.ui \
     crankscoredialog.ui \
     cplayshow.ui \
-    cddtable.ui
+    cddtable.ui \
+    clayoutcardsdialog.ui
 
 RESOURCES = images.qrc

@@ -48,9 +48,9 @@ enum tagIds { TAG_EVENT = 0, TAG_SITE, TAG_DATE, TAG_ROUND, TAG_BOARD, TAG_WEST,
  *   - Games played manually by the user in cooperation with this program. They are called played games.
  *   - Games played automatically by this program. They are called auto games.
  * When data is saved, only played and auto games are saved.\n
- * There are two types of game sets:
- *   - Original games as read from a pbn file.
- *   - Random generated (by this program) games.
+ * There are two types of game deals (collection of games):
+ *   - Original deals as read from a pbn file.
+ *   - Random generated (by this program) deals.
  */
 class CGamesDoc : public QObject
 {
@@ -76,6 +76,7 @@ public:
     int getNumberPlayedGames();
     int getNumberAuctionAndPlay(int gameIndex);
     int getMaxNumberAuctionAndPlay();
+    bool anyOriginalPlayed();
     int getPlayedAuctionAndPlayIndex(int gameIndex);
     void getGame(int gameIndex, int *board, Seat *dealer, Team *vulnerable,
                  int *wCards = 0, int *nCards = 0, int *eCards = 0, int *sCards = 0);
@@ -94,6 +95,7 @@ public:
     int getBelowTheLine(int gameIndex);
     int getAboveTheLine(int gameIndex);
     int getHonorBonus(int gameIndex);
+    DealType getDealType() { return dealType; }
     ScoringMethod getScoringMethod();
     void setScoringMethod(ScoringMethod scoringMethod) { this->scoringMethod = scoringMethod; }
     bool getComputerPlays() { return computerPlays; }

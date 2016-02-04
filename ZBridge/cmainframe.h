@@ -85,6 +85,8 @@ private:
     virtual void customEvent(QEvent *event);
 
     void enableUIActions(actionIndicator actions, bool advProtocol);
+    void resetPlay();
+    void open(QString &originalFileName);
 
     Ui::CMainFrame *ui;
     CZBridgeApp *app;
