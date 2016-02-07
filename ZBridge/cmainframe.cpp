@@ -427,7 +427,6 @@ void CMainFrame::resetPlay()
 
     //Hide score table in case it is shown and clear games.
     mainScoreDialog->hide();
-    games->clearGames(doc->getGameOptions().scoringMethod);
 
     //Clear expose all cards.
     ui->action_Expose_All_Cards->setChecked(false);
@@ -748,10 +747,11 @@ void CMainFrame::on_action_Lay_Out_Cards_triggered()
                    tr("Do you want to save played games?")) == QMessageBox::Yes)
                 on_actionSave_triggered();
         }
-
-        //Reset play.
-        resetPlay();
+        games->clearGames(doc->getGameOptions().scoringMethod);
     }
+
+    //Reset play.
+    resetPlay();
 
     //Show Lay Out Cards dialog.
     CLayoutCardsDialog layOutCards(games);
@@ -963,6 +963,7 @@ void CMainFrame::on_actionSeat_Configuration_triggered()
 
         //Reset play.
         resetPlay();
+        games->clearGames(doc->getGameOptions().scoringMethod);
     }
 }
 

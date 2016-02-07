@@ -23,6 +23,8 @@
 
 #include <QDialog>
 #include <QToolButton>
+#include <QPushButton>
+#include <QLabel>
 
 #include "Defines.h"
 
@@ -99,15 +101,20 @@ private slots:
     void on_C2_clicked();
     void on_backward_clicked();
     void on_forward_clicked();
-    void on_spinBoard_valueChanged(const QString &arg1);
-    void on_spinDealer_valueChanged(const QString &arg1);
-    void on_spinVul_valueChanged(const QString &arg1);
     void on_clearDeal_clicked();
     void on_dealRemaining_clicked();
     void on_buttonBox_accepted();
     void on_buttonBox_rejected();
 
 private:
+    void initialize();
+    void insertCard(int card, int cCards[4][13]);
+    void insertSorted(int face, int cCards[13]);
+    void removeCard(Suit suit, int face, Seat *seat);
+    void selectSeat(Seat currentSeat, QPushButton *pSeat[4]);
+    void handsText(QString &text, int cCards[13]);
+    void cardClicked(Suit suit, int face);
+
     Ui::CLayoutCardsDialog *ui;
 
     struct buttons
@@ -121,6 +128,13 @@ private:
     Seat dealer;
     Team vul;
     int cards[4][13];
+    int cCards[4][4][13];
+    QLabel *pHands[4][4];
+
+    int relInx;
+    Seat currentSeat;
+    QPushButton *pSeat[4];
+    int count[4];
 };
 
 #endif // CLAYOUTCARDSDIALOG_H

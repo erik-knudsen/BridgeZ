@@ -64,6 +64,8 @@ public:
     void prepNextDeal();
     void getNextDeal(int *board, int cards[][13], Seat *dealer, Team *vulnerable);
     void getCurrentDeal(int *board, int cards[][13], Seat *dealer, Team *vulnerable);
+    bool getDeal(int relInx, int *board, int cards[][13], Seat *dealer, Team *vulnerable);
+    int setDeal(int relInx, int board, int cards[][13], Seat dealer, Team vulnerable);
     void setNextDeal(int board, Seat dealer, Team vulnerable);
     void setNextDeal(int cards[][13]);
     void setPlayedResult(CBidHistory &bidHistory, CPlayHistory &playHistory, QString &westName, QString &northName,
@@ -167,6 +169,7 @@ private:
     void makePlay(QTextStream &stream, CPlayHistory &playHistory);
     int getIndexAndSeat(int gameIndex, QString &nameWN, QString &nameES, Seat *seat);
     Team getRubberVulnerable(int gameIndex);
+    bool checkCards(int wCards[], int nCards[], int eCards[], int sCards[]);
 
     QString event;              /**< The current game event. */
     QList<CGame *> games;       /**< List with all games. */

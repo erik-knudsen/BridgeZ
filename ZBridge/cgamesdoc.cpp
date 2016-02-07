@@ -296,6 +296,103 @@ void CGamesDoc::getCurrentDeal(int *board, int cards[][13], Seat *dealer, Team *
 }
 
 /**
+ * @brief Retrieve game in the current game set (server only).
+ * @param[in] relInx Relative index to current deal for the game to get.
+ * @param[out] board Board number for the game.
+ * @param[out] cards The cards for the game.
+ * @param[out] dealer The dealer for the game.
+ * @param[out] vulnerable The vulnerability for the game.
+ * @return true if there is a game in the game set, otherwise false.
+ *
+ * Retrieves the current game in the current game set. This function is only
+ * used when laying out deals.
+ */
+bool CGamesDoc::getDeal(int relInx, int *board, int cards[][13], Seat *dealer, Team *vulnerable)
+{
+    if (games.size() <= (currentGameIndex + relInx))
+    {
+        *board = currentGameIndex + relInx + 1;
+        for (int i = 0; i < games.size(); i++)
+            if (*board <= games[i]->board)
+                *board = games[i]->board + 1;
+        return false;
+    }
+
+    //Take card distribution etc. from the game.
+    CGame *currentGame = games[currentGameIndex + relInx];
+    *board = currentGame->board;
+    *dealer = currentGame->dealer;
+    *vulnerable = currentGame->vulnerable;
+    for (int i = 0; i < 13; i++)
+    {
+        cards[WEST_SEAT][i] = currentGame->wCards[i];
+        cards[NORTH_SEAT][i] = currentGame->nCards[i];
+        cards[EAST_SEAT][i] = currentGame->eCards[i];
+        cards[SOUTH_SEAT][i] = currentGame->sCards[i];
+    }
+    return true;
+}
+
+/**
+ * @brief Set info for the game in the current game set (server only).
+ * @param[in] relInx Relative index to the current game for the game to set.
+ * @param[in] board Board number for the game.
+ * @param[in] cards The cards for the game.
+ * @param[in] dealer The dealer for the game.
+ * @param[in] vulnerable The vulnerability for the game.
+ * @return relative index to the current game of where the game was actually set.
+ *
+ * Sets info for game in the current game set. In case the relative index points
+ * beyond the games in the game set, then a new game is appended. It is assured that
+ * the deal type is considered and original deal. This function is only used when
+ * laying out deals.
+ */
+int CGamesDoc::setDeal(int relInx, int board, int cards[][13], Seat dealer, Team vulnerable)
+{
+    //Check proper board, dealer and vulnerability.
+    bool foundBoard = false;
+    for (int i = 0; i < games.size(); i++)
+        if (board == games[i]->board)
+            foundBoard = true;
+    assert(!foundBoard);
+
+    assert((board > 0) && (dealer != NO_SEAT) &&
+            (vulnerable != NONE));
+
+    //Check cards.
+    assert(checkCards(cards[WEST_SEAT], cards[NORTH_SEAT], cards[EAST_SEAT], cards[SOUTH_SEAT]));
+
+    if (dealType != ORIGINAL_DEAL)
+        dealType= ORIGINAL_DEAL;
+
+    int inx = relInx;
+
+    CGame *currentGame;
+    if (games.size() <= (currentGameIndex + relInx))
+    {
+        currentGame = new CGame();
+        games.append(currentGame);
+        inx = games.size() - currentGameIndex - 1;
+    }
+    else
+        currentGame = games[currentGameIndex + relInx];
+
+    currentGame->board = board;
+    currentGame->dealer = dealer;
+    currentGame->vulnerable = vulnerable;
+
+    //Save game.
+    for (int i = 0; i < 13; i++)
+    {
+        currentGame->wCards[i] = cards[WEST_SEAT][i];
+        currentGame->nCards[i] = cards[NORTH_SEAT][i];
+        currentGame->eCards[i] = cards[EAST_SEAT][i];
+        currentGame->sCards[i] = cards[SOUTH_SEAT][i];
+    }
+    return inx;
+}
+
+/**
  * @brief Set info for the next game in the current game set (client only).
  * @param[in] board Board number for the next game.
  * @param[in] dealer The dealer for the next game.
@@ -2003,10 +2100,9 @@ void CGamesDoc::readGames(QTextStream &pbnText, QString &event, bool originalGam
                 throw PlayException(QString("PBN - Consistency error in original games (Dealer, Board or vulnerability) in board: %1").arg(nextGame->board).toStdString());
 
             //Check cards.
-            for (int i = 0; i < 13; i++)
-                if ((nextGame->wCards[i] < 0) || (nextGame->nCards[i] < 0) ||
-                        (nextGame->eCards[i] < 0) || (nextGame->sCards[i] < 0))
-                    throw PlayException(QString("PBN - Consistency error in original games (Cards missing in Deal) in board: %1").arg(nextGame->board).toStdString());
+            if (!checkCards(nextGame->wCards, nextGame->nCards,
+                            nextGame->eCards, nextGame->sCards))
+                throw PlayException(QString("PBN - Consistency error in original games (Cards missing in Deal) in board: %1").arg(nextGame->board).toStdString());
 
             //Check auction and play.
             QListIterator<CAuctionAndPlay *> auctionAndPlayItr(nextGame->auctionAndPlay);
@@ -2078,10 +2174,9 @@ void CGamesDoc::readGames(QTextStream &pbnText, QString &event, bool originalGam
                     throw PlayException(QString("PBN - Consistency error in played games (Dealer, Board or Vulnerability) in board: %1").arg(nextGame->board).toStdString());
 
                 //Check cards.
-                for (int i = 0; i < 13; i++)
-                    if ((nextGame->wCards[i] < 0) || (nextGame->nCards[i] < 0) ||
-                            (nextGame->eCards[i] < 0) || (nextGame->sCards[i] < 0))
-                        throw PlayException(QString("PBN - Consistency error in played games (Cards missing in Deal) in board: %1").arg(nextGame->board).toStdString());
+                if (!checkCards(nextGame->wCards, nextGame->nCards,
+                        nextGame->eCards, nextGame->sCards))
+                    throw PlayException(QString("PBN - Consistency error in played games (Cards missing in Deal) in board: %1").arg(nextGame->board).toStdString());
             }
         }
 
@@ -3027,4 +3122,28 @@ Team CGamesDoc::getRubberVulnerable(int gameIndex)
     }
 
     return vulnerable;
+}
+
+bool CGamesDoc::checkCards(int wCards[], int nCards[], int eCards[], int sCards[])
+{
+    bool found[52];
+    for (int i = 0; i < 52; i++)
+         found[i] = false;
+    for (int i = 0; i < 13; i++)
+        if ((wCards[i] >= 0) && (nCards[i] >= 0) &&
+                (eCards[i] >= 0) && (sCards[i] >= 0) &&
+                (wCards[i] < 52) && (nCards[i] < 52) &&
+                (eCards[i] < 52) && (sCards[i] < 52))
+        {
+            found[wCards[i]] = true;
+            found[nCards[i]] = true;
+            found[eCards[i]] = true;
+            found[sCards[i]] = true;
+        }
+
+    for (int i = 0; i < 52; i++)
+        if (!found[i])
+            return false;
+
+    return true;
 }
