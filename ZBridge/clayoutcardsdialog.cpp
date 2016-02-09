@@ -21,6 +21,7 @@
 #include <cassert>
 #include <QMessageBox>
 
+#include "mt19937ar.h"
 #include "cgamesdoc.h"
 #include "clayoutcardsdialog.h"
 #include "ui_clayoutcardsdialog.h"
@@ -489,11 +490,70 @@ void CLayoutCardsDialog::on_forward_clicked()
 }
 
 void CLayoutCardsDialog::on_clearDeal_clicked()
-{
+{  
+    for (int i = 0; i < 4; i++)
+    for (int k = 0; k < 4; k++)
+    for (int j = 0; j < 13; j++)
+       cCards[i][k][j] = -1;
+
+    for (int i = 0; i < 4; i++)
+    for (int j = 0; j < 13; j++)
+    {
+        buttons[i][j].isDealt = false;
+        buttons[i][j].pButton->setText(faces[j]);
+    }
+
+    for (int i = 0; i < 4; i++)
+        count[i] = 0;
+
+    for (int i = 0; i < 4; i++)
+    for (int k = 0; k < 4; k++)
+        pHands[i][k]->setText(" ");
 }
 
 void CLayoutCardsDialog::on_dealRemaining_clicked()
 {
+    Seat oldSeat = currentSeat;
+    int cardValues[52];
+    int noCard = 0;
+
+    //Find cards remaining to be dealt.
+    for (int k = 0; k < 4; k++)
+    for (int j = 0; j < 13; j++)
+        if (!buttons[k][j].isDealt)
+        {
+            int card = MAKE_CARD(k, j);
+            cardValues[noCard++] = card;
+        }
+
+    for (int i = 0; i < 4; i++)
+    {
+        //For seat calculate count of cards already dealt to this seat.
+        int count = 0;
+        for (int k = 0; k < 4; k++)
+            for (int j = 0; j < 13; j++)
+                if (cCards[i][k][j] != -1)
+                    count++;
+
+        currentSeat = (Seat)i;
+
+        //Deal remaing cards for the seat.
+        for (int j = count; j < 13; j++)
+        {
+            assert(noCard != 0);
+
+            int inx = genrand_int32()%(noCard);
+            int card = cardValues[inx];
+            Suit suit = CARD_SUIT(card);
+            int face = CARD_FACE(card);
+            cardClicked(suit, face);
+
+            --noCard;
+            for (int k = inx; k < noCard; k++)
+                cardValues[k] = cardValues[k + 1];
+        }
+    }
+    currentSeat = oldSeat;
 }
 
 void CLayoutCardsDialog::on_buttonBox_accepted()
