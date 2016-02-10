@@ -27,6 +27,7 @@
 #include <QLabel>
 
 #include "Defines.h"
+#include "cgamesdoc.h"
 
 class CGamesDoc;
 
@@ -99,8 +100,10 @@ private slots:
     void on_C4_clicked();
     void on_C3_clicked();
     void on_C2_clicked();
+    void on_first_clicked();
     void on_backward_clicked();
     void on_forward_clicked();
+    void on_last_clicked();
     void on_clearDeal_clicked();
     void on_dealRemaining_clicked();
     void on_buttonBox_accepted();
@@ -114,9 +117,10 @@ private:
     void selectSeat(Seat currentSeat, QPushButton *pSeat[4]);
     void handsText(QString &text, int cCards[13]);
     void cardClicked(Suit suit, int face);
+    void upDateSelectButtons();
 
     Ui::CLayoutCardsDialog *ui;
-
+    CGamesDoc *games;
     struct buttons
     {
         bool isDealt;
@@ -135,6 +139,9 @@ private:
     Seat currentSeat;
     QPushButton *pSeat[4];
     int count[4];
+
+    bool gameChanged;
+    bool updateSelect;
 };
 
 #endif // CLAYOUTCARDSDIALOG_H

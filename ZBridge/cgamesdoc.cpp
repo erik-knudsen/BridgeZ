@@ -350,11 +350,19 @@ bool CGamesDoc::getDeal(int relInx, int *board, int cards[][13], Seat *dealer, T
 int CGamesDoc::setDeal(int relInx, int board, int cards[][13], Seat dealer, Team vulnerable)
 {
     //Check proper board, dealer and vulnerability.
-    bool foundBoard = false;
-    for (int i = 0; i < games.size(); i++)
-        if (board == games[i]->board)
-            foundBoard = true;
-    assert(!foundBoard);
+    if (games.size() <= (currentGameIndex + relInx))
+    {
+        bool foundBoard = false;
+        for (int i = 0; i < games.size(); i++)
+            if (board == games[i]->board)
+                foundBoard = true;
+        assert(!foundBoard);
+    }
+    else
+    {
+        bool foundBoard = (games[currentGameIndex + relInx]->board == board);
+        assert(foundBoard);
+    }
 
     assert((board > 0) && (dealer != NO_SEAT) &&
             (vulnerable != NONE));
@@ -585,9 +593,9 @@ void CGamesDoc::determineEvents(QTextStream &original, QStringList &events)
     }
 }
 
-int CGamesDoc::getNumberOfNotPlayedGames()
+int CGamesDoc::getNumberOfNotPlayedGames(int noRandomDeals)
 {
-    int noGames = (dealType == RANDOM_DEAL) ? (NO_RANDOM_DEALS) : (games.size());
+    int noGames = (dealType == RANDOM_DEAL) ? (noRandomDeals) : (games.size());
 
     return (noGames - getNumberPlayedGames());
 }

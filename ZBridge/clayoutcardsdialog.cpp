@@ -22,7 +22,6 @@
 #include <QMessageBox>
 
 #include "mt19937ar.h"
-#include "cgamesdoc.h"
 #include "clayoutcardsdialog.h"
 #include "ui_clayoutcardsdialog.h"
 
@@ -30,6 +29,8 @@ CLayoutCardsDialog::CLayoutCardsDialog(CGamesDoc *games, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::CLayoutCardsDialog)
 {
+    this->games = games;
+
     ui->setupUi(this);
 
     //Initial seat selected.
@@ -190,6 +191,8 @@ CLayoutCardsDialog::CLayoutCardsDialog(CGamesDoc *games, QWidget *parent) :
     labels << tr("Neither") << tr("North/South") << tr("East/West") << tr("Both");
     ui->vul->addItems(labels);
     ui->vul->setCurrentIndex(vul);
+
+    upDateSelectButtons();
 }
 
 CLayoutCardsDialog::~CLayoutCardsDialog()
@@ -481,34 +484,32 @@ void CLayoutCardsDialog::on_C2_clicked()
     cardClicked(CLUBS, 0);
 }
 
+void CLayoutCardsDialog::on_first_clicked()
+{
+    assert((relInx != 0) && (count[0] == 13) && (count[1] == 13) && (count[2] == 13) && (count[3] == 13));
+}
+
 void CLayoutCardsDialog::on_backward_clicked()
 {
+    assert((relInx != 0) && (count[0] == 13) && (count[1] == 13) && (count[2] == 13) && (count[3] == 13));
 }
 
 void CLayoutCardsDialog::on_forward_clicked()
 {
+    assert((count[0] == 13) && (count[1] == 13) && (count[2] == 13) && (count[3] == 13));
+}
+
+void CLayoutCardsDialog::on_last_clicked()
+{
+    assert((count[0] == 13) && (count[1] == 13) && (count[2] == 13) && (count[3] == 13));
 }
 
 void CLayoutCardsDialog::on_clearDeal_clicked()
 {  
     for (int i = 0; i < 4; i++)
-    for (int k = 0; k < 4; k++)
     for (int j = 0; j < 13; j++)
-       cCards[i][k][j] = -1;
-
-    for (int i = 0; i < 4; i++)
-    for (int j = 0; j < 13; j++)
-    {
-        buttons[i][j].isDealt = false;
-        buttons[i][j].pButton->setText(faces[j]);
-    }
-
-    for (int i = 0; i < 4; i++)
-        count[i] = 0;
-
-    for (int i = 0; i < 4; i++)
-    for (int k = 0; k < 4; k++)
-        pHands[i][k]->setText(" ");
+        if (buttons[i][j].isDealt)
+            cardClicked((Suit)i, j);
 }
 
 void CLayoutCardsDialog::on_dealRemaining_clicked()
@@ -558,6 +559,7 @@ void CLayoutCardsDialog::on_dealRemaining_clicked()
 
 void CLayoutCardsDialog::on_buttonBox_accepted()
 {
+    assert((count[0] == 13) && (count[1] == 13) && (count[2] == 13) && (count[3] == 13));
 }
 
 void CLayoutCardsDialog::on_buttonBox_rejected()
@@ -639,6 +641,12 @@ void CLayoutCardsDialog::cardClicked(Suit suit, int face)
 {
     if (buttons[suit][face].isDealt)
     {
+        if (!gameChanged)
+        {
+            gameChanged = true;
+            updateSelect = true;
+        }
+
         //Move it from dealt to not dealt.
         Seat seat;
         removeCard(suit, face, &seat);
@@ -651,9 +659,17 @@ void CLayoutCardsDialog::cardClicked(Suit suit, int face)
 
         buttons[suit][face].isDealt = false;
         buttons[suit][face].pButton->setText(faces[face]);
+
+        upDateSelectButtons();
     }
     else if (count[currentSeat] < 13)
     {
+        if (!gameChanged)
+        {
+            gameChanged = true;
+            updateSelect = true;
+        }
+
         count[currentSeat]++;
 
         QString text;
@@ -663,7 +679,48 @@ void CLayoutCardsDialog::cardClicked(Suit suit, int face)
 
         buttons[suit][face].isDealt = true;
         buttons[suit][face].pButton->setText(" ");
+
+        upDateSelectButtons();
     }
     else
         QMessageBox::warning(0, tr("ZBridge"), tr("Hand is full."));
+}
+
+void CLayoutCardsDialog::upDateSelectButtons()
+{
+    bool none = ((count[0] == 0) && (count[1] == 0) && (count[2] == 0) && (count[3] == 0));
+    bool all = ((count[0] == 13) && (count[1] == 13) && (count[2] == 13) && (count[3] == 13));
+    if (none || all)
+    {
+        gameChanged = false;
+        updateSelect = true;
+    }
+
+    if (!updateSelect)
+        return;
+
+    updateSelect = false;
+
+    QPushButton *okButton = ui->buttonBox->button(QDialogButtonBox::Ok);
+
+    ui->clearDeal->setDisabled(none);
+    ui->dealRemaining->setDisabled(all);
+
+    int noEditable = games->getNumberOfNotPlayedGames(0);
+    if (((noEditable == 0) && !all) || (!none && !all))
+    {
+        ui->backward->setDisabled(true);
+        ui->forward->setDisabled(true);
+        ui->first->setDisabled(true);
+        ui->last->setDisabled(true);
+        okButton->setDisabled(true);
+    }
+    else if (all || none)
+    {
+        ui->backward->setDisabled(relInx == 0);
+        ui->forward->setDisabled(false);
+        ui->first->setDisabled(relInx == 0);
+        ui->last->setDisabled(false);
+        okButton->setDisabled(false);
+    }
 }
