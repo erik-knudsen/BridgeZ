@@ -25,6 +25,13 @@
 #include "clayoutcardsdialog.h"
 #include "ui_clayoutcardsdialog.h"
 
+/**
+ * @brief Constructor for the layout card class.
+ * @param games Pointer to the games to edit.
+ * @param parent Parent of the class.
+ *
+ * Initialization is performed and the first deal to edit is shown.
+ */
 CLayoutCardsDialog::CLayoutCardsDialog(CGamesDoc *games, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::CLayoutCardsDialog)
@@ -32,9 +39,6 @@ CLayoutCardsDialog::CLayoutCardsDialog(CGamesDoc *games, QWidget *parent) :
     this->games = games;
 
     ui->setupUi(this);
-
-    //Initial seat selected.
-    currentSeat = WEST_SEAT;
 
     //Cards faces.
     faces[0] = tr("2");
@@ -58,11 +62,6 @@ CLayoutCardsDialog::CLayoutCardsDialog(CGamesDoc *games, QWidget *parent) :
     pSeat[SOUTH_SEAT] = ui->south;
     for (int i = 0; i < 4; i++)
         pSeat[i]->setCheckable(true);
-
-    //No cards are dealt initially.
-    for (int i = 0; i < 4; i++)
-    for (int j = 0; j < 13; j++)
-        buttons[i][j].isDealt = false;
 
     //Pointer to buttons (indexed by color, face).
     buttons[SPADES][12].pButton = ui->SA;
@@ -121,6 +120,7 @@ CLayoutCardsDialog::CLayoutCardsDialog(CGamesDoc *games, QWidget *parent) :
     buttons[CLUBS][1].pButton = ui->C3;
     buttons[CLUBS][0].pButton = ui->C2;
 
+    //Pointer to hands.
     pHands[WEST_SEAT][SPADES] = ui->westSpade;
     pHands[WEST_SEAT][HEARTS] = ui->westHeart;
     pHands[WEST_SEAT][DIAMONDS] = ui->westDiamond;
@@ -141,57 +141,18 @@ CLayoutCardsDialog::CLayoutCardsDialog(CGamesDoc *games, QWidget *parent) :
     pHands[SOUTH_SEAT][DIAMONDS] = ui->southDiamond;
     pHands[SOUTH_SEAT][CLUBS] = ui->southClub;
 
-    for (int i = 0; i < 4; i++)
-    for (int k = 0; k < 4; k++)
-    for (int j = 0; j < 13; j++)
-       cCards[i][k][j] = -1;
-
-    relInx = 0;
-    if (games->getDeal(relInx, &board, cards, &dealer, &vul))
-    {
-        for (int i = 0; i < 4; i++)
-            count[i] = 13;
-
-        for (int i = 0; i < 4; i++)
-        for (int j = 0; j < 13; j++)
-        {
-            buttons[i][j].isDealt = true;
-            buttons[i][j].pButton->setText(" ");
-        }
-        initialize();
-
-        for (int i = 0; i < 4; i++)
-        for (int k = 0; k < 4; k++)
-        {
-            QString text;
-            handsText(text, cCards[i][k]);
-            pHands[i][k]->setText(text);
-        }
-    }
-    else
-    {
-        for (int i = 0; i < 4; i++)
-            count[i] = 0;
-
-        for (int i = 0; i < 4; i++)
-        for (int k = 0; k < 4; k++)
-            pHands[i][k]->setText(" ");
-
-        dealer = Seat((board - 1) % 4);
-        vul = Team(((board - 1) % 4 + board/4)%4);
-    }
-    ui->board->setText(QString::number(board));
-    selectSeat(currentSeat, pSeat);
+    //Combo boxes with dealer and vulnerability.
     QStringList labels;
     labels << tr("West") << tr("North") << tr("East") << tr("South");
     ui->dealer->addItems(labels);
-    ui->dealer->setCurrentIndex(dealer);
 
     labels.clear();
     labels << tr("Neither") << tr("North/South") << tr("East/West") << tr("Both");
     ui->vul->addItems(labels);
-    ui->vul->setCurrentIndex(vul);
 
+    //Set up the first deal to edit.
+    relInx = 0;
+    setCurrentDeal();
     upDateSelectButtons();
 }
 
@@ -200,310 +161,537 @@ CLayoutCardsDialog::~CLayoutCardsDialog()
     delete ui;
 }
 
+/**
+ * @brief Current seat is set to west.
+ */
 void CLayoutCardsDialog::on_west_clicked()
 {
     currentSeat = WEST_SEAT;
     selectSeat(currentSeat, pSeat);
 }
 
+/**
+ * @brief Current seat is set to north.
+ */
 void CLayoutCardsDialog::on_north_clicked()
 {
     currentSeat = NORTH_SEAT;
     selectSeat(currentSeat, pSeat);
 }
 
+/**
+ * @brief Current seat is set to east.
+ */
 void CLayoutCardsDialog::on_east_clicked()
 {
     currentSeat = EAST_SEAT;
     selectSeat(currentSeat, pSeat);
 }
 
+/**
+ * @brief Current seat is set to south.
+ */
 void CLayoutCardsDialog::on_south_clicked()
 {
     currentSeat = SOUTH_SEAT;
     selectSeat(currentSeat, pSeat);
 }
 
+/**
+ * @brief Card to deal or retract was clicked.
+ */
 void CLayoutCardsDialog::on_SA_clicked()
 {
     cardClicked(SPADES, 12);
 }
 
+/**
+ * @brief Card to deal or retract was clicked.
+ */
 void CLayoutCardsDialog::on_SK_clicked()
 {
     cardClicked(SPADES, 11);
 }
 
+/**
+ * @brief Card to deal or retract was clicked.
+ */
 void CLayoutCardsDialog::on_SQ_clicked()
 {
     cardClicked(SPADES, 10);
 }
 
+/**
+ * @brief Card to deal or retract was clicked.
+ */
 void CLayoutCardsDialog::on_SJ_clicked()
 {
     cardClicked(SPADES, 9);
 }
 
+/**
+ * @brief Card to deal or retract was clicked.
+ */
 void CLayoutCardsDialog::on_ST_clicked()
 {
     cardClicked(SPADES, 8);
 }
 
+/**
+ * @brief Card to deal or retract was clicked.
+ */
 void CLayoutCardsDialog::on_S9_clicked()
 {
     cardClicked(SPADES, 7);
 }
 
+/**
+ * @brief Card to deal or retract was clicked.
+ */
 void CLayoutCardsDialog::on_S8_clicked()
 {
     cardClicked(SPADES, 6);
 }
 
+/**
+ * @brief Card to deal or retract was clicked.
+ */
 void CLayoutCardsDialog::on_S7_clicked()
 {
     cardClicked(SPADES, 5);
 }
 
+/**
+ * @brief Card to deal or retract was clicked.
+ */
 void CLayoutCardsDialog::on_S6_clicked()
 {
     cardClicked(SPADES, 4);
 }
 
+/**
+ * @brief Card to deal or retract was clicked.
+ */
 void CLayoutCardsDialog::on_S5_clicked()
 {
     cardClicked(SPADES, 3);
 }
 
+/**
+ * @brief Card to deal or retract was clicked.
+ */
 void CLayoutCardsDialog::on_S4_clicked()
 {
     cardClicked(SPADES, 2);
 }
 
+/**
+ * @brief Card to deal or retract was clicked.
+ */
 void CLayoutCardsDialog::on_S3_clicked()
 {
     cardClicked(SPADES, 1);
 }
 
+/**
+ * @brief Card to deal or retract was clicked.
+ */
 void CLayoutCardsDialog::on_S2_clicked()
 {
     cardClicked(SPADES, 0);
 }
 
+/**
+ * @brief Card to deal or retract was clicked.
+ */
 void CLayoutCardsDialog::on_HA_clicked()
 {
     cardClicked(HEARTS, 12);
 }
 
+/**
+ * @brief Card to deal or retract was clicked.
+ */
 void CLayoutCardsDialog::on_HK_clicked()
 {
     cardClicked(HEARTS, 11);
 }
 
+/**
+ * @brief Card to deal or retract was clicked.
+ */
 void CLayoutCardsDialog::on_HQ_clicked()
 {
     cardClicked(HEARTS, 10);
 }
 
+/**
+ * @brief Card to deal or retract was clicked.
+ */
 void CLayoutCardsDialog::on_HJ_clicked()
 {
     cardClicked(HEARTS, 9);
 }
 
+/**
+ * @brief Card to deal or retract was clicked.
+ */
 void CLayoutCardsDialog::on_HT_clicked()
 {
     cardClicked(HEARTS, 8);
 }
 
+/**
+ * @brief Card to deal or retract was clicked.
+ */
 void CLayoutCardsDialog::on_H9_clicked()
 {
     cardClicked(HEARTS, 7);
 }
 
+/**
+ * @brief Card to deal or retract was clicked.
+ */
 void CLayoutCardsDialog::on_H8_clicked()
 {
     cardClicked(HEARTS, 6);
 }
 
+/**
+ * @brief Card to deal or retract was clicked.
+ */
 void CLayoutCardsDialog::on_H7_clicked()
 {
     cardClicked(HEARTS, 5);
 }
 
+/**
+ * @brief Card to deal or retract was clicked.
+ */
 void CLayoutCardsDialog::on_H6_clicked()
 {
     cardClicked(HEARTS, 4);
 }
 
+/**
+ * @brief Card to deal or retract was clicked.
+ */
 void CLayoutCardsDialog::on_H5_clicked()
 {
     cardClicked(HEARTS, 3);
 }
 
+/**
+ * @brief Card to deal or retract was clicked.
+ */
 void CLayoutCardsDialog::on_H4_clicked()
 {
     cardClicked(HEARTS, 2);
 }
 
+/**
+ * @brief Card to deal or retract was clicked.
+ */
 void CLayoutCardsDialog::on_H3_clicked()
 {
     cardClicked(HEARTS, 1);
 }
 
+/**
+ * @brief Card to deal or retract was clicked.
+ */
 void CLayoutCardsDialog::on_H2_clicked()
 {
     cardClicked(HEARTS, 0);
 }
 
+/**
+ * @brief Card to deal or retract was clicked.
+ */
 void CLayoutCardsDialog::on_DA_clicked()
 {
     cardClicked(DIAMONDS, 12);
 }
 
+/**
+ * @brief Card to deal or retract was clicked.
+ */
 void CLayoutCardsDialog::on_DK_clicked()
 {
     cardClicked(DIAMONDS, 11);
 }
 
+/**
+ * @brief Card to deal or retract was clicked.
+ */
 void CLayoutCardsDialog::on_DQ_clicked()
 {
     cardClicked(DIAMONDS, 10);
 }
 
+/**
+ * @brief Card to deal or retract was clicked.
+ */
 void CLayoutCardsDialog::on_DJ_clicked()
 {
     cardClicked(DIAMONDS, 9);
 }
 
+/**
+ * @brief Card to deal or retract was clicked.
+ */
 void CLayoutCardsDialog::on_DT_clicked()
 {
     cardClicked(DIAMONDS, 8);
 }
 
+/**
+ * @brief Card to deal or retract was clicked.
+ */
 void CLayoutCardsDialog::on_D9_clicked()
 {
     cardClicked(DIAMONDS, 7);
 }
 
+/**
+ * @brief Card to deal or retract was clicked.
+ */
 void CLayoutCardsDialog::on_D8_clicked()
 {
     cardClicked(DIAMONDS, 6);
 }
 
+/**
+ * @brief Card to deal or retract was clicked.
+ */
 void CLayoutCardsDialog::on_D7_clicked()
 {
     cardClicked(DIAMONDS, 5);
 }
 
+/**
+ * @brief Card to deal or retract was clicked.
+ */
 void CLayoutCardsDialog::on_D6_clicked()
 {
     cardClicked(DIAMONDS, 4);
 }
 
+/**
+ * @brief Card to deal or retract was clicked.
+ */
 void CLayoutCardsDialog::on_D5_clicked()
 {
     cardClicked(DIAMONDS, 3);
 }
 
+/**
+ * @brief Card to deal or retract was clicked.
+ */
 void CLayoutCardsDialog::on_D4_clicked()
 {
     cardClicked(DIAMONDS, 2);
 }
 
+/**
+ * @brief Card to deal or retract was clicked.
+ */
 void CLayoutCardsDialog::on_D3_clicked()
 {
     cardClicked(DIAMONDS, 2);
 }
 
+/**
+ * @brief Card to deal or retract was clicked.
+ */
 void CLayoutCardsDialog::on_D2_clicked()
 {
     cardClicked(DIAMONDS, 0);
 }
 
+/**
+ * @brief Card to deal or retract was clicked.
+ */
 void CLayoutCardsDialog::on_CA_clicked()
 {
     cardClicked(CLUBS, 12);
 }
 
+/**
+ * @brief Card to deal or retract was clicked.
+ */
 void CLayoutCardsDialog::on_CK_clicked()
 {
     cardClicked(CLUBS, 11);
 }
 
+/**
+ * @brief Card to deal or retract was clicked.
+ */
 void CLayoutCardsDialog::on_CQ_clicked()
 {
     cardClicked(CLUBS, 10);
 }
 
+/**
+ * @brief Card to deal or retract was clicked.
+ */
 void CLayoutCardsDialog::on_CJ_clicked()
 {
     cardClicked(CLUBS, 9);
 }
 
+/**
+ * @brief Card to deal or retract was clicked.
+ */
 void CLayoutCardsDialog::on_CT_clicked()
 {
     cardClicked(CLUBS, 8);
 }
 
+/**
+ * @brief Card to deal or retract was clicked.
+ */
 void CLayoutCardsDialog::on_C9_clicked()
 {
     cardClicked(CLUBS, 7);
 }
 
+/**
+ * @brief Card to deal or retract was clicked.
+ */
 void CLayoutCardsDialog::on_C8_clicked()
 {
     cardClicked(CLUBS, 6);
 }
 
+/**
+ * @brief Card to deal or retract was clicked.
+ */
 void CLayoutCardsDialog::on_C7_clicked()
 {
     cardClicked(CLUBS, 5);
 }
 
+/**
+ * @brief Card to deal or retract was clicked.
+ */
 void CLayoutCardsDialog::on_C6_clicked()
 {
     cardClicked(CLUBS, 4);
 }
 
+/**
+ * @brief Card to deal or retract was clicked.
+ */
 void CLayoutCardsDialog::on_C5_clicked()
 {
     cardClicked(CLUBS, 3);
 }
 
+/**
+ * @brief Card to deal or retract was clicked.
+ */
 void CLayoutCardsDialog::on_C4_clicked()
 {
     cardClicked(CLUBS, 2);
 }
 
+/**
+ * @brief Card to deal or retract was clicked.
+ */
 void CLayoutCardsDialog::on_C3_clicked()
 {
     cardClicked(CLUBS, 1);
 }
 
+/**
+ * @brief Card to deal or retract was clicked.
+ */
 void CLayoutCardsDialog::on_C2_clicked()
 {
     cardClicked(CLUBS, 0);
 }
 
+/**
+ * @brief Edit first deal.
+ */
 void CLayoutCardsDialog::on_first_clicked()
 {
-    assert((relInx != 0) && (count[0] == 13) && (count[1] == 13) && (count[2] == 13) && (count[3] == 13));
+    bool none = ((count[0] == 0) && (count[1] == 0) && (count[2] == 0) && (count[3] == 0));
+    bool all = ((count[0] == 13) && (count[1] == 13) && (count[2] == 13) && (count[3] == 13));
+    assert((relInx != 0) && (none || all));
+
+    if (all)
+    {
+        getCurrentDeal(cards, &dealer, &vul);
+        games->setDeal(relInx, board, cards, dealer, vul);
+    }
+    relInx = 0;
+    setCurrentDeal();
+    upDateSelectButtons();
 }
 
+/**
+ * @brief Edit previous deal.
+ */
 void CLayoutCardsDialog::on_backward_clicked()
 {
-    assert((relInx != 0) && (count[0] == 13) && (count[1] == 13) && (count[2] == 13) && (count[3] == 13));
+    bool none = ((count[0] == 0) && (count[1] == 0) && (count[2] == 0) && (count[3] == 0));
+    bool all = ((count[0] == 13) && (count[1] == 13) && (count[2] == 13) && (count[3] == 13));
+    assert((relInx != 0) && (none || all));
+
+    if (all)
+    {
+        getCurrentDeal(cards, &dealer, &vul);
+        games->setDeal(relInx, board, cards, dealer, vul);
+    }
+    relInx--;
+    setCurrentDeal();
+    upDateSelectButtons();
 }
 
+/**
+ * @brief Edit next deal.
+ */
 void CLayoutCardsDialog::on_forward_clicked()
 {
-    assert((count[0] == 13) && (count[1] == 13) && (count[2] == 13) && (count[3] == 13));
+    bool none = ((count[0] == 0) && (count[1] == 0) && (count[2] == 0) && (count[3] == 0));
+    bool all = ((count[0] == 13) && (count[1] == 13) && (count[2] == 13) && (count[3] == 13));
+    assert(none || all);
+
+    if (all)
+    {
+        getCurrentDeal(cards, &dealer, &vul);
+        games->setDeal(relInx, board, cards, dealer, vul);
+    }
+    relInx++;
+    setCurrentDeal();
+    upDateSelectButtons();
 }
 
+/**
+ * @brief Edit last deal.
+ */
 void CLayoutCardsDialog::on_last_clicked()
 {
-    assert((count[0] == 13) && (count[1] == 13) && (count[2] == 13) && (count[3] == 13));
+    bool none = ((count[0] == 0) && (count[1] == 0) && (count[2] == 0) && (count[3] == 0));
+    bool all = ((count[0] == 13) && (count[1] == 13) && (count[2] == 13) && (count[3] == 13));
+    assert(none || all);
+
+    if (all)
+    {
+        getCurrentDeal(cards, &dealer, &vul);
+        games->setDeal(relInx, board, cards, dealer, vul);
+    }
+    relInx = games->getNumberOfNotPlayedGames(0);
+    setCurrentDeal();
+    upDateSelectButtons();
 }
 
+/**
+ * @brief Clear current deal.
+ */
 void CLayoutCardsDialog::on_clearDeal_clicked()
 {  
     for (int i = 0; i < 4; i++)
@@ -512,6 +700,9 @@ void CLayoutCardsDialog::on_clearDeal_clicked()
             cardClicked((Suit)i, j);
 }
 
+/**
+ * @brief Deal remaing cards (random) in current deal.
+ */
 void CLayoutCardsDialog::on_dealRemaining_clicked()
 {
     Seat oldSeat = currentSeat;
@@ -557,22 +748,34 @@ void CLayoutCardsDialog::on_dealRemaining_clicked()
     currentSeat = oldSeat;
 }
 
+/**
+ * @brief Accept deals.
+ */
 void CLayoutCardsDialog::on_buttonBox_accepted()
 {
-    assert((count[0] == 13) && (count[1] == 13) && (count[2] == 13) && (count[3] == 13));
+    bool none = ((count[0] == 0) && (count[1] == 0) && (count[2] == 0) && (count[3] == 0));
+    bool all = ((count[0] == 13) && (count[1] == 13) && (count[2] == 13) && (count[3] == 13));
+    assert(none || all);
+
+    if (all)
+    {
+        getCurrentDeal(cards, &dealer, &vul);
+        games->setDeal(relInx, board, cards, dealer, vul);
+    }
 }
 
+/**
+ * @brief Cancel edits.
+ */
 void CLayoutCardsDialog::on_buttonBox_rejected()
 {
 }
 
-void CLayoutCardsDialog::initialize()
-{
-    for (int i = 0; i < 4; i++)
-        for (int j = 0; j < 13; j++)
-            insertCard(cards[i][j], cCards[i]);
-}
-
+/**
+ * @brief Insert card in currently dealt card.
+ * @param card The card to insert.
+ * @param cCards Has the currently dealt cards for a given seat and will be updated.
+ */
 void CLayoutCardsDialog::insertCard(int card, int cCards[4][13])
 {
     Suit suit = CARD_SUIT(card);
@@ -583,6 +786,11 @@ void CLayoutCardsDialog::insertCard(int card, int cCards[4][13])
     insertSorted(face, cCards[suit]);
 }
 
+/**
+ * @brief Insert face sorted in currently dealt faces.
+ * @param face The face to insert.
+ * @param cCards Has the currently dealt cards for a given seat and suit and will be updated.
+ */
 void CLayoutCardsDialog::insertSorted(int face, int cCards[13])
 {
     int inx;
@@ -599,6 +807,12 @@ void CLayoutCardsDialog::insertSorted(int face, int cCards[13])
     cCards[inx] = face;
 }
 
+/**
+ * @brief Remove a card from the dealt cards.
+ * @param suit Suit of the card.
+ * @param face Face of the card.
+ * @param[out] seat Returns the seat from where the card was removed.
+ */
 void CLayoutCardsDialog::removeCard(Suit suit, int face, Seat *seat)
 {
     int i, j;
@@ -620,12 +834,22 @@ void CLayoutCardsDialog::removeCard(Suit suit, int face, Seat *seat)
     cCards[i][suit][12] = -1;
 }
 
+/**
+ * @brief Select the current seat.
+ * @param currentSeat The seat to select as the current seat.
+ * @param pSeat Pointer to seat buttons.
+ */
 void CLayoutCardsDialog::selectSeat(Seat currentSeat, QPushButton *pSeat[4])
 {
     for (int i = 0; i < 4; i++)
         pSeat[i]->setChecked(i == currentSeat);
 }
 
+/**
+ * @brief Generate the currently selected faces, given the seat and suit.
+ * @param[out] text The generated text.
+ * @param cCards Currently selected faces for a given seat, suit.
+ */
 void CLayoutCardsDialog::handsText(QString &text, int cCards[])
 {
     for (int j = 0; (j < 13) && (cCards[j] != -1); j++)
@@ -637,6 +861,11 @@ void CLayoutCardsDialog::handsText(QString &text, int cCards[])
     }
 }
 
+/**
+ * @brief A card was clicked.
+ * @param suit The suit of the clicked card.
+ * @param face The face of the clicked card.
+ */
 void CLayoutCardsDialog::cardClicked(Suit suit, int face)
 {
     if (buttons[suit][face].isDealt)
@@ -664,6 +893,7 @@ void CLayoutCardsDialog::cardClicked(Suit suit, int face)
     }
     else if (count[currentSeat] < 13)
     {
+        //Move it from not dealt to dealt.
         if (!gameChanged)
         {
             gameChanged = true;
@@ -686,6 +916,9 @@ void CLayoutCardsDialog::cardClicked(Suit suit, int face)
         QMessageBox::warning(0, tr("ZBridge"), tr("Hand is full."));
 }
 
+/**
+ * @brief Enable/disable relevant buttons according to state.
+ */
 void CLayoutCardsDialog::upDateSelectButtons()
 {
     bool none = ((count[0] == 0) && (count[1] == 0) && (count[2] == 0) && (count[3] == 0));
@@ -718,9 +951,97 @@ void CLayoutCardsDialog::upDateSelectButtons()
     else if (all || none)
     {
         ui->backward->setDisabled(relInx == 0);
-        ui->forward->setDisabled(false);
+        ui->forward->setDisabled((relInx == noEditable) && none);
         ui->first->setDisabled(relInx == 0);
-        ui->last->setDisabled(false);
+        ui->last->setDisabled((relInx == noEditable) && none);
         okButton->setDisabled(false);
     }
+}
+
+/**
+ * @brief Get the currently edited deal in a format suitable for storing.
+ * @param[out] cards The cards of the deal.
+ * @param[out] dealer The dealer.
+ * @param[out] vulnerable The vulnerability.
+ */
+void CLayoutCardsDialog::getCurrentDeal(int cards[4][13], Seat *dealer, Team *vulnerable)
+{
+    int m;
+
+    for (int i = 0; i < 4; i++)
+    {
+        m = 0;
+        for (int k = 0; k < 4; k++)
+        for (int j = 0; j < 13; j++)
+        {
+            if (cCards[i][k][j] == -1)
+                break;
+            cards[i][m++] = MAKE_CARD(k, cCards[i][k][j]);
+            assert(m  <= 13);
+        }
+        assert( m == 13);
+    }
+    *dealer = (Seat)ui->dealer->currentIndex();
+    *vulnerable = (Team)ui->vul->currentIndex();
+}
+
+/**
+ * @brief Set a current deal in the internal format.
+ */
+void CLayoutCardsDialog::setCurrentDeal()
+{
+    for (int i = 0; i < 4; i++)
+    for (int k = 0; k < 4; k++)
+    for (int j = 0; j < 13; j++)
+       cCards[i][k][j] = -1;
+
+    if (games->getDeal(relInx, &board, cards, &dealer, &vul))
+    {
+        for (int i = 0; i < 4; i++)
+            count[i] = 13;
+
+        for (int i = 0; i < 4; i++)
+        for (int j = 0; j < 13; j++)
+        {
+            buttons[i][j].isDealt = true;
+            buttons[i][j].pButton->setText(" ");
+        }
+
+        for (int i = 0; i < 4; i++)
+            for (int j = 0; j < 13; j++)
+                insertCard(cards[i][j], cCards[i]);
+
+        for (int i = 0; i < 4; i++)
+        for (int k = 0; k < 4; k++)
+        {
+            QString text;
+            handsText(text, cCards[i][k]);
+            pHands[i][k]->setText(text);
+        }
+    }
+    else
+    {
+        dealer = Seat((board - 1) % 4);
+        vul = Team(((board - 1) % 4 + board/4)%4);
+
+        for (int i = 0; i < 4; i++)
+            count[i] = 0;
+
+        for (int i = 0; i < 4; i++)
+        for (int j = 0; j < 13; j++)
+        {
+            buttons[i][j].isDealt = false;
+            buttons[i][j].pButton->setText(faces[j]);
+        }
+
+        for (int i = 0; i < 4; i++)
+        for (int k = 0; k < 4; k++)
+            pHands[i][k]->setText(" ");
+    }
+
+    ui->board->setText(QString::number(board));
+    currentSeat = WEST_SEAT;
+    selectSeat(currentSeat, pSeat);
+    ui->dealer->setCurrentIndex(dealer);
+    ui->vul->setCurrentIndex(vul);
 }

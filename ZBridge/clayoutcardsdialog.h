@@ -35,6 +35,11 @@ namespace Ui {
 class CLayoutCardsDialog;
 }
 
+/**
+ * @brief This class enables editing of new or existing pbn files.
+ *
+ * Editing can only be done on pbn files with original games that has not been played.
+ */
 class CLayoutCardsDialog : public QDialog
 {
     Q_OBJECT
@@ -110,7 +115,6 @@ private slots:
     void on_buttonBox_rejected();
 
 private:
-    void initialize();
     void insertCard(int card, int cCards[4][13]);
     void insertSorted(int face, int cCards[13]);
     void removeCard(Suit suit, int face, Seat *seat);
@@ -118,6 +122,8 @@ private:
     void handsText(QString &text, int cCards[13]);
     void cardClicked(Suit suit, int face);
     void upDateSelectButtons();
+    void getCurrentDeal(int cards[4][13], Seat *dealer, Team *vulnerable);
+    void setCurrentDeal();
 
     Ui::CLayoutCardsDialog *ui;
     CGamesDoc *games;
