@@ -36,9 +36,10 @@ class CLayoutCardsDialog;
 }
 
 /**
- * @brief This class enables editing of new or existing pbn files.
+ * @brief This class enables editing of existing or creation of new pbn files.
  *
- * Editing can only be done on pbn files with original games that has not been played.
+ * Editing can only be done on pbn files with original games that has not been played. New games
+ * are stored in pbn files as original games that are not played.
  */
 class CLayoutCardsDialog : public QDialog
 {
@@ -105,6 +106,8 @@ private slots:
     void on_C4_clicked();
     void on_C3_clicked();
     void on_C2_clicked();
+    void on_dealer_currentIndexChanged(int index);
+    void on_vul_currentIndexChanged(int index);
     void on_first_clicked();
     void on_backward_clicked();
     void on_forward_clicked();
@@ -126,27 +129,31 @@ private:
     void setCurrentDeal();
 
     Ui::CLayoutCardsDialog *ui;
+
+    int relInx;
     CGamesDoc *games;
-    struct buttons
-    {
-        bool isDealt;
-        QToolButton *pButton;
-    } buttons[4][13];
-    QString faces[13];
 
     int board;
     Seat dealer;
     Team vul;
     int cards[4][13];
-    int cCards[4][4][13];
-    QLabel *pHands[4][4];
 
-    int relInx;
+    QString faces[13];
+
+    struct buttons
+    {
+        bool isDealt;
+        QToolButton *pButton;
+    } buttons[4][13];
+
     Seat currentSeat;
     QPushButton *pSeat[4];
-    int count[4];
+    QLabel *pHands[4][4];
 
-    bool gameChanged;
+    int cCards[4][4][13];
+    int count[4];
+    bool dealChanged;
+    bool dealComplete;
     bool updateSelect;
 };
 

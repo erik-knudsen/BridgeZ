@@ -498,7 +498,7 @@ void CLayoutCardsDialog::on_D4_clicked()
  */
 void CLayoutCardsDialog::on_D3_clicked()
 {
-    cardClicked(DIAMONDS, 2);
+    cardClicked(DIAMONDS, 1);
 }
 
 /**
@@ -614,6 +614,26 @@ void CLayoutCardsDialog::on_C2_clicked()
 }
 
 /**
+ * @brief ealer was changed.
+ * @param index
+ */
+void CLayoutCardsDialog::on_dealer_currentIndexChanged(int index)
+{
+    dealChanged = true;
+    upDateSelectButtons();
+}
+
+/**
+ * @brief Vulnerability was changed.
+ * @param arg1
+ */
+void CLayoutCardsDialog::on_vul_currentIndexChanged(int index)
+{
+    dealChanged = true;
+    upDateSelectButtons();
+}
+
+/**
  * @brief Edit first deal.
  */
 void CLayoutCardsDialog::on_first_clicked()
@@ -622,7 +642,7 @@ void CLayoutCardsDialog::on_first_clicked()
     bool all = ((count[0] == 13) && (count[1] == 13) && (count[2] == 13) && (count[3] == 13));
     assert((relInx != 0) && (none || all));
 
-    if (all)
+    if (all && dealChanged)
     {
         getCurrentDeal(cards, &dealer, &vul);
         games->setDeal(relInx, board, cards, dealer, vul);
@@ -641,7 +661,7 @@ void CLayoutCardsDialog::on_backward_clicked()
     bool all = ((count[0] == 13) && (count[1] == 13) && (count[2] == 13) && (count[3] == 13));
     assert((relInx != 0) && (none || all));
 
-    if (all)
+    if (all && dealChanged)
     {
         getCurrentDeal(cards, &dealer, &vul);
         games->setDeal(relInx, board, cards, dealer, vul);
@@ -660,7 +680,7 @@ void CLayoutCardsDialog::on_forward_clicked()
     bool all = ((count[0] == 13) && (count[1] == 13) && (count[2] == 13) && (count[3] == 13));
     assert(none || all);
 
-    if (all)
+    if (all && dealChanged)
     {
         getCurrentDeal(cards, &dealer, &vul);
         games->setDeal(relInx, board, cards, dealer, vul);
@@ -679,7 +699,7 @@ void CLayoutCardsDialog::on_last_clicked()
     bool all = ((count[0] == 13) && (count[1] == 13) && (count[2] == 13) && (count[3] == 13));
     assert(none || all);
 
-    if (all)
+    if (all && dealChanged)
     {
         getCurrentDeal(cards, &dealer, &vul);
         games->setDeal(relInx, board, cards, dealer, vul);
@@ -757,7 +777,7 @@ void CLayoutCardsDialog::on_buttonBox_accepted()
     bool all = ((count[0] == 13) && (count[1] == 13) && (count[2] == 13) && (count[3] == 13));
     assert(none || all);
 
-    if (all)
+    if (all && dealChanged)
     {
         getCurrentDeal(cards, &dealer, &vul);
         games->setDeal(relInx, board, cards, dealer, vul);
@@ -870,11 +890,13 @@ void CLayoutCardsDialog::cardClicked(Suit suit, int face)
 {
     if (buttons[suit][face].isDealt)
     {
-        if (!gameChanged)
+        if (dealComplete)
         {
-            gameChanged = true;
+            dealComplete = false;
             updateSelect = true;
         }
+
+        dealChanged = true;
 
         //Move it from dealt to not dealt.
         Seat seat;
@@ -894,11 +916,13 @@ void CLayoutCardsDialog::cardClicked(Suit suit, int face)
     else if (count[currentSeat] < 13)
     {
         //Move it from not dealt to dealt.
-        if (!gameChanged)
+        if (dealComplete)
         {
-            gameChanged = true;
+            dealComplete = false;
             updateSelect = true;
         }
+
+        dealChanged = true;
 
         count[currentSeat]++;
 
@@ -925,7 +949,7 @@ void CLayoutCardsDialog::upDateSelectButtons()
     bool all = ((count[0] == 13) && (count[1] == 13) && (count[2] == 13) && (count[3] == 13));
     if (none || all)
     {
-        gameChanged = false;
+        dealComplete = true;
         updateSelect = true;
     }
 
@@ -954,7 +978,7 @@ void CLayoutCardsDialog::upDateSelectButtons()
         ui->forward->setDisabled((relInx == noEditable) && none);
         ui->first->setDisabled(relInx == 0);
         ui->last->setDisabled((relInx == noEditable) && none);
-        okButton->setDisabled(false);
+        okButton->setDisabled(!dealChanged);
     }
 }
 
@@ -994,6 +1018,8 @@ void CLayoutCardsDialog::setCurrentDeal()
     for (int k = 0; k < 4; k++)
     for (int j = 0; j < 13; j++)
        cCards[i][k][j] = -1;
+
+    dealChanged = false;
 
     if (games->getDeal(relInx, &board, cards, &dealer, &vul))
     {

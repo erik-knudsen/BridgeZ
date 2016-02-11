@@ -37,6 +37,12 @@
     <layout class="QGridLayout" name="gridLayout">
      <item row="0" column="0">
       <widget class="QLabel" name="label">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text">
         <string/>
        </property>
@@ -44,6 +50,12 @@
      </item>
      <item row="0" column="1">
       <widget class="QPushButton" name="west">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text">
         <string>West</string>
        </property>
@@ -54,6 +66,12 @@
      </item>
      <item row="0" column="2">
       <widget class="QPushButton" name="north">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text">
         <string>North</string>
        </property>
@@ -64,6 +82,12 @@
      </item>
      <item row="0" column="3">
       <widget class="QPushButton" name="east">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text">
         <string>East</string>
        </property>
@@ -74,6 +98,12 @@
      </item>
      <item row="0" column="4">
       <widget class="QPushButton" name="south">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text">
         <string>South</string>
        </property>
@@ -84,6 +114,12 @@
      </item>
      <item row="1" column="0">
       <widget class="QLabel" name="label_2">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text">
         <string/>
        </property>
@@ -97,6 +133,12 @@
      </item>
      <item row="1" column="1">
       <widget class="QLabel" name="westSpade">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text">
         <string>AKQJT978654321</string>
        </property>
@@ -107,6 +149,12 @@
      </item>
      <item row="1" column="2">
       <widget class="QLabel" name="northSpade">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text">
         <string>AKQJT978654321</string>
        </property>
@@ -117,6 +165,12 @@
      </item>
      <item row="1" column="3">
       <widget class="QLabel" name="eastSpade">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text">
         <string>AKQJT978654321</string>
        </property>
@@ -127,6 +181,12 @@
      </item>
      <item row="1" column="4">
       <widget class="QLabel" name="southSpade">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text">
         <string>AKQJT978654321</string>
        </property>
@@ -137,6 +197,12 @@
      </item>
      <item row="2" column="0">
       <widget class="QLabel" name="label_3">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text">
         <string/>
        </property>
@@ -150,6 +216,12 @@
      </item>
      <item row="2" column="1">
       <widget class="QLabel" name="westHeart">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text">
         <string>AKQJT978654321</string>
        </property>
@@ -160,6 +232,12 @@
      </item>
      <item row="2" column="2">
       <widget class="QLabel" name="northHeart">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text">
         <string>AKQJT978654321</string>
        </property>
@@ -170,6 +248,12 @@
      </item>
      <item row="2" column="3">
       <widget class="QLabel" name="eastHeart">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text">
         <string>AKQJT978654321</string>
        </property>
@@ -180,6 +264,12 @@
      </item>
      <item row="2" column="4">
       <widget class="QLabel" name="southHeart">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text">
         <string>AKQJT978654321</string>
        </property>
@@ -190,6 +280,12 @@
      </item>
      <item row="3" column="0">
       <widget class="QLabel" name="label_4">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text">
         <string/>
        </property>
@@ -203,6 +299,12 @@
      </item>
      <item row="3" column="1">
       <widget class="QLabel" name="westDiamond">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text">
         <string>AKQJT978654321</string>
        </property>
@@ -213,6 +315,12 @@
      </item>
      <item row="3" column="2">
       <widget class="QLabel" name="northDiamond">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text">
         <string>AKQJT978654321</string>
        </property>
@@ -223,6 +331,12 @@
      </item>
      <item row="3" column="3">
       <widget class="QLabel" name="eastDiamond">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text">
         <string>AKQJT978654321</string>
        </property>
@@ -233,6 +347,12 @@
      </item>
      <item row="3" column="4">
       <widget class="QLabel" name="southDiamond">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text">
         <string>AKQJT978654321</string>
        </property>
@@ -243,6 +363,12 @@
      </item>
      <item row="4" column="0">
       <widget class="QLabel" name="label_5">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text">
         <string/>
        </property>
@@ -256,6 +382,12 @@
      </item>
      <item row="4" column="1">
       <widget class="QLabel" name="westClub">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text">
         <string>AKQJT978654321</string>
        </property>
@@ -266,6 +398,12 @@
      </item>
      <item row="4" column="2">
       <widget class="QLabel" name="northClub">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text">
         <string>AKQJT978654321</string>
        </property>
@@ -276,6 +414,12 @@
      </item>
      <item row="4" column="3">
       <widget class="QLabel" name="eastClub">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text">
         <string>AKQJT978654321</string>
        </property>
@@ -286,6 +430,12 @@
      </item>
      <item row="4" column="4">
       <widget class="QLabel" name="southClub">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text">
         <string>AKQJT978654321</string>
        </property>
@@ -300,37 +450,33 @@
   <widget class="QGroupBox" name="groupBox_2">
    <property name="geometry">
     <rect>
-     <x>30</x>
-     <y>170</y>
-     <width>391</width>
-     <height>161</height>
+     <x>20</x>
+     <y>160</y>
+     <width>411</width>
+     <height>171</height>
     </rect>
    </property>
    <property name="title">
     <string>Cards</string>
    </property>
-   <widget class="QWidget" name="layoutWidget">
+   <widget class="QWidget" name="">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>30</y>
-      <width>341</width>
-      <height>115</height>
+      <x>10</x>
+      <y>20</y>
+      <width>381</width>
+      <height>131</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout_2">
-     <item row="0" column="0">
-      <widget class="QLabel" name="label_27">
-       <property name="text">
-        <string/>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-     </item>
      <item row="0" column="1">
       <widget class="QLabel" name="label_11">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text">
         <string>A</string>
        </property>
@@ -341,6 +487,12 @@
      </item>
      <item row="0" column="2">
       <widget class="QLabel" name="label_12">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text">
         <string>K</string>
        </property>
@@ -349,38 +501,43 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="3">
-      <widget class="QLabel" name="label_13">
+     <item row="0" column="0">
+      <widget class="QLabel" name="label_27">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text">
-        <string>Q</string>
+        <string/>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
        </property>
       </widget>
      </item>
-     <item row="0" column="4">
-      <widget class="QLabel" name="label_14">
-       <property name="text">
-        <string>J</string>
+     <item row="2" column="5">
+      <widget class="QToolButton" name="HT">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
        </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="5">
-      <widget class="QLabel" name="label_15">
        <property name="text">
         <string>T</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
        </property>
       </widget>
      </item>
      <item row="0" column="6">
       <widget class="QLabel" name="label_16">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text">
         <string>9</string>
        </property>
@@ -389,18 +546,14 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="7">
-      <widget class="QLabel" name="label_17">
-       <property name="text">
-        <string>8</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-     </item>
      <item row="0" column="8">
       <widget class="QLabel" name="label_18">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text">
         <string>7</string>
        </property>
@@ -409,18 +562,69 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="9">
-      <widget class="QLabel" name="label_19">
+     <item row="0" column="5">
+      <widget class="QLabel" name="label_15">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text">
-        <string>6</string>
+        <string>T</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
        </property>
       </widget>
      </item>
+     <item row="2" column="6">
+      <widget class="QToolButton" name="H9">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>9</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="5">
+      <widget class="QToolButton" name="ST">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>T</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="10">
+      <widget class="QToolButton" name="S5">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>5</string>
+       </property>
+      </widget>
+     </item>
      <item row="0" column="10">
       <widget class="QLabel" name="label_20">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text">
         <string>5</string>
        </property>
@@ -429,28 +633,14 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="11">
-      <widget class="QLabel" name="label_21">
-       <property name="text">
-        <string>4</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="12">
-      <widget class="QLabel" name="label_22">
-       <property name="text">
-        <string>3</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-     </item>
      <item row="0" column="13">
       <widget class="QLabel" name="label_23">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text">
         <string>2</string>
        </property>
@@ -459,8 +649,182 @@
        </property>
       </widget>
      </item>
+     <item row="1" column="1">
+      <widget class="QToolButton" name="SA">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>A</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="2">
+      <widget class="QToolButton" name="SK">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>K</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="7">
+      <widget class="QToolButton" name="S8">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>8</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="12">
+      <widget class="QToolButton" name="S3">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>3</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="13">
+      <widget class="QToolButton" name="S2">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>2</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="9">
+      <widget class="QLabel" name="label_19">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>6</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QToolButton" name="HA">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>A</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="7">
+      <widget class="QLabel" name="label_17">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>8</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="4">
+      <widget class="QToolButton" name="SJ">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>J</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="11">
+      <widget class="QToolButton" name="S4">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>4</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="12">
+      <widget class="QLabel" name="label_22">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>3</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="4">
+      <widget class="QLabel" name="label_14">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>J</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
      <item row="1" column="0">
       <widget class="QLabel" name="label_10">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text">
         <string/>
        </property>
@@ -472,99 +836,27 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="1">
-      <widget class="QToolButton" name="SA">
-       <property name="text">
-        <string>A</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="2">
-      <widget class="QToolButton" name="SK">
-       <property name="text">
-        <string>K</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="3">
-      <widget class="QToolButton" name="SQ">
-       <property name="text">
-        <string>Q</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="4">
-      <widget class="QToolButton" name="SJ">
-       <property name="text">
-        <string>J</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="5">
-      <widget class="QToolButton" name="ST">
-       <property name="text">
-        <string>T</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="6">
-      <widget class="QToolButton" name="S9">
-       <property name="text">
-        <string>9</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="7">
-      <widget class="QToolButton" name="S8">
-       <property name="text">
-        <string>8</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="8">
-      <widget class="QToolButton" name="S7">
-       <property name="text">
-        <string>7</string>
-       </property>
-      </widget>
-     </item>
      <item row="1" column="9">
       <widget class="QToolButton" name="S6">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text">
         <string>6</string>
        </property>
       </widget>
      </item>
-     <item row="1" column="10">
-      <widget class="QToolButton" name="S5">
-       <property name="text">
-        <string>5</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="11">
-      <widget class="QToolButton" name="S4">
-       <property name="text">
-        <string>4</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="12">
-      <widget class="QToolButton" name="S3">
-       <property name="text">
-        <string>3</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="13">
-      <widget class="QToolButton" name="S2">
-       <property name="text">
-        <string>2</string>
-       </property>
-      </widget>
-     </item>
      <item row="2" column="0">
       <widget class="QLabel" name="label_24">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text">
         <string/>
        </property>
@@ -576,15 +868,43 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="1">
-      <widget class="QToolButton" name="HA">
+     <item row="1" column="3">
+      <widget class="QToolButton" name="SQ">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text">
-        <string>A</string>
+        <string>Q</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="11">
+      <widget class="QLabel" name="label_21">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>4</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
        </property>
       </widget>
      </item>
      <item row="2" column="2">
       <widget class="QToolButton" name="HK">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text">
         <string>K</string>
        </property>
@@ -592,83 +912,145 @@
      </item>
      <item row="2" column="3">
       <widget class="QToolButton" name="HQ">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text">
         <string>Q</string>
        </property>
       </widget>
      </item>
-     <item row="2" column="4">
-      <widget class="QToolButton" name="HJ">
-       <property name="text">
-        <string>J</string>
+     <item row="1" column="8">
+      <widget class="QToolButton" name="S7">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
        </property>
-      </widget>
-     </item>
-     <item row="2" column="5">
-      <widget class="QToolButton" name="HT">
-       <property name="text">
-        <string>T</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="6">
-      <widget class="QToolButton" name="H9">
-       <property name="text">
-        <string>9</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="7">
-      <widget class="QToolButton" name="H8">
-       <property name="text">
-        <string>8</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="8">
-      <widget class="QToolButton" name="H7">
        <property name="text">
         <string>7</string>
        </property>
       </widget>
      </item>
-     <item row="2" column="9">
-      <widget class="QToolButton" name="H6">
+     <item row="2" column="4">
+      <widget class="QToolButton" name="HJ">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text">
-        <string>6</string>
+        <string>J</string>
        </property>
       </widget>
      </item>
-     <item row="2" column="10">
-      <widget class="QToolButton" name="H5">
+     <item row="1" column="6">
+      <widget class="QToolButton" name="S9">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text">
-        <string>5</string>
+        <string>9</string>
        </property>
       </widget>
      </item>
-     <item row="2" column="11">
-      <widget class="QToolButton" name="H4">
-       <property name="text">
-        <string>4</string>
+     <item row="0" column="3">
+      <widget class="QLabel" name="label_13">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
        </property>
-      </widget>
-     </item>
-     <item row="2" column="12">
-      <widget class="QToolButton" name="H3">
        <property name="text">
-        <string>3</string>
+        <string>Q</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
        </property>
       </widget>
      </item>
      <item row="2" column="13">
       <widget class="QToolButton" name="H2">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text">
         <string>2</string>
        </property>
       </widget>
      </item>
+     <item row="3" column="7">
+      <widget class="QToolButton" name="D8">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>8</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="10">
+      <widget class="QToolButton" name="H5">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>5</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="7">
+      <widget class="QToolButton" name="H8">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>8</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QToolButton" name="DA">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>A</string>
+       </property>
+      </widget>
+     </item>
      <item row="3" column="0">
       <widget class="QLabel" name="label_25">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text">
         <string/>
        </property>
@@ -680,99 +1062,118 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="1">
-      <widget class="QToolButton" name="DA">
-       <property name="text">
-        <string>A</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="2">
-      <widget class="QToolButton" name="DK">
-       <property name="text">
-        <string>K</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="3">
-      <widget class="QToolButton" name="DQ">
-       <property name="text">
-        <string>Q</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="4">
-      <widget class="QToolButton" name="DJ">
-       <property name="text">
-        <string>J</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="5">
-      <widget class="QToolButton" name="DT">
-       <property name="text">
-        <string>T</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="6">
-      <widget class="QToolButton" name="D9">
-       <property name="text">
-        <string>9</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="7">
-      <widget class="QToolButton" name="D8">
-       <property name="text">
-        <string>8</string>
-       </property>
-      </widget>
-     </item>
      <item row="3" column="8">
       <widget class="QToolButton" name="D7">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text">
         <string>7</string>
        </property>
       </widget>
      </item>
-     <item row="3" column="9">
-      <widget class="QToolButton" name="D6">
-       <property name="text">
-        <string>6</string>
-       </property>
-      </widget>
-     </item>
      <item row="3" column="10">
       <widget class="QToolButton" name="D5">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text">
         <string>5</string>
        </property>
       </widget>
      </item>
-     <item row="3" column="11">
-      <widget class="QToolButton" name="D4">
+     <item row="2" column="11">
+      <widget class="QToolButton" name="H4">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text">
         <string>4</string>
        </property>
       </widget>
      </item>
-     <item row="3" column="12">
-      <widget class="QToolButton" name="D3">
-       <property name="text">
-        <string>3</string>
-       </property>
-      </widget>
-     </item>
      <item row="3" column="13">
       <widget class="QToolButton" name="D2">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text">
         <string>2</string>
        </property>
       </widget>
      </item>
+     <item row="4" column="4">
+      <widget class="QToolButton" name="CJ">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>J</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="5">
+      <widget class="QToolButton" name="CT">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>T</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="8">
+      <widget class="QToolButton" name="H7">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>7</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="1">
+      <widget class="QToolButton" name="CA">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>A</string>
+       </property>
+      </widget>
+     </item>
      <item row="4" column="0">
       <widget class="QLabel" name="label_26">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text">
         <string/>
        </property>
@@ -784,43 +1185,14 @@
        </property>
       </widget>
      </item>
-     <item row="4" column="1">
-      <widget class="QToolButton" name="CA">
-       <property name="text">
-        <string>A</string>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="2">
-      <widget class="QToolButton" name="CK">
-       <property name="text">
-        <string>K</string>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="3">
-      <widget class="QToolButton" name="CQ">
-       <property name="text">
-        <string>Q</string>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="4">
-      <widget class="QToolButton" name="CJ">
-       <property name="text">
-        <string>J</string>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="5">
-      <widget class="QToolButton" name="CT">
-       <property name="text">
-        <string>T</string>
-       </property>
-      </widget>
-     </item>
      <item row="4" column="6">
       <widget class="QToolButton" name="C9">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text">
         <string>9</string>
        </property>
@@ -828,13 +1200,38 @@
      </item>
      <item row="4" column="7">
       <widget class="QToolButton" name="C8">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text">
         <string>8</string>
        </property>
       </widget>
      </item>
+     <item row="3" column="3">
+      <widget class="QToolButton" name="DQ">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>Q</string>
+       </property>
+      </widget>
+     </item>
      <item row="4" column="8">
       <widget class="QToolButton" name="C7">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text">
         <string>7</string>
        </property>
@@ -842,27 +1239,155 @@
      </item>
      <item row="4" column="9">
       <widget class="QToolButton" name="C6">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text">
         <string>6</string>
        </property>
       </widget>
      </item>
-     <item row="4" column="10">
-      <widget class="QToolButton" name="C5">
+     <item row="2" column="12">
+      <widget class="QToolButton" name="H3">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text">
-        <string>5</string>
+        <string>3</string>
        </property>
       </widget>
      </item>
-     <item row="4" column="11">
-      <widget class="QToolButton" name="C4">
+     <item row="3" column="4">
+      <widget class="QToolButton" name="DJ">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>J</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="12">
+      <widget class="QToolButton" name="D3">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>3</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="9">
+      <widget class="QToolButton" name="D6">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>6</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="2">
+      <widget class="QToolButton" name="CK">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>K</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="11">
+      <widget class="QToolButton" name="D4">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text">
         <string>4</string>
        </property>
       </widget>
      </item>
+     <item row="4" column="3">
+      <widget class="QToolButton" name="CQ">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>Q</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="2">
+      <widget class="QToolButton" name="DK">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>K</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="6">
+      <widget class="QToolButton" name="D9">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>9</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="5">
+      <widget class="QToolButton" name="DT">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>T</string>
+       </property>
+      </widget>
+     </item>
      <item row="4" column="12">
       <widget class="QToolButton" name="C3">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text">
         <string>3</string>
        </property>
@@ -870,8 +1395,53 @@
      </item>
      <item row="4" column="13">
       <widget class="QToolButton" name="C2">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text">
         <string>2</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="10">
+      <widget class="QToolButton" name="C5">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>5</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="11">
+      <widget class="QToolButton" name="C4">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>4</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="9">
+      <widget class="QToolButton" name="H6">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>6</string>
        </property>
       </widget>
      </item>
@@ -927,7 +1497,7 @@
     </item>
    </layout>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>30</x>
@@ -1082,7 +1652,7 @@
        </sizepolicy>
       </property>
       <property name="title">
-       <string>Vul</string>
+       <string>Vulnerability</string>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_4">
        <item>
