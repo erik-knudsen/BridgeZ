@@ -60,6 +60,7 @@ CTblMngrClient::CTblMngrClient(CZBridgeDoc *doc, CGamesDoc *games, QHostAddress 
 
     //Enable/disable relevant menu actions.
     QApplication::postEvent(parent, new UPDATE_UI_ACTION_Event(UPDATE_UI_INITIAL, false));
+    QApplication::postEvent(parent, new UPDATE_UI_ACTION_Event(UPDATE_UI_LAY_OUT_CARDS, false));
 
     actor = 0;
 

@@ -73,6 +73,9 @@ CTblMngrServer::CTblMngrServer(CZBridgeDoc *doc, CGamesDoc *games, QHostAddress 
     actors[EAST_SEAT] = 0;
     actors[SOUTH_SEAT] = 0;
 
+    //Enable/disable relevant menu actions.
+    QApplication::postEvent(parent, new UPDATE_UI_ACTION_Event(UPDATE_UI_INITIAL, false));
+
     //Start tcp server for remote clients.
     remoteActorServer = 0;
     if (!hostAddress.isNull())
@@ -89,9 +92,6 @@ CTblMngrServer::CTblMngrServer(CZBridgeDoc *doc, CGamesDoc *games, QHostAddress 
         connect(remoteActorServer, &CRemoteActorServer::connectWarning, this, &CTblMngrServer::connectWarning);
         connect(remoteActorServer, &CRemoteActorServer::connectError, this, &CTblMngrServer::connectError);
     }
-
-    //Enable/disable relevant menu actions.
-    QApplication::postEvent(parent, new UPDATE_UI_ACTION_Event(UPDATE_UI_INITIAL, false));
 
     //Timer for supervision of continue button (only used in bascic protocol).
     leaderButton = new QTimer(this);
@@ -554,11 +554,22 @@ void CTblMngrServer::clientDisconnected()
 
     //Prepare for a new session.
     cleanTableManager();
+
+    //Enable lay out cards if no clients are connected.
+    QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_LAY_OUT_CARDS,
+        ((remoteActorServer == 0) ||
+         ((!remoteActorServer->isConnected(WEST_SEAT)) &&
+          (!remoteActorServer->isConnected(NORTH_SEAT)) &&
+          (!remoteActorServer->isConnected(EAST_SEAT)) &&
+          (!remoteActorServer->isConnected(SOUTH_SEAT))))));
 }
 
 void CTblMngrServer::connectInfo(QString text)
 {
     QMessageBox::information(0, tr("ZBridge"), text);
+
+    //Do not lay out cards if client is connected.
+    QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_LAY_OUT_CARDS, false));
 }
 
 void CTblMngrServer::connectWarning(QString text)
