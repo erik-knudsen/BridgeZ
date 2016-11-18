@@ -49,6 +49,8 @@
     </property>
     <addaction name="action_Lay_Out_Cards"/>
     <addaction name="separator"/>
+    <addaction name="actionBidding_System"/>
+    <addaction name="separator"/>
     <addaction name="actionCu_t"/>
     <addaction name="action_Copy"/>
     <addaction name="action_Paste"/>
@@ -791,6 +793,11 @@
    </property>
    <property name="text">
     <string>Double Dummy Results</string>
+   </property>
+  </action>
+  <action name="actionBidding_System">
+   <property name="text">
+    <string>Bidding System</string>
    </property>
   </action>
  </widget>

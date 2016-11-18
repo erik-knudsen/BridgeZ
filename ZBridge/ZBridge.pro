@@ -99,7 +99,17 @@ SOURCES +=\
     ctblmngrclientauto.cpp \
     mt19937ar.cpp \
     cddtable.cpp \
-    clayoutcardsdialog.cpp
+    clayoutcardsdialog.cpp \
+    cauction.cpp \
+    cauctions.cpp \
+    cbiddb.cpp \
+    cbiddesc.cpp \
+    cbiddingsystemdialog.cpp \
+    cbidpagedescdialog.cpp \
+    cbids.cpp \
+    cfeatures.cpp \
+    crule.cpp \
+    cruledialog.cpp
 
 HEADERS  += cmainframe.h \
     czbridgedoc.h \
@@ -190,7 +200,17 @@ HEADERS  += cmainframe.h \
     ctblmngrclientauto.h \
     mt19937ar.h \
     cddtable.h \
-    clayoutcardsdialog.h
+    clayoutcardsdialog.h \
+    cauction.h \
+    cauctions.h \
+    cbiddb.h \
+    cbiddesc.h \
+    cbiddingsystemdialog.h \
+    cbidpagedescdialog.h \
+    cbids.h \
+    cfeatures.h \
+    crule.h \
+    cruledialog.h
 
 FORMS    += cmainframe.ui \
     cfilepropertiesdialog.ui \
@@ -223,6 +243,9 @@ FORMS    += cmainframe.ui \
     crankscoredialog.ui \
     cplayshow.ui \
     cddtable.ui \
-    clayoutcardsdialog.ui
+    clayoutcardsdialog.ui \
+    cbiddingsystemdialog.ui \
+    cbidpagedescdialog.ui \
+    cruledialog.ui
 
 RESOURCES = images.qrc

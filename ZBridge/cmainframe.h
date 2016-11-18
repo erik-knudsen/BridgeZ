@@ -124,6 +124,7 @@ private slots:
     void on_actionExit_triggered();
 
     void on_action_Lay_Out_Cards_triggered();
+    void on_actionBidding_System_triggered();
     void on_actionCu_t_triggered();
     void on_action_Copy_triggered();
     void on_action_Paste_triggered();

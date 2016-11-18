@@ -27,6 +27,7 @@
 #include <QHostInfo>
 #include <QStringList>
 #include <QString>
+#include <QDataStream>
 #include <QTextStream>
 #include <QInputDialog>
 #include <QMessageBox>
@@ -58,6 +59,9 @@
 #include "cmainscoredialog.h"
 #include "crubberscoredialog.h"
 #include "clayoutcardsdialog.h"
+#include "cbiddb.h"
+#include "cbiddesc.h"
+#include "cbiddingsystemdialog.h"
 
 //Static pointer to mainframe singleton.
 CMainFrame *CMainFrame::m_pInstance = 0;
@@ -311,6 +315,11 @@ void CMainFrame::enableUIActionsClient(bool advProtocol)
     enableUIActions(CLIENT_ACTIONS, advProtocol);
 }
 
+/**
+ * @brief Set or clear status text in main window.
+ *
+ * @param text The text to set.
+ */
 void CMainFrame::sStatusText(QString text)
 {
     if (text.size() > 0)
@@ -362,6 +371,9 @@ void CMainFrame::enableUIActions(actionIndicator actions, bool advProtocol)
     ui->action_Score->setEnabled((actions == SERVER_ACTIONS) || ((actions == CLIENT_ACTIONS) && advProtocol));
 }
 
+/**
+ * @brief Reset play configuration (manual play, auto play etc.)
+ */
 void CMainFrame::resetPlay()
 {
     if (tableManager != 0)
@@ -442,6 +454,10 @@ void CMainFrame::resetPlay()
     eventIndex = 0;
 }
 
+/**
+ * @brief Open Portable Bridge Notation (pbn) file for play etc.
+ * @param originalFileName Name of the pbn file to open.
+ */
 void CMainFrame::open(QString &originalFileName)
 {
     try
@@ -737,6 +753,9 @@ void CMainFrame::on_actionExit_triggered()
 
 }
 
+/**
+ * @brief Layout cards. User defines bridge hands to play.
+ */
 void CMainFrame::on_action_Lay_Out_Cards_triggered()
 {
     //Check if there are any original or random non saved games played in the current game deal.
@@ -770,6 +789,86 @@ void CMainFrame::on_action_Lay_Out_Cards_triggered()
         games->clearGames(doc->getGameOptions().scoringMethod);
 }
 
+
+/**
+ * @brief Edit/create bidding system database.
+ */
+void CMainFrame::on_actionBidding_System_triggered()
+{
+    CBidDB bidDB;
+    CBidDesc bidDesc;
+
+    try
+    {
+    //Determine Bidding System file to read.
+    QString fileName = QFileDialog::getOpenFileName(this,
+        tr("Read Bidding System"), "", tr("Bidding System Files (*.bsf)"));
+    QFile file(fileName);
+    if (file.open(QIODevice::ReadOnly))
+    {
+        QDataStream in(&file);
+        in >> bidDB;
+        file.close();
+        if (in.status() != QDataStream::Ok)
+            throw PlayException(tr("Bid DB: Corrupt or version not supported or not a bid database").toStdString());
+    }
+
+    //Open file with text description of pages in the bid database.
+    QString descFilename = fileName.left(fileName.indexOf(".bsf", 0, Qt::CaseInsensitive)) + ".dsc";
+    QFile descFile(descFilename);
+    if (descFile.open(QIODevice::ReadOnly))
+    {
+        QDataStream in(&descFile);
+        in >> bidDesc;
+        descFile.close();
+        if (in.status() != QDataStream::Ok)
+            throw PlayException(tr("Bid DB: Corrupt or version not supported or not a bid description").toStdString());
+    }
+
+    CBiddingSystemDialog biddingSystemDialog(&bidDB, &bidDesc, this);
+    if (biddingSystemDialog.exec() == QDialog::Accepted)
+    {
+        if (fileName.size() != 0)
+        {
+            int ret = QMessageBox::warning(this, tr("ZBridge"),
+                                           tr("Do you want to overwrite the existing Bidding System file?"),
+                                           QMessageBox::Yes | QMessageBox::No,
+                                           QMessageBox::No);
+            if (ret == QMessageBox::No)
+                fileName = "";
+        }
+        if (fileName.size() == 0)
+        {
+            fileName = QFileDialog::getSaveFileName(this,
+                                                    tr("Save Bidding System"), "", tr("Bidding System File (*.bsf)"));
+            descFilename = fileName.left(fileName.indexOf(".bsf", 0, Qt::CaseInsensitive)) + ".dsc";
+        }
+        file.setFileName(fileName);
+        if (file.open(QIODevice::WriteOnly))
+        {
+            QDataStream out(&file);
+            out << bidDB;
+            file.close();
+            if (out.status() != QDataStream::Ok)
+                throw PlayException(tr("Bid DB: Write of bid DB failed").toStdString());
+        }
+        descFile.setFileName(descFilename);
+        if (descFile.open(QIODevice::WriteOnly))
+        {
+            QDataStream out(&descFile);
+            out << bidDesc;
+            descFile.close();
+            if (out.status() != QDataStream::Ok)
+                throw PlayException(tr("Bid DB: Write of bid description failed").toStdString());
+        }
+    }
+    }
+    catch (PlayException &e)
+    {
+        QMessageBox::critical(0, tr("ZBridge"), e.what());
+    }
+}
+
 void CMainFrame::on_actionCu_t_triggered()
 {
 
@@ -785,16 +884,25 @@ void CMainFrame::on_action_Paste_triggered()
 
 }
 
+/**
+ * @brief Show all four hands.
+ */
 void CMainFrame::on_action_Expose_All_Cards_triggered()
 {
     tableManager->showAllCards();
 }
 
+/**
+* @brief Show score dialog.
+*/
 void CMainFrame::on_action_Score_triggered()
 {
     mainScoreDialog->show();
 }
 
+/**
+ * @brief Show double dummy results.
+ */
 void CMainFrame::on_actionDouble_Dummy_Results_triggered()
 {
     tableManager->showDoubleDummyResults();
@@ -889,6 +997,9 @@ void CMainFrame::on_action_Deal_New_Hand_triggered()
     tableManager->newDeal();
 }
 
+/**
+ * @brief Activate/deactivate deal profile.
+ */
 void CMainFrame::on_actionActivate_Deal_Profile_triggered()
 {
     if (ui->actionActivate_Deal_Profile->isChecked())
@@ -897,16 +1008,25 @@ void CMainFrame::on_actionActivate_Deal_Profile_triggered()
         games->clearDealOptions();
 }
 
+/**
+ * @brief Undo bid or play.
+ */
 void CMainFrame::on_actionUndo_triggered()
 {
     tableManager->undo();
 }
 
+/**
+ * @brief Start bidding from beginning.
+ */
 void CMainFrame::on_action_Bid_Rebid_triggered()
 {
     tableManager->reBid();
 }
 
+/**
+ * @brief Start playing from beginning.
+ */
 void CMainFrame::on_action_Restart_Hand_triggered()
 {
     tableManager->rePlay();
@@ -1104,6 +1224,9 @@ void CMainFrame::on_action_View_README_File_triggered()
 
 }
 
+/**
+ * @brief Show About dialog.
+ */
 void CMainFrame::on_action_About_ZBridge_triggered()
 {
     CAboutDlg about(app, doc, this);

@@ -48,6 +48,7 @@ enum DealType { ORIGINAL_DEAL, RANDOM_DEAL };               /**< The two types o
 enum GameType { ORIGINAL_GAME, PLAYED_GAME, AUTO_GAME };    /**< The three types of games in a game set. */
 
 //Honor card values
+const int NINE = 7;
 const int TEN =   8;
 const int JACK =  9;
 const int QUEEN = 10;
@@ -616,6 +617,8 @@ const int GINSBURG_VALUATION_MODE = 1;
 const int CUSTOM_VALUATION_MODE = 3;
 
 //Scoring.
+enum Forcing { NON_FORCING=0, FORCING=1, GAME_FORCING=2, MUST_PASS=3};
+enum Vulnerability { VUL_II=0, VUL_NI=1, VUL_YI=2, VUL_NN=3, VUL_NY=4, VUL_YN=5, VUL_YY=6 };
 enum ScoringMethod { IMP=0, MP=1, RUBBER=2, PRACTICE=3, NOSCORE=4, FORSCORE=5};
 
 //----------------------------- Wizard. -------------------------------
