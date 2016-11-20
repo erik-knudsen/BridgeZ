@@ -26,6 +26,7 @@
 
 #include "cauction.h"
 #include "crule.h"
+#include "cbiddesc.h"
 
 namespace Ui {
 class CRuleDialog;
@@ -39,7 +40,7 @@ class CRuleDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit CRuleDialog(CRule *rule, QString *ruleIdDesc, QString &bid, QWidget *parent = 0);
+    explicit CRuleDialog(CRule *rule, CBidDesc *bidDesc, QString &bid, QWidget *parent = 0);
     ~CRuleDialog();
 
 private slots:
@@ -283,6 +284,7 @@ private:
     Ui::CRuleDialog *ui;
 
     CRule *rule;
+    CBidDesc *bidDesc;
     QString *ruleIdDesc;
 
     qint16 id;                      /**< Identification of the rule. */

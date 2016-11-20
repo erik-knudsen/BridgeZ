@@ -63,12 +63,14 @@ class CFeatures
 public:
     CFeatures();
 
+    //Serialization.
     friend QDataStream &operator<<(QDataStream &out, const CFeatures &features);
     friend QDataStream &operator>>(QDataStream &in, CFeatures &features);
 
-    void setMinFeatures();
-    void setMaxFeatures();
-    void setCardFeatures(int cards[]);
+    //Set features.
+    void setMinFeatures();              //Min. features.
+    void setMaxFeatures();              //Max features.
+    void setCardFeatures(int cards[]);  //Features for given hand.
 
     //High card points.
     int getHcp(Suit suit);

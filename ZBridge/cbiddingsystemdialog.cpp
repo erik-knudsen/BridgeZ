@@ -891,7 +891,29 @@ void CBiddingSystemDialog::on_buttonBox_accepted()
         QString txt = bidPageDesc->getPageDesc();
         bidDesc->setPageDesc(currentPage, txt);
     }
+/*
+    //Determine Alert File to read from.
+    QString alertFileName = QFileDialog::getOpenFileName(this,
+        tr("Alert File"), "", tr("All Files (*.*)"));
+    QFile alertFile(alertFileName);
+    alertFile.open(QIODevice::ReadOnly | QIODevice::Text);
 
+    quint8 alertId = 0;
+    QString alertTxt;
+    while (!alertFile.atEnd())
+    {
+        QString line = alertFile.readLine();
+        QString text = line.mid(7, 3);
+        if (text.toInt() != alertId)
+        {
+            bidDesc->setAlertIdDesc(alertId, alertTxt);
+            alertTxt = line.mid(13).trimmed() + '\n';
+            alertId = text.toInt();
+        }
+        else
+            alertTxt += QString(line.mid(13).trimmed()) + '\n';
+    }
+*/
     accept();
 }
 
@@ -1248,18 +1270,12 @@ void CBiddingSystemDialog::on_rules_activated(int index)
         CRule *pRule = bidDB->getpRule(page, auction, bid, pRuleId);
         CRule rule = *pRule;
 
-        //Get rule description.
-        QString ruleIdDesc = bidDesc->getRuleIdDesc(pRule->getId());
-
         //Rule dialog.
-        CRuleDialog ruleDialog(&rule, &ruleIdDesc, bidText);
+        CRuleDialog ruleDialog(&rule, bidDesc, bidText);
 
         //Accept corrections to rule?
         if (ruleDialog.exec() == QDialog::Accepted)
-        {
             *pRule = rule;
-            bidDesc->setRuleIdDesc(pRule->getId(), ruleIdDesc);
-        }
     }
 }
 

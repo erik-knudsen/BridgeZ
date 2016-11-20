@@ -217,9 +217,9 @@
     <widget class="QGroupBox" name="groupBox_11">
      <property name="geometry">
       <rect>
-       <x>120</x>
-       <y>280</y>
-       <width>251</width>
+       <x>30</x>
+       <y>270</y>
+       <width>231</width>
        <height>91</height>
       </rect>
      </property>
@@ -231,7 +231,30 @@
        <rect>
         <x>20</x>
         <y>20</y>
-        <width>211</width>
+        <width>191</width>
+        <height>51</height>
+       </rect>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QGroupBox" name="groupBox_12">
+     <property name="geometry">
+      <rect>
+       <x>280</x>
+       <y>270</y>
+       <width>231</width>
+       <height>91</height>
+      </rect>
+     </property>
+     <property name="title">
+      <string>Alert Id Description</string>
+     </property>
+     <widget class="QPlainTextEdit" name="alertIdDesc">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>20</y>
+        <width>191</width>
         <height>51</height>
        </rect>
       </property>
@@ -1768,7 +1791,7 @@
        <rect>
         <x>10</x>
         <y>20</y>
-        <width>101</width>
+        <width>129</width>
         <height>125</height>
        </rect>
       </property>

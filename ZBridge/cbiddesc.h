@@ -15,7 +15,7 @@
 
 /**
  * \file
- * The file implements the definition of text description for pages and rules in the bid database.
+ * The file implements the definition of text description for pages, rules and alerts in the bid database.
  */
 
 #ifndef CBIDDESC_H
@@ -25,9 +25,6 @@
 #include <QDataStream>
 #include <QMap>
 
-/**
- * @brief Informative text description of pages and rules in the bid database.
- */
 class CBidDesc
 {
 public:
@@ -36,14 +33,16 @@ public:
     QString getPageDesc(qint16 pageId) { return pages.value(pageId, ""); }
     void setRuleIdDesc(qint16 ruleId, QString &text);
     QString getRuleIdDesc(qint16 ruleId) { return ruleIds.value(ruleId, ""); }
+    void setAlertIdDesc(quint8 alertId, QString &text);
+    QString getAlertIdDesc(quint8 alertId) { return alertIds.value(alertId, ""); }
 
-    //Serialization.
     friend QDataStream &operator<<(QDataStream &out, const CBidDesc &bidDesc);
     friend QDataStream &operator>>(QDataStream &in, CBidDesc &bidDesc);
 
 private:
     QMap<qint16, QString> pages;
     QMap<qint16, QString> ruleIds;
+    QMap<quint8, QString> alertIds;
 };
 
 #endif // CBIDDESC_H

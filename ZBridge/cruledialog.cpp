@@ -33,14 +33,14 @@
  * @param bid The bid (only to be displayed).
  * @param parent The dialogs parent.
  */
-CRuleDialog::CRuleDialog(CRule *rule, QString *ruleIdDesc, QString &bid, QWidget *parent) :
+CRuleDialog::CRuleDialog(CRule *rule, CBidDesc *bidDesc, QString &bid, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::CRuleDialog)
 {
     ui->setupUi(this);
 
     this->rule = rule;
-    this->ruleIdDesc = ruleIdDesc;
+    this->bidDesc = bidDesc;
 
     id = rule->getId();
     priority = rule->getPriority();
@@ -52,7 +52,8 @@ CRuleDialog::CRuleDialog(CRule *rule, QString *ruleIdDesc, QString &bid, QWidget
 
     //Set initial values.
     //Id.
-    ui->ruleId->setText(QString::number(id));
+    ui->ruleId->setText(QString::number(id));    
+    ui->ruleIdDesc->setPlainText(bidDesc->getRuleIdDesc(id));
 
     //Next bid.
     ui->ruleBid->setText(bid);
@@ -82,6 +83,7 @@ CRuleDialog::CRuleDialog(CRule *rule, QString *ruleIdDesc, QString &bid, QWidget
 
     //Alertno.
     ui->ruleAlertId->setText(QString::number(alertId));
+    ui->alertIdDesc->setPlainText(bidDesc->getAlertIdDesc(alertId));
 
     //Ranges.
     setText(ui->hcpS, lowFeatures.getHcp(SPADES), highFeatures.getHcp(SPADES), 0, highFeatures.getMaxHcp(SPADES));
@@ -222,9 +224,6 @@ CRuleDialog::CRuleDialog(CRule *rule, QString *ruleIdDesc, QString &bid, QWidget
     setText(ui->longerThan3, lowFeatures.getSuits(), highFeatures.getSuits(), 1, highFeatures.getMaxSuits());
     setText(ui->longerMajor, lowFeatures.getLMaj(), highFeatures.getLMaj(), 0, highFeatures.getMaxLMaj());
     setText(ui->longerMinor, lowFeatures.getLMin(), highFeatures.getLMin(), 0, highFeatures.getMaxLMin());
-
-    if (ruleIdDesc->size() > 0)
-        ui->ruleIdDesc->setPlainText(*ruleIdDesc);
 }
 
 CRuleDialog::~CRuleDialog()
@@ -245,7 +244,10 @@ void CRuleDialog::on_ruleId_editingFinished()
         ui->ruleId->setFocus();
     }
     else
+    {
         id = low;
+        ui->ruleIdDesc->setPlainText(bidDesc->getRuleIdDesc(id));
+    }
 }
 
 void CRuleDialog::on_rulePriority_valueChanged(int arg1)
@@ -285,7 +287,10 @@ void CRuleDialog::on_ruleAlertId_editingFinished()
         ui->ruleAlertId->setFocus();
     }
     else
+    {
         alertId = low;
+        ui->alertIdDesc->setPlainText(bidDesc->getAlertIdDesc(alertId));
+    }
 }
 
 void CRuleDialog::on_hcpS_editingFinished()
@@ -2491,7 +2496,10 @@ void CRuleDialog::on_buttonBox_accepted()
     rule->setAlertId(alertId);
     rule->setFeatures(lowFeatures, highFeatures);
 
-    *ruleIdDesc = ui->ruleIdDesc->toPlainText();
+    QString text = ui->ruleIdDesc->toPlainText();
+    bidDesc->setRuleIdDesc(id, text);
+    text = ui->alertIdDesc->toPlainText();
+    bidDesc->setAlertIdDesc(alertId, text);
 
     accept();
 }

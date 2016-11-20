@@ -41,21 +41,22 @@ void CBidDesc::setRuleIdDesc(qint16 ruleId, QString &text)
         ruleIds.insert(ruleId, text);
 }
 
-/**
- * @brief operator << Serialization of bid description.
- */
+void CBidDesc::setAlertIdDesc(quint8 alertId, QString &text)
+{
+    alertIds.remove(alertId);
+    if (text.size() > 0)
+        alertIds.insert(alertId, text);
+}
+
 QDataStream &operator<<(QDataStream &out, const CBidDesc &bidDesc)
 {
     out<<MAGIC_NUMBER<<BIDDB_VERSION;
     out<<bidDesc.pages;
     out<<bidDesc.ruleIds;
+    out<<bidDesc.alertIds;
 
     return out;
 }
-
-/**
- * @brief operator >> Serialization of bid description.
- */
 QDataStream &operator>>(QDataStream &in, CBidDesc &bidDesc)
 {
     quint32 magicNumber;
@@ -75,6 +76,7 @@ QDataStream &operator>>(QDataStream &in, CBidDesc &bidDesc)
     }
     in>>bidDesc.pages;
     in>>bidDesc.ruleIds;
+    in>>bidDesc.alertIds;
 
     return in;
 }
