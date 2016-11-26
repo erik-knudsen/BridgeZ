@@ -35,22 +35,25 @@
  * @param protocol The protocol to use (advanced or basic).
  * @param bidOptionDocOwn Own bid options.
  * @param bidOptionDocOpp Opponents bid options.
+ * @param bidDB The bid database.
+ * @param bidDesc Description of the bid database.
  * @param tableManager The controlling table manager.
  *
  * The constructor:
  *   - Saves parameters for easy use later on.
- *   - Generates bif and play engines.
+ *   - Generates bid and play engines.
  *   - Initializes the Yakindu client state chart.
  *   - Connects signals, mostly meant to control the play view, to the table manager.
  */
 CActorLocal::CActorLocal(bool manual, QString teamName, Seat seat, int protocol,
-                       CBidOptionDoc &bidOptionDocOwn, CBidOptionDoc &bidOptionDocOpp, CTblMngr *tableManager) :
+                       CBidOptionDoc &bidOptionDocOwn, CBidOptionDoc &bidOptionDocOpp, CBidDB &bidDB,
+                       CBidDesc &bidDesc, CTblMngr *tableManager) :
     CActor(tableManager)
 {
     this->manual = manual;
     this->teamName = teamName;
     this->protocol = protocol;
-    bidAndPlay.generateEngines(bidOptionDocOwn, bidOptionDocOpp);
+    bidAndPlay.generateEngines(bidOptionDocOwn, bidOptionDocOpp, bidDB, bidDesc);
     this->tableManager = tableManager;
     showUser = false;
     updateGameInfo = false;

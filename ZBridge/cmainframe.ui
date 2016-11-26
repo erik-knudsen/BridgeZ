@@ -49,8 +49,6 @@
     </property>
     <addaction name="action_Lay_Out_Cards"/>
     <addaction name="separator"/>
-    <addaction name="actionBidding_System"/>
-    <addaction name="separator"/>
     <addaction name="actionCu_t"/>
     <addaction name="action_Copy"/>
     <addaction name="action_Paste"/>
@@ -109,9 +107,11 @@
     <property name="title">
      <string>Special</string>
     </property>
+    <addaction name="actionSelect_Bid_Database"/>
+    <addaction name="actionEdit_Bid_Database"/>
+    <addaction name="separator"/>
     <addaction name="actionEnable_Analysis_Tracing"/>
     <addaction name="actionShow_Player_Analyses"/>
-    <addaction name="separator"/>
     <addaction name="separator"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
@@ -795,9 +795,14 @@
     <string>Double Dummy Results</string>
    </property>
   </action>
-  <action name="actionBidding_System">
+  <action name="actionSelect_Bid_Database">
    <property name="text">
-    <string>Bidding System</string>
+    <string>Select Bid Database</string>
+   </property>
+  </action>
+  <action name="actionEdit_Bid_Database">
+   <property name="text">
+    <string>Edit Bid Database</string>
    </property>
   </action>
  </widget>

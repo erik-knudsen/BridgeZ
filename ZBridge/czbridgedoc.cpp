@@ -25,6 +25,7 @@
 #include <QSettings>
 
 #include "czbridgedoc.h"
+#include "ZBridgeException.h"
 
 CZBridgeDoc *CZBridgeDoc::instance = 0;
 
@@ -44,6 +45,9 @@ CZBridgeDoc::CZBridgeDoc(QObject *parent) :
     ReadDisplayOptions();
     ReadGameOptions();
     ReadWizardOptions();
+    ReadBidDBFileName();
+
+    LoadBidDB();
 
     synchronizeOptions(false);
 }
@@ -526,6 +530,103 @@ void CZBridgeDoc::WriteWizardOptions()
 void CZBridgeDoc::ReadWizardOptions()
 {
     wizardOptions.ReadSettings();
+}
+
+/**
+ * @brief Read bid database file name from permanent storage.
+ */
+void CZBridgeDoc::WriteBidDBFileName()
+{
+    QSettings settings("ZBridge settings", "div");
+
+    settings.setValue("bidDBFileName", bidDBFileName);
+}
+
+/**
+ * @brief Write bid database file name to permanent storage.
+ */
+void CZBridgeDoc::ReadBidDBFileName()
+{
+    QSettings settings("ZBridge settings", "div");
+
+    bidDBFileName = settings.value("bidDBFileName","").toString();
+}
+
+/**
+ * @brief Write bid database to permanent storage.
+ */
+void CZBridgeDoc::SaveBidDB()
+{
+    try
+    {
+        QFile file(bidDBFileName);
+        if (file.open(QIODevice::WriteOnly))
+        {
+            QDataStream out(&file);
+            out << bidDB;
+            file.close();
+            if (out.status() != QDataStream::Ok)
+                throw PlayException(tr("Bid DB: Write of bid DB failed").toStdString());
+        }
+        QString descFilename = bidDBFileName.left(bidDBFileName.indexOf(".bsf", 0, Qt::CaseInsensitive)) + ".dsc";
+        QFile descFile(descFilename);
+        if (descFile.open(QIODevice::WriteOnly))
+        {
+            QDataStream out(&descFile);
+            out << bidDesc;
+            descFile.close();
+            if (out.status() != QDataStream::Ok)
+                throw PlayException(tr("Bid DB: Write of bid description failed").toStdString());
+        }
+    }
+    catch (PlayException &e)
+    {
+        QMessageBox::critical(0, tr("ZBridge"), e.what());
+    }
+}
+
+/**
+ * @brief Read bid database from permanent storage.
+ */
+void CZBridgeDoc::LoadBidDB()
+{
+    if (bidDBFileName.size() == 0)
+        return;
+
+    try
+    {
+        bidDB.clearBidDB();
+        bidDesc.clearBidDesc();
+
+        QFile file(bidDBFileName);
+        if (file.open(QIODevice::ReadOnly))
+        {
+            QDataStream in(&file);
+            in >> bidDB;
+            file.close();
+            if (in.status() != QDataStream::Ok)
+                throw PlayException(tr("Bid DB: Corrupt or version not supported or not a bid database").toStdString());
+        }
+
+        //Open file with text description of pages etc. in the bid database.
+        QString descFilename = bidDBFileName.left(bidDBFileName.indexOf(".bsf", 0, Qt::CaseInsensitive)) + ".dsc";
+        QFile descFile(descFilename);
+        if (descFile.open(QIODevice::ReadOnly))
+        {
+            QDataStream in(&descFile);
+            in >> bidDesc;
+            descFile.close();
+            if (in.status() != QDataStream::Ok)
+                throw PlayException(tr("Bid DB: Corrupt or version not supported or not a bid description").toStdString());
+        }
+    }
+    catch (PlayException &e)
+    {
+        bidDB.clearBidDB();
+        bidDesc.clearBidDesc();
+
+        QMessageBox::critical(0, tr("ZBridge"), e.what());
+    }
 }
 
 /**

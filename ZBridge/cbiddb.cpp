@@ -34,6 +34,11 @@ CBidDB::CBidDB()
 
 CBidDB::~CBidDB()
 {
+    clearBidDB();
+}
+
+void CBidDB::clearBidDB()
+{
     qDeleteAll(pages);
     pages.clear();
 }

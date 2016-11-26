@@ -28,7 +28,7 @@ class QString;
 class QDataStream;
 
 /**
- * @brief This class defines a set of bid options. It also describes how the options are ssaved and
+ * @brief This class defines a set of bid options. It also describes how the options are saved and
  * restored form persistent storage.
  */
 class CBidOptionDoc

@@ -28,6 +28,8 @@
 #include "../src-gen/ZBridgeClientSync.h"
 
 #include "Defines.h"
+#include "cbiddb.h"
+#include "cbiddesc.h"
 #include "cbidandplay.h"
 #include "cactorbase.h"
 
@@ -48,7 +50,8 @@ class CActorLocalAuto : public CActorBase
     Q_OBJECT
 public:
     CActorLocalAuto(QString teamName, Seat seat, CBidOptionDoc &bidOptionDocOwn,
-               CBidOptionDoc &bidOptionDocOpp, CTblMngrBase *tableManager);
+               CBidOptionDoc &bidOptionDocOpp, CBidDB &bidDB, CBidDesc &bidDesc,
+                    CTblMngrBase *tableManager);
 
     void startNewSession();
 

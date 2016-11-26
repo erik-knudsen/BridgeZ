@@ -30,8 +30,11 @@ CBidAndPlay::CBidAndPlay()
  * @brief Generate bid and play engines.
  * @param bidOptionDocOwn Options for own bidding.
  * @param bidOptionDocOpp Options for opponents bidding.
+ * @param bidDB The bid database.
+ * @param bidDesc Description of the bid database.
  */
-void CBidAndPlay::generateEngines(CBidOptionDoc &bidOptionDocOwn, CBidOptionDoc &bidOptionDocOpp)
+void CBidAndPlay::generateEngines(CBidOptionDoc &bidOptionDocOwn, CBidOptionDoc &bidOptionDocOpp,
+                                  CBidDB &bidDB, CBidDesc &bidDesc)
 {
 }
 

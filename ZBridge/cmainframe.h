@@ -124,7 +124,6 @@ private slots:
     void on_actionExit_triggered();
 
     void on_action_Lay_Out_Cards_triggered();
-    void on_actionBidding_System_triggered();
     void on_actionCu_t_triggered();
     void on_action_Copy_triggered();
     void on_action_Paste_triggered();
@@ -160,6 +159,8 @@ private slots:
     void on_action_Game_Options_triggered();
     void on_actionConfiguration_Wizard_triggered();
 
+    void on_actionSelect_Bid_Database_triggered();
+    void on_actionEdit_Bid_Database_triggered();
     void on_actionEnable_Analysis_Tracing_triggered();
     void on_actionShow_Player_Analyses_triggered();
 

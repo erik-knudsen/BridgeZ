@@ -32,6 +32,8 @@
 #include "cdisplayoptiondoc.h"
 #include "cgameoptiondoc.h"
 #include "cwizardoptiondoc.h"
+#include "cbiddb.h"
+#include "cbiddesc.h"
 
 
 /**
@@ -67,8 +69,13 @@ public:
     void synchronizeOptions(bool onlyDefaultBid);
     CBidOptionDoc &getNSBidOptions();
     CBidOptionDoc &getEWBidOptions();
+    QString getBidDBFileName() { return bidDBFileName; }
+    void setBidDBFileName(QString &bidDBFileName) { this->bidDBFileName = bidDBFileName; }
 
-    //Read and write options to permanent storage.
+    CBidDB *getBidDB() { return &bidDB; }
+    CBidDesc *getBidDesc() {return &bidDesc; }
+
+    //Read and write options (write and read to system storage, save and load to file storage).
     void WriteSeatOptions();
     void ReadSeatOptions();
     void SaveBidOptions();
@@ -83,7 +90,14 @@ public:
     void ReadGameOptions();
     void WriteWizardOptions();
     void ReadWizardOptions();
+    void WriteBidDBFileName();
+    void ReadBidDBFileName();
 
+    //Bid database.
+    void SaveBidDB();
+    void LoadBidDB();
+
+    //Other.
     void setFileComments(QString& fileComments);
     QString& getFileComments();
     void setShowCommentsUponOpen(bool autoShow);
@@ -105,6 +119,11 @@ private:
     CDisplayOptionDoc displayOptions;
     CGameOptionDoc gameOptions;
     CWizardOptionDoc wizardOptions;
+
+    //Bid database.
+    QString bidDBFileName;
+    CBidDB bidDB;
+    CBidDesc bidDesc;
 };
 
 #endif // CZBRIDGEDOC_H

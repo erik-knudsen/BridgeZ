@@ -27,6 +27,18 @@ CBidDesc::CBidDesc()
 {
 }
 
+CBidDesc::~CBidDesc()
+{
+    clearBidDesc();
+}
+
+CBidDesc::clearBidDesc()
+{
+    pages.clear();
+    ruleIds.clear();
+    alertIds.clear();
+}
+
 void CBidDesc::setPageDesc(qint16 pageId, QString &text)
 {
     pages.remove(pageId);

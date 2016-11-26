@@ -789,86 +789,6 @@ void CMainFrame::on_action_Lay_Out_Cards_triggered()
         games->clearGames(doc->getGameOptions().scoringMethod);
 }
 
-
-/**
- * @brief Edit/create bidding system database.
- */
-void CMainFrame::on_actionBidding_System_triggered()
-{
-    CBidDB bidDB;
-    CBidDesc bidDesc;
-
-    try
-    {
-    //Determine Bidding System file to read.
-    QString fileName = QFileDialog::getOpenFileName(this,
-        tr("Read Bidding System"), "", tr("Bidding System Files (*.bsf)"));
-    QFile file(fileName);
-    if (file.open(QIODevice::ReadOnly))
-    {
-        QDataStream in(&file);
-        in >> bidDB;
-        file.close();
-        if (in.status() != QDataStream::Ok)
-            throw PlayException(tr("Bid DB: Corrupt or version not supported or not a bid database").toStdString());
-    }
-
-    //Open file with text description of pages in the bid database.
-    QString descFilename = fileName.left(fileName.indexOf(".bsf", 0, Qt::CaseInsensitive)) + ".dsc";
-    QFile descFile(descFilename);
-    if (descFile.open(QIODevice::ReadOnly))
-    {
-        QDataStream in(&descFile);
-        in >> bidDesc;
-        descFile.close();
-        if (in.status() != QDataStream::Ok)
-            throw PlayException(tr("Bid DB: Corrupt or version not supported or not a bid description").toStdString());
-    }
-
-    CBiddingSystemDialog biddingSystemDialog(&bidDB, &bidDesc, this);
-    if (biddingSystemDialog.exec() == QDialog::Accepted)
-    {
-        if (fileName.size() != 0)
-        {
-            int ret = QMessageBox::warning(this, tr("ZBridge"),
-                                           tr("Do you want to overwrite the existing Bidding System file?"),
-                                           QMessageBox::Yes | QMessageBox::No,
-                                           QMessageBox::No);
-            if (ret == QMessageBox::No)
-                fileName = "";
-        }
-        if (fileName.size() == 0)
-        {
-            fileName = QFileDialog::getSaveFileName(this,
-                                                    tr("Save Bidding System"), "", tr("Bidding System File (*.bsf)"));
-            descFilename = fileName.left(fileName.indexOf(".bsf", 0, Qt::CaseInsensitive)) + ".dsc";
-        }
-        file.setFileName(fileName);
-        if (file.open(QIODevice::WriteOnly))
-        {
-            QDataStream out(&file);
-            out << bidDB;
-            file.close();
-            if (out.status() != QDataStream::Ok)
-                throw PlayException(tr("Bid DB: Write of bid DB failed").toStdString());
-        }
-        descFile.setFileName(descFilename);
-        if (descFile.open(QIODevice::WriteOnly))
-        {
-            QDataStream out(&descFile);
-            out << bidDesc;
-            descFile.close();
-            if (out.status() != QDataStream::Ok)
-                throw PlayException(tr("Bid DB: Write of bid description failed").toStdString());
-        }
-    }
-    }
-    catch (PlayException &e)
-    {
-        QMessageBox::critical(0, tr("ZBridge"), e.what());
-    }
-}
-
 void CMainFrame::on_actionCu_t_triggered()
 {
 
@@ -1154,6 +1074,54 @@ void CMainFrame::on_actionConfiguration_Wizard_triggered()
         doc->WriteWizardOptions();
         doc->synchronizeOptions(true);
     }
+}
+
+/**
+ * @brief Select bidding system database.
+ */
+void CMainFrame::on_actionSelect_Bid_Database_triggered()
+{
+    //Determine Bidding System file to read.
+    QString fileName = QFileDialog::getOpenFileName(this,
+        tr("Read Bidding System"), doc->getBidDBFileName(), tr("Bidding System Files (*.bsf)"));
+    if (fileName.size() != 0)
+    {
+        doc->setBidDBFileName(fileName);
+        doc->WriteBidDBFileName();
+        doc->LoadBidDB();
+    }
+}
+
+/**
+ * @brief Edit/create bidding system database.
+ */
+void CMainFrame::on_actionEdit_Bid_Database_triggered()
+{
+        CBiddingSystemDialog biddingSystemDialog(doc->getBidDB(), doc->getBidDesc(), this);
+        if (biddingSystemDialog.exec() == QDialog::Accepted)
+        {
+            QString fileName;
+            if ((fileName = doc->getBidDBFileName()).size() != 0)
+            {
+                int ret = QMessageBox::warning(this, tr("ZBridge"),
+                                               tr("Do you want to overwrite the existing Bidding System file?"),
+                                               QMessageBox::Yes | QMessageBox::No,
+                                               QMessageBox::No);
+                if (ret == QMessageBox::No)
+                    fileName = "";
+            }
+
+            if (fileName.size()== 0)
+            {
+                while ((fileName = QFileDialog::getSaveFileName(this,
+                          tr("Save Bidding System"), "", tr("Bidding System File (*.bsf)"))).size() == 0)
+                    ;
+                doc->setBidDBFileName(fileName);
+            }
+            doc->SaveBidDB();
+        }
+        else
+            doc->LoadBidDB();
 }
 
 void CMainFrame::on_actionEnable_Analysis_Tracing_triggered()

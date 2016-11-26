@@ -29,6 +29,9 @@ class CBidDesc
 {
 public:
     CBidDesc();
+    ~CBidDesc();
+    clearBidDesc();
+
     void setPageDesc(qint16 pageId, QString &text);
     QString getPageDesc(qint16 pageId) { return pages.value(pageId, ""); }
     void setRuleIdDesc(qint16 ruleId, QString &text);

@@ -138,16 +138,20 @@ void CTblMngrClient::newSession()
     //Set up actor.
     if (doc->getSeatOptions().seat == WEST_SEAT)
         actor = new CActorLocal((doc->getSeatOptions().westActor == MANUAL_ACTOR), doc->getSeatOptions().westName,
-                                WEST_SEAT, protocol, doc->getNSBidOptions(), doc->getEWBidOptions(), this);
+                                WEST_SEAT, protocol, doc->getNSBidOptions(), doc->getEWBidOptions(),
+                                *doc->getBidDB(), *doc->getBidDesc(), this);
     else if (doc->getSeatOptions().seat == NORTH_SEAT)
         actor = new CActorLocal((doc->getSeatOptions().northActor == MANUAL_ACTOR), doc->getSeatOptions().northName,
-                                NORTH_SEAT, protocol, doc->getNSBidOptions(), doc->getEWBidOptions(), this);
+                                NORTH_SEAT, protocol, doc->getNSBidOptions(), doc->getEWBidOptions(),
+                                *doc->getBidDB(), *doc->getBidDesc(), this);
     else if (doc->getSeatOptions().seat == EAST_SEAT)
         actor = new CActorLocal((doc->getSeatOptions().eastActor == MANUAL_ACTOR), doc->getSeatOptions().eastName,
-                                EAST_SEAT, protocol, doc->getNSBidOptions(), doc->getEWBidOptions(), this);
+                                EAST_SEAT, protocol, doc->getNSBidOptions(), doc->getEWBidOptions(),
+                                *doc->getBidDB(), *doc->getBidDesc(), this);
     else
         actor = new CActorLocal((doc->getSeatOptions().southActor == MANUAL_ACTOR), doc->getSeatOptions().southName,
-                                SOUTH_SEAT, protocol, doc->getNSBidOptions(), doc->getEWBidOptions(), this);
+                                SOUTH_SEAT, protocol, doc->getNSBidOptions(), doc->getEWBidOptions(),
+                                *doc->getBidDB(), *doc->getBidDesc(), this);
 
     actor->setShowUser((actor->getActorType() == MANUAL_ACTOR) || showAll);
     actor->setUpdateGameInfo(true);

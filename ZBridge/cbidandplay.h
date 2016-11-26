@@ -22,6 +22,8 @@
 #ifndef CBIDANDPLAY_H
 #define CBIDANDPLAY_H
 
+#include "cbiddb.h"
+#include "cbiddesc.h"
 #include "cbidhistory.h"
 #include "cplayhistory.h"
 #include "cbidengine.h"
@@ -46,7 +48,8 @@ class CBidAndPlay
 public:
     CBidAndPlay();
 
-    void generateEngines(CBidOptionDoc &bidOptionDocOwn, CBidOptionDoc &bidOptionDocOpp);
+    void generateEngines(CBidOptionDoc &bidOptionDocOwn, CBidOptionDoc &bidOptionDocOpp,
+                         CBidDB &bidDB, CBidDesc &bidDesc);
 
     void setBidInfo(Bids bid, Bids bidDouble, Seat openLeader)
     { playHistory.setBidInfo(bid, bidDouble, openLeader); }

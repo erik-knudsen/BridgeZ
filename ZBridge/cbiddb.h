@@ -54,6 +54,8 @@ public:
     CBidDB();
     ~CBidDB();
 
+    void clearBidDB();
+
     /** @name Get keys for the three mapping levels
      * Level 1 is page, level 2 is auction and level 3 is next bid or substitute auction.
      */
