@@ -28,6 +28,7 @@
 #include "cplayhistory.h"
 #include "cbidengine.h"
 #include "cplayengine.h"
+#include "cfeatures.h"
 #include "Defines.h"
 
 class CBidOptionDoc;
@@ -48,14 +49,14 @@ class CBidAndPlay
 public:
     CBidAndPlay();
 
-    void generateEngines(CBidOptionDoc &bidOptionDocOwn, CBidOptionDoc &bidOptionDocOpp,
+    void generateEngines(Seat seat, CBidOptionDoc &bidOptionDocOwn, CBidOptionDoc &bidOptionDocOpp,
                          CBidDB &bidDB, CBidDesc &bidDesc);
 
     void setBidInfo(Bids bid, Bids bidDouble, Seat openLeader)
     { playHistory.setBidInfo(bid, bidDouble, openLeader); }
-    void resetBidHistory() { bidHistory.resetBidHistory(); }
-    void appendBid(CBid &bid) { bidHistory.appendBid(bid); }
-    int bidUndo(Bids *bid) { return bidHistory.undo(bid); }
+    void resetBidHistory();
+    void appendBid(CBid &bid);
+    int bidUndo(Bids *bid);
     Bids getNextBid(Seat seat);
 
     void setActorsCards(int cards[13])
@@ -85,6 +86,9 @@ private:
 
     int actorsCards[13];
     int dummysCards[13];
+
+    Seat seat;
+    CFeatures features[4][2];
 };
 
 #endif // CHANDLEBID_H

@@ -210,7 +210,8 @@ HEADERS  += cmainframe.h \
     cbids.h \
     cfeatures.h \
     crule.h \
-    cruledialog.h
+    cruledialog.h \
+    biddbdefines.h
 
 FORMS    += cmainframe.ui \
     cfilepropertiesdialog.ui \

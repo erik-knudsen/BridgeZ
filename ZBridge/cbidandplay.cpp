@@ -33,9 +33,43 @@ CBidAndPlay::CBidAndPlay()
  * @param bidDB The bid database.
  * @param bidDesc Description of the bid database.
  */
-void CBidAndPlay::generateEngines(CBidOptionDoc &bidOptionDocOwn, CBidOptionDoc &bidOptionDocOpp,
+void CBidAndPlay::generateEngines(Seat seat, CBidOptionDoc &bidOptionDocOwn, CBidOptionDoc &bidOptionDocOpp,
                                   CBidDB &bidDB, CBidDesc &bidDesc)
 {
+    this->seat = seat;
+}
+
+/**
+ * @brief Reset bid history.
+ */
+void CBidAndPlay::resetBidHistory()
+{
+    for (int i = 0; i < 3; i++)
+    {
+        features[i][0].setMinFeatures();
+        features[i][1].setMaxFeatures();
+    }
+
+    bidHistory.resetBidHistory();
+}
+
+/**
+ * @brief Append bid to bid history.
+ * @param bid The bid to append.
+ */
+void CBidAndPlay::appendBid(CBid &bid)
+{
+    bidHistory.appendBid(bid);
+}
+
+/**
+* @brief Undo some of the bid history.
+* @param bid Last regular bidders bid (not double, redouble or pass) after one round (4) bids have been popped.
+* @return One less than number of bids given until (and including) last regular bidder or REBID if bid history gets reset.
+* */
+int CBidAndPlay::bidUndo(Bids *bid)
+{
+    return bidHistory.undo(bid);
 }
 
 /**

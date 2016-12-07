@@ -53,7 +53,7 @@ CActorLocal::CActorLocal(bool manual, QString teamName, Seat seat, int protocol,
     this->manual = manual;
     this->teamName = teamName;
     this->protocol = protocol;
-    bidAndPlay.generateEngines(bidOptionDocOwn, bidOptionDocOpp, bidDB, bidDesc);
+    bidAndPlay.generateEngines(seat, bidOptionDocOwn, bidOptionDocOpp, bidDB, bidDesc);
     this->tableManager = tableManager;
     showUser = false;
     updateGameInfo = false;

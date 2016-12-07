@@ -48,7 +48,7 @@ CActorLocalAuto::CActorLocalAuto(QString teamName, Seat seat, CBidOptionDoc &bid
     CActorBase(tableManager)
 {
     this->teamName = teamName;
-    bidAndPlay.generateEngines(bidOptionDocOwn, bidOptionDocOpp, bidDB, bidDesc);
+    bidAndPlay.generateEngines(seat, bidOptionDocOwn, bidOptionDocOpp, bidDB, bidDesc);
     this->tableManager = tableManager;
     updateGameInfo = false;
     synchronizing = false;
