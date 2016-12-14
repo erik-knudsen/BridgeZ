@@ -17,6 +17,7 @@
 #ifndef BIDDBDEFINES
 #define BIDDBDEFINES
 
+//Definition of pages**********************************************************
 //Opening bids---------------------------------------------------------------
 //Open 1. and 2. seat.
 const int O12_4M_SN_L = 1;      //4-major, strong 1NT, lower first.
@@ -425,6 +426,96 @@ const int D_RB_ACO = 421;       //After constructive overcall.
 const int D_RB_MO = 422;        //Rebid by opener and responder.
 const int D_RB_MO_OFF = 423;    //Maximal overcall double off.
 
+//Definition of rule ids*******************************************************************
+//1 in a suit opening.
+//Basic settings are 13+ HCP for balanced hand and 11+ HCP for unbalanced hand.
+//Additional settings.
+const int OB_12G = 1;           //Balanced and 12+ good HCP.
+const int OB_12 = 2;            //Balanced and 12+ HCP.
+const int OB_11G = 3;           //Balanced and 11+ good HCP.
+const int OUB_10 = 4;           //Balanced and 10+ HCP.
+const int OUB_9 = 5;            //Balanced and 9+ HCP.
+
+const int O_1H_4 = 6;           //1H promises 4 card suit.
+const int O_1H_5 = 7;           //1H promises 5 card suit.
+const int O_1S_4 = 8;           //1S promises 4 card suit.
+const int O_1S_5 = 9;           //1S promises 5 card suit.
+
+const int H5_2N = 44;           //Two Over One Natural.
+const int H5_2G = 44;           //Two Over One Game Force.
+
+const int O_PREP = 30;          //Prepared opening.
+const int O_MAJOR = 31;         //Open major suit first.
+const int O_LOWER = 32;         //Open loweer suit first.
+
+//Others.
+const int ST1N = 27;            //Strong 1NT.
+const int WK1N = 28;            //Weak 1NT.
+const int O_1N_WM = 13;         //Open 1NT with weak major.
+
+const int WK1N_R_GF = 33;       //Weak 1NT and 1NT after 1/1: 18+ HCP (GF).
+const int WK1N_R_NF = 34;       //Weak 1NT and 1NT after 1/1: 17-18 HCP (NF).
+
+const int SPL_O = 29;           //Splinter offensive side.
+const int SPL_D = 22;           //Splinter defensive side.
+const int SPL_N = 42;           //No splinter.
+
+const int OR_11_2N_GF = 35;     //2N after 1/1: 18+ HCP (GF).
+const int OR_11_2N_NF = 36;     //2N after 1/1: 17-18 HCP (NF).
+const int OR_21_2N_GF = 40;     //2N after 2/1: 15-18 HCP (GF).
+const int OR_21_2N_NF = 41;     //2N after 2/1: 12-14 HCP (NF).
+
+const int OR_11_3N_N = 37;      //3N after 1/1: 19+ HCP (natural).
+const int OR_11_3N_LM = 39;     //3N after 1/1: Long minor.
+const int OR_11_3N_A = 37;      //3N after 1/1: Balanced major raise.
+
+const int R_M_2N_S = 26;        //Stenberg 2NT major raise.
+const int R_M_2N_J = 26;        //Jacoby 2NT major raise.
+
+const int R_m_1N_S = 48;        //1N-3C/3D Slam try.
+const int R_m_1N_G = 49;        //1N-3C/3D Game invitation or preemptive.
+
+const int R_2C_2NT_2224 = 18;   //2NT after 2C: 22-24 HCP.
+const int R_2C_2NT_2324 = 21;   //2NT after 2C: 23-24 HCP.
+
+const int S_3L_P_NV = 14;       //Sound 3 level preempt when not vulnerable.
+const int S_3L_P_V = 16;        //Sound 3 level preempt when vulnerable.
+const int L_3L_P_NV = 15;       //Light 3 level preempt when not vulnerable.
+const int L_3L_P_V = 17;        //Light 3 level preempt when vulnerable.
+
+const int R_JR_LIM = 54;        //Open overcalled: responder jump raise is invitational.
+const int R_JR_PRE = 54;        //Open overcalled: responder jump raise is preemptive.
+
+const int D_CON = 56;           //Constructive overcall (raise is invitational).
+const int D_AGR = 57;           //Aggressive overcall (raise is preemptive).
+
+const int D_OVR_4 = 52;         //Four card overcall (good).
+
+const int D_J_OWK = 59;         //Jump overcall is weak.
+const int D_J_OIM = 60;         //Jump overcall is intermediate.
+
+const int GHES_OFF = 53;        //Ghestem convention is off.
+const int CBS_OFF = 61;         //Checkback Stayman is off.
+
+const int R_2C_2D_N = 19;       //2C-2D: negative.
+const int R_2C_2D_W = 20;       //2C-2D: waiting.
+
+const int R_1N_S = 47;          //Stayman.
+const int R_1N_4R_S = 56;       //4-response Stayman.
+
+const int R_1N_2N_N = 45;       //1N-2N natural.
+const int R_1N_2N_T = 45;       //1N-2N transfer.
+
+const int R_2N_3M = 23;         //2N-3M: natural forcing.
+
+const int RD_ESC = 51;          //Redouble escape.
+const int RD_PND = 12;          //Redouble pending.
+
+const int T_OUT_D_O = 24;       //Takeout offensive side (unclear what takeout rules).
+const int T_OUT_D_D = 11;       //Takeout defensive side (unclear what takeout rules).
+const int STD_O = 58;           //(mostly doubles) offensive side (instead of T_OUT_D_O).
+const int STD_D = 10;           //(mostly doubles) defensive side (instead of T_OUT_D_D).
+
 /*
     Possible combinations ----------------------------------------------------------------
 
@@ -509,7 +600,7 @@ const int D_RB_MO_OFF = 423;    //Maximal overcall double off.
 //3NT Acol.
 
 
-//Defines for bid database -----------------------------------------------------------
+//Pages for bid database -----------------------------------------------------------
 //Common.
     OR_COM_1 OR_COM_2 RR_COM
     OR_1m_2m_FL
