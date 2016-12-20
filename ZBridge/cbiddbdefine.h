@@ -459,8 +459,8 @@ const qint16 ST1N = 27;            //Strong 1NT.
 const qint16 WK1N = 28;            //Weak 1NT.
 const qint16 O_1N_WM = 13;         //Open 1NT with weak major.
 
-const qint16 WK1N_R_GF = 33;       //Weak 1NT and 1NT after 1/1: 18+ HCP (GF).
-const qint16 WK1N_R_NF = 34;       //Weak 1NT and 1NT after 1/1: 17-18 HCP (NF).
+const qint16 WK1N_R_GF = 33;       //Weak 1NT and 1NT after 1/1: 15-18 HCP.
+const qint16 WK1N_R_NF = 34;       //Weak 1NT and 1NT after 1/1: 15-16 HCP.
 
 const qint16 SPL_O = 29;           //Splinter offensive side.
 const qint16 SPL_D = 22;           //Splinter defensive side.
@@ -982,7 +982,7 @@ const qint16 STD_D = 10;           //(mostly doubles) defensive side (instead of
 
 //2NT after 2/1 15-18 HCP
     RR45_2N_21_1518
-//2NT after 2/1 15-18 HCP
+//2NT after 2/1 12-14 HCP
     RR45_2N_21_1214
 
 //After 2C-2D-2NT opening.
