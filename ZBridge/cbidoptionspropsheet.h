@@ -275,8 +275,7 @@ private slots:
     void on_negativeDoubles_clicked(bool checked);
 
     //2-Bids configuration.
-    void on_strongTwo_clicked();
-    void on_weakTwo_clicked();
+    void on_weakTwo_clicked(bool checked);
     void on_openValue20_clicked();
     void on_openValue21_clicked();
     void on_openValue22_clicked();
@@ -299,9 +298,8 @@ private slots:
     void on_unusualNT_clicked(bool checked);
     void on_drury_clicked(bool checked);
     void on_fourthSuitForcing_clicked(bool checked);
-    void on_structuredReverses_clicked(bool checked);
-    void on_jumpOvercallStrong_clicked();
-    void on_jumpOvercallWeak_clicked();
+    void on_structuredReverses_clicked(bool checked);    
+    void on_jumpOvercallWeak_clicked(bool checked);
 
     //Opening configuration.
     void on_elevenHCPsRbsLm_clicked(bool checked);

@@ -261,16 +261,33 @@ const int EWOPENINGLEADNT = 3;
 //Major modes.
 const int MAJOR_FOUR = 0;
 const int MAJOR_FIVE = 1;
+const int STAYMAN_OFF = 0;
+const int STAYMAN_3R_F = 1;
+const int STAYMAN_3R_NF = 2;
+const int STAYMAN_4R = 3;
 
 //2-Bid modes.
 const int STRONG_TWO = 0;
 const int WEAK_TWO = 1;
+
+//After strong two club.
+const int TWO_C_TWO_D_NEGATIVE = 0;
+const int TWO_C_TWO_D_WAITING = 1;
 
 //2C Open values.
 const int OPEN_VALUE_20 = 20;
 const int OPEN_VALUE_21 = 21;
 const int OPEN_VALUE_22 = 22;
 const int OPEN_VALUE_23 = 23;
+
+//After weak two and after weak jump overcall.
+const int W2_OGUST = 0;
+const int W2_FEATURE = 1;
+const int W2_NATURAL = 2;
+
+//Weak two new suit.
+const int W2_NEW_SUIT_NF = 0;
+const int W2_NEW_SUIT_F = 1;
 
 //NT Range.
 const int ONE_NT_RANGE_12_14 = 0;
@@ -285,9 +302,40 @@ const int THREE_NT_RANGE_25_27 = 0;
 const int GAMBLING_3_NT = 1;
 const int GAMBLING_3_NT_ACOL = 2;
 
-//Misc.
+//3 minor after 1NT.
+const int ONE_NT_3m_ST = 0;
+const int ONE_NT_3m_GT = 1;
+const int ONE_NT_3m_PE = 2;
+
+//3 major after 1NT.
+const int ONE_NT_3M_ST = 0;
+const int ONE_NT_3M_GF = 1;
+const int ONE_NT_3M_GT = 2;
+const int ONE_NT_3M_PE = 3;
+
+//2 NT after 1/1.
+const int TWO_NT_11_18_20 = 0;
+const int TWO_NT_11_17_18 = 1;
+
+//2 NT after 2/1.
+const int TWO_NT_21_15_18 = 0;
+const int TWO_NT_21_12_14 = 1;
+
+//After 1NT rebid.
+const int REBID_1NT_NAT = 0;
+const int REBID_1NT_F = 1;
+
+//Three level vulnerability.
+const int SOUND_THREE_LEVEL = 0;
+const int LIGHT_THREE_LEVEL = 1;
+
+//Jump overcall.
 const int JUMP_OVERCALL_STRONG = 0;
 const int JUMP_OVERCALL_WEAK = 1;
+
+//Direct cuebid.
+const int MICHAELS_CUEBID = 0;
+const int STRONG_CUE_BID = 1;
 
 //Signals.
 const int SIGNAL_NO_SIGNAL = 0;

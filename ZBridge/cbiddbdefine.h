@@ -99,7 +99,7 @@ const qint16 A_2N_21_22_SL = 1069; //3C Stayman. Later bids.
 //22-24 HCP.
 const qint16 A_2N_22_24 = 70;      //After opening.
 const qint16 A_2N_22_24_SN = 71;   //3C Stayman. 3D, 3H, 3S Natural.
-const qint16 A_2N_22_24_NT = 22;   //Non Texas.
+const qint16 A_2N_22_24_NT = 72;   //Non Texas.
 const qint16 A_2N_22_24_L = 73;    //Later bids.
 const qint16 A_2N_22_24_NL =74;    //3D, 3H, 3S Natural. Later bids.
 const qint16 A_2N_22_24_SL = 1074; //3C Stayman. Later bids.
@@ -448,7 +448,7 @@ const qint16 O_1S_4 = 8;           //1S promises 4 card suit.
 const qint16 O_1S_5 = 9;           //1S promises 5 card suit.
 
 const qint16 H5_2N = 44;           //Two Over One Natural.
-const qint16 H5_2G = 44;           //Two Over One Game Force.
+const qint16 H5_2G = 43;           //Two Over One Game Force.
 
 const qint16 O_PREP = 30;          //Prepared opening.
 const qint16 O_MAJOR = 31;         //Open major suit first.
@@ -473,10 +473,10 @@ const qint16 OR_21_2N_NF = 41;     //2N after 2/1: 12-14 HCP (NF).
 
 const qint16 OR_11_3N_N = 37;      //3N after 1/1: 19+ HCP (natural).
 const qint16 OR_11_3N_LM = 39;     //3N after 1/1: Long minor.
-const qint16 OR_11_3N_A = 37;      //3N after 1/1: Balanced major raise.
+const qint16 OR_11_3N_A = 38;      //3N after 1/1: Balanced major raise.
 
 const qint16 R_M_2N_S = 26;        //Stenberg 2NT major raise.
-const qint16 R_M_2N_J = 26;        //Jacoby 2NT major raise.
+const qint16 R_M_2N_J = 25;        //Jacoby 2NT major raise.
 
 const qint16 R_m_1N_S = 48;        //1N-3C/3D Slam try.
 const qint16 R_m_1N_G = 49;        //1N-3C/3D Game invitation or preemptive.
@@ -490,7 +490,7 @@ const qint16 L_3L_P_NV = 15;       //Light 3 level preempt when not vulnerable.
 const qint16 L_3L_P_V = 17;        //Light 3 level preempt when vulnerable.
 
 const qint16 R_JR_LIM = 54;        //Open overcalled: responder jump raise is invitational.
-const qint16 R_JR_PRE = 54;        //Open overcalled: responder jump raise is preemptive.
+const qint16 R_JR_PRE = 55;        //Open overcalled: responder jump raise is preemptive.
 
 const qint16 D_CON = 56;           //Constructive overcall (raise is invitational).
 const qint16 D_AGR = 57;           //Aggressive overcall (raise is preemptive).
@@ -510,7 +510,7 @@ const qint16 R_1N_S = 47;          //Stayman.
 const qint16 R_1N_4R_S = 56;       //4-response Stayman.
 
 const qint16 R_1N_2N_N = 45;       //1N-2N natural.
-const qint16 R_1N_2N_T = 45;       //1N-2N transfer.
+const qint16 R_1N_2N_T = 46;       //1N-2N transfer.
 
 const qint16 R_2N_3M = 23;         //2N-3M: natural forcing.
 
@@ -523,89 +523,6 @@ const qint16 STD_O = 58;           //(mostly doubles) offensive side (instead of
 const qint16 STD_D = 10;           //(mostly doubles) defensive side (instead of T_OUT_D_D).
 
 /*
-    Possible combinations ----------------------------------------------------------------
-
-    //Weak jump overcall (6-9 HCP)
-        //2NT Natural.
-        //2NT Ogust.
-        //2NT Feature.
-    //intermediate jump overcall (13-16 HCP).
-
-    //Strong cuebid.
-    //Michaels cue bid.
-
-    //Penalty double against overcall.
-    //Negative double against overcall.
-
-    //Forcing raise (American).
-    //Simple Limit raise (European).
-        //Simple limit raise only.
-        //Simple limit raise + 2NT major raise forcing (Jacoby 2NT).
-        //Splinter.
-
-//1NT.
-    //Stayman forcing.
-    //Stayman not forcing.
-
-    //2D/2H/2S sign off.
-    //Jacoby.
-        //2S sign off.
-        //2S,2N minor transfer.
-
-    //3C/3D slam try.
-    //3C/3D game try.
-    //3C/3D pre emptive.
-
-    //3H/3S slam try.
-    //3H/3S game forcing.
-    //3H/3S pre emptive.
-    //3H/3S game invitation.
-
-    //4H/4S natural.
-
-//1NT 12-14 HCP.
-//1NT 16-18 HCP.
-//1NT 15-17 HCP.
-
-
-//2NT after 1/1 18-20 HCP.
-//2NT after 1/1 17-18 HCP.
-
-//2NT after 2/1 12-14 HCP
-//2NT after 2/1 15-18 HCP
-
-//After openers 1NT rebids.
-    //New minor natural.
-    //New minor forcing.
-
-//4-major.
-    //Strong 1NT, lower first.
-    //Weak 1NT, lower first.
-//5-major.
-    //Strong 1NT, lower first.
-    //Weak 1NT, lower first.
-
-//Strong 2C.
-    //Weak 2D, 6-11 HCP. //Weak 2H/2S, 6-11 HCP.
-
-    //Ogust after weak 2D, not forcing. //Ogust after weak 2H/2S, not forcing.
-    //Ogust after weak 2D, forcing. //Ogust after weak 2H/2S, forcing.
-    //Feature after weak 2D, not forcing. //Feature after weak 2H/2S, not forcing.
-    //Feature after weak 2D, forcing. //Feature after weak 2H/2S, forcing.
-//Strong two (2C, 2D, 2H, 2S).
-
-//2NT 20-21 HCP.
-//2NT 21-22 HCP.
-//2NT 22-24 HCP.
-
-//After 2C-2D-2NT opening. 22-24 HCP.
-//After 2C-2D-2NT opening. 23-24 HCP.
-
-//3NT 25-27 HCP.
-//3NT gambling (1., 2. and 3. seat). //3NT gambling (4. seat).
-//3NT Acol.
-
-
 //Pages for bid database -----------------------------------------------------------
 //Common.
     OR_COM_1 OR_COM_2 RR_COM
@@ -652,10 +569,10 @@ const qint16 STD_D = 10;           //(mostly doubles) defensive side (instead of
         D_OPS_ND
         D_OVS_ND
 
-    //Forcing raise (American).
+    //Forcing raise - minor and major (+American).
         OR_1m_3m_F ORA_1C_1N ORA_1m_2N ORA_1m_3N OR_1M_3M_F
         RR_4N
-    //Simple Limit raise (European).
+    //Simple Limit raise - minor and major (+European).
         OR_1m_3m_L ORE_1C_1N ORE_1m_2N ORE_1m_3N OR_1M_3M_L
         RR_4F
         D_OPS_L
@@ -765,10 +682,10 @@ const qint16 STD_D = 10;           //(mostly doubles) defensive side (instead of
             //New minor forcing (after 1NT rebid).
                 RR4_WN_1718_F
 
-    //Forcing raise (American).
+    //Forcing raise - minor and major (+American).
         A4_FF ORA4_1M_2N_N ORA4_1M_3N_N
         RR4_4N
-    //Simple limit raise (European).
+    //Simple limit raise - minor and major (+European).
         RR4_4F_1D1H RR4_4F_1S
         //Non Splinter.
             E45_SL E4_1H_SL E4_1S_SL
@@ -808,10 +725,10 @@ const qint16 STD_D = 10;           //(mostly doubles) defensive side (instead of
             //New minor forcing (after 1NT rebid).
                 RR5_WN_1718_F
 
-    //Forcing raise (American).
+    //Forcing raise - minor and major (+American).
         A5_FF ORA5_1M_2N_N ORA5_1M_3N_N
         RR5_4N
-    //Simple limit raise (European).
+    //Simple limit raise - minor and major (+European).
         RR5_4F_1D1H RR5_4F_1S
         //Non Splinter.
             E45_SL E5_1H_SL E5_1S_SL

@@ -48,7 +48,7 @@ public:
     bool blackWood;
     bool gerber;
     bool cueBids;
-    bool stayman;
+    int stayman;
     bool jacobyTransfers;
     bool fourSuitTransfers;
     bool limitRaises;
@@ -58,8 +58,10 @@ public:
 
     //2 bids.
     int twoBidsMode;
-    int twoNTafterWeak2;
     int twoClubOpenValues;
+    int afterW2;
+    int w2NewSuit;
+    int twoCtwoD;
 
     //NT range.
     int oneNTRange;
@@ -67,14 +69,26 @@ public:
     int threeNTRange;
     bool gambling3NT;
 
+    //NT other.
+    int oneNT3m;
+    int oneNT3M;
+    int twoNTAfter11;
+    int after1NTRebid;
+    bool open1NTWeakMajor;
+    int twoNTAfter21;
+
+    //Three level;
+    int threeLevelPE;
+
     //Misc.
     bool jacoby2NT;
-    bool michaelsCueBid;
+    int directCueBid;
     bool unusual2NT;
     bool drury;
     bool fourSuitForcing;
     bool structuredReverse;
     int jumpOvercalls;
+    int afterWJO;
 
     //Opening.
     bool elevenHCPsRbsLm;

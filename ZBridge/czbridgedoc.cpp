@@ -90,21 +90,21 @@ void CZBridgeDoc::synchronizeOptions(bool all)
     {
         //General.
         defaultBidOption.majorsMode = MAJOR_FOUR;
-        defaultBidOption.blackWood = false;
-        defaultBidOption.gerber = false;
-        defaultBidOption.cueBids = false;
-        defaultBidOption.stayman = false;
+        defaultBidOption.blackWood = true;
+        defaultBidOption.gerber = true;
+        defaultBidOption.cueBids = true;
+        defaultBidOption.stayman = STAYMAN_3R_NF;
         defaultBidOption.jacobyTransfers = false;
         defaultBidOption.fourSuitTransfers = false;
-        defaultBidOption.limitRaises = false;
+        defaultBidOption.limitRaises = true;
         defaultBidOption.splinterbids = false;
-        defaultBidOption.takeoutDoubles = false;
+        defaultBidOption.takeoutDoubles = true;
         defaultBidOption.negativeDoubles = false;
 
         //2 bids.
         defaultBidOption.twoBidsMode = STRONG_TWO;
-        defaultBidOption.twoNTafterWeak2 = 0;
         defaultBidOption.twoClubOpenValues = OPEN_VALUE_22;
+        defaultBidOption.twoCtwoD = TWO_C_TWO_D_WAITING;
 
         //NT range.
         defaultBidOption.oneNTRange = ONE_NT_RANGE_15_17;
@@ -112,14 +112,26 @@ void CZBridgeDoc::synchronizeOptions(bool all)
         defaultBidOption.threeNTRange = THREE_NT_RANGE_25_27;
         defaultBidOption.gambling3NT = false;
 
+        //NT other.
+        defaultBidOption.oneNT3m = ONE_NT_3m_ST;
+        defaultBidOption.oneNT3M = ONE_NT_3M_GT;
+        defaultBidOption.twoNTAfter11 = TWO_NT_11_18_20;
+        defaultBidOption.after1NTRebid = REBID_1NT_NAT;
+        defaultBidOption.open1NTWeakMajor = true;
+        defaultBidOption.twoNTAfter21 = TWO_NT_21_12_14;
+
+        //Three level;
+        defaultBidOption.threeLevelPE = SOUND_THREE_LEVEL;
+
         //Misc.
         defaultBidOption.jacoby2NT = false;
-        defaultBidOption.michaelsCueBid = false;
+        defaultBidOption.directCueBid = STRONG_CUE_BID;
         defaultBidOption.unusual2NT = false;
         defaultBidOption.drury = false;
-        defaultBidOption.fourSuitForcing = false;
-        defaultBidOption.structuredReverse = false;
-        defaultBidOption.jumpOvercalls = JUMP_OVERCALL_STRONG;
+        defaultBidOption.fourSuitForcing = true;
+        defaultBidOption.structuredReverse = true;
+        defaultBidOption.jumpOvercalls = JUMP_OVERCALL_WEAK;
+        defaultBidOption.afterWJO = W2_NATURAL;
 
         //Opening.
         defaultBidOption.elevenHCPsRbsLm = false;
@@ -146,7 +158,7 @@ void CZBridgeDoc::synchronizeOptions(bool all)
         defaultBidOption.blackWood = true;
         defaultBidOption.gerber = true;
         defaultBidOption.cueBids = true;
-        defaultBidOption.stayman = true;
+        defaultBidOption.stayman = STAYMAN_3R_NF;
         defaultBidOption.jacobyTransfers = false;
         defaultBidOption.fourSuitTransfers = false;
         defaultBidOption.limitRaises = false;
@@ -156,21 +168,32 @@ void CZBridgeDoc::synchronizeOptions(bool all)
 
         //2 bids.
         defaultBidOption.twoBidsMode = STRONG_TWO;
-        defaultBidOption.twoNTafterWeak2 = 0;
         defaultBidOption.twoClubOpenValues = OPEN_VALUE_22;
+        defaultBidOption.twoCtwoD = TWO_C_TWO_D_WAITING;
 
         //NT range.
-        defaultBidOption.oneNTRange = ONE_NT_RANGE_15_17;
-        defaultBidOption.twoNTRange = TWO_NT_RANGE_20_21;
+        defaultBidOption.oneNTRange = ONE_NT_RANGE_16_18;
+        defaultBidOption.twoNTRange = TWO_NT_RANGE_22_24;
         defaultBidOption.threeNTRange = THREE_NT_RANGE_25_27;
         defaultBidOption.gambling3NT = false;
 
+        //NT other.
+        defaultBidOption.oneNT3m = ONE_NT_3m_GT;
+        defaultBidOption.oneNT3M = ONE_NT_3M_GT;
+        defaultBidOption.twoNTAfter11 = TWO_NT_11_18_20;
+        defaultBidOption.after1NTRebid = REBID_1NT_NAT;
+        defaultBidOption.open1NTWeakMajor = true;
+        defaultBidOption.twoNTAfter21 = TWO_NT_21_12_14;
+
+        //Three level;
+        defaultBidOption.threeLevelPE = SOUND_THREE_LEVEL;
+
         //Misc.
         defaultBidOption.jacoby2NT = false;
-        defaultBidOption.michaelsCueBid = false;
+        defaultBidOption.directCueBid = STRONG_CUE_BID;
         defaultBidOption.unusual2NT = false;
         defaultBidOption.drury = false;
-        defaultBidOption.fourSuitForcing = false;
+        defaultBidOption.fourSuitForcing = true;
         defaultBidOption.structuredReverse = true;
         defaultBidOption.jumpOvercalls = JUMP_OVERCALL_STRONG;
 
@@ -185,12 +208,12 @@ void CZBridgeDoc::synchronizeOptions(bool all)
         defaultBidOption.lengthLead = LOW_ENCOURAGING;
 
         //Signals.
-        defaultBidOption.partnerLeadSuit = SIGNAL_ATTITUDE_LOW;
+        defaultBidOption.partnerLeadSuit = SIGNAL_ATTITUDE_HIGH;
         defaultBidOption.declarerLeadSuit = SIGNAL_NO_SIGNAL;
-        defaultBidOption.discardingSuit = SIGNAL_ATTITUDE_LOW;
-        defaultBidOption.partnerLeadNT = SIGNAL_ATTITUDE_LOW;
+        defaultBidOption.discardingSuit = SIGNAL_ATTITUDE_HIGH;
+        defaultBidOption.partnerLeadNT = SIGNAL_ATTITUDE_HIGH;
         defaultBidOption.declarerLeadNT = SIGNAL_NO_SIGNAL;
-        defaultBidOption.discardingNT = SIGNAL_ATTITUDE_LOW;
+        defaultBidOption.discardingNT = SIGNAL_ATTITUDE_HIGH;
     }
     else if (wizardOptions.biddingStyle == STANDARD_AMERICAN_BASIC_BIDDING_STYLE)
     {
@@ -199,33 +222,47 @@ void CZBridgeDoc::synchronizeOptions(bool all)
         defaultBidOption.blackWood = true;
         defaultBidOption.gerber = true;
         defaultBidOption.cueBids = true;
-        defaultBidOption.stayman = true;
+        defaultBidOption.stayman = STAYMAN_3R_NF;
         defaultBidOption.jacobyTransfers = true;
-        defaultBidOption.fourSuitTransfers = false;
+        defaultBidOption.fourSuitTransfers = true;
         defaultBidOption.limitRaises = true;
         defaultBidOption.splinterbids = false;
         defaultBidOption.takeoutDoubles = true;
-        defaultBidOption.negativeDoubles = true;
+        defaultBidOption.negativeDoubles = false;
 
         //2 bids.
         defaultBidOption.twoBidsMode = WEAK_TWO;
-        defaultBidOption.twoNTafterWeak2 = 0;
         defaultBidOption.twoClubOpenValues = OPEN_VALUE_22;
+        defaultBidOption.afterW2 = W2_FEATURE;
+        defaultBidOption.w2NewSuit = W2_NEW_SUIT_NF;
+        defaultBidOption.twoCtwoD = TWO_C_TWO_D_WAITING;
 
         //NT range.
-        defaultBidOption.oneNTRange = ONE_NT_RANGE_15_17;
-        defaultBidOption.twoNTRange = TWO_NT_RANGE_20_21;
+        defaultBidOption.oneNTRange = ONE_NT_RANGE_16_18;
+        defaultBidOption.twoNTRange = TWO_NT_RANGE_21_22;
         defaultBidOption.threeNTRange = THREE_NT_RANGE_25_27;
         defaultBidOption.gambling3NT = false;
 
+        //NT other.
+        defaultBidOption.oneNT3m = ONE_NT_3m_ST;
+        defaultBidOption.oneNT3M = ONE_NT_3M_GF;
+        defaultBidOption.twoNTAfter11 = TWO_NT_11_17_18;
+        defaultBidOption.after1NTRebid = REBID_1NT_NAT;
+        defaultBidOption.open1NTWeakMajor = true;
+        defaultBidOption.twoNTAfter21 = TWO_NT_21_12_14;
+
+        //Three level;
+        defaultBidOption.threeLevelPE = SOUND_THREE_LEVEL;
+
         //Misc.
         defaultBidOption.jacoby2NT = false;
-        defaultBidOption.michaelsCueBid = false;
+        defaultBidOption.directCueBid = STRONG_CUE_BID;
         defaultBidOption.unusual2NT = false;
         defaultBidOption.drury = false;
-        defaultBidOption.fourSuitForcing = false;
+        defaultBidOption.fourSuitForcing = true;
         defaultBidOption.structuredReverse = true;
         defaultBidOption.jumpOvercalls = JUMP_OVERCALL_WEAK;
+        defaultBidOption.afterWJO = W2_NATURAL;
 
         //Opening.
         defaultBidOption.elevenHCPsRbsLm = false;
@@ -252,9 +289,9 @@ void CZBridgeDoc::synchronizeOptions(bool all)
         defaultBidOption.blackWood = true;
         defaultBidOption.gerber = true;
         defaultBidOption.cueBids = true;
-        defaultBidOption.stayman = true;
+        defaultBidOption.stayman = STAYMAN_3R_NF;
         defaultBidOption.jacobyTransfers = true;
-        defaultBidOption.fourSuitTransfers = true;
+        defaultBidOption.fourSuitTransfers = false;
         defaultBidOption.limitRaises = true;
         defaultBidOption.splinterbids = false;
         defaultBidOption.takeoutDoubles = true;
@@ -262,8 +299,10 @@ void CZBridgeDoc::synchronizeOptions(bool all)
 
         //2 bids.
         defaultBidOption.twoBidsMode = WEAK_TWO;
-        defaultBidOption.twoNTafterWeak2 = 0;
         defaultBidOption.twoClubOpenValues = OPEN_VALUE_22;
+        defaultBidOption.afterW2 = W2_FEATURE;
+        defaultBidOption.w2NewSuit = W2_NEW_SUIT_F;
+        defaultBidOption.twoCtwoD = TWO_C_TWO_D_WAITING;
 
         //NT range.
         defaultBidOption.oneNTRange = ONE_NT_RANGE_15_17;
@@ -271,14 +310,26 @@ void CZBridgeDoc::synchronizeOptions(bool all)
         defaultBidOption.threeNTRange = THREE_NT_RANGE_25_27;
         defaultBidOption.gambling3NT = false;
 
+        //NT other.
+        defaultBidOption.oneNT3m = ONE_NT_3m_GT;
+        defaultBidOption.oneNT3M = ONE_NT_3M_ST;
+        defaultBidOption.twoNTAfter11 = TWO_NT_11_17_18;
+        defaultBidOption.after1NTRebid = REBID_1NT_NAT;
+        defaultBidOption.open1NTWeakMajor = true;
+        defaultBidOption.twoNTAfter21 = TWO_NT_21_15_18;
+
+        //Three level;
+        defaultBidOption.threeLevelPE = SOUND_THREE_LEVEL;
+
         //Misc.
         defaultBidOption.jacoby2NT = true;
-        defaultBidOption.michaelsCueBid = true;
-        defaultBidOption.unusual2NT = true;
+        defaultBidOption.directCueBid = MICHAELS_CUEBID;
+        defaultBidOption.unusual2NT = false;
         defaultBidOption.drury = false;
         defaultBidOption.fourSuitForcing = true;
         defaultBidOption.structuredReverse = true;
         defaultBidOption.jumpOvercalls = JUMP_OVERCALL_WEAK;
+        defaultBidOption.afterWJO = W2_FEATURE;
 
         //Opening.
         defaultBidOption.elevenHCPsRbsLm = false;
@@ -305,29 +356,40 @@ void CZBridgeDoc::synchronizeOptions(bool all)
         defaultBidOption.blackWood = true;
         defaultBidOption.gerber = true;
         defaultBidOption.cueBids = true;
-        defaultBidOption.stayman = true;
+        defaultBidOption.stayman = STAYMAN_3R_NF;
         defaultBidOption.jacobyTransfers = false;
         defaultBidOption.fourSuitTransfers = false;
-        defaultBidOption.limitRaises = false;
+        defaultBidOption.limitRaises = true;
         defaultBidOption.splinterbids = true;
         defaultBidOption.takeoutDoubles = true;
         defaultBidOption.negativeDoubles = false;
 
         //2 bids.
         defaultBidOption.twoBidsMode = STRONG_TWO;
-        defaultBidOption.twoNTafterWeak2 = 0;
         defaultBidOption.twoClubOpenValues = OPEN_VALUE_22;
+        defaultBidOption.twoCtwoD = TWO_C_TWO_D_WAITING;
 
         //NT range.
         defaultBidOption.oneNTRange = ONE_NT_RANGE_12_14;
         defaultBidOption.twoNTRange = TWO_NT_RANGE_20_21;
-        defaultBidOption.threeNTRange = THREE_NT_RANGE_25_27;
+        defaultBidOption.threeNTRange = GAMBLING_3_NT_ACOL;
         defaultBidOption.gambling3NT = true;
+
+        //NT other.
+        defaultBidOption.oneNT3m = ONE_NT_3m_ST;
+        defaultBidOption.oneNT3M = ONE_NT_3M_GT;
+        defaultBidOption.twoNTAfter11 = TWO_NT_11_17_18;
+        defaultBidOption.after1NTRebid = REBID_1NT_NAT;
+        defaultBidOption.open1NTWeakMajor = true;
+        defaultBidOption.twoNTAfter21 = TWO_NT_21_15_18;
+
+        //Three level;
+        defaultBidOption.threeLevelPE = SOUND_THREE_LEVEL;
 
         //Misc.
         defaultBidOption.jacoby2NT = false;
-        defaultBidOption.michaelsCueBid = true;
-        defaultBidOption.unusual2NT = true;
+        defaultBidOption.directCueBid = STRONG_CUE_BID;
+        defaultBidOption.unusual2NT = false;
         defaultBidOption.drury = false;
         defaultBidOption.fourSuitForcing = true;
         defaultBidOption.structuredReverse = false;

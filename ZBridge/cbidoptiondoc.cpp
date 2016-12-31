@@ -38,21 +38,20 @@ CBidOptionDoc::CBidOptionDoc()
 
     //General.
     majorsMode = MAJOR_FOUR;
-    blackWood = false;
-    gerber = false;
-    cueBids = false;
-    stayman = false;
+    blackWood = true;
+    gerber = true;
+    cueBids = true;
+    stayman = STAYMAN_3R_NF;
     jacobyTransfers = false;
     fourSuitTransfers = false;
-    limitRaises = false;
+    limitRaises = true;
     splinterbids = false;
-    takeoutDoubles = false;
+    takeoutDoubles = true;
     negativeDoubles = false;
 
     //2 bids.
     twoBidsMode = STRONG_TWO;
-    twoNTafterWeak2 = 0;
-    twoClubOpenValues = OPEN_VALUE_21;
+    twoClubOpenValues = OPEN_VALUE_22;
 
     //NT range.
     oneNTRange = ONE_NT_RANGE_15_17;
@@ -60,14 +59,25 @@ CBidOptionDoc::CBidOptionDoc()
     threeNTRange = THREE_NT_RANGE_25_27;
     gambling3NT = false;
 
+    //NT other.
+    oneNT3m = ONE_NT_3m_ST;
+    oneNT3M = ONE_NT_3M_GT;
+    twoNTAfter11 = TWO_NT_11_18_20;
+    after1NTRebid = REBID_1NT_NAT;
+    open1NTWeakMajor = true;
+    twoNTAfter21 = TWO_NT_21_12_14;
+
+    //Three level;
+    threeLevelPE = SOUND_THREE_LEVEL;
+
     //Misc.
     jacoby2NT = false;
-    michaelsCueBid = false;
+    directCueBid = STRONG_CUE_BID;
     unusual2NT = false;
     drury = false;
-    fourSuitForcing = false;
-    structuredReverse = false;
-    jumpOvercalls = false;
+    fourSuitForcing = true;
+    structuredReverse = true;
+    jumpOvercalls = JUMP_OVERCALL_WEAK;
 
     //Opening.
     elevenHCPsRbsLm = false;
@@ -125,8 +135,10 @@ CBidOptionDoc& CBidOptionDoc::operator=(const CBidOptionDoc& bidOptionDoc)
 
     //2 bids.
     twoBidsMode = bidOptionDoc.twoBidsMode;
-    twoNTafterWeak2 = bidOptionDoc.twoNTafterWeak2;
     twoClubOpenValues = bidOptionDoc.twoClubOpenValues;
+    afterW2 = bidOptionDoc.afterW2;
+    w2NewSuit = bidOptionDoc.w2NewSuit;
+    twoCtwoD = bidOptionDoc.twoCtwoD;
 
     //NT range.
     oneNTRange = bidOptionDoc.oneNTRange;
@@ -134,9 +146,20 @@ CBidOptionDoc& CBidOptionDoc::operator=(const CBidOptionDoc& bidOptionDoc)
     threeNTRange = bidOptionDoc.threeNTRange;
     gambling3NT = bidOptionDoc.gambling3NT;
 
+    //NT other.
+    oneNT3m = bidOptionDoc.oneNT3m;
+    oneNT3M = bidOptionDoc.oneNT3M;
+    twoNTAfter11 = bidOptionDoc.twoNTAfter11;
+    after1NTRebid = bidOptionDoc.after1NTRebid;
+    open1NTWeakMajor = bidOptionDoc.open1NTWeakMajor;
+    twoNTAfter21 = bidOptionDoc.twoNTAfter21;
+
+    //Three level;
+    threeLevelPE = bidOptionDoc.threeLevelPE;
+
     //Misc.
     jacoby2NT = bidOptionDoc.jacoby2NT;
-    michaelsCueBid = bidOptionDoc.michaelsCueBid;
+    directCueBid = bidOptionDoc.directCueBid;
     unusual2NT = bidOptionDoc.unusual2NT;
     drury = bidOptionDoc.drury;
     fourSuitForcing = bidOptionDoc.fourSuitForcing;
@@ -183,9 +206,13 @@ QDataStream& operator <<( QDataStream& stream, const CBidOptionDoc& bidOptionDoc
         << bidOptionDoc.cueBids << bidOptionDoc.stayman << bidOptionDoc.jacobyTransfers
         << bidOptionDoc.fourSuitTransfers << bidOptionDoc.limitRaises << bidOptionDoc.splinterbids
         << bidOptionDoc.takeoutDoubles << bidOptionDoc.negativeDoubles << bidOptionDoc.twoBidsMode
-        << bidOptionDoc.twoNTafterWeak2 << bidOptionDoc.twoClubOpenValues << bidOptionDoc.oneNTRange
+        << bidOptionDoc.twoClubOpenValues << bidOptionDoc.afterW2 << bidOptionDoc.w2NewSuit
+        << bidOptionDoc.twoCtwoD << bidOptionDoc.oneNTRange
         << bidOptionDoc.twoNTRange << bidOptionDoc.threeNTRange << bidOptionDoc.gambling3NT
-        << bidOptionDoc.jacoby2NT << bidOptionDoc.michaelsCueBid << bidOptionDoc.unusual2NT
+        << bidOptionDoc.oneNT3m << bidOptionDoc.oneNT3M << bidOptionDoc.twoNTAfter11
+        << bidOptionDoc.after1NTRebid << bidOptionDoc.open1NTWeakMajor
+        << bidOptionDoc.twoNTAfter21 << bidOptionDoc.threeLevelPE
+        << bidOptionDoc.jacoby2NT << bidOptionDoc.directCueBid << bidOptionDoc.unusual2NT
         << bidOptionDoc.drury << bidOptionDoc.fourSuitForcing << bidOptionDoc.structuredReverse
         << bidOptionDoc.jumpOvercalls << bidOptionDoc.elevenHCPsRbsLm << bidOptionDoc.elevenHCPs6Cs
         << bidOptionDoc.fourteenTPsGs << bidOptionDoc.fourteenTPsLs << bidOptionDoc.thirteenTPsLs
@@ -217,9 +244,13 @@ QDataStream& operator >>( QDataStream& stream, CBidOptionDoc& bidOptionDoc )
         >> bidOptionDoc.cueBids >> bidOptionDoc.stayman >> bidOptionDoc.jacobyTransfers
         >> bidOptionDoc.fourSuitTransfers >> bidOptionDoc.limitRaises >> bidOptionDoc.splinterbids
         >> bidOptionDoc.takeoutDoubles >> bidOptionDoc.negativeDoubles >> bidOptionDoc.twoBidsMode
-        >> bidOptionDoc.twoNTafterWeak2 >> bidOptionDoc.twoClubOpenValues >> bidOptionDoc.oneNTRange
+        >> bidOptionDoc.twoClubOpenValues >> bidOptionDoc.afterW2 >> bidOptionDoc.w2NewSuit
+        >> bidOptionDoc.twoCtwoD >> bidOptionDoc.oneNTRange
         >> bidOptionDoc.twoNTRange >> bidOptionDoc.threeNTRange >> bidOptionDoc.gambling3NT
-        >> bidOptionDoc.jacoby2NT >> bidOptionDoc.michaelsCueBid >> bidOptionDoc.unusual2NT
+        >> bidOptionDoc.oneNT3m >> bidOptionDoc.oneNT3M >> bidOptionDoc.twoNTAfter11
+        >> bidOptionDoc.after1NTRebid >> bidOptionDoc.open1NTWeakMajor
+        >> bidOptionDoc.twoNTAfter21 >> bidOptionDoc.threeLevelPE
+        >> bidOptionDoc.jacoby2NT >> bidOptionDoc.directCueBid >> bidOptionDoc.unusual2NT
         >> bidOptionDoc.drury >> bidOptionDoc.fourSuitForcing >> bidOptionDoc.structuredReverse
         >> bidOptionDoc.jumpOvercalls >> bidOptionDoc.elevenHCPsRbsLm >> bidOptionDoc.elevenHCPs6Cs
         >> bidOptionDoc.fourteenTPsGs >> bidOptionDoc.fourteenTPsLs >> bidOptionDoc.thirteenTPsLs

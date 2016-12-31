@@ -68,7 +68,7 @@ CBidOptionsPropSheet::CBidOptionsPropSheet(CBidOptionDoc &bidOptionDoc, CZBridge
     ui->blackwood->setChecked(bidOptionDoc.blackWood);
     ui->gerber->setChecked(bidOptionDoc.gerber);
     ui->cueBids->setChecked(bidOptionDoc.cueBids);
-    ui->stayman->setChecked(bidOptionDoc.stayman);
+    ui->stayman->setChecked(bidOptionDoc.stayman != STAYMAN_OFF);
     ui->jacobyTransfers->setChecked(bidOptionDoc.jacobyTransfers);
     ui->fourSuitTransfers->setChecked(bidOptionDoc.fourSuitTransfers);
     ui->limitRaises->setChecked(bidOptionDoc.limitRaises);
@@ -78,7 +78,7 @@ CBidOptionsPropSheet::CBidOptionsPropSheet(CBidOptionDoc &bidOptionDoc, CZBridge
 
     //2-Bids.
     if (bidOptionDoc.twoBidsMode == STRONG_TWO)
-        ui->strongTwo->setChecked(true);
+        ui->weakTwo->setChecked(false);
     else
         ui->weakTwo->setChecked(true);
 
@@ -115,14 +115,14 @@ CBidOptionsPropSheet::CBidOptionsPropSheet(CBidOptionDoc &bidOptionDoc, CZBridge
 
     //Misc.
     ui->jacoby2NT->setChecked(bidOptionDoc.jacoby2NT);
-    ui->michaelsCueBid->setChecked(bidOptionDoc.michaelsCueBid);
+    ui->michaelsCueBid->setChecked(bidOptionDoc.directCueBid == MICHAELS_CUEBID);
     ui->unusualNT->setChecked(bidOptionDoc.unusual2NT);
     ui->drury->setChecked(bidOptionDoc.drury);
     ui->fourthSuitForcing->setChecked(bidOptionDoc.fourSuitForcing);
     ui->structuredReverses->setChecked(bidOptionDoc.structuredReverse);
 
     if (bidOptionDoc.jumpOvercalls == JUMP_OVERCALL_STRONG)
-        ui->jumpOvercallStrong->setChecked(true);
+        ui->jumpOvercallWeak->setChecked(false);
     else
         ui->jumpOvercallWeak->setChecked(true);
 
@@ -641,7 +641,7 @@ void CBidOptionsPropSheet::on_cueBids_clicked(bool checked)
 
 void CBidOptionsPropSheet::on_stayman_clicked(bool checked)
 {
-    bidOptionDoc.stayman = checked;
+    bidOptionDoc.stayman = checked ? STAYMAN_3R_NF : STAYMAN_OFF;
 }
 
 void CBidOptionsPropSheet::on_jacobyTransfers_clicked(bool checked)
@@ -674,14 +674,12 @@ void CBidOptionsPropSheet::on_negativeDoubles_clicked(bool checked)
     bidOptionDoc.negativeDoubles = checked;
 }
 
-void CBidOptionsPropSheet::on_strongTwo_clicked()
+void CBidOptionsPropSheet::on_weakTwo_clicked(bool checked)
 {
-    bidOptionDoc.twoBidsMode = STRONG_TWO;
-}
-
-void CBidOptionsPropSheet::on_weakTwo_clicked()
-{
-    bidOptionDoc.twoBidsMode = WEAK_TWO;
+    if (checked)
+        bidOptionDoc.twoBidsMode = WEAK_TWO;
+    else
+        bidOptionDoc.twoBidsMode = STRONG_TWO;
 }
 
 void CBidOptionsPropSheet::on_openValue20_clicked()
@@ -757,7 +755,7 @@ void CBidOptionsPropSheet::on_jacoby2NT_clicked(bool checked)
 
 void CBidOptionsPropSheet::on_michaelsCueBid_clicked(bool checked)
 {
-    bidOptionDoc.michaelsCueBid = checked;
+    bidOptionDoc.directCueBid = checked;
 }
 
 void CBidOptionsPropSheet::on_unusualNT_clicked(bool checked)
@@ -780,14 +778,12 @@ void CBidOptionsPropSheet::on_structuredReverses_clicked(bool checked)
     bidOptionDoc.structuredReverse = checked;
 }
 
-void CBidOptionsPropSheet::on_jumpOvercallStrong_clicked()
+void CBidOptionsPropSheet::on_jumpOvercallWeak_clicked(bool checked)
 {
-    bidOptionDoc.jumpOvercalls = JUMP_OVERCALL_STRONG;
-}
-
-void CBidOptionsPropSheet::on_jumpOvercallWeak_clicked()
-{
-    bidOptionDoc.jumpOvercalls = JUMP_OVERCALL_WEAK;
+    if (checked)
+        bidOptionDoc.jumpOvercalls = JUMP_OVERCALL_WEAK;
+    else
+        bidOptionDoc.jumpOvercalls = JUMP_OVERCALL_STRONG;
 }
 
 void CBidOptionsPropSheet::on_elevenHCPsRbsLm_clicked(bool checked)

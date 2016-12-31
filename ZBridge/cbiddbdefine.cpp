@@ -39,19 +39,19 @@ void CBidDBDefine::calcIds(CBidOptionDoc &bidOptions, QSet<qint16> &pages, QSet<
     if (bidOptions.jumpOvercalls == JUMP_OVERCALL_WEAK)
     {
         pages<<D_C2_1116_69<<D_D2_1116_69<<D_H2_1116_69<<D_S2_1116_69<<D_WJO_SNT_OFF;
-//      if (bidOptions.afterWJO == WJO_NATURAL)
+      if (bidOptions.afterWJO == W2_NATURAL)
             pages<<D_OVS_R_WJO_N;
-//      else if (bidOptions.afterWJO == WJO_OGUST)
-//          pages<<D_OVS_R_WJO_O;
-//      else if (bidOptions.afterWJO == WJO_FEATURE)
-//          pages<<D_OVS_R_WJO_F;
+        else if (bidOptions.afterWJO == W2_OGUST)
+            pages<<D_OVS_R_WJO_O;
+        else if (bidOptions.afterWJO == W2_FEATURE)
+            pages<<D_OVS_R_WJO_F;
     }
     //Intermediate jump overcall (13-16 HCP).
     else
         pages<<D_C2_1116_1316<<D_D2_1116_1316<<D_H2_1116_1316<<D_S2_1116_1316<<D_OVS_R_IJO<<D_IJO_SNT_OFF;
 
     //Strong cuebid.
-    if (!bidOptions.michaelsCueBid)
+    if (bidOptions.directCueBid == STRONG_CUE_BID)
         pages<<D_C_SCB<<D_D_SCB<<D_H_SCB<<D_S_SCB<<D_OPS_SCB<<D_OVS_R_SCB<<D_MCB_OFF;
     //Michaels cue bid.
     else
@@ -64,10 +64,10 @@ void CBidDBDefine::calcIds(CBidOptionDoc &bidOptions, QSet<qint16> &pages, QSet<
     else
         pages<<D_OPS_ND<<D_OVS_ND;
 
-    //Forcing raise (American).
+    //Forcing raise - minor and major (+American).
     if (!bidOptions.limitRaises)
         pages<<OR_1m_3m_F<<ORA_1C_1N<<ORA_1m_2N<<ORA_1m_3N<<OR_1M_3M_F<<RR_4N;
-    //Simple Limit raise (European).
+    //Simple Limit raise - minor and major (+European).
     else
     {
         pages<<OR_1m_3m_L<<ORE_1C_1N<<ORE_1m_2N<<ORE_1m_3N<<OR_1M_3M_L<<RR_4F<<D_OPS_L;
@@ -103,39 +103,39 @@ void CBidDBDefine::calcIds(CBidOptionDoc &bidOptions, QSet<qint16> &pages, QSet<
         }
 
         //3C/3D slam try or 3C/3D game try.
-//      if (bidOptions.oneNT3m == ONE_NT_3m_ST) || (bidOptions.oneNT3m == ONE_NT_3m_GT))
+        if ((bidOptions.oneNT3m == ONE_NT_3m_ST) || (bidOptions.oneNT3m == ONE_NT_3m_GT))
             pages<<D_W_3mSGT;
         //3C/3D pre emptive.
-//      else
-//          pages<<D_W_3mPE;
+        else
+            pages<<D_W_3mPE;
 
         //3H/3S slam try or game forcing or game invitation.
-//      if ((bidOptions.oneNT3M == ONE_NT_3M_ST) || (bidOptions.oneNT3M == ONE_NT_3M_GF) ||
-//          (bidOptions.oneNT3M == ONE_NT_3M_GI))
+        if ((bidOptions.oneNT3M == ONE_NT_3M_ST) || (bidOptions.oneNT3M == ONE_NT_3M_GF) ||
+            (bidOptions.oneNT3M == ONE_NT_3M_GT))
             pages<<D_W_3MSGT;
         //3H/3S pre emptive.
-//      else
-//          pages<<D_W_3MPE;
+        else
+            pages<<D_W_3MPE;
 
         //4H/4S natural.
         pages<<D_W_4MN;
 
         //2NT after 1/1 18-20 HCP.
-//      if (bidOptions.twoNTAfter11 == TWO_NT_11_18_20)
+        if (bidOptions.twoNTAfter11 == TWO_NT_11_18_20)
             //New minor natural (after 1NT rebid).
-//          if (bidOptions.rebid1NT == REBID_1NT_NAT)
+             if (bidOptions.after1NTRebid == REBID_1NT_NAT)
                 pages<<RR_WN_1820_N;
             //New minor forcing (after 1NT rebid).
-//          else
-//              pages<<RR_WN_1820_F;
+            else
+                pages<<RR_WN_1820_F;
         //2NT after 1/1 17-18 HCP.
-//      else
+        else
             //New minor natural (after 1NT rebid).
-//          if (bidOptions.rebid1NT == REBID_1NT_NAT)
-//              pages<<RR_WN_1718_N;
+            if (bidOptions.after1NTRebid == REBID_1NT_NAT)
+                pages<<RR_WN_1718_N;
             //New minor forcing (after 1NT rebid).
-//          else
-//              pages<<RR_WN_1718_F;
+            else
+                pages<<RR_WN_1718_F;
     }
 
 
@@ -158,29 +158,29 @@ void CBidDBDefine::calcIds(CBidOptionDoc &bidOptions, QSet<qint16> &pages, QSet<
         }
 
         //3C/3D slam try or 3C/3D game try.
-//      if (bidOptions.oneNT3m == ONE_NT_3m_ST) || (bidOptions.oneNT3m == ONE_NT_3m_GT))
+        if ((bidOptions.oneNT3m == ONE_NT_3m_ST) || (bidOptions.oneNT3m == ONE_NT_3m_GT))
             pages<<D_S_3mSGT;
         //3C/3D pre emptive
-//      else
-//        pages<<D_S_3mPE;
+        else
+          pages<<D_S_3mPE;
 
         //3H/3S slam try or game forcing or game invitation.
-//      if ((bidOptions.oneNT3M == ONE_NT_3M_ST) || (bidOptions.oneNT3M == ONE_NT_3M_GF) ||
-//          (bidOptions.oneNT3M == ONE_NT_3M_GI))
+        if ((bidOptions.oneNT3M == ONE_NT_3M_ST) || (bidOptions.oneNT3M == ONE_NT_3M_GF) ||
+            (bidOptions.oneNT3M == ONE_NT_3M_GT))
             pages<<D_S_3MSGT;
         //3H/3S pre emptive.
-//      else
-//          pages<<D_S_3MPE;
+        else
+            pages<<D_S_3MPE;
 
         //4H/4S natural.
         pages<<D_S_4MN;
 
         //New minor natural (after 1NT rebid).
-//      if (bidOptions.rebid1NT == REBID_1NT_NAT)
+        if (bidOptions.after1NTRebid == REBID_1NT_NAT)
             pages<<RR_SN_N;
         //New minor forcing (after 1NT rebid).
-//      else
-//          pages<<RR_SN_F;
+        else
+            pages<<RR_SN_F;
     }
 
     //4-major.
@@ -201,38 +201,38 @@ void CBidDBDefine::calcIds(CBidOptionDoc &bidOptions, QSet<qint16> &pages, QSet<
         {
             pages<<O12_4M_SN_L<<O3_4M_SN_L<<O4_4M_SN_L;
             //New minor natural (after 1NT rebid).
-//          if (bidOptions.rebid1NT == REBID_1NT_NAT)
+            if (bidOptions.after1NTRebid == REBID_1NT_NAT)
                 pages<<RR4_SN_N;
             //New minor forcing (after 1NT rebid).
-//          else
-//              pages<<RR4_SN_F;
+            else
+                pages<<RR4_SN_F;
         }
         //Weak 1NT, lower first.
         else
         {
             pages<<O12_4M_WN_L<<O3_4M_WN_L<<O4_4M_WN_L;
             //2NT after 1/1 18-20 HCP.
-//          if (bidOptions.twoNTAfter11 == TWO_NT_11_18_20)
+            if (bidOptions.twoNTAfter11 == TWO_NT_11_18_20)
                 //New minor natural (after 1NT rebid).
-//              if (bidOptions.rebid1NT == REBID_1NT_NAT)
+                if (bidOptions.after1NTRebid == REBID_1NT_NAT)
                     pages<<RR4_WN_1820_N;
                 //New minor forcing (after 1NT rebid).
-//              else
-//                  pages<<RR4_WN_1820_F;
+                else
+                    pages<<RR4_WN_1820_F;
             //2NT after 1/1 17-18 HCP.
-//          else
+            else
                 //New minor natural (after 1NT rebid).
-//              if (bidOptions.rebid1NT == REBID_1NT_NAT)
-//                  pages<<RR4_WN_1718_N;
+                if (bidOptions.after1NTRebid == REBID_1NT_NAT)
+                    pages<<RR4_WN_1718_N;
                 //New minor forcing (after 1NT rebid).
-//              else
-//                  pages<<RR4_WN_1718_F;
+                else
+                    pages<<RR4_WN_1718_F;
         }
 
-        //Forcing raise (American).
+        //Forcing raise - minor and major (+American).
         if (!bidOptions.limitRaises)
             pages<<A4_FF<<ORA4_1M_2N_N<<ORA4_1M_3N_N<<RR4_4N;
-        //Simple limit raise (European).
+        //Simple limit raise - minor and major (+European).
         else
         {
             pages<<RR4_4F_1D1H<<RR4_4F_1S;
@@ -272,10 +272,10 @@ void CBidDBDefine::calcIds(CBidOptionDoc &bidOptions, QSet<qint16> &pages, QSet<
         {
             pages<<O12_5M_SN<<O3_5M_SN<<O4_5M_SN;
             //New minor natural (after 1NT rebid).
-//          if (bidOptions.rebid1NT == REBID_1NT_NAT)
+            if (bidOptions.after1NTRebid == REBID_1NT_NAT)
                 pages<<RR5_SN_N;
             //New minor forcing (after 1NT rebid).
-//          else
+            else
                 pages<<RR5_SN_F;
         }
         //Weak 1NT.
@@ -283,27 +283,27 @@ void CBidDBDefine::calcIds(CBidOptionDoc &bidOptions, QSet<qint16> &pages, QSet<
         {
             pages<<O12_5M_WN<<O3_5M_WN<<O4_5M_WN;
             //2NT after 1/1 18-20 HCP.
-//          if (bidOptions.twoNTAfter11 == TWO_NT_11_18_20)
+            if (bidOptions.twoNTAfter11 == TWO_NT_11_18_20)
                 //New minor natural (after 1NT rebid).
-//              if (bidOptions.rebid1NT == REBID_1NT_NAT)
+                if (bidOptions.after1NTRebid == REBID_1NT_NAT)
                     pages<<RR5_WN_1820_N;
                 //New minor forcing (after 1NT rebid).
-//              else
-//                  pages<<RR5_WN_1820_F;
+                else
+                    pages<<RR5_WN_1820_F;
             //2NT after 1/1 17-18 HCP.
-//          else
+            else
                 //New minor natural (after 1NT rebid).
-//              if (bidOptions.rebid1NT == REBID_1NT_NAT)
-//                  pages<<RR5_WN_1718_N;
+                if (bidOptions.after1NTRebid == REBID_1NT_NAT)
+                    pages<<RR5_WN_1718_N;
                 //New minor forcing (after 1NT rebid).
-//              else
-//                  pages<<RR5_WN_1718_F;
+                else
+                    pages<<RR5_WN_1718_F;
         }
 
-        //Forcing raise (American).
+        //Forcing raise - minor and major (+American).
         if (!bidOptions.limitRaises)
             pages<<A5_FF<<ORA5_1M_2N_N<<ORA5_1M_3N_N<<RR5_4N;
-        //Simple limit raise (European).
+        //Simple limit raise - minor and major (+European).
         else
         {
             pages<<RR5_4F_1D1H<<RR5_4F_1S;
@@ -331,10 +331,10 @@ void CBidDBDefine::calcIds(CBidOptionDoc &bidOptions, QSet<qint16> &pages, QSet<
         pages<<O12_1N_12_14<<O3_1N_12_14<<O4_1N_12_14<<R_1214<<OR_1214_4MN;
 
         //Stayman forcing.
-//      if ((bidOptions.stayman == STAYMAN_3R_F) || (bidOptions.stayman == STAYMAN_4R))
-//          pages<<R_1214_SF<<OR_1214_SF_1<<OR_1214_SF_2;
+        if ((bidOptions.stayman == STAYMAN_3R_F) || (bidOptions.stayman == STAYMAN_4R))
+            pages<<R_1214_SF<<OR_1214_SF_1<<OR_1214_SF_2;
         //Stayman not forcing.
-//      else
+        else
             pages<<R_1214_SN<<OR_1214_SN_1<<OR_1214_SN_2;
 
         //2D/2H/2S sign off.
@@ -354,26 +354,26 @@ void CBidDBDefine::calcIds(CBidOptionDoc &bidOptions, QSet<qint16> &pages, QSet<
         }
 
         //3C/3D slam try.
-//      if (bidOptions.oneNT3m == ONE_NT_3m_ST)
+        if (bidOptions.oneNT3m == ONE_NT_3m_ST)
             pages<<R_1214_3mST<<OR_1214_3mST;
         //3C/3D game try.
-//      else if (bidOptions.oneNT3m == ONE_NT_3m_GT)
-//          pages<<R_1214_3mGT<<OR_1214_3mGT;
+        else if (bidOptions.oneNT3m == ONE_NT_3m_GT)
+            pages<<R_1214_3mGT<<OR_1214_3mGT;
         //3C/3D pre emptive.
-//        else
-//          pages<<R_1214_3mPE<<OR_1214_3mPE;
+          else
+            pages<<R_1214_3mPE<<OR_1214_3mPE;
 
         //3H/3S slam try.
-//      if (bidOptions.oneNT3M == ONE_NT_3M_ST)
-//          pages<<R_1214_3MST<<OR_1214_3MST;
+        if (bidOptions.oneNT3M == ONE_NT_3M_ST)
+            pages<<R_1214_3MST<<OR_1214_3MST;
         //3H/3S game forcing.
-//      else if (bidOptions.oneNT3M == ONE_NT_3M_GF)
-//          pages<<R_1214_3MGF<<OR_1214_3MGF;
+        else if (bidOptions.oneNT3M == ONE_NT_3M_GF)
+            pages<<R_1214_3MGF<<OR_1214_3MGF;
         //3H/3S pre emptive.
-//      else if (bidOptions.oneNT3M == ONE_NT_3M_PE)
-//          pages<<R_1214_3MGPE<<OR_1214_3MPE;
+        else if (bidOptions.oneNT3M == ONE_NT_3M_PE)
+            pages<<R_1214_3MPE<<OR_1214_3MPE;
         //3H/3S game invitation.
-//      else
+        else
             pages<<R_1214_3MGI<<OR_1214_3MGI;
 
         //4H/4S natural.
@@ -386,10 +386,10 @@ void CBidDBDefine::calcIds(CBidOptionDoc &bidOptions, QSet<qint16> &pages, QSet<
         pages<<O_1N_16_18<<R_1618<<OR_1618_4MN;
 
         //Stayman forcing.
-//      if ((bidOptions.stayman == STAYMAN_3R_F) || (bidOptions.stayman == STAYMAN_4R))
-//          pages<<R_1618_SF<<OR_1618_SF_1<<OR_1618_SF_2;
+        if ((bidOptions.stayman == STAYMAN_3R_F) || (bidOptions.stayman == STAYMAN_4R))
+            pages<<R_1618_SF<<OR_1618_SF_1<<OR_1618_SF_2;
         //Stayman not forcing.
-//      else
+        else
             pages<<R_1618_SN<<OR_1618_SN_1<<OR_1618_SN_2;
 
         //2D/2H/2S sign off.
@@ -409,26 +409,26 @@ void CBidDBDefine::calcIds(CBidOptionDoc &bidOptions, QSet<qint16> &pages, QSet<
         }
 
         //3C/3D slam try.
-//      if (bidOptions.oneNT3m == ONE_NT_3m_ST)
+        if (bidOptions.oneNT3m == ONE_NT_3m_ST)
             pages<<R_1618_3mST<<OR_1618_3mST;
         //3C/3D game try.
-//      else if (bidOptions.oneNT3m == ONE_NT_3m_GT)
-//          pages<<R_1618_3mGT<<OR_1618_3mGT;
+        else if (bidOptions.oneNT3m == ONE_NT_3m_GT)
+            pages<<R_1618_3mGT<<OR_1618_3mGT;
         //3C/3D pre emptive.
-//      else
-//          pages<<R_1618_3mPE<<OR_1618_3mPE;
+        else
+            pages<<R_1618_3mPE<<OR_1618_3mPE;
 
         //3H/3S slam try.
-//      if (bidOptions.oneNT3M == ONE_NT_3M_ST)
-//          pages<<R_1618_3MST<<OR_1618_3MST;
+        if (bidOptions.oneNT3M == ONE_NT_3M_ST)
+            pages<<R_1618_3MST<<OR_1618_3MST;
         //3H/3S game forcing
-//      else if (bidOptions.oneNT3M == ONE_NT_3M_GF)
-//          pages<<R_1618_3MGF<<OR_1618_3MGF;
+        else if (bidOptions.oneNT3M == ONE_NT_3M_GF)
+            pages<<R_1618_3MGF<<OR_1618_3MGF;
         //3H/3S pre emptive.
-//      else if (bidOptions.oneNT3M == ONE_NT_3M_PE)
-//          pages<<R_1618_3MGPE<<OR_1618_3MPE;
+        else if (bidOptions.oneNT3M == ONE_NT_3M_PE)
+            pages<<R_1618_3MPE<<OR_1618_3MPE;
         //3H/3S game invitation.
-//      else
+        else
             pages<<R_1618_3MGI<<OR_1618_3MGI;
 
         //4H/4S natural.
@@ -441,10 +441,10 @@ void CBidDBDefine::calcIds(CBidOptionDoc &bidOptions, QSet<qint16> &pages, QSet<
         pages<<O_1N_15_17<<R_1517<<OR_1517_4MN;
 
         //Stayman forcing.
-//      if ((bidOptions.stayman == STAYMAN_3R_F) || (bidOptions.stayman == STAYMAN_4R))
-//          pages<<R_1517_SF<<OR_1517_SF_1<<OR_1517_SF_2;
+        if ((bidOptions.stayman == STAYMAN_3R_F) || (bidOptions.stayman == STAYMAN_4R))
+            pages<<R_1517_SF<<OR_1517_SF_1<<OR_1517_SF_2;
         //Stayman not forcing.
-//      else
+        else
             pages<<R_1517_SN<<OR_1517_SN_1<<OR_1517_SN_2;
 
         //2D/2H/2S sign off.
@@ -464,26 +464,26 @@ void CBidDBDefine::calcIds(CBidOptionDoc &bidOptions, QSet<qint16> &pages, QSet<
         }
 
         //3C/3D slam try.
-//      if (bidOptions.oneNT3m == ONE_NT_3m_ST)
+        if (bidOptions.oneNT3m == ONE_NT_3m_ST)
             pages<<R_1517_3mST<<OR_1517_3mST;
         //3C/3D game try.
-//      else if (bidOptions.oneNT3m == ONE_NT_3m_GT)
-//          pages<<R_1517_3mGT<<OR_1517_3mGT;
+        else if (bidOptions.oneNT3m == ONE_NT_3m_GT)
+            pages<<R_1517_3mGT<<OR_1517_3mGT;
         //3C/3D pre emptive.
-//      else
-//          pages<<R_1517_3mPE<<OR_1517_3mPE;
+        else
+            pages<<R_1517_3mPE<<OR_1517_3mPE;
 
         //3H/3S slam try.
-//      if (bidOptions.oneNT3M == ONE_NT_3M_ST)
-//          pages<<R_1517_3MST<<OR_1517_3MST;
+        if (bidOptions.oneNT3M == ONE_NT_3M_ST)
+            pages<<R_1517_3MST<<OR_1517_3MST;
         //3H/3S game forcing
-//      else if (bidOptions.oneNT3M == ONE_NT_3M_GF)
-//          pages<<R_1517_3MGF<<OR_1517_3MGF;
+        else if (bidOptions.oneNT3M == ONE_NT_3M_GF)
+            pages<<R_1517_3MGF<<OR_1517_3MGF;
         //3H/3S pre emptive.
-//      else if (bidOptions.oneNT3M == ONE_NT_3M_PE)
-//          pages<<R_1517_3MGPE<<OR_1517_3MPE;
+        else if (bidOptions.oneNT3M == ONE_NT_3M_PE)
+            pages<<R_1517_3MPE<<OR_1517_3MPE;
         //3H/3S game invitation.
-//      else
+        else
             pages<<R_1517_3MGI<<OR_1517_3MGI;
 
         //4H/4S natural.
@@ -500,17 +500,17 @@ void CBidDBDefine::calcIds(CBidOptionDoc &bidOptions, QSet<qint16> &pages, QSet<
         pages<<A_W2D<<A_W2H2S<<A_W2DX_NAT<<A_W2H2SX_NAT;
 
         //Ogust after weak 2D, new suit not forcing. //Ogust after weak 2H/2S, new suit not forcing.
-//      if ((bidOptions.afterW2 == W2_OGUST) && !bidOptions.w2NewSuitF)
-//          pages<<A_W2D_O_NF<<A_W2H2S_O_NF;
+        if ((bidOptions.afterW2 == W2_OGUST) && (bidOptions.w2NewSuit == W2_NEW_SUIT_NF))
+            pages<<A_W2D_O_NF<<A_W2H2S_O_NF;
         //Ogust after weak 2D, forcing. //Ogust after weak 2H/2S, forcing.
-//      else if ((bidOptions.afterW2 == W2_OGUST) && bidOptions.w2NewSuitF)
-//            pages<<A_W2D_O_F<<A_W2H2S_O_F;
+        else if ((bidOptions.afterW2 == W2_OGUST) && (bidOptions.w2NewSuit == W2_NEW_SUIT_F))
+              pages<<A_W2D_O_F<<A_W2H2S_O_F;
         //Feature after weak 2D, not forcing. //Feature after weak 2H/2S, not forcing.
-//      else if ((bidOptions.afterW2 == W2_FEATURE) && !bidOptions.w2NewSuitF)
+        else if ((bidOptions.afterW2 == W2_FEATURE) && (bidOptions.w2NewSuit == W2_NEW_SUIT_NF))
             pages<<A_W2D_F_NF<<A_W2H2S_F_NF;
         //Feature after weak 2D, forcing. //Feature after weak 2H/2S, forcing.
-//      else if ((bidOptions.afterW2 == W2_FEATURE) && bidOptions.w2NewSuitF)
-//            pages<<A_W2D_F_F<<A_W2H2S_F_F;
+        else if ((bidOptions.afterW2 == W2_FEATURE) && (bidOptions.w2NewSuit == W2_NEW_SUIT_NF))
+              pages<<A_W2D_F_F<<A_W2H2S_F_F;
     }
 
     //Strong two (2C, 2D, 2H, 2S).
@@ -558,17 +558,17 @@ void CBidDBDefine::calcIds(CBidOptionDoc &bidOptions, QSet<qint16> &pages, QSet<
     }
 
     //2NT after 1/1 18-21 HCP
-//  if (bidOptions.twoNTAfter11 == TWO_NT_11_18_20)
+    if (bidOptions.twoNTAfter11 == TWO_NT_11_18_20)
         pages<<RR_2N_11_1821;
     //2NT after 1/1 17-18 HCP
-//  else
-//      pages<<RR_2N_11_1718;
+    else
+        pages<<RR_2N_11_1718;
 
     //2NT after 2/1 15-18 HCP
-//  if (bidOptions.twoNTAfter21 == TWO_NT_21_15_18)
-//      pages<<RR45_2N_21_1518;
+    if (bidOptions.twoNTAfter21 == TWO_NT_21_15_18)
+        pages<<RR45_2N_21_1518;
     //2NT after 2/1 12-14 HCP
-//  else
+    else
         pages<<RR45_2N_21_1214;
 
     //After 2C-2D-2NT opening.
@@ -633,7 +633,7 @@ void CBidDBDefine::calcIds(CBidOptionDoc &bidOptions, QSet<qint16> &pages, QSet<
     else
         rules<<ST1N;                    //Strong 1NT.
 
-//    if (bidOptions.open1NTWeakMajor)
+    if (bidOptions.open1NTWeakMajor)
         rules<<O_1N_WM;                 //Open 1NT  with weak major.
 
       if (bidOptions.limitRaises && bidOptions.splinterbids)
@@ -641,40 +641,40 @@ void CBidDBDefine::calcIds(CBidOptionDoc &bidOptions, QSet<qint16> &pages, QSet<
       else
           rules<<SPL_N;                 //No splinter.
 
-//    if (bidOptions.twoNTAfter11 == TWO_NT_11_18_20)
+      if (bidOptions.twoNTAfter11 == TWO_NT_11_18_20)
         rules<<OR_11_2N_GF;             //2N after 1/1: 18-20 HCP.
-//    else
-//      rules<<OR_11_2N_NF;             //2N after 1/1: 17-18 HCP.
+      else
+        rules<<OR_11_2N_NF;             //2N after 1/1: 17-18 HCP.
 
-//  if (bidOptions.twoNTAfter21 == TWO_NT_21_15_18)
-//      rules<<OR_21_2N_GF;             //2N after 2/1: 15-18 HCP.
-//  else
+    if (bidOptions.twoNTAfter21 == TWO_NT_21_15_18)
+        rules<<OR_21_2N_GF;             //2N after 2/1: 15-18 HCP.
+    else
         rules<<OR_21_2N_NF;             //2N after 2/1: 12-14 HCP.
 
-//    if (bidOptions.twoNTAfter11 == TWO_NT_11_18_20)
+      if (bidOptions.twoNTAfter11 == TWO_NT_11_18_20)
         rules<<OR_11_3N_LM;             //3N after 1/1: 19+ HCP
-//    else
-//      rules<<OR_11_3N_N;              //3N after 1/1: long minor.
+      else
+        rules<<OR_11_3N_N;              //3N after 1/1: long minor.
 
       if (bidOptions.limitRaises && bidOptions.splinterbids && bidOptions.jacoby2NT)
           rules<<R_M_2N_J;              //Jacoby 2NT major raise.
 
-//    if (bidOptions.oneNT3m == ONE_NT_3m_ST)
+      if (bidOptions.oneNT3m == ONE_NT_3m_ST)
         rules<<R_m_1N_S;                //1N-3C/3D Slam try.
-//    else
-//      rules<<R_m_1N_G;                //1N-3C/3D Game try or preemptive.
+      else
+        rules<<R_m_1N_G;                //1N-3C/3D Game try or preemptive.
 
 //    if (true)
           rules<<R_2C_2NT_2224;         //2NT after 2C: 22-24 HCP.
 //    else
 //        rules<<R_2C_2NT_2324;         //2NT after 2C: 23-24 HCP.
 
-//    if (bidOptions.threeLevelPE == SOUND_THREE_LEVEL)
+      if (bidOptions.threeLevelPE == SOUND_THREE_LEVEL)
           rules<<S_3L_P_NV<<S_3L_P_V;   //Sound 3 level preempt not vul/vul.
-//    else if (bidOptions.threeLevelPE == LIGHT_THREE_LEVEL)
-//        rules<<L_3L_P_NV<<L_3L_P_V;   //Light 3 level preempt not vul/vul.
-//    else
-//        rules<<S_3L_P_V<<L_3L_P_NV;   //Light/sound 3 level preempt not vul/vul.
+      else if (bidOptions.threeLevelPE == LIGHT_THREE_LEVEL)
+          rules<<L_3L_P_NV<<L_3L_P_V;   //Light 3 level preempt not vul/vul.
+      else
+          rules<<S_3L_P_V<<L_3L_P_NV;   //Light/sound 3 level preempt not vul/vul.
 
 //    if (bidOptions.overcallJR == O_JR_LIM)
           rules<<R_JR_LIM;              //Opponent overcalled: responder jump raise is invitational.
@@ -697,14 +697,35 @@ void CBidDBDefine::calcIds(CBidOptionDoc &bidOptions, QSet<qint16> &pages, QSet<
       rules<<GHES_OFF;                  //Ghestem convention is off.
       rules<<CBS_OFF;                   //Checkback Stayman is off.
 
-//    if (bidOptions.twoCtwoD == TWO_C_TWO_D_NEGATIVE)
-//        rules<<R_2C_2D_N;
-//     else
+      if (bidOptions.twoCtwoD == TWO_C_TWO_D_NEGATIVE)
+          rules<<R_2C_2D_N;
+       else
           rules<<R_2C_2D_W;
 
-//    if ((bidOptions.stayman == STAYMAN_3R_F) || (bidOptions.stayman == STAYMAN_3R_NF))
+      if ((bidOptions.stayman == STAYMAN_3R_F) || (bidOptions.stayman == STAYMAN_3R_NF))
           rules<<R_1N_S;                //Stayman.
+      else
+          rules<<R_1N_4R_S;             //4-response Stayman.
+
+//    if (bidOptions.oneNTtwoNT == NAT_1N_2N)
+          rules<<R_1N_2N_N;             //1N-2N natural.
 //    else
-//        rules<<R_1N_4R_S;             //4-response Stayman.
+//        rules<<R_1N_2N_T;             //1N-2N transfer.
+
+//        rules<<R_2N_3M;               //2N-3M: natural forcing.
+
+//        if (bidOptions.redouble == REDOUBLE_ESC)
+//            rules<<RD_ESC;
+//        else if (bidOptions.redouble == REDOUBLE_PEND);
+
+//        if (bidOptions.takeOutOff == TAKEOUT_STD)
+              rules<<STD_O;             //(mostly doubles) offensive side.
+//        else
+//            rules<<T_OUT_D_O;         //Takeout offensive side (unclear what takeout rules).
+
+//        if (bidOptions.takeOutDef == TAKEOUT_STD)
+              rules<<STD_D;             //(mostly doubles) defensive side.
+//        else
+//            rules<<T_OUT_D_D;         //Takeout defensive side (unclear what takeout rules).
 }
 
