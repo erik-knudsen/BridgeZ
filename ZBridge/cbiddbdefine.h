@@ -126,7 +126,7 @@ const qint16 A_3N_ACOL = 92;       //After 3NT ACOL.
 const qint16 A_3LEVEL = 100;       //
 
 //After 1 level opening (1C, 1D, 1H, 1S)--------------------------------------------------
-//Non Splqint16er.
+//Non Splinter.
 const qint16 A4_FF = 110;          //American 4-major, major/minor forcing/forcing raise.
 const qint16 A5_FF = 111;          //American 5-major, major/minor forcing/forcing raise.
 const qint16 A5_SF = 112;          //American 5-major, major/minor simple limit/forcing raise.
@@ -136,7 +136,7 @@ const qint16 E4_1H_SL = 115;       //European 4-major (1H), major/minor simple l
 const qint16 E4_1S_SL = 116;       //European 4-major (1S), major/minor simple limit/limit raise.
 const qint16 E5_1H_SL = 117;       //European 5-major (1H), major/minor simple limit/limit raise.
 const qint16 E5_1S_SL = 118;       //European 5-major (1S), major/minor simple limit/limit raise.
-//Splqint16er.
+//Splinter.
 const qint16 A45_L_S = 119;        //American 4/5 major, minor limit raise, splinter.
 const qint16 E45_L_S = 120;        //European 4/5 major, minor limit raise, splinter.
 const qint16 E4_1H_L_S = 121;      //European 4 major (1H), major limit raise, splinter.
@@ -569,21 +569,31 @@ const qint16 STD_D = 10;           //(mostly doubles) defensive side (instead of
         D_OPS_ND
         D_OVS_ND
 
-    //Forcing raise - minor and major (+American).
-        OR_1m_3m_F ORA_1C_1N ORA_1m_2N ORA_1m_3N OR_1M_3M_F
-        RR_4N
-    //Simple Limit raise - minor and major (+European).
-        OR_1m_3m_L ORE_1C_1N ORE_1m_2N ORE_1m_3N OR_1M_3M_L
-        RR_4F
+    //American
+        ORA_1C_1N ORA_1m_2N ORA_1m_3N
+
+        //Forcing raise - minor and major.
+            OR_1m_3m_F  OR_1M_3M_F
+            RR_4N       (Always 4. suit non forcing).
+        //Simple limit raise - minor and major.
+            OR_1m_3m_L OR_1M_3M_L
+            D_OPS_L
+    //European.
+        ORE_1C_1N ORE_1m_2N ORE_1m_3N
+        RR_4F           (Always 4. suit forcing).
+        //Always simple Limit raise - minor and major.
+        OR_1m_3m_L OR_1M_3M_L
         D_OPS_L
 
         //Simple limit raise only.
             ORE45_1M_2N_N
-        //Simple limit raise + 2NT major raise forcing (Jacoby 2NT).
-            ORE45_1M_2N_J
 
-        //Splinter.
-            OR_SPLINTER
+            //Splinter.
+                E45_L_S OR_SPLINTER
+            //Non Splinter.
+                E45_SL
+        //Simple limit raise + 2NT major raise forcing (Jacoby 2NT).
+            ORE45_1M_2N_J E45_L_S OR_SPLINTER       (Always Splinter).
 
     //Weak 1NT.
         D_W
@@ -682,20 +692,27 @@ const qint16 STD_D = 10;           //(mostly doubles) defensive side (instead of
             //New minor forcing (after 1NT rebid).
                 RR4_WN_1718_F
 
-    //Forcing raise - minor and major (+American).
-        A4_FF ORA4_1M_2N_N ORA4_1M_3N_N
-        RR4_4N
-    //Simple limit raise - minor and major (+European).
-        RR4_4F_1D1H RR4_4F_1S
-        //Non Splinter.
-            E45_SL E4_1H_SL E4_1S_SL
-        //Splinter.
-            E45_L_S
+    //American.
+        ORA4_1M_2N_N ORA4_1M_3N_N
+        //Forcing raise - (minor and major).
+            A4_FF RR4_4N        (Always 4. suit natural).
+        //Simple limit raise - (minor and major).
+            ORE45_1M_2N_J       (Always Jacoby 2NT).
+            A45_L_S OR_SPLINTER (Always Splinter)
+            AE4_1H_2NF_S AE4_1S_2NF_S
+            RR4_4F_1D1H RR4_1S RR_4F    (Always 4. suit forcing).
+    //European.
+    //Always simple limit raise - minor and major.
+        RR4_4F_1D1H RR4_4F_1S           (Always 4. suit forcing).
 
-                //Simple limit raise only.
-                    E4_1H_L_S E4_1S_L_S
-                //Simple limit raise + 2NT major raise forcing (Jacoby 2NT).
-                    AE4_1H_2NF_S AE4_1S_2NF_S
+        //Simple limit raise only.
+            E4_1H_L_S E4_1S_L_S
+
+            //Non Splinter.
+                E4_1H_SL E4_1S_SL
+        //Simple limit raise + 2NT major raise forcing (Jacoby 2NT).
+            AE4_1H_2NF_S AE4_1S_2NF_S
+
 
 //5-major.
     OR5_1H_1S OR5_1H_2 OR5_1S_2 OR5_1H OR5_1S OR5_1H_1N OR5_1H_1N OR5_1H_3N_N OR5_1S_3N_N
@@ -725,20 +742,26 @@ const qint16 STD_D = 10;           //(mostly doubles) defensive side (instead of
             //New minor forcing (after 1NT rebid).
                 RR5_WN_1718_F
 
-    //Forcing raise - minor and major (+American).
-        A5_FF ORA5_1M_2N_N ORA5_1M_3N_N
-        RR5_4N
-    //Simple limit raise - minor and major (+European).
-        RR5_4F_1D1H RR5_4F_1S
-        //Non Splinter.
-            E45_SL E5_1H_SL E5_1S_SL
-        //Splinter.
-            E45_L_S
+    //American.
+        ORA5_1M_2N_N ORA5_1M_3N_N
+        //Forcing raise - (minor and major).
+            A5_FF RR5_4N        (Always 4. suit natural).
+        //Simple limit raise - (minor and major).
+            ORE45_1M_2N_J       //Always Jacoby 2NT).
+            A45_L_S OR_SPLINTER //Always Splinter.
+            AE5_1H_2NF_S AE5_1S_2NF_S
+            RR5_4F_1D1H RR5_1S RR_4F    (Always Splinter and 4. suit forcing).
+    //European.
+    //Always simple limit raise - minor and major.
+        RR5_4F_1D1H RR5_4F_1S           (Always 4. suit forcing).
 
-                //Simple limit raise only.
-                    E5_1H_L_S E5_1S_L_S
-                //Simple limit raise + 2NT major raise forcing (Jacoby 2NT).
-                    AE5_1H_2NF_S AE5_1S_2NF_S
+        //Simple limit raise only.
+            E5_1H_L_S E5_1S_L_S
+
+            //Non Splinter.
+                E5_1H_SL E5_1S_SL
+        //Simple limit raise + 2NT major raise forcing (Jacoby 2NT).
+            AE5_1H_2NF_S AE5_1S_2NF_S
 
 //1NT 12-14 HCP.
     O12_1N_12_14 O3_1N_12_14 O4_1N_12_14 R_1214 OR_1214_4MN

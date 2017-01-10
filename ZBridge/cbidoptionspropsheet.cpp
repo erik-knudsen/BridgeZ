@@ -60,27 +60,45 @@ CBidOptionsPropSheet::CBidOptionsPropSheet(CBidOptionDoc &bidOptionDoc, CZBridge
     ui->biddingAggressiveness->setValue(bidOptionDoc.aggressiveness);
 
     //General.
+    if (bidOptionDoc.bidStyle == EUROPEAN_STYLE)
+        ui->europeanStyle->setChecked(true);
+    else
+        ui->americanStyle->setChecked(true);
+
     if (bidOptionDoc.majorsMode == MAJOR_FOUR)
         ui->majorFour->setChecked(true);
     else
         ui->majorFive->setChecked(true);
 
-    ui->blackwood->setChecked(bidOptionDoc.blackWood);
-    ui->gerber->setChecked(bidOptionDoc.gerber);
-    ui->cueBids->setChecked(bidOptionDoc.cueBids);
-    ui->stayman->setChecked(bidOptionDoc.stayman != STAYMAN_OFF);
+    ui->blackwood->setChecked(true);
+    ui->gerber->setChecked(true);
+    ui->cueBids->setChecked(true);
+    ui->stayman->setChecked(true);
+    if (bidOptionDoc.stayman == STAYMAN_3R_NF)
+        ui->staymanNF->setChecked(true);
+    else if (bidOptionDoc.stayman == STAYMAN_3R_F)
+        ui->staymanF->setChecked(true);
     ui->jacobyTransfers->setChecked(bidOptionDoc.jacobyTransfers);
-    ui->fourSuitTransfers->setChecked(bidOptionDoc.fourSuitTransfers);
-    ui->limitRaises->setChecked(bidOptionDoc.limitRaises);
-    ui->splinterBids->setChecked(bidOptionDoc.splinterbids);
-    ui->takeOutDoubles->setChecked(bidOptionDoc.takeoutDoubles);
-    ui->negativeDoubles->setChecked(bidOptionDoc.negativeDoubles);
+    if (bidOptionDoc.jacobyTransfers)
+        ui->fourSuitTransfers->setChecked(bidOptionDoc.fourSuitTransfers);
+
+    setDependencies();
 
     //2-Bids.
-    if (bidOptionDoc.twoBidsMode == STRONG_TWO)
+    if (bidOptionDoc.twoBidsMode == S2_NATURAL)
         ui->weakTwo->setChecked(false);
     else
+    {
         ui->weakTwo->setChecked(true);
+        if (bidOptionDoc.twoBidsMode== W2_OGUST)
+            ui->w2Ogust->setChecked(true);
+        else if (bidOptionDoc.twoBidsMode== W2_FEATURE)
+            ui->w2Feature->setChecked(true);
+        if (bidOptionDoc.w2NewSuit == W2_NEW_SUIT_NF)
+            ui->w2NewSuitNF->setChecked(true);
+        else if (bidOptionDoc.w2NewSuit == W2_NEW_SUIT_F)
+            ui->w2NewSuitF->setChecked(true);
+    }
 
     if (bidOptionDoc.twoClubOpenValues == OPEN_VALUE_20)
         ui->openValue20->setChecked(true);
@@ -90,41 +108,103 @@ CBidOptionsPropSheet::CBidOptionsPropSheet(CBidOptionDoc &bidOptionDoc, CZBridge
         ui->openValue22->setChecked(true);
     else
         ui->openValue23->setChecked(true);
+    ui->openValue22->setChecked(true);
+    ui->open2CBox->setEnabled(false);
+
+    if (bidOptionDoc.twoCtwoD == TWO_C_TWO_D_NEGATIVE)
+        ui->twoCtwoDNegative->setChecked(true);
+    else if (bidOptionDoc.twoCtwoD == TWO_C_TWO_D_WAITING)
+        ui->twoCtwoDWaiting->setChecked(true);
 
     //NT-Range.
     if (bidOptionDoc.oneNTRange == ONE_NT_RANGE_12_14)
+    {
         ui->oneNTRange12_14->setChecked(true);
+        ui->twoNT21->setEnabled(false);
+    }
     else if (bidOptionDoc.oneNTRange == ONE_NT_RANGE_15_17)
         ui->oneNTRange15_17->setChecked(true);
-    else
+    else if (bidOptionDoc.oneNTRange == ONE_NT_RANGE_16_18)
         ui->oneNTRange16_18->setChecked(true);
+    ui->open1NTWeakMajor->setChecked(bidOptionDoc.open1NTWeakMajor);
 
     if (bidOptionDoc.twoNTRange == TWO_NT_RANGE_20_21)
         ui->twoNTRange20_21->setChecked(true);
     else if (bidOptionDoc.twoNTRange == TWO_NT_RANGE_21_22)
         ui->twoNTRange21_22->setChecked(true);
-    else
+    else if (bidOptionDoc.twoNTRange == TWO_NT_RANGE_22_24)
         ui->twoNTRange22_24->setChecked(true);
 
     if (bidOptionDoc.threeNTRange == THREE_NT_RANGE_25_27)
         ui->threNTRange25_27->setChecked(true);
     else if (bidOptionDoc.threeNTRange == GAMBLING_3_NT)
         ui->gambling3NT->setChecked(true);
-    else
+    else  if (bidOptionDoc.threeNTRange == GAMBLING_3_NT_ACOL)
         ui->gambling3NT_ACOL->setChecked(true);
 
+    //NT Other.
+    if (bidOptionDoc.twoNT11 == TWO_NT_11_18_20)
+        ui->twoNT111820->setChecked(true);
+    else if (bidOptionDoc.twoNT11 == TWO_NT_11_17_18)
+        ui->twoNT111718->setChecked(true);
+
+    if ((bidOptionDoc.oneNTRange ==ONE_NT_RANGE_12_14) || (bidOptionDoc.twoNT21 == TWO_NT_21_15_18))
+        ui->twoNT211518->setChecked(true);
+    else if (bidOptionDoc.twoNT21 == TWO_NT_21_12_14)
+        ui->twoNT211214->setChecked(true);
+
+    if (bidOptionDoc.rebid1NT == REBID_1NT_NAT)
+        ui->rebid1NTNat->setChecked(true);
+    else if (bidOptionDoc.rebid1NT == REBID_1NT_F)
+        ui->rebid1NTF->setChecked(true);
+
+    if (bidOptionDoc.oneNT3m == ONE_NT_3m_ST)
+        ui->oneNT3mST->setChecked(true);
+    else if (bidOptionDoc.oneNT3m == ONE_NT_3m_GT)
+        ui->oneNT3mGT->setChecked(true);
+    else if (bidOptionDoc.oneNT3m == ONE_NT_3m_PE)
+        ui->oneNT3mPE->setChecked(true);
+
+    if (bidOptionDoc.oneNT3M == ONE_NT_3M_ST)
+        ui->oneNT3MST->setChecked(true);
+    if (bidOptionDoc.oneNT3M == ONE_NT_3M_GF)
+        ui->oneNT3MGF->setChecked(true);
+    if (bidOptionDoc.oneNT3M == ONE_NT_3M_GT)
+        ui->oneNT3MGT->setChecked(true);
+    if (bidOptionDoc.oneNT3M == ONE_NT_3M_PE)
+        ui->oneNT3MPE->setChecked(true);
+
     //Misc.
-    ui->jacoby2NT->setChecked(bidOptionDoc.jacoby2NT);
+    ui->structuredReverses->setChecked(bidOptionDoc.structuredReverse);
+    ui->takeOutDoubles->setChecked(bidOptionDoc.takeoutDoubles);
+    ui->negativeDoubles->setChecked(bidOptionDoc.negativeDoubles);
     ui->michaelsCueBid->setChecked(bidOptionDoc.directCueBid == MICHAELS_CUEBID);
     ui->unusualNT->setChecked(bidOptionDoc.unusual2NT);
     ui->drury->setChecked(bidOptionDoc.drury);
-    ui->fourthSuitForcing->setChecked(bidOptionDoc.fourSuitForcing);
-    ui->structuredReverses->setChecked(bidOptionDoc.structuredReverse);
+    ui->unusualNT->setChecked(false);
+    ui->unusualNT->setEnabled(false);
+    ui->drury->setChecked(false);
+    ui->drury->setEnabled(false);
 
     if (bidOptionDoc.jumpOvercalls == JUMP_OVERCALL_STRONG)
         ui->jumpOvercallWeak->setChecked(false);
     else
+    {
         ui->jumpOvercallWeak->setChecked(true);
+        if (bidOptionDoc.jumpOvercalls == JUMP_OVERCALL_WEAK_NATURAL)
+            ui->wjoNatural->setChecked(true);
+        else if (bidOptionDoc.jumpOvercalls == JUMP_OVERCALL_WEAK_OGUST)
+            ui->wjoOgust->setChecked(true);
+        else if (bidOptionDoc.jumpOvercalls == JUMP_OVERCALL_WEAK_FEATURE)
+            ui->wjoFeature->setChecked(true);
+    }
+
+    if (bidOptionDoc.threeLevel ==SOUND_THREE_LEVEL)
+        ui->soundThreeLevel->setChecked(true);
+    else if (bidOptionDoc.threeLevel ==LIGHT_THREE_LEVEL)
+        ui->lightThreeLevel->setChecked(true);
+    else if (bidOptionDoc.threeLevel ==LIGHT_THREE_LEVEL_NV)
+        ui->lightThreeLevelNV->setChecked(true);
 
     //Opening.
     ui->elevenHCPsRbsLm->setChecked(bidOptionDoc.elevenHCPsRbsLm);
@@ -614,39 +694,71 @@ void CBidOptionsPropSheet::on_biddingAggressiveness_valueChanged(int value)
     bidOptionDoc.aggressiveness = value;
 }
 
+void CBidOptionsPropSheet::on_americanStyle_clicked()
+{
+    bidOptionDoc.bidStyle = AMERICAN_STYLE;
+
+    setDependencies();
+}
+
+void CBidOptionsPropSheet::on_europeanStyle_clicked()
+{
+    bidOptionDoc.bidStyle = EUROPEAN_STYLE;
+
+    setDependencies();
+}
+
 void CBidOptionsPropSheet::on_majorFour_clicked()
 {
     bidOptionDoc.majorsMode = MAJOR_FOUR;
+
+    setDependencies();
 }
 
 void CBidOptionsPropSheet::on_majorFive_clicked()
 {
     bidOptionDoc.majorsMode = MAJOR_FIVE;
+
+    setDependencies();
 }
 
 void CBidOptionsPropSheet::on_blackwood_clicked(bool checked)
 {
-    bidOptionDoc.blackWood = checked;
+    ui->blackwood->setChecked(true);
 }
 
 void CBidOptionsPropSheet::on_gerber_clicked(bool checked)
 {
-    bidOptionDoc.gerber = checked;
+    ui->gerber->setChecked(true);
 }
 
 void CBidOptionsPropSheet::on_cueBids_clicked(bool checked)
 {
-    bidOptionDoc.cueBids = checked;
+    ui->cueBids->setChecked(true);
 }
 
 void CBidOptionsPropSheet::on_stayman_clicked(bool checked)
 {
-    bidOptionDoc.stayman = checked ? STAYMAN_3R_NF : STAYMAN_OFF;
+    ui->stayman->setChecked(true);
+}
+
+void CBidOptionsPropSheet::on_staymanNF_clicked()
+{
+    bidOptionDoc.stayman = STAYMAN_3R_NF;
+}
+
+void CBidOptionsPropSheet::on_staymanF_clicked()
+{
+    bidOptionDoc.stayman = STAYMAN_3R_F;
 }
 
 void CBidOptionsPropSheet::on_jacobyTransfers_clicked(bool checked)
 {
     bidOptionDoc.jacobyTransfers = checked;
+    if (!bidOptionDoc.jacobyTransfers)
+        ui->fourSuitTransfers->setChecked(false);
+    else
+        ui->fourSuitTransfers->setChecked(bidOptionDoc.fourSuitTransfers);
 }
 
 void CBidOptionsPropSheet::on_fourSuitTransfers_clicked(bool checked)
@@ -656,30 +768,63 @@ void CBidOptionsPropSheet::on_fourSuitTransfers_clicked(bool checked)
 
 void CBidOptionsPropSheet::on_limitRaises_clicked(bool checked)
 {
-    bidOptionDoc.limitRaises = checked;
+    if (bidOptionDoc.bidStyle == EUROPEAN_STYLE)
+        ui->limitRaises->setChecked(true);
+    else
+    {
+        bidOptionDoc.limitRaises = checked;
+        setDependencies();
+    }
+}
+
+void CBidOptionsPropSheet::on_jacoby2NT_clicked(bool checked)
+{
+    if ((bidOptionDoc.bidStyle == AMERICAN_STYLE) && (bidOptionDoc.majorsMode == MAJOR_FIVE) ||
+            (bidOptionDoc.bidStyle == EUROPEAN_STYLE))
+        bidOptionDoc.jacoby2NT = checked;
+    setDependencies();
 }
 
 void CBidOptionsPropSheet::on_splinterBids_clicked(bool checked)
 {
-    bidOptionDoc.splinterbids = checked;
+    if ((bidOptionDoc.bidStyle == EUROPEAN_STYLE) && !bidOptionDoc.jacoby2NT)
+        bidOptionDoc.splinterbids = checked;
+    setDependencies();
 }
 
-void CBidOptionsPropSheet::on_takeOutDoubles_clicked(bool checked)
+void CBidOptionsPropSheet::on_fourthSuitForcing_clicked(bool checked)
 {
-    bidOptionDoc.takeoutDoubles = checked;
-}
-
-void CBidOptionsPropSheet::on_negativeDoubles_clicked(bool checked)
-{
-    bidOptionDoc.negativeDoubles = checked;
+    setDependencies();
 }
 
 void CBidOptionsPropSheet::on_weakTwo_clicked(bool checked)
 {
+    ui->w2Feature->setChecked(true);
+
     if (checked)
-        bidOptionDoc.twoBidsMode = WEAK_TWO;
+        bidOptionDoc.twoBidsMode = W2_FEATURE;
     else
-        bidOptionDoc.twoBidsMode = STRONG_TWO;
+        bidOptionDoc.twoBidsMode = S2_NATURAL;
+}
+
+void CBidOptionsPropSheet::on_w2Ogust_clicked()
+{
+    bidOptionDoc.twoBidsMode = W2_OGUST;
+}
+
+void CBidOptionsPropSheet::on_w2Feature_clicked()
+{
+    bidOptionDoc.twoBidsMode = W2_FEATURE;
+}
+
+void CBidOptionsPropSheet::on_w2NewSuitNF_clicked()
+{
+    bidOptionDoc.w2NewSuit = W2_NEW_SUIT_NF;
+}
+
+void CBidOptionsPropSheet::on_w2NewSuitF_clicked()
+{
+    bidOptionDoc.w2NewSuit = W2_NEW_SUIT_F;
 }
 
 void CBidOptionsPropSheet::on_openValue20_clicked()
@@ -702,20 +847,49 @@ void CBidOptionsPropSheet::on_openValue23_clicked()
     bidOptionDoc.twoClubOpenValues = OPEN_VALUE_23;
 }
 
+void CBidOptionsPropSheet::on_twoCtwoDNegative_clicked()
+{
+    bidOptionDoc.twoCtwoD = TWO_C_TWO_D_NEGATIVE;
+}
+
+void CBidOptionsPropSheet::on_twoCtwoDWaiting_clicked()
+{
+    bidOptionDoc.twoCtwoD = TWO_C_TWO_D_WAITING;
+}
+
 void CBidOptionsPropSheet::on_oneNTRange12_14_clicked()
 {
     bidOptionDoc.oneNTRange = ONE_NT_RANGE_12_14;
+
+    ui->twoNT211518->setChecked(true);
+    ui->twoNT21->setEnabled(false);
 }
 
 void CBidOptionsPropSheet::on_oneNTRange15_17_clicked()
 {
+    ui->twoNT21->setEnabled(true);
+    if (bidOptionDoc.twoNT21 == TWO_NT_21_15_18)
+        ui->twoNT211518->setChecked(true);
+    else if (bidOptionDoc.twoNT21 == TWO_NT_21_12_14)
+        ui->twoNT211214->setChecked(true);
+
     bidOptionDoc.oneNTRange = ONE_NT_RANGE_15_17;
 }
 
 void CBidOptionsPropSheet::on_oneNTRange16_18_clicked()
 {
-    bidOptionDoc.oneNTRange = ONE_NT_RANGE_16_18;
+    ui->twoNT21->setEnabled(true);
+    if (bidOptionDoc.twoNT21 == TWO_NT_21_15_18)
+        ui->twoNT211518->setChecked(true);
+    else if (bidOptionDoc.twoNT21 == TWO_NT_21_12_14)
+        ui->twoNT211214->setChecked(true);
 
+    bidOptionDoc.oneNTRange = ONE_NT_RANGE_16_18;
+}
+
+void CBidOptionsPropSheet::on_open1NTWeakMajor_clicked(bool checked)
+{
+    bidOptionDoc.open1NTWeakMajor = checked;
 }
 
 void CBidOptionsPropSheet::on_twoNTRange20_21_clicked()
@@ -748,9 +922,84 @@ void CBidOptionsPropSheet::on_gambling3NT_ACOL_clicked()
     bidOptionDoc.threeNTRange = GAMBLING_3_NT_ACOL;
 }
 
-void CBidOptionsPropSheet::on_jacoby2NT_clicked(bool checked)
+void CBidOptionsPropSheet::on_twoNT111820_clicked()
 {
-    bidOptionDoc.jacoby2NT = checked;
+    bidOptionDoc.twoNT11 = TWO_NT_11_18_20;
+}
+
+void CBidOptionsPropSheet::on_twoNT111718_clicked()
+{
+    bidOptionDoc.twoNT11 = TWO_NT_11_17_18;
+}
+
+void CBidOptionsPropSheet::on_twoNT211518_clicked()
+{
+    bidOptionDoc.twoNT21 = TWO_NT_21_15_18;
+}
+
+void CBidOptionsPropSheet::on_twoNT211214_clicked()
+{
+    bidOptionDoc.twoNT21 = TWO_NT_21_12_14;
+}
+
+void CBidOptionsPropSheet::on_rebid1NTNat_clicked()
+{
+    bidOptionDoc.rebid1NT = REBID_1NT_NAT;
+}
+
+void CBidOptionsPropSheet::on_rebid1NTF_clicked()
+{
+    bidOptionDoc.rebid1NT = REBID_1NT_F;
+}
+
+void CBidOptionsPropSheet::on_oneNT3mST_clicked()
+{
+    bidOptionDoc.oneNT3m = ONE_NT_3m_ST;
+}
+
+void CBidOptionsPropSheet::on_oneNT3mGT_clicked()
+{
+    bidOptionDoc.oneNT3m = ONE_NT_3m_GT;
+}
+
+void CBidOptionsPropSheet::on_oneNT3mPE_clicked()
+{
+    bidOptionDoc.oneNT3m = ONE_NT_3m_PE;
+}
+
+void CBidOptionsPropSheet::on_oneNT3MST_clicked()
+{
+    bidOptionDoc.oneNT3M = ONE_NT_3M_ST;
+}
+
+void CBidOptionsPropSheet::on_oneNT3MGF_clicked()
+{
+    bidOptionDoc.oneNT3M = ONE_NT_3M_GF;
+}
+
+void CBidOptionsPropSheet::on_oneNT3MGT_clicked()
+{
+    bidOptionDoc.oneNT3M = ONE_NT_3M_GT;
+}
+
+void CBidOptionsPropSheet::on_oneNT3MPE_clicked()
+{
+    bidOptionDoc.oneNT3M = ONE_NT_3M_PE;
+}
+
+void CBidOptionsPropSheet::on_structuredReverses_clicked(bool checked)
+{
+    bidOptionDoc.structuredReverse = checked;
+}
+
+void CBidOptionsPropSheet::on_takeOutDoubles_clicked(bool checked)
+{
+    bidOptionDoc.takeoutDoubles = checked;
+}
+
+void CBidOptionsPropSheet::on_negativeDoubles_clicked(bool checked)
+{
+    bidOptionDoc.negativeDoubles = checked;
 }
 
 void CBidOptionsPropSheet::on_michaelsCueBid_clicked(bool checked)
@@ -768,22 +1017,45 @@ void CBidOptionsPropSheet::on_drury_clicked(bool checked)
     bidOptionDoc.drury = checked;
 }
 
-void CBidOptionsPropSheet::on_fourthSuitForcing_clicked(bool checked)
-{
-    bidOptionDoc.fourSuitForcing = checked;
-}
-
-void CBidOptionsPropSheet::on_structuredReverses_clicked(bool checked)
-{
-    bidOptionDoc.structuredReverse = checked;
-}
-
 void CBidOptionsPropSheet::on_jumpOvercallWeak_clicked(bool checked)
 {
     if (checked)
-        bidOptionDoc.jumpOvercalls = JUMP_OVERCALL_WEAK;
+    {
+        bidOptionDoc.jumpOvercalls = JUMP_OVERCALL_WEAK_NATURAL;
+        ui->wjoNatural->setChecked(true);
+    }
     else
         bidOptionDoc.jumpOvercalls = JUMP_OVERCALL_STRONG;
+}
+
+void CBidOptionsPropSheet::on_wjoNatural_clicked()
+{
+    bidOptionDoc.jumpOvercalls = JUMP_OVERCALL_WEAK_NATURAL;
+}
+
+void CBidOptionsPropSheet::on_wjoOgust_clicked()
+{
+    bidOptionDoc.jumpOvercalls = JUMP_OVERCALL_WEAK_OGUST;
+}
+
+void CBidOptionsPropSheet::on_wjoFeature_clicked()
+{
+    bidOptionDoc.jumpOvercalls = JUMP_OVERCALL_WEAK_FEATURE;
+}
+
+void CBidOptionsPropSheet::on_soundThreeLevel_clicked()
+{
+    bidOptionDoc.threeLevel = SOUND_THREE_LEVEL;
+}
+
+void CBidOptionsPropSheet::on_lightThreeLevel_clicked()
+{
+    bidOptionDoc.threeLevel = LIGHT_THREE_LEVEL;
+}
+
+void CBidOptionsPropSheet::on_lightThreeLevelNV_clicked()
+{
+    bidOptionDoc.threeLevel = LIGHT_THREE_LEVEL_NV;
 }
 
 void CBidOptionsPropSheet::on_elevenHCPsRbsLm_clicked(bool checked)
@@ -1854,4 +2126,47 @@ void CBidOptionsPropSheet::on_tnXxent_clicked()
 void CBidOptionsPropSheet::on_tnxXent_clicked()
 {
     bidOptionDoc.openingLead[EW_NT][TNXX_E_NT] = TNXx_E_NT;
+}
+
+void CBidOptionsPropSheet::setDependencies()
+{
+    if (bidOptionDoc.bidStyle == EUROPEAN_STYLE)
+    {
+        ui->limitRaises->setChecked(true);
+//        ui->limitRaises->setStyleSheet("background-color: yellow");
+        ui->fourthSuitForcing->setChecked(true);
+        if (bidOptionDoc.jacoby2NT)
+        {
+            ui->splinterBids->setChecked(true);
+        }
+        else
+        {
+            ui->splinterBids->setChecked(bidOptionDoc.splinterbids);
+        }
+    }
+    else
+    {
+        ui->limitRaises->setChecked(bidOptionDoc.limitRaises);
+        if (!bidOptionDoc.limitRaises)
+        {
+            ui->jacoby2NT->setChecked(false);
+            ui->splinterBids->setChecked(false);
+            ui->fourthSuitForcing->setChecked(false);
+        }
+        else
+        {
+            bool jacoby = (bidOptionDoc.majorsMode == MAJOR_FIVE) ? bidOptionDoc.jacoby2NT : true;
+            ui->jacoby2NT->setChecked(jacoby);
+            if (jacoby)
+            {
+                ui->splinterBids->setChecked(true);
+                ui->fourthSuitForcing->setChecked(true);
+            }
+            else
+            {
+                ui->splinterBids->setChecked(false);
+                ui->fourthSuitForcing->setChecked(false);
+            }
+        }
+    }
 }

@@ -36,14 +36,14 @@ void CBidDBDefine::calcIds(CBidOptionDoc &bidOptions, QSet<qint16> &pages, QSet<
     pages<<D_RB_MO<<D_RB_MO_OFF;
 
     //Weak jump overcall (6-9 HCP).
-    if (bidOptions.jumpOvercalls == JUMP_OVERCALL_WEAK)
+    if (bidOptions.jumpOvercalls != JUMP_OVERCALL_STRONG)
     {
         pages<<D_C2_1116_69<<D_D2_1116_69<<D_H2_1116_69<<D_S2_1116_69<<D_WJO_SNT_OFF;
-      if (bidOptions.afterWJO == W2_NATURAL)
+      if (bidOptions.jumpOvercalls == JUMP_OVERCALL_WEAK_NATURAL)
             pages<<D_OVS_R_WJO_N;
-        else if (bidOptions.afterWJO == W2_OGUST)
+        else if (bidOptions.jumpOvercalls == JUMP_OVERCALL_WEAK_OGUST)
             pages<<D_OVS_R_WJO_O;
-        else if (bidOptions.afterWJO == W2_FEATURE)
+        else if (bidOptions.jumpOvercalls == JUMP_OVERCALL_WEAK_FEATURE)
             pages<<D_OVS_R_WJO_F;
     }
     //Intermediate jump overcall (13-16 HCP).
@@ -64,24 +64,40 @@ void CBidDBDefine::calcIds(CBidOptionDoc &bidOptions, QSet<qint16> &pages, QSet<
     else
         pages<<D_OPS_ND<<D_OVS_ND;
 
-    //Forcing raise - minor and major (+American).
-    if (!bidOptions.limitRaises)
-        pages<<OR_1m_3m_F<<ORA_1C_1N<<ORA_1m_2N<<ORA_1m_3N<<OR_1M_3M_F<<RR_4N;
-    //Simple Limit raise - minor and major (+European).
+    //American.
+    if (bidOptions.bidStyle ==AMERICAN_STYLE)
+    {
+        pages<< ORA_1C_1N<<ORA_1m_2N<<ORA_1m_3N;
+
+        //Forcing raise - minor and major.
+        if (!bidOptions.limitRaises)
+            pages<<OR_1m_3m_F<<OR_1M_3M_F<<RR_4N;   //Always 4. suit natural.
+
+        //Limit raise - minor and major.
+        else
+            pages<<OR_1m_3m_L<<OR_1M_3M_L<<D_OPS_L;
+    }
+
+    //European (always simple limit).
     else
     {
-        pages<<OR_1m_3m_L<<ORE_1C_1N<<ORE_1m_2N<<ORE_1m_3N<<OR_1M_3M_L<<RR_4F<<D_OPS_L;
+        pages<<ORE_1C_1N<<ORE_1m_2N<<ORE_1m_3N<<RR_4F;
+        pages<<OR_1m_3m_L<<OR_1M_3M_L<<D_OPS_L;
 
         //Simple limit raise only.
         if (!bidOptions.jacoby2NT)
+        {
             pages<<ORE45_1M_2N_N;
+
+            //Splinter.
+            if (bidOptions.splinterbids)
+                pages<<E45_L_S<<OR_SPLINTER;
+            else
+                pages<<E45_SL;
+        }
         //Simple limit raise + 2NT major raise forcing (Jacoby 2NT).
         else
-            pages<<ORE45_1M_2N_J;
-
-        //Splinter.
-        if (bidOptions.splinterbids)
-            pages<<OR_SPLINTER;
+            pages<<ORE45_1M_2N_J<<E45_L_S<<OR_SPLINTER; //Always Splinter.
     }
 
     //Weak 1NT.
@@ -121,9 +137,9 @@ void CBidDBDefine::calcIds(CBidOptionDoc &bidOptions, QSet<qint16> &pages, QSet<
         pages<<D_W_4MN;
 
         //2NT after 1/1 18-20 HCP.
-        if (bidOptions.twoNTAfter11 == TWO_NT_11_18_20)
+        if (bidOptions.twoNT11 == TWO_NT_11_18_20)
             //New minor natural (after 1NT rebid).
-             if (bidOptions.after1NTRebid == REBID_1NT_NAT)
+             if (bidOptions.rebid1NT == REBID_1NT_NAT)
                 pages<<RR_WN_1820_N;
             //New minor forcing (after 1NT rebid).
             else
@@ -131,7 +147,7 @@ void CBidDBDefine::calcIds(CBidOptionDoc &bidOptions, QSet<qint16> &pages, QSet<
         //2NT after 1/1 17-18 HCP.
         else
             //New minor natural (after 1NT rebid).
-            if (bidOptions.after1NTRebid == REBID_1NT_NAT)
+            if (bidOptions.rebid1NT == REBID_1NT_NAT)
                 pages<<RR_WN_1718_N;
             //New minor forcing (after 1NT rebid).
             else
@@ -176,7 +192,7 @@ void CBidDBDefine::calcIds(CBidOptionDoc &bidOptions, QSet<qint16> &pages, QSet<
         pages<<D_S_4MN;
 
         //New minor natural (after 1NT rebid).
-        if (bidOptions.after1NTRebid == REBID_1NT_NAT)
+        if (bidOptions.rebid1NT == REBID_1NT_NAT)
             pages<<RR_SN_N;
         //New minor forcing (after 1NT rebid).
         else
@@ -201,7 +217,7 @@ void CBidDBDefine::calcIds(CBidOptionDoc &bidOptions, QSet<qint16> &pages, QSet<
         {
             pages<<O12_4M_SN_L<<O3_4M_SN_L<<O4_4M_SN_L;
             //New minor natural (after 1NT rebid).
-            if (bidOptions.after1NTRebid == REBID_1NT_NAT)
+            if (bidOptions.rebid1NT == REBID_1NT_NAT)
                 pages<<RR4_SN_N;
             //New minor forcing (after 1NT rebid).
             else
@@ -212,9 +228,9 @@ void CBidDBDefine::calcIds(CBidOptionDoc &bidOptions, QSet<qint16> &pages, QSet<
         {
             pages<<O12_4M_WN_L<<O3_4M_WN_L<<O4_4M_WN_L;
             //2NT after 1/1 18-20 HCP.
-            if (bidOptions.twoNTAfter11 == TWO_NT_11_18_20)
+            if (bidOptions.twoNT11 == TWO_NT_11_18_20)
                 //New minor natural (after 1NT rebid).
-                if (bidOptions.after1NTRebid == REBID_1NT_NAT)
+                if (bidOptions.rebid1NT == REBID_1NT_NAT)
                     pages<<RR4_WN_1820_N;
                 //New minor forcing (after 1NT rebid).
                 else
@@ -222,35 +238,48 @@ void CBidDBDefine::calcIds(CBidOptionDoc &bidOptions, QSet<qint16> &pages, QSet<
             //2NT after 1/1 17-18 HCP.
             else
                 //New minor natural (after 1NT rebid).
-                if (bidOptions.after1NTRebid == REBID_1NT_NAT)
+                if (bidOptions.rebid1NT == REBID_1NT_NAT)
                     pages<<RR4_WN_1718_N;
                 //New minor forcing (after 1NT rebid).
                 else
                     pages<<RR4_WN_1718_F;
         }
 
-        //Forcing raise - minor and major (+American).
-        if (!bidOptions.limitRaises)
-            pages<<A4_FF<<ORA4_1M_2N_N<<ORA4_1M_3N_N<<RR4_4N;
-        //Simple limit raise - minor and major (+European).
-        else
+        //American
+        if (bidOptions.bidStyle == AMERICAN_STYLE)
         {
-            pages<<RR4_4F_1D1H<<RR4_4F_1S;
-            //Non Splinter.
-            if (!bidOptions.splinterbids)
-                pages<<E45_SL<<E4_1H_SL<<E4_1S_SL;
-            //Splinter.
+            pages<<ORA4_1M_2N_N<<ORA4_1M_3N_N;
+
+            //Forcing raise - minor and major.
+            if (!bidOptions.limitRaises)
+                pages<<A4_FF<<RR4_4N;               //Always 4. suit natural.
             else
             {
-                pages<<E45_L_S;
-
-               //Simple limit raise only.
-                if (!bidOptions.jacoby2NT)
-                    pages<<E4_1H_L_S<<E4_1S_L_S;
-                //Simple limit raise + 2NT major raise forcing (Jacoby 2NT).
-                else
-                    pages<<AE4_1H_2NF_S<<AE4_1S_2NF_S;
+                pages<<ORE45_1M_2N_J;               //Always Jacoby 2NT.
+                pages<<A45_L_S<<OR_SPLINTER;        //Always Splinter.
+                pages<<AE4_1H_2NF_S<<AE4_1S_2NF_S;
+                pages<<RR4_4F_1D1H<<RR4_1S<<RR_4F;  //Always 4. suit forcing.
             }
+        }
+
+        //European (always simple limit raise).
+        else
+        {
+            pages<<RR4_4F_1D1H<<RR4_4F_1S;          //Always 4. suit forcing).
+
+            //Simple limit raise only.
+             if (!bidOptions.jacoby2NT)
+             {
+                 pages<<E4_1H_L_S<<E4_1S_L_S;
+
+                //Non Splinter.
+                if (!bidOptions.splinterbids)
+                    pages<<E4_1H_SL<<E4_1S_SL;
+             }
+
+             //Simple limit raise + 2NT major raise forcing (Jacoby 2NT).
+             else
+                 pages<<AE4_1H_2NF_S<<AE4_1S_2NF_S;
         }
     }
 
@@ -272,7 +301,7 @@ void CBidDBDefine::calcIds(CBidOptionDoc &bidOptions, QSet<qint16> &pages, QSet<
         {
             pages<<O12_5M_SN<<O3_5M_SN<<O4_5M_SN;
             //New minor natural (after 1NT rebid).
-            if (bidOptions.after1NTRebid == REBID_1NT_NAT)
+            if (bidOptions.rebid1NT == REBID_1NT_NAT)
                 pages<<RR5_SN_N;
             //New minor forcing (after 1NT rebid).
             else
@@ -283,9 +312,9 @@ void CBidDBDefine::calcIds(CBidOptionDoc &bidOptions, QSet<qint16> &pages, QSet<
         {
             pages<<O12_5M_WN<<O3_5M_WN<<O4_5M_WN;
             //2NT after 1/1 18-20 HCP.
-            if (bidOptions.twoNTAfter11 == TWO_NT_11_18_20)
+            if (bidOptions.twoNT11 == TWO_NT_11_18_20)
                 //New minor natural (after 1NT rebid).
-                if (bidOptions.after1NTRebid == REBID_1NT_NAT)
+                if (bidOptions.rebid1NT == REBID_1NT_NAT)
                     pages<<RR5_WN_1820_N;
                 //New minor forcing (after 1NT rebid).
                 else
@@ -293,35 +322,49 @@ void CBidDBDefine::calcIds(CBidOptionDoc &bidOptions, QSet<qint16> &pages, QSet<
             //2NT after 1/1 17-18 HCP.
             else
                 //New minor natural (after 1NT rebid).
-                if (bidOptions.after1NTRebid == REBID_1NT_NAT)
+                if (bidOptions.rebid1NT == REBID_1NT_NAT)
                     pages<<RR5_WN_1718_N;
                 //New minor forcing (after 1NT rebid).
                 else
                     pages<<RR5_WN_1718_F;
         }
 
-        //Forcing raise - minor and major (+American).
-        if (!bidOptions.limitRaises)
-            pages<<A5_FF<<ORA5_1M_2N_N<<ORA5_1M_3N_N<<RR5_4N;
-        //Simple limit raise - minor and major (+European).
-        else
+
+        //American
+        if (bidOptions.bidStyle == AMERICAN_STYLE)
         {
-            pages<<RR5_4F_1D1H<<RR5_4F_1S;
-            //Non Splinter.
-            if (!bidOptions.splinterbids)
-                pages<<E45_SL<<E5_1H_SL<<E5_1S_SL;
-            //Splinter.
+            pages<<ORA5_1M_2N_N<<ORA5_1M_3N_N;
+
+            //Forcing raise - minor and major.
+            if (!bidOptions.limitRaises)
+                pages<<A5_FF<<RR5_4N;               //Always 4. suit natural.
             else
             {
-                pages<<E45_L_S;
-
-                    //Simple limit raise only.
-                if (!bidOptions.jacoby2NT)
-                    pages<<E5_1H_L_S<<E5_1S_L_S;
-                    //Simple limit raise + 2NT major raise forcing (Jacoby 2NT).
-                else
-                    pages<<AE5_1H_2NF_S<<AE5_1S_2NF_S;
+                pages<<ORE45_1M_2N_J;               //Always Jacoby 2NT.
+                pages<<A45_L_S<<OR_SPLINTER;        //Always Splinter.
+                pages<<AE5_1H_2NF_S<<AE5_1S_2NF_S;
+                pages<<RR5_4F_1D1H<<RR5_1S<<RR_4F;  //Always 4. suit forcing.
             }
+        }
+
+        //European (always simple limit raise).
+        else
+        {
+            pages<<RR5_4F_1D1H<<RR5_4F_1S;          //Always 4. suit forcing).
+
+            //Simple limit raise only.
+             if (!bidOptions.jacoby2NT)
+             {
+                 pages<<E5_1H_L_S<<E5_1S_L_S;
+
+                //Non Splinter.
+                if (!bidOptions.splinterbids)
+                    pages<<E5_1H_SL<<E5_1S_SL;
+             }
+
+             //Simple limit raise + 2NT major raise forcing (Jacoby 2NT).
+             else
+                 pages<<AE5_1H_2NF_S<<AE5_1S_2NF_S;
         }
     }
 
@@ -491,7 +534,7 @@ void CBidDBDefine::calcIds(CBidOptionDoc &bidOptions, QSet<qint16> &pages, QSet<
     }
 
     //Strong 2C. Weak 2D, 2H, 2S.
-    if (bidOptions.twoBidsMode == WEAK_TWO)
+    if (bidOptions.twoBidsMode != S2_NATURAL)
     {
         pages<<O_S2_C<<A_S2_C;
         //Weak 2D, 6-11 HCP. //Weak 2H/2S, 6-11 HCP.
@@ -500,16 +543,16 @@ void CBidDBDefine::calcIds(CBidOptionDoc &bidOptions, QSet<qint16> &pages, QSet<
         pages<<A_W2D<<A_W2H2S<<A_W2DX_NAT<<A_W2H2SX_NAT;
 
         //Ogust after weak 2D, new suit not forcing. //Ogust after weak 2H/2S, new suit not forcing.
-        if ((bidOptions.afterW2 == W2_OGUST) && (bidOptions.w2NewSuit == W2_NEW_SUIT_NF))
+        if ((bidOptions.twoBidsMode == W2_OGUST) && (bidOptions.w2NewSuit == W2_NEW_SUIT_NF))
             pages<<A_W2D_O_NF<<A_W2H2S_O_NF;
         //Ogust after weak 2D, forcing. //Ogust after weak 2H/2S, forcing.
-        else if ((bidOptions.afterW2 == W2_OGUST) && (bidOptions.w2NewSuit == W2_NEW_SUIT_F))
+        else if ((bidOptions.twoBidsMode == W2_OGUST) && (bidOptions.w2NewSuit == W2_NEW_SUIT_F))
               pages<<A_W2D_O_F<<A_W2H2S_O_F;
         //Feature after weak 2D, not forcing. //Feature after weak 2H/2S, not forcing.
-        else if ((bidOptions.afterW2 == W2_FEATURE) && (bidOptions.w2NewSuit == W2_NEW_SUIT_NF))
+        else if ((bidOptions.twoBidsMode == W2_FEATURE) && (bidOptions.w2NewSuit == W2_NEW_SUIT_NF))
             pages<<A_W2D_F_NF<<A_W2H2S_F_NF;
         //Feature after weak 2D, forcing. //Feature after weak 2H/2S, forcing.
-        else if ((bidOptions.afterW2 == W2_FEATURE) && (bidOptions.w2NewSuit == W2_NEW_SUIT_NF))
+        else if ((bidOptions.twoBidsMode == W2_FEATURE) && (bidOptions.w2NewSuit == W2_NEW_SUIT_NF))
               pages<<A_W2D_F_F<<A_W2H2S_F_F;
     }
 
@@ -558,14 +601,14 @@ void CBidDBDefine::calcIds(CBidOptionDoc &bidOptions, QSet<qint16> &pages, QSet<
     }
 
     //2NT after 1/1 18-21 HCP
-    if (bidOptions.twoNTAfter11 == TWO_NT_11_18_20)
+    if (bidOptions.twoNT11 == TWO_NT_11_18_20)
         pages<<RR_2N_11_1821;
     //2NT after 1/1 17-18 HCP
     else
         pages<<RR_2N_11_1718;
 
     //2NT after 2/1 15-18 HCP
-    if (bidOptions.twoNTAfter21 == TWO_NT_21_15_18)
+    if (bidOptions.twoNT21 == TWO_NT_21_15_18)
         pages<<RR45_2N_21_1518;
     //2NT after 2/1 12-14 HCP
     else
@@ -641,17 +684,17 @@ void CBidDBDefine::calcIds(CBidOptionDoc &bidOptions, QSet<qint16> &pages, QSet<
       else
           rules<<SPL_N;                 //No splinter.
 
-      if (bidOptions.twoNTAfter11 == TWO_NT_11_18_20)
+      if (bidOptions.twoNT11 == TWO_NT_11_18_20)
         rules<<OR_11_2N_GF;             //2N after 1/1: 18-20 HCP.
       else
         rules<<OR_11_2N_NF;             //2N after 1/1: 17-18 HCP.
 
-    if (bidOptions.twoNTAfter21 == TWO_NT_21_15_18)
+    if (bidOptions.twoNT21 == TWO_NT_21_15_18)
         rules<<OR_21_2N_GF;             //2N after 2/1: 15-18 HCP.
     else
         rules<<OR_21_2N_NF;             //2N after 2/1: 12-14 HCP.
 
-      if (bidOptions.twoNTAfter11 == TWO_NT_11_18_20)
+      if (bidOptions.twoNT11 == TWO_NT_11_18_20)
         rules<<OR_11_3N_LM;             //3N after 1/1: 19+ HCP
       else
         rules<<OR_11_3N_N;              //3N after 1/1: long minor.
@@ -669,9 +712,9 @@ void CBidDBDefine::calcIds(CBidOptionDoc &bidOptions, QSet<qint16> &pages, QSet<
 //    else
 //        rules<<R_2C_2NT_2324;         //2NT after 2C: 23-24 HCP.
 
-      if (bidOptions.threeLevelPE == SOUND_THREE_LEVEL)
+      if (bidOptions.threeLevel == SOUND_THREE_LEVEL)
           rules<<S_3L_P_NV<<S_3L_P_V;   //Sound 3 level preempt not vul/vul.
-      else if (bidOptions.threeLevelPE == LIGHT_THREE_LEVEL)
+      else if (bidOptions.threeLevel == LIGHT_THREE_LEVEL)
           rules<<L_3L_P_NV<<L_3L_P_V;   //Light 3 level preempt not vul/vul.
       else
           rules<<S_3L_P_V<<L_3L_P_NV;   //Light/sound 3 level preempt not vul/vul.
@@ -689,7 +732,7 @@ void CBidDBDefine::calcIds(CBidOptionDoc &bidOptions, QSet<qint16> &pages, QSet<
 //    if (bidOptions.overcall4C)
 //        rules<<D_OVR_4;               //Four card overcall (good).
 
-      if (bidOptions.jumpOvercalls == JUMP_OVERCALL_WEAK)
+      if (bidOptions.jumpOvercalls != JUMP_OVERCALL_STRONG)
           rules<<D_J_OWK;
       else
           rules<<D_J_OIM;
