@@ -117,8 +117,8 @@ void CZBridgeDoc::synchronizeOptions(bool all)
         defaultBidOption.twoNT11 = TWO_NT_11_18_20;
         defaultBidOption.twoNT21 = TWO_NT_21_12_14;
         defaultBidOption.rebid1NT = REBID_1NT_NAT;
-        defaultBidOption.oneNT3m = ONE_NT_3m_ST;
-        defaultBidOption.oneNT3M = ONE_NT_3M_GT;
+        defaultBidOption.oneNT3m = ONE_NT_3m_SI;
+        defaultBidOption.oneNT3M = ONE_NT_3M_GI;
 
         //Misc.
         defaultBidOption.structuredReverse = true;
@@ -179,8 +179,8 @@ void CZBridgeDoc::synchronizeOptions(bool all)
         defaultBidOption.twoNT11 = TWO_NT_11_18_20;
         defaultBidOption.twoNT21 = TWO_NT_21_12_14;
         defaultBidOption.rebid1NT = REBID_1NT_NAT;
-        defaultBidOption.oneNT3m = ONE_NT_3m_GT;
-        defaultBidOption.oneNT3M = ONE_NT_3M_GT;
+        defaultBidOption.oneNT3m = ONE_NT_3M_GI;
+        defaultBidOption.oneNT3M = ONE_NT_3M_GI;
 
         //Misc.
         defaultBidOption.structuredReverse = true;
@@ -242,7 +242,7 @@ void CZBridgeDoc::synchronizeOptions(bool all)
         defaultBidOption.twoNT11 = TWO_NT_11_17_18;
         defaultBidOption.twoNT21 = TWO_NT_21_12_14;
         defaultBidOption.rebid1NT = REBID_1NT_NAT;
-        defaultBidOption.oneNT3m = ONE_NT_3m_ST;
+        defaultBidOption.oneNT3m = ONE_NT_3m_SI;
         defaultBidOption.oneNT3M = ONE_NT_3M_GF;
 
         //Misc.
@@ -305,8 +305,8 @@ void CZBridgeDoc::synchronizeOptions(bool all)
         defaultBidOption.twoNT11 = TWO_NT_11_17_18;
         defaultBidOption.twoNT21 = TWO_NT_21_15_18;
         defaultBidOption.rebid1NT = REBID_1NT_NAT;
-        defaultBidOption.oneNT3m = ONE_NT_3m_GT;
-        defaultBidOption.oneNT3M = ONE_NT_3M_ST;
+        defaultBidOption.oneNT3m = ONE_NT_3M_GI;
+        defaultBidOption.oneNT3M = ONE_NT_3M_SI;
 
         //Misc.
         defaultBidOption.structuredReverse = true;
@@ -367,8 +367,8 @@ void CZBridgeDoc::synchronizeOptions(bool all)
         defaultBidOption.twoNT11 = TWO_NT_11_17_18;
         defaultBidOption.twoNT21 = TWO_NT_21_15_18;
         defaultBidOption.rebid1NT = REBID_1NT_NAT;
-        defaultBidOption.oneNT3m = ONE_NT_3m_ST;
-        defaultBidOption.oneNT3M = ONE_NT_3M_GT;
+        defaultBidOption.oneNT3m = ONE_NT_3m_SI;
+        defaultBidOption.oneNT3M = ONE_NT_3M_GI;
 
         //Misc.
         defaultBidOption.structuredReverse = false;

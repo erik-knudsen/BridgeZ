@@ -310,12 +310,12 @@ private slots:
     void on_twoNT211214_clicked();
     void on_rebid1NTNat_clicked();
     void on_rebid1NTF_clicked();
-    void on_oneNT3mST_clicked();
-    void on_oneNT3mGT_clicked();
+    void on_oneNT3mSI_clicked();
+    void on_oneNT3mGI_clicked();
     void on_oneNT3mPE_clicked();
-    void on_oneNT3MST_clicked();
+    void on_oneNT3MSI_clicked();
     void on_oneNT3MGF_clicked();
-    void on_oneNT3MGT_clicked();
+    void on_oneNT3MGI_clicked();
     void on_oneNT3MPE_clicked();
 
     //Misc. configuration.

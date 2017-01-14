@@ -158,19 +158,19 @@ CBidOptionsPropSheet::CBidOptionsPropSheet(CBidOptionDoc &bidOptionDoc, CZBridge
     else if (bidOptionDoc.rebid1NT == REBID_1NT_F)
         ui->rebid1NTF->setChecked(true);
 
-    if (bidOptionDoc.oneNT3m == ONE_NT_3m_ST)
-        ui->oneNT3mST->setChecked(true);
-    else if (bidOptionDoc.oneNT3m == ONE_NT_3m_GT)
-        ui->oneNT3mGT->setChecked(true);
+    if (bidOptionDoc.oneNT3m == ONE_NT_3m_SI)
+        ui->oneNT3mSI->setChecked(true);
+    else if (bidOptionDoc.oneNT3m == ONE_NT_3M_GI)
+        ui->oneNT3mGI->setChecked(true);
     else if (bidOptionDoc.oneNT3m == ONE_NT_3m_PE)
         ui->oneNT3mPE->setChecked(true);
 
-    if (bidOptionDoc.oneNT3M == ONE_NT_3M_ST)
-        ui->oneNT3MST->setChecked(true);
+    if (bidOptionDoc.oneNT3M == ONE_NT_3M_SI)
+        ui->oneNT3MSI->setChecked(true);
     if (bidOptionDoc.oneNT3M == ONE_NT_3M_GF)
         ui->oneNT3MGF->setChecked(true);
-    if (bidOptionDoc.oneNT3M == ONE_NT_3M_GT)
-        ui->oneNT3MGT->setChecked(true);
+    if (bidOptionDoc.oneNT3M == ONE_NT_3M_GI)
+        ui->oneNT3MGI->setChecked(true);
     if (bidOptionDoc.oneNT3M == ONE_NT_3M_PE)
         ui->oneNT3MPE->setChecked(true);
 
@@ -212,6 +212,7 @@ CBidOptionsPropSheet::CBidOptionsPropSheet(CBidOptionDoc &bidOptionDoc, CZBridge
     ui->fourteenTPsGs->setChecked(bidOptionDoc.fourteenTPsGs);
     ui->fourteenTPsLs->setChecked(bidOptionDoc.fourteenTPsLs);
     ui->thirteeTPsLs->setChecked(bidOptionDoc.thirteenTPsLs);
+    ui->openBox->setEnabled(false);
 
     //Signals.
     ui->signalPartnerLeadSuit->setCurrentIndex(bidOptionDoc.partnerLeadSuit);
@@ -952,14 +953,14 @@ void CBidOptionsPropSheet::on_rebid1NTF_clicked()
     bidOptionDoc.rebid1NT = REBID_1NT_F;
 }
 
-void CBidOptionsPropSheet::on_oneNT3mST_clicked()
+void CBidOptionsPropSheet::on_oneNT3mSI_clicked()
 {
-    bidOptionDoc.oneNT3m = ONE_NT_3m_ST;
+    bidOptionDoc.oneNT3m = ONE_NT_3m_SI;
 }
 
-void CBidOptionsPropSheet::on_oneNT3mGT_clicked()
+void CBidOptionsPropSheet::on_oneNT3mGI_clicked()
 {
-    bidOptionDoc.oneNT3m = ONE_NT_3m_GT;
+    bidOptionDoc.oneNT3m = ONE_NT_3M_GI;
 }
 
 void CBidOptionsPropSheet::on_oneNT3mPE_clicked()
@@ -967,9 +968,9 @@ void CBidOptionsPropSheet::on_oneNT3mPE_clicked()
     bidOptionDoc.oneNT3m = ONE_NT_3m_PE;
 }
 
-void CBidOptionsPropSheet::on_oneNT3MST_clicked()
+void CBidOptionsPropSheet::on_oneNT3MSI_clicked()
 {
-    bidOptionDoc.oneNT3M = ONE_NT_3M_ST;
+    bidOptionDoc.oneNT3M = ONE_NT_3M_SI;
 }
 
 void CBidOptionsPropSheet::on_oneNT3MGF_clicked()
@@ -977,9 +978,9 @@ void CBidOptionsPropSheet::on_oneNT3MGF_clicked()
     bidOptionDoc.oneNT3M = ONE_NT_3M_GF;
 }
 
-void CBidOptionsPropSheet::on_oneNT3MGT_clicked()
+void CBidOptionsPropSheet::on_oneNT3MGI_clicked()
 {
-    bidOptionDoc.oneNT3M = ONE_NT_3M_GT;
+    bidOptionDoc.oneNT3M = ONE_NT_3M_GI;
 }
 
 void CBidOptionsPropSheet::on_oneNT3MPE_clicked()

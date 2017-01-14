@@ -318,14 +318,14 @@ const int REBID_1NT_NAT = 0;
 const int REBID_1NT_F = 1;
 
 //3 minor after 1NT.
-const int ONE_NT_3m_ST = 0;
-const int ONE_NT_3m_GT = 1;
+const int ONE_NT_3m_SI = 0;
+const int ONE_NT_3m_GI = 1;
 const int ONE_NT_3m_PE = 2;
 
 //3 major after 1NT.
-const int ONE_NT_3M_ST = 0;
+const int ONE_NT_3M_SI = 0;
 const int ONE_NT_3M_GF = 1;
-const int ONE_NT_3M_GT = 2;
+const int ONE_NT_3M_GI = 2;
 const int ONE_NT_3M_PE = 3;
 
 //Jump overcall types.

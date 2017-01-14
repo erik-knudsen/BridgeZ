@@ -78,8 +78,8 @@ const qint16 A_W2H2S_O_NF = 1092;  //Ogust after weak 2H/2S, not forcing.
 const qint16 A_W2H2S_F_NF = 1055;  //Feature after weak 2H/2S, not forcing.
 const qint16 A_W2H2S_O_F = 1093;   //Ogust after weak 2H/2S, forcing.
 const qint16 A_W2H2S_F_F = 1056;   //Feature after weak 2H/2S, forcing.
-const qint16 A_W2DX_NAT = 54;      //After weak 2D opening and qint16ervening takeout double.
-const qint16 A_W2H2SX_NAT = 55;    //After weak 2H/2S opening and qint16ervening takeout double.
+const qint16 A_W2DX_NAT = 54;      //After weak 2D opening and intervening takeout double.
+const qint16 A_W2H2SX_NAT = 55;    //After weak 2H/2S opening and intervening takeout double.
 
 //After 2NT opening--------------------------------------------------------------
 //20-21 HCP.
@@ -248,18 +248,18 @@ const qint16 R_1214_J_SO = 237;    //1NT 12-14 HCP. Jacoby. 2S sign off.
 const qint16 R_1618_J_MT = 238;    //1NT 16-18 HCP. Jacoby. 2S,2N minor transfer.
 const qint16 R_1517_J_MT = 239;    //1NT 15-17 HCP. Jacoby. 2S 2N minor transfer.
 const qint16 R_1214_J_MT = 240;    //1NT 12-14 HCP. Jacoby. 2S 2N minor transfer.
-const qint16 R_1618_3mST = 241;    //1NT 16-18 HCP. 3C/3D slam try.
-const qint16 R_1517_3mST = 242;    //1NT 15-17 HCP. 3C/3D slam try.
-const qint16 R_1214_3mST = 243;    //1NT 12-14 HCP. 3C/3D slam try.
-const qint16 R_1618_3mGT = 244;    //1NT 16-18 HCP. 3C/3D game try.
-const qint16 R_1517_3mGT = 245;    //1NT 15-17 HCP. 3C/3D game try.
-const qint16 R_1214_3mGT = 246;    //1NT 12-14 HCP. 3C/3D game try.
+const qint16 R_1618_3mSI = 241;    //1NT 16-18 HCP. 3C/3D slam invitation.
+const qint16 R_1517_3mSI = 242;    //1NT 15-17 HCP. 3C/3D slam invitation.
+const qint16 R_1214_3mSI = 243;    //1NT 12-14 HCP. 3C/3D slam invitation.
+const qint16 R_1618_3mGI = 244;    //1NT 16-18 HCP. 3C/3D game invitation.
+const qint16 R_1517_3mGI = 245;    //1NT 15-17 HCP. 3C/3D game invitation.
+const qint16 R_1214_3mGI = 246;    //1NT 12-14 HCP. 3C/3D game invitation.
 const qint16 R_1618_3mPE = 247;    //1NT 16-18 HCP. 3C/3D pre emptive.
 const qint16 R_1517_3mPE = 248;    //1NT 15-17 HCP. 3C/3D pre emptive.
 const qint16 R_1214_3mPE = 249;    //1NT 12-14 HCP. 3C/3D pre emptive.
-const qint16 R_1618_3MST = 250;    //1NT 16-18 HCP. 3H/3S slam try.
-const qint16 R_1517_3MST = 251;    //1NT 15-17 HCP. 3H/3S slam try.
-const qint16 R_1214_3MST = 252;    //1NT 12-14 HCP. 3H/3S slam try.
+const qint16 R_1618_3MSI = 250;    //1NT 16-18 HCP. 3H/3S slam invitation.
+const qint16 R_1517_3MSI = 251;    //1NT 15-17 HCP. 3H/3S slam invitation.
+const qint16 R_1214_3MSI = 252;    //1NT 12-14 HCP. 3H/3S slam invitation.
 const qint16 R_1618_3MGF = 253;    //1NT 16-18 HCP. 3H/3S game forcing.
 const qint16 R_1517_3MGF = 254;    //1NT 15-17 HCP. 3H/3S game forcing.
 const qint16 R_1214_3MGF = 255;    //1NT 12-14 HCP. 3H/3S game forcing.
@@ -273,9 +273,9 @@ const qint16 R_1618_4MN = 262;     //1NT 16-18 HCP. 4H/4S natural.
 const qint16 R_1517_4MN = 263;     //1NT 15-17 HCP. 4H/4S natural.
 const qint16 R_1214_4MN = 264;     //1NT 12-14 HCP. 4H/4S natural.
 //Rebids.
-const qint16 OR_1618_4MN = 265;    //1NT 16-18 HCP. Common.
-const qint16 OR_1517_4MN = 267;    //1NT 15-17 HCP. Common.
-const qint16 OR_1214_4MN = 269;    //1NT 12-14 HCP. Common.
+const qint16 OR_1618 = 265;        //1NT 16-18 HCP. Common.
+const qint16 OR_1517 = 267;        //1NT 15-17 HCP. Common.
+const qint16 OR_1214 = 269;        //1NT 12-14 HCP. Common.
 const qint16 OR_1618_SF_1 = 271;   //1NT 16-18 HCP. Forcing Stayman.
 const qint16 OR_1517_SF_1 = 273;   //1NT 15-17 HCP. Forcing Stayman.
 const qint16 OR_1214_SF_1 = 275;   //1NT 12-14 HCP. Forcing Stayman.
@@ -300,18 +300,18 @@ const qint16 OR_1214_J_SO = 294;    //1NT 12-14 HCP. Jacoby. 2S sign off.
 const qint16 OR_1618_J_MT = 295;    //1NT 16-18 HCP. Jacoby. 2S,2N minor transfer.
 const qint16 OR_1517_J_MT = 296;    //1NT 15-17 HCP. Jacoby. 2S 2N minor transfer.
 const qint16 OR_1214_J_MT = 297;    //1NT 12-14 HCP. Jacoby. 2S 2N minor transfer.
-const qint16 OR_1618_3mST = 298;    //1NT 16-18 HCP. 3C/3D slam try.
-const qint16 OR_1517_3mST = 299;    //1NT 15-17 HCP. 3C/3D slam try.
-const qint16 OR_1214_3mST = 300;    //1NT 12-14 HCP. 3C/3D slam try.
-const qint16 OR_1618_3mGT = 301;    //1NT 16-18 HCP. 3C/3D game try.
-const qint16 OR_1517_3mGT = 302;    //1NT 15-17 HCP. 3C/3D game try.
-const qint16 OR_1214_3mGT = 303;    //1NT 12-14 HCP. 3C/3D game try.
+const qint16 OR_1618_3mSI = 298;    //1NT 16-18 HCP. 3C/3D slam invitation.
+const qint16 OR_1517_3mSI = 299;    //1NT 15-17 HCP. 3C/3D slam invitation.
+const qint16 OR_1214_3mSI = 300;    //1NT 12-14 HCP. 3C/3D slam invitation.
+const qint16 OR_1618_3mGI = 301;    //1NT 16-18 HCP. 3C/3D game invitation.
+const qint16 OR_1517_3mGI = 302;    //1NT 15-17 HCP. 3C/3D game invitation.
+const qint16 OR_1214_3mGI = 303;    //1NT 12-14 HCP. 3C/3D game invitation.
 const qint16 OR_1618_3mPE = 304;    //1NT 16-18 HCP. 3C/3D pre emptive.
 const qint16 OR_1517_3mPE = 305;    //1NT 15-17 HCP. 3C/3D pre emptive.
 const qint16 OR_1214_3mPE = 306;    //1NT 12-14 HCP. 3C/3D pre emptive.
-const qint16 OR_1618_3MST = 307;    //1NT 16-18 HCP. 3H/3S slam try.
-const qint16 OR_1517_3MST = 308;    //1NT 15-17 HCP. 3H/3S slam try.
-const qint16 OR_1214_3MST = 309;    //1NT 12-14 HCP. 3H/3S slam try.
+const qint16 OR_1618_3MSI = 307;    //1NT 16-18 HCP. 3H/3S slam invitation.
+const qint16 OR_1517_3MSI = 308;    //1NT 15-17 HCP. 3H/3S slam invitation.
+const qint16 OR_1214_3MSI = 309;    //1NT 12-14 HCP. 3H/3S slam invitation.
 const qint16 OR_1618_3MGF = 310;    //1NT 16-18 HCP. 3H/3S game forcing.
 const qint16 OR_1517_3MGF = 311;    //1NT 15-17 HCP. 3H/3S game forcing.
 const qint16 OR_1214_3MGF = 312;    //1NT 12-14 HCP. 3H/3S game forcing.
@@ -330,12 +330,12 @@ const qint16 D_S_J = 324;          //Strong 1NT. Jacoby.
 const qint16 D_W_J = 325;          //Weak 1NT. Jacoby.
 const qint16 D_S_J_MT = 326;       //Strong 1NT. Jacoby. 2S,2N minor transfer.
 const qint16 D_W_J_MT = 327;       //Weak 1NT. Jacoby. 2S,2N minor transfer.
-const qint16 D_S_3mSGT = 328;      //Strong 1NT. 3C/3D slam or game try.
-const qint16 D_W_3mSGT = 329;      //Weak 1NT. 3C/3D slam or game try.
+const qint16 D_S_3mSGI = 328;      //Strong 1NT. 3C/3D slam or game invitation.
+const qint16 D_W_3mSGI = 329;      //Weak 1NT. 3C/3D slam or game invitation.
 const qint16 D_S_3mPE = 330;       //Strong 1NT. 3C/3D pre emptive.
 const qint16 D_W_3mPE = 331;       //Weak 1NT. 3C/3D pre emptive.
-const qint16 D_S_3MSGT = 3301;     //Strong 1NT.  3H/3S slam try or game forcing or game inv.
-const qint16 D_W_3MSGT = 3302;     //Weak 1NT.  3H/3S slam try or game forcing or game inv.
+const qint16 D_S_3MSGI = 3301;     //Strong 1NT.  3H/3S slam inv. or game forcing or game inv.
+const qint16 D_W_3MSGI = 3302;     //Weak 1NT.  3H/3S slam inv. or game forcing or game inv.
 const qint16 D_S_3MPE = 332;       //Strong 1NT. 3H/3S pre emptive.
 const qint16 D_W_3MPE = 333;       //Weak 1NT.  3H/3S pre emptive.
 const qint16 D_S_4MN = 334;        //Strong 1NT. 4H/4S natural.
@@ -478,7 +478,7 @@ const qint16 OR_11_3N_A = 38;      //3N after 1/1: Balanced major raise.
 const qint16 R_M_2N_S = 26;        //Stenberg 2NT major raise.
 const qint16 R_M_2N_J = 25;        //Jacoby 2NT major raise.
 
-const qint16 R_m_1N_S = 48;        //1N-3C/3D Slam try.
+const qint16 R_m_1N_S = 48;        //1N-3C/3D Slam invitation.
 const qint16 R_m_1N_G = 49;        //1N-3C/3D Game invitation or preemptive.
 
 const qint16 R_2C_2NT_2224 = 18;   //2NT after 2C: 22-24 HCP.
@@ -608,13 +608,13 @@ const qint16 STD_D = 10;           //(mostly doubles) defensive side (instead of
             //2S,2N minor transfer.
                 D_W_J_MT
 
-        //3C/3D slam try or 3C/3D game try.
-            D_W_3mSGT
+        //3C/3D slam invitation or 3C/3D game invitation.
+            D_W_3mSGI
         //3C/3D pre emptive.
             D_W_3mPE
 
-        //3H/3S slam try or game forcing or game invitation.
-            D_W_3MSGT
+        //3H/3S slam invitation or game forcing or game invitation.
+            D_W_3MSGI
         //3H/3S pre emptive.
             D_W_3MPE
 
@@ -645,13 +645,13 @@ const qint16 STD_D = 10;           //(mostly doubles) defensive side (instead of
             //2S,2N minor transfer.
                 D_S_J_MT
 
-        //3C/3D slam try or 3C/3D game try.
-            D_S_3mSGT
+        //3C/3D slam invitation or 3C/3D game invitation.
+            D_S_3mSGI
         //3C/3D pre emptive
             D_S_3mPE
 
-        //3H/3S slam try or game forcing or game invitation.
-            D_S_3MSGT
+        //3H/3S slam invitation or game forcing or game invitation.
+            D_S_3MSGI
         //3H/3S pre emptive.
             D_S_3MPE
 
@@ -700,7 +700,7 @@ const qint16 STD_D = 10;           //(mostly doubles) defensive side (instead of
             ORE45_1M_2N_J       (Always Jacoby 2NT).
             A45_L_S OR_SPLINTER (Always Splinter)
             AE4_1H_2NF_S AE4_1S_2NF_S
-            RR4_4F_1D1H RR4_1S RR_4F    (Always 4. suit forcing).
+            RR4_4F_1D1H RR_4F    (Always 4. suit forcing).
     //European.
     //Always simple limit raise - minor and major.
         RR4_4F_1D1H RR4_4F_1S           (Always 4. suit forcing).
@@ -750,7 +750,7 @@ const qint16 STD_D = 10;           //(mostly doubles) defensive side (instead of
             ORE45_1M_2N_J       //Always Jacoby 2NT).
             A45_L_S OR_SPLINTER //Always Splinter.
             AE5_1H_2NF_S AE5_1S_2NF_S
-            RR5_4F_1D1H RR5_1S RR_4F    (Always Splinter and 4. suit forcing).
+            RR5_4F_1D1H RR_4F    (Always Splinter and 4. suit forcing).
     //European.
     //Always simple limit raise - minor and major.
         RR5_4F_1D1H RR5_4F_1S           (Always 4. suit forcing).
@@ -779,15 +779,15 @@ const qint16 STD_D = 10;           //(mostly doubles) defensive side (instead of
         //2S,2N minor transfer.
             R_1214_J_MT OR_1214_J_MT
 
-    //3C/3D slam try.
-        R_1214_3mST OR_1214_3mST
-    //3C/3D game try.
-        R_1214_3mGT OR_1214_3mGT
+    //3C/3D slam invitation.
+        R_1214_3mSI OR_1214_3mSI
+    //3C/3D game invitation.
+        R_1214_3mGI OR_1214_3mGI
     //3C/3D pre emptive.
         R_1214_3mPE OR_1214_3mPE
 
-    //3H/3S slam try.
-        R_1214_3MST OR_1214_3MST
+    //3H/3S slam invitation.
+        R_1214_3MSI OR_1214_3MSI
     //3H/3S game forcing.
         R_1214_3MGF OR_1214_3MGF
     //3H/3S pre emptive.
@@ -813,15 +813,15 @@ const qint16 STD_D = 10;           //(mostly doubles) defensive side (instead of
         //2S,2N minor transfer.
             R_1618_J_MT OR_1618_J_MT
 
-    //3C/3D slam try.
-        R_1618_3mST OR_1618_3mST
-    //3C/3D game try.
-        R_1618_3mGT OR_1618_3mGT
+    //3C/3D slam invitation.
+        R_1618_3mSI OR_1618_3mSI
+    //3C/3D game invitation.
+        R_1618_3mGI OR_1618_3mGI
     //3C/3D pre emptive.
         R_1618_3mPE OR_1618_3mPE
 
-    //3H/3S slam try.
-        R_1618_3MST OR_1618_3MST
+    //3H/3S slam invitation.
+        R_1618_3MSI OR_1618_3MSI
     //3H/3S game forcing
         R_1618_3MGF OR_1618_3MGF
     //3H/3S pre emptive.
@@ -847,15 +847,15 @@ const qint16 STD_D = 10;           //(mostly doubles) defensive side (instead of
         //2S,2N minor transfer.
             R_1517_J_MT OR_1517_J_MT
 
-    //3C/3D slam try.
-        R_1517_3mST OR_1517_3mST
-    //3C/3D game try.
-        R_1517_3mGT OR_1517_3mGT
+    //3C/3D slam invitation.
+        R_1517_3mSI OR_1517_3mSI
+    //3C/3D game invitation.
+        R_1517_3mGI OR_1517_3mGI
     //3C/3D pre emptive.
         R_1517_3mPE OR_1517_3mPE
 
-    //3H/3S slam try.
-        R_1517_3MST OR_1517_3MST
+    //3H/3S slam invitation.
+        R_1517_3MSI OR_1517_3MSI
     //3H/3S game forcing
         R_1517_3MGF OR_1517_3MGF
     //3H/3S pre emptive.
@@ -920,6 +920,8 @@ const qint16 STD_D = 10;           //(mostly doubles) defensive side (instead of
 //2NT after 1/1 17-18 HCP
     RR_2N_11_1718
 
+//1NT 12-14 HCP
+    RR45_2N_21_1518
 //2NT after 2/1 15-18 HCP
     RR45_2N_21_1518
 //2NT after 2/1 12-14 HCP
@@ -959,6 +961,119 @@ const qint16 STD_D = 10;           //(mostly doubles) defensive side (instead of
 //3NT Acol.
     O_3N_ACOL A_3N_ACOL
 
+
+//Rules ids for bid database --------------------------------------------------------
+//4-major.
+    O_1H_4 O_1S_4                       //1H and 1S promises 4 card suit.
+//5-major.
+    O_1H_5 O_1S_5                       //1H and 1S promises 5 card suit.
+
+O_LOWER                                 //Open lower suit first.
+
+//Weak 1NT.
+    WK1N
+    //1NT after 1/1: 15-16 HCP.
+        WK1N_R_NF;                      //1NT after 1/1: 15-16 HCP
+    //1NT after 1/1: 15-18 HCP.
+        WK1N_R_GF;                      //1NT after 1/1: 15-18 HCP
+//Strong 1NT.
+    ST1N
+    //Open 1NT  with weak major.
+        O_1N_WM
+
+    //Splinter.
+        SPL_O<<SPL_D                    //Splinter offensive and defensive side.
+    //No splinter.
+        SPL_N                           //No splinter.
+
+//2N after 1/1: 18-20 HCP.
+    OR_11_2N_GF
+//2N after 1/1: 17-18 HCP.
+    OR_11_2N_NF
+
+//2N after 2/1: 15-18 HCP.
+    OR_21_2N_GF
+//2N after 2/1: 12-14 HCP.
+    OR_21_2N_NF
+
+//3N after 1/1: long minor.
+    OR_11_3N_LM
+//3N after 1/1: 19+ HCP
+    OR_11_3N_N
+
+//Jacoby 2NT major raise
+    R_M_2N_J
+
+//1N-3C/3D Slam invitation.
+    R_m_1N_S
+//1N-3C/3D Game invitation or preemptive.
+    R_m_1N_G
+
+//2NT after 2C: 22-24 HCP.
+    R_2C_2NT_2224
+//2NT after 2C: 23-24 HCP.
+    R_2C_2NT_2324;
+
+//Sound 3 level preempt not vul/vul.
+    S_3L_P_NV S_3L_P_V
+//Light 3 level preempt not vul/vul.
+    L_3L_P_NV L_3L_P_V
+//sound/light 3 level preempt vul/not vul.
+    S_3L_P_V L_3L_P_NV
+
+//Opponent overcalled: responder jump raise is invitational.
+    R_JR_LIM
+//Opponent overcalled: responder jump raise is preemptive.
+    R_JR_PRE
+
+//Constructive overcall (raise is invitational).
+    D_CON
+//Aggressive overcall (raise is preemptive).
+    D_AGR
+
+//Four card overcall (good).
+    D_OVR_4
+
+//Jump overcall weak.
+    D_J_OWK
+//Jump overcall intermediate.
+    D_J_OIM
+
+GHES_OFF;                  //Ghestem convention is off.
+CBS_OFF;                   //Checkback Stayman is off.
+
+//2C-2D negative.
+    R_2C_2D_N
+//2C-2D waiting.
+    R_2C_2D_W
+
+//3 response Stayman.
+    R_1N_S
+//4 response Stayman.
+    R_1N_4R_S
+
+//1N-2N natural.
+    R_1N_2N_N
+//1N-2N transfer.
+    R_1N_2N_T
+
+//2N-3M natural forcing.
+    R_2N_3M
+
+//Redouble escape.
+    RD_ESC
+//Redouble pending.
+    RD_PND
+
+//Takeout standard offensive side.
+    STD_O
+//Takeout ??? offensive side.
+    T_OUT_D_O
+
+//Takeout standard defensive side.
+    STD_D
+//Takeout ??? defensive side.
+    T_OUT_D_D
 */
 
 class CBidDBDefine

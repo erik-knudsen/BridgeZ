@@ -18,7 +18,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>352</width>
+     <width>351</width>
      <height>341</height>
     </rect>
    </property>
@@ -720,7 +720,7 @@
       <rect>
        <x>204</x>
        <y>10</y>
-       <width>132</width>
+       <width>151</width>
        <height>260</height>
       </rect>
      </property>
@@ -739,16 +739,16 @@
            <item>
             <layout class="QVBoxLayout" name="verticalLayout_58">
              <item>
-              <widget class="QRadioButton" name="oneNT3mST">
+              <widget class="QRadioButton" name="oneNT3mSI">
                <property name="text">
-                <string>Slam Try</string>
+                <string>Slam Invitation</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QRadioButton" name="oneNT3mGT">
+              <widget class="QRadioButton" name="oneNT3mGI">
                <property name="text">
-                <string>Game Try</string>
+                <string>Game Invitation</string>
                </property>
               </widget>
              </item>
@@ -773,9 +773,9 @@
            <item>
             <layout class="QVBoxLayout" name="verticalLayout_60">
              <item>
-              <widget class="QRadioButton" name="oneNT3MST">
+              <widget class="QRadioButton" name="oneNT3MSI">
                <property name="text">
-                <string>Slam Try</string>
+                <string>Slam Invitation</string>
                </property>
               </widget>
              </item>
@@ -787,9 +787,9 @@
               </widget>
              </item>
              <item>
-              <widget class="QRadioButton" name="oneNT3MGT">
+              <widget class="QRadioButton" name="oneNT3MGI">
                <property name="text">
-                <string>Game Try</string>
+                <string>Game Invitation</string>
                </property>
               </widget>
              </item>

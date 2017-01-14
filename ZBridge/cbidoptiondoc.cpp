@@ -66,8 +66,8 @@ CBidOptionDoc::CBidOptionDoc()
     twoNT11 = TWO_NT_11_18_20;
     twoNT21 = TWO_NT_21_12_14;
     rebid1NT = REBID_1NT_NAT;
-    oneNT3m = ONE_NT_3m_ST;
-    oneNT3M = ONE_NT_3M_GT;
+    oneNT3m = ONE_NT_3m_SI;
+    oneNT3M = ONE_NT_3M_GI;
 
     //Misc.
     structuredReverse = true;
