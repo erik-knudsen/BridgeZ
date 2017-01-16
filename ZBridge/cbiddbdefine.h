@@ -1076,6 +1076,12 @@ CBS_OFF;                   //Checkback Stayman is off.
     T_OUT_D_D
 */
 
+/**
+ * @brief This class calculates pages and rule ids for a given set of bid options.
+ *
+ * The pages and rule ids are as defined by the constants above. The calculations are
+ * hardcoded in this class.
+ */
 class CBidDBDefine
 {
 public:

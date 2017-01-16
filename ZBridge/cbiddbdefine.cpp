@@ -25,6 +25,12 @@ CBidDBDefine::CBidDBDefine(CZBridgeDoc *doc)
     calcIds(ewBidOptions, ewPages, ewRules);
 }
 
+/**
+ * @brief Calculate relevant pages and rule ids.
+ * @param bidOptions Options that selects pages and rules.
+ * @param pages Calculated pages.
+ * @param rules Calculated rule ids.
+ */
 void CBidDBDefine::calcIds(CBidOptionDoc &bidOptions, QSet<qint16> &pages, QSet<qint16> &rules)
 {
     //Pages*****************************************************************************************
