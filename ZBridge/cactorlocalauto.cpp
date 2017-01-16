@@ -31,8 +31,8 @@
  * @brief Constructor for local automatic actor.
  * @param teamName The team name for the cooperating pair of actors.
  * @param seat This actors seat.
- * @param bidOptionDocOwn Own bid options.
- * @param bidOptionDocOpp Opponents bid options.
+ * @param nsBidOptionDoc NS bid options.
+ * @param ewBidOptionDoc EW bid options.
  * @param bidDB The bid database.
  * @param bidDesc Description of the bid database.
  * @param tableManager The controlling table manager.
@@ -42,13 +42,13 @@
  *   - Generates bid and play engines.
  *   - Initializes the Yakindu client state chart.
  */
-CActorLocalAuto::CActorLocalAuto(QString teamName, Seat seat, CBidOptionDoc &bidOptionDocOwn,
-                         CBidOptionDoc &bidOptionDocOpp, CBidDB &bidDB, CBidDesc &bidDesc,
+CActorLocalAuto::CActorLocalAuto(QString teamName, Seat seat, CBidOptionDoc &nsBidOptionDoc,
+                         CBidOptionDoc &ewBidOptionDoc, CBidDB &bidDB, CBidDesc &bidDesc,
                          CTblMngrBase *tableManager) :
     CActorBase(tableManager)
 {
     this->teamName = teamName;
-    bidAndPlay.generateEngines(seat, bidOptionDocOwn, bidOptionDocOpp, bidDB, bidDesc);
+    bidAndPlay.generateEngines(seat, nsBidOptionDoc, ewBidOptionDoc, bidDB, bidDesc);
     this->tableManager = tableManager;
     updateGameInfo = false;
     synchronizing = false;

@@ -1085,13 +1085,12 @@ CBS_OFF;                   //Checkback Stayman is off.
 class CBidDBDefine
 {
 public:
-    CBidDBDefine(CZBridgeDoc *doc);
+    CBidDBDefine(Seat seat, CBidOptionDoc &nsBidOptions, CBidOptionDoc &ewBidOptions);
 
     void calcIds(CBidOptionDoc &bidOptions, QSet<qint16> &pages, QSet<qint16> &rules);
 
 private:
-    CBidOptionDoc nsBidOptions;
-    CBidOptionDoc ewBidOptions;
+    Seat seat;
 
     QSet<qint16> nsPages;
     QSet<qint16> ewPages;

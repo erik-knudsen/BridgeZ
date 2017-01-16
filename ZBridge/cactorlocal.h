@@ -49,8 +49,8 @@ class CActorLocal : public CActor
 {
     Q_OBJECT
 public:
-    CActorLocal(bool manual, QString teamName, Seat seat, int protocol, CBidOptionDoc &bidOptionDocOwn,
-               CBidOptionDoc &bidOptionDocOpp, CBidDB &bidDB, CBidDesc &bidDesc, CTblMngr *tableManager);
+    CActorLocal(bool manual, QString teamName, Seat seat, int protocol, CBidOptionDoc &nsBidOptionDoc,
+               CBidOptionDoc &ewBbidOptionDoc, CBidDB &bidDB, CBidDesc &bidDesc, CTblMngr *tableManager);
 
     void startNewSession();
     void clientRunCycle();

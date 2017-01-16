@@ -49,7 +49,7 @@ class CBidAndPlay
 public:
     CBidAndPlay();
 
-    void generateEngines(Seat seat, CBidOptionDoc &bidOptionDocOwn, CBidOptionDoc &bidOptionDocOpp,
+    void generateEngines(Seat seat, CBidOptionDoc &nsBidOptionDoc, CBidOptionDoc &ewBidOptionDoc,
                          CBidDB &bidDB, CBidDesc &bidDesc);
 
     void setBidInfo(Bids bid, Bids bidDouble, Seat openLeader)

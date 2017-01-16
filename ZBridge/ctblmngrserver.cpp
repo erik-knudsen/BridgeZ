@@ -626,13 +626,13 @@ void CTblMngrServer::newSession()
     //Set up actors.
     if (doc->getSeatOptions().westActor == MANUAL_ACTOR)
         actor = new CActorLocal(true, doc->getSeatOptions().westName, WEST_SEAT, protocol,
-                doc->getEWBidOptions(), doc->getNSBidOptions(),
+                doc->getNSBidOptions(), doc->getEWBidOptions(),
                 *doc->getBidDB(), *doc->getBidDesc(), this);
     else if ((remoteActorServer != 0) && remoteActorServer->isConnected(WEST_SEAT))
         actor = new CActorRemote(WEST_SEAT, protocol, remoteActorServer->getFrontend(WEST_SEAT), this);
     else
         actor = new CActorLocal(false, doc->getSeatOptions().westName, WEST_SEAT, protocol,
-                doc->getEWBidOptions(), doc->getNSBidOptions(),
+                doc->getNSBidOptions(), doc->getEWBidOptions(),
                 *doc->getBidDB(), *doc->getBidDesc(), this);
     actors[WEST_SEAT] = actor;
 
@@ -650,13 +650,13 @@ void CTblMngrServer::newSession()
 
     if (doc->getSeatOptions().eastActor == MANUAL_ACTOR)
         actor = new CActorLocal(true, doc->getSeatOptions().eastName, EAST_SEAT, protocol,
-                doc->getEWBidOptions(), doc->getNSBidOptions(),
+                doc->getNSBidOptions(), doc->getEWBidOptions(),
                 *doc->getBidDB(), *doc->getBidDesc(), this);
     else if ((remoteActorServer != 0) && remoteActorServer->isConnected(EAST_SEAT))
         actor = new CActorRemote(EAST_SEAT, protocol, remoteActorServer->getFrontend(EAST_SEAT), this);
     else
         actor = new CActorLocal(false, doc->getSeatOptions().eastName, EAST_SEAT, protocol,
-                doc->getEWBidOptions(), doc->getNSBidOptions(),
+                doc->getNSBidOptions(), doc->getEWBidOptions(),
                 *doc->getBidDB(), *doc->getBidDesc(), this);
     actors[EAST_SEAT] = actor;
 

@@ -16,10 +16,9 @@
 
 #include "cbiddbdefine.h"
 
-CBidDBDefine::CBidDBDefine(CZBridgeDoc *doc)
+CBidDBDefine::CBidDBDefine(Seat seat, CBidOptionDoc &nsBidOptions, CBidOptionDoc &ewBidOptions)
 {
-    nsBidOptions = doc->getNSBidOptions();
-    ewBidOptions = doc->getEWBidOptions();
+    this->seat = seat;
 
     calcIds(nsBidOptions, nsPages, nsRules);
     calcIds(ewBidOptions, ewPages, ewRules);

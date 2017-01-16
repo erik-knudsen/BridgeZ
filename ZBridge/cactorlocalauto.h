@@ -49,8 +49,8 @@ class CActorLocalAuto : public CActorBase
 {
     Q_OBJECT
 public:
-    CActorLocalAuto(QString teamName, Seat seat, CBidOptionDoc &bidOptionDocOwn,
-               CBidOptionDoc &bidOptionDocOpp, CBidDB &bidDB, CBidDesc &bidDesc,
+    CActorLocalAuto(QString teamName, Seat seat, CBidOptionDoc &nsBidOptionDoc,
+               CBidOptionDoc &ewBidOptionDoc, CBidDB &bidDB, CBidDesc &bidDesc,
                     CTblMngrBase *tableManager);
 
     void startNewSession();
