@@ -176,6 +176,7 @@ private:
     bool showUser;      /**< If true then the server handles the play view. */
     bool updateGameInfo;/**< If true then update of game info is handle by Table Manager. */
     bool waiting;
+    int undoState;
 
     QTimer *leaderButton;
 

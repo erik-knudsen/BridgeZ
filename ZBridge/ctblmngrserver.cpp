@@ -34,6 +34,12 @@
 #include "ctblmngrserver.h"
 #include "cremoteactorserver.h"
 
+//Undo states;
+const int DISABLE_UNDO = 0;
+const int ENABLE_UNDO_BID = 1;
+const int ENABLE_UNDO_PLAY = 2;
+const int ENABLE_UNDO_LEADER = 3;
+
 
 /**
  * @brief Constructor for table manager server.
@@ -759,9 +765,9 @@ void CTblMngrServer::showDoubleDummyResults()
  */
 void CTblMngrServer::reBid()
 {
-    assert(zBridgeServer_isActive(&handle, ZBridgeServer_entry__Bidding) ||
-        zBridgeServer_isActive(&handle, ZBridgeServer_entry__Playing) ||
-        zBridgeServer_isActive(&handle, ZBridgeServer_entry__SyncLeader));
+    assert(zBridgeServer_isStateActive(&handle, ZBridgeServer_entry__Bidding) ||
+        zBridgeServer_isStateActive(&handle, ZBridgeServer_entry__Playing) ||
+        zBridgeServer_isStateActive(&handle, ZBridgeServer_entry__SyncLeader));
 
     playHistory.resetPlayHistory();
     bidHistory.resetBidHistory();
@@ -775,8 +781,8 @@ void CTblMngrServer::reBid()
  */
 void CTblMngrServer::rePlay()
 {
-    assert(zBridgeServer_isActive(&handle, ZBridgeServer_entry__Playing) ||
-           zBridgeServer_isActive(&handle, ZBridgeServer_entry__SyncLeader));
+    assert(zBridgeServer_isStateActive(&handle, ZBridgeServer_entry__Playing) ||
+           zBridgeServer_isStateActive(&handle, ZBridgeServer_entry__SyncLeader));
 
     playHistory.resetPlayHistory();
 
@@ -789,11 +795,11 @@ void CTblMngrServer::rePlay()
  */
 void CTblMngrServer::undo()
 {
-    assert(zBridgeServer_isActive(&handle, ZBridgeServer_entry__Bidding) ||
-           zBridgeServer_isActive(&handle, ZBridgeServer_entry__Playing) ||
-           zBridgeServer_isActive(&handle, ZBridgeServer_entry__SyncLeader));
+    assert(zBridgeServer_isStateActive(&handle, ZBridgeServer_entry__Bidding) ||
+           zBridgeServer_isStateActive(&handle, ZBridgeServer_entry__Playing) ||
+           zBridgeServer_isStateActive(&handle, ZBridgeServer_entry__SyncLeader));
 
-    if (zBridgeServer_isActive(&handle, ZBridgeServer_entry__Bidding))
+    if (zBridgeServer_isStateActive(&handle, ZBridgeServer_entry__Bidding))
     {
         Bids bidVal;
         int bidder = bidHistory.undo(&bidVal);
@@ -802,13 +808,13 @@ void CTblMngrServer::undo()
         zBridgeServerIface_raise_undo(&handle, bidder);
         serverRunCycle();
     }
-    else if (zBridgeServer_isActive(&handle, ZBridgeServer_entry__Playing))
+    else if (zBridgeServer_isStateActive(&handle, ZBridgeServer_entry__Playing))
     {
         int leader = playHistory.undo(PT);
         zBridgeServerIface_raise_undo(&handle, leader);
         serverRunCycle();
     }
-    else if (zBridgeServer_isActive(&handle, ZBridgeServer_entry__SyncLeader))
+    else if (zBridgeServer_isStateActive(&handle, ZBridgeServer_entry__SyncLeader))
     {
         int leader = playHistory.undo(CT);
         zBridgeServerIface_raise_undo(&handle, leader);
@@ -1250,6 +1256,7 @@ void CTblMngrServer::sEnableContinueSync(int syncState)
         switch (syncState)
         {
         case BUTTON_AUCTION:
+            undoState = DISABLE_UNDO;
             QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_UNDO , false));
             QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_REBID , false));
             QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_REPLAY , false));
@@ -1257,6 +1264,7 @@ void CTblMngrServer::sEnableContinueSync(int syncState)
             break;
 
         case BUTTON_PLAY:
+            undoState = DISABLE_UNDO;
             QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_UNDO , false));
             QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_REBID , false));
             playView->showInfoPlayButton(true, BUTTON_PLAY);
@@ -1268,6 +1276,7 @@ void CTblMngrServer::sEnableContinueSync(int syncState)
 
         case BUTTON_DEAL:          
             //Disable Undo and Rebid and replay and New Deal and Show All and Double Dummy Results menu actions.
+            undoState = DISABLE_UNDO;
             QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_UNDO , false));
             QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_REBID , false));
             QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_REPLAY , false));

@@ -3,25 +3,39 @@
 #define SC_TYPES_H_
 
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif 
 
 #include <stdint.h>
 #include <stdbool.h>
- 				
-typedef int_fast16_t  sc_short;
-typedef uint_fast16_t sc_ushort;
-typedef int32_t       sc_integer; 
-typedef uint32_t      sc_uinteger; 
-typedef double        sc_real;
-typedef char*         sc_string;
 
-typedef void*         sc_eventid;
+#define sc_string		char*
+ 
+typedef bool			sc_boolean;
+typedef int_fast16_t	sc_short;
+typedef uint_fast16_t	sc_ushort;
+typedef int32_t			sc_integer;
+typedef uint32_t		sc_uinteger;
+
+typedef double			sc_real;
+
+typedef void*			sc_eventid;
+
+typedef intptr_t		sc_intptr_t;
 
 #ifdef __cplusplus
 }
-#endif 
-#define sc_boolean bool
+#endif
+
+#ifndef null
+	#ifdef __cplusplus
+		#define null 0
+	#else
+		#define null ((void *)0)
+	#endif
+#endif
+
 #define bool_true true
 #define bool_false false
 

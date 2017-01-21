@@ -3,7 +3,7 @@
 #define ZBRIDGESERVERSYNC_H_
 
 #include "sc_types.h"
-
+		
 #ifdef __cplusplus
 extern "C" { 
 #endif 
@@ -11,8 +11,9 @@ extern "C" {
 /*! \file Header of the state machine 'ZBridgeServerSync'.
 */
 
-//! enumeration of all states 
-typedef enum {
+/*! Enumeration of all states */ 
+typedef enum
+{
 	ZBridgeServerSync_entry_SynChronizeServer,
 	ZBridgeServerSync_entry_SynChronizeServer_West_WaitForAttemptSync,
 	ZBridgeServerSync_entry_SynChronizeServer_West_waitForConfirmSync,
@@ -36,8 +37,9 @@ typedef enum {
 	ZBridgeServerSync_last_state
 } ZBridgeServerSyncStates;
 
-//! Type definition of the data structure for the ZBridgeServerSyncInternal interface scope.
-typedef struct {
+/*! Type definition of the data structure for the ZBridgeServerSyncInternal interface scope. */
+typedef struct
+{
 	sc_integer W;
 	sc_integer N;
 	sc_integer E;
@@ -48,8 +50,9 @@ typedef struct {
 	sc_boolean confirmSouth;
 } ZBridgeServerSyncInternal;
 
-//! Type definition of the data structure for the ZBridgeServerSyncIface interface scope.
-typedef struct {
+/*! Type definition of the data structure for the ZBridgeServerSyncIface interface scope. */
+typedef struct
+{
 	sc_boolean attemptSync_raised;
 	sc_integer attemptSync_value;
 	sc_boolean continue_raised;
@@ -63,12 +66,15 @@ typedef struct {
 } ZBridgeServerSyncIface;
 
 
-//! the maximum number of orthogonal states defines the dimension of the state configuration vector.
+/*! Define dimension of the state configuration vector for orthogonal states. */
 #define ZBRIDGESERVERSYNC_MAX_ORTHOGONAL_STATES 4
 
-/*! Type definition of the data structure for the ZBridgeServerSync state machine.
-This data structure has to be allocated by the client code. */
-typedef struct {
+/*! 
+ * Type definition of the data structure for the ZBridgeServerSync state machine.
+ * This data structure has to be allocated by the client code. 
+ */
+typedef struct
+{
 	ZBridgeServerSyncStates stateConfVector[ZBRIDGESERVERSYNC_MAX_ORTHOGONAL_STATES];
 	sc_ushort stateConfVectorPosition; 
 	
@@ -96,27 +102,38 @@ extern void zBridgeServerSyncIface_raise_attemptSync(ZBridgeServerSync* handle, 
 extern void zBridgeServerSyncIface_raise_continue(ZBridgeServerSync* handle);
 
 /*! Checks if the out event 'sendAttemptSync' that is defined in the default interface scope has been raised. */ 
-extern sc_boolean zBridgeServerSyncIface_israised_sendAttemptSync(ZBridgeServerSync* handle);
+extern sc_boolean zBridgeServerSyncIface_israised_sendAttemptSync(const ZBridgeServerSync* handle);
 
 /*! Gets the value of the out event 'sendAttemptSync' that is defined in the default interface scope. */ 
-extern sc_integer zBridgeServerSyncIface_get_sendAttemptSync_value(ZBridgeServerSync* handle);
+extern sc_integer zBridgeServerSyncIface_get_sendAttemptSync_value(const ZBridgeServerSync* handle);
 
 /*! Checks if the out event 'sendAttemptSyncAll' that is defined in the default interface scope has been raised. */ 
-extern sc_boolean zBridgeServerSyncIface_israised_sendAttemptSyncAll(ZBridgeServerSync* handle);
+extern sc_boolean zBridgeServerSyncIface_israised_sendAttemptSyncAll(const ZBridgeServerSync* handle);
 
 /*! Checks if the out event 'sendConfirmSync' that is defined in the default interface scope has been raised. */ 
-extern sc_boolean zBridgeServerSyncIface_israised_sendConfirmSync(ZBridgeServerSync* handle);
+extern sc_boolean zBridgeServerSyncIface_israised_sendConfirmSync(const ZBridgeServerSync* handle);
 
 /*! Raises the in event 'confirmSync' that is defined in the default interface scope. */ 
 extern void zBridgeServerSyncIface_raise_confirmSync(ZBridgeServerSync* handle, sc_integer value);
 
 /*! Checks if the out event 'sendAllSync' that is defined in the default interface scope has been raised. */ 
-extern sc_boolean zBridgeServerSyncIface_israised_sendAllSync(ZBridgeServerSync* handle);
+extern sc_boolean zBridgeServerSyncIface_israised_sendAllSync(const ZBridgeServerSync* handle);
 
 
+/*!
+ * Checks whether the state machine is active (until 2.4.1 this method was used for states).
+ * A state machine is active if it was entered. It is inactive if it has not been entered at all or if it has been exited.
+ */
+extern sc_boolean zBridgeServerSync_isActive(const ZBridgeServerSync* handle);
 
-/*! Checks if the specified state is active. */
-extern sc_boolean zBridgeServerSync_isActive(ZBridgeServerSync* handle, ZBridgeServerSyncStates state);
+/*!
+ * Checks if all active states are final. 
+ * If there are no active states then the state machine is considered being inactive. In this case this method returns false.
+ */
+extern sc_boolean zBridgeServerSync_isFinal(const ZBridgeServerSync* handle);
+
+/*! Checks if the specified state is active (until 2.4.1 the used method for states was called isActive()). */
+extern sc_boolean zBridgeServerSync_isStateActive(const ZBridgeServerSync* handle, ZBridgeServerSyncStates state);
 
 #ifdef __cplusplus
 }

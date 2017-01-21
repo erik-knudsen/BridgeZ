@@ -3,7 +3,7 @@
 #define ZBRIDGECLIENT_H_
 
 #include "sc_types.h"
-
+		
 #ifdef __cplusplus
 extern "C" { 
 #endif 
@@ -11,8 +11,9 @@ extern "C" {
 /*! \file Header of the state machine 'ZBridgeClient'.
 */
 
-//! enumeration of all states 
-typedef enum {
+/*! Enumeration of all states */ 
+typedef enum
+{
 	ZBridgeClient_main_region_Connecting,
 	ZBridgeClient_main_region__final_,
 	ZBridgeClient_main_region_Seated,
@@ -32,8 +33,9 @@ typedef enum {
 	ZBridgeClient_last_state
 } ZBridgeClientStates;
 
-//! Type definition of the data structure for the ZBridgeClientInternal interface scope.
-typedef struct {
+/*! Type definition of the data structure for the ZBridgeClientInternal interface scope. */
+typedef struct
+{
 	sc_integer SS;
 	sc_integer SA;
 	sc_integer SP;
@@ -56,8 +58,9 @@ typedef struct {
 	sc_boolean firstTrick;
 } ZBridgeClientInternal;
 
-//! Type definition of the data structure for the ZBridgeClientIface interface scope.
-typedef struct {
+/*! Type definition of the data structure for the ZBridgeClientIface interface scope. */
+typedef struct
+{
 	sc_boolean endOfSession_raised;
 	sc_boolean connect_raised;
 	sc_boolean connectError_raised;
@@ -116,12 +119,15 @@ typedef struct {
 } ZBridgeClientIface;
 
 
-//! the maximum number of orthogonal states defines the dimension of the state configuration vector.
+/*! Define dimension of the state configuration vector for orthogonal states. */
 #define ZBRIDGECLIENT_MAX_ORTHOGONAL_STATES 1
 
-/*! Type definition of the data structure for the ZBridgeClient state machine.
-This data structure has to be allocated by the client code. */
-typedef struct {
+/*! 
+ * Type definition of the data structure for the ZBridgeClient state machine.
+ * This data structure has to be allocated by the client code. 
+ */
+typedef struct
+{
 	ZBridgeClientStates stateConfVector[ZBRIDGECLIENT_MAX_ORTHOGONAL_STATES];
 	sc_ushort stateConfVectorPosition; 
 	
@@ -146,7 +152,7 @@ extern void zBridgeClient_runCycle(ZBridgeClient* handle);
 extern void zBridgeClientIface_raise_endOfSession(ZBridgeClient* handle);
 
 /*! Checks if the out event 'connect' that is defined in the default interface scope has been raised. */ 
-extern sc_boolean zBridgeClientIface_israised_connect(ZBridgeClient* handle);
+extern sc_boolean zBridgeClientIface_israised_connect(const ZBridgeClient* handle);
 
 /*! Raises the in event 'connectError' that is defined in the default interface scope. */ 
 extern void zBridgeClientIface_raise_connectError(ZBridgeClient* handle);
@@ -155,25 +161,25 @@ extern void zBridgeClientIface_raise_connectError(ZBridgeClient* handle);
 extern void zBridgeClientIface_raise_seated(ZBridgeClient* handle);
 
 /*! Checks if the out event 'rTNames' that is defined in the default interface scope has been raised. */ 
-extern sc_boolean zBridgeClientIface_israised_rTNames(ZBridgeClient* handle);
+extern sc_boolean zBridgeClientIface_israised_rTNames(const ZBridgeClient* handle);
 
 /*! Raises the in event 'teamNames' that is defined in the default interface scope. */ 
 extern void zBridgeClientIface_raise_teamNames(ZBridgeClient* handle);
 
 /*! Checks if the out event 'rSBoard' that is defined in the default interface scope has been raised. */ 
-extern sc_boolean zBridgeClientIface_israised_rSBoard(ZBridgeClient* handle);
+extern sc_boolean zBridgeClientIface_israised_rSBoard(const ZBridgeClient* handle);
 
 /*! Raises the in event 'startOfBoard' that is defined in the default interface scope. */ 
 extern void zBridgeClientIface_raise_startOfBoard(ZBridgeClient* handle);
 
 /*! Checks if the out event 'rDealInfo' that is defined in the default interface scope has been raised. */ 
-extern sc_boolean zBridgeClientIface_israised_rDealInfo(ZBridgeClient* handle);
+extern sc_boolean zBridgeClientIface_israised_rDealInfo(const ZBridgeClient* handle);
 
 /*! Raises the in event 'dealInfo' that is defined in the default interface scope. */ 
 extern void zBridgeClientIface_raise_dealInfo(ZBridgeClient* handle);
 
 /*! Checks if the out event 'rCards' that is defined in the default interface scope has been raised. */ 
-extern sc_boolean zBridgeClientIface_israised_rCards(ZBridgeClient* handle);
+extern sc_boolean zBridgeClientIface_israised_rCards(const ZBridgeClient* handle);
 
 /*! Raises the in event 'cards' that is defined in the default interface scope. */ 
 extern void zBridgeClientIface_raise_cards(ZBridgeClient* handle);
@@ -182,43 +188,43 @@ extern void zBridgeClientIface_raise_cards(ZBridgeClient* handle);
 extern void zBridgeClientIface_raise_undo(ZBridgeClient* handle, sc_integer value);
 
 /*! Checks if the out event 'giveBid' that is defined in the default interface scope has been raised. */ 
-extern sc_boolean zBridgeClientIface_israised_giveBid(ZBridgeClient* handle);
+extern sc_boolean zBridgeClientIface_israised_giveBid(const ZBridgeClient* handle);
 
 /*! Checks if the out event 'rBid' that is defined in the default interface scope has been raised. */ 
-extern sc_boolean zBridgeClientIface_israised_rBid(ZBridgeClient* handle);
+extern sc_boolean zBridgeClientIface_israised_rBid(const ZBridgeClient* handle);
 
 /*! Raises the in event 'bidDone' that is defined in the default interface scope. */ 
 extern void zBridgeClientIface_raise_bidDone(ZBridgeClient* handle, sc_integer value);
 
 /*! Checks if the out event 'bidInfo' that is defined in the default interface scope has been raised. */ 
-extern sc_boolean zBridgeClientIface_israised_bidInfo(ZBridgeClient* handle);
+extern sc_boolean zBridgeClientIface_israised_bidInfo(const ZBridgeClient* handle);
 
 /*! Gets the value of the out event 'bidInfo' that is defined in the default interface scope. */ 
-extern sc_integer zBridgeClientIface_get_bidInfo_value(ZBridgeClient* handle);
+extern sc_integer zBridgeClientIface_get_bidInfo_value(const ZBridgeClient* handle);
 
 /*! Checks if the out event 'undoBid' that is defined in the default interface scope has been raised. */ 
-extern sc_boolean zBridgeClientIface_israised_undoBid(ZBridgeClient* handle);
+extern sc_boolean zBridgeClientIface_israised_undoBid(const ZBridgeClient* handle);
 
 /*! Gets the value of the out event 'undoBid' that is defined in the default interface scope. */ 
-extern sc_integer zBridgeClientIface_get_undoBid_value(ZBridgeClient* handle);
+extern sc_integer zBridgeClientIface_get_undoBid_value(const ZBridgeClient* handle);
 
 /*! Checks if the out event 'undoPlay' that is defined in the default interface scope has been raised. */ 
-extern sc_boolean zBridgeClientIface_israised_undoPlay(ZBridgeClient* handle);
+extern sc_boolean zBridgeClientIface_israised_undoPlay(const ZBridgeClient* handle);
 
 /*! Checks if the out event 'readyForDummy' that is defined in the default interface scope has been raised. */ 
-extern sc_boolean zBridgeClientIface_israised_readyForDummy(ZBridgeClient* handle);
+extern sc_boolean zBridgeClientIface_israised_readyForDummy(const ZBridgeClient* handle);
 
 /*! Checks if the out event 'clientPlays' that is defined in the default interface scope has been raised. */ 
-extern sc_boolean zBridgeClientIface_israised_clientPlays(ZBridgeClient* handle);
+extern sc_boolean zBridgeClientIface_israised_clientPlays(const ZBridgeClient* handle);
 
 /*! Raises the in event 'playerPlays' that is defined in the default interface scope. */ 
 extern void zBridgeClientIface_raise_playerPlays(ZBridgeClient* handle, sc_integer value);
 
 /*! Checks if the out event 'readyForDummyCards' that is defined in the default interface scope has been raised. */ 
-extern sc_boolean zBridgeClientIface_israised_readyForDummyCards(ZBridgeClient* handle);
+extern sc_boolean zBridgeClientIface_israised_readyForDummyCards(const ZBridgeClient* handle);
 
 /*! Checks if the out event 'readyForPlayer' that is defined in the default interface scope has been raised. */ 
-extern sc_boolean zBridgeClientIface_israised_readyForPlayer(ZBridgeClient* handle);
+extern sc_boolean zBridgeClientIface_israised_readyForPlayer(const ZBridgeClient* handle);
 
 /*! Raises the in event 'playerToLead' that is defined in the default interface scope. */ 
 extern void zBridgeClientIface_raise_playerToLead(ZBridgeClient* handle);
@@ -230,16 +236,16 @@ extern void zBridgeClientIface_raise_dummyToLead(ZBridgeClient* handle);
 extern void zBridgeClientIface_raise_dummyCards(ZBridgeClient* handle);
 
 /*! Checks if the out event 'getLeader' that is defined in the default interface scope has been raised. */ 
-extern sc_boolean zBridgeClientIface_israised_getLeader(ZBridgeClient* handle);
+extern sc_boolean zBridgeClientIface_israised_getLeader(const ZBridgeClient* handle);
 
 /*! Raises the in event 'newLeader' that is defined in the default interface scope. */ 
 extern void zBridgeClientIface_raise_newLeader(ZBridgeClient* handle, sc_integer value);
 
 /*! Checks if the out event 'undoTrick' that is defined in the default interface scope has been raised. */ 
-extern sc_boolean zBridgeClientIface_israised_undoTrick(ZBridgeClient* handle);
+extern sc_boolean zBridgeClientIface_israised_undoTrick(const ZBridgeClient* handle);
 
 /*! Gets the value of the out event 'undoTrick' that is defined in the default interface scope. */ 
-extern sc_integer zBridgeClientIface_get_undoTrick_value(ZBridgeClient* handle);
+extern sc_integer zBridgeClientIface_get_undoTrick_value(const ZBridgeClient* handle);
 
 /*! Raises the in event 'reStart' that is defined in the default interface scope. */ 
 extern void zBridgeClientIface_raise_reStart(ZBridgeClient* handle);
@@ -248,72 +254,83 @@ extern void zBridgeClientIface_raise_reStart(ZBridgeClient* handle);
 extern void zBridgeClientIface_raise_allSync(ZBridgeClient* handle);
 
 /*! Checks if the out event 'synchronize' that is defined in the default interface scope has been raised. */ 
-extern sc_boolean zBridgeClientIface_israised_synchronize(ZBridgeClient* handle);
+extern sc_boolean zBridgeClientIface_israised_synchronize(const ZBridgeClient* handle);
 
 /*! Gets the value of the variable 'boardNumber' that is defined in the default interface scope. */ 
-extern sc_integer zBridgeClientIface_get_boardNumber(ZBridgeClient* handle);
+extern sc_integer zBridgeClientIface_get_boardNumber(const ZBridgeClient* handle);
 /*! Sets the value of the variable 'boardNumber' that is defined in the default interface scope. */ 
 extern void zBridgeClientIface_set_boardNumber(ZBridgeClient* handle, sc_integer value);
 /*! Gets the value of the variable 'vulnerability' that is defined in the default interface scope. */ 
-extern sc_integer zBridgeClientIface_get_vulnerability(ZBridgeClient* handle);
+extern sc_integer zBridgeClientIface_get_vulnerability(const ZBridgeClient* handle);
 /*! Sets the value of the variable 'vulnerability' that is defined in the default interface scope. */ 
 extern void zBridgeClientIface_set_vulnerability(ZBridgeClient* handle, sc_integer value);
 /*! Gets the value of the variable 'client' that is defined in the default interface scope. */ 
-extern sc_integer zBridgeClientIface_get_client(ZBridgeClient* handle);
+extern sc_integer zBridgeClientIface_get_client(const ZBridgeClient* handle);
 /*! Sets the value of the variable 'client' that is defined in the default interface scope. */ 
 extern void zBridgeClientIface_set_client(ZBridgeClient* handle, sc_integer value);
 /*! Gets the value of the variable 'dealer' that is defined in the default interface scope. */ 
-extern sc_integer zBridgeClientIface_get_dealer(ZBridgeClient* handle);
+extern sc_integer zBridgeClientIface_get_dealer(const ZBridgeClient* handle);
 /*! Sets the value of the variable 'dealer' that is defined in the default interface scope. */ 
 extern void zBridgeClientIface_set_dealer(ZBridgeClient* handle, sc_integer value);
 /*! Gets the value of the variable 'bidder' that is defined in the default interface scope. */ 
-extern sc_integer zBridgeClientIface_get_bidder(ZBridgeClient* handle);
+extern sc_integer zBridgeClientIface_get_bidder(const ZBridgeClient* handle);
 /*! Sets the value of the variable 'bidder' that is defined in the default interface scope. */ 
 extern void zBridgeClientIface_set_bidder(ZBridgeClient* handle, sc_integer value);
 /*! Gets the value of the variable 'bidVal' that is defined in the default interface scope. */ 
-extern sc_integer zBridgeClientIface_get_bidVal(ZBridgeClient* handle);
+extern sc_integer zBridgeClientIface_get_bidVal(const ZBridgeClient* handle);
 /*! Sets the value of the variable 'bidVal' that is defined in the default interface scope. */ 
 extern void zBridgeClientIface_set_bidVal(ZBridgeClient* handle, sc_integer value);
 /*! Gets the value of the variable 'lastBid' that is defined in the default interface scope. */ 
-extern sc_integer zBridgeClientIface_get_lastBid(ZBridgeClient* handle);
+extern sc_integer zBridgeClientIface_get_lastBid(const ZBridgeClient* handle);
 /*! Sets the value of the variable 'lastBid' that is defined in the default interface scope. */ 
 extern void zBridgeClientIface_set_lastBid(ZBridgeClient* handle, sc_integer value);
 /*! Gets the value of the variable 'bidDouble' that is defined in the default interface scope. */ 
-extern sc_integer zBridgeClientIface_get_bidDouble(ZBridgeClient* handle);
+extern sc_integer zBridgeClientIface_get_bidDouble(const ZBridgeClient* handle);
 /*! Sets the value of the variable 'bidDouble' that is defined in the default interface scope. */ 
 extern void zBridgeClientIface_set_bidDouble(ZBridgeClient* handle, sc_integer value);
 /*! Gets the value of the variable 'bidEnable' that is defined in the default interface scope. */ 
-extern sc_integer zBridgeClientIface_get_bidEnable(ZBridgeClient* handle);
+extern sc_integer zBridgeClientIface_get_bidEnable(const ZBridgeClient* handle);
 /*! Sets the value of the variable 'bidEnable' that is defined in the default interface scope. */ 
 extern void zBridgeClientIface_set_bidEnable(ZBridgeClient* handle, sc_integer value);
 /*! Gets the value of the variable 'declarer' that is defined in the default interface scope. */ 
-extern sc_integer zBridgeClientIface_get_declarer(ZBridgeClient* handle);
+extern sc_integer zBridgeClientIface_get_declarer(const ZBridgeClient* handle);
 /*! Sets the value of the variable 'declarer' that is defined in the default interface scope. */ 
 extern void zBridgeClientIface_set_declarer(ZBridgeClient* handle, sc_integer value);
 /*! Gets the value of the variable 'dummy' that is defined in the default interface scope. */ 
-extern sc_integer zBridgeClientIface_get_dummy(ZBridgeClient* handle);
+extern sc_integer zBridgeClientIface_get_dummy(const ZBridgeClient* handle);
 /*! Sets the value of the variable 'dummy' that is defined in the default interface scope. */ 
 extern void zBridgeClientIface_set_dummy(ZBridgeClient* handle, sc_integer value);
 /*! Gets the value of the variable 'noTrick' that is defined in the default interface scope. */ 
-extern sc_integer zBridgeClientIface_get_noTrick(ZBridgeClient* handle);
+extern sc_integer zBridgeClientIface_get_noTrick(const ZBridgeClient* handle);
 /*! Sets the value of the variable 'noTrick' that is defined in the default interface scope. */ 
 extern void zBridgeClientIface_set_noTrick(ZBridgeClient* handle, sc_integer value);
 /*! Gets the value of the variable 'player' that is defined in the default interface scope. */ 
-extern sc_integer zBridgeClientIface_get_player(ZBridgeClient* handle);
+extern sc_integer zBridgeClientIface_get_player(const ZBridgeClient* handle);
 /*! Sets the value of the variable 'player' that is defined in the default interface scope. */ 
 extern void zBridgeClientIface_set_player(ZBridgeClient* handle, sc_integer value);
 /*! Gets the value of the variable 'cardVal' that is defined in the default interface scope. */ 
-extern sc_integer zBridgeClientIface_get_cardVal(ZBridgeClient* handle);
+extern sc_integer zBridgeClientIface_get_cardVal(const ZBridgeClient* handle);
 /*! Sets the value of the variable 'cardVal' that is defined in the default interface scope. */ 
 extern void zBridgeClientIface_set_cardVal(ZBridgeClient* handle, sc_integer value);
 /*! Gets the value of the variable 'syncState' that is defined in the default interface scope. */ 
-extern sc_integer zBridgeClientIface_get_syncState(ZBridgeClient* handle);
+extern sc_integer zBridgeClientIface_get_syncState(const ZBridgeClient* handle);
 /*! Sets the value of the variable 'syncState' that is defined in the default interface scope. */ 
 extern void zBridgeClientIface_set_syncState(ZBridgeClient* handle, sc_integer value);
 
+/*!
+ * Checks whether the state machine is active (until 2.4.1 this method was used for states).
+ * A state machine is active if it was entered. It is inactive if it has not been entered at all or if it has been exited.
+ */
+extern sc_boolean zBridgeClient_isActive(const ZBridgeClient* handle);
 
-/*! Checks if the specified state is active. */
-extern sc_boolean zBridgeClient_isActive(ZBridgeClient* handle, ZBridgeClientStates state);
+/*!
+ * Checks if all active states are final. 
+ * If there are no active states then the state machine is considered being inactive. In this case this method returns false.
+ */
+extern sc_boolean zBridgeClient_isFinal(const ZBridgeClient* handle);
+
+/*! Checks if the specified state is active (until 2.4.1 the used method for states was called isActive()). */
+extern sc_boolean zBridgeClient_isStateActive(const ZBridgeClient* handle, ZBridgeClientStates state);
 
 #ifdef __cplusplus
 }

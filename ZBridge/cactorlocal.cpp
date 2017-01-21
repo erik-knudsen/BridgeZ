@@ -711,9 +711,9 @@ void CActorLocal::undoTrick(bool rePlay)
         bidAndPlay.resetPlayHistory();
         leader = REPLAY;
     }
-    else if (zBridgeClient_isActive(&handle, ZBridgeClient_main_region_Play))
+    else if (zBridgeClient_isStateActive(&handle, ZBridgeClient_main_region_Play))
         leader = bidAndPlay.playUndo(PT);
-    else if (zBridgeClient_isActive(&handle, ZBridgeClient_main_region_SyncLeader))
+    else if (zBridgeClient_isStateActive(&handle, ZBridgeClient_main_region_SyncLeader))
         leader = bidAndPlay.playUndo(CT);
 
     zBridgeClientIface_raise_undo(&handle, leader);
