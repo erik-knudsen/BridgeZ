@@ -1256,7 +1256,6 @@ void CTblMngrServer::sEnableContinueSync(int syncState)
         switch (syncState)
         {
         case BUTTON_AUCTION:
-            undoState = DISABLE_UNDO;
             QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_UNDO , false));
             QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_REBID , false));
             QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_REPLAY , false));
@@ -1264,7 +1263,6 @@ void CTblMngrServer::sEnableContinueSync(int syncState)
             break;
 
         case BUTTON_PLAY:
-            undoState = DISABLE_UNDO;
             QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_UNDO , false));
             QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_REBID , false));
             playView->showInfoPlayButton(true, BUTTON_PLAY);
@@ -1276,7 +1274,6 @@ void CTblMngrServer::sEnableContinueSync(int syncState)
 
         case BUTTON_DEAL:          
             //Disable Undo and Rebid and replay and New Deal and Show All and Double Dummy Results menu actions.
-            undoState = DISABLE_UNDO;
             QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_UNDO , false));
             QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_REBID , false));
             QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_REPLAY , false));
