@@ -35,10 +35,9 @@
 class CZBridgeDoc;
 class CGamesDoc;
 class CActorLocal;
-class CBidEngine;
-class CPlayEngine;
 class CPlayView;
 class CRemoteActorClient;
+class CBidAndPlayEngines;
 
 
 /**
@@ -132,6 +131,8 @@ private:
 
     CActorLocal *actor;
     CRemoteActorClient *remoteActorClient;
+
+    CBidAndPlayEngines *bidAndPlayEngines;
 
     int protocol;
 

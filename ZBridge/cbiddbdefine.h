@@ -20,7 +20,6 @@
 #include <QtGlobal>
 #include <QSet>
 
-#include "czbridgedoc.h"
 #include "cbidoptiondoc.h"
 
 //Definition of pages**********************************************************
@@ -1085,13 +1084,11 @@ CBS_OFF;                   //Checkback Stayman is off.
 class CBidDBDefine
 {
 public:
-    CBidDBDefine(Seat seat, CBidOptionDoc &nsBidOptions, CBidOptionDoc &ewBidOptions);
+    CBidDBDefine(CBidOptionDoc &nsBidOptions, CBidOptionDoc &ewBidOptions);
 
     void calcIds(CBidOptionDoc &bidOptions, QSet<qint16> &pages, QSet<qint16> &rules);
 
 private:
-    Seat seat;
-
     QSet<qint16> nsPages;
     QSet<qint16> ewPages;
     QSet<qint16> nsRules;

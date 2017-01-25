@@ -27,6 +27,7 @@
 #include "cactorlocalAuto.h"
 #include "cremoteactorclient.h"
 #include "cremoteprotocol.h"
+#include "cbidandplayengines.h"
 #include "ctblmngrclientauto.h"
 
 /**
@@ -46,6 +47,8 @@ CTblMngrClientAuto::CTblMngrClientAuto(CZBridgeDoc *doc, CGamesDoc *games, QHost
     this->games = games;
     this->hostAddress = hostAddress;
 
+    bidAndPlayEngines = 0;
+
     actor = 0;
 
     remoteActorClient = 0;
@@ -61,7 +64,11 @@ CTblMngrClientAuto::~CTblMngrClientAuto()
  * @brief Clean table manager so that it can start a new session.
  */
 void CTblMngrClientAuto::cleanTableManager()
-{
+{        
+    if (bidAndPlayEngines != 0)
+      delete bidAndPlayEngines;
+    bidAndPlayEngines = 0;
+
     //Delete actor.
     if (actor != 0)
     {
@@ -96,23 +103,24 @@ void CTblMngrClientAuto::sNewSession()
 {
     //Prepare for new session.
     cleanTableManager();
+
+    //Set up bid and play engines.
+    bidAndPlayEngines = new CBidAndPlayEngines(doc->getBidDB(), doc->getBidDesc(),
+                                               doc->getNSBidOptions(), doc->getEWBidOptions());
+
     //Set up actor.
     if (doc->getSeatOptions().seat == WEST_SEAT)
         actor = new CActorLocalAuto(AUTO_SEAT_NAME_PREFIX + SEAT_NAMES[WEST_SEAT],
-                                WEST_SEAT, doc->getNSBidOptions(), doc->getEWBidOptions(),
-                                *doc->getBidDB(), *doc->getBidDesc(), this);
+                                WEST_SEAT, bidAndPlayEngines, this);
     else if (doc->getSeatOptions().seat == NORTH_SEAT)
         actor = new CActorLocalAuto(AUTO_SEAT_NAME_PREFIX + SEAT_NAMES[NORTH_SEAT],
-                                NORTH_SEAT, doc->getNSBidOptions(), doc->getEWBidOptions(),
-                                *doc->getBidDB(), *doc->getBidDesc(), this);
+                                NORTH_SEAT, bidAndPlayEngines, this);
     else if (doc->getSeatOptions().seat == EAST_SEAT)
         actor = new CActorLocalAuto(AUTO_SEAT_NAME_PREFIX + SEAT_NAMES[EAST_SEAT],
-                                EAST_SEAT, doc->getNSBidOptions(), doc->getEWBidOptions(),
-                                *doc->getBidDB(), *doc->getBidDesc(), this);
+                                EAST_SEAT, bidAndPlayEngines, this);
     else
         actor = new CActorLocalAuto(AUTO_SEAT_NAME_PREFIX + SEAT_NAMES[SOUTH_SEAT],
-                                SOUTH_SEAT, doc->getNSBidOptions(), doc->getEWBidOptions(),
-                                *doc->getBidDB(), *doc->getBidDesc(), this);
+                                SOUTH_SEAT, bidAndPlayEngines, this);
 
     //Only for update of Table Manager game info.
     actor->setUpdateGameInfo(true);

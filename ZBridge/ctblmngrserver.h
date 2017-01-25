@@ -36,10 +36,9 @@
 class CZBridgeDoc;
 class CGamesDoc;
 class CActor;
-class CBidEngine;
-class CPlayEngine;
 class CPlayView;
 class CRemoteActorServer;
+class CBidAndPlayEngines;
 
 /**
  * @brief This class implements the table manager server controller.
@@ -162,6 +161,7 @@ private:
     CRemoteActorServer *remoteActorServer;
     CBidHistory bidHistory;
     CPlayHistory playHistory;
+    CBidAndPlayEngines *bidAndPlayEngines;
 
     int protocol;
 

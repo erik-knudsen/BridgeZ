@@ -31,8 +31,9 @@
 #include "cbidengine.h"
 #include "cplayengine.h"
 #include "cddtable.h"
-#include "ctblmngrserver.h"
 #include "cremoteactorserver.h"
+#include "cbidandplayengines.h"
+#include "ctblmngrserver.h"
 
 //Undo states;
 const int DISABLE_UNDO = 0;
@@ -73,6 +74,8 @@ CTblMngrServer::CTblMngrServer(CZBridgeDoc *doc, CGamesDoc *games, QHostAddress 
     synchronizing = false;
 
     boardNo = -1;
+
+    bidAndPlayEngines = 0;
 
     actors[WEST_SEAT] = 0;
     actors[NORTH_SEAT] = 0;
@@ -518,6 +521,10 @@ void CTblMngrServer::cleanTableManager()
 {    
     playView->resetView();
 
+    if (bidAndPlayEngines != 0)
+      delete bidAndPlayEngines;
+    bidAndPlayEngines = 0;
+
     if (actors[WEST_SEAT] != 0)
     {
         actors[WEST_SEAT]->endOfSession();
@@ -629,53 +636,49 @@ void CTblMngrServer::newSession()
     //Enable/disable relevant menu actions.
     QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_SERVER , protocol == ADVANCED_PROTOCOL));
 
+    //Set up bid and play engines.
+    bidAndPlayEngines = new CBidAndPlayEngines(doc->getBidDB(), doc->getBidDesc(),
+                                               doc->getNSBidOptions(), doc->getEWBidOptions());
+
     //Set up actors.
     if (doc->getSeatOptions().westActor == MANUAL_ACTOR)
         actor = new CActorLocal(true, doc->getSeatOptions().westName, WEST_SEAT, protocol,
-                doc->getNSBidOptions(), doc->getEWBidOptions(),
-                *doc->getBidDB(), *doc->getBidDesc(), this);
+                bidAndPlayEngines, this);
     else if ((remoteActorServer != 0) && remoteActorServer->isConnected(WEST_SEAT))
         actor = new CActorRemote(WEST_SEAT, protocol, remoteActorServer->getFrontend(WEST_SEAT), this);
     else
         actor = new CActorLocal(false, doc->getSeatOptions().westName, WEST_SEAT, protocol,
-                doc->getNSBidOptions(), doc->getEWBidOptions(),
-                *doc->getBidDB(), *doc->getBidDesc(), this);
+                bidAndPlayEngines, this);
     actors[WEST_SEAT] = actor;
 
     if (doc->getSeatOptions().northActor == MANUAL_ACTOR)
         actor = new CActorLocal(true, doc->getSeatOptions().northName, NORTH_SEAT, protocol,
-                doc->getNSBidOptions(), doc->getEWBidOptions(),
-                *doc->getBidDB(), *doc->getBidDesc(), this);
+                bidAndPlayEngines, this);
     else if ((remoteActorServer != 0) && remoteActorServer->isConnected(NORTH_SEAT))
         actor = new CActorRemote(NORTH_SEAT, protocol, remoteActorServer->getFrontend(NORTH_SEAT), this);
     else
         actor = new CActorLocal(false, doc->getSeatOptions().northName, NORTH_SEAT, protocol,
-                doc->getNSBidOptions(), doc->getEWBidOptions(),
-                *doc->getBidDB(), *doc->getBidDesc(), this);
+                bidAndPlayEngines, this);
     actors[NORTH_SEAT] = actor;
 
     if (doc->getSeatOptions().eastActor == MANUAL_ACTOR)
         actor = new CActorLocal(true, doc->getSeatOptions().eastName, EAST_SEAT, protocol,
-                doc->getNSBidOptions(), doc->getEWBidOptions(),
-                *doc->getBidDB(), *doc->getBidDesc(), this);
+                bidAndPlayEngines, this);
     else if ((remoteActorServer != 0) && remoteActorServer->isConnected(EAST_SEAT))
         actor = new CActorRemote(EAST_SEAT, protocol, remoteActorServer->getFrontend(EAST_SEAT), this);
     else
         actor = new CActorLocal(false, doc->getSeatOptions().eastName, EAST_SEAT, protocol,
-                doc->getNSBidOptions(), doc->getEWBidOptions(),
-                *doc->getBidDB(), *doc->getBidDesc(), this);
+                bidAndPlayEngines, this);
     actors[EAST_SEAT] = actor;
 
     if (doc->getSeatOptions().southActor == MANUAL_ACTOR)
         actor = new CActorLocal(true, doc->getSeatOptions().southName, SOUTH_SEAT, protocol,
-                doc->getNSBidOptions(), doc->getEWBidOptions(),
-                *doc->getBidDB(), *doc->getBidDesc(), this);
+                bidAndPlayEngines, this);
     else if ((remoteActorServer != 0) && remoteActorServer->isConnected(SOUTH_SEAT))
         actor = new CActorRemote(SOUTH_SEAT, protocol, remoteActorServer->getFrontend(SOUTH_SEAT), this);
     else
         actor = new CActorLocal(false, doc->getSeatOptions().southName, SOUTH_SEAT, protocol,
-                doc->getNSBidOptions(), doc->getEWBidOptions(),
-                *doc->getBidDB(), *doc->getBidDesc(), this);
+                bidAndPlayEngines, this);
     actors[SOUTH_SEAT] = actor;
 
     setShowUser(showAll);

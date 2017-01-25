@@ -29,6 +29,7 @@
 #include "cremoteactorclient.h"
 #include "cremoteprotocol.h"
 #include "cddtable.h"
+#include "cbidandplayengines.h"
 #include "ctblmngrclient.h"
 
 //Communication mode constants.
@@ -62,6 +63,8 @@ CTblMngrClient::CTblMngrClient(CZBridgeDoc *doc, CGamesDoc *games, QHostAddress 
     QApplication::postEvent(parent, new UPDATE_UI_ACTION_Event(UPDATE_UI_INITIAL, false));
     QApplication::postEvent(parent, new UPDATE_UI_ACTION_Event(UPDATE_UI_LAY_OUT_CARDS, false));
 
+    bidAndPlayEngines = 0;
+
     actor = 0;
 
     remoteActorClient = 0;
@@ -85,6 +88,10 @@ void CTblMngrClient::cleanTableManager()
 {
     //Reset play view.
     playView->resetView();
+
+    if (bidAndPlayEngines != 0)
+      delete bidAndPlayEngines;
+    bidAndPlayEngines = 0;
 
     //Delete actor.
     if (actor != 0)
@@ -135,23 +142,23 @@ void CTblMngrClient::newSession()
     QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_CLIENT , protocol == ADVANCED_PROTOCOL));
     QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_NEW_SESSION , false));
 
+    //Set up bid and play engines.
+    bidAndPlayEngines = new CBidAndPlayEngines(doc->getBidDB(), doc->getBidDesc(),
+                                               doc->getNSBidOptions(), doc->getEWBidOptions());
+
     //Set up actor.
     if (doc->getSeatOptions().seat == WEST_SEAT)
         actor = new CActorLocal((doc->getSeatOptions().westActor == MANUAL_ACTOR), doc->getSeatOptions().westName,
-                                WEST_SEAT, protocol, doc->getNSBidOptions(), doc->getEWBidOptions(),
-                                *doc->getBidDB(), *doc->getBidDesc(), this);
+                                WEST_SEAT, protocol, bidAndPlayEngines, this);
     else if (doc->getSeatOptions().seat == NORTH_SEAT)
         actor = new CActorLocal((doc->getSeatOptions().northActor == MANUAL_ACTOR), doc->getSeatOptions().northName,
-                                NORTH_SEAT, protocol, doc->getNSBidOptions(), doc->getEWBidOptions(),
-                                *doc->getBidDB(), *doc->getBidDesc(), this);
+                                NORTH_SEAT, protocol, bidAndPlayEngines, this);
     else if (doc->getSeatOptions().seat == EAST_SEAT)
         actor = new CActorLocal((doc->getSeatOptions().eastActor == MANUAL_ACTOR), doc->getSeatOptions().eastName,
-                                EAST_SEAT, protocol, doc->getNSBidOptions(), doc->getEWBidOptions(),
-                                *doc->getBidDB(), *doc->getBidDesc(), this);
+                                EAST_SEAT, protocol, bidAndPlayEngines, this);
     else
         actor = new CActorLocal((doc->getSeatOptions().southActor == MANUAL_ACTOR), doc->getSeatOptions().southName,
-                                SOUTH_SEAT, protocol, doc->getNSBidOptions(), doc->getEWBidOptions(),
-                                *doc->getBidDB(), *doc->getBidDesc(), this);
+                                SOUTH_SEAT, protocol, bidAndPlayEngines, this);
 
     actor->setShowUser((actor->getActorType() == MANUAL_ACTOR) || showAll);
     actor->setUpdateGameInfo(true);

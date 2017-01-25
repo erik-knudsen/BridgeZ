@@ -213,7 +213,6 @@ static void zBridgeServer_effect_entry___choice_9_tr0(ZBridgeServer* handle);
 static void zBridgeServer_effect_entry___choice_10_tr0(ZBridgeServer* handle);
 static void zBridgeServer_effect_entry___choice_11_tr0(ZBridgeServer* handle);
 static void zBridgeServer_effect_entry___choice_12_tr0(ZBridgeServer* handle);
-static void zBridgeServer_enact_entry__Connect(ZBridgeServer* handle);
 static void zBridgeServer_enact_entry__Connect_West_TeamNames(ZBridgeServer* handle);
 static void zBridgeServer_enact_entry__Connect_West_StartOfBoard(ZBridgeServer* handle);
 static void zBridgeServer_enact_entry__Connect_North_TeamNames(ZBridgeServer* handle);
@@ -232,7 +231,6 @@ static void zBridgeServer_enact_entry__Bidding_West_Sync(ZBridgeServer* handle);
 static void zBridgeServer_enact_entry__Bidding_North_Sync(ZBridgeServer* handle);
 static void zBridgeServer_enact_entry__Bidding_East_Sync(ZBridgeServer* handle);
 static void zBridgeServer_enact_entry__Bidding_South_Sync(ZBridgeServer* handle);
-static void zBridgeServer_enact_entry__Playing(ZBridgeServer* handle);
 static void zBridgeServer_enact_entry__Playing_West_Wait(ZBridgeServer* handle);
 static void zBridgeServer_enact_entry__Playing_West_Sync(ZBridgeServer* handle);
 static void zBridgeServer_enact_entry__Playing_North_Wait(ZBridgeServer* handle);
@@ -246,17 +244,14 @@ static void zBridgeServer_enact_entry__SyncAuction(ZBridgeServer* handle);
 static void zBridgeServer_enact_entry__SyncPlay(ZBridgeServer* handle);
 static void zBridgeServer_enact_entry__SyncLeader(ZBridgeServer* handle);
 static void zBridgeServer_enact_entry__SyncReplay(ZBridgeServer* handle);
-static void zBridgeServer_exact_entry__Bidding(ZBridgeServer* handle);
 static void zBridgeServer_exact_entry__Bidding_West_Wait(ZBridgeServer* handle);
 static void zBridgeServer_exact_entry__Bidding_North_Wait(ZBridgeServer* handle);
 static void zBridgeServer_exact_entry__Bidding_East_Wait(ZBridgeServer* handle);
 static void zBridgeServer_exact_entry__Bidding_South_Wait(ZBridgeServer* handle);
-static void zBridgeServer_exact_entry__Playing(ZBridgeServer* handle);
 static void zBridgeServer_exact_entry__Playing_West_Wait(ZBridgeServer* handle);
 static void zBridgeServer_exact_entry__Playing_North_Wait(ZBridgeServer* handle);
 static void zBridgeServer_exact_entry__Playing_East_Wait(ZBridgeServer* handle);
 static void zBridgeServer_exact_entry__Playing_South_Wait(ZBridgeServer* handle);
-static void zBridgeServer_exact_entry__SyncLeader(ZBridgeServer* handle);
 static void zBridgeServer_enseq_entry__Connect_default(ZBridgeServer* handle);
 static void zBridgeServer_enseq_entry__Connect_West_Seated_default(ZBridgeServer* handle);
 static void zBridgeServer_enseq_entry__Connect_West_TeamNames_default(ZBridgeServer* handle);
@@ -512,10 +507,6 @@ void zBridgeServer_init(ZBridgeServer* handle)
 	zBridgeServer_clearOutEvents(handle);
 
 	/* Default init sequence for statechart ZBridgeServer */
-	handle->internal.UNDO_NONE = 1;
-	handle->internal.UNDO_BID = 2;
-	handle->internal.UNDO_PLAY = 3;
-	handle->internal.UNDO_LEAD = 4;
 	handle->internal.SS = 1;
 	handle->internal.SA = 2;
 	handle->internal.SP = 3;
@@ -576,7 +567,6 @@ void zBridgeServer_init(ZBridgeServer* handle)
 	handle->iface.noTrick = 0;
 	handle->iface.cardVal = 0;
 	handle->iface.syncState = 0;
-	handle->iface.undoState = 0;
 
 }
 
@@ -1478,14 +1468,6 @@ sc_integer zBridgeServerIface_get_syncState(const ZBridgeServer* handle)
 void zBridgeServerIface_set_syncState(ZBridgeServer* handle, sc_integer value)
 {
 	handle->iface.syncState = value;
-}
-sc_integer zBridgeServerIface_get_undoState(const ZBridgeServer* handle)
-{
-	return handle->iface.undoState;
-}
-void zBridgeServerIface_set_undoState(ZBridgeServer* handle, sc_integer value)
-{
-	handle->iface.undoState = value;
 }
 
 /* implementations of all internal functions */
@@ -2710,13 +2692,6 @@ static void zBridgeServer_effect_entry___choice_12_tr0(ZBridgeServer* handle)
 	zBridgeServer_react_entry___choice_11(handle);
 }
 
-/* Entry action for state 'Connect'. */
-static void zBridgeServer_enact_entry__Connect(ZBridgeServer* handle)
-{
-	/* Entry action for state 'Connect'. */
-	handle->iface.undoState = handle->internal.UNDO_NONE;
-}
-
 /* Entry action for state 'TeamNames'. */
 static void zBridgeServer_enact_entry__Connect_West_TeamNames(ZBridgeServer* handle)
 {
@@ -2855,7 +2830,6 @@ static void zBridgeServer_enact_entry__Bidding(ZBridgeServer* handle)
 	handle->internal.northBid = bool_false;
 	handle->internal.eastBid = bool_false;
 	handle->internal.southBid = bool_false;
-	handle->iface.undoState = handle->internal.UNDO_BID;
 }
 
 /* Entry action for state 'Sync'. */
@@ -2900,13 +2874,6 @@ static void zBridgeServer_enact_entry__Bidding_South_Sync(ZBridgeServer* handle)
 		handle->iface.bidDone_value = handle->iface.bidder;
 		handle->iface.bidDone_raised = bool_true;
 	} 
-}
-
-/* Entry action for state 'Playing'. */
-static void zBridgeServer_enact_entry__Playing(ZBridgeServer* handle)
-{
-	/* Entry action for state 'Playing'. */
-	handle->iface.undoState = handle->internal.UNDO_PLAY;
 }
 
 /* Entry action for state 'Wait'. */
@@ -3007,7 +2974,6 @@ static void zBridgeServer_enact_entry__SyncLeader(ZBridgeServer* handle)
 {
 	/* Entry action for state 'SyncLeader'. */
 	handle->iface.syncState = handle->internal.SL;
-	handle->iface.undoState = handle->internal.UNDO_LEAD;
 }
 
 /* Entry action for state 'SyncReplay'. */
@@ -3015,13 +2981,6 @@ static void zBridgeServer_enact_entry__SyncReplay(ZBridgeServer* handle)
 {
 	/* Entry action for state 'SyncReplay'. */
 	handle->iface.syncState = handle->internal.SR;
-}
-
-/* Exit action for state 'Bidding'. */
-static void zBridgeServer_exact_entry__Bidding(ZBridgeServer* handle)
-{
-	/* Exit action for state 'Bidding'. */
-	handle->iface.undoState = handle->internal.UNDO_NONE;
 }
 
 /* Exit action for state 'Wait'. */
@@ -3052,13 +3011,6 @@ static void zBridgeServer_exact_entry__Bidding_South_Wait(ZBridgeServer* handle)
 	handle->internal.southBid = bool_true;
 }
 
-/* Exit action for state 'Playing'. */
-static void zBridgeServer_exact_entry__Playing(ZBridgeServer* handle)
-{
-	/* Exit action for state 'Playing'. */
-	handle->iface.undoState = handle->internal.UNDO_NONE;
-}
-
 /* Exit action for state 'Wait'. */
 static void zBridgeServer_exact_entry__Playing_West_Wait(ZBridgeServer* handle)
 {
@@ -3087,18 +3039,10 @@ static void zBridgeServer_exact_entry__Playing_South_Wait(ZBridgeServer* handle)
 	handle->internal.southRCard = bool_true;
 }
 
-/* Exit action for state 'SyncLeader'. */
-static void zBridgeServer_exact_entry__SyncLeader(ZBridgeServer* handle)
-{
-	/* Exit action for state 'SyncLeader'. */
-	handle->iface.undoState = handle->internal.UNDO_NONE;
-}
-
 /* 'default' enter sequence for state Connect */
 static void zBridgeServer_enseq_entry__Connect_default(ZBridgeServer* handle)
 {
 	/* 'default' enter sequence for state Connect */
-	zBridgeServer_enact_entry__Connect(handle);
 	zBridgeServer_enseq_entry__Connect_West_default(handle);
 	zBridgeServer_enseq_entry__Connect_North_default(handle);
 	zBridgeServer_enseq_entry__Connect_East_default(handle);
@@ -3435,7 +3379,6 @@ static void zBridgeServer_enseq_entry__Bidding_South_Sync_default(ZBridgeServer*
 static void zBridgeServer_enseq_entry__Playing_default(ZBridgeServer* handle)
 {
 	/* 'default' enter sequence for state Playing */
-	zBridgeServer_enact_entry__Playing(handle);
 	zBridgeServer_enseq_entry__Playing_West_default(handle);
 	zBridgeServer_enseq_entry__Playing_North_default(handle);
 	zBridgeServer_enseq_entry__Playing_East_default(handle);
@@ -3962,7 +3905,6 @@ static void zBridgeServer_exseq_entry__Bidding(ZBridgeServer* handle)
 	zBridgeServer_exseq_entry__Bidding_North(handle);
 	zBridgeServer_exseq_entry__Bidding_East(handle);
 	zBridgeServer_exseq_entry__Bidding_South(handle);
-	zBridgeServer_exact_entry__Bidding(handle);
 }
 
 /* Default exit sequence for state Wait */
@@ -4041,7 +3983,6 @@ static void zBridgeServer_exseq_entry__Playing(ZBridgeServer* handle)
 	zBridgeServer_exseq_entry__Playing_North(handle);
 	zBridgeServer_exseq_entry__Playing_East(handle);
 	zBridgeServer_exseq_entry__Playing_South(handle);
-	zBridgeServer_exact_entry__Playing(handle);
 }
 
 /* Default exit sequence for state Wait */
@@ -4174,7 +4115,6 @@ static void zBridgeServer_exseq_entry__SyncLeader(ZBridgeServer* handle)
 	/* Default exit sequence for state SyncLeader */
 	handle->stateConfVector[0] = ZBridgeServer_last_state;
 	handle->stateConfVectorPosition = 0;
-	zBridgeServer_exact_entry__SyncLeader(handle);
 }
 
 /* Default exit sequence for state SyncReplay */
@@ -4455,25 +4395,21 @@ static void zBridgeServer_exseq_entry_(ZBridgeServer* handle)
 		case ZBridgeServer_entry__Bidding_South_Wait :
 		{
 			zBridgeServer_exseq_entry__Bidding_South_Wait(handle);
-			zBridgeServer_exact_entry__Bidding(handle);
 			break;
 		}
 		case ZBridgeServer_entry__Bidding_South_Sync :
 		{
 			zBridgeServer_exseq_entry__Bidding_South_Sync(handle);
-			zBridgeServer_exact_entry__Bidding(handle);
 			break;
 		}
 		case ZBridgeServer_entry__Playing_South_Wait :
 		{
 			zBridgeServer_exseq_entry__Playing_South_Wait(handle);
-			zBridgeServer_exact_entry__Playing(handle);
 			break;
 		}
 		case ZBridgeServer_entry__Playing_South_Sync :
 		{
 			zBridgeServer_exseq_entry__Playing_South_Sync(handle);
-			zBridgeServer_exact_entry__Playing(handle);
 			break;
 		}
 		default: break;

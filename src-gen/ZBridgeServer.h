@@ -77,10 +77,6 @@ typedef enum
 /*! Type definition of the data structure for the ZBridgeServerInternal interface scope. */
 typedef struct
 {
-	sc_integer UNDO_NONE;
-	sc_integer UNDO_BID;
-	sc_integer UNDO_PLAY;
-	sc_integer UNDO_LEAD;
 	sc_integer SS;
 	sc_integer SA;
 	sc_integer SP;
@@ -205,7 +201,6 @@ typedef struct
 	sc_integer noTrick;
 	sc_integer cardVal;
 	sc_integer syncState;
-	sc_integer undoState;
 } ZBridgeServerIface;
 
 
@@ -424,10 +419,6 @@ extern void zBridgeServerIface_set_cardVal(ZBridgeServer* handle, sc_integer val
 extern sc_integer zBridgeServerIface_get_syncState(const ZBridgeServer* handle);
 /*! Sets the value of the variable 'syncState' that is defined in the default interface scope. */ 
 extern void zBridgeServerIface_set_syncState(ZBridgeServer* handle, sc_integer value);
-/*! Gets the value of the variable 'undoState' that is defined in the default interface scope. */ 
-extern sc_integer zBridgeServerIface_get_undoState(const ZBridgeServer* handle);
-/*! Sets the value of the variable 'undoState' that is defined in the default interface scope. */ 
-extern void zBridgeServerIface_set_undoState(ZBridgeServer* handle, sc_integer value);
 
 /*!
  * Checks whether the state machine is active (until 2.4.1 this method was used for states).

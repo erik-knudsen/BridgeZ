@@ -18,11 +18,28 @@
  * The file implements the definition of the bid engine.
  */
 
+#include "cbiddb.h"
+#include "cbiddesc.h"
+#include "cbiddbdefine.h"
 #include "cbidengine.h"
 
 /**
- * @brief CBidEngine::CBidEngine
+ * @brief Generate bid engine.
+ * @param bidDB The bid database.
+ * @param bidDesc Description of the bid database.
+ * @param nsBbidOptionDoc Options for NS bidding.
+ * @param ewBidOptionDoc Options for EW bidding.
  */
-CBidEngine::CBidEngine()
+CBidEngine::CBidEngine(CBidDB *bidDB, CBidDesc *bidDesc,
+           CBidOptionDoc &nsBidOptionDoc, CBidOptionDoc &ewBidOptionDoc)
 {
+    this->bidDB = bidDB;
+    this->bidDesc = bidDesc;
+
+    bidDBDefine = new CBidDBDefine(nsBidOptionDoc, ewBidOptionDoc);
+}
+
+CBidEngine::~CBidEngine()
+{
+    delete bidDBDefine;
 }

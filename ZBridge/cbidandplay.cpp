@@ -19,7 +19,7 @@
  * Handling of bids and play.
  */
 
-#include "cbidoptiondoc.h"
+#include "cbidandplayengines.h"
 #include "cbidandplay.h"
 
 CBidAndPlay::CBidAndPlay()
@@ -27,29 +27,10 @@ CBidAndPlay::CBidAndPlay()
 }
 
 /**
- * @brief Generate bid and play engines.
- * @param nsBbidOptionDoc Options for NS bidding.
- * @param ewBidOptionDoc Options for EW bidding.
- * @param bidDB The bid database.
- * @param bidDesc Description of the bid database.
- */
-void CBidAndPlay::generateEngines(Seat seat, CBidOptionDoc &nsBidOptionDoc, CBidOptionDoc &ewBidOptionDoc,
-                                  CBidDB &bidDB, CBidDesc &bidDesc)
-{
-    this->seat = seat;
-}
-
-/**
  * @brief Reset bid history.
  */
 void CBidAndPlay::resetBidHistory()
 {
-    for (int i = 0; i < 3; i++)
-    {
-        features[i][0].setMinFeatures();
-        features[i][1].setMaxFeatures();
-    }
-
     bidHistory.resetBidHistory();
 }
 

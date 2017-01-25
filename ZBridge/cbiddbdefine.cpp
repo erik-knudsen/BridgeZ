@@ -16,10 +16,8 @@
 
 #include "cbiddbdefine.h"
 
-CBidDBDefine::CBidDBDefine(Seat seat, CBidOptionDoc &nsBidOptions, CBidOptionDoc &ewBidOptions)
+CBidDBDefine::CBidDBDefine(CBidOptionDoc &nsBidOptions, CBidOptionDoc &ewBidOptions)
 {
-    this->seat = seat;
-
     calcIds(nsBidOptions, nsPages, nsRules);
     calcIds(ewBidOptions, ewPages, ewRules);
 }

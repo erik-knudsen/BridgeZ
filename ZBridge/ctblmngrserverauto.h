@@ -36,9 +36,8 @@
 class CZBridgeDoc;
 class CGamesDoc;
 class CActorBase;
-class CBidEngine;
-class CPlayEngine;
 class CRemoteActorServer;
+class CBidAndPlayEngines;
 
 /**
  * @brief This class implements the table manager server controller for auto play.
@@ -124,6 +123,7 @@ private:
     CRemoteActorServer *remoteActorServer;
     CBidHistory bidHistory;
     CPlayHistory playHistory;
+    CBidAndPlayEngines *bidAndPlayEngines;
 
     int currentBoardNo;
     Team currentVulnerable;

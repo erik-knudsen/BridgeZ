@@ -33,7 +33,7 @@
 #include "cbidandplay.h"
 #include "cactor.h"
 
-class CBidOptionDoc;
+class CBidAndPlayEngines;
 class CTblMngr;
 
 /**
@@ -49,8 +49,8 @@ class CActorLocal : public CActor
 {
     Q_OBJECT
 public:
-    CActorLocal(bool manual, QString teamName, Seat seat, int protocol, CBidOptionDoc &nsBidOptionDoc,
-               CBidOptionDoc &ewBbidOptionDoc, CBidDB &bidDB, CBidDesc &bidDesc, CTblMngr *tableManager);
+    CActorLocal(bool manual, QString teamName, Seat seat, int protocol,
+               CBidAndPlayEngines *bidAndPlayEngines, CTblMngr *tableManager);
 
     void startNewSession();
     void clientRunCycle();

@@ -46,14 +46,13 @@
  *   - Connects signals, mostly meant to control the play view, to the table manager.
  */
 CActorLocal::CActorLocal(bool manual, QString teamName, Seat seat, int protocol,
-                       CBidOptionDoc &nsBidOptionDoc, CBidOptionDoc &ewBbidOptionDoc, CBidDB &bidDB,
-                       CBidDesc &bidDesc, CTblMngr *tableManager) :
+                       CBidAndPlayEngines *bidAndPlayEngines, CTblMngr *tableManager) :
     CActor(tableManager)
 {
     this->manual = manual;
     this->teamName = teamName;
     this->protocol = protocol;
-    bidAndPlay.generateEngines(seat, nsBidOptionDoc, ewBbidOptionDoc, bidDB, bidDesc);
+    bidAndPlay.setBidAndPlayEngines(bidAndPlayEngines);
     this->tableManager = tableManager;
     showUser = false;
     updateGameInfo = false;

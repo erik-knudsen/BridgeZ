@@ -110,7 +110,8 @@ SOURCES +=\
     cfeatures.cpp \
     crule.cpp \
     cruledialog.cpp \
-    cbiddbdefine.cpp
+    cbiddbdefine.cpp \
+    cbidandplayengines.cpp
 
 HEADERS  += cmainframe.h \
     czbridgedoc.h \
@@ -212,7 +213,8 @@ HEADERS  += cmainframe.h \
     cfeatures.h \
     crule.h \
     cruledialog.h \
-    cbiddbdefine.h
+    cbiddbdefine.h \
+    cbidandplayengines.h
 
 FORMS    += cmainframe.ui \
     cfilepropertiesdialog.ui \

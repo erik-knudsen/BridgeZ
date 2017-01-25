@@ -34,9 +34,9 @@
 class CZBridgeDoc;
 class CGamesDoc;
 class CActorLocalAuto;
-class CBidEngine;
 class CPlayEngine;
 class CRemoteActorClient;
+class CBidAndPlayEngines;
 
 
 /**
@@ -102,6 +102,8 @@ private:
 
     CActorLocalAuto *actor;
     CRemoteActorClient *remoteActorClient;
+
+    CBidAndPlayEngines *bidAndPlayEngines;
 
     int noHands;
     int currentCards[4][13];

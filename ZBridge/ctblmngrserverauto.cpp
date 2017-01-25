@@ -29,8 +29,9 @@
 #include "cactorremoteauto.h"
 #include "cbidengine.h"
 #include "cplayengine.h"
-#include "CTblMngrServerAuto.h"
 #include "cremoteactorserver.h"
+#include "cbidandplayengines.h"
+#include "CTblMngrServerAuto.h"
 
 
 /**
@@ -59,6 +60,8 @@ CTblMngrServerAuto::CTblMngrServerAuto(CZBridgeDoc *doc, CGamesDoc *games, QHost
     synchronizing = false;
 
     boardNo = -1;
+
+    bidAndPlayEngines = 0;
 
     actors[WEST_SEAT] = 0;
     actors[NORTH_SEAT] = 0;
@@ -390,7 +393,11 @@ void CTblMngrServerAuto::serverSyncActions()
  * @brief Clean table manager so that it can start a new session.
  */
 void CTblMngrServerAuto::cleanTableManager()
-{
+{        
+    if (bidAndPlayEngines != 0)
+      delete bidAndPlayEngines;
+    bidAndPlayEngines = 0;
+
     if (actors[WEST_SEAT] != 0)
     {
         actors[WEST_SEAT]->endOfSession();
@@ -467,37 +474,37 @@ void CTblMngrServerAuto::sNewSession()
     playWaiting = playContinue = false;
     firstAutoSync = true;
 
+    //Set up bid and play engines.
+    bidAndPlayEngines = new CBidAndPlayEngines(doc->getBidDB(), doc->getBidDesc(),
+                                               doc->getNSBidOptions(), doc->getEWBidOptions());
+
     //Set up actors.
     if ((remoteActorServer != 0) && remoteActorServer->isConnected(WEST_SEAT))
         actor = new CActorRemoteAuto(WEST_SEAT,  remoteActorServer->getFrontend(WEST_SEAT), this);
     else
         actor = new CActorLocalAuto(AUTO_SEAT_NAME_PREFIX + SEAT_NAMES[WEST_SEAT], WEST_SEAT,
-                doc->getNSBidOptions(), doc->getEWBidOptions(),
-                *doc->getBidDB(), *doc->getBidDesc(), this);
+                bidAndPlayEngines, this);
     actors[WEST_SEAT] = actor;
 
     if ((remoteActorServer != 0) && remoteActorServer->isConnected(NORTH_SEAT))
         actor = new CActorRemoteAuto(NORTH_SEAT, remoteActorServer->getFrontend(NORTH_SEAT), this);
     else
         actor = new CActorLocalAuto(AUTO_SEAT_NAME_PREFIX + SEAT_NAMES[NORTH_SEAT], NORTH_SEAT,
-                doc->getNSBidOptions(), doc->getEWBidOptions(),
-                *doc->getBidDB(), *doc->getBidDesc(), this);
+                bidAndPlayEngines, this);
     actors[NORTH_SEAT] = actor;
 
     if ((remoteActorServer != 0) && remoteActorServer->isConnected(EAST_SEAT))
         actor = new CActorRemoteAuto(EAST_SEAT, remoteActorServer->getFrontend(EAST_SEAT), this);
     else
         actor = new CActorLocalAuto(AUTO_SEAT_NAME_PREFIX + SEAT_NAMES[EAST_SEAT], EAST_SEAT,
-                doc->getNSBidOptions(), doc->getEWBidOptions(),
-                *doc->getBidDB(), *doc->getBidDesc(), this);
+                bidAndPlayEngines, this);
     actors[EAST_SEAT] = actor;
 
     if ((remoteActorServer != 0) && remoteActorServer->isConnected(SOUTH_SEAT))
         actor = new CActorRemoteAuto(SOUTH_SEAT, remoteActorServer->getFrontend(SOUTH_SEAT), this);
     else
         actor = new CActorLocalAuto(AUTO_SEAT_NAME_PREFIX + SEAT_NAMES[SOUTH_SEAT], SOUTH_SEAT,
-                doc->getNSBidOptions(), doc->getEWBidOptions(),
-                *doc->getBidDB(), *doc->getBidDesc(), this);
+                bidAndPlayEngines, this);
     actors[SOUTH_SEAT] = actor;
 
     setUpdateGameInfo();

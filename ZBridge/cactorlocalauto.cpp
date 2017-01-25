@@ -42,13 +42,12 @@
  *   - Generates bid and play engines.
  *   - Initializes the Yakindu client state chart.
  */
-CActorLocalAuto::CActorLocalAuto(QString teamName, Seat seat, CBidOptionDoc &nsBidOptionDoc,
-                         CBidOptionDoc &ewBidOptionDoc, CBidDB &bidDB, CBidDesc &bidDesc,
+CActorLocalAuto::CActorLocalAuto(QString teamName, Seat seat, CBidAndPlayEngines *bidAndPlayEngines,
                          CTblMngrBase *tableManager) :
     CActorBase(tableManager)
 {
     this->teamName = teamName;
-    bidAndPlay.generateEngines(seat, nsBidOptionDoc, ewBidOptionDoc, bidDB, bidDesc);
+    bidAndPlay.setBidAndPlayEngines(bidAndPlayEngines);
     this->tableManager = tableManager;
     updateGameInfo = false;
     synchronizing = false;
