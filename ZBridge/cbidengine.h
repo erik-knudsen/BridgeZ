@@ -21,10 +21,14 @@
 #ifndef CBIDENGINE_H
 #define CBIDENGINE_H
 
+#include "Defines.h"
+
 class CBidDB;
 class CBidDesc;
 class CBidOptionDoc;
 class CBidDBDefine;
+class CBidHistory;
+class CFeatures;
 
 /**
  * @brief The bid engine class handles automatic bidding.
@@ -35,6 +39,8 @@ public:
     CBidEngine(CBidDB *bidDB, CBidDesc *bidDesc,
                CBidOptionDoc &nsBidOptionDoc, CBidOptionDoc &ewBidOptionDoc);
     virtual ~CBidEngine();
+
+    Bids getNextBid(CBidHistory &bidHistory, int cards[13], CFeatures allFeatures[2][4]);
 
 private:
     CBidDB *bidDB;

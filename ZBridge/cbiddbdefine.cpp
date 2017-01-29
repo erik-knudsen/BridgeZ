@@ -22,6 +22,16 @@ CBidDBDefine::CBidDBDefine(CBidOptionDoc &nsBidOptions, CBidOptionDoc &ewBidOpti
     calcIds(ewBidOptions, ewPages, ewRules);
 }
 
+QSet<qint16> &CBidDBDefine::getPages(Seat seat)
+{
+    return ((seat == NORTH_SEAT) || (seat == SOUTH_SEAT)) ? nsPages : ewPages;
+}
+
+QSet<qint16> &CBidDBDefine::getRules(Seat seat)
+{
+    return ((seat == NORTH_SEAT) || (seat == SOUTH_SEAT)) ? nsRules : ewRules;
+}
+
 /**
  * @brief Calculate relevant pages and rule ids.
  * @param bidOptions Options that selects pages and rules.
@@ -671,6 +681,8 @@ void CBidDBDefine::calcIds(CBidOptionDoc &bidOptions, QSet<qint16> &pages, QSet<
 
 
     //Rules***************************************************************************************
+    rules<<0;
+
     if (bidOptions.majorsMode == MAJOR_FOUR)
         rules<<O_1H_4<<O_1S_4;          //1H and 1S promises 4 card suit.
     else

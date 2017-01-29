@@ -1085,10 +1085,11 @@ class CBidDBDefine
 {
 public:
     CBidDBDefine(CBidOptionDoc &nsBidOptions, CBidOptionDoc &ewBidOptions);
-
-    void calcIds(CBidOptionDoc &bidOptions, QSet<qint16> &pages, QSet<qint16> &rules);
+    QSet<qint16> &getPages(Seat seat);
+    QSet<qint16> &getRules(Seat seat);
 
 private:
+    void calcIds(CBidOptionDoc &bidOptions, QSet<qint16> &pages, QSet<qint16> &rules);
     QSet<qint16> nsPages;
     QSet<qint16> ewPages;
     QSet<qint16> nsRules;
