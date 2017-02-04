@@ -638,7 +638,8 @@ void CTblMngrServer::newSession()
 
     //Set up bid and play engines.
     bidAndPlayEngines = new CBidAndPlayEngines(doc->getBidDB(), doc->getBidDesc(),
-                                               doc->getNSBidOptions(), doc->getEWBidOptions());
+                                               doc->getNSBidOptions(), doc->getEWBidOptions(),
+                                               doc->getGameOptions().scoringMethod);
 
     //Set up actors.
     if (doc->getSeatOptions().westActor == MANUAL_ACTOR)

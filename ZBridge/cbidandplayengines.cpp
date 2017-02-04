@@ -23,18 +23,15 @@
 #include "cbidandplayengines.h"
 
 CBidAndPlayEngines::CBidAndPlayEngines(CBidDB *bidDB, CBidDesc *bidDesc,
-                 CBidOptionDoc &nsBidOptionDoc, CBidOptionDoc &ewBidOptionDoc)
+                 CBidOptionDoc &nsBidOptionDoc, CBidOptionDoc &ewBidOptionDoc,
+                 ScoringMethod scoringMethod)
 {
     //Allocate bid and play engines.
     bidEngine = new CBidEngine(bidDB, bidDesc, nsBidOptionDoc, ewBidOptionDoc);
     playEngine = new CPlayEngine();
 
-    //Initialize features.
-    for (int i = 0; i < 3; i++)
-    {
-        features[0][i].setMinFeatures();
-        features[1][i].setMaxFeatures();
-    }
+    //params.
+    this->scoringMethod = scoringMethod;
 }
 
 CBidAndPlayEngines::~CBidAndPlayEngines()

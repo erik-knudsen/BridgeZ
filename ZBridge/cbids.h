@@ -43,8 +43,10 @@ public:
     /*@{*/
     void getBids(QList<qint8> *bids, QList<CRule*> *pRules);
     CAuction getSubstituteAuction() { return substituteAuction; }
+    QList<CRule *> getpRules(qint8 bid);
     CRule *getpRule(qint8 bid, CRule *pRule);
     bool contains(qint8 bid, CRule *pRule);
+    bool contains(qint8 bid);
     /*@}*/
 
     /** @name Create entries/values.

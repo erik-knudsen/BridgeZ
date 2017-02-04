@@ -144,7 +144,8 @@ void CTblMngrClient::newSession()
 
     //Set up bid and play engines.
     bidAndPlayEngines = new CBidAndPlayEngines(doc->getBidDB(), doc->getBidDesc(),
-                                               doc->getNSBidOptions(), doc->getEWBidOptions());
+                           doc->getNSBidOptions(), doc->getEWBidOptions(),
+                                               doc->getGameOptions().scoringMethod);
 
     //Set up actor.
     if (doc->getSeatOptions().seat == WEST_SEAT)

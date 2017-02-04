@@ -63,6 +63,7 @@ public:
     QList<qint16> getPages();
     QList<CAuction> getAuctions(qint16 page);
     void getBids(qint16 page, CAuction &auction, QList<qint8> *bids, QList<CRule*> *pRules);
+    QList<CRule *> getpRules(qint16 page, CAuction &auction, qint8 bid);
     CAuction getSubstituteAuction(qint16 page, CAuction &auction);
     CRule *getpRule(qint16 page, CAuction &auction, qint8 bid, CRule *pRule);
     /*@}*/
@@ -74,6 +75,7 @@ public:
     bool pageExist(qint16 page);
     bool auctionExist(qint16 page, CAuction &auction);
     bool bidExist(qint16 page, CAuction &auction, qint8 bid, CRule *pRule);
+    bool bidExist(qint16 page, CAuction &auction, qint8 bid);
     bool isSubstituteAuction(qint16 page, CAuction &auction);
     bool isBids(qint16 page, CAuction &auction);
     /*@}*/

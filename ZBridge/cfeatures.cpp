@@ -546,6 +546,277 @@ void CFeatures::setCardFeatures(int cards[13])
     }
 }
 
+void CFeatures::delimitFeatures(CFeatures &features, bool lower)
+{
+    //High Card Points.
+    for (int i = 0; i < 5; i++)
+    {
+        int curVal = getHcp((Suit)i);
+        int newVal = features.getHcp((Suit)i);
+        if ((lower && (newVal > curVal)) || (!lower && newVal < curVal))
+            curVal = newVal;
+        setHcp((Suit)i, curVal);
+    }
+
+    //Weighted count of aces and kings.
+    for (int i = 0; i < 5; i++)
+    {
+        int curVal = getControls((Suit)i);
+        int newVal = features.getControls((Suit)i);
+        if ((lower && (newVal > curVal)) || (!lower && newVal < curVal))
+            curVal = newVal;
+        setControls((Suit)i, curVal);
+    }
+
+    //Count of aces, kings and queens.
+    for (int i = 0; i < 5; i++)
+    {
+        int curVal = getHc((Suit)i);
+        int newVal = features.getHc((Suit)i);
+        if ((lower && (newVal > curVal)) || (!lower && newVal < curVal))
+            curVal = newVal;
+        setHc((Suit)i, curVal);
+    }
+
+    //Count of cards higher than 9.
+    for (int i = 0; i < 5; i++)
+    {
+        int curVal = getHonor((Suit)i);
+        int newVal = features.getHonor((Suit)i);
+        if ((lower && (newVal > curVal)) || (!lower && newVal < curVal))
+            curVal = newVal;
+        setHonor((Suit)i, curVal);
+    }
+
+    //Count of aces.
+    for (int i = 0; i < 5; i++)
+    {
+        int curVal = getCountCard((Suit)i, ACE);
+        int newVal = features.getCountCard((Suit)i, ACE);
+        if ((lower && (newVal > curVal)) || (!lower && newVal < curVal))
+            curVal = newVal;
+        setCountCard((Suit)i, ACE, curVal);
+    }
+
+    //Count of kings.
+    for (int i = 0; i < 5; i++)
+    {
+        int curVal = getCountCard((Suit)i, KING);
+        int newVal = features.getCountCard((Suit)i, KING);
+        if ((lower && (newVal > curVal)) || (!lower && newVal < curVal))
+            curVal = newVal;
+        setCountCard((Suit)i, KING, curVal);
+    }
+
+    //Count of queens.
+    for (int i = 0; i < 5; i++)
+    {
+        int curVal = getCountCard((Suit)i, QUEEN);
+        int newVal = features.getCountCard((Suit)i, QUEEN);
+        if ((lower && (newVal > curVal)) || (!lower && newVal < curVal))
+            curVal = newVal;
+        setCountCard((Suit)i, QUEEN, curVal);
+    }
+
+    //Count of jacks.
+    for (int i = 0; i < 5; i++)
+    {
+        int curVal = getCountCard((Suit)i, JACK);
+        int newVal = features.getCountCard((Suit)i, JACK);
+        if ((lower && (newVal > curVal)) || (!lower && newVal < curVal))
+            curVal = newVal;
+        setCountCard((Suit)i, JACK, curVal);
+    }
+
+    //Count of tens.
+    for (int i = 0; i < 5; i++)
+    {
+        int curVal = getCountCard((Suit)i, TEN);
+        int newVal = features.getCountCard((Suit)i, TEN);
+        if ((lower && (newVal > curVal)) || (!lower && newVal < curVal))
+            curVal = newVal;
+        setCountCard((Suit)i, TEN, curVal);
+    }
+
+    //Count of aces in the whole hand + the count of kings in the suit.
+    for (int i = 0; i < 4; i++)
+    {
+        int curVal = getRkcb((Suit)i);
+        int newVal = features.getRkcb((Suit)i);
+        if ((lower && (newVal > curVal)) || (!lower && newVal < curVal))
+            curVal = newVal;
+        setRkcb((Suit)i, curVal);
+    }
+
+    //How balanced is the hand?
+    {
+        int curVal = getBal();
+        int newVal = features.getBal();
+        if ((lower && (newVal > curVal)) || (!lower && newVal < curVal))
+            curVal = newVal;
+        setBal(curVal);
+    }
+
+    //Distribution points.
+    for (int i = 0; i < 5; i++)
+    {
+        int curVal = getDp((Suit)i);
+        int newVal = features.getDp((Suit)i);
+        if ((lower && (newVal > curVal)) || (!lower && newVal < curVal))
+            curVal = newVal;
+        setDp((Suit)i, curVal);
+    }
+
+    //Difference in length between 2 suits.
+    for (int i = 0; i < 3; i++)
+    for (int j = i + 1; j < 4; j++)
+    {
+        int curVal = getDif2((Suit)j, (Suit)i);
+        int newVal = features.getDif2((Suit)j, (Suit)i);
+        if ((lower && (newVal > curVal)) || (!lower && newVal < curVal))
+            curVal = newVal;
+        setDif2((Suit)j, (Suit)i, curVal);
+    }
+
+    //Number of suits that are longer than 3.
+    {
+        int curVal = getSuits();
+        int newVal = features.getSuits();
+        if ((lower && (newVal > curVal)) || (!lower && newVal < curVal))
+            curVal = newVal;
+        setSuits(curVal);
+    }
+
+    //length of a suit.
+    for (int i = 0; i < 4; i++)
+    {
+        int curVal = getSuitLen((Suit)i);
+        int newVal = features.getSuitLen((Suit)i);
+        if ((lower && (newVal > curVal)) || (!lower && newVal < curVal))
+            curVal = newVal;
+        setSuitLen((Suit)i, curVal);
+    }
+
+    //Total length of two suits.
+    for (int i = 0; i < 3; i++)
+    for (int j = i + 1; j < 4; j++)
+    {
+        int curVal = getSuitLen2((Suit)j, (Suit)i);
+        int newVal = features.getSuitLen2((Suit)j, (Suit)i);
+        if ((lower && (newVal > curVal)) || (!lower && newVal < curVal))
+            curVal = newVal;
+        setSuitLen2((Suit)j, (Suit)i, curVal);
+    }
+
+    //Length of the longer major suit.
+    {
+        int curVal = getLMaj();
+        int newVal = features.getLMaj();
+        if ((lower && (newVal > curVal)) || (!lower && newVal < curVal))
+            curVal = newVal;
+        setLMaj(curVal);
+    }
+
+    //Length of the longer minor suit.
+    {
+        int curVal = getLMin();
+        int newVal = features.getLMin();
+        if ((lower && (newVal > curVal)) || (!lower && newVal < curVal))
+            curVal = newVal;
+        setLMin(curVal);
+    }
+
+    //Is the suit the longest in the hand?
+    for (int i = 0; i < 4; i++)
+    {
+        int curVal = getLongest((Suit)i);
+        int newVal = features.getLongest((Suit)i);
+        if ((lower && (newVal > curVal)) || (!lower && newVal < curVal))
+            curVal = newVal;
+        setLongest((Suit)i, curVal);
+    }
+
+    //Is the suit not shortest in the hand?
+    for (int i = 0; i < 4; i++)
+    {
+        int curVal = getLong((Suit)i);
+        int newVal = features.getLong((Suit)i);
+        if ((lower && (newVal > curVal)) || (!lower && newVal < curVal))
+            curVal = newVal;
+        setLong((Suit)i, curVal);
+    }
+
+    //Weighted count of intermediate cards.
+    for (int i = 0; i < 5; i++)
+    {
+        int curVal = getInter((Suit)i);
+        int newVal = features.getInter((Suit)i);
+        if ((lower && (newVal > curVal)) || (!lower && newVal < curVal))
+            curVal = newVal;
+        setInter((Suit)i, curVal);
+    }
+
+    //Expected number of losers.
+    for (int i = 0; i < 5; i++)
+    {
+        int curVal = getLoosers((Suit)i);
+        int newVal = features.getLoosers((Suit)i);
+        if ((lower && (newVal > curVal)) || (!lower && newVal < curVal))
+            curVal = newVal;
+        setLoosers((Suit)i, curVal);
+    }
+
+    //Quick tricks.
+    for (int i = 0; i < 5; i++)
+    {
+        int curVal = getQuickTricks((Suit)i);
+        int newVal = features.getQuickTricks((Suit)i);
+        if ((lower && (newVal > curVal)) || (!lower && newVal < curVal))
+            curVal = newVal;
+        setQuickTricks((Suit)i, curVal);
+    }
+
+    //Playing tricks.
+    for (int i = 0; i < 5; i++)
+    {
+        int curVal = getPlayingTricks((Suit)i);
+        int newVal = features.getPlayingTricks((Suit)i);
+        if ((lower && (newVal > curVal)) || (!lower && newVal < curVal))
+            curVal = newVal;
+        setPlayingTricks((Suit)i, curVal);
+    }
+
+    //Stopper quality.
+    for (int i = 0; i < 4; i++)
+    {
+        int curVal = getStopNT((Suit)i);
+        int newVal = features.getStopNT((Suit)i);
+        if ((lower && (newVal > curVal)) || (!lower && newVal < curVal))
+            curVal = newVal;
+        setStopNT((Suit)i, curVal);
+    }
+
+    //General quality assessment.
+    for (int i = 0; i < 4; i++)
+    {
+        int curVal = getQlty((Suit)i);
+        int newVal = features.getQlty((Suit)i);
+        if ((lower && (newVal > curVal)) || (!lower && newVal < curVal))
+            curVal = newVal;
+        setQlty((Suit)i, curVal);
+    }
+
+    //High Card Points + Distribution Points.
+    for (int i = 0; i < 5; i++)
+    {
+        int curVal = getPoints((Suit)i);
+        int newVal = features.getPoints((Suit)i);
+        if ((lower && (newVal > curVal)) || (!lower && newVal < curVal))
+            curVal = newVal;
+        setPoints((Suit)i, curVal);
+    }
+}
+
 /**
  * @brief Get the High Card Points.
  */

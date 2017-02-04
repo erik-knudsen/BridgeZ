@@ -42,6 +42,11 @@ void CBids::getBids(QList<qint8> *bids, QList<CRule *> *pRules)
     *pRules = this->bids.values();
 }
 
+QList<CRule *> CBids::getpRules(qint8 bid)
+{
+    return (bids.values(bid));
+}
+
 CRule *CBids::getpRule(qint8 bid, CRule *pRule)
 {
     return (bids.contains(bid, pRule)) ? pRule : 0;
@@ -50,6 +55,11 @@ CRule *CBids::getpRule(qint8 bid, CRule *pRule)
 bool CBids::contains(qint8 bid, CRule *pRule)
 {
     return bids.contains(bid, pRule);
+}
+
+bool CBids::contains(qint8 bid)
+{
+    return bids.contains(bid);
 }
 
 void CBids::createBid(qint8 bid, CRule *pRule)

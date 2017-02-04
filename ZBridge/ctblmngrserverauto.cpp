@@ -476,7 +476,8 @@ void CTblMngrServerAuto::sNewSession()
 
     //Set up bid and play engines.
     bidAndPlayEngines = new CBidAndPlayEngines(doc->getBidDB(), doc->getBidDesc(),
-                                               doc->getNSBidOptions(), doc->getEWBidOptions());
+                                               doc->getNSBidOptions(), doc->getEWBidOptions(),
+                                               doc->getGameOptions().scoringMethod);
 
     //Set up actors.
     if ((remoteActorServer != 0) && remoteActorServer->isConnected(WEST_SEAT))

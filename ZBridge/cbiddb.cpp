@@ -71,6 +71,19 @@ void CBidDB::getBids(qint16 page, CAuction &auction, QList<qint8> *bids, QList<C
     }
 }
 
+QList<CRule *> CBidDB::getpRules(qint16 page, CAuction &auction, qint8 bid)
+{
+    QList<CRule *> pRules;
+    CAuctions* pAuctions = pages.value(page, 0);
+    if (pAuctions != 0)
+    {
+        CBids *pBids = pAuctions->getpBids(auction);
+        if (pBids != 0)
+            pRules = pBids->getpRules(bid);
+    }
+    return pRules;
+}
+
 CAuction CBidDB::getSubstituteAuction(qint16 page, CAuction &auction)
 {
     CAuction substituteAuction;
@@ -115,6 +128,19 @@ bool CBidDB::bidExist(qint16 page, CAuction &auction, qint8 bid, CRule *pRule)
         CBids *pBids = pAuctions->getpBids(auction);
         if (pBids != 0)
             return pBids->contains(bid, pRule);
+    }
+
+    return false;
+}
+
+bool CBidDB::bidExist(qint16 page, CAuction &auction, qint8 bid)
+{
+    CAuctions* pAuctions = pages.value(page, 0);
+    if (pAuctions != 0)
+    {
+        CBids *pBids = pAuctions->getpBids(auction);
+        if (pBids != 0)
+            return pBids->contains(bid);
     }
 
     return false;

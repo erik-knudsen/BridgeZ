@@ -48,7 +48,7 @@ void CRule::initialize()
  */
 bool CRule::RuleIsOk(CFeatures &feature)
 {
-    const int NO_FEATURES = 136;
+    const int NO_FEATURES = 124;
     int low[NO_FEATURES], high[NO_FEATURES], cur[NO_FEATURES];
     int i;
 
@@ -114,18 +114,12 @@ bool CRule::RuleIsOk(CFeatures &feature)
 
     low[i++] = featureRange[0].getBal();
 
-    low[i++] = featureRange[0].getDif2(SPADES, HEARTS);
-    low[i++] = featureRange[0].getDif2(SPADES, DIAMONDS);
-    low[i++] = featureRange[0].getDif2(SPADES, CLUBS);
-    low[i++] = featureRange[0].getDif2(HEARTS, SPADES);
-    low[i++] = featureRange[0].getDif2(HEARTS, DIAMONDS);
-    low[i++] = featureRange[0].getDif2(HEARTS, CLUBS);
-    low[i++] = featureRange[0].getDif2(DIAMONDS, SPADES);
-    low[i++] = featureRange[0].getDif2(DIAMONDS, HEARTS);
     low[i++] = featureRange[0].getDif2(DIAMONDS, CLUBS);
-    low[i++] = featureRange[0].getDif2(CLUBS, SPADES);
-    low[i++] = featureRange[0].getDif2(CLUBS, HEARTS);
-    low[i++] = featureRange[0].getDif2(CLUBS, DIAMONDS);
+    low[i++] = featureRange[0].getDif2(HEARTS, CLUBS);
+    low[i++] = featureRange[0].getDif2(HEARTS, DIAMONDS);
+    low[i++] = featureRange[0].getDif2(SPADES, CLUBS);
+    low[i++] = featureRange[0].getDif2(SPADES, DIAMONDS);
+    low[i++] = featureRange[0].getDif2(SPADES, HEARTS);
 
     low[i++] = featureRange[0].getSuits();
 
@@ -134,18 +128,12 @@ bool CRule::RuleIsOk(CFeatures &feature)
     low[i++] = featureRange[0].getSuitLen(DIAMONDS);
     low[i++] = featureRange[0].getSuitLen(CLUBS);
 
-    low[i++] = featureRange[0].getSuitLen2(SPADES, HEARTS);
-    low[i++] = featureRange[0].getSuitLen2(SPADES, DIAMONDS);
-    low[i++] = featureRange[0].getSuitLen2(SPADES, CLUBS);
-    low[i++] = featureRange[0].getSuitLen2(HEARTS, SPADES);
-    low[i++] = featureRange[0].getSuitLen2(HEARTS, DIAMONDS);
-    low[i++] = featureRange[0].getSuitLen2(HEARTS, CLUBS);
-    low[i++] = featureRange[0].getSuitLen2(DIAMONDS, SPADES);
-    low[i++] = featureRange[0].getSuitLen2(DIAMONDS, HEARTS);
     low[i++] = featureRange[0].getSuitLen2(DIAMONDS, CLUBS);
-    low[i++] = featureRange[0].getSuitLen2(CLUBS, SPADES);
-    low[i++] = featureRange[0].getSuitLen2(CLUBS, HEARTS);
-    low[i++] = featureRange[0].getSuitLen2(CLUBS, DIAMONDS);
+    low[i++] = featureRange[0].getSuitLen2(HEARTS, CLUBS);
+    low[i++] = featureRange[0].getSuitLen2(HEARTS, DIAMONDS);
+    low[i++] = featureRange[0].getSuitLen2(SPADES, CLUBS);
+    low[i++] = featureRange[0].getSuitLen2(SPADES, DIAMONDS);
+    low[i++] = featureRange[0].getSuitLen2(SPADES, HEARTS);
 
     low[i++] = featureRange[0].getLMaj();
 
@@ -263,18 +251,12 @@ bool CRule::RuleIsOk(CFeatures &feature)
 
     high[i++] = featureRange[1].getBal();
 
-    high[i++] = featureRange[1].getDif2(SPADES, HEARTS);
-    high[i++] = featureRange[1].getDif2(SPADES, DIAMONDS);
-    high[i++] = featureRange[1].getDif2(SPADES, CLUBS);
-    high[i++] = featureRange[1].getDif2(HEARTS, SPADES);
-    high[i++] = featureRange[1].getDif2(HEARTS, DIAMONDS);
-    high[i++] = featureRange[1].getDif2(HEARTS, CLUBS);
-    high[i++] = featureRange[1].getDif2(DIAMONDS, SPADES);
-    high[i++] = featureRange[1].getDif2(DIAMONDS, HEARTS);
     high[i++] = featureRange[1].getDif2(DIAMONDS, CLUBS);
-    high[i++] = featureRange[1].getDif2(CLUBS, SPADES);
-    high[i++] = featureRange[1].getDif2(CLUBS, HEARTS);
-    high[i++] = featureRange[1].getDif2(CLUBS, DIAMONDS);
+    high[i++] = featureRange[1].getDif2(HEARTS, CLUBS);
+    high[i++] = featureRange[1].getDif2(HEARTS, DIAMONDS);
+    high[i++] = featureRange[1].getDif2(SPADES, CLUBS);
+    high[i++] = featureRange[1].getDif2(SPADES, DIAMONDS);
+    high[i++] = featureRange[1].getDif2(SPADES, HEARTS);
 
     high[i++] = featureRange[1].getSuits();
 
@@ -283,18 +265,12 @@ bool CRule::RuleIsOk(CFeatures &feature)
     high[i++] = featureRange[1].getSuitLen(DIAMONDS);
     high[i++] = featureRange[1].getSuitLen(CLUBS);
 
-    high[i++] = featureRange[1].getSuitLen2(SPADES, HEARTS);
-    high[i++] = featureRange[1].getSuitLen2(SPADES, DIAMONDS);
-    high[i++] = featureRange[1].getSuitLen2(SPADES, CLUBS);
-    high[i++] = featureRange[1].getSuitLen2(HEARTS, SPADES);
-    high[i++] = featureRange[1].getSuitLen2(HEARTS, DIAMONDS);
-    high[i++] = featureRange[1].getSuitLen2(HEARTS, CLUBS);
-    high[i++] = featureRange[1].getSuitLen2(DIAMONDS, SPADES);
-    high[i++] = featureRange[1].getSuitLen2(DIAMONDS, HEARTS);
     high[i++] = featureRange[1].getSuitLen2(DIAMONDS, CLUBS);
-    high[i++] = featureRange[1].getSuitLen2(CLUBS, SPADES);
-    high[i++] = featureRange[1].getSuitLen2(CLUBS, HEARTS);
-    high[i++] = featureRange[1].getSuitLen2(CLUBS, DIAMONDS);
+    high[i++] = featureRange[1].getSuitLen2(HEARTS, CLUBS);
+    high[i++] = featureRange[1].getSuitLen2(HEARTS, DIAMONDS);
+    high[i++] = featureRange[1].getSuitLen2(SPADES, CLUBS);
+    high[i++] = featureRange[1].getSuitLen2(SPADES, DIAMONDS);
+    high[i++] = featureRange[1].getSuitLen2(SPADES, HEARTS);
 
     high[i++] = featureRange[1].getLMaj();
 
@@ -412,18 +388,12 @@ bool CRule::RuleIsOk(CFeatures &feature)
 
     cur[i++] = feature.getBal();
 
-    cur[i++] = feature.getDif2(SPADES, HEARTS);
-    cur[i++] = feature.getDif2(SPADES, DIAMONDS);
-    cur[i++] = feature.getDif2(SPADES, CLUBS);
-    cur[i++] = feature.getDif2(HEARTS, SPADES);
-    cur[i++] = feature.getDif2(HEARTS, DIAMONDS);
-    cur[i++] = feature.getDif2(HEARTS, CLUBS);
-    cur[i++] = feature.getDif2(DIAMONDS, SPADES);
-    cur[i++] = feature.getDif2(DIAMONDS, HEARTS);
     cur[i++] = feature.getDif2(DIAMONDS, CLUBS);
-    cur[i++] = feature.getDif2(CLUBS, SPADES);
-    cur[i++] = feature.getDif2(CLUBS, HEARTS);
-    cur[i++] = feature.getDif2(CLUBS, DIAMONDS);
+    cur[i++] = feature.getDif2(HEARTS, CLUBS);
+    cur[i++] = feature.getDif2(HEARTS, DIAMONDS);
+    cur[i++] = feature.getDif2(SPADES, CLUBS);
+    cur[i++] = feature.getDif2(SPADES, DIAMONDS);
+    cur[i++] = feature.getDif2(SPADES, HEARTS);
 
     cur[i++] = feature.getSuits();
 
@@ -432,18 +402,12 @@ bool CRule::RuleIsOk(CFeatures &feature)
     cur[i++] = feature.getSuitLen(DIAMONDS);
     cur[i++] = feature.getSuitLen(CLUBS);
 
-    cur[i++] = feature.getSuitLen2(SPADES, HEARTS);
-    cur[i++] = feature.getSuitLen2(SPADES, DIAMONDS);
-    cur[i++] = feature.getSuitLen2(SPADES, CLUBS);
-    cur[i++] = feature.getSuitLen2(HEARTS, SPADES);
-    cur[i++] = feature.getSuitLen2(HEARTS, DIAMONDS);
-    cur[i++] = feature.getSuitLen2(HEARTS, CLUBS);
-    cur[i++] = feature.getSuitLen2(DIAMONDS, SPADES);
-    cur[i++] = feature.getSuitLen2(DIAMONDS, HEARTS);
     cur[i++] = feature.getSuitLen2(DIAMONDS, CLUBS);
-    cur[i++] = feature.getSuitLen2(CLUBS, SPADES);
-    cur[i++] = feature.getSuitLen2(CLUBS, HEARTS);
-    cur[i++] = feature.getSuitLen2(CLUBS, DIAMONDS);
+    cur[i++] = feature.getSuitLen2(HEARTS, CLUBS);
+    cur[i++] = feature.getSuitLen2(HEARTS, DIAMONDS);
+    cur[i++] = feature.getSuitLen2(SPADES, CLUBS);
+    cur[i++] = feature.getSuitLen2(SPADES, DIAMONDS);
+    cur[i++] = feature.getSuitLen2(SPADES, HEARTS);
 
     cur[i++] = feature.getLMaj();
 
@@ -502,6 +466,7 @@ bool CRule::RuleIsOk(CFeatures &feature)
     for (int i = 0; i < NO_FEATURES; i++)
         if ((low[i] > cur[i]) || (high[i] < cur[i]))
             return false;
+
     return true;
 }
 

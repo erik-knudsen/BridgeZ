@@ -33,14 +33,15 @@ class CBidAndPlayEngines
 {
 public:
     CBidAndPlayEngines(CBidDB *bidDB, CBidDesc *bidDesc,
-                       CBidOptionDoc &nsBidOptionDoc, CBidOptionDoc &ewBidOptionDoc);
+                       CBidOptionDoc &nsBidOptionDoc, CBidOptionDoc &ewBidOptionDoc,
+                       ScoringMethod scoringMethod);
     virtual ~CBidAndPlayEngines();
 
 private:
     CBidEngine *bidEngine;
     CPlayEngine *playEngine;
 
-    CFeatures features[2][4];
+    ScoringMethod scoringMethod;
 };
 
 #endif // CBIDANDPLAYENGINES_H

@@ -21,6 +21,8 @@
 #ifndef CBIDENGINE_H
 #define CBIDENGINE_H
 
+#include <QList>
+
 #include "Defines.h"
 
 class CBidDB;
@@ -29,6 +31,7 @@ class CBidOptionDoc;
 class CBidDBDefine;
 class CBidHistory;
 class CFeatures;
+class CRule;
 
 /**
  * @brief The bid engine class handles automatic bidding.
@@ -40,7 +43,10 @@ public:
                CBidOptionDoc &nsBidOptionDoc, CBidOptionDoc &ewBidOptionDoc);
     virtual ~CBidEngine();
 
-    Bids getNextBid(CBidHistory &bidHistory, int cards[13], CFeatures allFeatures[2][4]);
+    Bids getNextBid(CBidHistory &bidHistory, int cards[13], ScoringMethod scoringMethod,
+            Vulnerability vulnerability, Forcing *forcing, int *alertId);
+    QList<CRule *> getpRules(CBidHistory &bidHistory, Bids bid, ScoringMethod scoringMethod,
+                             Vulnerability vulnerability);
 
 private:
     CBidDB *bidDB;
