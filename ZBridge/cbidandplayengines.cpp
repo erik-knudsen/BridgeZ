@@ -18,14 +18,34 @@
  * The file implements the definition of the bid and the play engines.
  */
 
+#include <cassert>
+
 #include "cbidengine.h"
 #include "cplayengine.h"
 #include "cbidandplayengines.h"
 
-CBidAndPlayEngines::CBidAndPlayEngines(CBidDB *bidDB, CBidDesc *bidDesc,
-                 CBidOptionDoc &nsBidOptionDoc, CBidOptionDoc &ewBidOptionDoc,
-                 ScoringMethod scoringMethod)
+CBidAndPlayEngines::CBidAndPlayEngines()
 {
+    bidEngine = 0;
+    playEngine = 0;
+}
+
+CBidAndPlayEngines::~CBidAndPlayEngines()
+{
+    if (bidEngine != 0)
+        delete bidEngine;
+    if (playEngine != 0)
+        delete playEngine;
+}
+
+void CBidAndPlayEngines::initialize(CBidDB *bidDB, CBidDesc *bidDesc, CBidOptionDoc &nsBidOptionDoc,
+                                    CBidOptionDoc &ewBidOptionDoc, ScoringMethod scoringMethod)
+{
+    if (bidEngine != 0)
+        delete bidEngine;
+    if (playEngine != 0)
+        delete playEngine;
+
     //Allocate bid and play engines.
     bidEngine = new CBidEngine(bidDB, bidDesc, nsBidOptionDoc, ewBidOptionDoc);
     playEngine = new CPlayEngine();
@@ -34,8 +54,39 @@ CBidAndPlayEngines::CBidAndPlayEngines(CBidDB *bidDB, CBidDesc *bidDesc,
     this->scoringMethod = scoringMethod;
 }
 
-CBidAndPlayEngines::~CBidAndPlayEngines()
+/**
+ * @brief Calculate the next bid
+ *
+ * Calculate the next bid by using the bidding database.
+ *
+ * @param[in] bidHistory The bid history.
+ * @param[in] cards The cards for the next bidder.
+ * @param[in] vulnerability The vulnerability.
+ * @param[out] forcing The forcing status.
+ * @param[out] alertId The alert id.
+ * @return The calculated next bid. If none was found then return BID_NONE.
+ */
+Bids CBidAndPlayEngines::getNextBid(CBidHistory &bidHistory, int cards[],
+                            Vulnerability vulnerability, Forcing *forcing, int *alertId)
 {
-    delete bidEngine;
-    delete playEngine;
+    assert(bidEngine != 0);
+
+    //Must check something found in the bid database!!!!!!!
+    return bidEngine->getNextBid(bidHistory, cards, scoringMethod, vulnerability, forcing, alertId);
+}
+
+/**
+ * @brief Get possible rules for a given bid history and next bid as calculated by getNextBid.
+ * @param[in] bidHistory The bid history.
+ * @param bid[in] The bid calculated by getNext bid.
+ * @param vulnerability The vulnerability.
+ * @return returns a list with possible rules.
+ */
+QList<CRule *> CBidAndPlayEngines::getpRules(CBidHistory &bidHistory, Bids bid,
+                                             Vulnerability vulnerability)
+{
+    assert(bidEngine != 0);
+
+    //Must check something found in the bid database!!!!!!!
+    return bidEngine->getpRules(bidHistory, bid, scoringMethod, vulnerability);
 }

@@ -53,8 +53,8 @@ class CTblMngrServerAuto : public CTblMngrBase
     Q_OBJECT
 
 public:
-    CTblMngrServerAuto(CZBridgeDoc *doc, CGamesDoc *games, QHostAddress hostAddress,
-                       QObject *parent = 0) throw(NetProtocolException);
+    CTblMngrServerAuto(CZBridgeDoc *doc, CGamesDoc *games, CBidAndPlayEngines *bidAndPlayEngines,
+                QHostAddress hostAddress, QObject *parent = 0) throw(NetProtocolException);
     ~CTblMngrServerAuto();
 
     //Run cycle for the server statechart.

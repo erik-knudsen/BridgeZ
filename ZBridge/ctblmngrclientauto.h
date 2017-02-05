@@ -54,7 +54,8 @@ class CTblMngrClientAuto : public CTblMngrBase
     Q_OBJECT
 
 public:
-    CTblMngrClientAuto(CZBridgeDoc *doc, CGamesDoc *games, QHostAddress hostAddress, QObject *parent = 0);
+    CTblMngrClientAuto(CZBridgeDoc *doc, CGamesDoc *games, CBidAndPlayEngines *bidAndPlayEngines,
+                       QHostAddress hostAddress, QObject *parent = 0);
     ~CTblMngrClientAuto();
 
 public slots:

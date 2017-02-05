@@ -22,20 +22,28 @@
 #define CBIDANDPLAYENGINES_H
 
 #include "cfeatures.h"
+#include "cbidhistory.h"
 
 class CBidDB;
 class CBidDesc;
 class CBidOptionDoc;
 class CBidEngine;
 class CPlayEngine;
+class CRule;
 
 class CBidAndPlayEngines
 {
 public:
-    CBidAndPlayEngines(CBidDB *bidDB, CBidDesc *bidDesc,
-                       CBidOptionDoc &nsBidOptionDoc, CBidOptionDoc &ewBidOptionDoc,
-                       ScoringMethod scoringMethod);
+    CBidAndPlayEngines();
     virtual ~CBidAndPlayEngines();
+
+    void initialize(CBidDB *bidDB, CBidDesc *bidDesc,
+                    CBidOptionDoc &nsBidOptionDoc, CBidOptionDoc &ewBidOptionDoc,
+                    ScoringMethod scoringMethod);
+    void setScoringMethod(ScoringMethod scoringMethod) { this->scoringMethod = scoringMethod; }
+    Bids getNextBid(CBidHistory &bidHistory, int cards[], Vulnerability vulnerability,
+                    Forcing *forcing, int *alertId);
+    QList<CRule *> getpRules(CBidHistory &bidHistory, Bids bid, Vulnerability vulnerability);
 
 private:
     CBidEngine *bidEngine;

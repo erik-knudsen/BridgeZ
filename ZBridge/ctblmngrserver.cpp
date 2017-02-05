@@ -60,13 +60,14 @@ const int ENABLE_UNDO_LEADER = 3;
  *   - In server mode it sets up a tcp server for remote actors.
  *   - Enables/disables relevant main menu entries.
  */
-CTblMngrServer::CTblMngrServer(CZBridgeDoc *doc, CGamesDoc *games, QHostAddress hostAddress,
-                               CPlayView *playView,
+CTblMngrServer::CTblMngrServer(CZBridgeDoc *doc, CGamesDoc *games,
+        CBidAndPlayEngines *bidAndPlayEngines, QHostAddress hostAddress, CPlayView *playView,
                                QObject *parent) throw(NetProtocolException) :
     CTblMngr(playView, parent)
 {
     this->doc = doc;
     this->games = games;
+    this->bidAndPlayEngines = bidAndPlayEngines;
     this->playView = playView;
 
     playView->resetView();
@@ -521,10 +522,6 @@ void CTblMngrServer::cleanTableManager()
 {    
     playView->resetView();
 
-    if (bidAndPlayEngines != 0)
-      delete bidAndPlayEngines;
-    bidAndPlayEngines = 0;
-
     if (actors[WEST_SEAT] != 0)
     {
         actors[WEST_SEAT]->endOfSession();
@@ -636,11 +633,6 @@ void CTblMngrServer::newSession()
     //Enable/disable relevant menu actions.
     QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_SERVER , protocol == ADVANCED_PROTOCOL));
 
-    //Set up bid and play engines.
-    bidAndPlayEngines = new CBidAndPlayEngines(doc->getBidDB(), doc->getBidDesc(),
-                                               doc->getNSBidOptions(), doc->getEWBidOptions(),
-                                               doc->getGameOptions().scoringMethod);
-
     //Set up actors.
     if (doc->getSeatOptions().westActor == MANUAL_ACTOR)
         actor = new CActorLocal(true, doc->getSeatOptions().westName, WEST_SEAT, protocol,
@@ -702,10 +694,10 @@ void CTblMngrServer::newSession()
         games->writeOriginalGames(originalStream);
         games->writePlayedGames(playedStream);
 
-        actors[WEST_SEAT]->xmitPBNFiles(originalStream, playedStream, doc->getGameOptions().scoringMethod);
-        actors[NORTH_SEAT]->xmitPBNFiles(originalStream, playedStream, doc->getGameOptions().scoringMethod);
-        actors[EAST_SEAT]->xmitPBNFiles(originalStream, playedStream, doc->getGameOptions().scoringMethod);
-        actors[SOUTH_SEAT]->xmitPBNFiles(originalStream, playedStream, doc->getGameOptions().scoringMethod);
+        actors[WEST_SEAT]->xmitPBNFiles(originalStream, playedStream, games->getScoringMethod());
+        actors[NORTH_SEAT]->xmitPBNFiles(originalStream, playedStream, games->getScoringMethod());
+        actors[EAST_SEAT]->xmitPBNFiles(originalStream, playedStream, games->getScoringMethod());
+        actors[SOUTH_SEAT]->xmitPBNFiles(originalStream, playedStream, games->getScoringMethod());
 
         originalBytes.close();
         playedBytes.close();

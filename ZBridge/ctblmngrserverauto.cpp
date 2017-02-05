@@ -50,8 +50,9 @@
  *   - Initializes the table management server.
  *   - In server mode it sets up a tcp server for remote actors.
  */
-CTblMngrServerAuto::CTblMngrServerAuto(CZBridgeDoc *doc, CGamesDoc *games, QHostAddress hostAddress,
-                                       QObject *parent) throw(NetProtocolException) :
+CTblMngrServerAuto::CTblMngrServerAuto(CZBridgeDoc *doc, CGamesDoc *games,
+                     CBidAndPlayEngines *bidAndPlayEngines, QHostAddress hostAddress,
+                     QObject *parent) throw(NetProtocolException) :
     CTblMngrBase(parent)
 {
     this->doc = doc;
@@ -61,7 +62,7 @@ CTblMngrServerAuto::CTblMngrServerAuto(CZBridgeDoc *doc, CGamesDoc *games, QHost
 
     boardNo = -1;
 
-    bidAndPlayEngines = 0;
+    this->bidAndPlayEngines = bidAndPlayEngines;
 
     actors[WEST_SEAT] = 0;
     actors[NORTH_SEAT] = 0;
@@ -394,10 +395,6 @@ void CTblMngrServerAuto::serverSyncActions()
  */
 void CTblMngrServerAuto::cleanTableManager()
 {        
-    if (bidAndPlayEngines != 0)
-      delete bidAndPlayEngines;
-    bidAndPlayEngines = 0;
-
     if (actors[WEST_SEAT] != 0)
     {
         actors[WEST_SEAT]->endOfSession();
@@ -473,11 +470,6 @@ void CTblMngrServerAuto::sNewSession()
 
     playWaiting = playContinue = false;
     firstAutoSync = true;
-
-    //Set up bid and play engines.
-    bidAndPlayEngines = new CBidAndPlayEngines(doc->getBidDB(), doc->getBidDesc(),
-                                               doc->getNSBidOptions(), doc->getEWBidOptions(),
-                                               doc->getGameOptions().scoringMethod);
 
     //Set up actors.
     if ((remoteActorServer != 0) && remoteActorServer->isConnected(WEST_SEAT))

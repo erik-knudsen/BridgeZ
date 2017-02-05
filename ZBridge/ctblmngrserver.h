@@ -55,7 +55,8 @@ class CTblMngrServer : public CTblMngr
     Q_OBJECT
 
 public:
-    CTblMngrServer(CZBridgeDoc *doc, CGamesDoc *games, QHostAddress hostAddress, CPlayView *playView,
+    CTblMngrServer(CZBridgeDoc *doc, CGamesDoc *games, CBidAndPlayEngines *bidAndPlayEngines,
+                   QHostAddress hostAddress, CPlayView *playView,
                    QObject *parent = 0) throw(NetProtocolException);
     ~CTblMngrServer();
 

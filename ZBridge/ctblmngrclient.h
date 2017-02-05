@@ -50,8 +50,8 @@ class CTblMngrClient : public CTblMngr
     Q_OBJECT
 
 public:
-    CTblMngrClient(CZBridgeDoc *doc, CGamesDoc *games, QHostAddress hostAddress,
-                   CPlayView *playView, QObject *parent = 0);
+    CTblMngrClient(CZBridgeDoc *doc, CGamesDoc *games, CBidAndPlayEngines *bidAndPlayEngines,
+                   QHostAddress hostAddress, CPlayView *playView, QObject *parent = 0);
     ~CTblMngrClient();
 
 

@@ -39,12 +39,13 @@
  *
  * The constructor initialize the table management client.
  */
-CTblMngrClientAuto::CTblMngrClientAuto(CZBridgeDoc *doc, CGamesDoc *games, QHostAddress hostAddress,
-                               QObject *parent) :
+CTblMngrClientAuto::CTblMngrClientAuto(CZBridgeDoc *doc, CGamesDoc *games,
+          CBidAndPlayEngines *bidAndPlayEngines, QHostAddress hostAddress, QObject *parent) :
     CTblMngrBase(parent)
 {
     this->doc = doc;
     this->games = games;
+    this->bidAndPlayEngines = bidAndPlayEngines;
     this->hostAddress = hostAddress;
 
     bidAndPlayEngines = 0;
@@ -65,10 +66,6 @@ CTblMngrClientAuto::~CTblMngrClientAuto()
  */
 void CTblMngrClientAuto::cleanTableManager()
 {        
-    if (bidAndPlayEngines != 0)
-      delete bidAndPlayEngines;
-    bidAndPlayEngines = 0;
-
     //Delete actor.
     if (actor != 0)
     {
@@ -103,11 +100,6 @@ void CTblMngrClientAuto::sNewSession()
 {
     //Prepare for new session.
     cleanTableManager();
-
-    //Set up bid and play engines.
-    bidAndPlayEngines = new CBidAndPlayEngines(doc->getBidDB(), doc->getBidDesc(),
-                                               doc->getNSBidOptions(), doc->getEWBidOptions(),
-                                               doc->getGameOptions().scoringMethod);
 
     //Set up actor.
     if (doc->getSeatOptions().seat == WEST_SEAT)

@@ -62,6 +62,7 @@
 #include "cbiddb.h"
 #include "cbiddesc.h"
 #include "cbiddingsystemdialog.h"
+#include "cbidandplayengines.h"
 
 //Static pointer to mainframe singleton.
 CMainFrame *CMainFrame::m_pInstance = 0;
@@ -102,6 +103,9 @@ CMainFrame::CMainFrame(CZBridgeApp *app, CZBridgeDoc *doc, CGamesDoc *games) :
     //Main score dialog.
     mainScoreDialog = new CMainScoreDialog(games, this);
 
+    //Bid and play engines.
+    bidAndPlayEngines = new CBidAndPlayEngines();
+
     //Reset play.
     resetPlay();
 
@@ -133,6 +137,7 @@ CMainFrame::CMainFrame(CZBridgeApp *app, CZBridgeDoc *doc, CGamesDoc *games) :
 CMainFrame::~CMainFrame()
 {
     delete ui;
+    delete bidAndPlayEngines;
 }
 
 /**
@@ -398,8 +403,8 @@ void CMainFrame::resetPlay()
     {
         try
         {
-            tableManager = new CTblMngrServer(doc, games, hostAddress, playView, this);
-            tableManagerAuto = new CTblMngrServerAuto(doc, games, hostAddress, 0);
+            tableManager = new CTblMngrServer(doc, games, bidAndPlayEngines, hostAddress, playView, this);
+            tableManagerAuto = new CTblMngrServerAuto(doc, games, bidAndPlayEngines, hostAddress, 0);
         }
         catch (NetProtocolException &e)
         {
@@ -414,8 +419,8 @@ void CMainFrame::resetPlay()
     //Table manager client?
     else if((doc->getSeatOptions().role == CLIENT_ROLE) && !hostAddress.isNull())
     {
-        tableManager = new CTblMngrClient(doc, games, hostAddress, playView, this);
-        tableManagerAuto = new CTblMngrClientAuto(doc, games, hostAddress, 0);
+        tableManager = new CTblMngrClient(doc, games, bidAndPlayEngines, hostAddress, playView, this);
+        tableManagerAuto = new CTblMngrClientAuto(doc, games, bidAndPlayEngines, hostAddress, 0);
         connect(tableManager, &CTblMngrBase::sigDisconnect, tableManagerAuto, &CTblMngrBase::sltDisconnect);
         connect(tableManagerAuto, &CTblMngrBase::sigDisconnect, tableManager, &CTblMngrBase::sltDisconnect);
     }
@@ -423,8 +428,8 @@ void CMainFrame::resetPlay()
     //Table manager standalone?
     if (hostAddress.isNull())
     {
-        tableManager = new CTblMngrServer(doc, games, hostAddress, playView, this);
-        tableManagerAuto = new CTblMngrServerAuto(doc, games, hostAddress, 0);
+        tableManager = new CTblMngrServer(doc, games, bidAndPlayEngines, hostAddress, playView, this);
+        tableManagerAuto = new CTblMngrServerAuto(doc, games, bidAndPlayEngines, hostAddress, 0);
     }
 
     QThread *thread = new QThread();
@@ -508,6 +513,11 @@ void CMainFrame::open(QString &originalFileName)
     //Save info about pbn file.
     eventIndex = inx;
     fileName = originalFileName;
+
+    //Initialize bid and play engines.
+    bidAndPlayEngines->initialize(doc->getBidDB(), doc->getBidDesc(),
+                                  doc->getNSBidOptions(), doc->getEWBidOptions(),
+                                  games->getScoringMethod());
 
     //Set up synchronization (auto play or not).
     //Open is not available on client, i.e table manager is either server or standalone.
@@ -886,6 +896,11 @@ void CMainFrame::on_actionNew_Session_triggered()
     fileName.clear();
     eventIndex = 0;
 
+    //Initialize bid and play engines.
+    bidAndPlayEngines->initialize(doc->getBidDB(), doc->getBidDesc(),
+                                  doc->getNSBidOptions(), doc->getEWBidOptions(),
+                                  games->getScoringMethod());
+
     //Set up synchronization (auto play or not).
     if (!hostAddress.isNull() && !(doc->getSeatOptions().protocol == BASIC_PROTOCOL) &&
             (doc->getSeatOptions().role == CLIENT_ROLE))
@@ -905,7 +920,7 @@ void CMainFrame::on_actionNew_Session_triggered()
         }
     }
 
-    //Start new session (client or server) .
+    //Start new session (client or server).
     tableManager->newSession();
 }
 

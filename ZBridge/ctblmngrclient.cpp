@@ -48,12 +48,14 @@ const int NORMAL_MODE = 3;
  * The constructor initialize the table management client. It Enables/disables relevant main
  * menu entries.
  */
-CTblMngrClient::CTblMngrClient(CZBridgeDoc *doc, CGamesDoc *games, QHostAddress hostAddress,
+CTblMngrClient::CTblMngrClient(CZBridgeDoc *doc, CGamesDoc *games,
+                               CBidAndPlayEngines *bidAndPlayEngines, QHostAddress hostAddress,
                                CPlayView *playView, QObject *parent) :
     CTblMngr(playView, parent)
 {
     this->doc = doc;
     this->games = games;
+    this->bidAndPlayEngines = bidAndPlayEngines;
     this->playView = playView;
     this->hostAddress = hostAddress;
 
@@ -88,10 +90,6 @@ void CTblMngrClient::cleanTableManager()
 {
     //Reset play view.
     playView->resetView();
-
-    if (bidAndPlayEngines != 0)
-      delete bidAndPlayEngines;
-    bidAndPlayEngines = 0;
 
     //Delete actor.
     if (actor != 0)
@@ -141,11 +139,6 @@ void CTblMngrClient::newSession()
     //Enable/disable relevant menu actions.
     QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_CLIENT , protocol == ADVANCED_PROTOCOL));
     QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_NEW_SESSION , false));
-
-    //Set up bid and play engines.
-    bidAndPlayEngines = new CBidAndPlayEngines(doc->getBidDB(), doc->getBidDesc(),
-                           doc->getNSBidOptions(), doc->getEWBidOptions(),
-                                               doc->getGameOptions().scoringMethod);
 
     //Set up actor.
     if (doc->getSeatOptions().seat == WEST_SEAT)
@@ -864,6 +857,7 @@ void CTblMngrClient::receiveLine(QString line)
         //Start of original PBN stream (comes always before played PBN stream - only advanced protocol).
         COriginalPBNStartMsg originalPBNStartMsg(line);
         games->clearGames(originalPBNStartMsg.scoringMethod);
+        bidAndPlayEngines->setScoringMethod(originalPBNStartMsg.scoringMethod);
 
         originalBytes.open(QIODevice::ReadWrite);
         originalStream.setDevice(&originalBytes);
