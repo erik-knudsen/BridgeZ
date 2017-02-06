@@ -44,9 +44,9 @@ public:
     virtual ~CBidEngine();
 
     Bids getNextBid(CBidHistory &bidHistory, int cards[13], ScoringMethod scoringMethod,
-            Vulnerability vulnerability, Forcing *forcing, int *alertId);
+            Team teamVul, Forcing *forcing, int *alertId);
     QList<CRule *> getpRules(CBidHistory &bidHistory, Bids bid, ScoringMethod scoringMethod,
-                             Vulnerability vulnerability);
+                             Team teamVul);
 
 private:
     CBidDB *bidDB;

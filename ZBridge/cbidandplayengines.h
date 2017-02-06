@@ -41,9 +41,9 @@ public:
                     CBidOptionDoc &nsBidOptionDoc, CBidOptionDoc &ewBidOptionDoc,
                     ScoringMethod scoringMethod);
     void setScoringMethod(ScoringMethod scoringMethod) { this->scoringMethod = scoringMethod; }
-    Bids getNextBid(CBidHistory &bidHistory, int cards[], Vulnerability vulnerability,
+    Bids getNextBid(CBidHistory &bidHistory, int cards[], Team teamVul,
                     Forcing *forcing, int *alertId);
-    QList<CRule *> getpRules(CBidHistory &bidHistory, Bids bid, Vulnerability vulnerability);
+    QList<CRule *> getpRules(CBidHistory &bidHistory, Bids bid, Team teamVul);
 
 private:
     CBidEngine *bidEngine;

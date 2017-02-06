@@ -55,13 +55,13 @@ CBidEngine::~CBidEngine()
  * @param[in] bidHistory The bid history.
  * @param[in] cards The cards for the next bidder.
  * @param[in] scoringMethod The scoring method.
- * @param[in] vulnerability The vulnerability.
+ * @param[in] teamVul Team vulnerability.
  * @param[out] forcing The forcing status.
  * @param[out] alertId The alert id.
  * @return The calculated next bid. If none was found then return BID_NONE.
  */
 Bids CBidEngine::getNextBid(CBidHistory &bidHistory, int cards[], ScoringMethod scoringMethod,
-                            Vulnerability vulnerability, Forcing *forcing, int *alertId)
+                            Team teamVul, Forcing *forcing, int *alertId)
 {
     CAuction auction;
     CFeatures features;
@@ -102,11 +102,17 @@ Bids CBidEngine::getNextBid(CBidHistory &bidHistory, int cards[], ScoringMethod 
                     for (int i = 0; i < bids.size(); i++)
                         if (rules.contains(pRules[i]->getId()))
                         {
-                            //Found a defined rule. Check features.
+                            //Found a defined rule. Check scoring method, vulnerability and features.
                             found = true;
+                            Vulnerability ruleVul = pRules[i]->getVulnerability();
                             if (((pRules[i]->getScoringMethod() == NOSCORE) ||
                                     (pRules[i]->getScoringMethod() == scoringMethod)) &&
-                                    (pRules[i]->getVulnerability() == vulnerability) &&
+                                    ((ruleVul == VUL_II) ||
+                                     ((teamVul == NEITHER) && ((ruleVul == VUL_NI) || (ruleVul == VUL_NN))) ||
+                                     ((teamVul == BOTH) && ((ruleVul == VUL_YI) || (ruleVul == VUL_YY))) ||
+                                     ((((teamVul == NORTH_SOUTH) && ((seat == NORTH_SEAT) || (seat == SOUTH_SEAT))) ||
+                                       ((teamVul == EAST_WEST) && ((seat == EAST_SEAT) || (seat == WEST_SEAT)))) &&
+                                      ((ruleVul == VUL_YI) || (ruleVul == VUL_YN)))) &&
                                     (pRules[i]->RuleIsOk(features)))
                                 bidInx.append(i);
                         }
@@ -168,11 +174,11 @@ Bids CBidEngine::getNextBid(CBidHistory &bidHistory, int cards[], ScoringMethod 
  * @param[in] bidHistory The bid history.
  * @param bid[in] The bid calculated by getNext bid.
  * @param scoringMethod The scoring method.
- * @param vulnerability The vulnerability.
+ * @param teamVul Team vulnerability.
  * @return returns a list with possible rules.
  */
 QList<CRule *> CBidEngine::getpRules(CBidHistory &bidHistory, Bids bid, ScoringMethod scoringMethod,
-                                     Vulnerability vulnerability)
+                                     Team teamVul)
 {
     CAuction auction;
     QList<CRule *> pDefRules;
@@ -208,10 +214,17 @@ QList<CRule *> CBidEngine::getpRules(CBidHistory &bidHistory, Bids bid, ScoringM
                     for (int i = 0; i < pRules.size(); i++)
                         if (rules.contains(pRules[i]->getId()))
                         {
-                            //Found a defined rule. Check features.
+                            //Found a defined rule. Check scoring method and vulnerability.
                             found = true;
-                            if ((pRules[i]->getScoringMethod() == scoringMethod) &&
-                                    (pRules[i]->getVulnerability() == vulnerability))
+                            Vulnerability ruleVul = pRules[i]->getVulnerability();
+                            if (((pRules[i]->getScoringMethod() == NOSCORE) ||
+                                    (pRules[i]->getScoringMethod() == scoringMethod)) &&
+                                    ((ruleVul == VUL_II) ||
+                                     ((teamVul == NEITHER) && ((ruleVul == VUL_NI) || (ruleVul == VUL_NN))) ||
+                                     ((teamVul == BOTH) && ((ruleVul == VUL_YI) || (ruleVul == VUL_YY))) ||
+                                     ((((teamVul == NORTH_SOUTH) && ((seat == NORTH_SEAT) || (seat == SOUTH_SEAT))) ||
+                                       ((teamVul == EAST_WEST) && ((seat == EAST_SEAT) || (seat == WEST_SEAT)))) &&
+                                      ((ruleVul == VUL_YI) || (ruleVul == VUL_YN)))))
                                 pDefRules.append(pRules[i]);
                         }
                     //Found one or more rules?

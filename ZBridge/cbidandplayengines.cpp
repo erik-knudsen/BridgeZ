@@ -61,32 +61,32 @@ void CBidAndPlayEngines::initialize(CBidDB *bidDB, CBidDesc *bidDesc, CBidOption
  *
  * @param[in] bidHistory The bid history.
  * @param[in] cards The cards for the next bidder.
- * @param[in] vulnerability The vulnerability.
+ * @param[in] teamVul Team vulnerability.
  * @param[out] forcing The forcing status.
  * @param[out] alertId The alert id.
  * @return The calculated next bid. If none was found then return BID_NONE.
  */
 Bids CBidAndPlayEngines::getNextBid(CBidHistory &bidHistory, int cards[],
-                            Vulnerability vulnerability, Forcing *forcing, int *alertId)
+                            Team teamVul, Forcing *forcing, int *alertId)
 {
     assert(bidEngine != 0);
 
     //Must check something found in the bid database!!!!!!!
-    return bidEngine->getNextBid(bidHistory, cards, scoringMethod, vulnerability, forcing, alertId);
+    return bidEngine->getNextBid(bidHistory, cards, scoringMethod, teamVul, forcing, alertId);
 }
 
 /**
  * @brief Get possible rules for a given bid history and next bid as calculated by getNextBid.
  * @param[in] bidHistory The bid history.
  * @param bid[in] The bid calculated by getNext bid.
- * @param vulnerability The vulnerability.
+ * @param teamVul Team vulnerability.
  * @return returns a list with possible rules.
  */
 QList<CRule *> CBidAndPlayEngines::getpRules(CBidHistory &bidHistory, Bids bid,
-                                             Vulnerability vulnerability)
+                                             Team teamVul)
 {
     assert(bidEngine != 0);
 
     //Must check something found in the bid database!!!!!!!
-    return bidEngine->getpRules(bidHistory, bid, scoringMethod, vulnerability);
+    return bidEngine->getpRules(bidHistory, bid, scoringMethod, teamVul);
 }
