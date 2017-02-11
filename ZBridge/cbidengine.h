@@ -43,9 +43,9 @@ public:
                CBidOptionDoc &nsBidOptionDoc, CBidOptionDoc &ewBidOptionDoc);
     virtual ~CBidEngine();
 
-    Bids getNextBid(CBidHistory &bidHistory, int cards[13], ScoringMethod scoringMethod,
-            Team teamVul, Forcing *forcing, int *alertId);
-    QList<CRule *> getpRules(CBidHistory &bidHistory, Bids bid, ScoringMethod scoringMethod,
+    Bids getNextBid(Seat seat, CBidHistory &bidHistory, int cards[13], ScoringMethod scoringMethod,
+            Team teamVul);
+    QList<CRule *> getpRules(Seat seat, CBidHistory &bidHistory, Bids bid, ScoringMethod scoringMethod,
                              Team teamVul);
 
 private:

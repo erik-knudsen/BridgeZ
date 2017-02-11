@@ -18,6 +18,8 @@
  * The file implements the definition of the bid engine.
  */
 
+#include <cassert>
+
 #include "cbiddb.h"
 #include "cbiddesc.h"
 #include "cbiddbdefine.h"
@@ -52,17 +54,18 @@ CBidEngine::~CBidEngine()
  *
  * Calculate the next bid by using the bidding database.
  *
+ * @param[in] seat Bidders seat.
  * @param[in] bidHistory The bid history.
  * @param[in] cards The cards for the next bidder.
  * @param[in] scoringMethod The scoring method.
  * @param[in] teamVul Team vulnerability.
- * @param[out] forcing The forcing status.
- * @param[out] alertId The alert id.
  * @return The calculated next bid. If none was found then return BID_NONE.
  */
-Bids CBidEngine::getNextBid(CBidHistory &bidHistory, int cards[], ScoringMethod scoringMethod,
-                            Team teamVul, Forcing *forcing, int *alertId)
+Bids CBidEngine::getNextBid(Seat seat, CBidHistory &bidHistory, int cards[], ScoringMethod scoringMethod,
+                            Team teamVul)
 {
+    assert ((bidHistory.bidList.size() == 0) ? true : (((bidHistory.bidList.last().bidder + 1) % 4) == seat));
+
     CAuction auction;
     CFeatures features;
 
@@ -72,9 +75,6 @@ Bids CBidEngine::getNextBid(CBidHistory &bidHistory, int cards[], ScoringMethod 
     //Get auction till now.
     for (int i = 0; i < bidHistory.bidList.size(); i++)
         auction.auction.append(bidHistory.bidList[i].bid);
-
-    //Next bidder.
-    Seat seat = (Seat)((bidHistory.bidList.last().bidder + 1) % 4);
 
     //Get relevant pages and rules.
     QSet<qint16> &pages = bidDBDefine->getPages(seat);
@@ -122,17 +122,18 @@ Bids CBidEngine::getNextBid(CBidHistory &bidHistory, int cards[], ScoringMethod 
                         //Find highest priority.
                         int j, i;
                         for (j = 1, i = bidInx[0]; j < bidInx.size(); j++)
-                            if (pRules[i]->getPriority() < pRules[j]->getPriority())
-                                i = j;
+                            if (pRules[i]->getPriority() < pRules[bidInx[j]]->getPriority())
+                                i = bidInx[j];
 
-                        //Get forcing status.
-                        *forcing = pRules[i]->getStatus();
-
-                        //Get alert id.
-                        *alertId = pRules[i]->getAlertId();
+                        //Find lowest bid.
+                        Bids bid = (Bids)bids[i];
+                        for (j = 0; j < bidInx.size(); j++)
+                            if ((pRules[i]->getPriority() == pRules[bidInx[j]]->getPriority()) &&
+                                    (bid > bids[bidInx[j]]))
+                                bid = (Bids)bids[bidInx[j]];
 
                         //Return found bid.
-                        return (Bids)bids[i];
+                        return bid;
                     }
                     else if (found)
                         return (BID_NONE);
@@ -171,24 +172,24 @@ Bids CBidEngine::getNextBid(CBidHistory &bidHistory, int cards[], ScoringMethod 
 
 /**
  * @brief Get possible rules for a given bid history and next bid as calculated by getNextBid.
+ * @param[in] seat Bidders seat.
  * @param[in] bidHistory The bid history.
  * @param bid[in] The bid calculated by getNext bid.
  * @param scoringMethod The scoring method.
  * @param teamVul Team vulnerability.
  * @return returns a list with possible rules.
  */
-QList<CRule *> CBidEngine::getpRules(CBidHistory &bidHistory, Bids bid, ScoringMethod scoringMethod,
+QList<CRule *> CBidEngine::getpRules(Seat seat, CBidHistory &bidHistory, Bids bid, ScoringMethod scoringMethod,
                                      Team teamVul)
 {
+    assert ((bidHistory.bidList.size() == 0) ? true : (((bidHistory.bidList.last().bidder + 1) % 4) == seat));
+
     CAuction auction;
     QList<CRule *> pDefRules;
 
     //Get auction till now.
     for (int i = 0; i < bidHistory.bidList.size(); i++)
         auction.auction.append(bidHistory.bidList[i].bid);
-
-    //Next bidder.
-    Seat seat = (Seat)((bidHistory.bidList.last().bidder + 1) % 4);
 
     //Get relevant pages and rules.
     QSet<qint16> &pages = bidDBDefine->getPages(seat);
@@ -207,9 +208,10 @@ QList<CRule *> CBidEngine::getpRules(CBidHistory &bidHistory, Bids bid, ScoringM
             {
                 if (bidDB->isBids(page, auction))
                 {
-                    //Found auction. Get rules for the auction and bid.
+                    //Found auction. Get bids and rules for the auction.
+                    QList<qint8> bids;
                     QList<CRule*> pRules;
-                    pRules = bidDB->getpRules(page, auction, bid);
+                    bidDB->getBids(page, auction, &bids, &pRules);
                     bool found = false;
                     for (int i = 0; i < pRules.size(); i++)
                         if (rules.contains(pRules[i]->getId()))
@@ -217,7 +219,8 @@ QList<CRule *> CBidEngine::getpRules(CBidHistory &bidHistory, Bids bid, ScoringM
                             //Found a defined rule. Check scoring method and vulnerability.
                             found = true;
                             Vulnerability ruleVul = pRules[i]->getVulnerability();
-                            if (((pRules[i]->getScoringMethod() == NOSCORE) ||
+                            if ((bids[i] == bid) &&
+                                    ((pRules[i]->getScoringMethod() == NOSCORE) ||
                                     (pRules[i]->getScoringMethod() == scoringMethod)) &&
                                     ((ruleVul == VUL_II) ||
                                      ((teamVul == NEITHER) && ((ruleVul == VUL_NI) || (ruleVul == VUL_NN))) ||

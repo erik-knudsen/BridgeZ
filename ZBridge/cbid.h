@@ -24,6 +24,7 @@
 
 #include <QString>
 
+#include "crule.h"
 #include "Defines.h"
 
 /**
@@ -35,9 +36,10 @@ public:
     CBid(Seat bidder, Bids bid, QString alert);
     CBid() { bid = BID_NONE; }
 
-    Seat bidder;      /**< Position east, south, north or west. */
+    Seat bidder;        /**< Position east, south, north or west. */
     Bids bid;           /**< Bid value. */
     QString alert;      /**< Text string describing possible alert. */
+    QList<CRule *> rules; /**< Rules delimiting the bid. */
 };
 
 #endif // CBID_H

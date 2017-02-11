@@ -54,7 +54,7 @@ public:
     void resetBidHistory();
     void appendBid(CBid &bid);
     int bidUndo(Bids *bid);
-    Bids getNextBid(Seat seat);
+    Bids getNextBid(Seat seat, Team teamVul);
 
     void setActorsCards(int cards[13])
     { for (int i = 0; i < 13; i++) actorsCards[i] = cards[i]; }

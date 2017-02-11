@@ -55,11 +55,18 @@ int CBidAndPlay::bidUndo(Bids *bid)
 
 /**
  * @brief Based on bid engine get next bid.
- * @param seat The seat for the bidder.
+ * @param seat Bidders seat.
+ * @param teamVul Vulnerability for the bidder.
  * @return The automatically calculated bid.
  */
-Bids CBidAndPlay::getNextBid(Seat seat)
+Bids CBidAndPlay::getNextBid(Seat seat, Team teamVul)
 {
+    Bids bid;
+
+    bid = bidAndPlayEngines->getNextBid(seat, bidHistory, actorsCards, teamVul);
+
+    return bid;
+/*
     if (bidHistory.bidList.isEmpty())
         return BID_1C;
 
@@ -78,6 +85,7 @@ Bids CBidAndPlay::getNextBid(Seat seat)
 //        return (Bids)(bidHistory.bidList[bidHistory.bidList.size() - 3].bid + 1);
 
     return (Bids)(bidHistory.bidList.last().bid + 1);
+*/
 }
 
 /**

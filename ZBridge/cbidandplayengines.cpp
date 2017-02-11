@@ -59,34 +59,33 @@ void CBidAndPlayEngines::initialize(CBidDB *bidDB, CBidDesc *bidDesc, CBidOption
  *
  * Calculate the next bid by using the bidding database.
  *
+ * @param[in] seat Bidders seat.
  * @param[in] bidHistory The bid history.
  * @param[in] cards The cards for the next bidder.
  * @param[in] teamVul Team vulnerability.
- * @param[out] forcing The forcing status.
- * @param[out] alertId The alert id.
  * @return The calculated next bid. If none was found then return BID_NONE.
  */
-Bids CBidAndPlayEngines::getNextBid(CBidHistory &bidHistory, int cards[],
-                            Team teamVul, Forcing *forcing, int *alertId)
+Bids CBidAndPlayEngines::getNextBid(Seat seat, CBidHistory &bidHistory, int cards[], Team teamVul)
 {
     assert(bidEngine != 0);
 
     //Must check something found in the bid database!!!!!!!
-    return bidEngine->getNextBid(bidHistory, cards, scoringMethod, teamVul, forcing, alertId);
+    return bidEngine->getNextBid(seat, bidHistory, cards, scoringMethod, teamVul);
 }
 
 /**
  * @brief Get possible rules for a given bid history and next bid as calculated by getNextBid.
+ * @param[in] seat Bidders seat.
  * @param[in] bidHistory The bid history.
  * @param bid[in] The bid calculated by getNext bid.
  * @param teamVul Team vulnerability.
  * @return returns a list with possible rules.
  */
-QList<CRule *> CBidAndPlayEngines::getpRules(CBidHistory &bidHistory, Bids bid,
+QList<CRule *> CBidAndPlayEngines::getpRules(Seat seat, CBidHistory &bidHistory, Bids bid,
                                              Team teamVul)
 {
     assert(bidEngine != 0);
 
     //Must check something found in the bid database!!!!!!!
-    return bidEngine->getpRules(bidHistory, bid, scoringMethod, teamVul);
+    return bidEngine->getpRules(seat, bidHistory, bid, scoringMethod, teamVul);
 }

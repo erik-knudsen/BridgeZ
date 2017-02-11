@@ -318,10 +318,13 @@ void CFeatures::setCardFeatures(int cards[13])
         for (int suit = 0; suit < 4; suit++)
         {
             int loosers = count[suit];
-            for (int i = 0; i < count[suit]; i++)
-                for (int j = 0; j < 13; j++)
-                    if ((CARD_SUIT(cards[j] == suit)) && (CARD_FACE(cards[j] >= QUEEN)))
-                            loosers--;
+            if (loosers > 3)
+                loosers = 3;
+            int offset = 3 - loosers;
+            for (int j = 0; j < 13; j++)
+                if ((CARD_SUIT(cards[j]) == suit) &&
+                        (CARD_FACE(cards[j]) >= (QUEEN + offset)))
+                    loosers--;
             tLoosers += loosers;
             setLoosers((Suit)suit, loosers);
         }
@@ -330,7 +333,7 @@ void CFeatures::setCardFeatures(int cards[13])
 
     //Quick tricks.
     {
-        int tQuickTricks;
+        int tQuickTricks = 0;
 
         for (int suit = 0; suit < 4; suit++)
         {
@@ -338,13 +341,13 @@ void CFeatures::setCardFeatures(int cards[13])
             bool king = false;
             bool queen = false;
             for (int i = 0; i < 13; i++)
-                if (CARD_SUIT(cards[i] == suit))
+                if (CARD_SUIT(cards[i]) == suit)
                 {
                     if (CARD_FACE(cards[i]) == ACE)
                         ace = true;
-                    else if (CARD_FACE(cards[i] == KING))
+                    else if (CARD_FACE(cards[i]) == KING)
                         king = true;
-                    else if (CARD_FACE(cards[i] == QUEEN))
+                    else if (CARD_FACE(cards[i]) == QUEEN)
                         queen = true;
                 }
             int quickTricks;
@@ -379,17 +382,17 @@ void CFeatures::setCardFeatures(int cards[13])
             bool jack = false;
             bool ten = false;
             for (int i = 0; i < 13; i++)
-                if (CARD_SUIT(cards[i] == suit))
+                if (CARD_SUIT(cards[i]) == suit)
                 {
                     if (CARD_FACE(cards[i]) == ACE)
                         ace = true;
-                    else if (CARD_FACE(cards[i] == KING))
+                    else if (CARD_FACE(cards[i]) == KING)
                         king = true;
-                    else if (CARD_FACE(cards[i] == QUEEN))
+                    else if (CARD_FACE(cards[i]) == QUEEN)
                         queen = true;
-                    else if (CARD_FACE(cards[i] == JACK))
+                    else if (CARD_FACE(cards[i]) == JACK)
                         jack = true;
-                    else if (CARD_FACE(cards[i] == TEN))
+                    else if (CARD_FACE(cards[i]) == TEN)
                         ten = true;
                 }
             if (ace && king && queen)
@@ -410,11 +413,13 @@ void CFeatures::setCardFeatures(int cards[13])
         //Long suit playing tricks.
         for (int suit = 0; suit < 4; suit++)
         {
-            //One trick for each card over 3 in trump suit.
+            //One trick for each card over 3 in the trump suit.
             int lsptTricks = 0;
             if (count[suit] > 3)
-                lsptTricks += (3 - count[suit]) * 2;
+                lsptTricks += (count[suit] - 3) * 2;
 
+            //Half a trick for the 4. card and one trick for the 5. and
+            // subsequent cards in side suits.
             int lspTricks = 0;
             for (int i = 0; i < 4; i++)
                 if (i != suit)
@@ -444,19 +449,19 @@ void CFeatures::setCardFeatures(int cards[13])
             bool ten = false;
             bool nine = false;
             for (int i = 0; i < 13; i++)
-                if (CARD_SUIT(cards[i] == suit))
+                if (CARD_SUIT(cards[i]) == suit)
                 {
                     if (CARD_FACE(cards[i]) == ACE)
                         ace = true;
-                    else if (CARD_FACE(cards[i] == KING))
+                    else if (CARD_FACE(cards[i]) == KING)
                         king = true;
-                    else if (CARD_FACE(cards[i] == QUEEN))
+                    else if (CARD_FACE(cards[i]) == QUEEN)
                         queen = true;
-                    else if (CARD_FACE(cards[i] == JACK))
+                    else if (CARD_FACE(cards[i]) == JACK)
                         jack = true;
-                    else if (CARD_FACE(cards[i] == TEN))
+                    else if (CARD_FACE(cards[i]) == TEN)
                         ten = true;
-                    else if (CARD_FACE(cards[i] == NINE))
+                    else if (CARD_FACE(cards[i]) == NINE)
                         nine = true;
                 }
             int cnt = count[suit];
@@ -495,15 +500,15 @@ void CFeatures::setCardFeatures(int cards[13])
                 {
                     if (CARD_FACE(cards[i]) == ACE)
                         ace = true;
-                    else if (CARD_FACE(cards[i] == KING))
+                    else if (CARD_FACE(cards[i]) == KING)
                         king = true;
-                    else if (CARD_FACE(cards[i] == QUEEN))
+                    else if (CARD_FACE(cards[i]) == QUEEN)
                         queen = true;
-                    else if (CARD_FACE(cards[i] == JACK))
+                    else if (CARD_FACE(cards[i]) == JACK)
                         jack = true;
-                    else if (CARD_FACE(cards[i] == TEN))
+                    else if (CARD_FACE(cards[i]) == TEN)
                         ten = true;
-                    else if (CARD_FACE(cards[i] == NINE))
+                    else if (CARD_FACE(cards[i]) == NINE)
                         nine = true;
                 }
             int cnt = count[suit];
@@ -1608,7 +1613,7 @@ int CFeatures::calcBal(int count[])
     int bal;
 
     for (int i = 0; i < 4; i++)
-        countV[i] = count[i];
+        countV.append(count[i]);
 
     qSort(countV.begin(), countV.end());
 

@@ -249,7 +249,8 @@ void CActorLocalAuto::clientSyncRunCycle()
  */
 void CActorLocalAuto::bidValue()
 {
-    Bids nextBid = bidAndPlay.getNextBid((Seat)zBridgeClientIface_get_bidder(&handle));
+    Bids nextBid = bidAndPlay.getNextBid((Seat)zBridgeClientIface_get_bidder(&handle),
+                                         (Team)zBridgeClientIface_get_vulnerability(&handle));
     bidValue(nextBid);
 }
 

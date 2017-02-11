@@ -48,7 +48,7 @@ void CRule::initialize()
  */
 bool CRule::RuleIsOk(CFeatures &feature)
 {
-    const int NO_FEATURES = 124;
+    const int NO_FEATURES = 108;
     int low[NO_FEATURES], high[NO_FEATURES], cur[NO_FEATURES];
     int i;
 
