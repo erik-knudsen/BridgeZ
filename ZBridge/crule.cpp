@@ -48,7 +48,7 @@ void CRule::initialize()
  */
 bool CRule::RuleIsOk(CFeatures &feature)
 {
-    const int NO_FEATURES = 108;
+    const int NO_FEATURES = 110;
     int low[NO_FEATURES], high[NO_FEATURES], cur[NO_FEATURES];
     int i;
 
@@ -171,6 +171,7 @@ bool CRule::RuleIsOk(CFeatures &feature)
     low[i++] = featureRange[0].getPlayingTricks(HEARTS);
     low[i++] = featureRange[0].getPlayingTricks(DIAMONDS);
     low[i++] = featureRange[0].getPlayingTricks(CLUBS);
+    low[i++] = featureRange[0].getPlayingTricks(ANY);
 
     low[i++] = featureRange[0].getStopNT(SPADES);
     low[i++] = featureRange[0].getStopNT(HEARTS);
@@ -186,6 +187,7 @@ bool CRule::RuleIsOk(CFeatures &feature)
     low[i++] = featureRange[0].getPoints(HEARTS);
     low[i++] = featureRange[0].getPoints(DIAMONDS);
     low[i++] = featureRange[0].getPoints(CLUBS);
+    low[i++] = featureRange[0].getPoints(ANY);
 
     assert (i == NO_FEATURES);
 
@@ -308,6 +310,7 @@ bool CRule::RuleIsOk(CFeatures &feature)
     high[i++] = featureRange[1].getPlayingTricks(HEARTS);
     high[i++] = featureRange[1].getPlayingTricks(DIAMONDS);
     high[i++] = featureRange[1].getPlayingTricks(CLUBS);
+    high[i++] = featureRange[1].getPlayingTricks(ANY);
 
     high[i++] = featureRange[1].getStopNT(SPADES);
     high[i++] = featureRange[1].getStopNT(HEARTS);
@@ -323,6 +326,7 @@ bool CRule::RuleIsOk(CFeatures &feature)
     high[i++] = featureRange[1].getPoints(HEARTS);
     high[i++] = featureRange[1].getPoints(DIAMONDS);
     high[i++] = featureRange[1].getPoints(CLUBS);
+    high[i++] = featureRange[1].getPoints(ANY);
 
     assert (i == NO_FEATURES);
 
@@ -445,6 +449,7 @@ bool CRule::RuleIsOk(CFeatures &feature)
     cur[i++] = feature.getPlayingTricks(HEARTS);
     cur[i++] = feature.getPlayingTricks(DIAMONDS);
     cur[i++] = feature.getPlayingTricks(CLUBS);
+    cur[i++] = feature.getPlayingTricks(ANY);
 
     cur[i++] = feature.getStopNT(SPADES);
     cur[i++] = feature.getStopNT(HEARTS);
@@ -460,6 +465,7 @@ bool CRule::RuleIsOk(CFeatures &feature)
     cur[i++] = feature.getPoints(HEARTS);
     cur[i++] = feature.getPoints(DIAMONDS);
     cur[i++] = feature.getPoints(CLUBS);
+    cur[i++] = feature.getPoints(ANY);
 
     assert (i == NO_FEATURES);
 

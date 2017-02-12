@@ -465,9 +465,10 @@ void CFeatures::setCardFeatures(int cards[13])
                         nine = true;
                 }
             int cnt = count[suit];
-            if ((ace && king) || (king && queen && jack) || (queen && jack && ten && nine))
+            if ((ace && king) || (ace && queen && (cnt > 2)) || (king && queen && jack) ||
+                    (queen && jack && ten && nine))
                 stopNT = 4;
-            if ((ace && jack && (cnt > 2)) || (ace && ten && (cnt > 2)) ||
+            else if ((ace && jack && (cnt > 2)) || (ace && ten && (cnt > 2)) ||
                     (king && jack && (cnt > 2)) || (king && ten && nine) ||
                     (queen && jack && nine && (cnt > 3)))
                 stopNT = 3;
@@ -496,7 +497,7 @@ void CFeatures::setCardFeatures(int cards[13])
             bool ten = false;
             bool nine = false;
             for (int i = 0; i < 13; i++)
-                if (CARD_SUIT(cards[i] == suit))
+                if (CARD_SUIT(cards[i]) == suit)
                 {
                     if (CARD_FACE(cards[i]) == ACE)
                         ace = true;
@@ -516,7 +517,7 @@ void CFeatures::setCardFeatures(int cards[13])
                 qlty = 6;
             else if ((getHcp((Suit)suit) >= 7) || (king && queen && jack))
                 qlty = 5;
-            if ((ace && jack && ten) || (ace && queen && ten) || (king && queen && ten))
+            else if ((ace && jack && ten) || (ace && queen && ten) || (king && queen && ten))
                 qlty = 4;
             else if ((ace && queen) || (ace && ten && (cnt > 2)) || (king && jack && (cnt > 2)) ||
                      (king && ten && nine) || (queen && jack && (cnt > 2)) || (queen && ten && nine))

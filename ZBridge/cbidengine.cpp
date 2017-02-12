@@ -67,7 +67,10 @@ Bids CBidEngine::getNextBid(Seat seat, CBidHistory &bidHistory, int cards[], Sco
     assert ((bidHistory.bidList.size() == 0) ? true : (((bidHistory.bidList.last().bidder + 1) % 4) == seat));
 
     CAuction auction;
+    QList<CAuction> subAuction;
     CFeatures features;
+    QList<CRule *> pDefRules;
+    QList<qint8> defBids;
 
     //Calculate features.
     features.setCardFeatures(cards);
@@ -97,13 +100,10 @@ Bids CBidEngine::getNextBid(Seat seat, CBidHistory &bidHistory, int cards[], Sco
                     QList<qint8> bids;
                     QList<CRule*> pRules;
                     bidDB->getBids(page, auction, &bids, &pRules);
-                    bool found = false;
-                    QList<int> bidInx;
                     for (int i = 0; i < bids.size(); i++)
                         if (rules.contains(pRules[i]->getId()))
                         {
                             //Found a defined rule. Check scoring method, vulnerability and features.
-                            found = true;
                             Vulnerability ruleVul = pRules[i]->getVulnerability();
                             if (((pRules[i]->getScoringMethod() == NOSCORE) ||
                                     (pRules[i]->getScoringMethod() == scoringMethod)) &&
@@ -114,60 +114,78 @@ Bids CBidEngine::getNextBid(Seat seat, CBidHistory &bidHistory, int cards[], Sco
                                        ((teamVul == EAST_WEST) && ((seat == EAST_SEAT) || (seat == WEST_SEAT)))) &&
                                       ((ruleVul == VUL_YI) || (ruleVul == VUL_YN)))) &&
                                     (pRules[i]->RuleIsOk(features)))
-                                bidInx.append(i);
+                            {
+                                defBids.append(bids[i]);
+                                pDefRules.append(pRules[i]);
+                            }
                         }
-                    //Found one or more rules and feature check is ok?
-                    if (bidInx.size() > 0)
-                    {
-                        //Find highest priority.
-                        int j, i;
-                        for (j = 1, i = bidInx[0]; j < bidInx.size(); j++)
-                            if (pRules[i]->getPriority() < pRules[bidInx[j]]->getPriority())
-                                i = bidInx[j];
-
-                        //Find lowest bid.
-                        Bids bid = (Bids)bids[i];
-                        for (j = 0; j < bidInx.size(); j++)
-                            if ((pRules[i]->getPriority() == pRules[bidInx[j]]->getPriority()) &&
-                                    (bid > bids[bidInx[j]]))
-                                bid = (Bids)bids[bidInx[j]];
-
-                        //Return found bid.
-                        return bid;
-                    }
-                    else if (found)
-                        return (BID_NONE);
                 }
                 else
                 {
-                    //Found a substitute auction. Get the substitute auction.
-                    //and try again.
-                    cont = true;
-                    auction = bidDB->getSubstituteAuction(page, auction);
-                    break;
+                    //Found a substitute auction.
+                    //Save the substitute auction (in case we need it later).
+                    //Only one substitute auction is allowed.
+                    assert (subAuction.size() == 0);
+                    subAuction.append(bidDB->getSubstituteAuction(page, auction));
                 }
             }
         }
-        if (cont)
-            continue;
 
-        //We did not find an auction.
-        //Try to remove initial pass bids (if any) in the auction.
-        if ((auction.auction.size() > 0) && (auction.auction[0] == BID_PASS))
+        //Did we find anything?
+        if (pDefRules.size() == 0)
         {
-            cont = true;
-            CAuction oldAuction = auction;
-            int first;
-            for (first = 0; first < auction.auction.size(); first++)
-                if (auction.auction[first] != BID_PASS)
-                    break;
-            auction.auction.clear();
-            for (int i = first; i < oldAuction.auction.size(); i++)
-                auction.auction.append(oldAuction.auction[i]);
+            //We did not find anything. Should we try a substitute auction?
+            if (subAuction.size() != 0)
+            {
+                auction = subAuction[0];
+                subAuction.clear();
+                cont = true;
+            }
+
+            //As a last resort try to remove initial pass bids (if any) in the auction.
+            else if ((auction.auction.size() > 0) &&
+                    (auction.auction[0] == BID_PASS))
+            {
+                cont = true;
+                CAuction oldAuction = auction;
+                int first;
+                for (first = 0; first < auction.auction.size(); first++)
+                    if (auction.auction[first] != BID_PASS)
+                        break;
+                auction.auction.clear();
+                for (int i = first; i < oldAuction.auction.size(); i++)
+                    auction.auction.append(oldAuction.auction[i]);
+            }
         }
     }
 
-    return BID_NONE;
+    //Found one or more rules with feature check ok?
+    if (pDefRules.size() > 0)
+    {
+        //Find highest priority and bid.
+        int priority = pDefRules[0]->getPriority();
+        qint8 bid = defBids[0];
+        for (int i = 0; i < pDefRules.size(); i++)
+            if (pDefRules[i]->getPriority() > priority)
+            {
+                priority = pDefRules[i]->getPriority();
+                bid = defBids[i];
+            }
+
+        //Find lowest bid.
+        for (int i = 0; i < defBids.size(); i++)
+            if ((pDefRules[i]->getPriority() == priority) &&
+                    (bid > defBids[i]))
+                bid = defBids[i];
+
+        //Return found bid.
+        return (Bids)bid;
+    }
+    else
+    {
+        return BID_PASS;
+//      return BID_NONE;
+    }
 }
 
 /**
@@ -185,6 +203,7 @@ QList<CRule *> CBidEngine::getpRules(Seat seat, CBidHistory &bidHistory, Bids bi
     assert ((bidHistory.bidList.size() == 0) ? true : (((bidHistory.bidList.last().bidder + 1) % 4) == seat));
 
     CAuction auction;
+    QList<CAuction> subAuction;
     QList<CRule *> pDefRules;
 
     //Get auction till now.
@@ -212,12 +231,10 @@ QList<CRule *> CBidEngine::getpRules(Seat seat, CBidHistory &bidHistory, Bids bi
                     QList<qint8> bids;
                     QList<CRule*> pRules;
                     bidDB->getBids(page, auction, &bids, &pRules);
-                    bool found = false;
                     for (int i = 0; i < pRules.size(); i++)
                         if (rules.contains(pRules[i]->getId()))
                         {
                             //Found a defined rule. Check scoring method and vulnerability.
-                            found = true;
                             Vulnerability ruleVul = pRules[i]->getVulnerability();
                             if ((bids[i] == bid) &&
                                     ((pRules[i]->getScoringMethod() == NOSCORE) ||
@@ -230,38 +247,44 @@ QList<CRule *> CBidEngine::getpRules(Seat seat, CBidHistory &bidHistory, Bids bi
                                       ((ruleVul == VUL_YI) || (ruleVul == VUL_YN)))))
                                 pDefRules.append(pRules[i]);
                         }
-                    //Found one or more rules?
-                    if (found)
-                        return pDefRules;
                 }
                 else
                 {
-                    //Found a substitute auction. Get the substitute auction.
-                    //and try again.
-                    cont = true;
-                    auction = bidDB->getSubstituteAuction(page, auction);
-                    break;
+                    //Found a substitute auction.
+                    //Save the substitute auction (in case we need it later).
+                    //Only one substitute auction is allowed.
+                    assert (subAuction.size() == 0);
+                    subAuction.append(bidDB->getSubstituteAuction(page, auction));
                 }
             }
         }
-        if (cont)
-            continue;
 
-        //We did not find an auction.
-        //Try to remove initial pass bids (if any) in the auction.
-        if ((auction.auction.size() > 0) && (auction.auction[0] == BID_PASS))
+        //Did we find anything?
+        if (pDefRules.size() == 0)
         {
-            cont = true;
-            CAuction oldAuction = auction;
-            int first;
-            for (first = 0; first < auction.auction.size(); first++)
-                if (auction.auction[first] != BID_PASS)
-                    break;
-            auction.auction.clear();
-            for (int i = first; i < oldAuction.auction.size(); i++)
-                auction.auction.append(oldAuction.auction[i]);
+            //We did not find anything. Should we try a substitute auction?
+            if (subAuction.size() != 0)
+            {
+                auction = subAuction[0];
+                subAuction.clear();
+                cont = true;
+            }
+
+            //As a last resort try to remove initial pass bids (if any) in the auction.
+            else if ((auction.auction.size() > 0) && (auction.auction[0] == BID_PASS))
+            {
+                cont = true;
+                CAuction oldAuction = auction;
+                int first;
+                for (first = 0; first < auction.auction.size(); first++)
+                    if (auction.auction[first] != BID_PASS)
+                        break;
+                auction.auction.clear();
+                for (int i = first; i < oldAuction.auction.size(); i++)
+                    auction.auction.append(oldAuction.auction[i]);
+            }
         }
     }
 
-    return pDefRules;           //Empty.
+    return pDefRules;
 }
