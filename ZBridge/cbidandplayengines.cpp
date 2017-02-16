@@ -1,4 +1,4 @@
-/* Erik Aagaard Knudsen.
+﻿/* Erik Aagaard Knudsen.
   Copyright © 2017 - All Rights Reserved
 
   Project: ZBridge
@@ -6,9 +6,9 @@
   Developers: eak
 
   Revision History:
-  25-jan-2017 eak: Original
+  25-jan-2017 eak: Original 
 
-  Abstract: Bid and play engines.
+  Abstract: Bid and play engines. 
 
   Platforms: Qt.
   */
@@ -82,10 +82,10 @@ Bids CBidAndPlayEngines::getNextBid(Seat seat, CBidHistory &bidHistory, int card
  * @return returns a list with possible rules.
  */
 QList<CRule *> CBidAndPlayEngines::getpRules(Seat seat, CBidHistory &bidHistory, Bids bid,
-                                             Team teamVul)
+                                             Team teamVul, bool *substitute)
 {
     assert(bidEngine != 0);
 
     //Must check something found in the bid database!!!!!!!
-    return bidEngine->getpRules(seat, bidHistory, bid, scoringMethod, teamVul);
+    return bidEngine->getpRules(seat, bidHistory, bid, scoringMethod, teamVul, substitute);
 }

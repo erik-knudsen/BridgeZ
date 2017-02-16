@@ -1,7 +1,7 @@
-/*Erik Aagaard Knudsen.
+﻿/*Erik Aagaard Knudsen.
   Copyright © 2013 - All Rights Reserved
 
-  Project: ZBridge
+  Project: ZBridge 
   File: CBid.h
   Developers: eak
 
@@ -34,4 +34,5 @@ CBid::CBid(Seat bidder, Bids bid, QString alert)
     this->bidder = bidder;
     this->bid = bid;
     this->alert = alert;
+    substitute = false;
 }

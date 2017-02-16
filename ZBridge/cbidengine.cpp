@@ -1,9 +1,9 @@
-/* Erik Aagaard Knudsen.
+﻿/* Erik Aagaard Knudsen.
   Copyright © 2013 - All Rights Reserved
 
   Project: ZBridge
   File: CBidEngine.cpp
-  Developers: eak
+  Developers: eak 
 
   Revision History:
   13-jun-2013 eak: Original
@@ -75,13 +75,17 @@ Bids CBidEngine::getNextBid(Seat seat, CBidHistory &bidHistory, int cards[], Sco
     //Calculate features.
     features.setCardFeatures(cards);
 
-    //Get auction till now.
-    for (int i = 0; i < bidHistory.bidList.size(); i++)
-        auction.auction.append(bidHistory.bidList[i].bid);
-
     //Get relevant pages and rules.
     QSet<qint16> &pages = bidDBDefine->getPages(seat);
     QSet<qint16> &rules = bidDBDefine->getRules(seat);
+
+    //Get auction till now.
+    for (int i = 0; i < bidHistory.bidList.size(); i++)
+    {
+        if (bidHistory.bidList[i].substitute)
+            auction = findSubstituteAuction(auction, pages);
+        auction.auction.append(bidHistory.bidList[i].bid);
+    }
 
     QSetIterator<qint16> i(pages);
     bool cont = true;
@@ -198,21 +202,26 @@ Bids CBidEngine::getNextBid(Seat seat, CBidHistory &bidHistory, int cards[], Sco
  * @return returns a list with possible rules.
  */
 QList<CRule *> CBidEngine::getpRules(Seat seat, CBidHistory &bidHistory, Bids bid, ScoringMethod scoringMethod,
-                                     Team teamVul)
+                                     Team teamVul, bool *substitute)
 {
     assert ((bidHistory.bidList.size() == 0) ? true : (((bidHistory.bidList.last().bidder + 1) % 4) == seat));
 
     CAuction auction;
     QList<CAuction> subAuction;
     QList<CRule *> pDefRules;
-
-    //Get auction till now.
-    for (int i = 0; i < bidHistory.bidList.size(); i++)
-        auction.auction.append(bidHistory.bidList[i].bid);
+    *substitute = false;
 
     //Get relevant pages and rules.
     QSet<qint16> &pages = bidDBDefine->getPages(seat);
     QSet<qint16> &rules = bidDBDefine->getRules(seat);
+
+    //Get auction till now.
+    for (int i = 0; i < bidHistory.bidList.size(); i++)
+    {
+        if (bidHistory.bidList[i].substitute)
+            auction = findSubstituteAuction(auction, pages);
+        auction.auction.append(bidHistory.bidList[i].bid);
+    }
 
     QSetIterator<qint16> i(pages);
     bool cont = true;
@@ -267,6 +276,7 @@ QList<CRule *> CBidEngine::getpRules(Seat seat, CBidHistory &bidHistory, Bids bi
             {
                 auction = subAuction[0];
                 subAuction.clear();
+                *substitute = true;
                 cont = true;
             }
 
@@ -288,3 +298,21 @@ QList<CRule *> CBidEngine::getpRules(Seat seat, CBidHistory &bidHistory, Bids bi
 
     return pDefRules;
 }
+
+CAuction CBidEngine::findSubstituteAuction(CAuction &auction, QSet<qint16> &pages)
+{
+    CAuction subAuction;
+    QSetIterator<qint16> i(pages);
+
+    while (i.hasNext())
+    {
+        qint16 page = i.next();
+        if (bidDB->auctionExist(page, auction) && bidDB->isSubstituteAuction(page, auction))
+        {
+                subAuction = bidDB->getSubstituteAuction(page, auction);
+                break;
+        }
+    }
+    return subAuction;
+}
+

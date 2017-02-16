@@ -1,4 +1,4 @@
-/* Erik Aagaard Knudsen.
+﻿/* Erik Aagaard Knudsen.
   Copyright © 2013 - All Rights Reserved
 
   Project: ZBridge
@@ -6,7 +6,7 @@
   Developers: eak
 
   Revision History:
-  13-jun-2013 eak: Original
+  13-jun-2013 eak: Original 
 
   Abstract: Bid engine.
 
@@ -32,6 +32,7 @@ class CBidDBDefine;
 class CBidHistory;
 class CFeatures;
 class CRule;
+class CAuction;
 
 /**
  * @brief The bid engine class handles automatic bidding.
@@ -46,9 +47,11 @@ public:
     Bids getNextBid(Seat seat, CBidHistory &bidHistory, int cards[13], ScoringMethod scoringMethod,
             Team teamVul);
     QList<CRule *> getpRules(Seat seat, CBidHistory &bidHistory, Bids bid, ScoringMethod scoringMethod,
-                             Team teamVul);
+                             Team teamVul, bool *substitute);
 
 private:
+    CAuction findSubstituteAuction(CAuction &auction, QSet<qint16> &pages);
+
     CBidDB *bidDB;
     CBidDesc *bidDesc;
     CBidDBDefine *bidDBDefine;

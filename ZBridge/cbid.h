@@ -1,4 +1,4 @@
-/*Erik Aagaard Knudsen.
+﻿/*Erik Aagaard Knudsen.
   Copyright © 2013 - All Rights Reserved
 
   Project: ZBridge
@@ -10,7 +10,7 @@
 
   Abstract: One bid.
 
-  Platforms: Qt.
+  Platforms: Qt. 
 
 */
 
@@ -40,6 +40,7 @@ public:
     Bids bid;           /**< Bid value. */
     QString alert;      /**< Text string describing possible alert. */
     QList<CRule *> rules; /**< Rules delimiting the bid. */
+    bool substitute;    /**< Previous bidding sequence substitute? */
 };
 
 #endif // CBID_H

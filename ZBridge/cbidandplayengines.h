@@ -1,4 +1,4 @@
-/* Erik Aagaard Knudsen.
+﻿/* Erik Aagaard Knudsen.
   Copyright © 2017 - All Rights Reserved
 
   Project: ZBridge
@@ -8,7 +8,7 @@
   Revision History:
   25-jan-2017 eak: Original
 
-  Abstract: Bid and play engines.
+  Abstract: Bid and play engines. 
 
   Platforms: Qt.
   */
@@ -42,7 +42,8 @@ public:
                     ScoringMethod scoringMethod);
     void setScoringMethod(ScoringMethod scoringMethod) { this->scoringMethod = scoringMethod; }
     Bids getNextBid(Seat seat, CBidHistory &bidHistory, int cards[], Team teamVul);
-    QList<CRule *> getpRules(Seat seat, CBidHistory &bidHistory, Bids bid, Team teamVul);
+    QList<CRule *> getpRules(Seat seat, CBidHistory &bidHistory, Bids bid, Team teamVul,
+                             bool *substitute);
 
 private:
     CBidEngine *bidEngine;
