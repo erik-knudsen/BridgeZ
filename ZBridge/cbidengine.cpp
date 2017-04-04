@@ -128,7 +128,7 @@ Bids CBidEngine::getNextBid(Seat seat, CBidHistory &bidHistory, int cards[], Sco
                 {
                     //Found a substitute auction.
                     //Save the substitute auction (in case we need it later).
-                    //Only one substitute auction is allowed.
+                    //Only one substitute auction is allowed (and only in one level).
                     assert (subAuction.size() == 0);
                     subAuction.append(bidDB->getSubstituteAuction(page, auction));
                 }
@@ -142,7 +142,6 @@ Bids CBidEngine::getNextBid(Seat seat, CBidHistory &bidHistory, int cards[], Sco
             if (subAuction.size() != 0)
             {
                 auction = subAuction[0];
-                subAuction.clear();
                 cont = true;
             }
 
@@ -196,9 +195,10 @@ Bids CBidEngine::getNextBid(Seat seat, CBidHistory &bidHistory, int cards[], Sco
  * @brief Get possible rules for a given bid history and next bid as calculated by getNextBid.
  * @param[in] seat Bidders seat.
  * @param[in] bidHistory The bid history.
- * @param bid[in] The bid calculated by getNext bid.
- * @param scoringMethod The scoring method.
- * @param teamVul Team vulnerability.
+ * @param[in]bid The bid calculated by getNext bid.
+ * @param[in] scoringMethod The scoring method.
+ * @param[in] teamVul Team vulnerability.
+ * @param[out] substitute true if a substitute auction was used.
  * @return returns a list with possible rules.
  */
 QList<CRule *> CBidEngine::getpRules(Seat seat, CBidHistory &bidHistory, Bids bid, ScoringMethod scoringMethod,
@@ -261,7 +261,7 @@ QList<CRule *> CBidEngine::getpRules(Seat seat, CBidHistory &bidHistory, Bids bi
                 {
                     //Found a substitute auction.
                     //Save the substitute auction (in case we need it later).
-                    //Only one substitute auction is allowed.
+                    //Only one substitute auction is allowed (and only in one level).
                     assert (subAuction.size() == 0);
                     subAuction.append(bidDB->getSubstituteAuction(page, auction));
                 }
@@ -275,7 +275,6 @@ QList<CRule *> CBidEngine::getpRules(Seat seat, CBidHistory &bidHistory, Bids bi
             if (subAuction.size() != 0)
             {
                 auction = subAuction[0];
-                subAuction.clear();
                 *substitute = true;
                 cont = true;
             }
@@ -297,6 +296,11 @@ QList<CRule *> CBidEngine::getpRules(Seat seat, CBidHistory &bidHistory, Bids bi
     }
 
     return pDefRules;
+}
+
+QString CBidEngine::getAlertIdDesc(quint8 alertId)
+{
+     return bidDesc->getAlertIdDesc(alertId);
 }
 
 CAuction CBidEngine::findSubstituteAuction(CAuction &auction, QSet<qint16> &pages)

@@ -246,6 +246,6 @@ void CRemoteActorServer::disConnectSeat(Seat seat)
 {
     remoteConnects[seat].isConnected = false;
 
-    emit connectError(tr(SEAT_NAMES[seat]) + tr(" has disconnected."));
+    emit connectError(QCoreApplication::translate("defines", SEAT_NAMES[seat]) + tr(" has disconnected."));
     emit clientDisconnected();
 }

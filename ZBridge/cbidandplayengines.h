@@ -44,6 +44,7 @@ public:
     Bids getNextBid(Seat seat, CBidHistory &bidHistory, int cards[], Team teamVul);
     QList<CRule *> getpRules(Seat seat, CBidHistory &bidHistory, Bids bid, Team teamVul,
                              bool *substitute);
+    QString getAlertIdDesc(quint8 alertId);
 
 private:
     CBidEngine *bidEngine;

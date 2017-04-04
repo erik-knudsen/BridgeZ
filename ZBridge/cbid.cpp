@@ -26,9 +26,20 @@
  * @param bidder The bidder.
  * @param bid The bid.
  * @param alert An alert (if any).
+ * @param rules The rules for the bid.
+ * @param substitute Indicates if a substitute bid was used.
  *
  * Constructs the bid.
  */
+CBid::CBid(Seat bidder, Bids bid, QString alert, QList<CRule *> &rules, bool substitute)
+{
+    this->bidder = bidder;
+    this->bid = bid;
+    this->alert = alert;
+    this->rules = rules;
+    this->substitute = substitute;
+}
+
 CBid::CBid(Seat bidder, Bids bid, QString alert)
 {
     this->bidder = bidder;

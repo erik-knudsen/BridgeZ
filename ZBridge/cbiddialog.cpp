@@ -315,7 +315,7 @@ void CBidDialog::enableBidder(Seat seat, Bids lastBid, Bids doubleBid)
     int i;
 
     //Set window title.
-    setWindowTitle(tr("Bidder: ") + tr(SEAT_NAMES[seat]));
+    setWindowTitle(tr("Bidder: ") + QCoreApplication::translate("defines", SEAT_NAMES[seat]));
 
     //Enable proper bid buttons.
     for (i = BID_1C; i <= BID_7NT; i++)
@@ -338,7 +338,7 @@ void CBidDialog::enableBidder(Seat seat, Bids lastBid, Bids doubleBid)
 void CBidDialog::disableBidder()
 {  
     //Erase window title.
-    setWindowTitle(tr(""));
+    setWindowTitle(QString(""));
 
     setEnabled(false);
 }

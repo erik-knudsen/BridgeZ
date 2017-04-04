@@ -22,6 +22,8 @@
 #ifndef CBIDANDPLAY_H
 #define CBIDANDPLAY_H
 
+#include <QCoreApplication>
+
 #include "cbiddb.h"
 #include "cbiddesc.h"
 #include "cbidhistory.h"
@@ -44,6 +46,8 @@ class CBidAndPlayEngines;
  */
 class CBidAndPlay
 {
+    Q_DECLARE_TR_FUNCTIONS(CBidAndPlay)
+
 public:
     CBidAndPlay();
 
@@ -52,7 +56,7 @@ public:
     void setBidInfo(Bids bid, Bids bidDouble, Seat openLeader)
     { playHistory.setBidInfo(bid, bidDouble, openLeader); }
     void resetBidHistory();
-    void appendBid(CBid &bid);
+    void appendBid(Seat bidder, Bids bid, Team vulnerable);
     int bidUndo(Bids *bid);
     Bids getNextBid(Seat seat, Team teamVul);
 
@@ -72,6 +76,8 @@ public:
     int getNextPlay(Seat player, Seat dummySeat);
     CBidHistory &getBidHistory() { return bidHistory; }
     CPlayHistory &getPlayHistory() { return playHistory; }
+    QString featuresOfLastBid();
+    QString alertOfLastBid();
 
 private:
     CBidHistory bidHistory;
@@ -82,4 +88,4 @@ private:
     int dummysCards[13];
 };
 
-#endif // CHANDLEBID_H
+#endif //CBIDANDPLAY_H

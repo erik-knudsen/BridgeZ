@@ -141,13 +141,14 @@ void CMainScoreDialog::sUpdateTable()
                         &declarer, &contract, &contractModifier, &result);
 
         //Board.
-        QTableWidgetItem *boardItem = new QTableWidgetItem(tr("%1").arg(board));
+        QTableWidgetItem *boardItem = new QTableWidgetItem(QString("%1").arg(board));
         boardItem->setTextAlignment(Qt::AlignCenter);
         boardItem->setFlags(Qt::ItemIsEnabled);
         ui->scoreTable->setItem(gameIndex, 0, boardItem);
 
         //Vulnerability.
-        QTableWidgetItem *vulnerabilityItem = new QTableWidgetItem(tr("%1").arg(TEAM_NAMES[vulnerable]));
+        QTableWidgetItem *vulnerabilityItem = new QTableWidgetItem(QString("%1").
+                               arg(QCoreApplication::translate("defines", TEAM_NAMES[vulnerable])));
         vulnerabilityItem->setTextAlignment(Qt::AlignCenter);
         vulnerabilityItem->setFlags(Qt::ItemIsEnabled);
         ui->scoreTable->setItem(gameIndex, 1, vulnerabilityItem);
@@ -165,7 +166,9 @@ void CMainScoreDialog::sUpdateTable()
         {
             Suit suit = BID_SUIT(contract);
             int level = BID_LEVEL(contract);
-            cntr = QString("%1 %2%3").arg(tr(SEAT_NAMES[declarer])[0]).arg(level).arg(tr(SUIT_NAMES[suit]));
+            cntr = QString("%1 %2%3").arg(QCoreApplication::translate("defines", SEAT_NAMES[declarer])[0]).
+                    arg(level).
+                    arg(QCoreApplication::translate("defines", SUIT_NAMES[suit]));
             if (contractModifier == BID_DOUBLE)
                 cntr += " X";
             else if (contractModifier == BID_REDOUBLE)
@@ -181,7 +184,7 @@ void CMainScoreDialog::sUpdateTable()
         if (declarer == NO_SEAT)
             res = tr("-");
         else
-            res = tr("%1").arg(result);
+            res = QString("%1").arg(result);
         QTableWidgetItem *resultItem = new QTableWidgetItem(res);
         resultItem->setTextAlignment(Qt::AlignCenter);
         resultItem->setFlags(Qt::ItemIsEnabled);
@@ -195,7 +198,7 @@ void CMainScoreDialog::sUpdateTable()
             if (belowTheLinePoint > 0)
             {
                 belowTheLineNSGamePoint += belowTheLinePoint;
-                QTableWidgetItem *belowTheLineNSItem = new QTableWidgetItem(tr("%1").arg(belowTheLinePoint));
+                QTableWidgetItem *belowTheLineNSItem = new QTableWidgetItem(QString("%1").arg(belowTheLinePoint));
                 belowTheLineNSItem->setTextAlignment(Qt::AlignCenter);
                 belowTheLineNSItem->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
                 if (belowTheLineNSGamePoint >= 100)
@@ -215,7 +218,7 @@ void CMainScoreDialog::sUpdateTable()
             else if (belowTheLinePoint < 0)
             {
                 belowTheLineEWGamePoint -= belowTheLinePoint;
-                QTableWidgetItem *belowTheLineEWItem = new QTableWidgetItem(tr("%1").arg(-belowTheLinePoint));
+                QTableWidgetItem *belowTheLineEWItem = new QTableWidgetItem(QString("%1").arg(-belowTheLinePoint));
                 belowTheLineEWItem->setTextAlignment(Qt::AlignCenter);
                 belowTheLineEWItem->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
                 if (belowTheLineEWGamePoint >= 100)
@@ -242,10 +245,10 @@ void CMainScoreDialog::sUpdateTable()
             if (playedAuctionAndPlayIndex != -1)
             {
                 score = games->getDuplicateScore(gameIndex, playedAuctionAndPlayIndex);
-                scoreItem = new QTableWidgetItem(tr("%1").arg(score));
+                scoreItem = new QTableWidgetItem(QString("%1").arg(score));
             }
             else
-                scoreItem = new QTableWidgetItem(tr("-"));
+                scoreItem = new QTableWidgetItem(QString("-"));
             scoreItem->setTextAlignment(Qt::AlignCenter);
             scoreItem->setFlags(Qt::ItemIsEnabled);
             ui->scoreTable->setItem(gameIndex, 4, scoreItem);
@@ -254,7 +257,7 @@ void CMainScoreDialog::sUpdateTable()
             {
                 float result = games->getDuplicatePointBoard(gameIndex, playedAuctionAndPlayIndex,
                                              scoringMethod);
-                QTableWidgetItem *gameItem = new QTableWidgetItem(tr("%1").arg(result, 0, 'f', 1));
+                QTableWidgetItem *gameItem = new QTableWidgetItem(QString("%1").arg(result, 0, 'f', 1));
                 gameItem->setTextAlignment(Qt::AlignCenter);
                 gameItem->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
                 ui->scoreTable->setItem(gameIndex, 5, gameItem);
@@ -271,7 +274,7 @@ void CMainScoreDialog::sUpdateTable()
                     nameES = southName;
                 }
                 result = games->getDuplicateResultAll(gameIndex, nameWN, nameES, scoringMethod);
-                QTableWidgetItem *allItem = new QTableWidgetItem(tr("%1").arg(result, 0, 'f', 1));
+                QTableWidgetItem *allItem = new QTableWidgetItem(QString("%1").arg(result, 0, 'f', 1));
                 allItem->setTextAlignment(Qt::AlignCenter);
                 allItem->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
                 ui->scoreTable->setItem(gameIndex, 6, allItem);

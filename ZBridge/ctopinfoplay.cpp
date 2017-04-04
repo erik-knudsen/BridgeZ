@@ -18,6 +18,8 @@
  * Shows information for top info play widget (definition).
  */
 
+#include <QCoreApplication>
+
 #include "Defines.h"
 #include "ctopinfoplay.h"
 
@@ -87,18 +89,18 @@ void CTopInfoPlay::setBoardId(QString board)
 
 void CTopInfoPlay::setVulnerability(Team team)
 {
-    vulnerabel->setText(tr(TEAM_NAMES[team]));
+    vulnerabel->setText(QCoreApplication::translate("defines", TEAM_NAMES[team]));
 }
 
 void CTopInfoPlay::setDealer(Seat seat)
 {
-    dealer->setText(tr(SEAT_NAMES[seat]));
+    dealer->setText(QCoreApplication::translate("defines", SEAT_NAMES[seat]));
 }
 
 void CTopInfoPlay::setDeclarer(Seat seat)
 {
     if (seat != NO_SEAT)
-        declarer->setText(tr(SEAT_NAMES[seat]));
+        declarer->setText(QCoreApplication::translate("defines", SEAT_NAMES[seat]));
 }
 
 void CTopInfoPlay::setContract(Bids bid, Bids dbl)

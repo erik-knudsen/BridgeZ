@@ -77,8 +77,9 @@ Bids CBidAndPlayEngines::getNextBid(Seat seat, CBidHistory &bidHistory, int card
  * @brief Get possible rules for a given bid history and next bid as calculated by getNextBid.
  * @param[in] seat Bidders seat.
  * @param[in] bidHistory The bid history.
- * @param bid[in] The bid calculated by getNext bid.
- * @param teamVul Team vulnerability.
+ * @param[in] bid The bid calculated by getNext bid.
+ * @param[in] teamVul Team vulnerability.
+ * @param[out] substitute true if a substitute auction was used.
  * @return returns a list with possible rules.
  */
 QList<CRule *> CBidAndPlayEngines::getpRules(Seat seat, CBidHistory &bidHistory, Bids bid,
@@ -88,4 +89,9 @@ QList<CRule *> CBidAndPlayEngines::getpRules(Seat seat, CBidHistory &bidHistory,
 
     //Must check something found in the bid database!!!!!!!
     return bidEngine->getpRules(seat, bidHistory, bid, scoringMethod, teamVul, substitute);
+}
+
+QString CBidAndPlayEngines::getAlertIdDesc(quint8 alertId)
+{
+    return bidEngine->getAlertIdDesc(alertId);
 }

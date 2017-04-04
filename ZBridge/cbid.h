@@ -33,6 +33,7 @@
 class CBid
 {
 public:
+    CBid(Seat bidder, Bids bid, QString alert, QList<CRule *> &rules, bool substitute);
     CBid(Seat bidder, Bids bid, QString alert);
     CBid() { bid = BID_NONE; }
 

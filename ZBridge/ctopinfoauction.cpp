@@ -18,6 +18,7 @@
  * Shows information for top info auction widget (definition).
  */
 
+#include <QCoreApplication>
 #include <QGraphicsSimpleTextItem>
 
 #include "Defines.h"
@@ -68,10 +69,10 @@ void CTopInfoAuction::setBoardId(QString board)
 
 void CTopInfoAuction::setVulnerability(Team team)
 {
-    vulnerabel->setText(tr(TEAM_NAMES[team]));
+    vulnerabel->setText(QCoreApplication::translate("defines", TEAM_NAMES[team]));
 }
 
 void CTopInfoAuction::setDealer(Seat seat)
 {
-    dealer->setText(tr(SEAT_NAMES[seat]));
+    dealer->setText(QCoreApplication::translate("defines", SEAT_NAMES[seat]));
 }

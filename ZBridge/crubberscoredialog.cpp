@@ -217,8 +217,9 @@ void CRubberScoreDialog::paintEvent(QPaintEvent * /* event */)
         Suit suit = BID_SUIT(rubberPoints[i].contract);
         int level = BID_LEVEL(rubberPoints[i].contract);
         Seat declarer = rubberPoints[i].declarer;
-        QString contract = QString("%1 %2%3").arg(tr(SEAT_NAMES[declarer])[0]).
-                arg(level).arg(tr(SUIT_NAMES[suit]));
+        QString contract = QString("%1 %2%3").arg(QCoreApplication::translate("defines", SEAT_NAMES[declarer])[0]).
+                arg(level).
+                arg(QCoreApplication::translate("defines", SUIT_NAMES[suit]));
         if (rubberPoints[i].contractModifier == BID_DOUBLE)
             contract += " X";
         else if (rubberPoints[i].contractModifier == BID_REDOUBLE)

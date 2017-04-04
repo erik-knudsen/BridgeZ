@@ -41,10 +41,11 @@ CPointScoreDialog::CPointScoreDialog(CGamesDoc *games, int scoringMethod, int in
     games->getGame(index, &board, &dealer, &vulnerable);
 
     //Board.
-    ui->board->setText(tr("Board %1").arg(board));
+    ui->board->setText(QString(tr("Board") + " %1").arg(board));
 
     //Vulnerability.
-    ui->vulnerability->setText(tr("Vulnerability %1").arg(TEAM_NAMES[vulnerable]));
+    ui->vulnerability->setText(QString(tr("Vulnerability") + " %1").
+                               arg(QCoreApplication::translate("defines", TEAM_NAMES[vulnerable])));
 
     //Scoring method.
     if (scoringMethod == IMP)
@@ -93,7 +94,9 @@ CPointScoreDialog::CPointScoreDialog(CGamesDoc *games, int scoringMethod, int in
         {
             Suit suit = BID_SUIT(contract);
             int level = BID_LEVEL(contract);
-            cntr = QString("%1 %2%3").arg(tr(SEAT_NAMES[declarer])[0]).arg(level).arg(tr(SUIT_NAMES[suit]));
+            cntr = QString("%1 %2%3").arg(QCoreApplication::translate("defines", SEAT_NAMES[declarer])[0]).
+                    arg(level).
+                    arg(QCoreApplication::translate("defines", SUIT_NAMES[suit]));
             if (contractModifier == BID_DOUBLE)
                 cntr += " X";
             else if (contractModifier == BID_REDOUBLE)
@@ -107,9 +110,9 @@ CPointScoreDialog::CPointScoreDialog(CGamesDoc *games, int scoringMethod, int in
         //Result.
         QString res;
         if (declarer == NO_SEAT)
-            res = tr("-");
+            res = QString("-");
         else
-            res = tr("%1").arg(result);
+            res = QString("%1").arg(result);
         QTableWidgetItem *resultItem = new QTableWidgetItem(res);
         resultItem->setTextAlignment(Qt::AlignCenter);
         resultItem->setFlags(Qt::ItemIsEnabled);
@@ -118,14 +121,14 @@ CPointScoreDialog::CPointScoreDialog(CGamesDoc *games, int scoringMethod, int in
         //Score.
         QTableWidgetItem *scoreItem;
         int score = games->getDuplicateScore(index, auctionAndPlayIndex);
-        scoreItem = new QTableWidgetItem(tr("%1").arg(score));
+        scoreItem = new QTableWidgetItem(QString("%1").arg(score));
         scoreItem->setTextAlignment(Qt::AlignCenter);
         scoreItem->setFlags(Qt::ItemIsEnabled);
         ui->pointScoreTable->setItem(auctionAndPlayIndex, 3, scoreItem);
 
         //Points (MP or IMP).
         float point = games->getDuplicatePointBoard(index,auctionAndPlayIndex, scoringMethod);
-        QTableWidgetItem *nsewPointItem = new QTableWidgetItem(tr("%1").arg(point, 0, 'f', 1));
+        QTableWidgetItem *nsewPointItem = new QTableWidgetItem(QString("%1").arg(point, 0, 'f', 1));
         nsewPointItem->setTextAlignment(Qt::AlignCenter);
         nsewPointItem->setFlags(Qt::ItemIsEnabled);
         ui->pointScoreTable->setItem(auctionAndPlayIndex, 4, nsewPointItem);

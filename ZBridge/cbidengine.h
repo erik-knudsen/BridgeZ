@@ -48,6 +48,7 @@ public:
             Team teamVul);
     QList<CRule *> getpRules(Seat seat, CBidHistory &bidHistory, Bids bid, ScoringMethod scoringMethod,
                              Team teamVul, bool *substitute);
+    QString getAlertIdDesc(quint8 alertId);
 
 private:
     CAuction findSubstituteAuction(CAuction &auction, QSet<qint16> &pages);

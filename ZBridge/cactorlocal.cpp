@@ -595,10 +595,8 @@ void CActorLocal::cards(int cards[4][13])
  */
 void CActorLocal::bidDone(Seat bidder, Bids bid)
 {
-    CBid bidEntry(bidder, bid, "");
-
     //Save bid in bid history.
-    bidAndPlay.appendBid(bidEntry);
+    bidAndPlay.appendBid(bidder, bid, (Team)zBridgeClientIface_get_vulnerability(&handle));
 
     if (showUser)
     {

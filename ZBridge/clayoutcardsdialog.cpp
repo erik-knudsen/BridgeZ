@@ -41,14 +41,14 @@ CLayoutCardsDialog::CLayoutCardsDialog(CGamesDoc *games, QWidget *parent) :
     ui->setupUi(this);
 
     //Cards faces.
-    faces[0] = tr("2");
-    faces[1] = tr("3");
-    faces[2] = tr("4");
-    faces[3] = tr("5");
-    faces[4] = tr("6");
-    faces[5] = tr("7");
-    faces[6] = tr("8");
-    faces[7] = tr("9");
+    faces[0] = QString("2");
+    faces[1] = QString("3");
+    faces[2] = QString("4");
+    faces[3] = QString("5");
+    faces[4] = QString("6");
+    faces[5] = QString("7");
+    faces[6] = QString("8");
+    faces[7] = QString("9");
     faces[8] = tr("T");
     faces[9] = tr("J");
     faces[10] = tr("Q");

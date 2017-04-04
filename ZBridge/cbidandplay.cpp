@@ -19,6 +19,8 @@
  * Handling of bids and play.
  */
 
+#include <cassert>
+
 #include "cbidandplayengines.h"
 #include "cbidandplay.h"
 
@@ -38,9 +40,19 @@ void CBidAndPlay::resetBidHistory()
  * @brief Append bid to bid history.
  * @param bid The bid to append.
  */
-void CBidAndPlay::appendBid(CBid &bid)
+void CBidAndPlay::appendBid(Seat bidder, Bids bid, Team vulnerable)
 {
-    bidHistory.appendBid(bid);
+    QString alert;
+    QList<CRule *> rules;
+    bool substitute = false;
+
+    rules = bidAndPlayEngines->getpRules(bidder, bidHistory, bid, vulnerable, &substitute);
+    if (rules.size() > 0)
+        alert = bidAndPlayEngines->getAlertIdDesc(rules[0]->getAlertId());
+
+    CBid bidEntry(bidder, bid, alert, rules, substitute);
+
+    bidHistory.appendBid(bidEntry);
 }
 
 /**
@@ -105,4 +117,140 @@ int CBidAndPlay::getNextPlay(Seat player, Seat dummySeat)
             break;
 
     return i;
+}
+
+QString CBidAndPlay::featuresOfLastBid()
+{
+    QString features;
+
+    assert (bidHistory.bidList.size() > 0);
+
+    CBid lastBid = bidHistory.bidList.last();
+    if (lastBid.rules.size() > 0)
+    {
+        //Status.
+        Forcing forcing = lastBid.rules[0]->getStatus();
+        QStringList labels;
+        labels << tr("Non Forcing") << tr("Forcing") << tr("Game Forcing") << tr("Must Pass");
+        features += tr("Status: ") + labels[forcing];
+
+        for (int i = 0; i < lastBid.rules.size(); i++)
+        {
+            features += "\n";
+
+            CFeatures lowFeatures;
+            CFeatures highFeatures;
+            lastBid.rules[i]->getFeatures(&lowFeatures, &highFeatures);
+
+            //HCP.
+            int hcpLow = lowFeatures.getHcp(ANY);
+            int hcpHigh = highFeatures.getHcp(ANY);
+            if ((hcpLow > 0) || (hcpHigh < lowFeatures.getMaxHcp(ANY)))
+            {
+                if (hcpHigh == lowFeatures.getMaxHcp(ANY))
+                    features += QString(tr("HCP: ") + "%1  ").arg(hcpLow);
+                else
+                    features += QString(tr("HCP: ") + "%1-%2  ").arg(hcpLow).arg(hcpHigh);
+            }
+
+            //DP.
+            int dpLow = lowFeatures.getDp(ANY);
+            int dpHigh = highFeatures.getDp(ANY);
+            if ((dpLow > 0) || (dpHigh < lowFeatures.getMaxDp()))
+            {
+                if (dpHigh == lowFeatures.getMaxDp())
+                    features += QString(tr("DP: ") + "%1  ").arg(dpLow);
+                else
+                    features += QString(tr("DP: ") + "%1-%2  ").arg(dpLow).arg(dpHigh);
+            }
+
+            //TP.
+            int tpLow = lowFeatures.getPoints(ANY);
+            int tpHigh = highFeatures.getPoints(ANY);
+            if ((tpLow > 0) || (tpHigh < lowFeatures.getMaxPoints()))
+            {
+                if (dpHigh == lowFeatures.getMaxDp())
+                    features += QString(tr("TP: ") + "%1+  ").arg(dpLow);
+                else
+                    features += QString(tr("TP: ") + "%1-%2  ").arg(dpLow).arg(dpHigh);
+            }
+
+            //Suits.
+            for (int suit = 0; suit < 4; suit++)
+            {
+                QString suitName = QCoreApplication::translate("defines", SUIT_NAMES[suit]);
+                int lLow = lowFeatures.getSuitLen((Suit)suit);
+                int lHigh = highFeatures.getSuitLen((Suit)suit);
+                if ((lLow > 0) || (lHigh < lowFeatures.getMaxSuitLen()))
+                {
+                    if (lHigh == lowFeatures.getMaxSuitLen())
+                        features += QString(suitName + ": %1+  ").arg(lLow);
+                    else
+                        features += QString(suitName + ": %1-%2  ").arg(lLow).arg(lHigh);
+                }
+                else
+                {
+                    Suit low = ANY;
+                    Suit high = ANY;
+                    for (int i = 0; i < 4; i++)
+                    if ((Suit)i != suit)
+                    {
+                        int difLow = lowFeatures.getDif2((Suit)suit, (Suit)i);
+                        int difHigh = highFeatures.getDif2((Suit)suit, (Suit)i);
+                        if (difHigh <= 0)
+                            high = (Suit)i;
+                        else if (difLow >= 0)
+                            low = (Suit)i;
+                    }
+
+                    if ((low != ANY) || (high != ANY))
+                    {
+                        if (low = ANY)
+                            features += QString(suitName + ": 0-%1  ").
+                                    arg(QCoreApplication::translate("defines", SUIT_NAMES[high]));
+                        else if (high == ANY)
+                            features += QString(suitName + ": %1+  ").
+                                    arg(QCoreApplication::translate("defines", SUIT_NAMES[low]));
+                        else
+                            features += QString(suitName + ": %1-%2  ").
+                                    arg(QCoreApplication::translate("defines", SUIT_NAMES[low])).
+                                    arg(QCoreApplication::translate("defines", SUIT_NAMES[high]));
+                    }
+                }
+            }
+
+            //Aces.
+            int aceLow = lowFeatures.getCountCard(ANY, ACE);
+            int aceHigh = highFeatures.getCountCard(ANY, ACE);
+            if ((aceLow > 0) || (aceHigh < lowFeatures.getMaxCountCard(ANY)))
+            {
+                if (aceHigh == lowFeatures.getMaxCountCard(ANY))
+                    features += QString(tr("A: ") + "%1+  ").arg(aceLow);
+                else
+                    features += QString(tr("A: ") + "%1-%2  ").arg(aceLow).arg(aceHigh);
+            }
+
+            //Kings.
+            int kingLow = lowFeatures.getCountCard(ANY, KING);
+            int kingHigh = highFeatures.getCountCard(ANY, KING);
+            if ((kingLow > 0) || (kingHigh < lowFeatures.getMaxCountCard(ANY)))
+            {
+                if (kingHigh == lowFeatures.getMaxCountCard(ANY))
+                    features += QString(tr("K: ") + "%1+  ").arg(kingLow);
+                else
+                    features += QString(tr("K: ") + "%1-%2  ").arg(kingLow).arg(kingHigh);
+            }
+        }
+    }
+
+    return features;
+}
+
+QString CBidAndPlay::alertOfLastBid()
+{
+    assert (bidHistory.bidList.size() > 0);
+
+    CBid lastBid = bidHistory.bidList.last();
+
+    return lastBid.alert;
 }

@@ -58,10 +58,10 @@ const int ACE =   12;
 //Seat names (indexed by enum Seat).
 const char * const SEAT_NAMES[4] =
 {
-    QT_TR_NOOP("West"),
-    QT_TR_NOOP("North"),
-    QT_TR_NOOP("East"),
-    QT_TR_NOOP("South")
+    QT_TRANSLATE_NOOP("defines", "West"),
+    QT_TRANSLATE_NOOP("defines", "North"),
+    QT_TRANSLATE_NOOP("defines", "East"),
+    QT_TRANSLATE_NOOP("defines", "South")
 };
 
 //Auto seat names prefix.
@@ -70,20 +70,20 @@ const QString AUTO_SEAT_NAME_PREFIX = "AUTO_";
 //Suit names (indexed by enum Suit).
 const char * const SUIT_NAMES[5] =
 {
-    QT_TR_NOOP("C"),
-    QT_TR_NOOP("D"),
-    QT_TR_NOOP("H"),
-    QT_TR_NOOP("S"),
-    QT_TR_NOOP("NT")
+    QT_TRANSLATE_NOOP("defines", "C"),
+    QT_TRANSLATE_NOOP("defines", "D"),
+    QT_TRANSLATE_NOOP("defines", "H"),
+    QT_TRANSLATE_NOOP("defines", "S"),
+    QT_TRANSLATE_NOOP("defines", "NT")
 };
 
 //Team names (indexed by enum Team).
 const char * const TEAM_NAMES[4] =
 {
-    QT_TR_NOOP("Neither"),
-    QT_TR_NOOP("North-South"),
-    QT_TR_NOOP("East-West"),
-    QT_TR_NOOP("All")
+    QT_TRANSLATE_NOOP("defines", "Neither"),
+    QT_TRANSLATE_NOOP("defines", "North-South"),
+    QT_TRANSLATE_NOOP("defines", "East-West"),
+    QT_TRANSLATE_NOOP("defines", "All")
 };
 
 //Suit, position and vulnerability. MUST NOT be changed (used as index).
