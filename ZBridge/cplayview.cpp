@@ -802,10 +802,12 @@ void CPlayView::showBidDialog(bool show)
  * @brief Show bid in mid info auction widget.
  * @param seat The seat to show the bid for.
  * @param bid The bid to show.
+ * @param features Text string describing rules for the bid.
+ * @param alert Text string describing alert (empty if no alert).
  */
-void CPlayView::showBid(Seat seat, Bids bid)
+void CPlayView::showBid(Seat seat, Bids bid, QString features, QString alert)
 {
-    midInfoAuction->showBid(seat, bid);
+    midInfoAuction->showBid(seat, bid, features, alert);
 }
 
 /**

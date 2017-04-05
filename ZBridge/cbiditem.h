@@ -43,6 +43,10 @@ public:
     Seat getSeat() { return seat; }
     void setBid(Bids bid) { this->bid = bid; }
     Bids getBid() { return bid; }
+    void setFeatures(QString features) { this->features = features; }
+    QString getFeatures() { return features; }
+    void setAlert(QString alert) { this->alert = alert; }
+    QString getAlert() { return alert; }
     void connectBid(QObject *bidSignal) { this->bidSignal = bidSignal; }
 
 protected:
@@ -52,6 +56,8 @@ protected:
 private:
     Seat seat;          /**< The seat who gave the bid. */
     Bids bid;           /**< The bid. */
+    QString features;
+    QString alert;
     QObject *bidSignal; /**< Event receiver. */
 };
 

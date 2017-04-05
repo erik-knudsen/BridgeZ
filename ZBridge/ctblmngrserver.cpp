@@ -292,7 +292,7 @@ void CTblMngrServer::serverActions()
         {
             //Show relevant information to the user in play view.
             sShowBidDialog(false);
-            sShowBid((Seat)zBridgeServerIface_get_bidder(&handle), BID_BLANK);
+//            sShowBid((Seat)zBridgeServerIface_get_bidder(&handle), BID_BLANK);
             sClearYourTurnOnTable();
             sShowDummyOnTable((Seat)((zBridgeServerIface_get_declarer(&handle) + 2) & 3));
             sShowPlay();        //Show play widget in play view.

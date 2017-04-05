@@ -121,7 +121,7 @@ public:
      */
     /*@{*/
     void showBidDialog(bool show);
-    void showBid(Seat seat, Bids bid);
+    void showBid(Seat seat, Bids bid, QString features = "", QString alert = "");
     void undoBid(int noBid);
     void enableBidder(Seat bidder, Bids lastBid, Bids doubleBid);
     void disableBidder();

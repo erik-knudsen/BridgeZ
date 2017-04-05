@@ -74,8 +74,10 @@ CMidInfoAuction::CMidInfoAuction(QGraphicsWidget *parent) :
  * must be shown
  * @param seat The seat.
  * @param bid The bid.
+ * @param features Text string describing rules for the bid - might be 0.
+ * @param alert Text string describing alert (empty if no alert) - might be 0.
  */
-void CMidInfoAuction::showBid(Seat seat, Bids bid)
+void CMidInfoAuction::showBid(Seat seat, Bids bid, QString features, QString alert)
 {
     int size = bidValues.size();
     CBidItem *last = 0;
@@ -92,10 +94,12 @@ void CMidInfoAuction::showBid(Seat seat, Bids bid)
             line++;
         last->setPos(startX + seat * horInc, startY + line * verInc);
     }
-    else if (((bid != BID_PLAYER) &&(size > 0) && (last->getBid() == BID_PLAYER) && (last->getSeat() == seat)))
+    else if ((bid != BID_PLAYER) &&(size > 0) && (last->getBid() == BID_PLAYER) && (last->getSeat() == seat))
     {
         last->setSeat(seat);
         last->setBid(bid);
+        last->setFeatures(features);
+        last->setAlert(alert);
     }
     if (last != 0) last->update();
 }

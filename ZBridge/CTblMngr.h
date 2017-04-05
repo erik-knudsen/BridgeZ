@@ -80,7 +80,7 @@ public slots:
     virtual void sShowAuction() = 0;
     virtual void sShowPlay() = 0;
     void sShowBidDialog(bool show);
-    void sShowBid(Seat seat, Bids bid);
+    void sShowBid(Seat seat, Bids bid, QString features = "", QString alert = "");
     void sShowCenter(Team vulnerable);
     void sShowDummyCards(Seat seat, int cards[13]);
     void sShowDummyOnTable(Seat seat);

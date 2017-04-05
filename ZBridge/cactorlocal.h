@@ -99,7 +99,7 @@ signals:
     void sShowAuction();
     void sShowPlay();
     void sShowBidDialog(bool show);
-    void sShowBid(Seat seat, Bids bid);
+    void sShowBid(Seat seat, Bids bid, QString features = "", QString alert = "");
     void sShowCenter(Team vulnerable);
     void sShowDummyOnTable(Seat seat);
     void sShowDummyCards(Seat seat, int cards[13]);

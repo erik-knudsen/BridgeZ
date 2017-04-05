@@ -145,34 +145,42 @@ QString CBidAndPlay::featuresOfLastBid()
             //HCP.
             int hcpLow = lowFeatures.getHcp(ANY);
             int hcpHigh = highFeatures.getHcp(ANY);
-            if ((hcpLow > 0) || (hcpHigh < lowFeatures.getMaxHcp(ANY)))
+            if ((hcpLow > 0) || (hcpHigh < highFeatures.getMaxHcp(ANY)))
             {
-                if (hcpHigh == lowFeatures.getMaxHcp(ANY))
+                if (hcpHigh == highFeatures.getMaxHcp(ANY))
                     features += QString(tr("HCP: ") + "%1  ").arg(hcpLow);
                 else
                     features += QString(tr("HCP: ") + "%1-%2  ").arg(hcpLow).arg(hcpHigh);
             }
 
             //DP.
-            int dpLow = lowFeatures.getDp(ANY);
-            int dpHigh = highFeatures.getDp(ANY);
-            if ((dpLow > 0) || (dpHigh < lowFeatures.getMaxDp()))
+            for (int i = 0; i < 5; i++)
             {
-                if (dpHigh == lowFeatures.getMaxDp())
-                    features += QString(tr("DP: ") + "%1  ").arg(dpLow);
-                else
-                    features += QString(tr("DP: ") + "%1-%2  ").arg(dpLow).arg(dpHigh);
+                int dpLow = lowFeatures.getDp((Suit)i);
+                int dpHigh = highFeatures.getDp((Suit)i);
+                if ((dpLow > 0) || (dpHigh < highFeatures.getMaxDp()))
+                {
+                    QString txt = tr("DP ") + QCoreApplication::translate("defines", SUIT_NAMES[i]) + ": ";
+                    if (dpHigh == highFeatures.getMaxDp())
+                        features += QString(txt + "%1  ").arg(dpLow);
+                    else
+                        features += QString(txt + "%1-%2  ").arg(dpLow).arg(dpHigh);
+                }
             }
 
             //TP.
-            int tpLow = lowFeatures.getPoints(ANY);
-            int tpHigh = highFeatures.getPoints(ANY);
-            if ((tpLow > 0) || (tpHigh < lowFeatures.getMaxPoints()))
+            for (int i = 0; i < 5; i++)
             {
-                if (dpHigh == lowFeatures.getMaxDp())
-                    features += QString(tr("TP: ") + "%1+  ").arg(dpLow);
-                else
-                    features += QString(tr("TP: ") + "%1-%2  ").arg(dpLow).arg(dpHigh);
+                int tpLow = lowFeatures.getPoints((Suit)i);
+                int tpHigh = highFeatures.getPoints((Suit)i);
+                if ((tpLow > 0) || (tpHigh < highFeatures.getMaxPoints()))
+                {
+                    QString txt = tr("TP ") + QCoreApplication::translate("defines", SUIT_NAMES[i]) + ": ";
+                    if (tpHigh == highFeatures.getMaxPoints())
+                        features += QString(txt + "%1+  ").arg(tpLow);
+                    else
+                        features += QString(txt + "%1-%2  ").arg(tpLow).arg(tpHigh);
+                }
             }
 
             //Suits.
@@ -181,9 +189,9 @@ QString CBidAndPlay::featuresOfLastBid()
                 QString suitName = QCoreApplication::translate("defines", SUIT_NAMES[suit]);
                 int lLow = lowFeatures.getSuitLen((Suit)suit);
                 int lHigh = highFeatures.getSuitLen((Suit)suit);
-                if ((lLow > 0) || (lHigh < lowFeatures.getMaxSuitLen()))
+                if ((lLow > 0) || (lHigh < highFeatures.getMaxSuitLen()))
                 {
-                    if (lHigh == lowFeatures.getMaxSuitLen())
+                    if (lHigh == highFeatures.getMaxSuitLen())
                         features += QString(suitName + ": %1+  ").arg(lLow);
                     else
                         features += QString(suitName + ": %1-%2  ").arg(lLow).arg(lHigh);
@@ -222,9 +230,9 @@ QString CBidAndPlay::featuresOfLastBid()
             //Aces.
             int aceLow = lowFeatures.getCountCard(ANY, ACE);
             int aceHigh = highFeatures.getCountCard(ANY, ACE);
-            if ((aceLow > 0) || (aceHigh < lowFeatures.getMaxCountCard(ANY)))
+            if ((aceLow > 0) || (aceHigh < highFeatures.getMaxCountCard(ANY)))
             {
-                if (aceHigh == lowFeatures.getMaxCountCard(ANY))
+                if (aceHigh == highFeatures.getMaxCountCard(ANY))
                     features += QString(tr("A: ") + "%1+  ").arg(aceLow);
                 else
                     features += QString(tr("A: ") + "%1-%2  ").arg(aceLow).arg(aceHigh);
@@ -233,12 +241,42 @@ QString CBidAndPlay::featuresOfLastBid()
             //Kings.
             int kingLow = lowFeatures.getCountCard(ANY, KING);
             int kingHigh = highFeatures.getCountCard(ANY, KING);
-            if ((kingLow > 0) || (kingHigh < lowFeatures.getMaxCountCard(ANY)))
+            if ((kingLow > 0) || (kingHigh < highFeatures.getMaxCountCard(ANY)))
             {
-                if (kingHigh == lowFeatures.getMaxCountCard(ANY))
+                if (kingHigh == highFeatures.getMaxCountCard(ANY))
                     features += QString(tr("K: ") + "%1+  ").arg(kingLow);
                 else
                     features += QString(tr("K: ") + "%1-%2  ").arg(kingLow).arg(kingHigh);
+            }
+
+            //Playing tricks.
+            for (int i = 0; i < 5; i++)
+            {
+                int ptLow = lowFeatures.getPlayingTricks((Suit)i);
+                int ptHigh = highFeatures.getPlayingTricks((Suit)i);
+                if ((ptLow > 0) || (ptHigh < highFeatures.getMaxPlayingTricks()))
+                {
+                    QString txt = tr("PT ") + QCoreApplication::translate("defines", SUIT_NAMES[i]) + ": ";
+                    if (ptHigh == highFeatures.getMaxDp())
+                        features += QString(txt + "%1  ").arg(ptLow);
+                    else
+                        features += QString(txt + "%1-%2  ").arg(ptLow).arg(ptHigh);
+                }
+            }
+
+            //Stopper quality.
+            for (int i = 0; i < 4; i++)
+            {
+                int sqLow = lowFeatures.getStopNT((Suit)i);
+                int sqHigh = highFeatures.getStopNT((Suit)i);
+                if ((sqLow > 0) || (sqHigh < highFeatures.getMaxStopNT()))
+                {
+                    QString txt = tr("SQ ") + QCoreApplication::translate("defines", SUIT_NAMES[i]) + ": ";
+                    if (sqHigh == highFeatures.getMaxStopNT())
+                        features += QString(txt + "%1  ").arg(sqLow);
+                    else
+                        features += QString(txt + "%1-%2  ").arg(sqLow).arg(sqHigh);
+                }
             }
         }
     }

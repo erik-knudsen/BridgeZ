@@ -314,8 +314,8 @@ void CTblMngrClient::sRBid(Seat player, Seat bidder)
  */
 void CTblMngrClient::sBid(Seat bidder, Bids bid)
 {
-    playView->showBid(bidder, bid);
-    playView->showBid((Seat)((bidder + 1) & 3), BID_PLAYER);
+//    playView->showBid(bidder, bid);
+//    playView->showBid((Seat)((bidder + 1) & 3), BID_PLAYER);
 
     CBidMsg bidMsg(bidder, bid);
     remoteActorClient->sendLine(bidMsg.line);

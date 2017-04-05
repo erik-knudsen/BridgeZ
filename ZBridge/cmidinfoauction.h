@@ -36,7 +36,7 @@ class CMidInfoAuction : public QGraphicsWidget
 public:
     explicit CMidInfoAuction(QGraphicsWidget *parent = 0);
 
-    void showBid(Seat seat, Bids bid);
+    void showBid(Seat seat, Bids bid, QString features = "", QString alert = "");
     void undoBid(int noBid);
     void reset();
     void connectBids(QObject *bidSignalStrategy) {this->bidSignalStrategy = bidSignalStrategy; }

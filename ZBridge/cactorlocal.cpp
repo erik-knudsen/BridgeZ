@@ -152,7 +152,7 @@ void CActorLocal::clientActions()
         {
             //Must clear bid dialog, clear auction info and show play info.
             emit sShowBidDialog(false);
-            emit sShowBid((Seat)zBridgeClientIface_get_bidder(&handle), BID_BLANK);
+//            emit sShowBid((Seat)zBridgeClientIface_get_bidder(&handle), BID_BLANK);
             emit sShowDummyOnTable((Seat)((zBridgeClientIface_get_declarer(&handle) + 2) & 3));
             emit sShowPlay();
         }
@@ -601,7 +601,7 @@ void CActorLocal::bidDone(Seat bidder, Bids bid)
     if (showUser)
     {
         //Show bid in play view.
-        emit sShowBid(bidder, bid);
+        emit sShowBid(bidder, bid, bidAndPlay.featuresOfLastBid(), bidAndPlay.alertOfLastBid());
         emit sShowBid((Seat)((bidder + 1) & 3), BID_PLAYER);
     }
 

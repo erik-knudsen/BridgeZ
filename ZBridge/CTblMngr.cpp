@@ -103,9 +103,9 @@ void CTblMngr::sShowBidDialog(bool show)
  * @param seat The seat which bids.
  * @param bid The bid.
  */
-void CTblMngr::sShowBid(Seat seat, Bids bid)
+void CTblMngr::sShowBid(Seat seat, Bids bid, QString features, QString alert)
 {
-    playView->showBid(seat, bid);
+    playView->showBid(seat, bid, features, alert);
 }
 
 /**
