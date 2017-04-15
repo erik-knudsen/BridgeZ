@@ -111,7 +111,8 @@ SOURCES +=\
     crule.cpp \
     cruledialog.cpp \
     cbiddbdefine.cpp \
-    cbidandplayengines.cpp
+    cbidandplayengines.cpp \
+    cpopup.cpp
 
 HEADERS  += cmainframe.h \
     czbridgedoc.h \
@@ -214,7 +215,8 @@ HEADERS  += cmainframe.h \
     crule.h \
     cruledialog.h \
     cbiddbdefine.h \
-    cbidandplayengines.h
+    cbidandplayengines.h \
+    cpopup.h
 
 FORMS    += cmainframe.ui \
     cfilepropertiesdialog.ui \
@@ -250,6 +252,7 @@ FORMS    += cmainframe.ui \
     clayoutcardsdialog.ui \
     cbiddingsystemdialog.ui \
     cbidpagedescdialog.ui \
-    cruledialog.ui
+    cruledialog.ui \
+    cpopup.ui
 
 RESOURCES = images.qrc

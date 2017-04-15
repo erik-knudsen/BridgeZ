@@ -19,6 +19,7 @@
 
 #include <QGraphicsItem>
 
+#include "cpopup.h"
 #include "defines.h"
 
 /**
@@ -50,6 +51,8 @@ public:
     void connectBid(QObject *bidSignal) { this->bidSignal = bidSignal; }
 
 protected:
+    void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
+    void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 
@@ -59,6 +62,7 @@ private:
     QString features;
     QString alert;
     QObject *bidSignal; /**< Event receiver. */
+    CPopup popup;
 };
 
 #endif // CBIDITEM_H

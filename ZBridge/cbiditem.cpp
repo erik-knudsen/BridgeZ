@@ -35,6 +35,7 @@ CBidItem::CBidItem(Seat seat, Bids bid)
 {
     setFlag(QGraphicsItem::ItemIsSelectable);
     bidSignal = 0;
+    setAcceptHoverEvents(true);
 
     setSeat(seat);
     setBid(bid);
@@ -54,6 +55,23 @@ void CBidItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
     QString bidRef = BIDS[bid];
     pixmap.load(bidRef);
     painter->drawPixmap(0, 0, pixmap);
+}
+
+void CBidItem::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
+{
+    if (alert.size() > 0)
+        popup.showPopup(alert + "\n" + features);
+    else if (features.size() > 0)
+        popup.showPopup(features);
+
+    update();
+}
+
+void CBidItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
+{
+    popup.close();
+
+    update();
 }
 
 void CBidItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
