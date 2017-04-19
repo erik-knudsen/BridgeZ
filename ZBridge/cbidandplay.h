@@ -29,6 +29,7 @@
 #include "cbidhistory.h"
 #include "cplayhistory.h"
 #include "cfeatures.h"
+#include "cbid.h"
 #include "Defines.h"
 
 class CBidAndPlayEngines;
@@ -58,7 +59,7 @@ public:
     void resetBidHistory();
     void appendBid(Seat bidder, Bids bid, Team vulnerable);
     int bidUndo(Bids *bid);
-    Bids getNextBid(Seat seat, Team teamVul);
+    CBid getNextBid(Seat seat, Team teamVul);
 
     void setActorsCards(int cards[13])
     { for (int i = 0; i < 13; i++) actorsCards[i] = cards[i]; }
@@ -76,6 +77,7 @@ public:
     int getNextPlay(Seat player, Seat dummySeat);
     CBidHistory &getBidHistory() { return bidHistory; }
     CPlayHistory &getPlayHistory() { return playHistory; }
+    QString featuresOfBid(CBid bid);
     QString featuresOfLastBid();
     QString alertOfLastBid();
 

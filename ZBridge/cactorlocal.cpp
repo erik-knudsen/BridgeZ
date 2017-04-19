@@ -20,6 +20,7 @@
 
 #include <cassert>
 #include <QTimer>
+#include <QDebug>
 
 #include "CTblMngr.h"
 #include "cbidengine.h"
@@ -383,9 +384,12 @@ void CActorLocal::clientSyncRunCycle()
  */
 void CActorLocal::bidValue()
 {
-    Bids nextBid = bidAndPlay.getNextBid((Seat)zBridgeClientIface_get_bidder(&handle),
+    CBid nextBid = bidAndPlay.getNextBid((Seat)zBridgeClientIface_get_bidder(&handle),
                 (Team)zBridgeClientIface_get_vulnerability(&handle));
-    bidValue(nextBid);
+
+    qDebug() << QString(SEAT_NAMES[nextBid.bidder]) + ":  " + bidAndPlay.featuresOfBid(nextBid);
+
+    bidValue(nextBid.bid);
 }
 
 /**

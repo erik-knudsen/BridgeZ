@@ -71,13 +71,10 @@ int CBidAndPlay::bidUndo(Bids *bid)
  * @param teamVul Vulnerability for the bidder.
  * @return The automatically calculated bid.
  */
-Bids CBidAndPlay::getNextBid(Seat seat, Team teamVul)
+CBid CBidAndPlay::getNextBid(Seat seat, Team teamVul)
 {
-    Bids bid;
+    return (bidAndPlayEngines->getNextBid(seat, bidHistory, actorsCards, teamVul));
 
-    bid = bidAndPlayEngines->getNextBid(seat, bidHistory, actorsCards, teamVul);
-
-    return bid;
 /*
     if (bidHistory.bidList.isEmpty())
         return BID_1C;
@@ -119,28 +116,25 @@ int CBidAndPlay::getNextPlay(Seat player, Seat dummySeat)
     return i;
 }
 
-QString CBidAndPlay::featuresOfLastBid()
+QString CBidAndPlay::featuresOfBid(CBid bid)
 {
     QString features;
 
-    assert (bidHistory.bidList.size() > 0);
-
-    CBid lastBid = bidHistory.bidList.last();
-    if (lastBid.rules.size() > 0)
+    if (bid.rules.size() > 0)
     {
         //Status.
-        Forcing forcing = lastBid.rules[0]->getStatus();
+        Forcing forcing = bid.rules[0]->getStatus();
         QStringList labels;
         labels << tr("Non Forcing") << tr("Forcing") << tr("Game Forcing") << tr("Must Pass");
         features += tr("Status: ") + labels[forcing];
 
-        for (int i = 0; i < lastBid.rules.size(); i++)
+        for (int i = 0; i < bid.rules.size(); i++)
         {
             features += "\n";
 
             CFeatures lowFeatures;
             CFeatures highFeatures;
-            lastBid.rules[i]->getFeatures(&lowFeatures, &highFeatures);
+            bid.rules[i]->getFeatures(&lowFeatures, &highFeatures);
 
             //HCP.
             int hcpLow = lowFeatures.getHcp(ANY);
@@ -390,10 +384,47 @@ QString CBidAndPlay::featuresOfLastBid()
                     }
                 }
             }
+
+            //General quality.
+            found = false;
+            for (int i = 0; i < 4; i++)
+            {
+                int gqLow = lowFeatures.getQlty((Suit)i);
+                int gqHigh = highFeatures.getQlty((Suit)i);
+                if ((gqLow > 0) || (gqHigh < highFeatures.getMaxQlty()))
+                    found = true;
+            }
+            if (found)
+            {
+                features += tr("GQ ");
+                for (int i = 0; i < 4; i++)
+                {
+                    int gqLow = lowFeatures.getQlty((Suit)i);
+                    int gqHigh = highFeatures.getQlty((Suit)i);
+                    if ((gqLow > 0) || (gqHigh < highFeatures.getMaxQlty()))
+                    {
+                        features += QCoreApplication::translate("defines", SUIT_NAMES[i]) + ":";
+                        if (gqHigh == gqLow)
+                            features += QString("%1  ").arg(gqLow);
+                        else if (gqHigh == highFeatures.getMaxQlty())
+                            features += QString("%1+  ").arg(gqLow);
+                        else if (gqLow == 0)
+                            features += QString("+%1  ").arg(gqHigh);
+                        else
+                            features += QString("%1-%2  ").arg(gqLow).arg(gqHigh);
+                    }
+                }
+            }
         }
     }
-
     return features;
+}
+
+QString CBidAndPlay::featuresOfLastBid()
+{
+    assert (bidHistory.bidList.size() > 0);
+
+    return featuresOfBid(bidHistory.bidList.last());
 }
 
 QString CBidAndPlay::alertOfLastBid()

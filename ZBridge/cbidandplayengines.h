@@ -23,6 +23,7 @@
 
 #include "cfeatures.h"
 #include "cbidhistory.h"
+#include "cbid.h"
 
 class CBidDB;
 class CBidDesc;
@@ -41,7 +42,7 @@ public:
                     CBidOptionDoc &nsBidOptionDoc, CBidOptionDoc &ewBidOptionDoc,
                     ScoringMethod scoringMethod);
     void setScoringMethod(ScoringMethod scoringMethod) { this->scoringMethod = scoringMethod; }
-    Bids getNextBid(Seat seat, CBidHistory &bidHistory, int cards[], Team teamVul);
+    CBid getNextBid(Seat seat, CBidHistory &bidHistory, int cards[], Team teamVul);
     QList<CRule *> getpRules(Seat seat, CBidHistory &bidHistory, Bids bid, Team teamVul,
                              bool *substitute);
     QString getAlertIdDesc(quint8 alertId);

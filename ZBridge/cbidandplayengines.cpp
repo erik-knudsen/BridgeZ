@@ -65,7 +65,7 @@ void CBidAndPlayEngines::initialize(CBidDB *bidDB, CBidDesc *bidDesc, CBidOption
  * @param[in] teamVul Team vulnerability.
  * @return The calculated next bid. If none was found then return BID_NONE.
  */
-Bids CBidAndPlayEngines::getNextBid(Seat seat, CBidHistory &bidHistory, int cards[], Team teamVul)
+CBid CBidAndPlayEngines::getNextBid(Seat seat, CBidHistory &bidHistory, int cards[], Team teamVul)
 {
     assert(bidEngine != 0);
 

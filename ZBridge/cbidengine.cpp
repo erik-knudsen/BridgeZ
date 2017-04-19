@@ -61,10 +61,13 @@ CBidEngine::~CBidEngine()
  * @param[in] teamVul Team vulnerability.
  * @return The calculated next bid. If none was found then return BID_NONE.
  */
-Bids CBidEngine::getNextBid(Seat seat, CBidHistory &bidHistory, int cards[], ScoringMethod scoringMethod,
+CBid CBidEngine::getNextBid(Seat seat, CBidHistory &bidHistory, int cards[], ScoringMethod scoringMethod,
                             Team teamVul)
 {
     assert ((bidHistory.bidList.size() == 0) ? true : (((bidHistory.bidList.last().bidder + 1) % 4) == seat));
+
+    CBid bid;
+    bid.bidder = seat;
 
     CAuction auction;
     QList<CAuction> subAuction;
@@ -166,28 +169,39 @@ Bids CBidEngine::getNextBid(Seat seat, CBidHistory &bidHistory, int cards[], Sco
     if (pDefRules.size() > 0)
     {
         //Find highest priority and bid.
-        int priority = pDefRules[0]->getPriority();
-        qint8 bid = defBids[0];
+        int inx = 0;
+        int priority = pDefRules[inx]->getPriority();
+        qint8 bidVal = defBids[inx];
         for (int i = 0; i < pDefRules.size(); i++)
             if (pDefRules[i]->getPriority() > priority)
             {
-                priority = pDefRules[i]->getPriority();
-                bid = defBids[i];
+                inx = i;
+                priority = pDefRules[inx]->getPriority();
+                bidVal = defBids[inx];
             }
 
         //Find lowest bid.
         for (int i = 0; i < defBids.size(); i++)
             if ((pDefRules[i]->getPriority() == priority) &&
-                    (bid > defBids[i]))
-                bid = defBids[i];
+                    (bidVal > defBids[i]))
+            {
+                inx = i;
+                bidVal = defBids[inx];
+            }
 
         //Return found bid.
-        return (Bids)bid;
+        bid.bid = (Bids)bidVal;
+        bid.rules.append(pDefRules[inx]);
+        bid.alert = getAlertIdDesc(bid.rules[0]->getAlertId());
+        bid.substitute = (subAuction.size() > 0);
+
+        return bid;
     }
     else
     {
-        return BID_PASS;
-//      return BID_NONE;
+        bid.bid = BID_PASS;
+//      bid.bid = BID_NONE;
+        return bid;
     }
 }
 

@@ -23,6 +23,7 @@
 
 #include <QList>
 
+#include "cbid.h"
 #include "Defines.h"
 
 class CBidDB;
@@ -44,7 +45,7 @@ public:
                CBidOptionDoc &nsBidOptionDoc, CBidOptionDoc &ewBidOptionDoc);
     virtual ~CBidEngine();
 
-    Bids getNextBid(Seat seat, CBidHistory &bidHistory, int cards[13], ScoringMethod scoringMethod,
+    CBid getNextBid(Seat seat, CBidHistory &bidHistory, int cards[13], ScoringMethod scoringMethod,
             Team teamVul);
     QList<CRule *> getpRules(Seat seat, CBidHistory &bidHistory, Bids bid, ScoringMethod scoringMethod,
                              Team teamVul, bool *substitute);
