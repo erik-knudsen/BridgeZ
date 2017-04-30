@@ -48,7 +48,7 @@ void CRule::initialize()
  */
 bool CRule::RuleIsOk(CFeatures &feature)
 {
-    const int NO_FEATURES = 110;
+    const int NO_FEATURES = 115;
     int low[NO_FEATURES], high[NO_FEATURES], cur[NO_FEATURES];
     int i;
 
@@ -113,6 +113,12 @@ bool CRule::RuleIsOk(CFeatures &feature)
     low[i++] = featureRange[0].getRkcb(CLUBS);
 
     low[i++] = featureRange[0].getBal();
+
+    low[i++] = featureRange[0].getDp(SPADES);
+    low[i++] = featureRange[0].getDp(HEARTS);
+    low[i++] = featureRange[0].getDp(DIAMONDS);
+    low[i++] = featureRange[0].getDp(CLUBS);
+    low[i++] = featureRange[0].getDp(ANY);
 
     low[i++] = featureRange[0].getDif2(DIAMONDS, CLUBS);
     low[i++] = featureRange[0].getDif2(HEARTS, CLUBS);
@@ -253,6 +259,12 @@ bool CRule::RuleIsOk(CFeatures &feature)
 
     high[i++] = featureRange[1].getBal();
 
+    high[i++] = featureRange[1].getDp(SPADES);
+    high[i++] = featureRange[1].getDp(HEARTS);
+    high[i++] = featureRange[1].getDp(DIAMONDS);
+    high[i++] = featureRange[1].getDp(CLUBS);
+    high[i++] = featureRange[1].getDp(ANY);
+
     high[i++] = featureRange[1].getDif2(DIAMONDS, CLUBS);
     high[i++] = featureRange[1].getDif2(HEARTS, CLUBS);
     high[i++] = featureRange[1].getDif2(HEARTS, DIAMONDS);
@@ -391,6 +403,12 @@ bool CRule::RuleIsOk(CFeatures &feature)
     cur[i++] = feature.getRkcb(CLUBS);
 
     cur[i++] = feature.getBal();
+
+    cur[i++] = feature.getDp(SPADES);
+    cur[i++] = feature.getDp(HEARTS);
+    cur[i++] = feature.getDp(DIAMONDS);
+    cur[i++] = feature.getDp(CLUBS);
+    cur[i++] = feature.getDp(ANY);
 
     cur[i++] = feature.getDif2(DIAMONDS, CLUBS);
     cur[i++] = feature.getDif2(HEARTS, CLUBS);

@@ -142,20 +142,20 @@ QString CBidAndPlay::featuresOfBid(CBid bid)
             if ((hcpLow > 0) || (hcpHigh < highFeatures.getMaxHcp(ANY)))
             {
                 if (hcpHigh == hcpLow)
-                    features += QString(tr("HCP: ") + "%1  ").arg(hcpLow);
+                    features += QString(tr("HCP: ") + "%1 ; ").arg(hcpLow);
                 else if (hcpHigh == highFeatures.getMaxHcp(ANY))
-                    features += QString(tr("HCP: ") + "%1+  ").arg(hcpLow);
+                    features += QString(tr("HCP: ") + "%1+ ; ").arg(hcpLow);
                 else if (hcpLow == 0)
-                    features += QString(tr("HCP: ") + "+%1  ").arg(hcpHigh);
+                    features += QString(tr("HCP: ") + "+%1 ; ").arg(hcpHigh);
                 else
-                    features += QString(tr("HCP: ") + "%1-%2  ").arg(hcpLow).arg(hcpHigh);
+                    features += QString(tr("HCP: ") + "%1-%2 ; ").arg(hcpLow).arg(hcpHigh);
             }
 
             //DP.
             bool found = false;
             for (int i = 0; i < 5; i++)
             {
-                Suit suit = (Suit)((i < 4) ? (i) : (i - 1));
+                Suit suit = (Suit)((i < 4) ? (i) : (-1));
                 int dpLow = lowFeatures.getDp(suit);
                 int dpHigh = highFeatures.getDp(suit);
                 if ((dpLow > 0) || (dpHigh < highFeatures.getMaxDp()))
@@ -166,29 +166,30 @@ QString CBidAndPlay::featuresOfBid(CBid bid)
                 features += tr("DP ");
                 for (int i = 0; i < 5; i++)
                 {
-                    Suit suit = (Suit)((i < 4) ? (i) : (i - 1));
+                    Suit suit = (Suit)((i < 4) ? (i) : (-1));
                     int dpLow = lowFeatures.getDp(suit);
                     int dpHigh = highFeatures.getDp(suit);
                     if ((dpLow > 0) || (dpHigh < highFeatures.getMaxDp()))
                     {
                         features += QCoreApplication::translate("defines", SUIT_NAMES[i]) + ":";
                         if (dpHigh == dpLow)
-                            features += QString("%1  ").arg(dpLow);
+                            features += QString("%1 ").arg(dpLow);
                         else if (dpHigh == highFeatures.getMaxDp())
-                            features += QString("%1+  ").arg(dpLow);
+                            features += QString("%1+ ").arg(dpLow);
                         else if (dpLow == 0)
-                            features += QString("+%1  ").arg(dpHigh);
+                            features += QString("+%1 ").arg(dpHigh);
                         else
-                            features += QString("%1-%2  ").arg(dpLow).arg(dpHigh);
+                            features += QString("%1-%2 ").arg(dpLow).arg(dpHigh);
                     }
                 }
+                features += "; ";
             }
 
             //TP.
             found = false;
             for (int i = 0; i < 5; i++)
             {
-                Suit suit = (Suit)((i < 4) ? (i) : (i - 1));
+                Suit suit = (Suit)((i < 4) ? (i) : (-1));
                 int tpLow = lowFeatures.getPoints(suit);
                 int tpHigh = highFeatures.getPoints(suit);
                 if ((tpLow > 0) || (tpHigh < highFeatures.getMaxPoints()))
@@ -199,29 +200,29 @@ QString CBidAndPlay::featuresOfBid(CBid bid)
                 features += tr("TP ");
                 for (int i = 0; i < 5; i++)
                 {
-                    Suit suit = (Suit)((i < 4) ? (i) : (i - 1));
+                    Suit suit = (Suit)((i < 4) ? (i) : (-1));
                     int tpLow = lowFeatures.getPoints(suit);
                     int tpHigh = highFeatures.getPoints(suit);
                     if ((tpLow > 0) || (tpHigh < highFeatures.getMaxPoints()))
                     {
                         features += QCoreApplication::translate("defines", SUIT_NAMES[i]) + ":";
                         if (tpHigh == tpLow)
-                            features += QString("%1  ").arg(tpLow);
+                            features += QString("%1 ").arg(tpLow);
                         else if (tpHigh == highFeatures.getMaxPoints())
-                            features += QString("%1+  ").arg(tpLow);
+                            features += QString("%1+ ").arg(tpLow);
                         else if (tpLow == 0)
-                            features += QString("+%1  ").arg(tpHigh);
+                            features += QString("+%1 ").arg(tpHigh);
                         else
-                            features += QString("%1-%2  ").arg(tpLow).arg(tpHigh);
+                            features += QString("%1-%2 ").arg(tpLow).arg(tpHigh);
                     }
                 }
+                features += "; ";
             }
 
             //Suit length.
             found = false;
             for (int i = 0; i < 4; i++)
             {
-                QString txt = tr("SL ") + QCoreApplication::translate("defines", SUIT_NAMES[i]) + ": ";
                 int slLow = lowFeatures.getSuitLen((Suit)i);
                 int slHigh = highFeatures.getSuitLen((Suit)i);
                 if ((slLow > 0) || (slHigh < highFeatures.getMaxSuitLen()))
@@ -238,15 +239,16 @@ QString CBidAndPlay::featuresOfBid(CBid bid)
                     {
                         features += QCoreApplication::translate("defines", SUIT_NAMES[i]) + ":";
                         if (slHigh == slLow)
-                            features += QString("%1  ").arg(slLow);
+                            features += QString("%1 ").arg(slLow);
                         else if (slHigh == highFeatures.getMaxSuitLen())
-                            features += QString("%1+  ").arg(slLow);
+                            features += QString("%1+ ").arg(slLow);
                         else if (slLow == 0)
-                            features += QString("+%1  ").arg(slHigh);
+                            features += QString("+%1 ").arg(slHigh);
                         else
-                            features += QString("%1-%2  ").arg(slLow).arg(slHigh);
+                            features += QString("%1-%2 ").arg(slLow).arg(slHigh);
                     }
                 }
+                features += "; ";
             }
 
             //Difference in length.
@@ -279,16 +281,17 @@ QString CBidAndPlay::featuresOfBid(CBid bid)
                             QString suit_2_name =  QCoreApplication::translate("defines", SUIT_NAMES[suit_2]);
                             features += suit_1_name + suit_2_name + ":";
                             if (difHigh == difLow)
-                                features += QString("%1  ").arg(difLow);
+                                features += QString("%1 ").arg(difLow);
                             else if (difHigh == highFeatures.getMaxDif2())
-                                features += QString("%1+  ").arg(difLow);
+                                features += QString("%1+ ").arg(difLow);
                             else if (difLow == -lowFeatures.getMaxDif2())
-                                features += QString("+%1  ").arg(difHigh);
+                                features += QString("+%1 ").arg(difHigh);
                             else
-                                features += QString("%1-%2  ").arg(difLow).arg(difHigh);
+                                features += QString("%1-%2 ").arg(difLow).arg(difHigh);
                         }
                     }
                 }
+                features += "; ";
             }
 
             //Aces.
@@ -297,13 +300,13 @@ QString CBidAndPlay::featuresOfBid(CBid bid)
             if ((aceLow > 0) || (aceHigh < highFeatures.getMaxCountCard(ANY)))
             {
                 if (aceHigh == aceLow)
-                    features += QString(tr("A: ") + "%1  ").arg(aceLow);
+                    features += QString(tr("A: ") + "%1 ; ").arg(aceLow);
                 else if (aceHigh == highFeatures.getMaxCountCard(ANY))
-                    features += QString(tr("A: ") + "%1+  ").arg(aceLow);
+                    features += QString(tr("A: ") + "%1+ ; ").arg(aceLow);
                 else if (aceLow == 0)
-                    features += QString(tr("A: ") + "+%1  ").arg(aceHigh);
+                    features += QString(tr("A: ") + "+%1 ; ").arg(aceHigh);
                 else
-                    features += QString(tr("A: ") + "%1-%2  ").arg(aceLow).arg(aceHigh);
+                    features += QString(tr("A: ") + "%1-%2 ; ").arg(aceLow).arg(aceHigh);
             }
 
             //Kings.
@@ -312,20 +315,20 @@ QString CBidAndPlay::featuresOfBid(CBid bid)
             if ((kingLow > 0) || (kingHigh < highFeatures.getMaxCountCard(ANY)))
             {
                 if (kingHigh == kingLow)
-                    features += QString(tr("K: ") + "%1  ").arg(kingLow);
+                    features += QString(tr("K: ") + "%1 ; ").arg(kingLow);
                 else if (kingHigh == highFeatures.getMaxCountCard(ANY))
-                    features += QString(tr("K: ") + "%1+  ").arg(kingLow);
+                    features += QString(tr("K: ") + "%1+ ; ").arg(kingLow);
                 else if (kingLow == 0)
-                    features += QString(tr("K: ") + "+%1  ").arg(kingHigh);
+                    features += QString(tr("K: ") + "+%1 ; ").arg(kingHigh);
                 else
-                    features += QString(tr("K: ") + "%1-%2  ").arg(kingLow).arg(kingHigh);
+                    features += QString(tr("K: ") + "%1-%2 ; ").arg(kingLow).arg(kingHigh);
             }
 
             //Playing tricks.
             found = false;
             for (int i = 0; i < 5; i++)
             {
-                Suit suit = (Suit)((i < 4) ? (i) : (i - 1));
+                Suit suit = (Suit)((i < 4) ? (i) : (-1));
                 int ptLow = lowFeatures.getPlayingTricks(suit);
                 int ptHigh = highFeatures.getPlayingTricks(suit);
                 if ((ptLow > 0) || (ptHigh < highFeatures.getMaxPlayingTricks()))
@@ -336,22 +339,23 @@ QString CBidAndPlay::featuresOfBid(CBid bid)
                 features += tr("PT ");
                 for (int i = 0; i < 5; i++)
                 {
-                    Suit suit = (Suit)((i < 4) ? (i) : (i - 1));
+                    Suit suit = (Suit)((i < 4) ? (i) : (-1));
                     int ptLow = lowFeatures.getPlayingTricks(suit);
                     int ptHigh = highFeatures.getPlayingTricks(suit);
                     if ((ptLow > 0) || (ptHigh < highFeatures.getMaxPlayingTricks()))
                     {
                         features += QCoreApplication::translate("defines", SUIT_NAMES[i]) + ":";
                         if (ptHigh == ptLow)
-                            features += QString("%1  ").arg(ptLow);
+                            features += QString("%1 ").arg(ptLow);
                         else if (ptHigh == highFeatures.getMaxDp())
-                            features += QString("%1+  ").arg(ptLow);
+                            features += QString("%1+ ").arg(ptLow);
                         else if (ptLow == 0)
-                            features += QString("+%1  ").arg(ptHigh);
+                            features += QString("+%1 ").arg(ptHigh);
                         else
-                            features += QString("%1-%2  ").arg(ptLow).arg(ptHigh);
+                            features += QString("%1-%2 ").arg(ptLow).arg(ptHigh);
                     }
                 }
+                features += "; ";
             }
 
             //Stopper quality.
@@ -374,15 +378,16 @@ QString CBidAndPlay::featuresOfBid(CBid bid)
                     {
                         features += QCoreApplication::translate("defines", SUIT_NAMES[i]) + ":";
                         if (sqHigh == sqLow)
-                            features += QString("%1  ").arg(sqLow);
+                            features += QString("%1 ").arg(sqLow);
                         else if (sqHigh == highFeatures.getMaxStopNT())
-                            features += QString("%1+  ").arg(sqLow);
+                            features += QString("%1+ ").arg(sqLow);
                         else if (sqLow == 0)
-                            features += QString("+%1  ").arg(sqHigh);
+                            features += QString("+%1 ").arg(sqHigh);
                         else
-                            features += QString("%1-%2  ").arg(sqLow).arg(sqHigh);
+                            features += QString("%1-%2 ").arg(sqLow).arg(sqHigh);
                     }
                 }
+                features +="; ";
             }
 
             //General quality.
@@ -405,15 +410,16 @@ QString CBidAndPlay::featuresOfBid(CBid bid)
                     {
                         features += QCoreApplication::translate("defines", SUIT_NAMES[i]) + ":";
                         if (gqHigh == gqLow)
-                            features += QString("%1  ").arg(gqLow);
+                            features += QString("%1 ").arg(gqLow);
                         else if (gqHigh == highFeatures.getMaxQlty())
-                            features += QString("%1+  ").arg(gqLow);
+                            features += QString("%1+ ").arg(gqLow);
                         else if (gqLow == 0)
-                            features += QString("+%1  ").arg(gqHigh);
+                            features += QString("+%1 ").arg(gqHigh);
                         else
-                            features += QString("%1-%2  ").arg(gqLow).arg(gqHigh);
+                            features += QString("%1-%2 ").arg(gqLow).arg(gqHigh);
                     }
                 }
+                features += "; ";
             }
         }
     }
