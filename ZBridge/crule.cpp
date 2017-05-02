@@ -30,6 +30,8 @@ CRule::CRule()
 
 void CRule::initialize()
 {
+    dBRule = true;
+
     id = 0;
     priority = 0;           //Lowest priority.
     status = NON_FORCING;   //Not forcing rule.

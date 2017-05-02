@@ -53,6 +53,9 @@ public:
 
 private:
     CAuction findSubstituteAuction(CAuction &auction, QSet<qint16> &pages);
+    CBid calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures &features, ScoringMethod scoringMethod,
+                                Team teamVul);
+    void calculatepRules(Seat seat, CBidHistory &bidHistory, Bids bid, ScoringMethod scoringMethod, Team teamVul, QList<CRule *> &pDefRules);
 
     CBidDB *bidDB;
     CBidDesc *bidDesc;

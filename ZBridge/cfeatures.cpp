@@ -555,7 +555,7 @@ void CFeatures::setCardFeatures(int cards[13])
 void CFeatures::delimitFeatures(CFeatures &features, bool lower)
 {
     //High Card Points.
-    for (int i = 0; i < 5; i++)
+    for (int i = -1; i < 4; i++)
     {
         int curVal = getHcp((Suit)i);
         int newVal = features.getHcp((Suit)i);
@@ -565,7 +565,7 @@ void CFeatures::delimitFeatures(CFeatures &features, bool lower)
     }
 
     //Weighted count of aces and kings.
-    for (int i = 0; i < 5; i++)
+    for (int i = -1; i < 4; i++)
     {
         int curVal = getControls((Suit)i);
         int newVal = features.getControls((Suit)i);
@@ -575,7 +575,7 @@ void CFeatures::delimitFeatures(CFeatures &features, bool lower)
     }
 
     //Count of aces, kings and queens.
-    for (int i = 0; i < 5; i++)
+    for (int i = -1; i < 4; i++)
     {
         int curVal = getHc((Suit)i);
         int newVal = features.getHc((Suit)i);
@@ -585,7 +585,7 @@ void CFeatures::delimitFeatures(CFeatures &features, bool lower)
     }
 
     //Count of cards higher than 9.
-    for (int i = 0; i < 5; i++)
+    for (int i = -1; i < 4; i++)
     {
         int curVal = getHonor((Suit)i);
         int newVal = features.getHonor((Suit)i);
@@ -595,7 +595,7 @@ void CFeatures::delimitFeatures(CFeatures &features, bool lower)
     }
 
     //Count of aces.
-    for (int i = 0; i < 5; i++)
+    for (int i = -1; i < 4; i++)
     {
         int curVal = getCountCard((Suit)i, ACE);
         int newVal = features.getCountCard((Suit)i, ACE);
@@ -605,7 +605,7 @@ void CFeatures::delimitFeatures(CFeatures &features, bool lower)
     }
 
     //Count of kings.
-    for (int i = 0; i < 5; i++)
+    for (int i = -1; i < 4; i++)
     {
         int curVal = getCountCard((Suit)i, KING);
         int newVal = features.getCountCard((Suit)i, KING);
@@ -615,7 +615,7 @@ void CFeatures::delimitFeatures(CFeatures &features, bool lower)
     }
 
     //Count of queens.
-    for (int i = 0; i < 5; i++)
+    for (int i = -1; i < 4; i++)
     {
         int curVal = getCountCard((Suit)i, QUEEN);
         int newVal = features.getCountCard((Suit)i, QUEEN);
@@ -625,7 +625,7 @@ void CFeatures::delimitFeatures(CFeatures &features, bool lower)
     }
 
     //Count of jacks.
-    for (int i = 0; i < 5; i++)
+    for (int i = -1; i < 4; i++)
     {
         int curVal = getCountCard((Suit)i, JACK);
         int newVal = features.getCountCard((Suit)i, JACK);
@@ -635,7 +635,7 @@ void CFeatures::delimitFeatures(CFeatures &features, bool lower)
     }
 
     //Count of tens.
-    for (int i = 0; i < 5; i++)
+    for (int i = -1; i < 4; i++)
     {
         int curVal = getCountCard((Suit)i, TEN);
         int newVal = features.getCountCard((Suit)i, TEN);
@@ -664,7 +664,7 @@ void CFeatures::delimitFeatures(CFeatures &features, bool lower)
     }
 
     //Distribution points.
-    for (int i = 0; i < 5; i++)
+    for (int i = -1; i < 4; i++)
     {
         int curVal = getDp((Suit)i);
         int newVal = features.getDp((Suit)i);
@@ -753,7 +753,7 @@ void CFeatures::delimitFeatures(CFeatures &features, bool lower)
     }
 
     //Weighted count of intermediate cards.
-    for (int i = 0; i < 5; i++)
+    for (int i = -1; i < 4; i++)
     {
         int curVal = getInter((Suit)i);
         int newVal = features.getInter((Suit)i);
@@ -763,7 +763,7 @@ void CFeatures::delimitFeatures(CFeatures &features, bool lower)
     }
 
     //Expected number of losers.
-    for (int i = 0; i < 5; i++)
+    for (int i = -1; i < 4; i++)
     {
         int curVal = getLoosers((Suit)i);
         int newVal = features.getLoosers((Suit)i);
@@ -773,7 +773,7 @@ void CFeatures::delimitFeatures(CFeatures &features, bool lower)
     }
 
     //Quick tricks.
-    for (int i = 0; i < 5; i++)
+    for (int i = -1; i < 4; i++)
     {
         int curVal = getQuickTricks((Suit)i);
         int newVal = features.getQuickTricks((Suit)i);
@@ -783,7 +783,7 @@ void CFeatures::delimitFeatures(CFeatures &features, bool lower)
     }
 
     //Playing tricks.
-    for (int i = 0; i < 5; i++)
+    for (int i = -1; i < 4; i++)
     {
         int curVal = getPlayingTricks((Suit)i);
         int newVal = features.getPlayingTricks((Suit)i);
@@ -813,7 +813,7 @@ void CFeatures::delimitFeatures(CFeatures &features, bool lower)
     }
 
     //High Card Points + Distribution Points.
-    for (int i = 0; i < 5; i++)
+    for (int i = -1; i < 4; i++)
     {
         int curVal = getPoints((Suit)i);
         int newVal = features.getPoints((Suit)i);

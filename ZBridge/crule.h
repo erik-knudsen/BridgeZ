@@ -53,12 +53,15 @@ public:
     quint8 getAlertId() { return alertId; }
     void setFeatures(CFeatures &lowFeatures, CFeatures &highFeatures);
     void getFeatures(CFeatures *lowFeatures, CFeatures *highFeatures);
+    void setdBRule(bool dBRule) { this->dBRule = dBRule; }
+    bool isdBRule() { return dBRule; }
 
     //Serialization.
     friend QDataStream &operator<<(QDataStream &out, const CRule *rule);
     friend QDataStream &operator>>(QDataStream &in, CRule *&rule);
 
 private:
+    bool dBRule;                    /**< true if the rule is from the bidding database. */
     qint16 id;                      /**< Identification of the rule. */
     qint8 priority;                 /**< Priority of the rule. */
     Forcing status;                 /**< Forcing etc. */

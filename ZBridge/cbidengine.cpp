@@ -50,16 +50,19 @@ CBidEngine::~CBidEngine()
 }
 
 /**
- * @brief Calculate the next bid
+ * @brief Determine the next bid
  *
- * Calculate the next bid by using the bidding database.
+ * Determine the next bid by using the bidding database.\n
+ * In cases where the bidding database is not enough then the search for the next bid
+ * is extended by using a built in algoritmic approach.
+ *
  *
  * @param[in] seat Bidders seat.
  * @param[in] bidHistory The bid history.
  * @param[in] cards The cards for the next bidder.
  * @param[in] scoringMethod The scoring method.
  * @param[in] teamVul Team vulnerability.
- * @return The calculated next bid. If none was found then return BID_NONE.
+ * @return The determined next bid.
  */
 CBid CBidEngine::getNextBid(Seat seat, CBidHistory &bidHistory, int cards[], ScoringMethod scoringMethod,
                             Team teamVul)
@@ -198,15 +201,13 @@ CBid CBidEngine::getNextBid(Seat seat, CBidHistory &bidHistory, int cards[], Sco
         return bid;
     }
     else
-    {
-        bid.bid = BID_PASS;
-//      bid.bid = BID_NONE;
-        return bid;
-    }
+        //Built in algoritmic calculation of next bid.
+        return calculateNextBid(seat, bidHistory, features, scoringMethod, teamVul);
 }
 
 /**
  * @brief Get possible rules for a given bid history and next bid as calculated by getNextBid.
+ *
  * @param[in] seat Bidders seat.
  * @param[in] bidHistory The bid history.
  * @param[in]bid The bid calculated by getNext bid.
@@ -309,6 +310,10 @@ QList<CRule *> CBidEngine::getpRules(Seat seat, CBidHistory &bidHistory, Bids bi
         }
     }
 
+    //Built in algorithmic calculation of relevant rules.
+    if (pDefRules.size() == 0)
+        calculatepRules(seat, bidHistory, bid, scoringMethod, teamVul, pDefRules);
+
     return pDefRules;
 }
 
@@ -332,5 +337,214 @@ CAuction CBidEngine::findSubstituteAuction(CAuction &auction, QSet<qint16> &page
         }
     }
     return subAuction;
+}
+
+/**
+ * @brief Calculate the next bid
+ *
+ * Calculate the next bid by using an algoritmic approach. The method is used after the bidding database
+ * runs out for suggestion(s).
+ *
+ * @param[in] seat Bidders seat.
+ * @param[in] bidHistory The bid history.
+ * @param[in] ownFeatures The features of the cards for the next bidder.
+ * @param[in] scoringMethod The scoring method.
+ * @param[in] teamVul Team vulnerability.
+ * @return The calculated next bid.
+ */
+CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures &ownFeatures, ScoringMethod scoringMethod, Team teamVul)
+{
+    CRule *pRule = new CRule();
+    QList<CRule *> rules;
+    pRule->setdBRule(false);
+    rules.append(pRule);
+    CBid bid(seat, BID_PASS, "", rules, false);
+
+    int size = bidHistory.bidList.size();
+    int first = size % 2;
+
+    bool nextBidIsOpen = (((size - first) % 4) == 0);
+
+    //Determine range of partner features.
+    CFeatures lowPartnerFeatures;
+    lowPartnerFeatures.setMinFeatures();
+    CFeatures highPartnerFeatures;
+    highPartnerFeatures.setMaxFeatures();
+    for (int i = size - 2; i >= 0; i -= 4)
+    {
+        //For the rules of a bid get the widest range for all features.
+        CFeatures lowRuleFeatures;
+        lowRuleFeatures.setMaxFeatures();
+        CFeatures highRuleFeatures;
+        highRuleFeatures.setMinFeatures();
+        for (int j = 0; j < bidHistory.bidList[i].rules.size(); j++)
+        {
+            CFeatures lowFeatures;
+            CFeatures highFeatures;
+            bidHistory.bidList[i].rules[j]->getFeatures(&lowFeatures, &highFeatures);
+            lowRuleFeatures.delimitFeatures(lowFeatures, false);
+            highRuleFeatures.delimitFeatures(highFeatures, true);
+        }
+        //Get the most narrow range.
+        lowPartnerFeatures.delimitFeatures(lowRuleFeatures, true);
+        highPartnerFeatures.delimitFeatures(highRuleFeatures, false);
+    }
+
+    //Determine range of own features.
+    CFeatures lowOwnFeatures;
+    lowOwnFeatures.setMinFeatures();
+    CFeatures highOwnFeatures;
+    highOwnFeatures.setMaxFeatures();
+    for (int i = size - 1; i >= 0; i -= 4)
+    {
+        //For the rules of a bid get the widest range for all features.
+        CFeatures lowRuleFeatures;
+        lowRuleFeatures.setMaxFeatures();
+        CFeatures highRuleFeatures;
+        highRuleFeatures.setMinFeatures();
+        for (int j = 0; j < bidHistory.bidList[i].rules.size(); j++)
+        {
+            CFeatures lowFeatures;
+            CFeatures highFeatures;
+            bidHistory.bidList[i].rules[j]->getFeatures(&lowFeatures, &highFeatures);
+            lowRuleFeatures.delimitFeatures(lowFeatures, false);
+            highRuleFeatures.delimitFeatures(highFeatures, true);
+        }
+        //Get the most narrow range.
+        lowOwnFeatures.delimitFeatures(lowRuleFeatures, true);
+        highOwnFeatures.delimitFeatures(highRuleFeatures, false);
+    }
+
+    //Already agreement on color?
+    Suit bidAgree;
+    if ((lowPartnerFeatures.getSuitLen(SPADES) + lowOwnFeatures.getSuitLen(SPADES)) >= 8)
+        bidAgree = SPADES;
+    else if ((lowPartnerFeatures.getSuitLen(HEARTS) + lowOwnFeatures.getSuitLen(HEARTS)) >= 8)
+        bidAgree = HEARTS;
+    else if ((lowPartnerFeatures.getSuitLen(DIAMONDS) + lowOwnFeatures.getSuitLen(DIAMONDS)) >= 8)
+        bidAgree = DIAMONDS;
+    else if ((lowPartnerFeatures.getSuitLen(CLUBS) + lowOwnFeatures.getSuitLen(CLUBS)) >= 8)
+        bidAgree = CLUBS;
+    else if ((lowPartnerFeatures.getDp(ANY) <= 1) && lowOwnFeatures.getDp(ANY) <= 1)
+        bidAgree = NOTRUMP;
+    else
+        bidAgree = ANY;
+
+    //Agreement on Major.
+    if ((bidAgree == SPADES) || (bidAgree == HEARTS))
+    {
+        int lowTotPoints = lowPartnerFeatures.getPoints(bidAgree) + ownFeatures.getPoints(bidAgree);
+        int highTotPoints = highPartnerFeatures.getPoints(bidAgree) + ownFeatures.getPoints(bidAgree);
+        //Not game?
+        if (highTotPoints < 26)
+        {
+            CFeatures lowFeatures;
+            CFeatures highFeatures;
+            pRule->getFeatures(&lowFeatures, &highFeatures);
+            highFeatures.setPoints(bidAgree, 26 - highPartnerFeatures.getPoints(bidAgree));
+            pRule->setFeatures(lowFeatures, highFeatures);
+            bid.bid =BID_PASS;
+        }
+        //Possible slam?
+        else if (lowTotPoints >= 31)
+        {
+            bool ace[4];
+            bool king[4];
+            for (int i = 0; i < 4; i++)
+            {
+                ace[i] = (ownFeatures.getCountCard((Suit)i, ACE) == 1) || (ownFeatures.getSuitLen((Suit)i) == 0);
+                king[i] = (ownFeatures.getCountCard((Suit)i, KING) == 1);
+            }
+            int level = 1;
+            Suit suit =ANY;
+            for (int i = 0; i < size; i++)
+            if (BID_LEVEL(bidHistory.bidList[i].bid) != -1)
+            {
+                level = BID_LEVEL(bidHistory.bidList[i].bid);
+                suit = BID_SUIT(bidHistory.bidList[i].bid);
+            }
+            int noAces = 0;
+            int noKings = 0;
+            for (int i = 0; i < 4; i++)
+            {
+                if (ace[i])
+                    noAces++;
+                if (king[i])
+                    noKings++;
+            }
+
+            //Possible grand slam?
+            if ((noAces == 4) && (lowTotPoints >= 35))
+            {
+                //Definately grand slam?
+                if (noKings >= 3)
+                {
+
+                }
+                //Ask partner about kings first.
+                else
+                {
+
+                }
+            }
+            //Small slam?
+            else if ((noAces >= 3) && (highTotPoints < 35))
+            {
+
+            }
+            //Check for hold first.
+            else
+            {
+
+            }
+
+        }
+        //Game
+        else
+        {
+
+        }
+    }
+
+    //Agreement on minor?
+    else if ((bidAgree == DIAMONDS) || (bidAgree == CLUBS))
+    {
+
+    }
+
+    //Agreemet on NT?
+    else if (bidAgree == NOTRUMP)
+    {
+
+    }
+
+    //No agreement on color.
+    else
+    {
+
+    }
+
+
+    return bid;
+}
+
+/**
+ * @brief Calculate possible rules for a given bid history and next bid as calculated by getNextBid.
+ *
+ * Calculate the possible rules by using an algoritmic approach. The method is used after the bidding
+ * database runs out for suggestion(s).
+ *
+ * @param[in] seat Bidders seat.
+ * @param[in] bidHistory The bid history.
+ * @param[in]bid The bid calculated by getNext bid.
+ * @param[in] scoringMethod The scoring method.
+ * @param[in] teamVul Team vulnerability.
+ * @param[out] pDefRules Calculated rules.
+ * @return returns a list with possible rules.
+ */
+void CBidEngine::calculatepRules(Seat seat, CBidHistory &bidHistory, Bids bid, ScoringMethod scoringMethod,
+                                     Team teamVul, QList<CRule *> &pDefRules)
+{
+
 }
 
