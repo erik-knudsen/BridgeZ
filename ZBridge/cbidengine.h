@@ -56,10 +56,15 @@ private:
     CBid calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures &features, ScoringMethod scoringMethod,
                                 Team teamVul);
     void calculatepRules(Seat seat, CBidHistory &bidHistory, Bids bid, ScoringMethod scoringMethod, Team teamVul, QList<CRule *> &pDefRules);
+    bool blackwoodOrGerberQuestion(CBidHistory &bidHistory, Suit bidAgree);
+    int CalculateNoCards(CFeatures partnerFeatures, CFeatures ownFeatures, int cardVal);
+    Bids blackwoodOrGerberAsk(CBidHistory &bidHistory, int noAces, int noKings, int lowTotPoints, int highTotPoints);
 
     CBidDB *bidDB;
     CBidDesc *bidDesc;
     CBidDBDefine *bidDBDefine;
+
+    void auctionToText(CAuction &auction, QString *text);
 };
 
 #endif // CBIDENGINE_H
