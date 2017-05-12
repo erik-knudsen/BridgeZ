@@ -59,6 +59,8 @@ private:
     bool blackwoodOrGerberQuestion(CBidHistory &bidHistory, Suit bidAgree);
     int CalculateNoCards(CFeatures partnerFeatures, CFeatures ownFeatures, int cardVal);
     Bids blackwoodOrGerberAsk(CBidHistory &bidHistory, int noAces, int noKings, int lowTotPoints, int highTotPoints);
+    bool isMin(int lowValue, int highValue, int value);
+    bool isMax(int lowValue, int highValue, int value);
 
     CBidDB *bidDB;
     CBidDesc *bidDesc;
