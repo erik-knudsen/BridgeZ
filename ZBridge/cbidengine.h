@@ -58,7 +58,7 @@ private:
     void calculatepRules(Seat seat, CBidHistory &bidHistory, Bids bid, ScoringMethod scoringMethod, Team teamVul, QList<CRule *> &pDefRules);
     bool blackwoodOrGerberQuestion(CBidHistory &bidHistory, Suit bidAgree);
     int CalculateNoCards(CFeatures partnerFeatures, CFeatures ownFeatures, int cardVal);
-    Bids blackwoodOrGerberAsk(CBidHistory &bidHistory, int noAces, int noKings, int lowTotPoints, int highTotPoints);
+    Bids blackwoodOrGerberAsk(CBidHistory &bidHistory, int noAces, int noKings, int lowTotPoints, int highTotPoints, Suit bidAgree, Suit newSuitAgree);
     bool isMin(int lowValue, int highValue, int value);
     bool isMax(int lowValue, int highValue, int value);
 
@@ -67,6 +67,21 @@ private:
     CBidDBDefine *bidDBDefine;
 
     void auctionToText(CAuction &auction, QString *text);
+    bool isMinorPass(Suit suitAgree, Bids bid);
+    bool isMajorOrNTPass(Suit suitAgree, Bids bid);
+    bool isBlackwoodQuestion(Suit suitAgree, Bids bid);
+    bool isGerberQuestion(Suit suitAgree, Bids bid);
+    int blackwoodAnswer(CBidHistory bidHistory, Suit suitAgree, Bids bid);
+    int gerberAnswer(CBidHistory bidHistory, Suit suitAgree, Bids bid);
+    bool isAnyPass(Suit suitAgree, Bids bid);
+    bool isSmallSlam(Bids bid);
+    bool isGrandSlam(Bids bid);
+    bool isGameMajorOrNT(Suit suitAgree, Bids bid);
+    bool isGameMinor(Suit suitAgree, Bids bid);
+    bool isGameInvitationMajorOrNT(CBidHistory bidHistory, Suit suitAgree, Bids bid);
+    bool isGameInvitationMinor(CBidHistory bidHistory, Suit suitAgree, Bids bid);
+    bool isGameNTAfterStopper(Suit suitAgree, Bids bid);
+    bool isStopperBid(Suit suitAgree, Bids bid);
 };
 
 #endif // CBIDENGINE_H

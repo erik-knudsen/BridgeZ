@@ -430,20 +430,37 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
         highOwnFeatures.delimitFeatures(highRuleFeatures, false);
     }
 
-    //Already agreement on suit?
-    Suit bidAgree;
+    //Already agrement on suit?
+    Suit suitAgree;
     if ((lowPartnerFeatures.getSuitLen(SPADES) + lowOwnFeatures.getSuitLen(SPADES)) >= 8)
-        bidAgree = SPADES;
+        suitAgree = SPADES;
     else if ((lowPartnerFeatures.getSuitLen(HEARTS) + lowOwnFeatures.getSuitLen(HEARTS)) >= 8)
-        bidAgree = HEARTS;
-    else if ((highPartnerFeatures.getDp(ANY) <= 1))
-        bidAgree = NOTRUMP;
+        suitAgree = HEARTS;
+    else if ((highPartnerFeatures.getDp(ANY) <= 1) && (lowOwnFeatures.getDp(ANY) <= 1))
+        suitAgree = NOTRUMP;
     else if ((lowPartnerFeatures.getSuitLen(DIAMONDS) + lowOwnFeatures.getSuitLen(DIAMONDS)) >= 8)
-        bidAgree = DIAMONDS;
+        suitAgree = DIAMONDS;
     else if ((lowPartnerFeatures.getSuitLen(CLUBS) + lowOwnFeatures.getSuitLen(CLUBS)) >= 8)
-        bidAgree = CLUBS;
+        suitAgree = CLUBS;
     else
-        bidAgree = ANY;
+        suitAgree = ANY;
+
+    //Agrement on suit in next bid.
+    Suit newSuitAgree;
+    if (suitAgree != ANY)
+        newSuitAgree = suitAgree;
+    else if ((lowPartnerFeatures.getSuitLen(SPADES) + ownFeatures.getSuitLen(SPADES)) >= 8)
+        newSuitAgree = SPADES;
+    else if ((lowPartnerFeatures.getSuitLen(HEARTS) + ownFeatures.getSuitLen(HEARTS)) >= 8)
+        newSuitAgree = HEARTS;
+    else if ((lowPartnerFeatures.getSuitLen(DIAMONDS) + ownFeatures.getSuitLen(DIAMONDS)) >= 8)
+        newSuitAgree = DIAMONDS;
+    else if ((lowPartnerFeatures.getSuitLen(CLUBS) + ownFeatures.getSuitLen(CLUBS)) >= 8)
+        newSuitAgree = CLUBS;
+    else if (lowPartnerFeatures.getDp(ANY) <= 1)
+        newSuitAgree = NOTRUMP;
+    else
+        newSuitAgree = ANY;
 
     //Get bidded suits and highest level.
     bool oppSuit[5];
@@ -504,15 +521,17 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
 
 
     //if (agreement on suit or nt)
-    if (bidAgree != ANY)
+    if (newSuitAgree != ANY)
     {
+        Suit nextAgree = (newSuitAgree == NOTRUMP) ? (ANY) : (newSuitAgree);
+
         //Calculate point range.
-        int lowTotPoints = lowPartnerFeatures.getPoints(bidAgree) + ownFeatures.getPoints(bidAgree);
-        int highTotPoints = highPartnerFeatures.getPoints(bidAgree) + ownFeatures.getPoints(bidAgree);
-        bool isMinPoints = isMin(lowOwnFeatures.getPoints(bidAgree), highOwnFeatures.getPoints(bidAgree),
-                               ownFeatures.getPoints(bidAgree));
-        bool isMaxPoints = isMax(lowOwnFeatures.getPoints(bidAgree), highOwnFeatures.getPoints(bidAgree),
-                               ownFeatures.getPoints(bidAgree));
+        int lowTotPoints = lowPartnerFeatures.getPoints(nextAgree) + ownFeatures.getPoints(nextAgree);
+        int highTotPoints = highPartnerFeatures.getPoints(nextAgree) + ownFeatures.getPoints(nextAgree);
+        bool isMinPoints = isMin(lowOwnFeatures.getPoints(nextAgree), highOwnFeatures.getPoints(nextAgree),
+                               ownFeatures.getPoints(nextAgree));
+        bool isMaxPoints = isMax(lowOwnFeatures.getPoints(nextAgree), highOwnFeatures.getPoints(nextAgree),
+                               ownFeatures.getPoints(nextAgree));
 
         //if (game is not possible)
         if (highTotPoints < 26)
@@ -521,16 +540,17 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
             CFeatures lowFeatures;
             CFeatures highFeatures;
             pRule->getFeatures(&lowFeatures, &highFeatures);
-            highFeatures.setPoints(bidAgree, 25 - highPartnerFeatures.getPoints(bidAgree));
+            highFeatures.setPoints(nextAgree, 25 - highPartnerFeatures.getPoints(nextAgree));
             pRule->setFeatures(lowFeatures, highFeatures);
             bid.bid = BID_PASS;
             return bid;
         }
-        //else if (slam is possible - small or grand)
-        else if (highTotPoints >= 33)
+
+        //if (slam is possible - small or grand)
+        if (highTotPoints >= 33)
         {
             //if (Blackwood or Gerber question)
-            if (blackwoodOrGerberQuestion(bidHistory, bidAgree))
+            if (blackwoodOrGerberQuestion(bidHistory, suitAgree))
             {
                 //Count aces.
                 int countAces = 0;
@@ -591,15 +611,25 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
             //if (Ask Blackwood or Gerber question)
             int noAces = CalculateNoCards(lowPartnerFeatures, ownFeatures, ACE);
             int noKings = CalculateNoCards(lowPartnerFeatures, ownFeatures, KING);
-            Bids nextBid = blackwoodOrGerberAsk(bidHistory, noAces, noKings, lowTotPoints, highTotPoints);
+            Bids nextBid = blackwoodOrGerberAsk(bidHistory, noAces, noKings, lowTotPoints, highTotPoints,
+                                                suitAgree, newSuitAgree);
             if (nextBid != BID_NONE)
             {
+                if (newSuitAgree == NOTRUMP)
+                {
+                    CFeatures lowFeatures;
+                    CFeatures highFeatures;
+                    pRule->getFeatures(&lowFeatures, &highFeatures);
+                    lowFeatures.setDp(ANY, 1);
+                    lowFeatures.setPoints(ANY, 37 - lowPartnerFeatures.getPoints(ANY));
+                    pRule->setFeatures(lowFeatures, highFeatures);
+                }
                 bid.bid = nextBid;
                 pRule->setStatus(FORCING);
                 return bid;
             }
 
-            //if (possible grand slam)
+            //if (grand slam)
             if ((noAces == 4) && (noKings >= 3 && ((lowTotPoints >= 37) || ((highTotPoints >= 37) && !isMinPoints))))
             {
                 CFeatures lowFeatures;
@@ -607,11 +637,11 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
                 pRule->getFeatures(&lowFeatures, &highFeatures);
                 lowFeatures.setCountCard(ANY, ACE, 4);
                 lowFeatures.setCountCard(ANY, KING, 3);
-                lowFeatures.setPoints(bidAgree, 37 - lowPartnerFeatures.getPoints(bidAgree));
+                lowFeatures.setPoints(nextAgree, 37 - lowPartnerFeatures.getPoints(nextAgree));
                 pRule->setFeatures(lowFeatures, highFeatures);
-                if ((level < 7) || (suit < bidAgree))
-                    bid.bid = (bidAgree == NOTRUMP) ? (BID_7NT) : (bidAgree == SPADES) ? (BID_7S) :
-                                                                                         (bidAgree == HEARTS) ? (BID_7H) : (bidAgree == DIAMONDS) ? (BID_7D) : (BID_7C);
+                if ((level < 7) || (suit < newSuitAgree))
+                    bid.bid = (newSuitAgree == NOTRUMP) ? (BID_7NT) : (newSuitAgree == SPADES) ? (BID_7S) :
+                              (newSuitAgree == HEARTS) ? (BID_7H) : (newSuitAgree == DIAMONDS) ? (BID_7D) : (BID_7C);
                 else
                     bid.bid = BID_DOUBLE;
 
@@ -619,18 +649,18 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
                 
                 return bid;
             }
-            //if (possible small slam)
+            //if (small slam)
             if (((noAces >= 3) && ((lowTotPoints >= 33) || ((highTotPoints >= 33) && !isMinPoints))))
             {
                 CFeatures lowFeatures;
                 CFeatures highFeatures;
                 pRule->getFeatures(&lowFeatures, &highFeatures);
                 lowFeatures.setCountCard(ANY, ACE, 3);
-                lowFeatures.setPoints(bidAgree, 33 - lowPartnerFeatures.getPoints(bidAgree));
+                lowFeatures.setPoints(nextAgree, 33 - lowPartnerFeatures.getPoints(nextAgree));
                 pRule->setFeatures(lowFeatures, highFeatures);
-                if ((level < 6) || ((suit < bidAgree) && (level == 6)))
-                    bid.bid = (bidAgree == NOTRUMP) ? (BID_6NT) :(bidAgree == SPADES) ? (BID_6S) :
-                                                     (bidAgree == HEARTS) ? (BID_6H) : (bidAgree == DIAMONDS) ? (BID_6D) : (BID_6C);
+                if ((level < 6) || ((suit < newSuitAgree) && (level == 6)))
+                    bid.bid = (newSuitAgree == NOTRUMP) ? (BID_6NT) :(newSuitAgree == SPADES) ? (BID_6S) :
+                              (newSuitAgree == HEARTS) ? (BID_6H) : (newSuitAgree == DIAMONDS) ? (BID_6D) : (BID_6C);
                 else
                     bid.bid = BID_DOUBLE;
 
@@ -641,9 +671,9 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
         }
 
         //if (game is possible in major or in nt)
-        if ((bidAgree == SPADES) || (bidAgree == HEARTS) || (bidAgree == NOTRUMP))
+        if ((newSuitAgree == SPADES) || (newSuitAgree == HEARTS) || (newSuitAgree == NOTRUMP))
         {
-            int maxLevel = (bidAgree == NOTRUMP) ? (3) : (4);
+            int maxLevel = (newSuitAgree == NOTRUMP) ? (3) : (4);
 
             //if (game in major or nt)
             if ((lowTotPoints >= 26) || ((highTotPoints >= 26 && !isMinPoints)))
@@ -651,25 +681,25 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
                 CFeatures lowFeatures;
                 CFeatures highFeatures;
                 pRule->getFeatures(&lowFeatures, &highFeatures);
-                lowFeatures.setPoints(bidAgree, 25 - lowPartnerFeatures.getPoints(bidAgree));
-                highFeatures.setPoints(bidAgree, 28 - lowPartnerFeatures.getPoints(bidAgree));
+                lowFeatures.setPoints(nextAgree, 25 - lowPartnerFeatures.getPoints(nextAgree));
+                highFeatures.setPoints(nextAgree, 28 - lowPartnerFeatures.getPoints(nextAgree));
                 pRule->setFeatures(lowFeatures, highFeatures);
-                if ((level < maxLevel) || ((suit < bidAgree) && (level == maxLevel)))
-                    bid.bid = (bidAgree == NOTRUMP) ? (BID_3NT) : (bidAgree == SPADES) ? (BID_4S) : (BID_4H);
+                if ((level < maxLevel) || ((suit < suitAgree) && (level == maxLevel)))
+                    bid.bid = (newSuitAgree == NOTRUMP) ? (BID_3NT) : (newSuitAgree == SPADES) ? (BID_4S) : (BID_4H);
                 else
                     bid.bid = BID_DOUBLE;
 
                 pRule->setStatus(MUST_PASS);
             }
-            //if (game is possible)
-            else if ((level < (maxLevel - 1)) || ((suit < bidAgree) && (level == (maxLevel - 1))))
+            //if (game might be possible)
+            if ((level < (maxLevel - 1)) || ((suit < newSuitAgree) && (level == (maxLevel - 1))))
             {
                 CFeatures lowFeatures;
                 CFeatures highFeatures;
-                bid.bid = (bidAgree == NOTRUMP) ? (BID_2NT) : (bidAgree == SPADES) ? (BID_3S) : (BID_3H);
+                bid.bid = (newSuitAgree == NOTRUMP) ? (BID_2NT) : (newSuitAgree == SPADES) ? (BID_3S) : (BID_3H);
                 pRule->getFeatures(&lowFeatures, &highFeatures);
-                lowFeatures.setPoints(bidAgree, 23 - lowPartnerFeatures.getPoints(bidAgree));
-                highFeatures.setPoints(bidAgree, 26 - lowPartnerFeatures.getPoints(bidAgree));
+                lowFeatures.setPoints(nextAgree, 23 - lowPartnerFeatures.getPoints(nextAgree));
+                highFeatures.setPoints(nextAgree, 26 - lowPartnerFeatures.getPoints(nextAgree));
                 pRule->setFeatures(lowFeatures, highFeatures);
             }
             else
@@ -678,8 +708,8 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
             return bid;
         }
 
-        //if (game is possible in minor)
-        if ((bidAgree == DIAMONDS) || (bidAgree == CLUBS))
+        //if (game is possible in minor - might be nt)
+        if ((newSuitAgree == DIAMONDS) || (newSuitAgree == CLUBS))
         {
             //if (game is possible - in nt)
             if ((lowTotPoints >= 26) && !isMinPoints)
@@ -690,7 +720,7 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
                     //if (3NT)
                     int i;
                     for (i = 0; i < 4; i++)
-                        if (((Suit)i != bidAgree) &&
+                        if (((Suit)i != newSuitAgree) &&
                                 (ownFeatures.getStopNT((Suit)i) < 3) && (lowPartnerFeatures.getStopNT((Suit)i) < 3))
                             break;
                     if ( i == 4)
@@ -700,7 +730,7 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
                         bid.bid = BID_3NT;
                         pRule->getFeatures(&lowFeatures, &highFeatures);
                         for (int i = 0; i < 4; i++)
-                            if (((Suit)i != bidAgree) &&
+                            if (((Suit)i != newSuitAgree) &&
                                     (lowOwnFeatures.getStopNT((Suit)i) < 3) && (lowPartnerFeatures.getStopNT((Suit)i) < 3))
                                 lowFeatures.setStopNT((Suit)i, 3);
                         pRule->setFeatures(lowFeatures, highFeatures);
@@ -709,9 +739,10 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
                         return bid;
                     }
 
+                    //if (check stoppers)
                     int first = (level < 3) ? (0) : (suit + 1);
                     for (int i = first; i < 4; i++)
-                    if ((Suit)i != bidAgree)
+                    if ((Suit)i != newSuitAgree)
                     {
                         //if (stopper quality is ok)
                         if (ownFeatures.getStopNT((Suit)i) >= 3)
@@ -728,238 +759,221 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
                         }
                     }
                 }
-                //if (not game in minor)
-                if (highTotPoints < 29)
-                {
-                    //Bid pass and set points in rule.
-                    CFeatures lowFeatures;
-                    CFeatures highFeatures;
-                    pRule->getFeatures(&lowFeatures, &highFeatures);
-                    highFeatures.setPoints(bidAgree, 29 - highPartnerFeatures.getPoints(bidAgree));
-                    pRule->setFeatures(lowFeatures, highFeatures);
-                    bid.bid = BID_PASS;
-                }
-                //if (game in minor)
-                else if ((lowTotPoints >= 29) || ((highTotPoints >= 29) && !isMinPoints))
-                {
-                    CFeatures lowFeatures;
-                    CFeatures highFeatures;
-                    pRule->getFeatures(&lowFeatures, &highFeatures);
-                    lowFeatures.setPoints(bidAgree, 28 - lowPartnerFeatures.getPoints(bidAgree));
-                    highFeatures.setPoints(bidAgree, 31 - lowPartnerFeatures.getPoints(bidAgree));
-                    pRule->setFeatures(lowFeatures, highFeatures);
-                    if ((level < 5) || ((suit < bidAgree) && (level == 5)))
-                        bid.bid = (bidAgree == DIAMONDS) ? (BID_5D) : (BID_5C);
-                    else
-                        bid.bid = BID_DOUBLE;
-
-                    pRule->setStatus(MUST_PASS);
-                }
-                //if (game is possible)
-                else if ((level < 4)|| ((suit < bidAgree) && (level == 4)))
-                {
-                    CFeatures lowFeatures;
-                    CFeatures highFeatures;
-                    pRule->getFeatures(&lowFeatures, &highFeatures);
-                    lowFeatures.setPoints(bidAgree, 28 - lowPartnerFeatures.getPoints(bidAgree));
-                    highFeatures.setPoints(bidAgree, 31 - lowPartnerFeatures.getPoints(bidAgree));
-                    pRule->setFeatures(lowFeatures, highFeatures);
-                    bid.bid = (bidAgree == DIAMONDS) ? (BID_4D) : (BID_4C);
-                }
+            }
+            //if (not game in minor)
+            if (highTotPoints < 29)
+            {
+                //Bid pass and set points in rule.
+                CFeatures lowFeatures;
+                CFeatures highFeatures;
+                pRule->getFeatures(&lowFeatures, &highFeatures);
+                highFeatures.setPoints(nextAgree, 29 - highPartnerFeatures.getPoints(nextAgree));
+                pRule->setFeatures(lowFeatures, highFeatures);
+                bid.bid = BID_PASS;
+            }
+            //if (game in minor)
+            if ((lowTotPoints >= 29) || ((highTotPoints >= 29) && !isMinPoints))
+            {
+                CFeatures lowFeatures;
+                CFeatures highFeatures;
+                pRule->getFeatures(&lowFeatures, &highFeatures);
+                lowFeatures.setPoints(nextAgree, 28 - lowPartnerFeatures.getPoints(nextAgree));
+                highFeatures.setPoints(nextAgree, 31 - lowPartnerFeatures.getPoints(nextAgree));
+                pRule->setFeatures(lowFeatures, highFeatures);
+                if ((level < 5) || ((suit < newSuitAgree) && (level == 5)))
+                    bid.bid = (newSuitAgree == DIAMONDS) ? (BID_5D) : (BID_5C);
                 else
                     bid.bid = BID_DOUBLE;
 
-                return bid;
+                pRule->setStatus(MUST_PASS);
             }
+            //if (game is possible)
+            else if ((level < 4)|| ((suit < newSuitAgree) && (level == 4)))
+            {
+                CFeatures lowFeatures;
+                CFeatures highFeatures;
+                pRule->getFeatures(&lowFeatures, &highFeatures);
+                lowFeatures.setPoints(nextAgree, 28 - lowPartnerFeatures.getPoints(nextAgree));
+                highFeatures.setPoints(nextAgree, 31 - lowPartnerFeatures.getPoints(nextAgree));
+                pRule->setFeatures(lowFeatures, highFeatures);
+                bid.bid = (newSuitAgree == DIAMONDS) ? (BID_4D) : (BID_4C);
+            }
+            else
+                bid.bid = BID_DOUBLE;
+
+            return bid;
         }
     }
 
     //Not agreed on suit?
     else
     {
-        Suit newBid;
-        if ((lowPartnerFeatures.getSuitLen(SPADES) + ownFeatures.getSuitLen(SPADES)) >= 8)
-            newBid = SPADES;
-        else if ((lowPartnerFeatures.getSuitLen(HEARTS) + ownFeatures.getSuitLen(HEARTS)) >= 8)
-            newBid = HEARTS;
-        else if ((lowPartnerFeatures.getSuitLen(DIAMONDS) + ownFeatures.getSuitLen(DIAMONDS)) >= 8)
-            newBid = DIAMONDS;
-        else if ((lowPartnerFeatures.getSuitLen(CLUBS) + ownFeatures.getSuitLen(CLUBS)) >= 8)
-            newBid = CLUBS;
-        else
-            newBid = ANY;
-
-        //Double, new suit, nt, rebid?
-        if (newBid == ANY)
+        //Check for double.
+        int size = bidHistory.bidList.size();
+        if ((size >= 3) && (bidHistory.bidList[size - 2].bid == BID_DOUBLE))
         {
-            //Check for double.
-            int size = bidHistory.bidList.size();
-            if ((size >= 3) && (bidHistory.bidList[size - 2].bid == BID_DOUBLE))
-            {
-                int points = ownFeatures.getPoints(ANY);
+            int points = ownFeatures.getPoints(ANY);
 
-                //Penalty double?
-                Suit opp = BID_SUIT(bidHistory.bidList[size - 3].bid);
-                if ((lowPartnerFeatures.getPoints(ANY) >= 12) || (level == 4) ||
-                        (bidHistory.bidList[size - 1].bid == BID_PASS) && (ownFeatures.getSuitLen(opp) >= 6) &&
-                        (ownFeatures.getHonor(opp) >= 3))
-                {
-                    CFeatures lowFeatures;
-                    CFeatures highFeatures;
-                    pRule->getFeatures(&lowFeatures, &highFeatures);
-                    lowFeatures.setSuitLen(opp, 6);
-                    lowFeatures.setHonor(opp, 3);
-                    pRule->setFeatures(lowFeatures, highFeatures);
-                    bid.bid = BID_PASS;
-                    return bid;
-                }
-
-                //Respond in nt?
-                if (ownFeatures.getDp(ANY) <= 1)
-                {
-                    int i;
-                    for (i = 0; i < 4; i++)
-                        if (oppSuit[i] && !ownFeatures.getStopNT((Suit)i) >= 3)
-                            break;
-                    //Are conditions for nt ok?
-                    if (i == 4)
-                    {
-                        //1NT?
-                        if ((points >= 6) && (points <= 9) && (level == 1) && (suit < NOTRUMP))
-                        {
-                            CFeatures lowFeatures;
-                            CFeatures highFeatures;
-                            pRule->getFeatures(&lowFeatures, &highFeatures);
-                            highFeatures.setDp(ANY, 1);
-                            lowFeatures.setPoints(ANY, 6);
-                            highFeatures.setPoints(ANY, 9);
-                            for (int i = 0; i < 4; i++)
-                            if (oppSuit[i])
-                                lowFeatures.setStopNT((Suit)i, 3);
-                            pRule->setFeatures(lowFeatures, highFeatures);
-                            bid.bid = BID_1NT;
-                            return bid;
-                        }
-                        //2NT?
-                        if ((points >= 10) && (points <= 12) && (level < 2) || (level == 2) && (suit < NOTRUMP))
-                        {
-                            CFeatures lowFeatures;
-                            CFeatures highFeatures;
-                            pRule->getFeatures(&lowFeatures, &highFeatures);
-                            highFeatures.setDp(ANY, 1);
-                            lowFeatures.setPoints(ANY, 10);
-                            highFeatures.setPoints(ANY, 12);
-                            for (int i = 0; i < 4; i++)
-                            if (oppSuit[i])
-                                lowFeatures.setStopNT((Suit)i, 3);
-                            pRule->setFeatures(lowFeatures, highFeatures);
-                            bid.bid = BID_2NT;
-                            return bid;
-                        }
-                        //3NT?
-                        if ((points >= 13) && (points <= 15) && (level < 3) || (level == 3) && (suit < NOTRUMP))
-                        {
-                            CFeatures lowFeatures;
-                            CFeatures highFeatures;
-                            pRule->getFeatures(&lowFeatures, &highFeatures);
-                            highFeatures.setDp(ANY, 1);
-                            lowFeatures.setPoints(ANY, 13);
-                            highFeatures.setPoints(ANY, 15);
-                            for (int i = 0; i < 4; i++)
-                            if (oppSuit[i])
-                                lowFeatures.setStopNT((Suit)i, 3);
-                            pRule->setFeatures(lowFeatures, highFeatures);
-                            bid.bid = BID_3NT;
-                            return bid;
-                        }
-                    }
-                }
-                //Find longest suit.
-                int j = 0;
-                for (int i = 1; i <= 4; i++)
-                    if (ownFeatures.getSuitLen((Suit)i) > ownFeatures.getSuitLen((Suit)j))
-                        j = i;
-                if (points <= 8)
-                {
-                    CFeatures lowFeatures;
-                    CFeatures highFeatures;
-                    pRule->getFeatures(&lowFeatures, &highFeatures);
-                    highFeatures.setPoints(ANY, 8);
-                    pRule->setFeatures(lowFeatures, highFeatures);
-                    int bidLevel = (j <= suit) ? (level + 1) : (level);
-                    bid.bid = MAKE_BID(j, bidLevel);
-                    return bid;
-                }
-                if ((points > 8) && (points <= 12))
-                {
-                    CFeatures lowFeatures;
-                    CFeatures highFeatures;
-                    pRule->getFeatures(&lowFeatures, &highFeatures);
-                    highFeatures.setPoints(ANY, 12);
-                    lowFeatures.setPoints(ANY, 9);
-                    pRule->setFeatures(lowFeatures, highFeatures);
-                    int bidLevel = (j <= suit) ? (level + 2) : (level + 1);
-                    bid.bid = MAKE_BID(j, bidLevel);
-                    return bid;
-                }
-                if (points > 12)
-                {
-                    CFeatures lowFeatures;
-                    CFeatures highFeatures;
-                    pRule->getFeatures(&lowFeatures, &highFeatures);
-                    lowFeatures.setPoints(ANY, 13);
-                    pRule->setFeatures(lowFeatures, highFeatures);
-                    int bidLevel = (j <= suit) ? (level + 3) : (level + 2);
-                    bid.bid = MAKE_BID(j, bidLevel);
-                    return bid;
-                }
-            }
-
-            //Find new suit or nt (if possible.
-            int i;
-            for (i = 0; i < 4; i++)
-                if ((lowPartnerFeatures.getSuitLen((Suit)i) == 0) && (lowOwnFeatures.getSuitLen((Suit)i) == 0) &&
-                        (!oppSuit[i]) && (ownFeatures.getSuitLen((Suit)i) >= 4))
-                    break;
-            //New suit?
-            if ((i < 4) && ((i > suit) || ((i <= suit) && (ownFeatures.getDp(ANY) > 1))))
+            //Penalty double?
+            Suit opp = BID_SUIT(bidHistory.bidList[size - 3].bid);
+            if ((lowPartnerFeatures.getPoints(ANY) >= 12) || (level == 4) ||
+                    (bidHistory.bidList[size - 1].bid == BID_PASS) && (ownFeatures.getSuitLen(opp) >= 6) &&
+                    (ownFeatures.getHonor(opp) >= 3))
             {
                 CFeatures lowFeatures;
                 CFeatures highFeatures;
                 pRule->getFeatures(&lowFeatures, &highFeatures);
-                lowFeatures.setSuitLen((Suit)i, 4);
+                lowFeatures.setSuitLen(opp, 6);
+                lowFeatures.setHonor(opp, 3);
                 pRule->setFeatures(lowFeatures, highFeatures);
-                int newSuitLevel = (i > suit) ? (level) : (level + 1);
-                bid.bid = MAKE_BID(i, newSuitLevel);
+                bid.bid = BID_PASS;
                 return bid;
             }
-            //NT?
+
+            //Respond in nt?
             if (ownFeatures.getDp(ANY) <= 1)
             {
+                int i;
+                for (i = 0; i < 4; i++)
+                    if (oppSuit[i] && !ownFeatures.getStopNT((Suit)i) >= 3)
+                        break;
+                //Are conditions for nt ok?
+                if (i == 4)
+                {
+                    //1NT?
+                    if ((points >= 6) && (points <= 9) && (level == 1) && (suit < NOTRUMP))
+                    {
+                        CFeatures lowFeatures;
+                        CFeatures highFeatures;
+                        pRule->getFeatures(&lowFeatures, &highFeatures);
+                        highFeatures.setDp(ANY, 1);
+                        lowFeatures.setPoints(ANY, 6);
+                        highFeatures.setPoints(ANY, 9);
+                        for (int i = 0; i < 4; i++)
+                            if (oppSuit[i])
+                                lowFeatures.setStopNT((Suit)i, 3);
+                        pRule->setFeatures(lowFeatures, highFeatures);
+                        bid.bid = BID_1NT;
+                        return bid;
+                    }
+                    //2NT?
+                    if ((points >= 10) && (points <= 12) && (level < 2) || (level == 2) && (suit < NOTRUMP))
+                    {
+                        CFeatures lowFeatures;
+                        CFeatures highFeatures;
+                        pRule->getFeatures(&lowFeatures, &highFeatures);
+                        highFeatures.setDp(ANY, 1);
+                        lowFeatures.setPoints(ANY, 10);
+                        highFeatures.setPoints(ANY, 12);
+                        for (int i = 0; i < 4; i++)
+                            if (oppSuit[i])
+                                lowFeatures.setStopNT((Suit)i, 3);
+                        pRule->setFeatures(lowFeatures, highFeatures);
+                        bid.bid = BID_2NT;
+                        return bid;
+                    }
+                    //3NT?
+                    if ((points >= 13) && (points <= 15) && (level < 3) || (level == 3) && (suit < NOTRUMP))
+                    {
+                        CFeatures lowFeatures;
+                        CFeatures highFeatures;
+                        pRule->getFeatures(&lowFeatures, &highFeatures);
+                        highFeatures.setDp(ANY, 1);
+                        lowFeatures.setPoints(ANY, 13);
+                        highFeatures.setPoints(ANY, 15);
+                        for (int i = 0; i < 4; i++)
+                            if (oppSuit[i])
+                                lowFeatures.setStopNT((Suit)i, 3);
+                        pRule->setFeatures(lowFeatures, highFeatures);
+                        bid.bid = BID_3NT;
+                        return bid;
+                    }
+                }
+            }
+            //Find longest suit.
+            int j = 0;
+            for (int i = 1; i <= 4; i++)
+                if (ownFeatures.getSuitLen((Suit)i) > ownFeatures.getSuitLen((Suit)j))
+                    j = i;
+            if (points <= 8)
+            {
                 CFeatures lowFeatures;
                 CFeatures highFeatures;
                 pRule->getFeatures(&lowFeatures, &highFeatures);
-                highFeatures.setDp(ANY, 1);
+                highFeatures.setPoints(ANY, 8);
                 pRule->setFeatures(lowFeatures, highFeatures);
-                int newSuitLevel = (suit != NOTRUMP) ? (level) : (level + 1);
-                bid.bid = MAKE_BID(NOTRUMP, newSuitLevel);
+                int bidLevel = (j <= suit) ? (level + 1) : (level);
+                bid.bid = MAKE_BID(j, bidLevel);
                 return bid;
             }
-
-            //Rebid.
+            if ((points > 8) && (points <= 12))
             {
-                int j = 0;
-                for (int i = 0; i < 4; i++)
-                    if (ownSuit[i] && ownFeatures.getPoints((Suit)i) > ownFeatures.getPoints((Suit)j))
-                        j = i;
-
-                int newSuitLevel = (i > suit) ? (level) : (level + 1);
-                bid.bid = MAKE_BID(j, newSuitLevel);
+                CFeatures lowFeatures;
+                CFeatures highFeatures;
+                pRule->getFeatures(&lowFeatures, &highFeatures);
+                highFeatures.setPoints(ANY, 12);
+                lowFeatures.setPoints(ANY, 9);
+                pRule->setFeatures(lowFeatures, highFeatures);
+                int bidLevel = (j <= suit) ? (level + 2) : (level + 1);
+                bid.bid = MAKE_BID(j, bidLevel);
+                return bid;
+            }
+            if (points > 12)
+            {
+                CFeatures lowFeatures;
+                CFeatures highFeatures;
+                pRule->getFeatures(&lowFeatures, &highFeatures);
+                lowFeatures.setPoints(ANY, 13);
+                pRule->setFeatures(lowFeatures, highFeatures);
+                int bidLevel = (j <= suit) ? (level + 3) : (level + 2);
+                bid.bid = MAKE_BID(j, bidLevel);
                 return bid;
             }
         }
 
-        //Agree on suit.
+        //Find new suit or nt (if possible.
+        int i;
+        for (i = 0; i < 4; i++)
+            if ((lowPartnerFeatures.getSuitLen((Suit)i) == 0) && (lowOwnFeatures.getSuitLen((Suit)i) == 0) &&
+                    (!oppSuit[i]) && (ownFeatures.getSuitLen((Suit)i) >= 4))
+                break;
+        //New suit?
+        if ((i < 4) && ((i > suit) || ((i <= suit) && (ownFeatures.getDp(ANY) > 1))))
+        {
+            CFeatures lowFeatures;
+            CFeatures highFeatures;
+            pRule->getFeatures(&lowFeatures, &highFeatures);
+            lowFeatures.setSuitLen((Suit)i, 4);
+            pRule->setFeatures(lowFeatures, highFeatures);
+            int newSuitLevel = (i > suit) ? (level) : (level + 1);
+            bid.bid = MAKE_BID(i, newSuitLevel);
+            return bid;
+        }
+        //NT?
+        if (ownFeatures.getDp(ANY) <= 1)
+        {
+            CFeatures lowFeatures;
+            CFeatures highFeatures;
+            pRule->getFeatures(&lowFeatures, &highFeatures);
+            highFeatures.setDp(ANY, 1);
+            //EAK How about limits???
+            pRule->setFeatures(lowFeatures, highFeatures);
+            int newSuitLevel = (suit != NOTRUMP) ? (level) : (level + 1);
+            bid.bid = MAKE_BID(NOTRUMP, newSuitLevel);
+            return bid;
+        }
+
+        //Rebid.
+        {
+            int j = 0;
+            for (int i = 0; i < 4; i++)
+                if (ownSuit[i] && ownFeatures.getPoints((Suit)i) > ownFeatures.getPoints((Suit)j))
+                    j = i;
+            //EAK How about limits.
+            int newSuitLevel = (i > suit) ? (level) : (level + 1);
+            bid.bid = MAKE_BID(j, newSuitLevel);
+            return bid;
+        }
     }
     return bid;
 }
@@ -982,13 +996,24 @@ void CBidEngine::calculatepRules(Seat seat, CBidHistory &bidHistory, Bids bid, S
                                  Team teamVul, QList<CRule *> &pDefRules)
 {
     CRule *pRule = new CRule();
+    QList<CRule *> rules;
     pRule->setdBRule(false);
-    pDefRules.append(pRule);
+    rules.append(pRule);
+
+    //Get auction till now.
+    CAuction auction;
+    for (int i = 0; i < bidHistory.bidList.size(); i++)
+        auction.auction.append(bidHistory.bidList[i].bid);
+
+    QString txt;
+    auctionToText(auction, &txt);
+    qDebug() << QString(SEAT_NAMES[seat]) + ": " + txt;
 
     int size = bidHistory.bidList.size();
-    int first = size % 2;
 
-    bool nextBidderIsFirstBidder = (((size - first) % 4) == 0);
+    //Is next bidder opener (player or defender)?
+    int first = size % 2;
+    bool nextBidIsOpen = (((size - first) % 4) == 0);
 
     //Determine range of partner features.
     CFeatures lowPartnerFeatures;
@@ -1010,7 +1035,7 @@ void CBidEngine::calculatepRules(Seat seat, CBidHistory &bidHistory, Bids bid, S
             lowRuleFeatures.delimitFeatures(lowFeatures, false);
             highRuleFeatures.delimitFeatures(highFeatures, true);
         }
-        //Get the most narrow range across bids.
+        //Get the most narrow range.
         lowPartnerFeatures.delimitFeatures(lowRuleFeatures, true);
         highPartnerFeatures.delimitFeatures(highRuleFeatures, false);
     }
@@ -1020,7 +1045,7 @@ void CBidEngine::calculatepRules(Seat seat, CBidHistory &bidHistory, Bids bid, S
     lowOwnFeatures.setMinFeatures();
     CFeatures highOwnFeatures;
     highOwnFeatures.setMaxFeatures();
-    for (int i = size - 4; i >= 0; i -= 4)
+    for (int i = size - 1; i >= 0; i -= 4)
     {
         //For the rules of a bid get the widest range for all features.
         CFeatures lowRuleFeatures;
@@ -1035,27 +1060,46 @@ void CBidEngine::calculatepRules(Seat seat, CBidHistory &bidHistory, Bids bid, S
             lowRuleFeatures.delimitFeatures(lowFeatures, false);
             highRuleFeatures.delimitFeatures(highFeatures, true);
         }
-        //Get the most narrow range across bids.
+        //Get the most narrow range.
         lowOwnFeatures.delimitFeatures(lowRuleFeatures, true);
         highOwnFeatures.delimitFeatures(highRuleFeatures, false);
     }
 
-    //Already agreement on suit?
-    Suit bidAgree;
-    if ((lowPartnerFeatures.getSuitLen(SPADES) + lowOwnFeatures.getSuitLen(SPADES)) >= 8)
-        bidAgree = SPADES;
-    else if ((lowPartnerFeatures.getSuitLen(HEARTS) + lowOwnFeatures.getSuitLen(HEARTS)) >= 8)
-        bidAgree = HEARTS;
-    else if ((lowPartnerFeatures.getSuitLen(DIAMONDS) + lowOwnFeatures.getSuitLen(DIAMONDS)) >= 8)
-        bidAgree = DIAMONDS;
-    else if ((lowPartnerFeatures.getSuitLen(CLUBS) + lowOwnFeatures.getSuitLen(CLUBS)) >= 8)
-        bidAgree = CLUBS;
-    else if ((lowPartnerFeatures.getDp(ANY) <= 1) && lowOwnFeatures.getDp(ANY) <= 1)
-        bidAgree = NOTRUMP;
-    else
-        bidAgree = ANY;
+    CFeatures lowFeatures;
+    CFeatures highFeatures;
+    pRule->getFeatures(&lowFeatures, &highFeatures);
 
-    //Get bidded colors and level.
+    //Already agrement on suit?
+    Suit suitAgree;
+    if ((lowPartnerFeatures.getSuitLen(SPADES) + lowOwnFeatures.getSuitLen(SPADES)) >= 8)
+        suitAgree = SPADES;
+    else if ((lowPartnerFeatures.getSuitLen(HEARTS) + lowOwnFeatures.getSuitLen(HEARTS)) >= 8)
+        suitAgree = HEARTS;
+    else if ((highPartnerFeatures.getDp(ANY) <= 1) && (lowOwnFeatures.getDp(ANY) <= 1))
+        suitAgree = NOTRUMP;
+    else if ((lowPartnerFeatures.getSuitLen(DIAMONDS) + lowOwnFeatures.getSuitLen(DIAMONDS)) >= 8)
+        suitAgree = DIAMONDS;
+    else if ((lowPartnerFeatures.getSuitLen(CLUBS) + lowOwnFeatures.getSuitLen(CLUBS)) >= 8)
+        suitAgree = CLUBS;
+    else
+        suitAgree = ANY;
+
+    //Agrement on suit in next bid.
+    Suit newSuitAgree = BID_SUIT(bid);
+    Suit nextAgree = (newSuitAgree == NOTRUMP) ? (ANY) : (newSuitAgree);
+
+    if (newSuitAgree == SPADES)
+        lowFeatures.setSuitLen(SPADES, 8 - lowPartnerFeatures.getSuitLen(SPADES));
+    else if (newSuitAgree == HEARTS)
+        lowFeatures.setSuitLen(HEARTS, 8 - lowPartnerFeatures.getSuitLen(HEARTS));
+    else if (newSuitAgree == DIAMONDS)
+        lowFeatures.setSuitLen(DIAMONDS, 8 - lowPartnerFeatures.getSuitLen(DIAMONDS));
+    else if (newSuitAgree == CLUBS)
+        lowFeatures.setSuitLen(CLUBS, 8 - lowPartnerFeatures.getSuitLen(CLUBS));
+    else if (newSuitAgree == NOTRUMP)
+        lowFeatures.setDp(ANY, 1);
+
+    //Get bidded suits and highest level.
     bool oppSuit[5];
     int oppLevel = 0;
     bool ownSuit[5];
@@ -1067,7 +1111,7 @@ void CBidEngine::calculatepRules(Seat seat, CBidHistory &bidHistory, Bids bid, S
     for (int i = 0; i < 5; i++)
         oppSuit[i] = ownSuit[i] = partnerSuit[i] = ownProp[i] = partnerProp[i] = false;
 
-    //Opponent suit and level.
+    //Opponent suits and level.
     for (int i = size - 1; i >= 0; i -= 2)
     {
         if (IS_BID(bidHistory.bidList[i].bid))
@@ -1103,136 +1147,17 @@ void CBidEngine::calculatepRules(Seat seat, CBidHistory &bidHistory, Bids bid, S
         }
     }
 
-    //New suit bids.
-    Suit suit = BID_SUIT(bid);
-    bool newSuit = (suit != NOTRUMP) && !ownSuit[suit] && !partnerSuit[suit] && !oppSuit[suit];
-
-    //Rebids
-    bool reBid = (suit != NOTRUMP) && ownSuit[suit] && !partnerSuit[suit];
-
-    //nt bids.
-    bool ntBid = (BID_SUIT(bid) == NOTRUMP);
-/*
-    //Agreement on Major suit.
-    if ((bidAgree == SPADES) || (bidAgree == HEARTS))
-    {
-        int lowTotPoints = lowPartnerFeatures.getPoints(bidAgree) + ownFeatures.getPoints(bidAgree);
-        int highTotPoints = highPartnerFeatures.getPoints(bidAgree) + ownFeatures.getPoints(bidAgree);
-        //Not game?
-        if (highTotPoints < 26)
+    int level = 1;
+    Suit suit =ANY;
+    for (int i = 0; i < size; i++)
+        if (BID_LEVEL(bidHistory.bidList[i].bid) != -1)
         {
-            CFeatures lowFeatures;
-            CFeatures highFeatures;
-            pRule->getFeatures(&lowFeatures, &highFeatures);
-            highFeatures.setPoints(bidAgree, 26 - highPartnerFeatures.getPoints(bidAgree));
-            pRule->setFeatures(lowFeatures, highFeatures);
-            bid.bid =BID_PASS;
+            level = BID_LEVEL(bidHistory.bidList[i].bid);
+            suit = BID_SUIT(bidHistory.bidList[i].bid);
         }
-        //Possible slam?
-        else if (lowTotPoints >= 31)
-        {
-            bool ace[4];
-            bool king[4];
-            for (int i = 0; i < 4; i++)
-            {
-                ace[i] = (ownFeatures.getCountCard((Suit)i, ACE) == 1) || (ownFeatures.getSuitLen((Suit)i) == 0);
-                king[i] = (ownFeatures.getCountCard((Suit)i, KING) == 1);
-            }
-            int level = 1;
-            Suit suit =ANY;
-            for (int i = 0; i < size; i++)
-            if (BID_LEVEL(bidHistory.bidList[i].bid) != -1)
-            {
-                level = BID_LEVEL(bidHistory.bidList[i].bid);
-                suit = BID_SUIT(bidHistory.bidList[i].bid);
-            }
-            int noAces = 0;
-            int noKings = 0;
-            for (int i = 0; i < 4; i++)
-            {
-                if (ace[i])
-                    noAces++;
-                if (king[i])
-                    noKings++;
-            }
-
-            //Possible grand slam?
-            if ((noAces == 4) && (lowTotPoints >= 35))
-            {
-                //Definately grand slam?
-                if (noKings >= 3)
-                {
-                    CFeatures lowFeatures;
-                    CFeatures highFeatures;
-                    pRule->getFeatures(&lowFeatures, &highFeatures);
-                    lowFeatures.setCountCard(ANY, ACE, 4);
-                    lowFeatures.setCountCard(ANY, KING, 3);
-                    pRule->setFeatures(lowFeatures, highFeatures);
-                    if ((level < 7) || (suit < bidAgree))
-                    {
-                        bid.bid = (bidAgree == HEARTS) ? (BID_7H) : (BID_7S);
-                    }
-                    else
-                        bid.bid = BID_DOUBLE;
-                }
-                //Ask partner about kings first.
-                else
-                {
-                    if ((level < 5) || ((suit < NOTRUMP) && (level == 5)))
-                    {
-                        bid.bid = BID_5NT;
-                        pRule->setId(SPC_Q_5NT);
-                        pRule->setStatus(FORCING);
-                    }
-                    else
-                        bid.bid = BID_DOUBLE;
-                }
-            }
-            //Small slam?
-            else if ((noAces >= 3) && (highTotPoints < 35))
-            {
-                if ((level < 6) || ((suit < bidAgree) && (level == 6)))
-                {
-                    bid.bid = (bidAgree == HEARTS) ? (BID_6H) : (BID_6S);
-                }
-                else
-                    bid.bid = BID_DOUBLE;
-            }
-            //Check for hold first.
-            else
-            {
-
-            }
-
-        }
-        //Game
-        else
-        {
-
-        }
-    }
-
-    //Agreement on Minor suit?
-    else if ((bidAgree == DIAMONDS) || (bidAgree == CLUBS))
-    {
-
-    }
-
-    //Agreemet on NT?
-    else if (bidAgree == NOTRUMP)
-    {
-
-    }
-
-    //No agreement on suit.
-    else
-    {
-
-    }
-*/
 }
 
-bool CBidEngine::blackwoodOrGerberQuestion(CBidHistory &bidHistory, Suit bidAgree)
+bool CBidEngine::blackwoodOrGerberQuestion(CBidHistory &bidHistory, Suit suitAgree)
 {
     int size = bidHistory.bidList.size();
     if (size < 2)
@@ -1242,7 +1167,7 @@ bool CBidEngine::blackwoodOrGerberQuestion(CBidHistory &bidHistory, Suit bidAgre
     if ((bid != BID_4NT) && (bid != BID_4C) && (bid != BID_5NT) && (bid != BID_5C))
             return false;
 
-    bool agree = (bidAgree == SPADES) || (bidAgree == HEARTS) || (bidAgree == DIAMONDS) || (bidAgree == CLUBS);
+    bool agree = (suitAgree == SPADES) || (suitAgree == HEARTS) || (suitAgree == DIAMONDS) || (suitAgree == CLUBS);
 
     //Blackwood.
     if (agree && ((bid == BID_4NT) || (bid == BID_5NT)))
@@ -1280,9 +1205,122 @@ int CBidEngine::CalculateNoCards(CFeatures partnerFeatures, CFeatures ownFeature
 
 }
 
-Bids CBidEngine::blackwoodOrGerberAsk(CBidHistory &bidHistory, int noAces, int noKings, int lowTotPoints, int highTotPoints)
+Bids CBidEngine::blackwoodOrGerberAsk(CBidHistory &bidHistory, int noAces, int noKings, int lowTotPoints,
+                                      int highTotPoints, Suit suitAgree, Suit newSuitAgree)
 {
     return BID_PASS;
+}
+
+bool CBidEngine::isAnyPass(Suit suitAgree, Bids bid)
+{
+    return ((suitAgree == ANY) && (bid == BID_PASS));
+}
+
+bool CBidEngine::isMinorPass(Suit suitAgree, Bids bid)
+{
+    return (((suitAgree == DIAMONDS) || (suitAgree == CLUBS)) && (bid == BID_PASS));
+}
+
+bool CBidEngine::isMajorOrNTPass(Suit suitAgree, Bids bid)
+{
+    return (((suitAgree == NOTRUMP) || (suitAgree == SPADES) || (suitAgree == HEARTS)) &&
+            (bid == BID_PASS));
+}
+
+bool CBidEngine::isBlackwoodQuestion(Suit suitAgree, Bids bid)
+{
+    return (((suitAgree == SPADES) || (suitAgree == HEARTS) || (suitAgree == DIAMONDS) || (suitAgree == CLUBS)) &&
+            (bid == BID_4NT));
+}
+
+bool CBidEngine::isGerberQuestion(Suit suitAgree, Bids bid)
+{
+    return ((suitAgree == NOTRUMP) &&
+            (bid == BID_4C));
+}
+
+int CBidEngine::blackwoodAnswer(CBidHistory bidHistory, Suit suitAgree, Bids bid)
+{
+    int size = bidHistory.bidList.size();
+
+    if (size < 2)
+        return -1;
+
+    if (((suitAgree == SPADES) || (suitAgree == HEARTS) || (suitAgree == DIAMONDS) || (suitAgree == CLUBS)) &&
+             (bidHistory.bidList[size - 2].bid == BID_4NT) && ((bid == BID_5C) || (bid == BID_5D) ||
+            (bid == BID_5H) || (bid == BID_5S)))
+        return (bid - BID_5C);
+
+    return -1;
+}
+
+int CBidEngine::gerberAnswer(CBidHistory bidHistory, Suit suitAgree, Bids bid)
+{
+    int size = bidHistory.bidList.size();
+
+    if (size < 2)
+        return -1;
+
+    if ((suitAgree == NOTRUMP) &&
+             (bidHistory.bidList[size - 2].bid == BID_4C) && ((bid == BID_4D) ||
+             (bid == BID_4H) || (bid == BID_4S) || (bid == BID_4NT)))
+        return (bid - BID_4D);
+
+    return -1;
+}
+
+bool CBidEngine::isSmallSlam(Bids bid)
+{
+    return (BID_LEVEL(bid) == 6);
+}
+
+bool CBidEngine::isGrandSlam(Bids bid)
+{
+    return (BID_LEVEL(bid) == 7);
+}
+
+bool CBidEngine::isGameMajorOrNT(Suit suitAgree, Bids bid)
+{
+    return (((suitAgree == SPADES) && (bid == BID_4S)) || ((suitAgree == HEARTS) && (bid == BID_4H)) ||
+            ((suitAgree == NOTRUMP) && (bid == BID_3NT)));
+}
+
+bool CBidEngine::isGameMinor(Suit suitAgree, Bids bid)
+{
+    return (((suitAgree == DIAMONDS) && (bid == BID_5D)) || ((suitAgree == CLUBS) && (bid == BID_5C)));
+}
+
+bool CBidEngine::isGameInvitationMajorOrNT(CBidHistory bidHistory, Suit suitAgree, Bids bid)
+{
+    int size = bidHistory.bidList.size();
+
+    if ((size < 2) || (BID_SUIT(bidHistory.bidList[size - 2].bid) != BID_SUIT(bid)))
+        return -1;
+
+    return (((suitAgree == NOTRUMP) && (bid == BID_2NT)) ||
+            ((suitAgree == SPADES) && (bid == BID_3S)) ||
+            ((suitAgree == HEARTS) && (bid == BID_3H)));
+}
+
+bool CBidEngine::isGameInvitationMinor(CBidHistory bidHistory, Suit suitAgree, Bids bid)
+{
+    int size = bidHistory.bidList.size();
+
+    if ((size < 2) || (BID_SUIT(bidHistory.bidList[size - 2].bid) != BID_SUIT(bid)))
+        return -1;
+
+    return (((suitAgree == DIAMONDS) && (bid == BID_4D)) ||
+            ((suitAgree == CLUBS) && (bid == BID_4C)));
+}
+
+bool CBidEngine::isGameNTAfterStopper(Suit suitAgree, Bids bid)
+{
+    return (((suitAgree == DIAMONDS) || (suitAgree == CLUBS)) && (bid == BID_3NT));
+}
+
+bool CBidEngine::isStopperBid(Suit suitAgree, Bids bid)
+{
+    return (((suitAgree == DIAMONDS) || (suitAgree == CLUBS)) && (BID_LEVEL(bid) == 3) && (suitAgree != BID_SUIT(bid)));
 }
 
 bool CBidEngine::isMin(int lowValue, int highValue, int value)
