@@ -67,21 +67,24 @@ private:
     CBidDBDefine *bidDBDefine;
 
     void auctionToText(CAuction &auction, QString *text);
-    bool isMinorPass(Suit suitAgree, Bids bid);
-    bool isMajorOrNTPass(Suit suitAgree, Bids bid);
-    bool isBlackwoodQuestion(Suit suitAgree, Bids bid);
-    bool isGerberQuestion(Suit suitAgree, Bids bid);
-    int blackwoodAnswer(CBidHistory bidHistory, Suit suitAgree, Bids bid);
-    int gerberAnswer(CBidHistory bidHistory, Suit suitAgree, Bids bid);
-    bool isAnyPass(Suit suitAgree, Bids bid);
+
+    bool isMinorPass(Suit suitPAgree, Bids bid);
+    bool isMajorOrNTPass(Suit suitPAgree, Bids bid);
+    bool isBlackwoodQuestion(Suit suitPAgree, Bids bid);
+    bool isGerberQuestion(Suit suitPAgree, Bids bid);
+    int blackwoodAnswer(CBidHistory bidHistory, Suit suitPAgree, Bids bid);
+    int gerberAnswer(CBidHistory bidHistory, Suit suitPAgree, Bids bid);
+    bool isAnyPass(Suit suitPAgree, Bids bid);
     bool isSmallSlam(Bids bid);
     bool isGrandSlam(Bids bid);
-    bool isGameMajorOrNT(Suit suitAgree, Bids bid);
-    bool isGameMinor(Suit suitAgree, Bids bid);
-    bool isGameInvitationMajorOrNT(CBidHistory bidHistory, Suit suitAgree, Bids bid);
-    bool isGameInvitationMinor(CBidHistory bidHistory, Suit suitAgree, Bids bid);
-    bool isGameNTAfterStopper(Suit suitAgree, Bids bid);
+    int limitMajorOrMinor(CBidHistory bidHistory, Suit suitNAgree, Bids bid, CFeatures lowPartnerFeatures);
+    bool isGameInvitationMinor(CBidHistory bidHistory, Suit suitNAgree, Bids bid);
+    bool isGameNTAfterStopper(Suit suitPAgree, Bids bid);
     bool isStopperBid(Suit suitAgree, Bids bid);
+    bool isDoublePass(CBidHistory bidHistory, Bids bid);
+    int limitNT(CBidHistory bidHistory, Bids bid, CFeatures &lowPartnerFeatures);
+    bool isNewSuit(CBidHistory bidHistory, Suit suitNAgree, Bids bid);
+    bool isRebid(CBidHistory bidHistory, Suit suitPAgree, Bids bid);
 };
 
 #endif // CBIDENGINE_H

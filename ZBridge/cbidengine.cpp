@@ -30,6 +30,9 @@
 #include "cbiddbdefine.h"
 #include "cbidengine.h"
 
+const int BID_SUIT_POINT[] = {17, 20, 22, 25, 28, 33, 37};
+const int BID_NT_POINT[] = {17, 23, 26, 28, 29, 33, 37};
+
 /**
  * @brief Generate bid engine.
  * @param bidDB The bid database.
@@ -615,16 +618,21 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
                                                 suitAgree, newSuitAgree);
             if (nextBid != BID_NONE)
             {
-                if (newSuitAgree == NOTRUMP)
+                CFeatures lowFeatures;
+                CFeatures highFeatures;
+                pRule->getFeatures(&lowFeatures, &highFeatures);
+                if (nextBid == BID_4C)
                 {
-                    CFeatures lowFeatures;
-                    CFeatures highFeatures;
-                    pRule->getFeatures(&lowFeatures, &highFeatures);
-                    lowFeatures.setDp(ANY, 1);
-                    lowFeatures.setPoints(ANY, 37 - lowPartnerFeatures.getPoints(ANY));
-                    pRule->setFeatures(lowFeatures, highFeatures);
+                    highFeatures.setDp(ANY, 1);
+                    lowFeatures.setPoints(ANY, highTotPoints - lowPartnerFeatures.getPoints(ANY));
+                }
+                else if (nextBid == BID_4NT)
+                {
+                    lowFeatures.setSuitLen(newSuitAgree, 8 -lowPartnerFeatures.getSuitLen(newSuitAgree));
+                    lowFeatures.setPoints(newSuitAgree, highTotPoints - lowPartnerFeatures.getPoints(newSuitAgree));
                 }
                 bid.bid = nextBid;
+                pRule->setFeatures(lowFeatures, highFeatures);
                 pRule->setStatus(FORCING);
                 return bid;
             }
@@ -1208,45 +1216,68 @@ int CBidEngine::CalculateNoCards(CFeatures partnerFeatures, CFeatures ownFeature
 Bids CBidEngine::blackwoodOrGerberAsk(CBidHistory &bidHistory, int noAces, int noKings, int lowTotPoints,
                                       int highTotPoints, Suit suitAgree, Suit newSuitAgree)
 {
-    return BID_PASS;
+    int size = bidHistory.bidList.size();
+    if (size < 2)
+        return BID_NONE;
+
+    if (newSuitAgree == NOTRUMP)
+    {
+        if ((size < 4) || (bidHistory.bidList[size - 4].bid != BID_4C) &&
+                ((noAces <= 2) || ((noAces == 3) && (highTotPoints >= BID_NT_POINT[6]))))
+            return BID_4C;
+        else if ((size > 4) && ((bidHistory.bidList[size - 4].bid == BID_4C)) &&
+                 (noKings <= 3) && (highTotPoints >= BID_NT_POINT[6]))
+            return BID_5C;
+    }
+    else
+    {
+        if ((size < 4) || (bidHistory.bidList[size - 4].bid != BID_4NT) &&
+                ((noAces <= 2) || ((noAces == 3) && (highTotPoints >= BID_SUIT_POINT[6]))))
+            return BID_4NT;
+        else if ((size > 4) && ((bidHistory.bidList[size - 4].bid == BID_4NT)) &&
+                 (noKings <= 3) && (highTotPoints >= BID_SUIT_POINT[6]))
+            return BID_5NT;
+    }
+
+    return BID_NONE;
 }
 
-bool CBidEngine::isAnyPass(Suit suitAgree, Bids bid)
+bool CBidEngine::isAnyPass(Suit suitPAgree, Bids bid)
 {
-    return ((suitAgree == ANY) && (bid == BID_PASS));
+    return ((suitPAgree == ANY) && (bid == BID_PASS));
 }
 
-bool CBidEngine::isMinorPass(Suit suitAgree, Bids bid)
+bool CBidEngine::isMinorPass(Suit suitPAgree, Bids bid)
 {
-    return (((suitAgree == DIAMONDS) || (suitAgree == CLUBS)) && (bid == BID_PASS));
+    return (((suitPAgree == DIAMONDS) || (suitPAgree == CLUBS)) && (bid == BID_PASS));
 }
 
-bool CBidEngine::isMajorOrNTPass(Suit suitAgree, Bids bid)
+bool CBidEngine::isMajorOrNTPass(Suit suitPAgree, Bids bid)
 {
-    return (((suitAgree == NOTRUMP) || (suitAgree == SPADES) || (suitAgree == HEARTS)) &&
+    return (((suitPAgree == NOTRUMP) || (suitPAgree == SPADES) || (suitPAgree == HEARTS)) &&
             (bid == BID_PASS));
 }
 
-bool CBidEngine::isBlackwoodQuestion(Suit suitAgree, Bids bid)
+bool CBidEngine::isBlackwoodQuestion(Suit suitPAgree, Bids bid)
 {
-    return (((suitAgree == SPADES) || (suitAgree == HEARTS) || (suitAgree == DIAMONDS) || (suitAgree == CLUBS)) &&
+    return (((suitPAgree == SPADES) || (suitPAgree == HEARTS) || (suitPAgree == DIAMONDS) || (suitPAgree == CLUBS)) &&
             (bid == BID_4NT));
 }
 
-bool CBidEngine::isGerberQuestion(Suit suitAgree, Bids bid)
+bool CBidEngine::isGerberQuestion(Suit suitPAgree, Bids bid)
 {
-    return ((suitAgree == NOTRUMP) &&
+    return ((suitPAgree == NOTRUMP) &&
             (bid == BID_4C));
 }
 
-int CBidEngine::blackwoodAnswer(CBidHistory bidHistory, Suit suitAgree, Bids bid)
+int CBidEngine::blackwoodAnswer(CBidHistory bidHistory, Suit suitPAgree, Bids bid)
 {
     int size = bidHistory.bidList.size();
 
     if (size < 2)
         return -1;
 
-    if (((suitAgree == SPADES) || (suitAgree == HEARTS) || (suitAgree == DIAMONDS) || (suitAgree == CLUBS)) &&
+    if (((suitPAgree == SPADES) || (suitPAgree == HEARTS) || (suitPAgree == DIAMONDS) || (suitPAgree == CLUBS)) &&
              (bidHistory.bidList[size - 2].bid == BID_4NT) && ((bid == BID_5C) || (bid == BID_5D) ||
             (bid == BID_5H) || (bid == BID_5S)))
         return (bid - BID_5C);
@@ -1254,14 +1285,14 @@ int CBidEngine::blackwoodAnswer(CBidHistory bidHistory, Suit suitAgree, Bids bid
     return -1;
 }
 
-int CBidEngine::gerberAnswer(CBidHistory bidHistory, Suit suitAgree, Bids bid)
+int CBidEngine::gerberAnswer(CBidHistory bidHistory, Suit suitPAgree, Bids bid)
 {
     int size = bidHistory.bidList.size();
 
     if (size < 2)
         return -1;
 
-    if ((suitAgree == NOTRUMP) &&
+    if ((suitPAgree == NOTRUMP) &&
              (bidHistory.bidList[size - 2].bid == BID_4C) && ((bid == BID_4D) ||
              (bid == BID_4H) || (bid == BID_4S) || (bid == BID_4NT)))
         return (bid - BID_4D);
@@ -1279,48 +1310,94 @@ bool CBidEngine::isGrandSlam(Bids bid)
     return (BID_LEVEL(bid) == 7);
 }
 
-bool CBidEngine::isGameMajorOrNT(Suit suitAgree, Bids bid)
+int CBidEngine::limitMajorOrMinor(CBidHistory bidHistory, Suit suitNAgree, Bids bid, CFeatures lowPartnerFeatures)
 {
-    return (((suitAgree == SPADES) && (bid == BID_4S)) || ((suitAgree == HEARTS) && (bid == BID_4H)) ||
-            ((suitAgree == NOTRUMP) && (bid == BID_3NT)));
+    int level = BID_LEVEL(bid);
+    Suit suit = BID_SUIT(bid);
+    if ((suit != SPADES) && (suit != HEARTS) && (suit != DIAMONDS) && (suit != CLUBS) || (suit != suitNAgree))
+        return -1;
+    if ((level > 4) && ((suit == SPADES) || (suit == HEARTS)) ||
+        (level > 5) && ((suit == DIAMONDS) && (suit == CLUBS)))
+        return -1;
+
+    int size = bidHistory.bidList.size();
+
+    if ((size < 2) || (BID_SUIT(bidHistory.bidList[size - 2].bid) != suit))
+        return -1;
+
+    int points = lowPartnerFeatures.getPoints(suit);
+
+    return (BID_SUIT_POINT[level] - points);
 }
 
-bool CBidEngine::isGameMinor(Suit suitAgree, Bids bid)
+bool CBidEngine::isGameNTAfterStopper(Suit suitPAgree, Bids bid)
 {
-    return (((suitAgree == DIAMONDS) && (bid == BID_5D)) || ((suitAgree == CLUBS) && (bid == BID_5C)));
+    return (((suitPAgree == DIAMONDS) || (suitPAgree == CLUBS)) && (bid == BID_3NT));
 }
 
-bool CBidEngine::isGameInvitationMajorOrNT(CBidHistory bidHistory, Suit suitAgree, Bids bid)
+bool CBidEngine::isStopperBid(Suit suitPAgree, Bids bid)
+{
+    return (((suitPAgree == DIAMONDS) || (suitPAgree == CLUBS)) && (BID_LEVEL(bid) == 3) && (suitPAgree != BID_SUIT(bid)));
+}
+
+bool CBidEngine::isDoublePass(CBidHistory bidHistory, Bids bid)
 {
     int size = bidHistory.bidList.size();
 
-    if ((size < 2) || (BID_SUIT(bidHistory.bidList[size - 2].bid) != BID_SUIT(bid)))
+    if (size < 2)
         return -1;
 
-    return (((suitAgree == NOTRUMP) && (bid == BID_2NT)) ||
-            ((suitAgree == SPADES) && (bid == BID_3S)) ||
-            ((suitAgree == HEARTS) && (bid == BID_3H)));
+    return ((bid == BID_PASS) && (bidHistory.bidList[size -2].bid == BID_DOUBLE));
 }
 
-bool CBidEngine::isGameInvitationMinor(CBidHistory bidHistory, Suit suitAgree, Bids bid)
+int CBidEngine::limitNT(CBidHistory bidHistory, Bids bid, CFeatures &lowPartnerFeatures)
 {
+    int level = BID_LEVEL(bid);
+
+    if ((level > 3) || (BID_SUIT(bid) != NOTRUMP))
+        return -1;
+
+    int size = bidHistory.bidList.size();
+    int first = size % 2;
+
+    //Find first non pass.
+    int i;
+    for (i = first; i < size; i += 2)
+        if (bidHistory.bidList[i].bid != BID_PASS)
+            break;
+
+    bool nextBidIsOpen = (((size - i) % 4) == 0);
+
+    //Catchall 1NT?
+    if (!nextBidIsOpen && (bid == BID_1NT) && ((size = (i + 2))) &&
+                       (BID_LEVEL(bidHistory.bidList[size - 2].bid) == 1))
+        return -6;
+
+    int points = lowPartnerFeatures.getHcp(ANY);
+
+    return (BID_NT_POINT[level] - points);
+}
+
+bool CBidEngine::isRebid(CBidHistory bidHistory, Suit suitPAgree, Bids bid)
+{
+    if (suitPAgree != ANY)
+        return -1;
+
     int size = bidHistory.bidList.size();
 
-    if ((size < 2) || (BID_SUIT(bidHistory.bidList[size - 2].bid) != BID_SUIT(bid)))
-        return -1;
+    int i;
+    for (i = size - 4; i >= 0; i -=4)
+        if (BID_SUIT(bid) == BID_SUIT(bidHistory.bidList[i].bid))
+            break;
 
-    return (((suitAgree == DIAMONDS) && (bid == BID_4D)) ||
-            ((suitAgree == CLUBS) && (bid == BID_4C)));
+    return (i >= 0);
 }
 
-bool CBidEngine::isGameNTAfterStopper(Suit suitAgree, Bids bid)
+bool CBidEngine::isNewSuit(CBidHistory bidHistory, Suit suitNAgree, Bids bid)
 {
-    return (((suitAgree == DIAMONDS) || (suitAgree == CLUBS)) && (bid == BID_3NT));
-}
+    Suit suit = BID_SUIT(bid);
 
-bool CBidEngine::isStopperBid(Suit suitAgree, Bids bid)
-{
-    return (((suitAgree == DIAMONDS) || (suitAgree == CLUBS)) && (BID_LEVEL(bid) == 3) && (suitAgree != BID_SUIT(bid)));
+    return (suitNAgree == ANY) && ((suit == SPADES) || (suit == HEARTS) || (suit == DIAMONDS) || (suit == CLUBS));
 }
 
 bool CBidEngine::isMin(int lowValue, int highValue, int value)
