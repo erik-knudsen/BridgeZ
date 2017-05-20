@@ -56,9 +56,11 @@ private:
     CBid calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures &features, ScoringMethod scoringMethod,
                                 Team teamVul);
     void calculatepRules(Seat seat, CBidHistory &bidHistory, Bids bid, ScoringMethod scoringMethod, Team teamVul, QList<CRule *> &pDefRules);
-    bool blackwoodOrGerberQuestion(CBidHistory &bidHistory, Suit bidAgree);
+    bool blackwoodOrGerberQuestion(CBidHistory &bidHistory, Suit agree);
     int CalculateNoCards(CFeatures partnerFeatures, CFeatures ownFeatures, int cardVal);
-    Bids blackwoodOrGerberAsk(CBidHistory &bidHistory, int noAces, int noKings, int lowTotPoints, int highTotPoints, Suit bidAgree, Suit newSuitAgree);
+    Bids blackwoodOrGerberAsk(CBidHistory &bidHistory, int noAces, int noKings, int highTotPoints, Suit agree);
+    void getLevel(Suit agree, int lowPartnerPoints, int ownPoints , Bids *bid, int *level);
+    bool canDouble(CBidHistory bidHistory);
     bool isMin(int lowValue, int highValue, int value);
     bool isMax(int lowValue, int highValue, int value);
 
@@ -85,6 +87,7 @@ private:
     int limitNT(CBidHistory bidHistory, Bids bid, CFeatures &lowPartnerFeatures);
     bool isNewSuit(CBidHistory bidHistory, Suit suitNAgree, Bids bid);
     bool isRebid(CBidHistory bidHistory, Suit suitPAgree, Bids bid);
+    bool hasDoubled(CBidHistory bidHistory);
 };
 
 #endif // CBIDENGINE_H
