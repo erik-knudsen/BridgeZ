@@ -79,7 +79,7 @@ private:
     bool isAnyPass(Suit suitPAgree, Bids bid);
     bool isSmallSlam(Bids bid);
     bool isGrandSlam(Bids bid);
-    int limitMajorOrMinor(CBidHistory bidHistory, Suit suitNAgree, Bids bid, CFeatures lowPartnerFeatures);
+    int limitMajorOrMinor(CBidHistory bidHistory, Suit suitNAgree, Bids bid, CFeatures &lowPartnerFeatures);
     bool isGameInvitationMinor(CBidHistory bidHistory, Suit suitNAgree, Bids bid);
     bool isGameNTAfterStopper(Suit suitPAgree, Bids bid);
     bool isStopperBid(Suit suitAgree, Bids bid);
