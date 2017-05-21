@@ -55,11 +55,12 @@ private:
     CAuction findSubstituteAuction(CAuction &auction, QSet<qint16> &pages);
     CBid calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures &features, ScoringMethod scoringMethod,
                                 Team teamVul);
-    void calculatepRules(Seat seat, CBidHistory &bidHistory, Bids bid, ScoringMethod scoringMethod, Team teamVul, QList<CRule *> &pDefRules);
+    void calculatepRules(Seat seat, CBidHistory &bidHistory, Bids bid, ScoringMethod scoringMethod, Team teamVul,
+                         QList<CRule *> &pDefRules);
     bool blackwoodOrGerberQuestion(CBidHistory &bidHistory, Suit agree);
     int CalculateNoCards(CFeatures partnerFeatures, CFeatures ownFeatures, int cardVal);
     Bids blackwoodOrGerberAsk(CBidHistory &bidHistory, int noAces, int noKings, int highTotPoints, Suit agree);
-    void getLevel(Suit agree, int lowPartnerPoints, int ownPoints , Bids *bid, int *level);
+    void getLevel(Suit agree, int lowPartnerPoints, int ownPoints , Bids *bid, int *low, int *high);
     bool canDouble(CBidHistory bidHistory);
     bool isMin(int lowValue, int highValue, int value);
     bool isMax(int lowValue, int highValue, int value);
@@ -72,7 +73,7 @@ private:
 
     bool isMinorPass(Suit suitPAgree, Bids bid);
     bool isMajorOrNTPass(Suit suitPAgree, Bids bid);
-    bool isBlackwoodQuestion(Suit suitPAgree, Bids bid);
+    bool isBlackwoodQuestion(Suit suitNAgree, Bids bid);
     bool isGerberQuestion(Suit suitPAgree, Bids bid);
     int blackwoodAnswer(CBidHistory bidHistory, Suit suitPAgree, Bids bid);
     int gerberAnswer(CBidHistory bidHistory, Suit suitPAgree, Bids bid);
@@ -87,7 +88,9 @@ private:
     int limitNT(CBidHistory bidHistory, Bids bid, CFeatures &lowPartnerFeatures);
     bool isNewSuit(CBidHistory bidHistory, Suit suitNAgree, Bids bid);
     bool isRebid(CBidHistory bidHistory, Suit suitPAgree, Bids bid);
+    bool isNextBidOpen(CBidHistory bidHistory);
     bool hasDoubled(CBidHistory bidHistory);
+    bool mustPass(CBidHistory bidHistory);
 };
 
 #endif // CBIDENGINE_H
