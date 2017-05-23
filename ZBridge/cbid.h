@@ -36,6 +36,7 @@ public:
     CBid(Seat bidder, Bids bid, QString alert, QList<CRule *> &rules, bool substitute);
     CBid(Seat bidder, Bids bid, QString alert);
     CBid() { bid = BID_NONE; }
+    ~CBid();
 
     Seat bidder;        /**< Position east, south, north or west. */
     Bids bid;           /**< Bid value. */

@@ -47,3 +47,10 @@ CBid::CBid(Seat bidder, Bids bid, QString alert)
     this->alert = alert;
     substitute = false;
 }
+
+CBid::~CBid()
+{
+    for (int i = 0; i < rules.size(); i++)
+        if (!rules[i]->isdBRule())
+            delete rules[i];
+}
