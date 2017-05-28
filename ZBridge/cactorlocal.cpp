@@ -386,6 +386,7 @@ void CActorLocal::bidValue()
 {
     CBid nextBid = bidAndPlay.getNextBid((Seat)zBridgeClientIface_get_bidder(&handle),
                 (Team)zBridgeClientIface_get_vulnerability(&handle));
+    nextBid.delRules = true;            //Delete non db rules on destroy.
 
     qDebug() << QString(SEAT_NAMES[nextBid.bidder]) + ":  " + bidAndPlay.featuresOfBid(nextBid);
 
@@ -604,8 +605,10 @@ void CActorLocal::bidDone(Seat bidder, Bids bid)
 
     if (showUser)
     {
+        QString features = bidAndPlay.featuresOfLastBid();
+        QString alert = bidAndPlay.alertOfLastBid();
         //Show bid in play view.
-        emit sShowBid(bidder, bid, bidAndPlay.featuresOfLastBid(), bidAndPlay.alertOfLastBid());
+        emit sShowBid(bidder, bid, features, alert);
         emit sShowBid((Seat)((bidder + 1) & 3), BID_PLAYER);
     }
 

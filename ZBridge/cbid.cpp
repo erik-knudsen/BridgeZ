@@ -38,6 +38,7 @@ CBid::CBid(Seat bidder, Bids bid, QString alert, QList<CRule *> &rules, bool sub
     this->alert = alert;
     this->rules = rules;
     this->substitute = substitute;
+    delRules = false;
 }
 
 CBid::CBid(Seat bidder, Bids bid, QString alert)
@@ -46,10 +47,12 @@ CBid::CBid(Seat bidder, Bids bid, QString alert)
     this->bid = bid;
     this->alert = alert;
     substitute = false;
+    delRules = false;
 }
 
 CBid::~CBid()
 {
+    if (delRules)
     for (int i = 0; i < rules.size(); i++)
         if (!rules[i]->isdBRule())
             delete rules[i];

@@ -1544,6 +1544,10 @@ int CFeatures::getPoints(Suit trump)
  */
 void CFeatures::setPoints(Suit trump, int points)
 {
+    bool cont = false;
+    if (!((points >= 0) && (points <= getMaxPoints())))
+        cont = true;
+
     assert ((points >= 0) && (points <= getMaxPoints()));
 
     int shift[] = { 24, 0, 6, 12, 18};

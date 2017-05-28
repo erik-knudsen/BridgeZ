@@ -35,7 +35,7 @@ class CBid
 public:
     CBid(Seat bidder, Bids bid, QString alert, QList<CRule *> &rules, bool substitute);
     CBid(Seat bidder, Bids bid, QString alert);
-    CBid() { bid = BID_NONE; }
+    CBid() { bid = BID_NONE; delRules = false;}
     ~CBid();
 
     Seat bidder;        /**< Position east, south, north or west. */
@@ -43,6 +43,7 @@ public:
     QString alert;      /**< Text string describing possible alert. */
     QList<CRule *> rules; /**< Rules delimiting the bid. */
     bool substitute;    /**< Previous bidding sequence substitute? */
+    bool delRules;      /**< If true then delete non bid DB rules on destroy. */
 };
 
 #endif // CBID_H

@@ -57,10 +57,14 @@ private:
                                 Team teamVul);
     void calculatepRules(Seat seat, CBidHistory &bidHistory, Bids bid, ScoringMethod scoringMethod, Team teamVul,
                          QList<CRule *> &pDefRules);
-    bool mustPass(CBidHistory bidHistory);
-    bool isPenaltyDouble(CBidHistory bidHistory, CFeatures lowPartnerFeatures);
-    bool isDouble(CBidHistory bidHistory);
-    bool canDouble(CBidHistory bidHistory);
+    void calculateRange(Seat seat, CFeatures &lowFeatures, CFeatures &highFeatures, CBidHistory &bidHistory);
+    bool isNT(CBidHistory &bidHistory, int inx);
+    bool nextBidCanBeNT(CFeatures ownFeatures, CFeatures &lowPartnerFeatures, CFeatures &highPartnerFeatures, CFeatures lowRHFeatures, CFeatures highRHFeatures,
+                        CFeatures lowLHFeatures, CFeatures highLHFeatures);
+    bool mustPass(CBidHistory &bidHistory);
+    bool isPenaltyDouble(CBidHistory &bidHistory, CFeatures lowPartnerFeatures);
+    bool isDouble(CBidHistory &bidHistory);
+    bool canDouble(CBidHistory &bidHistory);
     Bids getTakeoutDouble(CFeatures &lowPartnerFeatures, CFeatures &ownFeatures,
                        int highLevel, Suit highSuit, int *low, int *high);
     Suit findTakeoutDouble(Bids bid, int highLevel, Suit highSuit, int *low, int *high);
@@ -70,9 +74,9 @@ private:
     void getLevel(Suit agree, int lowPartnerPoints, int ownPoints , Bids *bid, int *low, int *high);
     void findLevel(Suit agree, int lowPartnerPoints, int bidLevel, int *low, int *high);
     bool isNewSuit(Suit suitNAgree, Bids bid);
-    bool isRebid(CBidHistory bidHistory, Suit suitPAgree, Bids bid);
-    bool isNextBidOpen(CBidHistory bidHistory);
-    int limitNT(CBidHistory bidHistory, Bids bid, CFeatures &lowPartnerFeatures);
+    bool isRebid(CBidHistory &bidHistory, Suit suitPAgree, Bids bid);
+    bool isNextBidOpen(CBidHistory &bidHistory);
+    int limitNT(CBidHistory &bidHistory, Bids bid, CFeatures &lowPartnerFeatures);
 
     bool isMin(int lowValue, int highValue, int value);
     bool isMax(int lowValue, int highValue, int value);

@@ -77,7 +77,7 @@ public:
     int getNextPlay(Seat player, Seat dummySeat);
     CBidHistory &getBidHistory() { return bidHistory; }
     CPlayHistory &getPlayHistory() { return playHistory; }
-    QString featuresOfBid(CBid bid);
+    QString featuresOfBid(CBid &bid);
     QString featuresOfLastBid();
     QString alertOfLastBid();
 

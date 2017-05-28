@@ -116,7 +116,7 @@ int CBidAndPlay::getNextPlay(Seat player, Seat dummySeat)
     return i;
 }
 
-QString CBidAndPlay::featuresOfBid(CBid bid)
+QString CBidAndPlay::featuresOfBid(CBid &bid)
 {
     QString features;
 
@@ -437,7 +437,5 @@ QString CBidAndPlay::alertOfLastBid()
 {
     assert (bidHistory.bidList.size() > 0);
 
-    CBid lastBid = bidHistory.bidList.last();
-
-    return lastBid.alert;
+    return bidHistory.bidList.last().alert;
 }

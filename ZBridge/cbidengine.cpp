@@ -397,53 +397,26 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
 
     //Determine range of partner features.
     CFeatures lowPartnerFeatures;
-    lowPartnerFeatures.setMinFeatures();
     CFeatures highPartnerFeatures;
-    highPartnerFeatures.setMaxFeatures();
-    for (int i = size - 2; i >= 0; i -= 4)
-    {
-        //For the rules of a bid get the widest range for all features.
-        CFeatures lowRuleFeatures;
-        lowRuleFeatures.setMaxFeatures();
-        CFeatures highRuleFeatures;
-        highRuleFeatures.setMinFeatures();
-        for (int j = 0; j < bidHistory.bidList[i].rules.size(); j++)
-        {
-            CFeatures lowFeatures;
-            CFeatures highFeatures;
-            bidHistory.bidList[i].rules[j]->getFeatures(&lowFeatures, &highFeatures);
-            lowRuleFeatures.delimitFeatures(lowFeatures, false);
-            highRuleFeatures.delimitFeatures(highFeatures, true);
-        }
-        //Get the most narrow range.
-        lowPartnerFeatures.delimitFeatures(lowRuleFeatures, true);
-        highPartnerFeatures.delimitFeatures(highRuleFeatures, false);
-    }
+    Seat partnerSeat = (Seat)((seat + 2) / 4);
+    calculateRange(partnerSeat, lowPartnerFeatures, highPartnerFeatures, bidHistory);
 
     //Determine range of own features.
     CFeatures lowOwnFeatures;
-    lowOwnFeatures.setMinFeatures();
     CFeatures highOwnFeatures;
-    highOwnFeatures.setMaxFeatures();
-    for (int i = size - 1; i >= 0; i -= 4)
-    {
-        //For the rules of a bid get the widest range for all features.
-        CFeatures lowRuleFeatures;
-        lowRuleFeatures.setMaxFeatures();
-        CFeatures highRuleFeatures;
-        highRuleFeatures.setMinFeatures();
-        for (int j = 0; j < bidHistory.bidList[i].rules.size(); j++)
-        {
-            CFeatures lowFeatures;
-            CFeatures highFeatures;
-            bidHistory.bidList[i].rules[j]->getFeatures(&lowFeatures, &highFeatures);
-            lowRuleFeatures.delimitFeatures(lowFeatures, false);
-            highRuleFeatures.delimitFeatures(highFeatures, true);
-        }
-        //Get the most narrow range.
-        lowOwnFeatures.delimitFeatures(lowRuleFeatures, true);
-        highOwnFeatures.delimitFeatures(highRuleFeatures, false);
-    }
+    calculateRange(seat, lowOwnFeatures, highOwnFeatures, bidHistory);
+
+    //Determine range of rh opp features.
+    CFeatures lowRHFeatures;
+    CFeatures highRHFeatures;
+    Seat rhSeat = (Seat)((seat + 3) / 4);
+    calculateRange(rhSeat, lowRHFeatures, highRHFeatures, bidHistory);
+
+    //Determine range of lh opp features.
+    CFeatures lowLHFeatures;
+    CFeatures highLHFeatures;
+    Seat lhSeat = (Seat)((seat + 1) / 4);
+    calculateRange(lhSeat, lowLHFeatures, highLHFeatures, bidHistory);
 
     //Already agrement on suit?
     Suit suitAgree;
@@ -472,7 +445,8 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
         newSuitAgree = DIAMONDS;
     else if ((lowPartnerFeatures.getSuitLen(CLUBS) + ownFeatures.getSuitLen(CLUBS)) >= 8)
         newSuitAgree = CLUBS;
-    else if (ownFeatures.getDp(ANY) <= 1)
+    else if (nextBidCanBeNT(ownFeatures, lowPartnerFeatures, highPartnerFeatures,
+                            lowRHFeatures, highRHFeatures, lowLHFeatures, highLHFeatures))
         newSuitAgree = NOTRUMP;
     else
         newSuitAgree = ANY;
@@ -1121,53 +1095,14 @@ void CBidEngine::calculatepRules(Seat seat, CBidHistory &bidHistory, Bids bid, S
 
     //Determine range of partner features.
     CFeatures lowPartnerFeatures;
-    lowPartnerFeatures.setMinFeatures();
     CFeatures highPartnerFeatures;
-    highPartnerFeatures.setMaxFeatures();
-    for (int i = size - 2; i >= 0; i -= 4)
-    {
-        //For the rules of a bid get the widest range for all features.
-        CFeatures lowRuleFeatures;
-        lowRuleFeatures.setMaxFeatures();
-        CFeatures highRuleFeatures;
-        highRuleFeatures.setMinFeatures();
-        for (int j = 0; j < bidHistory.bidList[i].rules.size(); j++)
-        {
-            CFeatures lowFeatures;
-            CFeatures highFeatures;
-            bidHistory.bidList[i].rules[j]->getFeatures(&lowFeatures, &highFeatures);
-            lowRuleFeatures.delimitFeatures(lowFeatures, false);
-            highRuleFeatures.delimitFeatures(highFeatures, true);
-        }
-        //Get the most narrow range.
-        lowPartnerFeatures.delimitFeatures(lowRuleFeatures, true);
-        highPartnerFeatures.delimitFeatures(highRuleFeatures, false);
-    }
+    Seat partnerSeat = (Seat)((seat + 2) / 4);
+    calculateRange(partnerSeat, lowPartnerFeatures, highPartnerFeatures, bidHistory);
 
     //Determine range of own features.
     CFeatures lowOwnFeatures;
-    lowOwnFeatures.setMinFeatures();
     CFeatures highOwnFeatures;
-    highOwnFeatures.setMaxFeatures();
-    for (int i = size - 1; i >= 0; i -= 4)
-    {
-        //For the rules of a bid get the widest range for all features.
-        CFeatures lowRuleFeatures;
-        lowRuleFeatures.setMaxFeatures();
-        CFeatures highRuleFeatures;
-        highRuleFeatures.setMinFeatures();
-        for (int j = 0; j < bidHistory.bidList[i].rules.size(); j++)
-        {
-            CFeatures lowFeatures;
-            CFeatures highFeatures;
-            bidHistory.bidList[i].rules[j]->getFeatures(&lowFeatures, &highFeatures);
-            lowRuleFeatures.delimitFeatures(lowFeatures, false);
-            highRuleFeatures.delimitFeatures(highFeatures, true);
-        }
-        //Get the most narrow range.
-        lowOwnFeatures.delimitFeatures(lowRuleFeatures, true);
-        highOwnFeatures.delimitFeatures(highRuleFeatures, false);
-    }
+    calculateRange(seat, lowOwnFeatures, highOwnFeatures, bidHistory);
 
     //Already agrement on suit?
     Suit suitAgree;
@@ -1666,14 +1601,139 @@ void CBidEngine::calculatepRules(Seat seat, CBidHistory &bidHistory, Bids bid, S
     }
 }
 
-bool CBidEngine::mustPass(CBidHistory bidHistory)
+void CBidEngine::calculateRange(Seat seat, CFeatures &lowFeatures, CFeatures &highFeatures, CBidHistory &bidHistory)
+{
+    int size = bidHistory.bidList.size();
+
+    int last;
+    for (last = size - 1; last >= 0; last--)
+        if (bidHistory.bidList[last].bidder == seat)
+            break;
+    if (last < 0)
+        return;
+
+    bool foundNT = false;
+
+    highFeatures.setMaxFeatures();
+    lowFeatures.setMinFeatures();
+    for (int i = last; i >= 0; i -= 4)
+    {
+        //For the rules of a bid get the widest range for all features.
+        CFeatures lowRuleFeatures;
+        lowRuleFeatures.setMaxFeatures();
+        CFeatures highRuleFeatures;
+        highRuleFeatures.setMinFeatures();
+        for (int j = 0; j < bidHistory.bidList[i].rules.size(); j++)
+        {
+            CFeatures low;
+            CFeatures high;
+            bidHistory.bidList[i].rules[j]->getFeatures(&low, &high);
+
+            //Check for points.
+            if ((low.getHcp(ANY) > 0) || (high.getHcp(ANY) < high.getMaxHcp(ANY)) &&
+                    (low.getPoints(ANY) == 0) && (high.getPoints(ANY) == high.getMaxPoints()))
+            {
+                low.setPoints(ANY, low.getHcp(ANY));
+                high.setPoints(ANY, high.getHcp(ANY));
+            }
+            lowRuleFeatures.delimitFeatures(low, false);
+            highRuleFeatures.delimitFeatures(high, true);
+        }
+        //Check for NT.
+        if (!foundNT && isNT(bidHistory, i))
+            foundNT = true;
+        //Check
+
+        //Get the most narrow range.
+        lowFeatures.delimitFeatures(lowRuleFeatures, true);
+        highFeatures.delimitFeatures(highRuleFeatures, false);
+    }
+    if (foundNT)
+    {
+        lowFeatures.setDp(ANY, 0);
+        highFeatures.setDp(ANY, 1);
+    }
+}
+
+bool CBidEngine::isNT(CBidHistory &bidHistory, int inx)
+{
+    if ((bidHistory.bidList.size() <= inx) || (inx < 0) ||
+        (BID_SUIT(bidHistory.bidList[inx].bid) != NOTRUMP))
+        return false;
+
+    CFeatures lowFeatures;
+    CFeatures highFeatures;
+
+    bidHistory.bidList[inx].rules[0]->getFeatures(&lowFeatures, &highFeatures);
+
+    return !(((bidHistory.bidList[inx].bid == BID_1NT) && (highFeatures.getDp(ANY) == highFeatures.getMaxDp())) ||
+             (bidHistory.bidList[inx].alert > 0));
+}
+
+bool CBidEngine::nextBidCanBeNT(CFeatures ownFeatures,
+                                CFeatures &lowPartnerFeatures, CFeatures &highPartnerFeatures,
+                                CFeatures lowRHFeatures, CFeatures highRHFeatures,
+                                CFeatures lowLHFeatures, CFeatures highLHFeatures)
+{
+    //Do not bid NT if opponent has bid NT.
+    if ((highRHFeatures.getDp(ANY) <= 1) || (highLHFeatures.getDp(ANY) <= 1))
+        return false;
+
+    //Find which suits have been bidded.
+    bool ownSuit[4];
+    bool oppSuit[4];
+    for (int i = 0; i < 4; i++)
+        ownSuit[i] = oppSuit[i] = false;
+
+    //Own suit.
+    for (int i = 0; i < 4; i++)
+    {
+        if ((lowPartnerFeatures.getSuitLen((Suit)i) >= 4) || (ownFeatures.getSuitLen((Suit)i) >= 4))
+            ownSuit[i] = true;
+    }
+
+    //Opp suit.
+    for (int i = 0; i < 4; i++)
+    {
+        if ((lowRHFeatures.getSuitLen((Suit)i) >= 4) || (lowLHFeatures.getSuitLen((Suit)i) >= 4))
+            oppSuit[i] = true;
+    }
+
+    //Check for distribution.
+    bool foundDouble = false;
+    int i;
+    for (i = 0; i < 4; i++)
+    if (!ownSuit[i] && !oppSuit[i])
+    {
+        int count = ownFeatures.getSuitLen((Suit)i);
+        if ((count < 2) || (foundDouble && (count == 2)))
+            break;
+        if (count == 2)
+            foundDouble = true;
+    }
+    if ( i < 4)
+        return false;
+
+    //Check for bids by opponent.
+    for (i = 0; i < 4; i++)
+    {
+        if (!ownSuit[i] && oppSuit[i] && ownFeatures.getStopNT((Suit)i) < 3)
+            break;
+    }
+    if (i < 4)
+        return false;
+
+    return true;
+}
+
+bool CBidEngine::mustPass(CBidHistory &bidHistory)
 {
     int size = bidHistory.bidList.size();
 
     return ((size >= 2) && (bidHistory.bidList[size - 2].rules[0]->getStatus() == MUST_PASS));
 }
 
-bool CBidEngine::isPenaltyDouble(CBidHistory bidHistory, CFeatures lowPartnerFeatures)
+bool CBidEngine::isPenaltyDouble(CBidHistory &bidHistory, CFeatures lowPartnerFeatures)
 {
     int size = bidHistory.bidList.size();
 
@@ -1689,14 +1749,14 @@ bool CBidEngine::isPenaltyDouble(CBidHistory bidHistory, CFeatures lowPartnerFea
             ((BID_LEVEL(bidHistory.bidList[i].bid) >= 4) || (lowPartnerFeatures.getPoints(ANY) >= 12)));
 }
 
-bool CBidEngine::isDouble(CBidHistory bidHistory)
+bool CBidEngine::isDouble(CBidHistory &bidHistory)
 {
     int size = bidHistory.bidList.size();
 
     return ((size >= 2) && (bidHistory.bidList[size - 2].bid == BID_DOUBLE));
 }
 
-bool CBidEngine::canDouble(CBidHistory bidHistory)
+bool CBidEngine::canDouble(CBidHistory &bidHistory)
 {
     int size = bidHistory.bidList.size();
 
@@ -1902,22 +1962,24 @@ bool CBidEngine::isNewSuit(Suit suitNAgree, Bids bid)
     return (suitNAgree == ANY) && ((suit == SPADES) || (suit == HEARTS) || (suit == DIAMONDS) || (suit == CLUBS));
 }
 
-bool CBidEngine::isRebid(CBidHistory bidHistory, Suit suitPAgree, Bids bid)
+bool CBidEngine::isRebid(CBidHistory &bidHistory, Suit suitPAgree, Bids bid)
 {
-    if (suitPAgree != ANY)
-        return -1;
+    Suit bidSuit = BID_SUIT(bid);
+
+    if ((suitPAgree != ANY) || ((bidSuit != CLUBS) && (bidSuit!= DIAMONDS) && (bidSuit != HEARTS) && (bidSuit != SPADES)))
+        return false;
 
     int size = bidHistory.bidList.size();
 
     int i;
     for (i = size - 4; i >= 0; i -=4)
-        if (BID_SUIT(bid) == BID_SUIT(bidHistory.bidList[i].bid))
+        if (bidSuit == BID_SUIT(bidHistory.bidList[i].bid))
             break;
 
     return (i >= 0);
 }
 
-bool CBidEngine::isNextBidOpen(CBidHistory bidHistory)
+bool CBidEngine::isNextBidOpen(CBidHistory &bidHistory)
 {
     int size = bidHistory.bidList.size();
 
@@ -1930,7 +1992,7 @@ bool CBidEngine::isNextBidOpen(CBidHistory bidHistory)
     return (((size - i) % 4) == 0);
 }
 
-int CBidEngine::limitNT(CBidHistory bidHistory, Bids bid, CFeatures &lowPartnerFeatures)
+int CBidEngine::limitNT(CBidHistory &bidHistory, Bids bid, CFeatures &lowPartnerFeatures)
 {
     int level = BID_LEVEL(bid);
 

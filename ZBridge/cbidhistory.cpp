@@ -42,6 +42,7 @@ CBidHistory::CBidHistory()
 void CBidHistory::appendBid(CBid &bid)
 {
     bidList.append(bid);
+    bidList.last().delRules = true;     //Delete non db rules on destroy.
 }
 
 /**
