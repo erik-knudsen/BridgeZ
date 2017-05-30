@@ -33,7 +33,6 @@ class CBidHistory
 {
 public:
     CBidHistory();
-//    CBidHistory& operator=(const CBidHistory &bidHistory);
 
     void appendBid(CBid &bid);
     void removeBid();

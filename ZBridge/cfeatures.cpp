@@ -828,6 +828,8 @@ void CFeatures::delimitFeatures(CFeatures &features, bool lower)
  */
 int CFeatures::getHcp(Suit suit)
 {
+    assert (suit != NOTRUMP);
+
     int shift[] = { 16, 0, 4, 8, 12};
     int mask[] = { 0x3f, 0xf, 0xf, 0xf, 0xf};
 
@@ -845,6 +847,8 @@ int CFeatures::getHcp(Suit suit)
  */
 void CFeatures::setHcp(Suit suit, int hcp)
 {
+    assert (suit != NOTRUMP);
+
     assert ((hcp >= 0) && (hcp <= getMaxHcp(suit)));
 
     int shift[] = { 16, 0, 4, 8, 12};
@@ -858,6 +862,8 @@ void CFeatures::setHcp(Suit suit, int hcp)
  */
 int CFeatures::getControls(Suit suit)
 {
+    assert (suit != NOTRUMP);
+
     int shift[] = { 8, 0, 2, 4, 6};
     int mask[] = { 0xf, 0x3, 0x3, 0x3, 0x3};
 
@@ -875,6 +881,8 @@ int CFeatures::getControls(Suit suit)
  */
 void CFeatures::setControls(Suit suit, int controls)
 {
+    assert (suit != NOTRUMP);
+
     assert ((controls >= 0) && (controls <= getMaxControls(suit)));
 
     int shift[] = { 8, 0, 2, 4, 6};
@@ -888,6 +896,8 @@ void CFeatures::setControls(Suit suit, int controls)
  */
 int CFeatures::getHc(Suit suit)
 {
+    assert (suit != NOTRUMP);
+
     int shift[] = { 8, 0, 2, 4, 6};
     int mask[] = { 0xf, 0x3, 0x3, 0x3, 0x3};
 
@@ -905,6 +915,8 @@ int CFeatures::getHc(Suit suit)
  */
 void CFeatures::setHc(Suit suit, int hc)
 {
+    assert (suit != NOTRUMP);
+
     assert ((hc >= 0) && (hc <= getMaxHc(suit)));
 
     int shift[] = { 8, 0, 2, 4, 6};
@@ -918,6 +930,8 @@ void CFeatures::setHc(Suit suit, int hc)
  */
 int CFeatures::getHonor(Suit suit)
 {
+    assert (suit != NOTRUMP);
+
     int shift[] = { 12, 0, 3, 6, 9};
     int mask[] = { 0xf, 0x7, 0x7, 0x7, 0x7};
 
@@ -935,6 +949,7 @@ int CFeatures::getHonor(Suit suit)
  */
 void CFeatures::setHonor(Suit suit, int honor)
 {
+    assert (suit != NOTRUMP);
     assert ((honor >= 0) && (honor <= getMaxHonor(suit)));
 
     int shift[] = { 12, 0, 3, 6, 9};
@@ -948,6 +963,7 @@ void CFeatures::setHonor(Suit suit, int honor)
  */
 int CFeatures::getCountCard(Suit suit, int card)
 {
+    assert (suit != NOTRUMP);
     assert ((card == ACE) || (card == KING) || (card == QUEEN) || (card == JACK) || (card == TEN));
 
     int shift[] = { 4, 0, 1, 2, 3};
@@ -970,6 +986,7 @@ int CFeatures::getCountCard(Suit suit, int card)
  */
 void CFeatures::setCountCard(Suit suit, int card, int count)
 {
+    assert (suit != NOTRUMP);
     assert ((card == ACE) || (card == KING) || (card == QUEEN) || (card == JACK) || (card == TEN));
     assert ((count >= 0) && (count <= getMaxCountCard(suit)));
 
@@ -993,6 +1010,7 @@ void CFeatures::setCountCard(Suit suit, int card, int count)
  */
 int CFeatures::getRkcb(Suit suit)
 {
+    assert (suit != NOTRUMP);
     assert(suit != ANY);
 
     int shift[] = { 0, 3, 6, 9};
@@ -1012,6 +1030,7 @@ int CFeatures::getRkcb(Suit suit)
  */
 void CFeatures::setRkcb(Suit suit, int rkcb)
 {
+    assert (suit != NOTRUMP);
     assert ((suit != ANY) && (rkcb >= 0) && (rkcb <= getMaxRkcb()));
 
     int shift[] = { 0, 3, 6, 9};
@@ -1050,6 +1069,9 @@ void CFeatures::setBal(int bal)
  */
 int CFeatures::getDp(Suit suit)
 {
+    if (suit == NOTRUMP)
+        suit = ANY;
+
     int shift[] = { 16, 0, 4, 8, 12};
     int mask[] = { 0xf, 0xf, 0xf, 0xf, 0xf};
 
@@ -1067,6 +1089,9 @@ int CFeatures::getDp(Suit suit)
  */
 void CFeatures::setDp(Suit suit, int dP)
 {
+    if (suit == NOTRUMP)
+        suit = ANY;
+
     assert ((dP >= 0) && (dP <= getMaxDp()));
 
     int shift[] = { 16, 0, 4, 8, 12};
@@ -1080,6 +1105,7 @@ void CFeatures::setDp(Suit suit, int dP)
  */
 int CFeatures::getDif2(Suit suit1, Suit suit2)
 {
+    assert ((suit1 != NOTRUMP) && (suit2 != NOTRUMP));
     assert ((suit1 != ANY) && (suit2 != ANY) && (suit1 != suit2));
 
     int shift[] = { 0, 5, 10, 15, 20, 25};
@@ -1110,6 +1136,7 @@ int CFeatures::getDif2(Suit suit1, Suit suit2)
  */
 void CFeatures::setDif2(Suit suit1, Suit suit2, int dif)
 {
+    assert ((suit1 != NOTRUMP) && (suit2 != NOTRUMP));
     assert ((suit1 != ANY) && (suit2 != ANY) && (suit1 != suit2) && (dif >= -getMaxDif2()) && (dif <= getMaxDif2()));
 
     int shift[] = { 0, 5, 10, 15, 20, 25};
@@ -1159,6 +1186,7 @@ void CFeatures::setSuits(int suits)
  */
 int CFeatures::getSuitLen(Suit suit)
 {
+    assert (suit != NOTRUMP);
     assert (suit != ANY);
 
     int shift[] = { 0, 4, 8, 12};
@@ -1178,6 +1206,7 @@ int CFeatures::getSuitLen(Suit suit)
  */
 void CFeatures::setSuitLen(Suit suit, int suitLen)
 {
+    assert (suit != NOTRUMP);
     assert ((suit != ANY) && (suitLen >= 0) && (suitLen <= getMaxSuitLen()));
 
     int shift[] = { 0, 4, 8, 12};
@@ -1191,6 +1220,7 @@ void CFeatures::setSuitLen(Suit suit, int suitLen)
  */
 int CFeatures::getSuitLen2(Suit suit1, Suit suit2)
 {
+    assert ((suit1 != NOTRUMP) && (suit2 != NOTRUMP));
     assert ((suit1 != ANY) && (suit2 != ANY) && (suit1 != suit2));
 
     int shift[] = { 0, 4, 8, 12, 16, 20};
@@ -1214,6 +1244,7 @@ int CFeatures::getSuitLen2(Suit suit1, Suit suit2)
  */
 void CFeatures::setSuitLen2(Suit suit1, Suit suit2, int suitLen2)
 {
+    assert ((suit1 != NOTRUMP) && (suit2 != NOTRUMP));
     assert ((suit1 != ANY) && (suit2 != ANY) && (suit1 != suit2) && (suitLen2 >= 0) && (suitLen2 <= getMaxSuitLen2()));
 
     int shift[] = { 0, 4, 8, 12, 16, 20};
@@ -1279,6 +1310,7 @@ void CFeatures::setLMin(int lMin)
  */
 int CFeatures::getLongest(Suit suit)
 {
+    assert (suit != NOTRUMP);
     assert (suit != ANY);
 
     int shift[] = { 0, 1, 2, 3};
@@ -1298,6 +1330,7 @@ int CFeatures::getLongest(Suit suit)
  */
 void CFeatures::setLongest(Suit suit, int longest)
 {
+    assert (suit != NOTRUMP);
     assert ((suit != ANY) && (longest >= 0) && (longest <= getMaxLongest()));
 
     int shift[] = { 0, 1, 2, 3};
@@ -1311,6 +1344,7 @@ void CFeatures::setLongest(Suit suit, int longest)
  */
 int CFeatures::getLong(Suit suit)
 {
+    assert (suit != NOTRUMP);
     assert (suit != ANY);
 
     int shift[] = { 0, 1, 2, 3};
@@ -1330,6 +1364,7 @@ int CFeatures::getLong(Suit suit)
  */
 void CFeatures::setLong(Suit suit, int lng)
 {
+    assert (suit != NOTRUMP);
     assert ((suit != ANY) && (lng >= 0) && (lng <= getMaxLong()));
 
     int shift[] = { 0, 1, 2, 3};
@@ -1343,6 +1378,8 @@ void CFeatures::setLong(Suit suit, int lng)
  */
 int CFeatures::getInter(Suit suit)
 {
+    assert (suit != NOTRUMP);
+
     int shift[] = { 12, 0, 3, 6, 9};
     int mask[] = { 0x1f, 0x7, 0x7, 0x7, 0x7};
 
@@ -1360,6 +1397,8 @@ int CFeatures::getInter(Suit suit)
  */
 void CFeatures::setInter(Suit suit, int inter)
 {
+    assert (suit != NOTRUMP);
+
     assert ((inter >= 0) && (inter <= getMaxInter(suit)));
 
     int shift[] = { 12, 0, 3, 6, 9};
@@ -1373,6 +1412,8 @@ void CFeatures::setInter(Suit suit, int inter)
  */
 int CFeatures::getLoosers(Suit suit)
 {
+    assert (suit != NOTRUMP);
+
     int shift[] = { 8, 0, 2, 4, 6};
     int mask[] = { 0xf, 0x3, 0x3, 0x3, 0x3};
 
@@ -1390,6 +1431,8 @@ int CFeatures::getLoosers(Suit suit)
  */
 void CFeatures::setLoosers(Suit suit, int loosers)
 {
+    assert (suit != NOTRUMP);
+
     assert ((loosers >= 0) && (loosers <= getMaxLoosers(suit)));
 
     int shift[] = { 8, 0, 2, 4, 6};
@@ -1403,6 +1446,8 @@ void CFeatures::setLoosers(Suit suit, int loosers)
  */
 int CFeatures::getQuickTricks(Suit suit)
 {    
+    assert (suit != NOTRUMP);
+
     int shift[] = { 12, 0, 3, 6, 9};
     int mask[] = { 0x1f, 0x7, 0x7, 0x7, 0x7};
 
@@ -1420,6 +1465,8 @@ int CFeatures::getQuickTricks(Suit suit)
  */
 void CFeatures::setQuickTricks(Suit suit, int quickTricks)
 {
+    assert (suit != NOTRUMP);
+
     assert ((quickTricks >= 0) && (quickTricks <= getMaxQuickTricks(suit)));
 
     int shift[] = { 12, 0, 3, 6, 9};
@@ -1433,6 +1480,9 @@ void CFeatures::setQuickTricks(Suit suit, int quickTricks)
  */
 int CFeatures::getPlayingTricks(Suit suit)
 {
+    if (suit == NOTRUMP)
+        suit = ANY;
+
     int shift[] = {20, 0, 5, 10, 15};
     int mask[] = { 0x1f, 0x1f, 0x1f, 0x1f, 0x1f};
 
@@ -1450,6 +1500,9 @@ int CFeatures::getPlayingTricks(Suit suit)
  */
 void CFeatures::setPlayingTricks(Suit suit, int playingTricks)
 {
+    if (suit == NOTRUMP)
+        suit = ANY;
+
     assert ((playingTricks >= 0) && (playingTricks <= getMaxPlayingTricks()));
 
     int shift[] = {20, 0, 5, 10, 15};
@@ -1463,6 +1516,7 @@ void CFeatures::setPlayingTricks(Suit suit, int playingTricks)
  */
 int CFeatures::getStopNT(Suit suit)
 {
+    assert (suit != NOTRUMP);
     assert (suit != ANY);
 
     int shift[] = { 0, 3, 6, 9};
@@ -1482,6 +1536,7 @@ int CFeatures::getStopNT(Suit suit)
  */
 void CFeatures::setStopNT(Suit suit, int stopNT)
 {
+    assert (suit != NOTRUMP);
     assert ((suit != ANY) && (stopNT >= 0) && (stopNT <= getMaxStopNT()));
 
     int shift[] = { 0, 3, 6, 9};
@@ -1495,6 +1550,7 @@ void CFeatures::setStopNT(Suit suit, int stopNT)
  */
 int CFeatures::getQlty(Suit suit)
 {
+    assert (suit != NOTRUMP);
     assert (suit != ANY);
 
     int shift[] = { 0, 4, 8, 12};
@@ -1514,6 +1570,7 @@ int CFeatures::getQlty(Suit suit)
  */
 void CFeatures::setQlty(Suit suit, int qlty)
 {
+    assert (suit != NOTRUMP);
     assert ((suit != ANY) && (qlty >= 0) && (qlty <= getMaxQlty()));
 
     int shift[] = { 0, 4, 8, 12};
@@ -1527,6 +1584,9 @@ void CFeatures::setQlty(Suit suit, int qlty)
  */
 int CFeatures::getPoints(Suit trump)
 {
+    if (trump == NOTRUMP)
+        trump = ANY;
+
     int shift[] = { 24, 0, 6, 12, 18};
     int mask[] = { 0x3f, 0x3f, 0x3f, 0x3f, 0x3f};
 
@@ -1544,9 +1604,8 @@ int CFeatures::getPoints(Suit trump)
  */
 void CFeatures::setPoints(Suit trump, int points)
 {
-    bool cont = false;
-    if (!((points >= 0) && (points <= getMaxPoints())))
-        cont = true;
+    if (trump == NOTRUMP)
+        trump = ANY;
 
     assert ((points >= 0) && (points <= getMaxPoints()));
 
