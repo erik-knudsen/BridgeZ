@@ -77,6 +77,7 @@ private:
     bool isRebid(CBidHistory &bidHistory, Suit suitPAgree, Bids bid);
     bool isNextBidOpen(CBidHistory &bidHistory);
     int limitNT(CBidHistory &bidHistory, Bids bid, CFeatures &lowPartnerFeatures);
+    int nextBidder(CBidHistory &bidHistory);
 
     bool isMin(int lowValue, int highValue, int value);
     bool isMax(int lowValue, int highValue, int value);

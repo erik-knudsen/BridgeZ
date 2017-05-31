@@ -30,6 +30,7 @@
 #include "cbiddbdefine.h"
 #include "cbidengine.h"
 
+//Bid limit levels.
 const int BID_POINT_SIZE = 7;
 const int BID_SUIT_POINT[BID_POINT_SIZE] = {17, 20, 22, 25, 28, 33, 37};
 const int BID_NT_POINT[BID_POINT_SIZE] = {17, 23, 26, 28, 29, 33, 37};
@@ -38,6 +39,31 @@ const int BID_SUIT_MINOR_GAME_INX = 4;
 const int BID_NT_GAME_INX = 2;
 const int BID_SMALL_SLAM_INX = 5;
 const int BID_GRAND_SLAM_INX = 6;
+
+//Newbid definitions. For new suit bidding.
+const int OPEN_RESPONSE = 1;            //Next bid is response to opener by partner.
+const int OPEN_REBID = 2;               //Next bid is rebid of opener.
+const int OPEN_REBID_RESPONSE = 3;      //Next bid is second response to opener by partner.
+const int OPEN_OTHER = -1;              //Next bid is other bids.
+const int CATCHALL_NT_L = 6;            //Catch all NT low point level by partner.
+const int CATCHALL_NT_H = 9;            //Catch all NT high point level by partner.
+const int NEWSUIT_P1_1 = 6;             //Low point for response to opener on 1. level by partner.
+const int NEWSUIT_P1_2 = 10;            //Low point for response to opener on 2. level by partner.
+const int NEWSUIT_P1_J = 16;            //Low point for jump response to opener by partner.
+const int NEWSUIT_O_J_L = 19;           //Low point for openers rebid jump response by opener.
+const int NEWSUIT_O_J_H = 21;           //High point for openers rebid jump response by opener.
+const int NEWSUIT_O_S_L = 12;           //Low point for openers simpel new suit response by opener.
+const int NEWSUIT_O_S_H = 18;           //High point for openers simpel new suit response by opener.
+const int NEWSUIT_O_3_L = 16;           //Low point for openers reverse suit response by opener.
+const int NEWSUIT_O_3_H = 21;           //High point for openers reverse suit response by opener.
+const int NEWSUIT_P2_3_L = 10;          //Low point for partners 2. bid on level 3.
+const int NEWSUIT_P2_3_H = 12;          //High point for partners 2. bid on level 3.
+const int NEWSUIT_P2_4 = 13;            //Low point for partners 2. bid on level 4.
+
+//Rebid of suit definitions.
+const int REBID_SL = 6;                 //Minimum suit length.
+const int REBID_O = 12;                 //Base level for openers rebid.
+const int REBID_P = 6;                  //Base level for partners rebid.
 
 /**
  * @brief Generate bid engine.
@@ -976,24 +1002,149 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
     {
         //Find new suit (if possible).
         {
-            int i;
-            for (i = 0; i < 4; i++)
-                if ((lowPartnerFeatures.getSuitLen((Suit)i) == 0) && (lowOwnFeatures.getSuitLen((Suit)i) == 0) &&
-                        (!oppSuit[i]) && (ownFeatures.getSuitLen((Suit)i) >= 4))
+            int newSuit;
+            for (newSuit = 0; newSuit < 4; newSuit++)
+                if ((lowPartnerFeatures.getSuitLen((Suit)newSuit) == 0) && (lowOwnFeatures.getSuitLen((Suit)newSuit) == 0) &&
+                        (!oppSuit[newSuit]) && (ownFeatures.getSuitLen((Suit)newSuit) >= 4))
                     break;
-            //New suit?   //All the stuff with catchall nt etc. is handled by the tables.
-            if ((i < 4) && ((highSuit > i) || (newSuitAgree != NOTRUMP)))
+            //New suit?
+            if ((newSuit < 4) && ((highSuit > newSuit) || (newSuitAgree != NOTRUMP)))
             {
-                CFeatures lowFeatures;
-                CFeatures highFeatures;
-                pRule->getFeatures(&lowFeatures, &highFeatures);
-                lowFeatures.setSuitLen((Suit)i, 4);
-                pRule->setFeatures(lowFeatures, highFeatures);
+                int low = -1;
+                int  high = -1;
+                int newLevel = (newSuit > highSuit) ? (highLevel) : (highLevel + 1);
 
-                int newSuitLevel = (i > highSuit) ? (highLevel) : (highLevel + 1);
-                bid.bid = MAKE_BID(i, newSuitLevel);
+                int points = ownFeatures.getPoints(NOTRUMP);                
+                Bids newBid = MAKE_BID(newSuit, newLevel);
 
-                return bid;
+                int size = bidHistory.bidList.size();
+                int bidder = nextBidder(bidHistory);
+
+                //Response from openers partner.
+                if (bidder == OPEN_RESPONSE)
+                {
+                    //Check if new bid is possible. Otherwise skip.
+                    Bids partnerBid = bidHistory.bidList[size - 2].bid;
+                    //Jump in new suit.
+                    if ((((newBid - partnerBid) / 5) > 0) && (points < NEWSUIT_P1_J))                 //16
+                        newBid = BID_NONE;
+                    //New suit level 1.
+                    else if ((((newBid - partnerBid) / 5) == 0) && (newLevel == 1) && (points < NEWSUIT_P1_1)) //6
+                        newBid = BID_NONE;
+                    //New suit level 2.
+                    else if ((((newBid - partnerBid) / 5) == 0) && (newLevel == 2) && (points < NEWSUIT_P1_2))  //10
+                        newBid = BID_NONE;
+
+                    //Check for catch all 1NT.
+                    if ((newBid == BID_NONE) &&
+                        (highOwnLevel == 1) && !(highOppLevel > 1) && !oppSuit[NOTRUMP] &&
+                            (points >= CATCHALL_NT_L) && (points <= CATCHALL_NT_H))            //6-9
+                        newBid = BID_1NT;
+
+                    //Check for jump (not really needed).
+//                    if ((((newBid - partnerBid)/5) == 0) && (points >= NEWSUIT_P1_J))     //16
+//                        newBid = Bids(newBid + 5);
+
+                    //Points.
+                    low = CATCHALL_NT_L;                //6
+                    //Catch all 1NT (6-9)
+                    if (newBid == BID_1NT)
+                        high = CATCHALL_NT_H;           //9
+                    //Jump in new suit.
+                    else if (((newBid - partnerBid) / 5) > 0)
+                        low = NEWSUIT_P1_J;                         //16
+                    //New suit level 2.
+                    else if ((((newBid - partnerBid) / 5) == 0) && (newLevel == 2))
+                        low = NEWSUIT_P1_2;                 //10
+                    //New suit level 1.
+                    else if ((((newBid - partnerBid) / 5) == 0) && (newLevel == 1))
+                        low = NEWSUIT_P1_1;                 //6
+                }
+
+                //Rebid of opener.
+                else if (bidder == OPEN_REBID)
+                {
+                    Bids partnerBid = bidHistory.bidList[size - 2].bid;
+                    Bids ownBid = bidHistory.bidList[size - 4].bid;
+                    Bids cmpBid = IS_BID(partnerBid) ? (partnerBid) : (ownBid);
+
+                    //Jump in new suit.
+                    if ((((newBid - cmpBid) / 5) > 0) && (points < NEWSUIT_O_J_L))      //19
+                        newBid = BID_PASS;
+                    //Reverse suit.
+                    else if ((((newBid - cmpBid) / 5) == 0) && (((newBid - ownBid) / 5) == 1) && (points < NEWSUIT_O_3_L))   //16
+                        newBid = BID_PASS;
+                    //Simpel new suit.
+                    else if ((((newBid - cmpBid) / 5) == 0) && (((newBid - ownBid) / 5) == 0) && (points < NEWSUIT_O_S_L))  //12
+                        newBid = BID_PASS;
+
+                    //Check for jump.
+                    if ((((newBid - cmpBid)/5) == 0) && (points >= NEWSUIT_O_J_L))          //19
+                        newBid = Bids(newBid + 5);
+
+                    //Points.
+                    //Jump in new suit.
+                    if (((newBid - cmpBid)/5) > 0)
+                    {
+                        low = NEWSUIT_O_J_L;        //19
+                        high = NEWSUIT_O_J_H;       //21
+                    }
+                    //Reverse suit.
+                    else if ((((newBid - cmpBid) / 5) == 0) && (((newBid - ownBid) / 5) == 1))
+                    {
+                        low = NEWSUIT_O_3_L;        //16
+                        high = NEWSUIT_O_3_H;       //21
+                    }
+                    //Simpel new suit.
+                    else if ((((newBid - cmpBid) / 5) == 0) && (((newBid - ownBid) / 5) == 0))
+                    {
+                        low = NEWSUIT_O_S_L;            //12
+                        high = NEWSUIT_O_S_H;           //18
+                    }
+                }
+
+                //Rebid of openers partner.
+                else if (bidder == OPEN_REBID_RESPONSE)
+                {
+                    int level = BID_LEVEL(newBid);
+                    if (points < NEWSUIT_P2_3_L)            //10
+                        newBid = BID_NONE;
+                    else if ((points >= NEWSUIT_P2_3_L) && (points <= NEWSUIT_P2_3_H) && (level > 3))       //10-12
+                        newBid = BID_NONE;
+                    else if ((points >= NEWSUIT_P2_3_L) && (points <= NEWSUIT_P2_3_H) && (level <= 3))      //10-12
+                    {
+                        low = NEWSUIT_P2_3_L;           //10
+                        high = NEWSUIT_P2_3_H;          //12
+                        newBid = (Bids)(newBid + (3 - level) * 5);
+                    }
+                    else if ((points >= 13) && (level > 4))
+                        newBid = BID_NONE;
+                    else if ((points >= NEWSUIT_P2_4) && (level <= 4))          //13
+                    {
+                        low = NEWSUIT_P2_4;                                     //13
+                        newBid = (Bids)(newBid + (4 - level) * 5);
+                    }
+                }
+                else
+                    newBid = BID_NONE;
+
+                if (newBid != BID_NONE)
+                {
+                    CFeatures lowFeatures;
+                    CFeatures highFeatures;
+                    pRule->getFeatures(&lowFeatures, &highFeatures);
+                    if (low != -1)
+                        lowFeatures.setPoints(NOTRUMP, low);
+                    if (high != -1)
+                        highFeatures.setPoints(NOTRUMP, high);
+                    if (newBid != BID_1NT)
+                        lowFeatures.setSuitLen((Suit)newSuit, 4);
+                    pRule->setFeatures(lowFeatures, highFeatures);
+
+                    bid.bid = newBid;
+
+                    return bid;
+                }
             }
         }
 
@@ -1043,7 +1194,7 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
             {
                 int j = 0;
                 for (int i = 0; i < 4; i++)
-                    if (ownSuit[i] && (ownFeatures.getSuitLen((Suit)i) >= 6) &&
+                    if (ownSuit[i] && (ownFeatures.getSuitLen((Suit)i) >= REBID_SL) &&              //6
                             (ownFeatures.getPoints((Suit)i) > ownFeatures.getPoints((Suit)j)))
                         j = i;
                 int newSuitLevel = (j > highSuit) ? (highLevel) : (highLevel + 1);
@@ -1051,7 +1202,7 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
                 Bids nextBid;
                 int low, high;
 
-                int level = isNextBidOpen(bidHistory) ? (12) : (6);
+                int level = isNextBidOpen(bidHistory) ? (REBID_O) : (REBID_P);              //12, 6
                 getLevel((Suit)j, level, ownFeatures.getPoints((Suit)j), &nextBid,
                          &low, &high);
 
@@ -1060,7 +1211,7 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
                     CFeatures lowFeatures;
                     CFeatures highFeatures;
                     pRule->getFeatures(&lowFeatures, &highFeatures);
-                    lowFeatures.setSuitLen((Suit)j, 6);
+                    lowFeatures.setSuitLen((Suit)j, REBID_SL);              //6
                     lowFeatures.setPoints((Suit)j, low);
                     highFeatures.setPoints((Suit)j, high);
                     pRule->setFeatures(lowFeatures, highFeatures);
@@ -1139,7 +1290,7 @@ void CBidEngine::calculatepRules(Seat seat, CBidHistory &bidHistory, Bids bid, S
         newSuitAgree = DIAMONDS;
     else if ((lowPartnerFeatures.getSuitLen(CLUBS) > 0) && (BID_SUIT(bid) == CLUBS))
         newSuitAgree = CLUBS;
-    else if (BID_SUIT(bid) == NOTRUMP)
+    else if ((BID_SUIT(bid) == NOTRUMP) && !(nextBidder(bidHistory) == OPEN_RESPONSE) && (bid == BID_1NT))
         newSuitAgree = NOTRUMP;
     else
         newSuitAgree = ANY;
@@ -1546,13 +1697,85 @@ void CBidEngine::calculatepRules(Seat seat, CBidHistory &bidHistory, Bids bid, S
         return;
     }
 
-    //New suit.
-    if (isNewSuit(newSuitAgree, bid))
+    //New suit or catch all NT.
+    if (isNewSuit(newSuitAgree, bid) || (nextBidder(bidHistory) == OPEN_RESPONSE) && (bid == BID_1NT))
     {
+        int low = -1;
+        int high = -1;
+
+        int bidder = nextBidder(bidHistory);
+
+        //Response from openers partner.
+        if (bidder == OPEN_RESPONSE)
+        {
+            Bids partnerBid = bidHistory.bidList[size - 2].bid;
+
+            //Points.
+            low = CATCHALL_NT_L;                //6
+            //Catch all 1NT (6-9)
+            if (bid == BID_1NT)
+                high = CATCHALL_NT_H;           //9
+            //Jump in new suit (16+).
+            else if (((bid - partnerBid) / 5) > 0)
+                low = NEWSUIT_P1_J;             //16
+            //New suit level 2 (10+).
+            else if ((((bid - partnerBid) / 5) == 0) && (BID_LEVEL(bid) == 2))
+                low = NEWSUIT_P1_2;             //10
+            //New suit level 1 (6+).
+            else if ((((bid - partnerBid) / 5) == 0) && (BID_LEVEL(bid) == 1))
+                low = NEWSUIT_P1_1;             //6
+        }
+
+        //Rebid of opener.
+        else if (bidder == OPEN_REBID)
+        {
+            Bids partnerBid = bidHistory.bidList[size - 2].bid;
+            Bids ownBid = bidHistory.bidList[size - 4].bid;
+            Bids cmpBid = IS_BID(partnerBid) ? (partnerBid) : (ownBid);
+
+            //Points.
+            //Jump in new suit.
+            if (((bid - cmpBid)/5) > 0)
+            {
+                low = NEWSUIT_O_J_L;                //19
+                high = NEWSUIT_O_J_H;               //21
+            }
+            //Reverse suit.
+            else if ((((bid - cmpBid) / 5) == 0) && (((bid - ownBid) / 5) == 1))
+            {
+                low = NEWSUIT_O_3_L;                //16
+                high = NEWSUIT_O_3_H;               //21
+            }
+            //Simpel new suit.
+            else if ((((bid - cmpBid) / 5) == 0) && (((bid - ownBid) / 5) == 0))
+            {
+                low = NEWSUIT_O_S_L;                //12
+                high = NEWSUIT_O_S_H;               //18
+            }
+        }
+
+        //Rebid of openers partner.
+        else if (bidder == OPEN_REBID_RESPONSE)
+        {
+            int level = BID_LEVEL(bid);
+            if (level == 3)
+            {
+                low = NEWSUIT_P2_3_L;               //10
+                high = NEWSUIT_P2_3_H;              //12
+            }
+            else if (level == 4)
+                low = NEWSUIT_P2_4;                 //13
+        }
+
         CFeatures lowFeatures;
         CFeatures highFeatures;
         pRule->getFeatures(&lowFeatures, &highFeatures);
-        lowFeatures.setSuitLen(BID_SUIT(bid), 4);
+        if (low != -1)
+            lowFeatures.setPoints(NOTRUMP, low);
+        if (high != -1)
+            highFeatures.setPoints(NOTRUMP, high);
+        if (bid != BID_1NT)
+            lowFeatures.setSuitLen(BID_SUIT(bid), 4);
         pRule->setFeatures(lowFeatures, highFeatures);
 
         return;
@@ -1580,7 +1803,7 @@ void CBidEngine::calculatepRules(Seat seat, CBidHistory &bidHistory, Bids bid, S
     {
         int low, high;
 
-        int level = isNextBidOpen(bidHistory) ? (12) : (6);
+        int level = isNextBidOpen(bidHistory) ? (REBID_O) : (REBID_P);          //12,6
         Suit suit = BID_SUIT(bid);
         int bidLevel = BID_LEVEL(bid);
         findLevel(suit, level, bidLevel, &low, &high);
@@ -1588,7 +1811,7 @@ void CBidEngine::calculatepRules(Seat seat, CBidHistory &bidHistory, Bids bid, S
         CFeatures lowFeatures;
         CFeatures highFeatures;
         pRule->getFeatures(&lowFeatures, &highFeatures);
-        lowFeatures.setSuitLen(suit, 6);
+        lowFeatures.setSuitLen(suit, REBID_SL);                 //6
         lowFeatures.setPoints(suit, low);
         highFeatures.setPoints(suit, high);
         pRule->setFeatures(lowFeatures, highFeatures);
@@ -2029,6 +2252,29 @@ int CBidEngine::limitNT(CBidHistory &bidHistory, Bids bid, CFeatures &lowPartner
     int points = lowPartnerFeatures.getHcp(ANY);
 
     return (BID_NT_POINT[level] - points);
+}
+
+int CBidEngine::nextBidder(CBidHistory &bidHistory)
+{
+    int size = bidHistory.bidList.size();
+
+    int first = size % 2;
+    int i;
+    for (i = first; i < size; i += 2)
+        if (bidHistory.bidList[i].bid != BID_PASS)
+            break;
+
+    int retVal;
+
+    //Opener.
+    if ((((size - i) % 4) == 0))
+        retVal = ((size - i) == 4) ? (OPEN_REBID) : (OPEN_OTHER);
+
+    //Partner.
+    else
+        retVal = ((size - i) == 2) ? (OPEN_RESPONSE) : ((size - i) == 6) ? (OPEN_REBID_RESPONSE) : (OPEN_OTHER);
+
+    return retVal;
 }
 
 bool CBidEngine::isMin(int lowValue, int highValue, int value)
