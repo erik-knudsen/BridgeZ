@@ -220,7 +220,7 @@ void CFeatures::setCardFeatures(int cards[13])
             dp[suit] = (count[suit] <= 2) ? (3 - count[suit]) : 0;
             dpt += dp[suit];
         }
-        setDp(ANY, dpt);
+        setDp(NOTRUMP, dpt);
 
         for (int trump = 0; trump < 4; trump++)
         {
@@ -433,7 +433,7 @@ void CFeatures::setCardFeatures(int cards[13])
                 }
             setPlayingTricks((Suit)suit, hcpTricks + lspTricks + lsptTricks);
             if (lsptTricks == 0)
-                setPlayingTricks(ANY, hcpTricks + lspTricks);
+                setPlayingTricks(NOTRUMP, hcpTricks + lspTricks);
         }
     }
 
@@ -547,8 +547,8 @@ void CFeatures::setCardFeatures(int cards[13])
         //Length distribution points.
         int ln = 0;
         for (int suit = 0; suit < 4; suit++)
-            ln += (count[suit] > 4) ? (count[suit] - 1) : 0;
-        setPoints(ANY, hcp + ln);
+            ln += (count[suit] > 4) ? (count[suit] - 4) : 0;
+        setPoints(NOTRUMP, hcp + ln);
     }
 }
 
