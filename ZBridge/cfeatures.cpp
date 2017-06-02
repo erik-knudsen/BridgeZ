@@ -817,6 +817,8 @@ void CFeatures::delimitFeatures(CFeatures &features, bool lower)
     {
         int curVal = getPoints((Suit)i);
         int newVal = features.getPoints((Suit)i);
+        if ((newVal == 0) || (newVal == features.getMaxPoints()))
+                newVal = features.getHcp(ANY);
         if ((lower && (newVal > curVal)) || (!lower && newVal < curVal))
             curVal = newVal;
         setPoints((Suit)i, curVal);

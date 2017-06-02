@@ -380,10 +380,11 @@ CAuction CBidEngine::findSubstituteAuction(CAuction &auction, QSet<qint16> &page
  * @brief Calculate the next bid
  *
  * Calculate the next bid by using an algoritmic approach. The method is used after the bidding database
- * runs out for suggestion(s) and it only covers bids that are not covered by the bidding database.\n\n
+ * runs out for suggestion(s). It extends the bidding database and it only covers bids that are not already
+ * covered by the bidding database.\n\n
  *
- * Note the rule used for the calculated bid is also calculated and returned with the bid.
- * This rule is only used for debugging and does not take part in anything else.\n\n
+ * NOTE the rule used for the calculated bid is also calculated and returned with the bid.
+ * NOTE This rule is only used for debugging and does not take part in anything else.\n\n
  *
  * The following approach is used:\n
  *   1. New suit bids are non forcing.
@@ -397,8 +398,8 @@ CAuction CBidEngine::findSubstituteAuction(CAuction &auction, QSet<qint16> &page
  * @param[in] seat Bidders seat.
  * @param[in] bidHistory The bid history.
  * @param[in] ownFeatures The features of the cards for the next bidder.
- * @param[in] scoringMethod The scoring method.
- * @param[in] teamVul Team vulnerability.
+ * @param[in] scoringMethod The scoring method (not used).
+ * @param[in] teamVul Team vulnerability (not used).
  * @return The calculated next bid.
  */
 CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures &ownFeatures, ScoringMethod scoringMethod, Team teamVul)
@@ -883,11 +884,34 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
         {
             Bids nextBid;
             int low, high;
+            Bids game = (agree == SPADES) ? (BID_4S) : (agree == HEARTS) ? (BID_4H) :
+                        (agree == DIAMONDS) ? (BID_5D) : (agree == CLUBS) ? (BID_5C) : (BID_3NT);
+            Bids highPartnerBid = MAKE_BID(highPartnerSuit, highPartnerLevel);
+            Bids highOwnBid = MAKE_BID(highOwnSuit, highOwnLevel);
+            Bids highBid = (highPartnerBid > highOwnBid) ? (highPartnerBid) : (highOwnBid);
 
             getLevel(agree, lowPartnerFeatures.getPoints(agree), ownFeatures.getPoints(agree), &nextBid,
                      &low, &high);
 
-            if (BID_LEVEL((nextBid) <= highPartnerLevel) || (BID_LEVEL(nextBid) <= highOwnLevel))
+            //Assure agreed suit is bidded.
+            if ((BID_SUIT(highBid) != agree) && (highBid > nextBid))
+            {
+                Suit highSuit = BID_SUIT(highBid);
+                int highLevel = BID_LEVEL(highBid);
+                int level = (highSuit > agree) ? (highLevel + 1) : (highLevel);
+                nextBid = MAKE_BID(agree, level);
+            }
+
+            //Assure game is bidded if status is game forcing.
+            int size = bidHistory.bidList.size();
+            if ((bidHistory.bidList[size - 2].rules[0]->getStatus() == GAME_FORCING) &&
+                    (nextBid < game))
+                nextBid = game;
+
+            //No reason to get higher than necessary.
+            if ((nextBid <= highBid) || ((nextBid > game) &&
+                 !IS_BID(bidHistory.bidList[size - 1].bid) &&
+                 (bidHistory.bidList[size - 2].bid == game)))
                 nextBid = BID_PASS;
 
             if ((BID_LEVEL(nextBid) > highLevel) || ((highSuit < agree) && (BID_LEVEL(nextBid) == highLevel)) ||
@@ -904,7 +928,6 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
 
                 int inx = ((agree == SPADES) || (agree == HEARTS) || (agree == NOTRUMP)) ?
                             (BID_SUIT_MAJOR_GAME_INX) :(BID_SUIT_MINOR_GAME_INX);                   //26, 29
-                Bids game = ((agree == SPADES) || (agree == HEARTS) || (agree == NOTRUMP)) ? (BID_3NT) : (BID_5C);
 
                 if (((high + highPartnerFeatures.getPoints(agree)) < BID_SUIT_POINT[inx]) ||              //26
                         (nextBid >= game))
@@ -1079,10 +1102,12 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
             Bids nextBid;
             int low, high;
 
-            getLevel(NOTRUMP, lowPartnerFeatures.getPoints(NOTRUMP), ownFeatures.getPoints(newSuitAgree), &nextBid,
+            getLevel(NOTRUMP, lowPartnerFeatures.getPoints(newSuitAgree), ownFeatures.getPoints(newSuitAgree), &nextBid,
                      &low, &high);
 
-            if (BID_LEVEL((nextBid) <= highPartnerLevel) || (BID_LEVEL(nextBid) <= highOwnLevel))
+            if (((BID_LEVEL(nextBid) < highPartnerLevel) || (BID_LEVEL(nextBid) < highOwnLevel)) ||
+                    (((BID_LEVEL(nextBid) == highPartnerLevel) || (BID_LEVEL(nextBid) == highOwnLevel)) &&
+                     (ownSuit[NOTRUMP] || partnerSuit[NOTRUMP])))
                 nextBid = BID_PASS;
 
             if ((BID_LEVEL(nextBid) > highLevel) || ((highSuit < newSuitAgree) && (BID_LEVEL(nextBid) == highLevel)) ||
@@ -1109,7 +1134,7 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
             return bid;
         }
 
-        //Rebid.
+        //Rebid of own suit.
         {
             bool found = false;
             for (int i = 0; i < 4; i++)
@@ -1127,7 +1152,7 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
                 Bids nextBid;
                 int low, high;
 
-                int level = isNextBidOpen(bidHistory) ? (REBID_O) : (REBID_P);              //12, 6
+                int level = isNextBidOpen(bidHistory) ? (REBID_P) : (REBID_O);              //6, 12
                 getLevel((Suit)j, level, ownFeatures.getPoints((Suit)j), &nextBid,
                          &low, &high);
 
@@ -1166,7 +1191,6 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
  * @param[in] scoringMethod The scoring method.
  * @param[in] teamVul Team vulnerability.
  * @param[out] pDefRules Calculated rules.
- * @return returns a list with possible rules.
  */
 void CBidEngine::calculatepRules(Seat seat, CBidHistory &bidHistory, Bids bid, ScoringMethod scoringMethod,
                                  Team teamVul, QList<CRule *> &pDefRules)
@@ -1674,12 +1698,12 @@ void CBidEngine::calculatepRules(Seat seat, CBidHistory &bidHistory, Bids bid, S
             pRule->setStatus(MUST_PASS);                //Game is not possible.
     }
 
-    //Rebid.
+    //Rebid own suit.
     if (isRebid(bidHistory, suitAgree, bid))
     {
         int low, high;
 
-        int level = isNextBidOpen(bidHistory) ? (REBID_O) : (REBID_P);          //12,6
+        int level = isNextBidOpen(bidHistory) ? (REBID_P) : (REBID_O);          //6, 12
         Suit suit = BID_SUIT(bid);
         int bidLevel = BID_LEVEL(bid);
         findLevel(suit, level, bidLevel, &low, &high);
@@ -2012,10 +2036,10 @@ int CBidEngine::CalculateNoCards(CFeatures partnerFeatures, CFeatures ownFeature
 
     int noPartner = 0;
     for (int i = 0; i < 4; i++)
-        if (ownFeatures.getCountCard((Suit)i, cardVal) == 1)
+        if (partnerFeatures.getCountCard((Suit)i, cardVal) == 1)
             noPartner++;
-    if (ownFeatures.getCountCard(ANY, cardVal) > noPartner)
-        noPartner = ownFeatures.getCountCard(ANY, cardVal);
+    if (partnerFeatures.getCountCard(ANY, cardVal) > noPartner)
+        noPartner = partnerFeatures.getCountCard(ANY, cardVal);
 
     return noOwn + noPartner;
 
