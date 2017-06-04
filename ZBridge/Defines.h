@@ -721,7 +721,8 @@ const int BID_VER_SIZE = 12;
 #define IS_DIAMONDS(card)       ((SUIT_INTERVAL[DIAMONDS][0] <= card) && (card <= SUIT_INTERVAL[DIAMONDS][1]))
 #define IS_HEARTS(card)         ((SUIT_INTERVAL[HEARTS][0] <= card) && (card <= SUIT_INTERVAL[HEARTS][1]))
 #define IS_SPADES(card)         ((SUIT_INTERVAL[SPADES][0] <= card) && (card <= SUIT_INTERVAL[SPADES][1]))
-#define	MAKE_CARD(suit, face)   (SUIT_INTERVAL[suit][0] + face)
+#define	MAKE_CARD(suit, face)   ((suit >= CLUBS) && (suit <= SPADES) && (face >= 0) && (face <= 12)) ?\
+                                 (SUIT_INTERVAL[suit][0] + face) : -1
 #define	CARD_SUIT(card)         (IS_CLUBS(card) ? CLUBS :\
                                  IS_DIAMONDS(card) ? DIAMONDS :\
                                   IS_HEARTS(card) ? HEARTS :\
@@ -735,7 +736,8 @@ const int BID_VER_SIZE = 12;
 #define ISMINOR(suit)	(((suit == CLUBS) || (suit == DIAMONDS)) ? true : false)
 #define ISNOTRUMP(suit)((suit == NOTRUMP) ? true : false)
 
-#define MAKE_BID(suit, level) (Bids)(BID_PASS + (level-1)*5 + suit + 1)
+#define MAKE_BID(suit, level) ((suit > ANY) && (suit <= NOTRUMP) && (level >= 1) && (level <= 7)) ?\
+                               (Bids)(BID_PASS + (level-1)*5 + suit + 1) : BID_NONE
 #define BID_SUIT(bid)  (Suit)(((bid <= BID_PASS) || (bid >= BID_DOUBLE)) ? -1 : (((bid-1) % 5)))
 #define BID_LEVEL(bid) ( ((bid <= BID_PASS) || (bid >= BID_DOUBLE)) ? -1 : (((bid-1) / 5) + 1) )
 

@@ -521,20 +521,6 @@ const qint16 T_OUT_D_D = 11;       //Takeout defensive side (unclear what takeou
 const qint16 STD_O = 58;           //(mostly doubles) offensive side (instead of T_OUT_D_O).
 const qint16 STD_D = 10;           //(mostly doubles) defensive side (instead of T_OUT_D_D).
 
-//Blackwood.
-const qint16 SPC_Q_4NT = 100;      //Question about aces.
-const qint16 SPC_Q_5NT = 101;      //Question about kings.
-
-//Gerber.
-const qint16 SPC_Q_4C = 102;       //Question about aces.
-const qint16 SPC_Q_5C = 103;       //Question about kings.
-
-//Control question.
-const qint16 SPC_Q_CNTRL = 104;
-
-//Other special.
-const qint16 SPC_Q_OTH = 105;
-
 /*
 //Pages for bid database -----------------------------------------------------------
 //Common.

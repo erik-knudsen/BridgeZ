@@ -65,6 +65,20 @@ const int REBID_SL = 6;                 //Minimum suit length.
 const int REBID_O = 12;                 //Base level for openers rebid.
 const int REBID_P = 6;                  //Base level for partners rebid.
 
+//Alert id definitions (from alert ids in the bidding database).
+const int BLACKWOOD_ACE = 173;          //Blackwood ace question.
+const int BLACKWOOD_KING = 174;         //Blackwood king question.
+const int GERBER_ACE = 102;             //Gerber ace question.
+const int GERBER_KING = 172;            //Gerber king question.
+const int ZERO_OR_FOUR_ACES = 175;      //Zero or four aces.
+const int ONE_ACE = 176;                //One ace.
+const int TWO_ACES = 177;               //Two aces.
+const int THREE_ACES = 178;             //Three aces.
+const int ZERO_OR_FOUR_KINGS = 179;     //Zero or four kings.
+const int ONE_KING = 180;               //One king.
+const int TWO_KINGS = 181;              //Two kings.
+const int THREE_KINGS = 182;            //Three kings.
+
 /**
  * @brief Generate bid engine.
  * @param bidDB The bid database.
@@ -620,6 +634,11 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
                                ownFeatures.getPoints(agree));
         bool isMaxPoints = isMax(lowOwnFeatures.getPoints(agree), highOwnFeatures.getPoints(agree),
                                ownFeatures.getPoints(agree));
+        Bids game = (agree == SPADES) ? (BID_4S) : (agree == HEARTS) ? (BID_4H) :
+                    (agree == DIAMONDS) ? (BID_5D) : (agree == CLUBS) ? (BID_5C) : (BID_3NT);
+        Bids highPartnerBid = MAKE_BID(highPartnerSuit, highPartnerLevel);
+        Bids highOwnBid = MAKE_BID(highOwnSuit, highOwnLevel);
+        Bids highBid = (highPartnerBid > highOwnBid) ? (highPartnerBid) : (highOwnBid);
 
         //if (slam is possible - small or grand)
         if (lowTotPoints >= BID_SUIT_POINT[BID_SMALL_SLAM_INX])     //33
@@ -653,6 +672,16 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
                     lowFeatures.setCountCard(ANY, ACE, countAces);
                     highFeatures.setCountCard(ANY, ACE, countAces);
 
+                    //Blackwood ace asking.
+                    if ((countAces == 0) || (countAces == 4))
+                        pRule->setAlertId(ZERO_OR_FOUR_ACES);
+                    else if (countAces == 1)
+                        pRule->setAlertId(ONE_ACE);
+                    else if (countAces == 2)
+                        pRule->setAlertId(TWO_ACES);
+                    else if (countAces == 3)
+                        pRule->setAlertId(THREE_ACES);
+
                     bid.bid = ((countAces == 0) || (countAces == 4)) ? (BID_5C) :
                               (countAces == 1) ? (BID_5D) : (countAces == 2) ? (BID_5H) : (BID_5S);
                 }
@@ -660,7 +689,17 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
                 else if (bidHistory.bidList[size - 2].bid == BID_5NT)
                 {
                     lowFeatures.setCountCard(ANY, KING, countKings);
-                    highFeatures.setCountCard(ANY, KING, countKings);
+                    highFeatures.setCountCard(ANY, KING, countKings);                    
+
+                    //Blackwood king asking.
+                    if ((countKings == 0) || (countKings == 4))
+                        pRule->setAlertId(ZERO_OR_FOUR_KINGS);
+                    else if (countKings == 1)
+                        pRule->setAlertId(ONE_KING);
+                    else if (countKings == 2)
+                        pRule->setAlertId(TWO_KINGS);
+                    else if (countKings == 3)
+                        pRule->setAlertId(THREE_KINGS);
 
                     bid.bid = ((countKings == 0) || (countKings == 4)) ? (BID_5C) :
                               (countKings == 1) ? (BID_5D) : (countKings == 2) ? (BID_5H) : (BID_5S);
@@ -671,6 +710,16 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
                     lowFeatures.setCountCard(ANY, ACE, countAces);
                     highFeatures.setCountCard(ANY, ACE, countAces);
 
+                    //Gerber ace asking.
+                    if ((countAces == 0) || (countAces == 4))
+                        pRule->setAlertId(ZERO_OR_FOUR_ACES);
+                    else if (countAces == 1)
+                        pRule->setAlertId(ONE_ACE);
+                    else if (countAces == 2)
+                        pRule->setAlertId(TWO_ACES);
+                    else if (countAces == 3)
+                        pRule->setAlertId(THREE_ACES);
+
                     bid.bid = ((countAces == 0) || (countAces == 4)) ? (BID_4D) :
                               (countAces == 1) ? (BID_4H) : (countAces == 2) ? (BID_4S) : (BID_4NT);
                 }
@@ -679,6 +728,16 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
                 {
                     lowFeatures.setCountCard(ANY, KING, countKings);
                     highFeatures.setCountCard(ANY, KING, countAces);
+
+                    //Gerber king asking.
+                    if ((countKings == 0) || (countKings == 4))
+                        pRule->setAlertId(ZERO_OR_FOUR_KINGS);
+                    else if (countKings == 1)
+                        pRule->setAlertId(ONE_KING);
+                    else if (countKings == 2)
+                        pRule->setAlertId(TWO_KINGS);
+                    else if (countKings == 3)
+                        pRule->setAlertId(THREE_KINGS);
 
                     bid.bid = ((countKings == 0) || (countKings == 4)) ? (BID_5D) :
                               (countKings == 1) ? (BID_5H) : (countKings == 2) ? (BID_5S) : (BID_5NT);
@@ -704,13 +763,19 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
                 CFeatures highFeatures;
                 pRule->getFeatures(&lowFeatures, &highFeatures);
                 if (nextBid == BID_4C)
-                {
+                {                    
+                    //Gerber ace asking.
+                    pRule->setAlertId(GERBER_ACE);
+
                     int points = BID_NT_POINT[BID_SMALL_SLAM_INX] - lowPartnerFeatures.getPoints(NOTRUMP);
                     if (points < 0) points = 0;
                     lowFeatures.setPoints(NOTRUMP, points);
                 }
                 else if (nextBid == BID_4NT)
-                {
+                {                    
+                    //Blackwood ace asking.
+                    pRule->setAlertId(BLACKWOOD_ACE);
+
                     int points = BID_SUIT_POINT[BID_SMALL_SLAM_INX] - lowPartnerFeatures.getPoints(agree);
                     if (points < 0) points = 0;
                     if ((lowPartnerFeatures.getSuitLen(agree) + lowOwnFeatures.getSuitLen(agree)) < 8)
@@ -718,13 +783,19 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
                     lowFeatures.setPoints(agree, points);
                 }
                 else if (nextBid == BID_5C)
-                {
+                {                    
+                    //Gerber king asking.
+                    pRule->setAlertId(GERBER_KING);
+
                     int points = BID_NT_POINT[BID_GRAND_SLAM_INX] - lowPartnerFeatures.getPoints(NOTRUMP);
                     if (points < 0) points = 0;
                     lowFeatures.setPoints(NOTRUMP, points);
                 }
                 else if (nextBid == BID_5NT)
-                {
+                {                   
+                    //Blackwood king asking.
+                    pRule->setAlertId(BLACKWOOD_KING);
+
                     int points = BID_SUIT_POINT[BID_GRAND_SLAM_INX] - lowPartnerFeatures.getPoints(agree);
                     if (points < 0) points = 0;
                     if ((lowPartnerFeatures.getSuitLen(agree) + lowOwnFeatures.getSuitLen(agree)) < 8)
@@ -735,16 +806,18 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
                 {
                     pRule->setFeatures(lowFeatures, highFeatures);
                     pRule->setStatus(FORCING);
-
-                    bid.bid = nextBid;
                 }
                 else if (canDouble(bidHistory) &&
                     ((highOppLevel > BID_LEVEL(nextBid)) || ((highOppLevel == BID_LEVEL(nextBid)) && (highOppSuit >= agree))))
-                    bid.bid = BID_DOUBLE;
+                    nextBid = BID_DOUBLE;
                 else
-                    bid.bid = BID_PASS;
+                    nextBid = BID_NONE;
 
-                return bid;
+                if (nextBid != BID_NONE)
+                {
+                    bid.bid = nextBid;
+                    return bid;
+                }
             }
 
             //if (grand slam)
@@ -758,7 +831,7 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
                     pRule->getFeatures(&lowFeatures, &highFeatures);
                     lowFeatures.setCountCard(ANY, ACE, 4);
                     lowFeatures.setCountCard(ANY, KING, 3);
-                    lowFeatures.setPoints(agree,
+                    highFeatures.setPoints(agree,
                             BID_SUIT_POINT[BID_GRAND_SLAM_INX] - lowPartnerFeatures.getPoints(agree));     //37
                     pRule->setFeatures(lowFeatures, highFeatures);
                     pRule->setStatus(MUST_PASS);
@@ -784,7 +857,7 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
                     CFeatures highFeatures;
                     pRule->getFeatures(&lowFeatures, &highFeatures);
                     lowFeatures.setCountCard(ANY, ACE, 3);
-                    lowFeatures.setPoints(agree,
+                    highFeatures.setPoints(agree,
                            BID_SUIT_POINT[BID_SMALL_SLAM_INX] - lowPartnerFeatures.getPoints(agree));  //33
                     pRule->setFeatures(lowFeatures, highFeatures);
                     pRule->setStatus(MUST_PASS);
@@ -884,11 +957,6 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
         {
             Bids nextBid;
             int low, high;
-            Bids game = (agree == SPADES) ? (BID_4S) : (agree == HEARTS) ? (BID_4H) :
-                        (agree == DIAMONDS) ? (BID_5D) : (agree == CLUBS) ? (BID_5C) : (BID_3NT);
-            Bids highPartnerBid = MAKE_BID(highPartnerSuit, highPartnerLevel);
-            Bids highOwnBid = MAKE_BID(highOwnSuit, highOwnLevel);
-            Bids highBid = (highPartnerBid > highOwnBid) ? (highPartnerBid) : (highOwnBid);
 
             getLevel(agree, lowPartnerFeatures.getPoints(agree), ownFeatures.getPoints(agree), &nextBid,
                      &low, &high);
@@ -909,6 +977,9 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
                 nextBid = game;
 
             //No reason to get higher than necessary.
+            //If small slam is bidded, then this is based on points only.
+            if ((nextBid > game) && (suitAgree == agree) && (nextBid < BID_6C))
+                    nextBid = game;
             if ((nextBid <= highBid) || ((nextBid > game) &&
                  !IS_BID(bidHistory.bidList[size - 1].bid) &&
                  (bidHistory.bidList[size - 2].bid == game)))
@@ -929,9 +1000,9 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
                 int inx = ((agree == SPADES) || (agree == HEARTS) || (agree == NOTRUMP)) ?
                             (BID_SUIT_MAJOR_GAME_INX) :(BID_SUIT_MINOR_GAME_INX);                   //26, 29
 
-                if (((high + highPartnerFeatures.getPoints(agree)) < BID_SUIT_POINT[inx]) ||              //26
-                        (nextBid >= game))
-                    pRule->setStatus(MUST_PASS);                    //Game is not possible or game is bidded.
+                if ((((high + highPartnerFeatures.getPoints(agree)) < BID_SUIT_POINT[inx]) && (suitAgree == agree)) ||              //26
+                        (nextBid == game) || (nextBid >= BID_6C))
+                    pRule->setStatus(MUST_PASS);    //Game is not possible or game/small slam is bidded.
 
                 bid.bid = nextBid;
             }
@@ -1239,7 +1310,7 @@ void CBidEngine::calculatepRules(Seat seat, CBidHistory &bidHistory, Bids bid, S
         newSuitAgree = DIAMONDS;
     else if ((lowPartnerFeatures.getSuitLen(CLUBS) > 0) && (BID_SUIT(bid) == CLUBS))
         newSuitAgree = CLUBS;
-    else if ((BID_SUIT(bid) == NOTRUMP) && !(nextBidder(bidHistory) == OPEN_RESPONSE) && (bid == BID_1NT))
+    else if ((BID_SUIT(bid) == NOTRUMP) && !((nextBidder(bidHistory) == OPEN_RESPONSE) && (bid == BID_1NT)))
         newSuitAgree = NOTRUMP;
     else
         newSuitAgree = ANY;
@@ -1387,6 +1458,17 @@ void CBidEngine::calculatepRules(Seat seat, CBidHistory &bidHistory, Bids bid, S
         if (bidHistory.bidList[size - 2].bid == BID_4NT)
         {
             int countAces = bid - BID_5C;
+
+            //Blackwood ace asking.
+            if (countAces == 0)
+                pRule->setAlertId(ZERO_OR_FOUR_ACES);
+            else if (countAces == 1)
+                pRule->setAlertId(ONE_ACE);
+            else if (countAces == 2)
+                pRule->setAlertId(TWO_ACES);
+            else if (countAces == 3)
+                pRule->setAlertId(THREE_ACES);
+
             if ((countAces == 0) && (noPAces == 0))
                 countAces = 4;
             if ((countAces >= 0) && (countAces <= 4))
@@ -1399,6 +1481,17 @@ void CBidEngine::calculatepRules(Seat seat, CBidHistory &bidHistory, Bids bid, S
         else if (bidHistory.bidList[size - 2].bid == BID_5NT)
         {
             int countKings = bid - BID_5C;
+
+            //Blackwood king asking.
+            if (countKings == 0)
+                pRule->setAlertId(ZERO_OR_FOUR_KINGS);
+            else if (countKings == 1)
+                pRule->setAlertId(ONE_KING);
+            else if (countKings == 2)
+                pRule->setAlertId(TWO_KINGS);
+            else if (countKings == 3)
+                pRule->setAlertId(THREE_KINGS);
+
             if ((countKings == 0) && (noPKings == 0))
                 countKings = 4;
             if ((countKings >= 0) && (countKings <= 4))
@@ -1411,6 +1504,17 @@ void CBidEngine::calculatepRules(Seat seat, CBidHistory &bidHistory, Bids bid, S
         else if (bidHistory.bidList[size - 2].bid == BID_4C)
         {
             int countAces = bid - BID_4D;
+
+            //Gerber ace asking.
+            if (countAces == 0)
+                pRule->setAlertId(ZERO_OR_FOUR_ACES);
+            else if (countAces == 1)
+                pRule->setAlertId(ONE_ACE);
+            else if (countAces == 2)
+                pRule->setAlertId(TWO_ACES);
+            else if (countAces == 3)
+                pRule->setAlertId(THREE_ACES);
+
             if ((countAces == 0) && (noPAces == 0))
                 countAces = 4;
             if ((countAces >= 0) && (countAces <= 4))
@@ -1423,6 +1527,17 @@ void CBidEngine::calculatepRules(Seat seat, CBidHistory &bidHistory, Bids bid, S
         else if (bidHistory.bidList[size - 2].bid == BID_5C)
         {
             int countKings = bid - BID_4D;
+
+            //Gerber king asking.
+            if (countKings == 0)
+                pRule->setAlertId(ZERO_OR_FOUR_KINGS);
+            else if (countKings == 1)
+                pRule->setAlertId(ONE_KING);
+            else if (countKings == 2)
+                pRule->setAlertId(TWO_KINGS);
+            else if (countKings == 3)
+                pRule->setAlertId(THREE_KINGS);
+
             if ((countKings == 0) && (noPKings == 0))
                 countKings = 4;
             if ((countKings >= 0) && (countKings <= 4))
@@ -1449,6 +1564,9 @@ void CBidEngine::calculatepRules(Seat seat, CBidHistory &bidHistory, Bids bid, S
 
         if (bid == BID_4NT)
         {
+            //Blackwood ace asking.
+            pRule->setAlertId(BLACKWOOD_ACE);
+
             int points = BID_SUIT_POINT[BID_SMALL_SLAM_INX] - lowPartnerFeatures.getPoints(newSuitAgree);
             if (points < 0) points = 0;
             if ((lowPartnerFeatures.getSuitLen(newSuitAgree) + lowOwnFeatures.getSuitLen(newSuitAgree)) < 8)
@@ -1457,6 +1575,9 @@ void CBidEngine::calculatepRules(Seat seat, CBidHistory &bidHistory, Bids bid, S
         }
         else if (bid == BID_5NT)
         {
+            //Blackwood king asking.
+            pRule->setAlertId(BLACKWOOD_KING);
+
             int points = BID_SUIT_POINT[BID_GRAND_SLAM_INX] - lowPartnerFeatures.getPoints(newSuitAgree);
             if (points < 0) points = 0;
             if ((lowPartnerFeatures.getSuitLen(newSuitAgree) + lowOwnFeatures.getSuitLen(newSuitAgree)) < 8)
@@ -1480,12 +1601,18 @@ void CBidEngine::calculatepRules(Seat seat, CBidHistory &bidHistory, Bids bid, S
 
         if (bid == BID_4C)
         {
+            //Gerber ace asking.
+            pRule->setAlertId(GERBER_ACE);
+
             int points = BID_NT_POINT[BID_SMALL_SLAM_INX] - lowPartnerFeatures.getPoints(suitAgree);
             if (points < 0) points = 0;
             lowFeatures.setPoints(suitAgree, points);
         }
         else if (bid == BID_5C)
         {
+            //Gerber king asking.
+            pRule->setAlertId(GERBER_KING);
+
             int points = BID_NT_POINT[BID_GRAND_SLAM_INX] - lowPartnerFeatures.getPoints(suitAgree);
             if (points < 0) points = 0;
             lowFeatures.setPoints(suitAgree, points);
@@ -1506,9 +1633,7 @@ void CBidEngine::calculatepRules(Seat seat, CBidHistory &bidHistory, Bids bid, S
             CFeatures highFeatures;
 
             pRule->getFeatures(&lowFeatures, &highFeatures);
-            lowFeatures.setCountCard(ANY, ACE, 4);
-            lowFeatures.setCountCard(ANY, KING, 3);
-            lowFeatures.setPoints(newSuitAgree,
+            highFeatures.setPoints(newSuitAgree,
                                   BID_SUIT_POINT[BID_GRAND_SLAM_INX] - lowPartnerFeatures.getPoints(newSuitAgree));     //37
             pRule->setFeatures(lowFeatures, highFeatures);
             pRule->setStatus(MUST_PASS);
@@ -1525,8 +1650,7 @@ void CBidEngine::calculatepRules(Seat seat, CBidHistory &bidHistory, Bids bid, S
             CFeatures highFeatures;
 
             pRule->getFeatures(&lowFeatures, &highFeatures);
-            lowFeatures.setCountCard(ANY, ACE, 3);
-            lowFeatures.setPoints(newSuitAgree,
+            highFeatures.setPoints(newSuitAgree,
                                   BID_SUIT_POINT[BID_SMALL_SLAM_INX] - lowPartnerFeatures.getPoints(newSuitAgree));  //33
             pRule->setFeatures(lowFeatures, highFeatures);
             pRule->setStatus(MUST_PASS);
@@ -1590,9 +1714,9 @@ void CBidEngine::calculatepRules(Seat seat, CBidHistory &bidHistory, Bids bid, S
                     (BID_SUIT_MAJOR_GAME_INX) :(BID_SUIT_MINOR_GAME_INX);                   //26, 29
         Bids game = ((agree == SPADES) || (agree == HEARTS) || (agree == NOTRUMP)) ? (BID_3NT) : (BID_5C);
 
-        if (((high + highPartnerFeatures.getPoints(agree)) < BID_SUIT_POINT[inx]) ||
-            (bid >= game))
-                pRule->setStatus(MUST_PASS);        //Game is not possible or game is biddden.
+        if ((((high + highPartnerFeatures.getPoints(agree)) < BID_SUIT_POINT[inx]) && (suitAgree == agree)) ||              //26
+                (bid == game))
+            pRule->setStatus(MUST_PASS);                    //Game is not possible or game is bidded.
 
         return;
     }
@@ -1990,7 +2114,7 @@ bool CBidEngine::isBlackwoodOrGerberQuestion(CBidHistory &bidHistory, Suit agree
         return true;
 
     //Blackwood.
-    if ((bid == BID_4NT) || (bid == BID_5NT))
+    if (((bid == BID_4NT) || (bid == BID_5NT)) && (agree != NOTRUMP))
         return true;
 
     return false;
@@ -2051,20 +2175,20 @@ void CBidEngine::getLevel(Suit agree, int lowPartnerPoints, int ownPoints, Bids 
     const int *BID_POINT = (agree == NOTRUMP) ? (BID_NT_POINT) : (BID_SUIT_POINT);
 
     int i;
-    for (i = 0; i < BID_POINT_SIZE; i++)
+    for (i = 0; i < (BID_POINT_SIZE - 1); i++)
         if (points < BID_POINT[i])
             break;
     if (i == 0)
     {
+        *low = 0;
         *bid = BID_PASS;
         *high = BID_POINT[0] - lowPartnerPoints - 1;
-        *low = 0;
     }
     else
     {
         *bid = MAKE_BID(agree, i);
-        *high = BID_POINT[i] - lowPartnerPoints - 1;
         *low = (BID_POINT[i - 1] >= lowPartnerPoints) ? (BID_POINT[i - 1] - lowPartnerPoints) : (0);
+        *high = BID_POINT[i] - lowPartnerPoints - 1;
     }
 }
 
@@ -2072,7 +2196,7 @@ void CBidEngine::findLevel(Suit agree, int lowPartnerPoints, int bidLevel, int *
 {
     const int *BID_POINT = (agree == NOTRUMP) ? (BID_NT_POINT) : (BID_SUIT_POINT);
 
-    if (bidLevel < 1)
+    if (bidLevel < 1)                   //BID_PASS.
     {
         *low = 0;
         int i;
