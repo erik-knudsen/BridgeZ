@@ -66,8 +66,8 @@ private:
     bool isDouble(CBidHistory &bidHistory);
     bool canDouble(CBidHistory &bidHistory);
     Bids getTakeoutDouble(CFeatures &lowPartnerFeatures, CFeatures &ownFeatures,
-                       int highLevel, Suit highSuit, int *low, int *high);
-    Suit findTakeoutDouble(Bids bid, int highLevel, Suit highSuit, int *low, int *high);
+                       Bids highBid, int *low, int *high);
+    Suit findTakeoutDouble(Bids bid, Bids highBid, int *low, int *high);
     bool isBlackwoodOrGerberQuestion(CBidHistory &bidHistory, Suit agree);
     Bids blackwoodOrGerberAsk(CBidHistory &bidHistory, int noAces, int noKings, int lowTotPoints, Suit agree);
     int CalculateNoCards(CFeatures partnerFeatures, CFeatures ownFeatures, int cardVal);
@@ -76,7 +76,6 @@ private:
     bool isNewSuit(Suit suitNAgree, Bids bid);
     bool isRebid(CBidHistory &bidHistory, Suit suitPAgree, Bids bid);
     bool isNextBidOpen(CBidHistory &bidHistory);
-    int limitNT(CBidHistory &bidHistory, Bids bid, CFeatures &lowPartnerFeatures);
     int nextBidder(CBidHistory &bidHistory);
 
     bool isMin(int lowValue, int highValue, int value);
