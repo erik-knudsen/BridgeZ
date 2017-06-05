@@ -45,7 +45,7 @@ public:
                CBidOptionDoc &nsBidOptionDoc, CBidOptionDoc &ewBidOptionDoc);
     virtual ~CBidEngine();
 
-    CBid getNextBid(Seat seat, CBidHistory &bidHistory, int cards[13], ScoringMethod scoringMethod,
+    CBid getNextBid(Seat seat, CBidHistory &bidHistory, ScoringMethod scoringMethod,
             Team teamVul);
     QList<CRule *> getpRules(Seat seat, CBidHistory &bidHistory, Bids bid, ScoringMethod scoringMethod,
                              Team teamVul, bool *substitute);
@@ -57,8 +57,6 @@ private:
                                 Team teamVul);
     void calculatepRules(Seat seat, CBidHistory &bidHistory, Bids bid, ScoringMethod scoringMethod, Team teamVul,
                          QList<CRule *> &pDefRules);
-    void calculateRange(Seat seat, CFeatures &lowFeatures, CFeatures &highFeatures, CBidHistory &bidHistory);
-    bool isNT(CBidHistory &bidHistory, int inx);
     bool nextBidCanBeNT(CFeatures ownFeatures, CFeatures &lowPartnerFeatures, CFeatures &highPartnerFeatures, CFeatures lowRHFeatures, CFeatures highRHFeatures,
                         CFeatures lowLHFeatures, CFeatures highLHFeatures);
     bool mustPass(CBidHistory &bidHistory);

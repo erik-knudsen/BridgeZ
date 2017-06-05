@@ -48,6 +48,7 @@ CActorLocalAuto::CActorLocalAuto(QString teamName, Seat seat, CBidAndPlayEngines
 {
     this->teamName = teamName;
     bidAndPlay.setBidAndPlayEngines(bidAndPlayEngines);
+    bidAndPlay.setSeat(seat);
     this->tableManager = tableManager;
     updateGameInfo = false;
     synchronizing = false;

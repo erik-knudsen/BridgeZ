@@ -54,6 +54,7 @@ public:
 
     void setBidAndPlayEngines(CBidAndPlayEngines *bidAndPlayEngines)
     { this->bidAndPlayEngines = bidAndPlayEngines; }
+    void setSeat(Seat seat);
     void setBidInfo(Bids bid, Bids bidDouble, Seat openLeader)
     { playHistory.setBidInfo(bid, bidDouble, openLeader); }
     void resetBidHistory();
@@ -61,8 +62,7 @@ public:
     int bidUndo(Bids *bid);
     CBid getNextBid(Seat seat, Team teamVul);
 
-    void setActorsCards(int cards[13])
-    { for (int i = 0; i < 13; i++) actorsCards[i] = cards[i]; }
+    void setActorsCards(int cards[13]);
     void setDummysCards(int cards[13])
     { for (int i = 0; i < 13; i++) dummysCards[i] = cards[i]; }
     bool cardOk(int card, Seat player, bool dummy)

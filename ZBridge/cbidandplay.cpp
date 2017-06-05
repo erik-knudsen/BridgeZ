@@ -28,6 +28,12 @@ CBidAndPlay::CBidAndPlay()
 {
 }
 
+void CBidAndPlay::setSeat(Seat seat)
+{
+    if (seat != NO_SEAT)
+        bidHistory.setSeat((seat));
+}
+
 /**
  * @brief Reset bid history.
  */
@@ -73,7 +79,7 @@ int CBidAndPlay::bidUndo(Bids *bid)
  */
 CBid CBidAndPlay::getNextBid(Seat seat, Team teamVul)
 {
-    return (bidAndPlayEngines->getNextBid(seat, bidHistory, actorsCards, teamVul));
+    return (bidAndPlayEngines->getNextBid(seat, bidHistory, teamVul));
 
 /*
     if (bidHistory.bidList.isEmpty())
@@ -95,6 +101,13 @@ CBid CBidAndPlay::getNextBid(Seat seat, Team teamVul)
 
     return (Bids)(bidHistory.bidList.last().bid + 1);
 */
+}
+
+void CBidAndPlay::setActorsCards(int cards[])
+{
+    for (int i = 0; i < 13; i++) actorsCards[i] = cards[i];
+
+    bidHistory.setFeatures(cards);
 }
 
 /**

@@ -54,6 +54,7 @@ CActorLocal::CActorLocal(bool manual, QString teamName, Seat seat, int protocol,
     this->teamName = teamName;
     this->protocol = protocol;
     bidAndPlay.setBidAndPlayEngines(bidAndPlayEngines);
+    bidAndPlay.setSeat(seat);
     this->tableManager = tableManager;
     showUser = false;
     updateGameInfo = false;

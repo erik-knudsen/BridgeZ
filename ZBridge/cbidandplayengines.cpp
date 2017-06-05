@@ -61,16 +61,15 @@ void CBidAndPlayEngines::initialize(CBidDB *bidDB, CBidDesc *bidDesc, CBidOption
  *
  * @param[in] seat Bidders seat.
  * @param[in] bidHistory The bid history.
- * @param[in] cards The cards for the next bidder.
  * @param[in] teamVul Team vulnerability.
  * @return The calculated next bid. If none was found then return BID_NONE.
  */
-CBid CBidAndPlayEngines::getNextBid(Seat seat, CBidHistory &bidHistory, int cards[], Team teamVul)
+CBid CBidAndPlayEngines::getNextBid(Seat seat, CBidHistory &bidHistory, Team teamVul)
 {
     assert(bidEngine != 0);
 
     //Must check something found in the bid database!!!!!!!
-    return bidEngine->getNextBid(seat, bidHistory, cards, scoringMethod, teamVul);
+    return bidEngine->getNextBid(seat, bidHistory, scoringMethod, teamVul);
 }
 
 /**
