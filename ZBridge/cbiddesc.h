@@ -25,6 +25,9 @@
 #include <QDataStream>
 #include <QMap>
 
+/**
+ * @brief Text description of pages, rules and alerts in the bid database.
+ */
 class CBidDesc
 {
 public:

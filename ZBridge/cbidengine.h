@@ -37,6 +37,10 @@ class CAuction;
 
 /**
  * @brief The bid engine class handles automatic bidding.
+ *
+ * Automatic bidding is used for players, who are played by a computer. Either locally or remote.
+ * It uses a two step approach. First it tries to find the next bid in the bidding database and if
+ * this is not possible then it uses a built in algoritmic approach.
  */
 class CBidEngine
 {
@@ -79,9 +83,9 @@ private:
     bool isMin(int lowValue, int highValue, int value);
     bool isMax(int lowValue, int highValue, int value);
 
-    CBidDB *bidDB;
-    CBidDesc *bidDesc;
-    CBidDBDefine *bidDBDefine;
+    CBidDB *bidDB;                  /**< The bid database. */
+    CBidDesc *bidDesc;              /**< Text descriptions for the bid database (alerts etc.). */
+    CBidDBDefine *bidDBDefine;      /**< Definitions for the bid database (which conventions to use etc.) */
 
     void auctionToText(CAuction &auction, QString *text);
 };

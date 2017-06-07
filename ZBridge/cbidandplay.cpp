@@ -44,6 +44,10 @@ void CBidAndPlay::resetBidHistory()
 
 /**
  * @brief Append bid to bid history.
+ *
+ * Appends the bid to the bid history and determines and also appends the rules
+ * for the bid.
+ *
  * @param bid The bid to append.
  */
 void CBidAndPlay::appendBid(Seat bidder, Bids bid, Team vulnerable)
@@ -63,6 +67,7 @@ void CBidAndPlay::appendBid(Seat bidder, Bids bid, Team vulnerable)
 
 /**
 * @brief Undo some of the bid history.
+*
 * @param bid Last regular bidders bid (not double, redouble or pass) after one round (4) bids have been popped.
 * @return One less than number of bids given until (and including) last regular bidder or REBID if bid history gets reset.
 * */
@@ -73,6 +78,7 @@ int CBidAndPlay::bidUndo(Bids *bid)
 
 /**
  * @brief Based on bid engine get next bid.
+ *
  * @param seat Bidders seat.
  * @param teamVul Vulnerability for the bidder.
  * @return The automatically calculated bid.
@@ -112,6 +118,7 @@ void CBidAndPlay::setActorsCards(int cards[])
 
 /**
  * @brief Based on play engine get next play.
+ *
  * @param player The player.
  * @param dummySeat Dummy.
  * @return The automatically calculated play.
@@ -129,6 +136,12 @@ int CBidAndPlay::getNextPlay(Seat player, Seat dummySeat)
     return i;
 }
 
+/**
+ * @brief Calculates a textual description of the feature limits for the bid.
+ *
+ * @param bid The bid to do the calculation for.
+ * @return Textual description of the feature limits.
+ */
 QString CBidAndPlay::featuresOfBid(CBid &bid)
 {
     QString features;
@@ -439,6 +452,11 @@ QString CBidAndPlay::featuresOfBid(CBid &bid)
     return features;
 }
 
+/**
+ * @brief Get textual description of the feature limits for the last bid in the bid history.
+ *
+ * @return Textual description of the feature limits for the last bid in the bid history.
+ */
 QString CBidAndPlay::featuresOfLastBid()
 {
     assert (bidHistory.bidList.size() > 0);
@@ -446,6 +464,11 @@ QString CBidAndPlay::featuresOfLastBid()
     return featuresOfBid(bidHistory.bidList.last());
 }
 
+/**
+ * @brief Get the alert of the last bid.
+ *
+ * @return Alert of the last bid.
+ */
 QString CBidAndPlay::alertOfLastBid()
 {
     assert (bidHistory.bidList.size() > 0);

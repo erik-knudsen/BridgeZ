@@ -38,6 +38,15 @@ CBidAndPlayEngines::~CBidAndPlayEngines()
         delete playEngine;
 }
 
+/**
+ * @brief Allocate bid and play engines.
+ *
+ * @param bidDB The bid database.
+ * @param bidDesc Textual descriptions related to the bid database.
+ * @param nsBidOptionDoc Options for the north/south pair.
+ * @param ewBidOptionDoc Options for the east/west pair.
+ * @param scoringMethod The scoringmethod.
+ */
 void CBidAndPlayEngines::initialize(CBidDB *bidDB, CBidDesc *bidDesc, CBidOptionDoc &nsBidOptionDoc,
                                     CBidOptionDoc &ewBidOptionDoc, ScoringMethod scoringMethod)
 {
@@ -74,6 +83,7 @@ CBid CBidAndPlayEngines::getNextBid(Seat seat, CBidHistory &bidHistory, Team tea
 
 /**
  * @brief Get possible rules for a given bid history and next bid as calculated by getNextBid.
+ *
  * @param[in] seat Bidders seat.
  * @param[in] bidHistory The bid history.
  * @param[in] bid The bid calculated by getNext bid.
@@ -86,7 +96,6 @@ QList<CRule *> CBidAndPlayEngines::getpRules(Seat seat, CBidHistory &bidHistory,
 {
     assert(bidEngine != 0);
 
-    //Must check something found in the bid database!!!!!!!
     return bidEngine->getpRules(seat, bidHistory, bid, scoringMethod, teamVul, substitute);
 }
 

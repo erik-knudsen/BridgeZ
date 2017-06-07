@@ -30,6 +30,10 @@ CBidHistory::CBidHistory()
 
 /**
  * @brief Append a bid to the bid history.
+ *
+ * A bid is appended to the bid history. This includes not only the bid but also the
+ * public known feature limits, which has been used for selecting the bid.
+ *
  * @param bid The bid to append.
  */
 void CBidHistory::appendBid(CBid &bid)
@@ -51,9 +55,6 @@ void CBidHistory::appendBid(CBid &bid)
     }
 }
 
-/**
- * @brief Remove the last bid appended to the bid history.
- */
 void CBidHistory::removeBid()
 {
     if (!bidList.isEmpty())
@@ -72,6 +73,7 @@ void CBidHistory::resetBidHistory()
 
 /**
  * @brief Undo some of the bid history.
+ *
  * @param bid Last regular bidders bid (not double, redouble or pass) after one round (4) bids have been popped.
  * @return One less than number of bids given until (and including) last regular bidder or REBID if bid history gets reset.
  */
@@ -118,6 +120,13 @@ bool CBidHistory::passedOut()
             (bidList[3].bid == BID_PASS));
 }
 
+/**
+ * @brief Set the bidders seat.
+ *
+ * The bidders seat is set. This includes initialization of public feature limits for all players.
+ *
+ * @param seat
+ */
 void CBidHistory::setSeat(Seat seat)
 {
     partnerSeat = (Seat)((seat + 2) % 4);
@@ -135,11 +144,24 @@ void CBidHistory::setSeat(Seat seat)
     lowLHFeatures.setMinFeatures();
 }
 
+/**
+ * @brief Set features for the bidder.
+ *
+ * The features are calculated based on the bidders cards. These are ofcourse well known to the bidder.
+ *
+ * @param cards
+ */
 void CBidHistory::setFeatures(int cards[13])
 {
     features.setCardFeatures(cards);
 }
 
+/**
+ * @brief Get public known low limits of partner features.
+ *
+ * @param seat The seat for which to get the public known low limit partner features.
+ * @return Returns public known low limit partner features.
+ */
 CFeatures &CBidHistory::getLowPartnerFeatures(Seat seat)
 {
     if (seat == ownSeat)
@@ -152,6 +174,12 @@ CFeatures &CBidHistory::getLowPartnerFeatures(Seat seat)
     return lowRHFeatures;
 }
 
+/**
+ * @brief Get public known high limits of partner features.
+ *
+ * @param seat The seat for which to get the public known high limit partner features.
+ * @return Returns public known high limit partner features.
+ */
 CFeatures &CBidHistory::getHighPartnerFeatures(Seat seat)
 {
     if (seat == ownSeat)
@@ -164,6 +192,12 @@ CFeatures &CBidHistory::getHighPartnerFeatures(Seat seat)
     return highRHFeatures;
 }
 
+/**
+ * @brief Get public known low limits of own features.
+ *
+ * @param seat The seat for which to get the public known low limit own features.
+ * @return Returns public known low limit own features.
+ */
 CFeatures &CBidHistory::getLowOwnFeatures(Seat seat)
 {
     if (seat == ownSeat)
@@ -176,6 +210,12 @@ CFeatures &CBidHistory::getLowOwnFeatures(Seat seat)
     return lowLHFeatures;
 }
 
+/**
+ * @brief Get public known high limits of own features.
+ *
+ * @param seat The seat for which to get the public known high limit own features.
+ * @return Returns public known high limit own features.
+ */
 CFeatures &CBidHistory::getHighOwnFeatures(Seat seat)
 {
     if (seat == ownSeat)
@@ -188,6 +228,12 @@ CFeatures &CBidHistory::getHighOwnFeatures(Seat seat)
     return highLHFeatures;
 }
 
+/**
+ * @brief Get public known low limits of right hand players features.
+ *
+ * @param seat The seat for which to get the public known low limit right hand players features.
+ * @return Returns public known low limit right hand players features.
+ */
 CFeatures &CBidHistory::getLowRHFeatures(Seat seat)
 {
     if (seat == ownSeat)
@@ -200,6 +246,12 @@ CFeatures &CBidHistory::getLowRHFeatures(Seat seat)
     return lowOwnFeatures;
 }
 
+/**
+ * @brief Get public known high limits of right hand players features.
+ *
+ * @param seat The seat for which to get the public known high limit right hand players features.
+ * @return Returns public known high limit right hand players features.
+ */
 CFeatures &CBidHistory::getHighRHFeatures(Seat seat)
 {
     if (seat == ownSeat)
@@ -212,6 +264,12 @@ CFeatures &CBidHistory::getHighRHFeatures(Seat seat)
     return highOwnFeatures;
 }
 
+/**
+ * @brief Get public known low limits of left hand players features.
+ *
+ * @param seat The seat for which to get the public known low limit left hand players features.
+ * @return Returns public known low limit left hand players features.
+ */
 CFeatures &CBidHistory::getLowLHFeatures(Seat seat)
 {
     if (seat == ownSeat)
@@ -224,6 +282,12 @@ CFeatures &CBidHistory::getLowLHFeatures(Seat seat)
     return lowPartnerFeatures;
 }
 
+/**
+ * @brief Get public known high limits of left hand players features.
+ *
+ * @param seat The seat for which to get the public known high limit left hand players features.
+ * @return Returns public known high limit left hand players features.
+ */
 CFeatures &CBidHistory::getHighLHFeatures(Seat seat)
 {
     if (seat == ownSeat)
@@ -236,7 +300,13 @@ CFeatures &CBidHistory::getHighLHFeatures(Seat seat)
     return highPartnerFeatures;
 }
 
-//Calculate range of feature attributes for the bid history of a given seat with rules for the bids.
+/**
+ * @brief Calculate public range of feature attributes for the bid history of a given seat.
+ *
+ * @param seat[in] The seat to calculate public known range of features for.
+ * @param lowFeatures[out] Low limit of features.
+ * @param highFeatures[out] High limit of features.
+ */
 void CBidHistory::calculateRange(Seat seat, CFeatures &lowFeatures, CFeatures &highFeatures)
 {
     highFeatures.setMaxFeatures();
@@ -255,7 +325,19 @@ void CBidHistory::calculateRange(Seat seat, CFeatures &lowFeatures, CFeatures &h
         CalculateBidRuleRange(i, lowFeatures, highFeatures);
 }
 
-//Calculate range of feature attributes for a given bid in the bid history.
+/**
+ * @brief Calculate range of feature attributes for a given bid in the bid history.
+ *
+ * Assumes previous bids in the bid history has been calculated.\n
+ * First the rules of the bid are combined to get the widest range of feature limits. Next
+ * these feature limits are combined with previous bids to get the most narrow limits.\n
+ * The bid database is in some cases corrected for HCP/Points. And it is marked whether
+ * the bid potentially can be a NT bid.
+ *
+ * @param inx[in] Index of the bid in the bid history.
+ * @param[in][out] lowFeatures Low limit of features.
+ * @param[in][out] highFeatures High limit of features.
+ */
 void CBidHistory::CalculateBidRuleRange(int inx, CFeatures &lowFeatures, CFeatures &highFeatures)
 {
     assert ((inx >= 0) && (inx < bidList.size()));

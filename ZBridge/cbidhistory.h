@@ -29,6 +29,9 @@
 
 /**
  * @brief The CBidHistory class describes the bid history.
+ *
+ * The bid history has the bids given by the players. It also has the features (HCP etc.) for the
+ * bidders cards. Furthermore it maintains the disclosed feature limits for all bidders (players)
  */
 class CBidHistory
 {
@@ -52,18 +55,18 @@ public:
     CFeatures &getLowLHFeatures(Seat seat);
     CFeatures &getHighLHFeatures(Seat seat);
 
-    QList<CBid> bidList;
+    QList<CBid> bidList;            /**< The list of the given bids. Public for easy access. */
 
 private:
-    CFeatures features;
-    CFeatures lowPartnerFeatures;
-    CFeatures highPartnerFeatures;
-    CFeatures lowOwnFeatures;
-    CFeatures highOwnFeatures;
-    CFeatures lowRHFeatures;
-    CFeatures highRHFeatures;
-    CFeatures lowLHFeatures;
-    CFeatures highLHFeatures;
+    CFeatures features;             /**< Features of the cards for the bidder. */
+    CFeatures lowPartnerFeatures;   /**< Low limits for public known partner features. */
+    CFeatures highPartnerFeatures;  /**< High limits for public known partner features. */
+    CFeatures lowOwnFeatures;       /**< Low limits for public known own features. */
+    CFeatures highOwnFeatures;      /**< High limits for public known own features. */
+    CFeatures lowRHFeatures;        /**< Low limits for public known right hand players features. */
+    CFeatures highRHFeatures;       /**< High limits for public known right hand players features. */
+    CFeatures lowLHFeatures;        /**< Low limits for public known left hand players features. */
+    CFeatures highLHFeatures;       /**< High limits for public known left hand players features. */
     Seat partnerSeat, ownSeat, rhSeat, lhSeat;
 
     void removeBid();

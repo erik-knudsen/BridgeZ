@@ -32,6 +32,9 @@ class CBidEngine;
 class CPlayEngine;
 class CRule;
 
+/**
+ * @brief This class handles computer generated bid and play of cards.
+ */
 class CBidAndPlayEngines
 {
 public:
@@ -48,8 +51,8 @@ public:
     QString getAlertIdDesc(quint8 alertId);
 
 private:
-    CBidEngine *bidEngine;
-    CPlayEngine *playEngine;
+    CBidEngine *bidEngine;          /**< The bid engine. */
+    CPlayEngine *playEngine;        /**< The play engine. */
 
     ScoringMethod scoringMethod;
 };

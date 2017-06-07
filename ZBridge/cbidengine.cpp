@@ -107,7 +107,6 @@ CBidEngine::~CBidEngine()
  * In cases where the bidding database is not enough then the search for the next bid
  * is extended by using a built in algoritmic approach.
  *
- *
  * @param[in] seat Bidders seat.
  * @param[in] bidHistory The bid history.
  * @param[in] scoringMethod The scoring method.
@@ -366,6 +365,12 @@ QList<CRule *> CBidEngine::getpRules(Seat seat, CBidHistory &bidHistory, Bids bi
     return pDefRules;
 }
 
+/**
+ * @brief Get text description of alert.
+ *
+ * @param[in] alertId The id of the alert as used in th bidding database..
+ * @return returns a text description of the alert.
+ */
 QString CBidEngine::getAlertIdDesc(quint8 alertId)
 {
      return bidDesc->getAlertIdDesc(alertId);
@@ -395,8 +400,8 @@ CAuction CBidEngine::findSubstituteAuction(CAuction &auction, QSet<qint16> &page
  * runs out for suggestion(s). It extends the bidding database and it only covers bids that are not already
  * covered by the bidding database.\n\n
  *
- * NOTE the rule used for the calculated bid is also calculated and returned with the bid.
- * NOTE This calculated rule is only used for debugging and does not take part in anything else.\n\n
+ * NOTE the rule used for the calculated bid is also calculated and returned with the bid.\n
+ * NOTEThis calculated rule is only used for debugging and does not take part in anything else.\n\n
  *
  * The following approach is used:\n
  *   1. New suit bids are non forcing.
@@ -1244,7 +1249,7 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
  *
  * @param[in] seat Bidders seat.
  * @param[in] bidHistory The bid history.
- * @param[in]bid The bid calculated by getNext bid.
+ * @param[in] bid The bid calculated by getNext bid.
  * @param[in] scoringMethod The scoring method.
  * @param[in] teamVul Team vulnerability.
  * @param[out] pDefRules Calculated rules.

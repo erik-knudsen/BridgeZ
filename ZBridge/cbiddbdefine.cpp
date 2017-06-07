@@ -34,6 +34,7 @@ QSet<qint16> &CBidDBDefine::getRules(Seat seat)
 
 /**
  * @brief Calculate relevant pages and rule ids.
+ *
  * @param bidOptions Options that selects pages and rules.
  * @param pages Calculated pages.
  * @param rules Calculated rule ids.

@@ -50,6 +50,14 @@ CBid::CBid(Seat bidder, Bids bid, QString alert)
     delRules = false;
 }
 
+/**
+ * @brief Destructor deletes non DB rules.
+ *
+ * The rules delimiting the bid can be either found in the bidding database or they can be found
+ * by a built in algoritmic approach. In the first case the rule pointers points directly into the
+ * bidding database and should therefore not be deleted. In the second case the rules are calculated
+ * and should be deleted upon destruction.
+ */
 CBid::~CBid()
 {
     if (delRules)
