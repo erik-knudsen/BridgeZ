@@ -52,10 +52,10 @@ private:
     QObject *bidSignalStrategy;
     bool pressed;
     QVector<CBidItem *> bidValues;
-    QGraphicsSimpleTextItem *west;
-    QGraphicsSimpleTextItem *north;
-    QGraphicsSimpleTextItem *east;
-    QGraphicsSimpleTextItem *south;
+    QGraphicsTextItem *west;
+    QGraphicsTextItem *north;
+    QGraphicsTextItem *east;
+    QGraphicsTextItem *south;
 
     int startX, startY, horInc, verInc;
     int line;

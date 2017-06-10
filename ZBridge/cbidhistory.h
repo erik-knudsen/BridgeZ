@@ -59,15 +59,9 @@ public:
 
 private:
     CFeatures features;             /**< Features of the cards for the bidder. */
-    CFeatures lowPartnerFeatures;   /**< Low limits for public known partner features. */
-    CFeatures highPartnerFeatures;  /**< High limits for public known partner features. */
-    CFeatures lowOwnFeatures;       /**< Low limits for public known own features. */
-    CFeatures highOwnFeatures;      /**< High limits for public known own features. */
-    CFeatures lowRHFeatures;        /**< Low limits for public known right hand players features. */
-    CFeatures highRHFeatures;       /**< High limits for public known right hand players features. */
-    CFeatures lowLHFeatures;        /**< Low limits for public known left hand players features. */
-    CFeatures highLHFeatures;       /**< High limits for public known left hand players features. */
-    Seat partnerSeat, ownSeat, rhSeat, lhSeat;
+    CFeatures lowFeatures[4];       /**< Low limits for public known partner features. */
+    CFeatures highFeatures[4];      /**< High limits for public known partner features. */
+    Seat seat;                      /**< The bidders seat. */
 
     void removeBid();
     void calculateRange(Seat seat, CFeatures &lowFeatures, CFeatures &highFeatures);

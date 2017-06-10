@@ -40,10 +40,10 @@ public:
     void showEWTricks(int tricks);
 
 private:
-    QGraphicsSimpleTextItem *nsLabel;
-    QGraphicsSimpleTextItem *ewLabel;
-    QGraphicsSimpleTextItem *nsTricks;
-    QGraphicsSimpleTextItem *ewTricks;
+    QGraphicsTextItem *nsLabel;
+    QGraphicsTextItem *ewLabel;
+    QGraphicsTextItem *nsTricks;
+    QGraphicsTextItem *ewTricks;
 };
 
 #endif // CBOTTOMINFOPLAY_H

@@ -28,51 +28,50 @@ CTopInfoAuction::CTopInfoAuction(QGraphicsWidget *parent) :
     QGraphicsWidget(parent)
 {
     //Create widgets.
-    QFont font("Times", 10, QFont::Bold);
-    QBrush brush(Qt::darkRed);
+    QFont font("Times New Roman", 10, QFont::Bold);
 
-    boardIdLabel = new QGraphicsSimpleTextItem(tr("Board Id: "), this);
+    boardIdLabel = new QGraphicsTextItem(tr("Board Id: "), this);
     boardIdLabel->setPos(0, 0);
     boardIdLabel->setFont(font);
-    boardIdLabel->setBrush(brush);
+    boardIdLabel->setDefaultTextColor(Qt::darkRed);
 
-    boardId = new QGraphicsSimpleTextItem(this);
-    boardId->setPos(80, 0);
+    boardId = new QGraphicsTextItem(this);
+    boardId->setPos(90, 0);
     boardId->setFont(font);
-    boardId->setBrush(brush);
+    boardId->setDefaultTextColor(Qt::darkRed);
 
-    vulnerabelLabel = new QGraphicsSimpleTextItem(tr("Vulnerable: "), this);
+    vulnerabelLabel = new QGraphicsTextItem(tr("Vulnerable: "), this);
     vulnerabelLabel->setPos(0,20);
     vulnerabelLabel->setFont(font);
-    vulnerabelLabel->setBrush(brush);
+    vulnerabelLabel->setDefaultTextColor(Qt::darkRed);
 
-    vulnerabel = new QGraphicsSimpleTextItem(this);
-    vulnerabel->setPos(80, 20);
+    vulnerabel = new QGraphicsTextItem(this);
+    vulnerabel->setPos(90, 20);
     vulnerabel->setFont(font);
-    vulnerabel->setBrush(brush);
+    vulnerabel->setDefaultTextColor(Qt::darkRed);
 
-    dealerLabel = new QGraphicsSimpleTextItem(tr("Dealer: "), this);
+    dealerLabel = new QGraphicsTextItem(tr("Dealer: "), this);
     dealerLabel->setPos(0, 40);
     dealerLabel->setFont(font);
-    dealerLabel->setBrush(brush);
+    dealerLabel->setDefaultTextColor(Qt::darkRed);
 
-    dealer = new QGraphicsSimpleTextItem(this);
-    dealer->setPos(80, 40);
+    dealer = new QGraphicsTextItem(this);
+    dealer->setPos(90, 40);
     dealer->setFont(font);
-    dealer->setBrush(brush);
+    dealer->setDefaultTextColor(Qt::darkRed);
 }
 
 void CTopInfoAuction::setBoardId(QString board)
 {
-    boardId->setText(board);
+    boardId->setPlainText(board);
 }
 
 void CTopInfoAuction::setVulnerability(Team team)
 {
-    vulnerabel->setText(QCoreApplication::translate("defines", TEAM_NAMES[team]));
+    vulnerabel->setPlainText(QCoreApplication::translate("defines", TEAM_NAMES[team]));
 }
 
 void CTopInfoAuction::setDealer(Seat seat)
 {
-    dealer->setText(QCoreApplication::translate("defines", SEAT_NAMES[seat]));
+    dealer->setPlainText(QCoreApplication::translate("defines", SEAT_NAMES[seat]));
 }

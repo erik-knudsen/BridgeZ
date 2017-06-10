@@ -25,7 +25,7 @@
 
 CBidHistory::CBidHistory()
 {
-    ownSeat = partnerSeat = rhSeat = lhSeat = NO_SEAT;
+    seat = NO_SEAT;
 }
 
 /**
@@ -40,19 +40,9 @@ void CBidHistory::appendBid(CBid &bid)
 {
     bidList.append(bid);
     bidList.last().delRules = true;     //Delete non db rules on destroy.
-    if (ownSeat != NO_SEAT)
-    {
-        int inx = bidList.size() - 1;
 
-        if (bid.bidder == partnerSeat)
-            CalculateBidRuleRange(inx, lowPartnerFeatures, highPartnerFeatures);
-        else if (bid.bidder == ownSeat)
-            CalculateBidRuleRange(inx, lowOwnFeatures, highOwnFeatures);
-        else if (bid.bidder == rhSeat)
-            CalculateBidRuleRange(inx, lowRHFeatures, highRHFeatures);
-        else if (bid.bidder == lhSeat)
-            CalculateBidRuleRange(inx, lowLHFeatures, highLHFeatures);
-    }
+    if (seat != NO_SEAT)
+        CalculateBidRuleRange((bidList.size() - 1), lowFeatures[bid.bidder], highFeatures[bid.bidder]);
 }
 
 void CBidHistory::removeBid()
@@ -67,8 +57,8 @@ void CBidHistory::removeBid()
 void CBidHistory::resetBidHistory()
 {
     bidList.clear();
-    if (ownSeat != NO_SEAT)
-        setSeat(ownSeat);
+    if (seat != NO_SEAT)
+        setSeat(seat);
 }
 
 /**
@@ -94,22 +84,19 @@ int CBidHistory::undo(Bids *bid)
 
     if (bidList.empty())
     {
-        if (ownSeat != NO_SEAT)
-            setSeat((ownSeat));
+        if (seat != NO_SEAT)
+            setSeat((seat));
 
         return REBID;
     }
 
-    if (ownSeat != NO_SEAT)
-    {
-        calculateRange(partnerSeat, lowPartnerFeatures, highPartnerFeatures);
-        calculateRange(ownSeat, lowOwnFeatures, highOwnFeatures);
-        calculateRange(rhSeat, lowRHFeatures, highRHFeatures);
-        calculateRange(lhSeat, lowLHFeatures, highLHFeatures);
-    }
+    if (seat != NO_SEAT)
+        for (int i = 0; i < 4; i++)
+            calculateRange((Seat)i, lowFeatures[i], highFeatures[i]);
 
     *bid = bidList.last().bid;
-    return bidList.size() - 1;
+
+    return (bidList.size() - 1);
 }
 
 bool CBidHistory::passedOut()
@@ -129,19 +116,13 @@ bool CBidHistory::passedOut()
  */
 void CBidHistory::setSeat(Seat seat)
 {
-    partnerSeat = (Seat)((seat + 2) % 4);
-    ownSeat = seat;
-    rhSeat = (Seat)((seat + 3) % 4);
-    lhSeat = (Seat)((seat + 1) % 4);
+    this->seat = seat;
 
-    highPartnerFeatures.setMaxFeatures();
-    lowPartnerFeatures.setMinFeatures();
-    highOwnFeatures.setMaxFeatures();
-    lowOwnFeatures.setMinFeatures();
-    highRHFeatures.setMaxFeatures();
-    lowRHFeatures.setMinFeatures();
-    highLHFeatures.setMaxFeatures();
-    lowLHFeatures.setMinFeatures();
+    for (int i = 0; i <4; i++)
+    {
+        highFeatures[i].setMaxFeatures();
+        lowFeatures[i].setMinFeatures();
+    }
 }
 
 /**
@@ -164,14 +145,7 @@ void CBidHistory::setFeatures(int cards[13])
  */
 CFeatures &CBidHistory::getLowPartnerFeatures(Seat seat)
 {
-    if (seat == ownSeat)
-        return lowPartnerFeatures;
-    if (seat == partnerSeat)
-        return lowOwnFeatures;
-    if (seat == rhSeat)
-        return lowLHFeatures;
-
-    return lowRHFeatures;
+    return lowFeatures[(seat + 2) % 4];
 }
 
 /**
@@ -182,14 +156,7 @@ CFeatures &CBidHistory::getLowPartnerFeatures(Seat seat)
  */
 CFeatures &CBidHistory::getHighPartnerFeatures(Seat seat)
 {
-    if (seat == ownSeat)
-        return highPartnerFeatures;
-    if (seat == partnerSeat)
-        return highOwnFeatures;
-    if (seat == rhSeat)
-        return highLHFeatures;
-
-    return highRHFeatures;
+    return highFeatures[(seat + 2) % 4];
 }
 
 /**
@@ -200,14 +167,7 @@ CFeatures &CBidHistory::getHighPartnerFeatures(Seat seat)
  */
 CFeatures &CBidHistory::getLowOwnFeatures(Seat seat)
 {
-    if (seat == ownSeat)
-        return lowOwnFeatures;
-    if (seat == partnerSeat)
-        return lowPartnerFeatures;
-    if (seat == rhSeat)
-        return lowRHFeatures;
-
-    return lowLHFeatures;
+    return lowFeatures[seat];
 }
 
 /**
@@ -218,14 +178,7 @@ CFeatures &CBidHistory::getLowOwnFeatures(Seat seat)
  */
 CFeatures &CBidHistory::getHighOwnFeatures(Seat seat)
 {
-    if (seat == ownSeat)
-        return highOwnFeatures;
-    if (seat == partnerSeat)
-        return highPartnerFeatures;
-    if (seat == rhSeat)
-        return highRHFeatures;
-
-    return highLHFeatures;
+    return highFeatures[seat];
 }
 
 /**
@@ -236,14 +189,7 @@ CFeatures &CBidHistory::getHighOwnFeatures(Seat seat)
  */
 CFeatures &CBidHistory::getLowRHFeatures(Seat seat)
 {
-    if (seat == ownSeat)
-        return lowRHFeatures;
-    if (seat == partnerSeat)
-        return lowLHFeatures;
-    if (seat == rhSeat)
-        return lowPartnerFeatures;
-
-    return lowOwnFeatures;
+    return lowFeatures[(seat + 3) % 4];
 }
 
 /**
@@ -254,14 +200,7 @@ CFeatures &CBidHistory::getLowRHFeatures(Seat seat)
  */
 CFeatures &CBidHistory::getHighRHFeatures(Seat seat)
 {
-    if (seat == ownSeat)
-        return highRHFeatures;
-    if (seat == partnerSeat)
-        return highLHFeatures;
-    if (seat == rhSeat)
-        return highPartnerFeatures;
-
-    return highOwnFeatures;
+    return highFeatures[(seat + 3) % 4];
 }
 
 /**
@@ -272,14 +211,7 @@ CFeatures &CBidHistory::getHighRHFeatures(Seat seat)
  */
 CFeatures &CBidHistory::getLowLHFeatures(Seat seat)
 {
-    if (seat == ownSeat)
-        return lowLHFeatures;
-    if (seat == partnerSeat)
-        return lowRHFeatures;
-    if (seat == rhSeat)
-        return lowOwnFeatures;
-
-    return lowPartnerFeatures;
+    return lowFeatures[(seat + 1) % 4];
 }
 
 /**
@@ -290,14 +222,7 @@ CFeatures &CBidHistory::getLowLHFeatures(Seat seat)
  */
 CFeatures &CBidHistory::getHighLHFeatures(Seat seat)
 {
-    if (seat == ownSeat)
-        return highLHFeatures;
-    if (seat == partnerSeat)
-        return highRHFeatures;
-    if (seat == rhSeat)
-        return highOwnFeatures;
-
-    return highPartnerFeatures;
+    return highFeatures[(seat + 1) % 4];
 }
 
 /**
@@ -329,8 +254,13 @@ void CBidHistory::calculateRange(Seat seat, CFeatures &lowFeatures, CFeatures &h
  * @brief Calculate range of feature attributes for a given bid in the bid history.
  *
  * Assumes previous bids in the bid history has been calculated.\n
- * First the rules of the bid are combined to get the widest range of feature limits. Next
- * these feature limits are combined with previous bids to get the most narrow limits.\n
+ * First the rules of the bid are combined to get the widest range of feature limits ("or"
+ * combination). Next these feature limits are combined with previous bids to get the
+ * most narrow limits ("and" combination). The use of this only works well if one of the
+ * combined bids has the most narrow "or" range for a given feature. The bid database
+ * handles (sufficiently - to be seen though) this. Example could be Stayman after 1NT.
+ * This shows either 4+ cards in either hearts or spades or both. But which is revealed
+ * in later bidding.\n
  * The bid database is in some cases corrected for HCP/Points. And it is marked whether
  * the bid potentially can be a NT bid.
  *

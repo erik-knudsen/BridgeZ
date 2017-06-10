@@ -39,28 +39,27 @@ CMidInfoAuction::CMidInfoAuction(QGraphicsWidget *parent) :
 
     line = 0;
 
-    QFont font("Times", 10, QFont::Bold);
-    QBrush brush(Qt::darkRed);
+    QFont font("Times New Roman", 10, QFont::Bold);
 
-    west = new QGraphicsSimpleTextItem(tr("West"), this);
-    west->setPos(startX - 10 + 0 * horInc, 20);
+    west = new QGraphicsTextItem(tr("W"), this);
+    west->setPos(startX - 2 + 0 * horInc, 15);
     west->setFont(font);
-    west->setBrush(brush);
+    west->setDefaultTextColor(Qt::darkRed);
 
-    north = new QGraphicsSimpleTextItem(tr("North"), this);
-    north->setPos(startX - 10 + 1 * horInc, 20);
+    north = new QGraphicsTextItem(tr("N"), this);
+    north->setPos(startX - 2 + 1 * horInc, 15);
     north->setFont(font);
-    north->setBrush(brush);
+    north->setDefaultTextColor(Qt::darkRed);
 
-    east = new QGraphicsSimpleTextItem(tr("East"), this);
-    east->setPos(startX - 10 + 2 * horInc, 20);
+    east = new QGraphicsTextItem(tr("E"), this);
+    east->setPos(startX - 2 + 2 * horInc, 15);
     east->setFont(font);
-    east->setBrush(brush);
+    east->setDefaultTextColor(Qt::darkRed);
 
-    south = new QGraphicsSimpleTextItem(tr("South"), this);
-    south->setPos(startX - 10 + 3 * horInc, 20);
+    south = new QGraphicsTextItem(tr("S"), this);
+    south->setPos(startX - 2 + 3 * horInc, 15);
     south->setFont(font);
-    south->setBrush(brush);
+    south->setDefaultTextColor(Qt::darkRed);
 
     pressed = true;
 }
@@ -71,7 +70,6 @@ CMidInfoAuction::CMidInfoAuction(QGraphicsWidget *parent) :
  * It is assumed that bids are shown in the sequence they are given. The bid BID_PLAYER indicates
  * the next bidder and must be shown before the next bid is shown.
  *
- * must be shown
  * @param seat The seat.
  * @param bid The bid.
  * @param features Text string describing rules for the bid - might be 0.

@@ -61,7 +61,7 @@ void CBottomInfoButton::paint(QPainter *painter, const QStyleOptionGraphicsItem 
     painter->drawRect(rec);
 
     painter->setPen(Qt::blue);
-    painter ->setFont(QFont("Arial", 30));
+    painter ->setFont(QFont("Times New Roman", 20, QFont::Bold));
     painter->drawText(rec, Qt::AlignCenter, text);
 
     QGraphicsWidget::paint(painter, option, widget);

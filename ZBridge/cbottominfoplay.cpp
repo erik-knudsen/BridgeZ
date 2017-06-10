@@ -25,37 +25,37 @@
 CBottomInfoPlay::CBottomInfoPlay(QGraphicsWidget *parent) :
     QGraphicsWidget(parent)
 {
-    nsLabel = new QGraphicsSimpleTextItem(tr("N-S"), this);
+    nsLabel = new QGraphicsTextItem(tr("N-S"), this);
     nsLabel->setPos(25, 0);
-    nsLabel->setFont(QFont("Times", 15, QFont::Bold));
-    nsLabel->setBrush(QBrush(Qt::darkRed));
+    nsLabel->setFont(QFont("Times New Roman", 15, QFont::Bold));
+    nsLabel->setDefaultTextColor(Qt::darkRed);
 
-    ewLabel = new QGraphicsSimpleTextItem(tr("E-W"), this);
+    ewLabel = new QGraphicsTextItem(tr("E-W"), this);
     ewLabel->setPos(75, 0);
-    ewLabel->setFont(QFont("Times", 15, QFont::Bold));
-    ewLabel->setBrush(QBrush(Qt::darkRed));
+    ewLabel->setFont(QFont("Times New Roman", 15, QFont::Bold));
+    ewLabel->setDefaultTextColor(Qt::darkRed);
 
-    nsTricks = new QGraphicsSimpleTextItem("8", this);
+    nsTricks = new QGraphicsTextItem("8", this);
     nsTricks->setPos(43, 30);
-    nsTricks->setFont(QFont("Times", 15, QFont::Bold));
-    nsTricks->setBrush(QBrush(Qt::darkRed));
+    nsTricks->setFont(QFont("Times New Roman", 15, QFont::Bold));
+    nsTricks->setDefaultTextColor(Qt::darkRed);
 
-    ewTricks = new QGraphicsSimpleTextItem("4", this);
+    ewTricks = new QGraphicsTextItem("4", this);
     ewTricks->setPos(93, 30);
-    ewTricks->setFont(QFont("Times", 15, QFont::Bold));
-    ewTricks->setBrush(QBrush(Qt::darkRed));
+    ewTricks->setFont(QFont("Times New Roman", 15, QFont::Bold));
+    ewTricks->setDefaultTextColor(Qt::darkRed);
 }
 
 void CBottomInfoPlay::showNSTricks(int tricks)
 {
     QString txt;
     txt.setNum(tricks);
-    nsTricks->setText(txt);
+    nsTricks->setPlainText(txt);
 }
 
 void CBottomInfoPlay::showEWTricks(int tricks)
 {
     QString txt;
     txt.setNum(tricks);
-    ewTricks->setText(txt);
+    ewTricks->setPlainText(txt);
 }

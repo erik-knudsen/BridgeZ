@@ -19,6 +19,7 @@
  */
 
 #include <QCoreApplication>
+//#include <QFontDatabase>
 
 #include "Defines.h"
 #include "ctopinfoplay.h"
@@ -27,80 +28,79 @@ CTopInfoPlay::CTopInfoPlay(QGraphicsWidget *parent) :
     QGraphicsWidget(parent)
 {
     //Create widgets.
-    QFont font("Times", 10, QFont::Bold);
-    QBrush brush(Qt::darkRed);
+    QFont font("Times New Roman", 10, QFont::Bold);
 
-    boardIdLabel = new QGraphicsSimpleTextItem(tr("Board Id: "), this);
+    boardIdLabel = new QGraphicsTextItem(tr("Board Id: "), this);
     boardIdLabel->setPos(0, 0);
     boardIdLabel->setFont(font);
-    boardIdLabel->setBrush(brush);
+    boardIdLabel->setDefaultTextColor(Qt::darkRed);
 
-    boardId = new QGraphicsSimpleTextItem(this);
-    boardId->setPos(80, 0);
+    boardId = new QGraphicsTextItem(this);
+    boardId->setPos(90, 0);
     boardId->setFont(font);
-    boardId->setBrush(brush);
+    boardId->setDefaultTextColor(Qt::darkRed);
 
-    vulnerabelLabel = new QGraphicsSimpleTextItem(tr("Vulnerable: "), this);
+    vulnerabelLabel = new QGraphicsTextItem(tr("Vulnerable: "), this);
     vulnerabelLabel->setPos(0,20);
     vulnerabelLabel->setFont(font);
-    vulnerabelLabel->setBrush(brush);
+    vulnerabelLabel->setDefaultTextColor(Qt::darkRed);
 
-    vulnerabel = new QGraphicsSimpleTextItem(this);
-    vulnerabel->setPos(80, 20);
+    vulnerabel = new QGraphicsTextItem(this);
+    vulnerabel->setPos(90, 20);
     vulnerabel->setFont(font);
-    vulnerabel->setBrush(brush);
+    vulnerabel->setDefaultTextColor(Qt::darkRed);
 
-    dealerLabel = new QGraphicsSimpleTextItem(tr("Dealer: "), this);
+    dealerLabel = new QGraphicsTextItem(tr("Dealer: "), this);
     dealerLabel->setPos(0, 40);
     dealerLabel->setFont(font);
-    dealerLabel->setBrush(brush);
+    dealerLabel->setDefaultTextColor(Qt::darkRed);
 
-    dealer = new QGraphicsSimpleTextItem(this);
-    dealer->setPos(80, 40);
+    dealer = new QGraphicsTextItem(this);
+    dealer->setPos(90, 40);
     dealer->setFont(font);
-    dealer->setBrush(brush);
+    dealer->setDefaultTextColor(Qt::darkRed);
 
-    declarerLabel = new QGraphicsSimpleTextItem(tr("Declarer: "), this);
+    declarerLabel = new QGraphicsTextItem(tr("Declarer: "), this);
     declarerLabel->setPos(0, 60);
     declarerLabel->setFont(font);
-    declarerLabel->setBrush(brush);
+    declarerLabel->setDefaultTextColor(Qt::darkRed);
 
-    declarer = new QGraphicsSimpleTextItem(this);
-    declarer->setPos(80, 60);
+    declarer = new QGraphicsTextItem(this);
+    declarer->setPos(90, 60);
     declarer->setFont(font);
-    declarer->setBrush(brush);
+    declarer->setDefaultTextColor(Qt::darkRed);
 
-    contractLabel = new QGraphicsSimpleTextItem(tr("Contract: "), this);
+    contractLabel = new QGraphicsTextItem(tr("Contract: "), this);
     contractLabel->setPos(0, 80);
     contractLabel->setFont(font);
-    contractLabel->setBrush(brush);
+    contractLabel->setDefaultTextColor(Qt::darkRed);
 
     contract = new QGraphicsPixmapItem(this);
-    contract->setPos(80, 80);
+    contract->setPos(93, 88);
 
     contract_dbl = new QGraphicsPixmapItem(this);
-    contract_dbl->setPos(100, 80);
+    contract_dbl->setPos(113, 88);
 }
 
 void CTopInfoPlay::setBoardId(QString board)
 {
-    boardId->setText(board);
+    boardId->setPlainText(board);
 }
 
 void CTopInfoPlay::setVulnerability(Team team)
 {
-    vulnerabel->setText(QCoreApplication::translate("defines", TEAM_NAMES[team]));
+    vulnerabel->setPlainText(QCoreApplication::translate("defines", TEAM_NAMES[team]));
 }
 
 void CTopInfoPlay::setDealer(Seat seat)
 {
-    dealer->setText(QCoreApplication::translate("defines", SEAT_NAMES[seat]));
+    dealer->setPlainText(QCoreApplication::translate("defines", SEAT_NAMES[seat]));
 }
 
 void CTopInfoPlay::setDeclarer(Seat seat)
 {
     if (seat != NO_SEAT)
-        declarer->setText(QCoreApplication::translate("defines", SEAT_NAMES[seat]));
+        declarer->setPlainText(QCoreApplication::translate("defines", SEAT_NAMES[seat]));
 }
 
 void CTopInfoPlay::setContract(Bids bid, Bids dbl)

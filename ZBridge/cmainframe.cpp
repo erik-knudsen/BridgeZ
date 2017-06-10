@@ -113,9 +113,9 @@ CMainFrame::CMainFrame(CZBridgeApp *app, CZBridgeDoc *doc, CGamesDoc *games) :
     setCentralWidget(playView);
     setWindowIcon(QIcon(":/newPrefix/resources/ZBridgeICN.bmp"));
 
-    resize(QSize(SCENE_HOR_SIZE + 30, SCENE_VER_SIZE + 130));
-    setMinimumSize(QSize(SCENE_HOR_SIZE * .75, SCENE_VER_SIZE * .75));
-    setMaximumSize(QSize(SCENE_HOR_SIZE * 1.25, SCENE_VER_SIZE * 1.25));
+    resize(QSize(SCENE_HOR_SIZE + 50, SCENE_VER_SIZE + 175));
+    setMinimumSize(QSize((SCENE_HOR_SIZE + 50) * .75, (SCENE_VER_SIZE + 175) * .75));
+    setMaximumSize(QSize((SCENE_HOR_SIZE + 50) * 1.25, (SCENE_VER_SIZE + 175) * 1.25));
 
     //File comment dialog (EAK).
     m_pFileCommentsDlg = new CFileCommentsDialog(app, doc, this);

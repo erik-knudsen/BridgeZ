@@ -84,7 +84,7 @@ CCenterCards::CCenterCards(QGraphicsWidget *parent) :
     actorText[RIGHT_POS].setPos(CENTER_HOR_SIZE - delta - CARD_HOR_SIZE/2 - offset, yLRPos - offset);
     actorText[BOTTOM_POS].setPos(xTBPos - offset, CENTER_VER_SIZE - delta - CARD_VER_SIZE / 2 - offset);
 
-    QFont font("Times", 30, QFont::Bold);
+    QFont font("Times New Roman", 30, QFont::Bold);
     for (int i = 0; i < 4; i++)
     {
         actorText[i].setVisible(false);

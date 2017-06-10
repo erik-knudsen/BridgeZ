@@ -86,27 +86,6 @@ int CBidAndPlay::bidUndo(Bids *bid)
 CBid CBidAndPlay::getNextBid(Seat seat, Team teamVul)
 {
     return (bidAndPlayEngines->getNextBid(seat, bidHistory, teamVul));
-
-/*
-    if (bidHistory.bidList.isEmpty())
-        return BID_1C;
-
-    if (bidHistory.bidList.last().bid == BID_PASS)
-        return BID_PASS;
-
-    if (bidHistory.bidList.last().bid == BID_7NT)
-        return BID_PASS;
-
-    if (bidHistory.bidList.last().bid == BID_DOUBLE)
-    return BID_PASS;
-//        return (Bids)(bidHistory.bidList[bidHistory.bidList.size() - 2].bid + 1);
-
-//    if (bidHistory.bidList.last().bid == BID_REDOUBLE)
-//        return BID_PASS;
-//        return (Bids)(bidHistory.bidList[bidHistory.bidList.size() - 3].bid + 1);
-
-    return (Bids)(bidHistory.bidList.last().bid + 1);
-*/
 }
 
 void CBidAndPlay::setActorsCards(int cards[])

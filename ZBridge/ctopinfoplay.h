@@ -47,15 +47,15 @@ public:
     void setContract(Bids bid, Bids dbl);
 
 private:
-    QGraphicsSimpleTextItem *boardIdLabel;
-    QGraphicsSimpleTextItem *vulnerabelLabel;
-    QGraphicsSimpleTextItem *dealerLabel;
-    QGraphicsSimpleTextItem *declarerLabel;
-    QGraphicsSimpleTextItem *contractLabel;
-    QGraphicsSimpleTextItem *vulnerabel;
-    QGraphicsSimpleTextItem *boardId;
-    QGraphicsSimpleTextItem *dealer;
-    QGraphicsSimpleTextItem *declarer;
+    QGraphicsTextItem *boardIdLabel;
+    QGraphicsTextItem *vulnerabelLabel;
+    QGraphicsTextItem *dealerLabel;
+    QGraphicsTextItem *declarerLabel;
+    QGraphicsTextItem *contractLabel;
+    QGraphicsTextItem *vulnerabel;
+    QGraphicsTextItem *boardId;
+    QGraphicsTextItem *dealer;
+    QGraphicsTextItem *declarer;
     QGraphicsPixmapItem *contract;
     QGraphicsPixmapItem *contract_dbl;
 };

@@ -25,8 +25,6 @@
 
 #include "defines.h"
 
-class QGraphicsSimpleTextItem;
-
 /**
  * @brief Show relevant info for auction.
  *
@@ -45,12 +43,12 @@ public:
     void setDealer(Seat seat);
 
 private:
-    QGraphicsSimpleTextItem *boardIdLabel;
-    QGraphicsSimpleTextItem *vulnerabelLabel;
-    QGraphicsSimpleTextItem *dealerLabel;
-    QGraphicsSimpleTextItem *boardId;
-    QGraphicsSimpleTextItem *vulnerabel;
-    QGraphicsSimpleTextItem *dealer;
+    QGraphicsTextItem *boardIdLabel;
+    QGraphicsTextItem *vulnerabelLabel;
+    QGraphicsTextItem *dealerLabel;
+    QGraphicsTextItem *boardId;
+    QGraphicsTextItem *vulnerabel;
+    QGraphicsTextItem *dealer;
 };
 
 #endif // CTOPINFOAUCTION_H
