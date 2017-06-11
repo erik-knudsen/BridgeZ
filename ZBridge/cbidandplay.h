@@ -61,7 +61,6 @@ public:
     void appendBid(Seat bidder, Bids bid, Team vulnerable);
     int bidUndo(Bids *bid);
     CBid getNextBid(Seat seat, Team teamVul);
-
     void setActorsCards(int cards[13]);
     void setDummysCards(int cards[13])
     { for (int i = 0; i < 13; i++) dummysCards[i] = cards[i]; }
@@ -85,6 +84,8 @@ private:
     CBidHistory bidHistory;
     CPlayHistory playHistory;
     CBidAndPlayEngines *bidAndPlayEngines;
+    CFeatures ownFeatures;
+    Seat seat;
 
     int actorsCards[13];
     int dummysCards[13];

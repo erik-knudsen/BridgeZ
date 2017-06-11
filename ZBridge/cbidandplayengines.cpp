@@ -69,16 +69,16 @@ void CBidAndPlayEngines::initialize(CBidDB *bidDB, CBidDesc *bidDesc, CBidOption
  * Calculate the next bid by using the bidding database.
  *
  * @param[in] seat Bidders seat.
+ * @param[in] ownFeatures The features of the bidders cards.
  * @param[in] bidHistory The bid history.
  * @param[in] teamVul Team vulnerability.
  * @return The calculated next bid. If none was found then return BID_NONE.
  */
-CBid CBidAndPlayEngines::getNextBid(Seat seat, CBidHistory &bidHistory, Team teamVul)
+CBid CBidAndPlayEngines::getNextBid(Seat seat, CFeatures &ownFeatures, CBidHistory &bidHistory, Team teamVul)
 {
     assert(bidEngine != 0);
 
-    //Must check something found in the bid database!!!!!!!
-    return bidEngine->getNextBid(seat, bidHistory, scoringMethod, teamVul);
+    return bidEngine->getNextBid(seat, ownFeatures, bidHistory, scoringMethod, teamVul);
 }
 
 /**
@@ -102,4 +102,23 @@ QList<CRule *> CBidAndPlayEngines::getpRules(Seat seat, CBidHistory &bidHistory,
 QString CBidAndPlayEngines::getAlertIdDesc(quint8 alertId)
 {
     return bidEngine->getAlertIdDesc(alertId);
+}
+
+/**
+ * @brief Determine the next card to play.
+ *
+ * @param seat The players seat.
+ * @param dummySeat The dummys seat.
+ * @param ownCards The players cards.
+ * @param dummyCards The dummys cards.
+ * @param bidHistory The bid history.
+ * @param playHistory The play history.
+ * @return The next card to play.
+ */
+int CBidAndPlayEngines::getNextPlay(Seat seat, Seat dummySeat, int ownCards[], int dummyCards[],
+                                    CBidHistory &bidHistory, CPlayHistory &playHistory)
+{
+    assert (playEngine != 0);
+
+    return playEngine->getNextPlay(seat, dummySeat, ownCards, dummyCards, bidHistory, playHistory);
 }

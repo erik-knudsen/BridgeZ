@@ -30,8 +30,9 @@ CBidAndPlay::CBidAndPlay()
 
 void CBidAndPlay::setSeat(Seat seat)
 {
-    if (seat != NO_SEAT)
-        bidHistory.setSeat((seat));
+    this->seat = seat;
+
+    bidHistory.setSeat(seat);
 }
 
 /**
@@ -85,14 +86,14 @@ int CBidAndPlay::bidUndo(Bids *bid)
  */
 CBid CBidAndPlay::getNextBid(Seat seat, Team teamVul)
 {
-    return (bidAndPlayEngines->getNextBid(seat, bidHistory, teamVul));
+    return (bidAndPlayEngines->getNextBid(seat, ownFeatures, bidHistory, teamVul));
 }
 
 void CBidAndPlay::setActorsCards(int cards[])
 {
     for (int i = 0; i < 13; i++) actorsCards[i] = cards[i];
 
-    bidHistory.setFeatures(cards);
+    ownFeatures.setCardFeatures(cards);
 }
 
 /**
@@ -104,15 +105,7 @@ void CBidAndPlay::setActorsCards(int cards[])
  */
 int CBidAndPlay::getNextPlay(Seat player, Seat dummySeat)
 {
-    int i;
-
-    int *cards = (player == dummySeat) ? dummysCards : actorsCards;
-
-    for (i = 0; i < 52; i++)
-        if (playHistory.cardOk(i, player, cards))
-            break;
-
-    return i;
+    return bidAndPlayEngines->getNextPlay(player, dummySeat, actorsCards, dummysCards, bidHistory, playHistory);
 }
 
 /**

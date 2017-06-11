@@ -49,7 +49,7 @@ public:
                CBidOptionDoc &nsBidOptionDoc, CBidOptionDoc &ewBidOptionDoc);
     virtual ~CBidEngine();
 
-    CBid getNextBid(Seat seat, CBidHistory &bidHistory, ScoringMethod scoringMethod,
+    CBid getNextBid(Seat seat, CFeatures &ownFeatures, CBidHistory &bidHistory, ScoringMethod scoringMethod,
             Team teamVul);
     QList<CRule *> getpRules(Seat seat, CBidHistory &bidHistory, Bids bid, ScoringMethod scoringMethod,
                              Team teamVul, bool *substitute);

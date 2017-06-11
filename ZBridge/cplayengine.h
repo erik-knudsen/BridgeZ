@@ -21,15 +21,27 @@
 #ifndef CPLAYENGINE_H
 #define CPLAYENGINE_H
 
+#include "Defines.h"
+
+class CBidHistory;
+class CPlayHistory;
+
 /**
  * @brief Play engine.
  *
- * Not implemented yet.
+ * The next card to play is determined as follows:\n
+ *   - Calculate a number of possible hand distributions based on remaining cards to play
+ *     and on the players signals as defined by the user.
+ *   - Solve these hands using double dummy algoritms (Bo Haglund, Soren Hein, Bob Richardson: DDS v. 2.8).
+ *   - Select the best card to play based on this.\n
  */
 class CPlayEngine
 {
 public:
     CPlayEngine();
+
+    int getNextPlay(Seat seat, Seat dummySeat, int ownCards[], int dummyCards[], CBidHistory &bidHistory,
+                    CPlayHistory &playHistory);
 };
 
 #endif // CPLAYENGINE_H

@@ -108,12 +108,13 @@ CBidEngine::~CBidEngine()
  * is extended by using a built in algoritmic approach.
  *
  * @param[in] seat Bidders seat.
+ * @param[in] ownFeatures The features of the bidders cards.
  * @param[in] bidHistory The bid history.
  * @param[in] scoringMethod The scoring method.
  * @param[in] teamVul Team vulnerability.
  * @return The determined next bid.
  */
-CBid CBidEngine::getNextBid(Seat seat, CBidHistory &bidHistory, ScoringMethod scoringMethod,
+CBid CBidEngine::getNextBid(Seat seat, CFeatures &ownFeatures, CBidHistory &bidHistory, ScoringMethod scoringMethod,
                             Team teamVul)
 {
     assert ((bidHistory.bidList.size() == 0) ? true : (((bidHistory.bidList.last().bidder + 1) % 4) == seat));
@@ -125,9 +126,6 @@ CBid CBidEngine::getNextBid(Seat seat, CBidHistory &bidHistory, ScoringMethod sc
     QList<CAuction> subAuction;
     QList<CRule *> pDefRules;
     QList<qint8> defBids;
-
-    //Get features.
-    CFeatures& features = bidHistory.getFeatures();
 
     //Get relevant pages and rules.
     QSet<qint16> &pages = bidDBDefine->getPages(seat);
@@ -171,7 +169,7 @@ CBid CBidEngine::getNextBid(Seat seat, CBidHistory &bidHistory, ScoringMethod sc
                                      ((((teamVul == NORTH_SOUTH) && ((seat == NORTH_SEAT) || (seat == SOUTH_SEAT))) ||
                                        ((teamVul == EAST_WEST) && ((seat == EAST_SEAT) || (seat == WEST_SEAT)))) &&
                                       ((ruleVul == VUL_YI) || (ruleVul == VUL_YN)))) &&
-                                    (pRules[i]->RuleIsOk(features)))
+                                    (pRules[i]->RuleIsOk(ownFeatures)))
                             {
                                 defBids.append(bids[i]);
                                 pDefRules.append(pRules[i]);
@@ -250,7 +248,7 @@ CBid CBidEngine::getNextBid(Seat seat, CBidHistory &bidHistory, ScoringMethod sc
     }
     else
         //Built in algoritmic calculation of next bid.
-        return calculateNextBid(seat, bidHistory, features, scoringMethod, teamVul);
+        return calculateNextBid(seat, bidHistory, ownFeatures, scoringMethod, teamVul);
 }
 
 /**
@@ -439,14 +437,14 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
 
     int size = bidHistory.bidList.size();
 
-    CFeatures& lowPartnerFeatures = bidHistory.getLowPartnerFeatures(seat);
-    CFeatures& highPartnerFeatures = bidHistory.getHighPartnerFeatures(seat);
-    CFeatures& lowOwnFeatures = bidHistory.getLowOwnFeatures(seat);
-    CFeatures& highOwnFeatures = bidHistory.getHighOwnFeatures(seat);
-    CFeatures& lowRHFeatures = bidHistory.getLowRHFeatures(seat);
-    CFeatures& highRHFeatures = bidHistory.getHighRHFeatures(seat);
-    CFeatures& lowLHFeatures = bidHistory.getLowLHFeatures(seat);
-    CFeatures& highLHFeatures = bidHistory.getHighLHFeatures(seat);
+    CFeatures& lowPartnerFeatures = bidHistory.getLowFeatures((Seat)((seat +2) % 4));
+    CFeatures& highPartnerFeatures = bidHistory.getHighFeatures((Seat)((seat +2) % 4));
+    CFeatures& lowOwnFeatures = bidHistory.getLowFeatures(seat);
+    CFeatures& highOwnFeatures = bidHistory.getHighFeatures(seat);
+    CFeatures& lowRHFeatures = bidHistory.getLowFeatures((Seat)((seat +3) % 4));
+    CFeatures& highRHFeatures = bidHistory.getHighFeatures((Seat)((seat +3) % 4));
+    CFeatures& lowLHFeatures = bidHistory.getLowFeatures((Seat)((seat +1) % 4));
+    CFeatures& highLHFeatures = bidHistory.getHighFeatures((Seat)((seat +1) % 4));
 
     //Already agrement on suit?
     Suit suitAgree;
@@ -1263,10 +1261,10 @@ void CBidEngine::calculatepRules(Seat seat, CBidHistory &bidHistory, Bids bid, S
 
     int size = bidHistory.bidList.size();
 
-    CFeatures& lowPartnerFeatures = bidHistory.getLowPartnerFeatures(seat);
-    CFeatures& highPartnerFeatures = bidHistory.getHighPartnerFeatures(seat);
-    CFeatures& lowOwnFeatures = bidHistory.getLowOwnFeatures(seat);
-    CFeatures& highOwnFeatures = bidHistory.getHighOwnFeatures(seat);
+    CFeatures& lowPartnerFeatures = bidHistory.getLowFeatures((Seat)((seat +2) % 4));
+    CFeatures& highPartnerFeatures = bidHistory.getHighFeatures((Seat)((seat +2) % 4));
+    CFeatures& lowOwnFeatures = bidHistory.getLowFeatures(seat);
+    CFeatures& highOwnFeatures = bidHistory.getHighFeatures(seat);
 
     //Already agrement on suit?
     Suit suitAgree;
