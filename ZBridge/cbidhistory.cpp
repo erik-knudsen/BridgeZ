@@ -120,7 +120,7 @@ bool CBidHistory::passedOut()
 /**
  * @brief Set the bidders seat.
  *
- * The bidders seat is set. This includes initialization of public feature limits for all players.
+ * Initialization of public feature limits for all players.
  *
  * @param seat
  */
@@ -136,9 +136,9 @@ void CBidHistory::initializeFeatures()
 /**
  * @brief Calculate public range of feature attributes for the bid history of a given seat.
  *
- * @param seat[in] The seat to calculate public known range of features for.
- * @param lowFeatures[out] Low limit of features.
- * @param highFeatures[out] High limit of features.
+ * @param[in] seat The seat to calculate public known range of features for.
+ * @param[out] lowFeatures Low limit of features.
+ * @param[out] highFeatures High limit of features.
  */
 void CBidHistory::calculateRange(Seat seat, CFeatures &lowFeatures, CFeatures &highFeatures)
 {
@@ -172,9 +172,9 @@ void CBidHistory::calculateRange(Seat seat, CFeatures &lowFeatures, CFeatures &h
  * The bid database is in some cases corrected for HCP/Points. And it is marked whether
  * the bid potentially can be a NT bid.
  *
- * @param inx[in] Index of the bid in the bid history.
- * @param[in][out] lowFeatures Low limit of features.
- * @param[in][out] highFeatures High limit of features.
+ * @param[in] inx Index of the bid in the bid history.
+ * @param[in,out] lowFeatures Low limit of features.
+ * @param[in,out] highFeatures High limit of features.
  */
 void CBidHistory::CalculateBidRuleRange(int inx, CFeatures &lowFeatures, CFeatures &highFeatures)
 {

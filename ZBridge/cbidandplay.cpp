@@ -99,7 +99,7 @@ void CBidAndPlay::setActorsCards(int cards[])
 /**
  * @brief Based on play engine get next play.
  *
- * @param player The player.
+ * @param player The player (dummys cards are played by declarer).
  * @param dummySeat Dummy.
  * @return The automatically calculated play.
  */

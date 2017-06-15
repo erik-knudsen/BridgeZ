@@ -107,7 +107,7 @@ QString CBidAndPlayEngines::getAlertIdDesc(quint8 alertId)
 /**
  * @brief Determine the next card to play.
  *
- * @param seat The players seat.
+ * @param seat The players seat (dummys cards are played by declarer).
  * @param dummySeat The dummys seat.
  * @param ownCards The players cards.
  * @param dummyCards The dummys cards.

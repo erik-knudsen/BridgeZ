@@ -96,6 +96,25 @@ int CPlayHistory::getPlayed(Seat seat, int cards[])
 }
 
 /**
+ * @brief Get which cards have been played until now.
+ * @param cards Cards played.
+ * @return Number of cards played.
+ */
+int CPlayHistory::getPlayed(int cards[])
+{
+    int noCards = 0;
+
+    for (int i = 0; i < 13; i++)
+    for (int j = 0; j < 4; j++)
+    if (play[j][i] != -1)
+    {
+        cards[i * 4 + j] = play[j][i];
+        noCards++;
+    }
+    return noCards;
+}
+
+/**
  * @brief Check if the played card is ok.
  * @param card The played card.
  * @param seat The players seat.
@@ -159,6 +178,14 @@ bool CPlayHistory::cardOk(int card, Seat seat, int cards[])
             return false;
 
     return true;
+}
+
+bool CPlayHistory::isCardPlayed(Seat seat, int card)
+{
+    for (int i = 0; i < 13; i++)
+        if (card == play[seat][i])
+            return true;
+    return false;
 }
 
 /**

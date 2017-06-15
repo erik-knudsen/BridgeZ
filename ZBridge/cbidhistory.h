@@ -32,8 +32,7 @@
  *
  * The bid history has the bids given by the players. It also has the features (HCP etc.) for the
  * bidders cards. Furthermore it maintains the disclosed feature limits for all bidders (players).
- * The bid history is also used on the server and on the client i.e. in places where feature
- * limits are not known.
+ * The bid history is also used on the server where feature limits are not known.
  */
 class CBidHistory
 {

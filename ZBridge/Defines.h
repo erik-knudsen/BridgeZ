@@ -420,45 +420,58 @@ const int TNXX_E_NT = 13;
 
 const int xX_N_S = 0;
 const int Xx_N_S = 1;
+
 const int xXX_N_S = 0;
 const int XxX_N_S = 1;
 const int XXx_N_S = 2;
+
 const int aKX_N_S = 0;
 const int AkX_N_S = 1;
 const int AKx_N_S = 2;
+
 const int kQX_N_S = 0;
 const int KqX_N_S = 1;
 const int KQx_N_S = 2;
+
 const int qJX_N_S = 0;
 const int QjX_N_S = 1;
 const int QJx_N_S = 2;
+
 const int jTX_N_S = 0;
 const int JtX_N_S = 1;
 const int JTx_N_S = 2;
+
 const int kQTN_N_S = 0;
 const int KqTN_N_S = 1;
 const int KQtN_N_S = 2;
 const int KQTn_N_S = 3;
+
 const int xXXX_N_S = 0;
 const int XxXX_N_S = 1;
 const int XXxX_N_S = 2;
 const int XXXx_N_S = 3;
+
 const int xXXXX_N_S = 0;
 const int XxXXX_N_S = 1;
 const int XXxXX_N_S = 2;
 const int XXXxX_N_S = 3;
 const int XXXXx_N_S = 4;
+
 const int tNX_N_S = 0;
 const int TnX_N_S = 1;
 const int TNx_N_S = 2;
+
 const int kJTX_N_S = 0;
 const int KjTX_N_S = 1;
 const int KJtX_N_S = 2;
+
 const int KJTx_N_S = 0;
+
 const int kTNX_N_S = 0;
 const int KtNX_N_S = 1;
 const int KTnX_N_S = 2;
 const int KTNx_N_S = 3;
+
 const int qTNX_N_S = 0;
 const int QtNX_N_S = 1;
 const int QTnX_N_S = 2;
@@ -466,45 +479,58 @@ const int QTNx_N_S = 3;
 
 const int xX_E_S = 0;
 const int Xx_E_S = 1;
+
 const int xXX_E_S = 0;
 const int XxX_E_S = 1;
 const int XXx_E_S = 2;
+
 const int aKX_E_S = 0;
 const int AkX_E_S = 1;
 const int AKx_E_S = 2;
+
 const int kQX_E_S = 0;
 const int KqX_E_S = 1;
 const int KQx_E_S = 2;
+
 const int qJX_E_S = 0;
 const int QjX_E_S = 1;
 const int QJx_E_S = 2;
+
 const int jTX_E_S = 0;
 const int JtX_E_S = 1;
 const int JTx_E_S = 2;
+
 const int kQTN_E_S = 0;
 const int KqTN_E_S = 1;
 const int KQtN_E_S = 2;
 const int KQTn_E_S = 3;
+
 const int xXXX_E_S = 0;
 const int XxXX_E_S = 1;
 const int XXxX_E_S = 2;
 const int XXXx_E_S = 3;
+
 const int xXXXX_E_S = 0;
 const int XxXXX_E_S = 1;
 const int XXxXX_E_S = 2;
 const int XXXxX_E_S = 3;
 const int XXXXx_E_S = 4;
+
 const int tNX_E_S = 0;
 const int TnX_E_S = 1;
 const int TNx_E_S = 2;
+
 const int kJTX_E_S = 0;
 const int KjTX_E_S = 1;
 const int KJtX_E_S = 2;
+
 const int KJTx_E_S = 0;
+
 const int kTNX_E_S = 0;
 const int KtNX_E_S = 1;
 const int KTnX_E_S = 2;
 const int KTNx_E_S = 3;
+
 const int qTNX_E_S = 0;
 const int QtNX_E_S = 1;
 const int QTnX_E_S = 2;
@@ -512,109 +538,135 @@ const int QTNx_E_S = 3;
 
 const int xX_N_NT = 0;
 const int Xx_N_NT = 1;
+
 const int xXX_N_NT = 0;
 const int XxX_N_NT = 1;
 const int XXx_N_NT = 2;
+
 const int aKJX_N_NT = 0;
 const int AkJX_N_NT = 1;
 const int AKjX_N_NT = 2;
 const int AKJx_N_NT = 3;
+
 const int aJTN_N_NT = 0;
 const int AjTN_N_NT = 1;
 const int AJtN_N_NT = 2;
 const int AJTn_N_NT = 3;
+
 const int kQJX_N_NT = 0;
 const int KqJX_N_NT = 1;
 const int KQjX_N_NT = 2;
 const int KQJx_N_NT = 3;
+
 const int qKTX_N_NT = 0;
 const int QkTX_N_NT = 1;
 const int QKtX_N_NT = 2;
 const int QKTx_N_NT = 3;
+
 const int jTNX_N_NT = 0;
 const int JtNX_N_NT = 1;
 const int JTnX_N_NT = 2;
 const int JTNx_N_NT = 3;
+
 const int xXXX_N_NT = 0;
 const int XxXX_N_NT = 1;
 const int XXxX_N_NT = 2;
 const int XXXx_N_NT = 3;
+
 const int xXXXX_N_NT = 0;
 const int XxXXX_N_NT = 1;
 const int XXxXX_N_NT = 2;
 const int XXXxX_N_NT = 3;
 const int XXXXx_N_NT = 4;
+
 const int aQJX_N_NT = 0;
 const int AqJX_N_NT = 1;
 const int AQjX_N_NT = 2;
 const int AQJx_N_NT = 3;
+
 const int aTNX_N_NT = 0;
 const int AtNX_N_NT = 1;
 const int ATnX_N_NT = 2;
 const int ATNx_N_NT = 3;
+
 const int kQTN_N_NT = 0;
 const int KqTN_N_NT = 1;
 const int KQtN_N_NT = 2;
 const int KQTn_N_NT = 3;
+
 const int qTNX_N_NT = 0;
 const int QtNX_N_NT = 1;
 const int QTnX_N_NT = 2;
 const int QTNx_N_NT = 3;
+
 const int tNXX_N_NT = 0;
 const int TnXX_N_NT = 1;
 const int TNxX_N_NT = 2;
 const int TNXx_N_NT = 3;
 
 const int xX_E_NT = 0;
-const int Xx_E_NT = 01;
+const int Xx_E_NT = 1;
+
 const int xXX_E_NT = 0;
 const int XxX_E_NT = 1;
 const int XXx_E_NT = 2;
+
 const int aKJX_E_NT = 0;
 const int AkJX_E_NT = 1;
 const int AKjX_E_NT = 2;
 const int AKJx_E_NT = 3;
+
 const int aJTN_E_NT = 0;
 const int AjTN_E_NT = 1;
 const int AJtN_E_NT = 2;
 const int AJTn_E_NT = 3;
+
 const int kQJX_E_NT = 0;
 const int KqJX_E_NT = 1;
 const int KQjX_E_NT = 2;
 const int KQJx_E_NT = 3;
+
 const int qKTX_E_NT = 0;
 const int QkTX_E_NT = 1;
 const int QKtX_E_NT = 2;
 const int QKTx_E_NT = 3;
+
 const int jTNX_E_NT = 0;
 const int JtNX_E_NT = 1;
 const int JTnX_E_NT = 2;
 const int JTNx_E_NT = 3;
+
 const int xXXX_E_NT = 0;
 const int XxXX_E_NT = 1;
 const int XXxX_E_NT = 2;
 const int XXXx_E_NT = 3;
+
 const int xXXXX_E_NT = 0;
 const int XxXXX_E_NT = 1;
 const int XXxXX_E_NT = 2;
 const int XXXxX_E_NT = 3;
 const int XXXXx_E_NT = 4;
+
 const int aQJX_E_NT = 0;
 const int AqJX_E_NT = 1;
 const int AQjX_E_NT = 2;
 const int AQJx_E_NT = 3;
+
 const int aTNX_E_NT = 0;
 const int AtNX_E_NT = 1;
 const int ATnX_E_NT = 2;
 const int ATNx_E_NT = 3;
+
 const int kQTN_E_NT = 0;
 const int KqTN_E_NT = 1;
 const int KQtN_E_NT = 2;
 const int KQTn_E_NT = 3;
+
 const int qTNX_E_NT = 0;
 const int QtNX_E_NT = 1;
 const int QTnX_E_NT = 2;
 const int QTNx_E_NT = 3;
+
 const int tNXX_E_NT = 0;
 const int TnXX_E_NT = 1;
 const int TNxX_E_NT = 2;
