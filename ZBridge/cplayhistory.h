@@ -40,7 +40,7 @@ public:
     bool cardOk(int card, Seat seat, int cards[13]);
     int getEWTricks() { return ewTricks; }
     int getNSTricks() { return nsTricks; }
-    bool isFirstPlay() { return ((noTrick == 0) && (openLeader == currentLeader)); }
+    bool isFirstPlay();
     bool isCardPlayed(Seat seat, int card);
 
     Seat getNextLeader();

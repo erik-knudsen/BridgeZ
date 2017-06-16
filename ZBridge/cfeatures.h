@@ -71,6 +71,7 @@ public:
     void setMinFeatures();              //Min. features.
     void setMaxFeatures();              //Max features.
     void setCardFeatures(int cards[]);  //Features for given hand.
+    bool featureIsOk(CFeatures &highFeatures, CFeatures &lowFeatures);
     void delimitFeatures(CFeatures &features, bool lower);
 
     //High card points.

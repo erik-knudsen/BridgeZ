@@ -89,10 +89,15 @@ void CPlayHistory::setPlay(Seat player, int trick, int cardVal)
  */
 int CPlayHistory::getPlayed(Seat seat, int cards[])
 {
-    for (int i = 0; i < noTrick; i++)
-        cards[i] = play[seat][i];
+    int noCards = 0;
 
-    return noTrick;
+    for (int i = 0; i < 13; i++)
+    if (play[seat][i] != -1)
+    {
+        cards[noCards] = play[seat][i];
+        noCards++;
+    }
+    return noCards;
 }
 
 /**
@@ -104,11 +109,11 @@ int CPlayHistory::getPlayed(int cards[])
 {
     int noCards = 0;
 
-    for (int i = 0; i < 13; i++)
     for (int j = 0; j < 4; j++)
+    for (int i = 0; i < 13; i++)
     if (play[j][i] != -1)
     {
-        cards[i * 4 + j] = play[j][i];
+        cards[noCards] = play[j][i];
         noCards++;
     }
     return noCards;
@@ -178,6 +183,11 @@ bool CPlayHistory::cardOk(int card, Seat seat, int cards[])
             return false;
 
     return true;
+}
+
+bool CPlayHistory::isFirstPlay()
+{
+    return ((play[0][0] == -1) && (play[1][0] == -1) && (play[2][0] == -1) && (play[3][0] == -1));
 }
 
 bool CPlayHistory::isCardPlayed(Seat seat, int card)
