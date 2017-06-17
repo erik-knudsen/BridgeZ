@@ -18,6 +18,7 @@
  * The file implements the definition of the play engine.
  */
 
+#include <QDebug>
 #include <cassert>
 
 #include "dll.h"
@@ -56,6 +57,9 @@ int CPlayEngine::getNextPlay(Seat seat, Seat dummySeat, int ownCards[], int dumm
 
     return i;
 */
+
+//    qDebug() << QString("getNextPlay: Seat %1, dummy %2").arg(SEAT_NAMES[seat]).arg(SEAT_NAMES[dummySeat]);
+
     //Determine remaining known cards (own and dummy).
     bool firstPlay = playHistory.isFirstPlay();
     int ownRemaining[13];
@@ -77,6 +81,8 @@ int CPlayEngine::getNextPlay(Seat seat, Seat dummySeat, int ownCards[], int dumm
     int handNo = 0;
     while (handNo < NO_HANDS_DD)
     {
+//        qDebug() << QString("Hand number: %1  Iteration: %2").arg(handNo).arg(iter);
+
         //Initialize cards.
         int cardValues[52];
         for (int i = 0; i < 52; i++)
@@ -166,8 +172,13 @@ int CPlayEngine::getNextPlay(Seat seat, Seat dummySeat, int ownCards[], int dumm
 
                 CFeatures features;
                 features.setCardFeatures(cards);
-                if (!features.featureIsOk(bidHistory.getHighFeatures((Seat)i), bidHistory.getLowFeatures((Seat)i)))
+                int res = features.featureIsOk(bidHistory.getHighFeatures((Seat)i), bidHistory.getLowFeatures((Seat)i));
+                if (res != 0)
+                {
+//                    if ((seat == NORTH_SEAT) && (res == 112))
+//                        qDebug() << QString("Seat: %1  Result: %2").arg(i).arg(res);
                     break;
+                }
             }
         }
 
@@ -219,13 +230,16 @@ int CPlayEngine::getNextPlay(Seat seat, Seat dummySeat, int ownCards[], int dumm
                     }
 
             //Double dummy solver.
+//            qDebug() << QString("Hand no: %1 before").arg(handNo);
             res = SolveBoard(dl, target, solutions, mode, &fut[handNo], threadIndex);
+//            qDebug() << QString("Hand no: %1 after").arg(handNo);
 
             //Next hand.
             handNo++;
         }
     }
 
+    //Get the best to play (highest sum of scores).
     int cards[52];
     for (int i = 0; i < 52; i++)
         cards[i] = 0;
@@ -239,7 +253,7 @@ int CPlayEngine::getNextPlay(Seat seat, Seat dummySeat, int ownCards[], int dumm
         cards[card] += fut[i].score[j];
     }
 
-    int card = 0;
+    int card = -1;
     int max = 0;
     for (int i = 0; i < 52; i++)
         if (cards[i] > max)
@@ -247,6 +261,24 @@ int CPlayEngine::getNextPlay(Seat seat, Seat dummySeat, int ownCards[], int dumm
             card  = i;
             max = cards[i];
         }
+
+    //If none is found, just take one that is allowable.
+    if (card == -1)
+    {
+        int *crds = (seat == dummySeat) ? dummyCards : ownCards;
+        int i;
+        for (i = 0; i < 13; i++)
+            if (playHistory.cardOk(crds[i], seat, crds))
+                    break;
+
+        assert(i < 13);
+
+        card = crds[i];
+
+//        qDebug() << "None found.";
+    }
+
+//    qDebug() << QString("Seat %1 plays: %2").arg(SEAT_NAMES[seat]).arg(card);
 
     return card;
 }

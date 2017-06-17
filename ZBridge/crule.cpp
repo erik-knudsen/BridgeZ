@@ -50,7 +50,7 @@ void CRule::initialize()
  */
 bool CRule::RuleIsOk(CFeatures &feature)
 {
-    return feature.featureIsOk(featureRange[1], featureRange[0]);
+    return (feature.featureIsOk(featureRange[1], featureRange[0]) == 0);
 
 }
 

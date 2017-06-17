@@ -552,150 +552,150 @@ void CFeatures::setCardFeatures(int cards[13])
     }
 }
 
-bool CFeatures::featureIsOk(CFeatures &highFeatures, CFeatures &lowFeatures)
+int CFeatures::featureIsOk(CFeatures &highFeatures, CFeatures &lowFeatures)
 {
     const int NO_FEATURES = 115;
     int low[NO_FEATURES], high[NO_FEATURES], cur[NO_FEATURES];
     int i;
 
     i = 0;
-    low[i++] = lowFeatures.getHcp(SPADES);
+    low[i++] = lowFeatures.getHcp(SPADES);                  //1
     low[i++] = lowFeatures.getHcp(HEARTS);
     low[i++] = lowFeatures.getHcp(DIAMONDS);
     low[i++] = lowFeatures.getHcp(CLUBS);
     low[i++] = lowFeatures.getHcp(ANY);
 
-    low[i++] = lowFeatures.getControls(SPADES);
+    low[i++] = lowFeatures.getControls(SPADES);             //6
     low[i++] = lowFeatures.getControls(HEARTS);
     low[i++] = lowFeatures.getControls(DIAMONDS);
     low[i++] = lowFeatures.getControls(CLUBS);
     low[i++] = lowFeatures.getControls(ANY);
 
-    low[i++] = lowFeatures.getHc(SPADES);
+    low[i++] = lowFeatures.getHc(SPADES);                   //11
     low[i++] = lowFeatures.getHc(HEARTS);
     low[i++] = lowFeatures.getHc(DIAMONDS);
     low[i++] = lowFeatures.getHc(CLUBS);
     low[i++] = lowFeatures.getHc(ANY);
 
-    low[i++] = lowFeatures.getHonor(SPADES);
+    low[i++] = lowFeatures.getHonor(SPADES);                //16
     low[i++] = lowFeatures.getHonor(HEARTS);
     low[i++] = lowFeatures.getHonor(DIAMONDS);
     low[i++] = lowFeatures.getHonor(CLUBS);
     low[i++] = lowFeatures.getHonor(ANY);
 
-    low[i++] = lowFeatures.getCountCard(SPADES, ACE);
+    low[i++] = lowFeatures.getCountCard(SPADES, ACE);       //21
     low[i++] = lowFeatures.getCountCard(HEARTS, ACE);
     low[i++] = lowFeatures.getCountCard(DIAMONDS, ACE);
     low[i++] = lowFeatures.getCountCard(CLUBS, ACE);
     low[i++] = lowFeatures.getCountCard(ANY, ACE);
 
-    low[i++] = lowFeatures.getCountCard(SPADES, KING);
+    low[i++] = lowFeatures.getCountCard(SPADES, KING);      //26
     low[i++] = lowFeatures.getCountCard(HEARTS, KING);
     low[i++] = lowFeatures.getCountCard(DIAMONDS, KING);
     low[i++] = lowFeatures.getCountCard(CLUBS, KING);
     low[i++] = lowFeatures.getCountCard(ANY, KING);
 
-    low[i++] = lowFeatures.getCountCard(SPADES, QUEEN);
+    low[i++] = lowFeatures.getCountCard(SPADES, QUEEN);     //31
     low[i++] = lowFeatures.getCountCard(HEARTS, QUEEN);
     low[i++] = lowFeatures.getCountCard(DIAMONDS, QUEEN);
     low[i++] = lowFeatures.getCountCard(CLUBS, QUEEN);
     low[i++] = lowFeatures.getCountCard(ANY, QUEEN);
 
-    low[i++] = lowFeatures.getCountCard(SPADES, JACK);
+    low[i++] = lowFeatures.getCountCard(SPADES, JACK);      //36
     low[i++] = lowFeatures.getCountCard(HEARTS, JACK);
     low[i++] = lowFeatures.getCountCard(DIAMONDS, JACK);
     low[i++] = lowFeatures.getCountCard(CLUBS, JACK);
     low[i++] = lowFeatures.getCountCard(ANY, JACK);
 
-    low[i++] = lowFeatures.getCountCard(SPADES, TEN);
+    low[i++] = lowFeatures.getCountCard(SPADES, TEN);       //41
     low[i++] = lowFeatures.getCountCard(HEARTS, TEN);
     low[i++] = lowFeatures.getCountCard(DIAMONDS, TEN);
     low[i++] = lowFeatures.getCountCard(CLUBS, TEN);
     low[i++] = lowFeatures.getCountCard(ANY, TEN);
 
-    low[i++] = lowFeatures.getRkcb(SPADES);
+    low[i++] = lowFeatures.getRkcb(SPADES);                 //46
     low[i++] = lowFeatures.getRkcb(HEARTS);
     low[i++] = lowFeatures.getRkcb(DIAMONDS);
     low[i++] = lowFeatures.getRkcb(CLUBS);
 
-    low[i++] = lowFeatures.getBal();
+    low[i++] = lowFeatures.getBal();                        //50
 
-    low[i++] = lowFeatures.getDp(SPADES);
+    low[i++] = lowFeatures.getDp(SPADES);                   //51
     low[i++] = lowFeatures.getDp(HEARTS);
     low[i++] = lowFeatures.getDp(DIAMONDS);
     low[i++] = lowFeatures.getDp(CLUBS);
     low[i++] = lowFeatures.getDp(ANY);
 
-    low[i++] = lowFeatures.getDif2(DIAMONDS, CLUBS);
+    low[i++] = lowFeatures.getDif2(DIAMONDS, CLUBS);        //56
     low[i++] = lowFeatures.getDif2(HEARTS, CLUBS);
     low[i++] = lowFeatures.getDif2(HEARTS, DIAMONDS);
     low[i++] = lowFeatures.getDif2(SPADES, CLUBS);
     low[i++] = lowFeatures.getDif2(SPADES, DIAMONDS);
     low[i++] = lowFeatures.getDif2(SPADES, HEARTS);
 
-    low[i++] = lowFeatures.getSuits();
+    low[i++] = lowFeatures.getSuits();                      //62
 
-    low[i++] = lowFeatures.getSuitLen(SPADES);
+    low[i++] = lowFeatures.getSuitLen(SPADES);              //63
     low[i++] = lowFeatures.getSuitLen(HEARTS);
     low[i++] = lowFeatures.getSuitLen(DIAMONDS);
     low[i++] = lowFeatures.getSuitLen(CLUBS);
 
-    low[i++] = lowFeatures.getSuitLen2(DIAMONDS, CLUBS);
+    low[i++] = lowFeatures.getSuitLen2(DIAMONDS, CLUBS);    //67
     low[i++] = lowFeatures.getSuitLen2(HEARTS, CLUBS);
     low[i++] = lowFeatures.getSuitLen2(HEARTS, DIAMONDS);
     low[i++] = lowFeatures.getSuitLen2(SPADES, CLUBS);
     low[i++] = lowFeatures.getSuitLen2(SPADES, DIAMONDS);
     low[i++] = lowFeatures.getSuitLen2(SPADES, HEARTS);
 
-    low[i++] = lowFeatures.getLMaj();
+    low[i++] = lowFeatures.getLMaj();                       //73
 
-    low[i++] = lowFeatures.getLMin();
+    low[i++] = lowFeatures.getLMin();                       //74
 
-    low[i++] = lowFeatures.getLongest(SPADES);
+    low[i++] = lowFeatures.getLongest(SPADES);              //75
     low[i++] = lowFeatures.getLongest(HEARTS);
     low[i++] = lowFeatures.getLongest(DIAMONDS);
     low[i++] = lowFeatures.getLongest(CLUBS);
 
-    low[i++] = lowFeatures.getLong(SPADES);
+    low[i++] = lowFeatures.getLong(SPADES);                 //79
     low[i++] = lowFeatures.getLong(HEARTS);
     low[i++] = lowFeatures.getLong(DIAMONDS);
     low[i++] = lowFeatures.getLong(CLUBS);
 
-    low[i++] = lowFeatures.getInter(SPADES);
+    low[i++] = lowFeatures.getInter(SPADES);                //83
     low[i++] = lowFeatures.getInter(HEARTS);
     low[i++] = lowFeatures.getInter(DIAMONDS);
     low[i++] = lowFeatures.getInter(CLUBS);
     low[i++] = lowFeatures.getInter(ANY);
 
-    low[i++] = lowFeatures.getLoosers(SPADES);
+    low[i++] = lowFeatures.getLoosers(SPADES);              //88
     low[i++] = lowFeatures.getLoosers(HEARTS);
     low[i++] = lowFeatures.getLoosers(DIAMONDS);
     low[i++] = lowFeatures.getLoosers(CLUBS);
     low[i++] = lowFeatures.getLoosers(ANY);
 
-    low[i++] = lowFeatures.getQuickTricks(SPADES);
+    low[i++] = lowFeatures.getQuickTricks(SPADES);          //93
     low[i++] = lowFeatures.getQuickTricks(HEARTS);
     low[i++] = lowFeatures.getQuickTricks(DIAMONDS);
     low[i++] = lowFeatures.getQuickTricks(CLUBS);
     low[i++] = lowFeatures.getQuickTricks(ANY);
 
-    low[i++] = lowFeatures.getPlayingTricks(SPADES);
+    low[i++] = lowFeatures.getPlayingTricks(SPADES);        //98
     low[i++] = lowFeatures.getPlayingTricks(HEARTS);
     low[i++] = lowFeatures.getPlayingTricks(DIAMONDS);
     low[i++] = lowFeatures.getPlayingTricks(CLUBS);
     low[i++] = lowFeatures.getPlayingTricks(ANY);
 
-    low[i++] = lowFeatures.getStopNT(SPADES);
+    low[i++] = lowFeatures.getStopNT(SPADES);               //103
     low[i++] = lowFeatures.getStopNT(HEARTS);
     low[i++] = lowFeatures.getStopNT(DIAMONDS);
     low[i++] = lowFeatures.getStopNT(CLUBS);
 
-    low[i++] = lowFeatures.getQlty(SPADES);
+    low[i++] = lowFeatures.getQlty(SPADES);                 //107
     low[i++] = lowFeatures.getQlty(HEARTS);
     low[i++] = lowFeatures.getQlty(DIAMONDS);
     low[i++] = lowFeatures.getQlty(CLUBS);
 
-    low[i++] = lowFeatures.getPoints(SPADES);
+    low[i++] = lowFeatures.getPoints(SPADES);               //111
     low[i++] = lowFeatures.getPoints(HEARTS);
     low[i++] = lowFeatures.getPoints(DIAMONDS);
     low[i++] = lowFeatures.getPoints(CLUBS);
@@ -995,9 +995,9 @@ bool CFeatures::featureIsOk(CFeatures &highFeatures, CFeatures &lowFeatures)
 
     for (int i = 0; i < NO_FEATURES; i++)
         if ((low[i] > cur[i]) || (high[i] < cur[i]))
-            return false;
+            return (i + 1);
 
-    return true;
+    return 0;
 }
 
 void CFeatures::delimitFeatures(CFeatures &features, bool lower)
