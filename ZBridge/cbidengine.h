@@ -72,13 +72,14 @@ private:
     Suit findTakeoutDouble(Bids bid, Bids highBid, int *low, int *high);
     bool isBlackwoodOrGerberQuestion(CBidHistory &bidHistory, Suit agree);
     Bids blackwoodOrGerberAsk(CBidHistory &bidHistory, int noAces, int noKings, int lowTotPoints, Suit agree);
-    int CalculateNoCards(CFeatures partnerFeatures, CFeatures ownFeatures, int cardVal);
+    int CalculateNoCards(CFeatures features, int cardVal);
     void getLevel(Suit agree, int lowPartnerPoints, int ownPoints , Bids *bid, int *low, int *high);
     void findLevel(Suit agree, int lowPartnerPoints, int bidLevel, int *low, int *high);
     bool isNewSuit(Suit suitNAgree, Bids bid);
     bool isRebid(CBidHistory &bidHistory, Suit suitPAgree, Bids bid);
     bool isNextBidOpen(CBidHistory &bidHistory);
     int nextBidder(CBidHistory &bidHistory);
+    bool isNTBidded(CBidHistory &bidHistory);
 
     bool isMin(int lowValue, int highValue, int value);
     bool isMax(int lowValue, int highValue, int value);

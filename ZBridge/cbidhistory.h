@@ -59,7 +59,6 @@ private:
     void removeBid();
     void calculateRange(Seat seat, CFeatures &lowFeatures, CFeatures &highFeatures);
     void CalculateBidRuleRange(int inx, CFeatures &lowFeatures, CFeatures &highFeatures);
-    bool isNT(int inx);
 };
 
 #endif // CBIDHISTORY_H

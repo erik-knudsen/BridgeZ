@@ -1265,8 +1265,6 @@ void CFeatures::delimitFeatures(CFeatures &features, bool lower)
     {
         int curVal = getPoints((Suit)i);
         int newVal = features.getPoints((Suit)i);
-        if ((newVal == 0) || (newVal == features.getMaxPoints()))
-                newVal = features.getHcp(ANY);
         if ((lower && (newVal > curVal)) || (!lower && newVal < curVal))
             curVal = newVal;
         setPoints((Suit)i, curVal);
@@ -2049,6 +2047,33 @@ int CFeatures::getPoints(Suit trump)
     return val;
 }
 
+int CFeatures::getExtPoints(Suit trump, bool low)
+{
+    if (low)
+    {
+        if ((getPoints(trump) == 0) && (getPoints(NOTRUMP) == 0))
+            return getHcp(ANY);
+
+        else if ((getPoints(trump) == 0) && (getPoints(NOTRUMP) != 0))
+            return getPoints(NOTRUMP);
+
+        else
+            return getPoints(trump);
+    }
+    else
+    {
+
+    if ((getPoints(trump) == getMaxPoints()) && (getPoints(NOTRUMP) == getMaxPoints()))
+        return getHcp(ANY);
+
+    else if ((getPoints(trump) == getMaxPoints()) && (getPoints(NOTRUMP) != getMaxPoints()))
+        return getPoints(NOTRUMP);
+
+    else
+        return getPoints(trump);
+    }
+}
+
 /**
  * @brief Set high card points + distribution points for a given trump suit.
  */
@@ -2063,6 +2088,12 @@ void CFeatures::setPoints(Suit trump, int points)
     int mask[] = { 0x3f, 0x3f, 0x3f, 0x3f, 0x3f};
 
     pointsS = (pointsS & (~(mask[trump + 1] << shift[trump + 1]))) | (points << shift[trump + 1]);
+}
+
+void CFeatures::updPoints(Suit trump, bool low)
+{
+    int points = getExtPoints(trump, low);
+    setPoints(trump, points);
 }
 
 int CFeatures::calcWeight(Suit suit, int firstCard, int cards[])

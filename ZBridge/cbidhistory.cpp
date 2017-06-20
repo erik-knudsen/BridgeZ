@@ -192,13 +192,6 @@ void CBidHistory::CalculateBidRuleRange(int inx, CFeatures &lowFeatures, CFeatur
         CFeatures high;
         bidList[inx].rules[j]->getFeatures(&low, &high);
 
-        //Check for points.
-        if ((low.getHcp(ANY) > 0) || (high.getHcp(ANY) < high.getMaxHcp(ANY)) &&
-                (low.getPoints(NOTRUMP) == 0) && (high.getPoints(NOTRUMP) == high.getMaxPoints()))
-        {
-            low.setPoints(NOTRUMP, low.getHcp(ANY));
-            high.setPoints(NOTRUMP, high.getHcp(ANY));
-        }
         lowRuleFeatures.delimitFeatures(low, false);
         highRuleFeatures.delimitFeatures(high, true);
     }
@@ -206,27 +199,4 @@ void CBidHistory::CalculateBidRuleRange(int inx, CFeatures &lowFeatures, CFeatur
     //Get the most narrow range.
     lowFeatures.delimitFeatures(lowRuleFeatures, true);
     highFeatures.delimitFeatures(highRuleFeatures, false);
-
-    //Check for NT.
-    if (isNT(inx))
-    {
-        lowFeatures.setDp(NOTRUMP, 0);
-        highFeatures.setDp(NOTRUMP, 1);
-    }
-}
-
-//Check if a given bid in the bid history is a NT bid?
-bool CBidHistory::isNT(int inx)
-{
-    if ((bidList.size() <= inx) || (inx < 0) ||
-        (BID_SUIT(bidList[inx].bid) != NOTRUMP) || (bidList[inx].rules.size() == 0))
-        return false;
-
-    CFeatures lowFeatures;
-    CFeatures highFeatures;
-
-    bidList[inx].rules[0]->getFeatures(&lowFeatures, &highFeatures);
-
-    return !(((bidList[inx].bid == BID_1NT) && (highFeatures.getDp(NOTRUMP) == highFeatures.getMaxDp())) ||
-             (bidList[inx].alert > 0));
 }

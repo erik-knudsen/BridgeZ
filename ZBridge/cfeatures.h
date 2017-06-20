@@ -186,8 +186,10 @@ public:
 
     //High Card Points + Distribution Points.
     int getPoints(Suit trump);
+    int getExtPoints(Suit trump, bool low);
     int getMaxPoints() { return 37;}
     void setPoints(Suit trump, int points);
+    void updPoints(Suit trump, bool low);
 
 private:
 
