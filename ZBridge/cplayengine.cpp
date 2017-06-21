@@ -28,6 +28,7 @@
 #include "cplayengine.h"
 
 const int NO_HANDS_DD = 10;
+const int MAX_ITER = 1000;
 
 CPlayEngine::CPlayEngine()
 {
@@ -79,10 +80,11 @@ int CPlayEngine::getNextPlay(Seat seat, Seat dummySeat, int ownCards[], int dumm
     futureTricks fut[NO_HANDS_DD];
     int hands[NO_HANDS_DD][4][13];
     int handNo = 0;
+    int iter = 0;
+    int maxFailures = 0;
+    int maxIter = 0;
     while (handNo < NO_HANDS_DD)
     {
-//        qDebug() << QString("Hand number: %1  Iteration: %2").arg(handNo).arg(iter);
-
         //Initialize cards.
         int cardValues[52];
         for (int i = 0; i < 52; i++)
@@ -149,6 +151,7 @@ int CPlayEngine::getNextPlay(Seat seat, Seat dummySeat, int ownCards[], int dumm
         }
 
         //Check features.
+        int noFailures = 0;
         int i;
         for (i = 0; i < 4; i++)
         {
@@ -169,21 +172,26 @@ int CPlayEngine::getNextPlay(Seat seat, Seat dummySeat, int ownCards[], int dumm
                     for (int k = 0; k < noPlayed; k++)
                         cards[newNo++] = played[k];
                 }
-
                 CFeatures features;
                 features.setCardFeatures(cards);
                 int res = features.featureIsOk(bidHistory.getHighFeatures((Seat)i), bidHistory.getLowFeatures((Seat)i));
                 if (res != 0)
-                {
-//                    if ((seat == NORTH_SEAT) && (res == 112))
-//                        qDebug() << QString("Seat: %1  Result: %2").arg(i).arg(res);
+                    noFailures++;
+                if ((res != 0) && (noFailures > maxFailures))
                     break;
-                }
             }
         }
 
+        iter++;
+        if (( i < 4) && (iter >= MAX_ITER))
+        {
+            maxFailures++;
+            iter = 0;
+            qDebug() << QString("Hand: %1   Failure: %2").arg(handNo).arg(maxFailures);
+        }
+
         //Hand ok so far?
-        if (i == 4)
+        else if (i == 4)
         {
             //Prepare for double dummy solver.
             deal dl;
@@ -234,8 +242,14 @@ int CPlayEngine::getNextPlay(Seat seat, Seat dummySeat, int ownCards[], int dumm
             res = SolveBoard(dl, target, solutions, mode, &fut[handNo], threadIndex);
 //            qDebug() << QString("Hand no: %1 after").arg(handNo);
 
+            if (iter > maxIter)
+            {
+//                qDebug() << QString("Hand: %1  Iterations: %2").arg(handNo).arg(iter);
+                maxIter = iter;
+            }
+
             //Next hand.
-            handNo++;
+            handNo++; iter = 0; maxFailures = 0;
         }
     }
 
