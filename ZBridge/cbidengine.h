@@ -72,6 +72,8 @@ private:
     Suit findTakeoutDouble(Bids bid, Bids highBid, int *low, int *high);
     bool isBlackwoodOrGerberQuestion(CBidHistory &bidHistory, Suit agree);
     Bids blackwoodOrGerberAsk(CBidHistory &bidHistory, int noAces, int noKings, int lowTotPoints, Suit agree);
+    int acesAsked(CBidHistory &bidHistory);
+    int kingsAsked(CBidHistory &bidHistory);
     int CalculateNoCards(CFeatures features, int cardVal);
     void getLevel(Suit agree, int lowPartnerPoints, int ownPoints , Bids *bid, int *low, int *high);
     void findLevel(Suit agree, int lowPartnerPoints, int bidLevel, int *low, int *high);

@@ -48,19 +48,6 @@ CPlayEngine::CPlayEngine()
 int CPlayEngine::getNextPlay(Seat seat, Seat dummySeat, int ownCards[], int dummyCards[],
                              CBidHistory &bidHistory, CPlayHistory &playHistory)
 {
-    /*    int i;
-
-    int *crds = (seat == dummySeat) ? dummyCards : ownCards;
-
-    for (i = 0; i < 52; i++)
-        if (playHistory.cardOk(i, seat, crds))
-            break;
-
-    return i;
-*/
-
-//    qDebug() << QString("getNextPlay: Seat %1, dummy %2").arg(SEAT_NAMES[seat]).arg(SEAT_NAMES[dummySeat]);
-
     //Determine remaining known cards (own and dummy).
     bool firstPlay = playHistory.isFirstPlay();
     int ownRemaining[13];
@@ -82,7 +69,6 @@ int CPlayEngine::getNextPlay(Seat seat, Seat dummySeat, int ownCards[], int dumm
     int handNo = 0;
     int iter = 0;
     int maxFailures = 0;
-    int maxIter = 0;
     while (handNo < NO_HANDS_DD)
     {
         //Initialize cards.
@@ -187,7 +173,6 @@ int CPlayEngine::getNextPlay(Seat seat, Seat dummySeat, int ownCards[], int dumm
         {
             maxFailures++;
             iter = 0;
-            qDebug() << QString("Hand: %1   Failure: %2").arg(handNo).arg(maxFailures);
         }
 
         //Hand ok so far?
@@ -238,15 +223,7 @@ int CPlayEngine::getNextPlay(Seat seat, Seat dummySeat, int ownCards[], int dumm
                     }
 
             //Double dummy solver.
-//            qDebug() << QString("Hand no: %1 before").arg(handNo);
             res = SolveBoard(dl, target, solutions, mode, &fut[handNo], threadIndex);
-//            qDebug() << QString("Hand no: %1 after").arg(handNo);
-
-            if (iter > maxIter)
-            {
-//                qDebug() << QString("Hand: %1  Iterations: %2").arg(handNo).arg(iter);
-                maxIter = iter;
-            }
 
             //Next hand.
             handNo++; iter = 0; maxFailures = 0;
@@ -288,11 +265,7 @@ int CPlayEngine::getNextPlay(Seat seat, Seat dummySeat, int ownCards[], int dumm
         assert(i < 13);
 
         card = crds[i];
-
-//        qDebug() << "None found.";
     }
-
-//    qDebug() << QString("Seat %1 plays: %2").arg(SEAT_NAMES[seat]).arg(card);
 
     return card;
 }
