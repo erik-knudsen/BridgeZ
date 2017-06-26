@@ -80,6 +80,7 @@ private:
     bool isNewSuit(Suit suitNAgree, Bids bid);
     bool isRebid(CBidHistory &bidHistory, Suit suitPAgree, Bids bid);
     bool isNextBidOpen(CBidHistory &bidHistory);
+    bool isNextBidOverCall(CBidHistory bidHistory);
     int nextBidder(CBidHistory &bidHistory);
     bool isNTBidded(CBidHistory &bidHistory);
 

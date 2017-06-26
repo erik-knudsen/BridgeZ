@@ -1011,7 +1011,7 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
                     lowFeatures.setPoints(newSuitAgree, lowPoints);
                     highFeatures.setPoints(newSuitAgree, highPoints);
                 }
-                else
+                else if ((acesAsked(bidHistory) < 0) || (kingsAsked(bidHistory) < 0))
                 {
                     lowFeatures.setPoints(newSuitAgree, low);
                     highFeatures.setPoints(newSuitAgree, high);
@@ -1026,8 +1026,9 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
                             (BID_SUIT_MAJOR_GAME_INX) :(BID_SUIT_MINOR_GAME_INX);                   //26, 29
 
                 if ((((high + highPartnerFeatures.getExtPoints(agree, false)) < BID_SUIT_POINT[inx]) && (suitAgree == agree)) ||              //26
-                        (nextBid == game) || (nextBid >= BID_6C))
-                    pRule->setStatus(MUST_PASS);    //Game is not possible or game/small slam is bidded.
+                        (nextBid == game) || (nextBid >= BID_6C) ||
+                        ((nextBid > game) && ((acesAsked(bidHistory) > 0) || (kingsAsked(bidHistory) > 0))))
+                    pRule->setStatus(MUST_PASS);                    //Game is not possible or game is bidded.
 
                 bid.bid = nextBid;
             }
@@ -1057,7 +1058,7 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
                 int  high = -1;
                 int newLevel = (newSuit > BID_SUIT(highBid)) ? (BID_LEVEL(highBid)) : (BID_LEVEL(highBid) + 1);
 
-                int points = ownFeatures.getPoints(NOTRUMP);                
+                int points = ownFeatures.getPoints(NOTRUMP);
                 Bids newBid = MAKE_BID(newSuit, newLevel);
 
                 int size = bidHistory.bidList.size();
@@ -1080,13 +1081,13 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
 
                     //Check for catch all 1NT.
                     if ((newBid == BID_NONE) &&
-                        (BID_LEVEL(highOwnBid) == 1) && !(BID_LEVEL(highOppBid) > 1) && !oppSuit[NOTRUMP] &&
+                            (BID_LEVEL(highOwnBid) == 1) && !(BID_LEVEL(highOppBid) > 1) && !oppSuit[NOTRUMP] &&
                             (points >= CATCHALL_NT_L) && (points <= CATCHALL_NT_H))            //6-9
                         newBid = BID_1NT;
 
                     //Check for jump (not really needed).
-//                    if ((((newBid - partnerBid)/5) == 0) && (points >= NEWSUIT_P1_J))     //16
-//                        newBid = Bids(newBid + 5);
+                    //                    if ((((newBid - partnerBid)/5) == 0) && (points >= NEWSUIT_P1_J))     //16
+                    //                        newBid = Bids(newBid + 5);
 
                     //Points.
                     low = CATCHALL_NT_L;                //6
@@ -1179,6 +1180,12 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
                     Bids newBid = MAKE_BID(newSuit, level);
                     if (newBid > highBid)
                     {
+                        CFeatures lowFeatures;
+                        CFeatures highFeatures;
+                        pRule->getFeatures(&lowFeatures, &highFeatures);
+                        lowFeatures.setSuitLen((Suit)newSuit, 4);
+                        pRule->setFeatures(lowFeatures, highFeatures);
+
                         bid.bid = newBid;
                         return bid;
                     }
@@ -1192,6 +1199,12 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
                     Bids newBid = MAKE_BID(newSuit, level);
                     if (newBid > highBid)
                     {
+                        CFeatures lowFeatures;
+                        CFeatures highFeatures;
+                        pRule->getFeatures(&lowFeatures, &highFeatures);
+                        lowFeatures.setSuitLen((Suit)newSuit, 4);
+                        pRule->setFeatures(lowFeatures, highFeatures);
+
                         bid.bid = newBid;
                         return bid;
                     }
@@ -1340,6 +1353,12 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
                     Bids newBid = MAKE_BID(suit, level);
                     if (newBid > highBid)
                     {
+                        CFeatures lowFeatures;
+                        CFeatures highFeatures;
+                        pRule->getFeatures(&lowFeatures, &highFeatures);
+                        lowFeatures.setSuitLen((Suit)suit, REBID_SL);
+                        pRule->setFeatures(lowFeatures, highFeatures);
+
                         bid.bid = newBid;
                         return bid;
                     }
@@ -1355,6 +1374,12 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
                     Bids newBid = game;
                     if (newBid > highBid)
                     {
+                        CFeatures lowFeatures;
+                        CFeatures highFeatures;
+                        pRule->getFeatures(&lowFeatures, &highFeatures);
+                        lowFeatures.setSuitLen((Suit)suit, REBID_SL);
+                        pRule->setFeatures(lowFeatures, highFeatures);
+
                         bid.bid = newBid;
                         return bid;
                     }
@@ -1846,7 +1871,7 @@ void CBidEngine::calculatepRules(Seat seat, CBidHistory &bidHistory, Bids bid, S
             lowFeatures.setPoints(agree, lowPoints);
             highFeatures.setPoints(agree, highPoints);
         }
-        else if (acesAsked(bidHistory) < 0)
+        else if ((acesAsked(bidHistory) < 0) && (kingsAsked(bidHistory) < 0))
         {
             lowFeatures.setPoints(agree, low);
             highFeatures.setPoints(agree, high);
@@ -1860,7 +1885,8 @@ void CBidEngine::calculatepRules(Seat seat, CBidHistory &bidHistory, Bids bid, S
                     (BID_SUIT_MAJOR_GAME_INX) :(BID_SUIT_MINOR_GAME_INX);                   //26, 29
 
         if ((((high + highPartnerFeatures.getExtPoints(agree, false)) < BID_SUIT_POINT[inx]) && (suitAgree == agree)) ||              //26
-                (bid == game) || ((bid > game) && (acesAsked(bidHistory) > 0)))
+                (bid == game) || (bid >= BID_6C) ||
+                ((bid > game) && ((acesAsked(bidHistory) > 0) || (kingsAsked(bidHistory) > 0))))
             pRule->setStatus(MUST_PASS);                    //Game is not possible or game is bidded.
 
         return;
@@ -1869,11 +1895,21 @@ void CBidEngine::calculatepRules(Seat seat, CBidHistory &bidHistory, Bids bid, S
     //New suit or catch all NT.
     if (isNewSuit(newSuitAgree, bid) || (nextBidder(bidHistory) == OPEN_RESPONSE) && (bid == BID_1NT))
     {
+        CFeatures lowFeatures;
+        CFeatures highFeatures;
+        pRule->getFeatures(&lowFeatures, &highFeatures);
+
+        if (isNewSuit(newSuitAgree, bid))
+            lowFeatures.setSuitLen(BID_SUIT(bid), 4);
+
         //Check for forcing or game forcing.
         int size = bidHistory.bidList.size();
         if ((size >= 2) && ((bidHistory.bidList[size - 2].rules[0]->getStatus() == FORCING) ||
                             (bidHistory.bidList[size - 2].rules[0]->getStatus() == GAME_FORCING)))
+        {
+            pRule->setFeatures(lowFeatures, highFeatures);
             return;
+        }
 
         int low = -1;
         int high = -1;
@@ -1942,9 +1978,6 @@ void CBidEngine::calculatepRules(Seat seat, CBidHistory &bidHistory, Bids bid, S
                 low = NEWSUIT_P2_4;                 //13
         }
 
-        CFeatures lowFeatures;
-        CFeatures highFeatures;
-        pRule->getFeatures(&lowFeatures, &highFeatures);
         if (low != -1)
         {
             lowFeatures.setPoints(NOTRUMP, low);
@@ -2010,11 +2043,19 @@ void CBidEngine::calculatepRules(Seat seat, CBidHistory &bidHistory, Bids bid, S
     //Rebid own suit.
     if (isRebid(bidHistory, suitAgree, bid))
     {
+        CFeatures lowFeatures;
+        CFeatures highFeatures;
+        pRule->getFeatures(&lowFeatures, &highFeatures);
+        lowFeatures.setSuitLen(BID_SUIT(bid), REBID_SL);
+
         //Check for forcing or game forcing.
         int size = bidHistory.bidList.size();
         if ((size >= 2) && ((bidHistory.bidList[size - 2].rules[0]->getStatus() == FORCING) ||
                             (bidHistory.bidList[size - 2].rules[0]->getStatus() == GAME_FORCING)))
+        {
+            pRule->setFeatures(lowFeatures, highFeatures);
             return;
+        }
 
         int low, high;
 
@@ -2027,11 +2068,6 @@ void CBidEngine::calculatepRules(Seat seat, CBidHistory &bidHistory, Bids bid, S
 
         Bids game = (suit == SPADES) ? (BID_4S) : (suit == HEARTS) ? (BID_4H) :
                     (suit == DIAMONDS) ? (BID_5D) : (BID_5C);
-
-        CFeatures lowFeatures;
-        CFeatures highFeatures;
-        pRule->getFeatures(&lowFeatures, &highFeatures);
-        lowFeatures.setSuitLen(suit, REBID_SL);              //6
 
         if (bid == game)
         {
@@ -2181,7 +2217,7 @@ Bids CBidEngine::getTakeoutDouble(CFeatures &lowPartnerFeatures, CFeatures &ownF
         {
             Bids bid;
             getLevel(NOTRUMP, 12, ownFeatures.getPoints(NOTRUMP), &bid, low, high);
-            if (bid <= BID_3NT)
+            if ((bid <= BID_3NT) && (bid != BID_PASS))
                 return bid;
         }
     }
@@ -2432,6 +2468,25 @@ bool CBidEngine::isNextBidOpen(CBidHistory &bidHistory)
             break;
 
     return (((size - i) % 4) == 0);
+}
+
+//Is the next bidder an overcaller?
+bool CBidEngine::isNextBidOverCall(CBidHistory bidHistory)
+{
+    int size = bidHistory.bidList.size();
+
+    int first = size % 2;
+    int i;
+    for (i = first; i < size; i += 2)
+        if (bidHistory.bidList[i].bid != BID_PASS)
+            break;
+    first = (first == 0) ? (1) : (0);
+    int j;
+    for (j = first; i < size; i += 2)
+        if (bidHistory.bidList[i].bid != BID_PASS)
+            break;
+
+    return (i > j);
 }
 
 //What type is the next bidder (used to discriminate between openers first an second bid
