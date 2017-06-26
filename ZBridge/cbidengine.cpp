@@ -565,14 +565,17 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
         Bids nextBid;
         int low, high;
 
+        Bids doubleBid = getDoubleBid(bidHistory);
+
         //Calculate takeout bid and point interval.
-        nextBid = getTakeoutDouble(lowPartnerFeatures, ownFeatures, highBid, &low, &high);
+        nextBid = getTakeoutDouble(lowPartnerFeatures, ownFeatures, highBid, doubleBid, &low, &high);
+
+        pRule->getFeatures(&lowFeatures, &highFeatures);
 
         //If bid is a NT bid?
         Suit suit = BID_SUIT(nextBid);
         if (BID_SUIT(nextBid) == NOTRUMP)
         {
-            pRule->getFeatures(&lowFeatures, &highFeatures);
             lowFeatures.setPoints(NOTRUMP, low);
             highFeatures.setPoints(NOTRUMP, high);
             highFeatures.setDp(NOTRUMP, 1);
@@ -581,13 +584,11 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
                     lowFeatures.setStopNT((Suit)i, 3);
         }
         //Otherwise a suit bid.
-        else
+        else if (nextBid != BID_PASS)
         {
-            pRule->getFeatures(&lowFeatures, &highFeatures);
             lowFeatures.setPoints((Suit)suit, low);
             highFeatures.setPoints((Suit)suit, high);
             lowFeatures.setSuitLen((Suit)suit, 4);
-            pRule->setFeatures(lowFeatures, highFeatures);
         }
 
         pRule->setFeatures(lowFeatures, highFeatures);
@@ -962,8 +963,8 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
             getLevel(agree, lowPartnerFeatures.getExtPoints(agree, true), ownFeatures.getPoints(agree), &nextBid,
                      &low, &high);
 
-            //Assure agreed suit is bidded as the last bidded suit.
-            if ((BID_SUIT(highOPBid) != agree) && (highOPBid > nextBid))
+            //Assure agreed suit is bidded as the last bidded suit (escape for slam control bids).
+            if ((BID_SUIT(highOPBid) != agree) && (highOPBid > nextBid) && (nextBid > BID_4C))
             {
                 Suit highSuit = BID_SUIT(highOPBid);
                 int highLevel = BID_LEVEL(highOPBid);
@@ -2185,7 +2186,20 @@ bool CBidEngine::isDouble(CBidHistory &bidHistory)
 {
     int size = bidHistory.bidList.size();
 
-    return ((size >= 2) && (bidHistory.bidList[size - 2].bid == BID_DOUBLE));
+    return (((size >= 3) && (bidHistory.bidList[size - 2].bid == BID_DOUBLE) && IS_BID(bidHistory.bidList[size - 3].bid)) ||
+            ((size >= 5) && (bidHistory.bidList[size - 2].bid == BID_DOUBLE) &&
+            (bidHistory.bidList[size - 3].bid == BID_PASS) && (bidHistory.bidList[size - 4].bid == BID_PASS) &&
+            IS_BID(bidHistory.bidList[size - 5].bid)));
+}
+
+Bids CBidEngine::getDoubleBid(CBidHistory &bidHistory)
+{
+    assert (isDouble(bidHistory));
+
+    int size = bidHistory.bidList.size();
+
+    return (bidHistory.bidList[size - 3].bid == BID_PASS) ? (bidHistory.bidList[size - 5].bid) :
+        (bidHistory.bidList[size - 3].bid);
 }
 
 //Can the next bid be a double bid?
@@ -2201,7 +2215,7 @@ bool CBidEngine::canDouble(CBidHistory &bidHistory)
 
 //Get takeout double bid and point intervals.
 Bids CBidEngine::getTakeoutDouble(CFeatures &lowPartnerFeatures, CFeatures &ownFeatures,
-                               Bids highBid, int *low, int *high)
+                               Bids highBid, Bids doubleBid, int *low, int *high)
 {
     //Bid NT?
     if (ownFeatures.getDp(NOTRUMP) <= 1)
@@ -2217,7 +2231,7 @@ Bids CBidEngine::getTakeoutDouble(CFeatures &lowPartnerFeatures, CFeatures &ownF
         {
             Bids bid;
             getLevel(NOTRUMP, 12, ownFeatures.getPoints(NOTRUMP), &bid, low, high);
-            if ((bid <= BID_3NT) && (bid != BID_PASS))
+            if ((bid <= BID_3NT) && (bid != BID_PASS) && (bid > highBid))
                 return bid;
         }
     }
@@ -2229,7 +2243,7 @@ Bids CBidEngine::getTakeoutDouble(CFeatures &lowPartnerFeatures, CFeatures &ownF
             suit = i;
 
     int points = ownFeatures.getPoints((Suit)suit);
-    int firstLevel = (suit > BID_SUIT(highBid)) ? (BID_LEVEL(highBid)) : (BID_LEVEL(highBid) + 1);
+    int firstLevel = (suit > BID_SUIT(doubleBid)) ? (BID_LEVEL(doubleBid)) : (BID_LEVEL(doubleBid) + 1);
     *low = 0;
     *high = 8;
     int level = 0;
@@ -2254,7 +2268,9 @@ Bids CBidEngine::getTakeoutDouble(CFeatures &lowPartnerFeatures, CFeatures &ownF
     else
         level = firstLevel + level;
 
-    return MAKE_BID(suit, level);
+    Bids bid = MAKE_BID(suit, level);
+
+    return (bid > highBid) ? (bid) : (BID_PASS);
 }
 
 //Find takeout double point intervals.

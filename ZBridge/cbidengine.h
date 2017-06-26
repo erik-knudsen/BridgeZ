@@ -66,9 +66,10 @@ private:
     bool mustPass(CBidHistory &bidHistory);
     bool isPenaltyDouble(CBidHistory &bidHistory, CFeatures lowPartnerFeatures);
     bool isDouble(CBidHistory &bidHistory);
+    Bids getDoubleBid(CBidHistory &bidHistory);
     bool canDouble(CBidHistory &bidHistory);
     Bids getTakeoutDouble(CFeatures &lowPartnerFeatures, CFeatures &ownFeatures,
-                       Bids highBid, int *low, int *high);
+                       Bids highBid, Bids doubleBid, int *low, int *high);
     Suit findTakeoutDouble(Bids bid, Bids highBid, int *low, int *high);
     bool isBlackwoodOrGerberQuestion(CBidHistory &bidHistory, Suit agree);
     Bids blackwoodOrGerberAsk(CBidHistory &bidHistory, int noAces, int noKings, int lowTotPoints, Suit agree);
