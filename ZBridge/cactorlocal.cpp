@@ -33,7 +33,6 @@
  * @param manual If true then the actor is manual else it is automatic.
  * @param teamName The team name for the cooperating pair of actors.
  * @param seat This actors seat.
- * @param protocol The protocol to use (advanced or basic).
  * @param nsBbidOptionDoc NS bid options.
  * @param ewBbidOptionDoc EW bid options.
  * @param bidDB The bid database.
@@ -46,13 +45,12 @@
  *   - Initializes the Yakindu client state chart.
  *   - Connects signals, mostly meant to control the play view, to the table manager.
  */
-CActorLocal::CActorLocal(bool manual, QString teamName, Seat seat, int protocol,
+CActorLocal::CActorLocal(bool manual, QString teamName, Seat seat,
                        CBidAndPlayEngines *bidAndPlayEngines, CTblMngr *tableManager) :
     CActor(tableManager)
 {
     this->manual = manual;
     this->teamName = teamName;
-    this->protocol = protocol;
     bidAndPlay.setBidAndPlayEngines(bidAndPlayEngines);
     bidAndPlay.setSeat(seat);
     this->tableManager = tableManager;
@@ -82,8 +80,6 @@ CActorLocal::CActorLocal(bool manual, QString teamName, Seat seat, int protocol,
     connect(this, &CActorLocal::sDisableBidder, tableManager, &CTblMngr::sDisableBidder);
     connect(this, &CActorLocal::sEnablePlayer, tableManager, &CTblMngr::sEnablePlayer);
     connect(this, &CActorLocal::sDisablePlayer, tableManager, &CTblMngr::sDisablePlayer);
-    connect(this, &CActorLocal::sEnableContinueLeader, tableManager, &CTblMngr::sEnableContinueLeader);
-    connect(this, &CActorLocal::sDisableContinueLeader, tableManager, &CTblMngr::sDisableContinueLeader);
     connect(this, &CActorLocal::sEnableContinueSync, tableManager, &CTblMngr::sEnableContinueSync);
     connect(this, &CActorLocal::sDisableContinueSync, tableManager, &CTblMngr::sDisableContinueSync);
 }
@@ -111,7 +107,7 @@ void CActorLocal::clientActions()
     if (zBridgeClientIface_israised_connect(&handle))
     {
         //Connect to the server (upon entry of the statechart).
-        emit sConnect(teamName ,  (Seat)zBridgeClientIface_get_client(&handle), protocol);
+        emit sConnect(teamName ,  (Seat)zBridgeClientIface_get_client(&handle), 0);
     }
 
     else if (zBridgeClientIface_israised_rTNames(&handle))
@@ -179,11 +175,7 @@ void CActorLocal::clientActions()
         {
             //Must get card to play from automatic play.
             //Calculate automatic play.
-            //For the basic protocol we need a delay to assure server gets ready for next play.
-            if (protocol == BASIC_PROTOCOL)
-                QTimer::singleShot(1000, this, SLOT(playValue()));
-            else
-                playValue();
+            playValue();
         }
     }
 
@@ -195,28 +187,17 @@ void CActorLocal::clientActions()
 
     else if (zBridgeClientIface_israised_getLeader(&handle))
     {
-        if (protocol == BASIC_PROTOCOL)
-        {
-            //Get leader of next play.
-            if (manual)
-                emit sEnableContinueLeader();
-            else
-                continueLeader();
-        }
-        else
-        {
-            //Get next leader.
-            zBridgeClientIface_raise_newLeader(&handle, bidAndPlay.getNextLeader());
+        //Get next leader.
+        zBridgeClientIface_raise_newLeader(&handle, bidAndPlay.getNextLeader());
 
-            //State chart run cycle.
-            clientRunCycle();
-        }
+        //State chart run cycle.
+        clientRunCycle();
     }
 
     else if (zBridgeClientIface_israised_undoPlay(&handle) || zBridgeClientIface_israised_undoBid(&handle))
     {
         //Undo bid.
-        if (showUser && protocol == ADVANCED_PROTOCOL)
+        if (showUser)
         {
             if (zBridgeClientIface_israised_undoPlay(&handle))
             {
@@ -235,7 +216,7 @@ void CActorLocal::clientActions()
     else if (zBridgeClientIface_israised_undoTrick(&handle))
     {
         //Undo trick.
-        if (showUser && protocol == ADVANCED_PROTOCOL)
+        if (showUser)
             emit sUndoTrick(bidAndPlay.getNoTrick(), bidAndPlay.getNSTricks(),
                             bidAndPlay.getEWTricks());
     }
@@ -258,11 +239,7 @@ void CActorLocal::clientActions()
         {
             //Must get bid from automatic player.
             //Calculate automatic bid.
-            //for the basic protocol we need a delay to assure server gets ready for next bid.
-            if (protocol == BASIC_PROTOCOL)
-                QTimer::singleShot(1000, this, SLOT(bidValue()));
-            else
-                bidValue();
+            bidValue();
         }
     }
 
@@ -291,22 +268,13 @@ void CActorLocal::clientActions()
     //Can Come after undoTrick.
     if (zBridgeClientIface_israised_synchronize(&handle))
     {
-        if (protocol == BASIC_PROTOCOL)
-        {
-            //There is no synchronization.
-            zBridgeClientIface_raise_allSync(&handle);
-            clientRunCycle();
-        }
-        else
-        {
-            //Synchronization of server and clients.
-            zBridgeClientSync_init(&syncHandle);
-            int syncState = zBridgeClientIface_get_syncState(&handle);
-            zBridgeClientSyncIface_set_syncState(&syncHandle, syncState);
-            synchronizing = true;
-            zBridgeClientSync_enter(&syncHandle);
-            clientSyncActions();
-        }
+        //Synchronization of server and clients.
+        zBridgeClientSync_init(&syncHandle);
+        int syncState = zBridgeClientIface_get_syncState(&handle);
+        zBridgeClientSyncIface_set_syncState(&syncHandle, syncState);
+        synchronizing = true;
+        zBridgeClientSync_enter(&syncHandle);
+        clientSyncActions();
     }
 }
 
@@ -385,14 +353,7 @@ void CActorLocal::clientSyncRunCycle()
 /**
  * @brief Get next bid automatically.
  *
- * For the basic protocol:
- *   - Bidders bid must be delayed to assure that the other 3 players have reported they are ready.
- *     This method is activated after a delay, when the bid is done automatically to assure this. When
- *     the bid is done manually this happens automatically. The problem is that bidders bid is followed
- *     immediately by bidder reporting ready for next bid.\n
- *
- * For the advanced protocol:
- *   - All 4 bidders requires the bid to be returned and this eliminates the need for a delay.
+ *   - All 4 bidders requires the bid to be returned.
  */
 void CActorLocal::bidValue()
 {
@@ -424,21 +385,14 @@ void CActorLocal::bidValue(Bids bid)
     //signals to these states.
     emit sBid(bidder, bid);  //Server first then clients.
 
-    if (protocol == BASIC_PROTOCOL)
-        bidDone(bidder, bid);    //This client.
+//    if (protocol == BASIC_PROTOCOL)
+//        bidDone(bidder, bid);    //This client.
 }
 
 /**
  * @brief Get next play automatically.
  *
- * For the basic protocol:
- *   - Players play must be delayed to assure that the other 3 players have reported they are ready. This
- *     method is activated after a delay, when the play is done automatically to assure this. When the play
- *     is done manually this happens automatically. The problem is that players play is followed immediately
- *     by player reporting ready for next play.\n
- *
- * For the advanced protocol:
- *   - All 4 players requires the play to be returned and this eliminates the need for a delay.
+ *   - All 4 players requires the play to be returned.
  */
 void CActorLocal::playValue()
 {
@@ -473,41 +427,11 @@ void CActorLocal::playValue(int card)
         //signals to these states.
         emit sPlayerPlays((Seat)zBridgeClientIface_get_client(&handle), card); //Server first then clients.
 
-        if (protocol == BASIC_PROTOCOL)
-            playerPlays(player, card); //This client.
     }
 }
 
 /**
- * @brief Continue with play when a trick has been played by all four players (only basic protocol).
- *
- * Prepare and initialize for the next trick to be played.
- */
-void CActorLocal::continueLeader()
-{
-    //If manual then disable the continue button.
-    if (manual)
-        emit sDisableContinueLeader();
-
-    //Must prepare play view for next trick.
-    if (showUser)
-        emit sClearCardsOnTable();
-
-    //Get next leader.
-    zBridgeClientIface_raise_newLeader(&handle, bidAndPlay.getNextLeader());
-
-    if (showUser)
-    {
-        //Show number of tricks.
-        emit sShowTricks(bidAndPlay.getEWTricks(), bidAndPlay.getNSTricks());
-    }
-
-    //State chart run cycle.
-    clientRunCycle();
-}
-
-/**
- * @brief Continue after synchronization (only advanced protocol).
+ * @brief Continue after synchronization.
  */
 void CActorLocal::continueSync()
 {
@@ -757,8 +681,6 @@ void CActorLocal::reStart()
 
 /**
  * @brief Synchronization signal from server to client.
- *
- * Only used with advanced protocol.
  */
 void CActorLocal::attemptSyncFromServerToClient()
 {
@@ -771,8 +693,6 @@ void CActorLocal::attemptSyncFromServerToClient()
 
 /**
  * @brief Synchronization signal from server to client.
- *
- * Only used with advanced protocol.
  */
 void CActorLocal::confirmSyncFromServerToClient()
 {
@@ -782,8 +702,6 @@ void CActorLocal::confirmSyncFromServerToClient()
 
 /**
  * @brief Synchronization signal from server to client.
- *
- * Only used with advanced protocol.
  */
 void CActorLocal::allSyncFromServerToClient()
 {

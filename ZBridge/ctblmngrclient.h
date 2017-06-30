@@ -100,12 +100,9 @@ public slots:
 
     void sShowAuction();
     void sShowPlay();
-    void sEnableContinueLeader();
-    void sDisableContinueLeader();
     void sEnableContinueSync(int syncState);
     void sDisableContinueSync(int syncState);
 
-    void sContinueLeader();
     void sContinueSync();
     /*@}*/
 
@@ -133,8 +130,6 @@ private:
     CRemoteActorClient *remoteActorClient;
 
     CBidAndPlayEngines *bidAndPlayEngines;
-
-    int protocol;
 
     int comMode;
     QBuffer originalBytes;

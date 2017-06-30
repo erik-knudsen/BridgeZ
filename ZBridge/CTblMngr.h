@@ -96,12 +96,9 @@ public slots:
     void sDisableBidder(Seat bidder);
     void sEnablePlayer(Seat player);
     void sDisablePlayer(Seat player);
-    virtual void sEnableContinueLeader() = 0;
-    virtual void sDisableContinueLeader() = 0;
     virtual void sEnableContinueSync(int syncState) = 0;
     virtual void sDisableContinueSync(int syncState) = 0;
 
-    virtual void sContinueLeader() = 0;
     virtual void sContinueSync() = 0;
     /*@}*/
 

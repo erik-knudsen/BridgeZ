@@ -67,9 +67,9 @@ public:
     void ResetStatusText();
 
     //Initial enable/disable for main menu.
-    void enableUIActionsInitial(bool advProtocol);  //Server/client mode not determined yet.
-    void enableUIActionsServer(bool advProtocol);   //Server mode.
-    void enableUIActionsClient(bool advProtocol);   //Client mode.
+    void enableUIActionsInitial();  //Server/client mode not determined yet.
+    void enableUIActionsServer();   //Server mode.
+    void enableUIActionsClient();   //Client mode.
 
 signals:
     void sAutoQuit();
@@ -85,7 +85,7 @@ private:
     QHostAddress getHostAddress(QString host);
     virtual void customEvent(QEvent *event);
 
-    void enableUIActions(actionIndicator actions, bool advProtocol);
+    void enableUIActions(actionIndicator actions);
     void resetPlay();
     void open(QString &originalFileName);
 

@@ -214,17 +214,17 @@ void CMainFrame::customEvent(QEvent *event)
         {
             //Enable/Disable for initial main menu entries.
         case UPDATE_UI_INITIAL:
-            enableUIActionsInitial(param);
+            enableUIActionsInitial();
             break;
 
             //Enable/Disable for initial main menu entries for table manager server.
         case UPDATE_UI_SERVER:
-            enableUIActionsServer(param);
+            enableUIActionsServer();
             break;
 
             //Enable/Disable for initial main menu entries for table manager client.
         case UPDATE_UI_CLIENT:
-            enableUIActionsClient(param);
+            enableUIActionsClient();
             break;
 
             //Enable/Disable save menu entry.
@@ -292,32 +292,26 @@ void CMainFrame::customEvent(QEvent *event)
 
 /**
  * @brief Enable main menu entries initially (before server or client mode is determined).
- *
- * @param advProtocol If true use advanced protocol else use basic protocol.
  */
-void CMainFrame::enableUIActionsInitial(bool advProtocol)
+void CMainFrame::enableUIActionsInitial()
 {
-    enableUIActions(INITIAL_ACTIONS, advProtocol);
+    enableUIActions(INITIAL_ACTIONS);
 }
 
 /**
  * @brief Enable main menu entries initially for server mode.
- *
- * @param advProtocol If true use advanced protocol else use basic protocol.
  */
-void CMainFrame::enableUIActionsServer(bool advProtocol)
+void CMainFrame::enableUIActionsServer()
 {
-    enableUIActions(SERVER_ACTIONS, advProtocol);
+    enableUIActions(SERVER_ACTIONS);
 }
 
 /**
  * @brief Enable main menu entries initially for client mode.
- *
- * @param advProtocol If true use advanced protocol else use basic protocol.
  */
-void CMainFrame::enableUIActionsClient(bool advProtocol)
+void CMainFrame::enableUIActionsClient()
 {
-    enableUIActions(CLIENT_ACTIONS, advProtocol);
+    enableUIActions(CLIENT_ACTIONS);
 }
 
 /**
@@ -340,21 +334,19 @@ void CMainFrame::sStatusText(QString text)
  *        - INITIAL_ACTIONS before server/client mode is determined.
  *        - SERVER_ACTIONS for server mode.
  *        - CLIENT_ACTIONS for client mode.
- *
- * @param advProtocol identifies whic protocol to use (advanced or basic).
  */
-void CMainFrame::enableUIActions(actionIndicator actions, bool advProtocol)
+void CMainFrame::enableUIActions(actionIndicator actions)
 {
     ui->actionOpen->setEnabled((actions == INITIAL_ACTIONS) || (actions == SERVER_ACTIONS));
 
     ui->actionRecent_File->setEnabled((actions == INITIAL_ACTIONS) || (actions == SERVER_ACTIONS));
     ui->action_Lay_Out_Cards->setEnabled((actions == INITIAL_ACTIONS) || (actions == SERVER_ACTIONS));
     ui->actionBidding_Play_History->setEnabled((actions == SERVER_ACTIONS) || (actions == CLIENT_ACTIONS));
-    ui->actionClaim_All->setEnabled(((actions == SERVER_ACTIONS) || (actions == CLIENT_ACTIONS)) && advProtocol);
-    ui->actionClaim_Contract->setEnabled(((actions == SERVER_ACTIONS) || (actions == CLIENT_ACTIONS)) && advProtocol);
-    ui->actionConcede->setEnabled(((actions == SERVER_ACTIONS) || (actions == CLIENT_ACTIONS)) && advProtocol);
-    ui->actionHint->setEnabled(((actions == SERVER_ACTIONS) || (actions == CLIENT_ACTIONS)) && advProtocol);
-    ui->actionAuto_Hints->setEnabled(((actions == SERVER_ACTIONS) || (actions == CLIENT_ACTIONS)) && advProtocol);
+    ui->actionClaim_All->setEnabled(((actions == SERVER_ACTIONS) || (actions == CLIENT_ACTIONS)));
+    ui->actionClaim_Contract->setEnabled(((actions == SERVER_ACTIONS) || (actions == CLIENT_ACTIONS)));
+    ui->actionConcede->setEnabled(((actions == SERVER_ACTIONS) || (actions == CLIENT_ACTIONS)));
+    ui->actionHint->setEnabled(((actions == SERVER_ACTIONS) || (actions == CLIENT_ACTIONS)));
+    ui->actionAuto_Hints->setEnabled(((actions == SERVER_ACTIONS) || (actions == CLIENT_ACTIONS)));
     ui->actionAuto_Play_Card->setEnabled((actions == SERVER_ACTIONS) || (actions == CLIENT_ACTIONS));
     ui->actionAuto_Play_All_Cards->setEnabled((actions == SERVER_ACTIONS) || (actions == CLIENT_ACTIONS));
     ui->actionAuto_Play_to_Completion->setEnabled((actions == SERVER_ACTIONS) || (actions == CLIENT_ACTIONS));
@@ -373,7 +365,7 @@ void CMainFrame::enableUIActions(actionIndicator actions, bool advProtocol)
     ui->action_Expose_All_Cards->setEnabled(false);
     ui->actionDouble_Dummy_Results->setEnabled(false);
 
-    ui->action_Score->setEnabled((actions == SERVER_ACTIONS) || ((actions == CLIENT_ACTIONS) && advProtocol));
+    ui->action_Score->setEnabled((actions == SERVER_ACTIONS) || (actions == CLIENT_ACTIONS));
 }
 
 /**
@@ -523,7 +515,7 @@ void CMainFrame::open(QString &originalFileName)
     //Open is not available on client, i.e table manager is either server or standalone.
     disconnect(tableManager, &CTblMngrBase::sigPlayStart, 0, 0);
     disconnect(tableManagerAuto, &CTblMngrBase::sigPlayStart, 0, 0);
-    if ((doc->getSeatOptions().protocol == BASIC_PROTOCOL) || !games->getComputerPlays())
+    if (!games->getComputerPlays())
         connect(tableManager, &CTblMngrBase::sigPlayStart, tableManager, &CTblMngrBase::sltPlayStart);
     else
     {
@@ -902,7 +894,7 @@ void CMainFrame::on_actionNew_Session_triggered()
                                   games->getScoringMethod());
 
     //Set up synchronization (auto play or not).
-    if (!hostAddress.isNull() && !(doc->getSeatOptions().protocol == BASIC_PROTOCOL) &&
+    if (!hostAddress.isNull() &&
             (doc->getSeatOptions().role == CLIENT_ROLE))
         emit sNewSession();     //To start new client session for table manager auto.
     else
@@ -910,7 +902,7 @@ void CMainFrame::on_actionNew_Session_triggered()
         //Implicit standalone or server session.
         disconnect(tableManager, &CTblMngrBase::sigPlayStart, 0, 0);
         disconnect(tableManagerAuto, &CTblMngrBase::sigPlayStart, 0, 0);
-        if ((doc->getSeatOptions().protocol == BASIC_PROTOCOL) || !games->getComputerPlays())
+        if (!games->getComputerPlays())
             connect(tableManager, &CTblMngrBase::sigPlayStart, tableManager, &CTblMngrBase::sltPlayStart);
         else
         {

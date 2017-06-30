@@ -102,12 +102,6 @@ CTblMngrServer::CTblMngrServer(CZBridgeDoc *doc, CGamesDoc *games,
         connect(remoteActorServer, &CRemoteActorServer::connectWarning, this, &CTblMngrServer::connectWarning);
         connect(remoteActorServer, &CRemoteActorServer::connectError, this, &CTblMngrServer::connectError);
     }
-
-    //Timer for supervision of continue button (only used in bascic protocol).
-    leaderButton = new QTimer(this);
-    connect(leaderButton, &QTimer::timeout, this, &CTblMngr::sContinueLeader);
-    leaderButton->setSingleShot(true);
-    waiting = false;
 }
 
 CTblMngrServer::~CTblMngrServer()
@@ -131,7 +125,6 @@ void CTblMngrServer::serverRunCycle()
     zBridgeServer_runCycle(&handle);
 }
 
-//Only used with advanced protocol.
 void CTblMngrServer::serverSyncRunCycle()
 {
     //Handle raised in flags.
@@ -166,11 +159,8 @@ void CTblMngrServer::serverActions()
         QString nsTeamName = teamNames[NORTH_SEAT];
         QString ewTeamName = teamNames[EAST_SEAT];
 
-        if (protocol == ADVANCED_PROTOCOL)
-        {
-            nsTeamName += ":" + teamNames[SOUTH_SEAT];
-            ewTeamName += ":" + teamNames[WEST_SEAT];
-        }
+        nsTeamName += ":" + teamNames[SOUTH_SEAT];
+        ewTeamName += ":" + teamNames[WEST_SEAT];
         actors[WEST_SEAT]->teamNames(nsTeamName, ewTeamName);
         actors[NORTH_SEAT]->teamNames(nsTeamName, ewTeamName);
         actors[EAST_SEAT]->teamNames(nsTeamName, ewTeamName);
@@ -185,18 +175,7 @@ void CTblMngrServer::serverActions()
 
     else if (zBridgeServerIface_israised_startOfBoardDelayed(&handle))
     {        
-        int delay = (protocol == BASIC_PROTOCOL) ? 1000 : 10;
-
-        if (protocol == BASIC_PROTOCOL)
-        {
-            games->setPlayedResult(bidHistory, playHistory, teamNames[WEST_SEAT], teamNames[NORTH_SEAT],
-                                   teamNames[EAST_SEAT], teamNames[SOUTH_SEAT]);
-            games->prepNextDeal();
-
-            //Non saved games does now exist.
-            QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_SAVE , true));
-            QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_SAVEAS , true));
-        }
+        int delay = 10;
 
         //For synchronization reasons start of board must be time delayed in some cases.
         QTimer::singleShot(delay, this, SLOT(startOfBoard()));
@@ -279,10 +258,10 @@ void CTblMngrServer::serverActions()
         serverRunCycle();
 
         //Then inform players about bid (they might send signals back to server).
-        if ((protocol != BASIC_PROTOCOL) || (bidder != WEST_SEAT)) actors[WEST_SEAT]->bidDone(bidder, bid);
-        if ((protocol != BASIC_PROTOCOL) || (bidder != NORTH_SEAT)) actors[NORTH_SEAT]->bidDone(bidder, bid);
-        if ((protocol != BASIC_PROTOCOL) || (bidder != EAST_SEAT)) actors[EAST_SEAT]->bidDone(bidder, bid);
-        if ((protocol != BASIC_PROTOCOL) || (bidder != SOUTH_SEAT))  actors[SOUTH_SEAT]->bidDone(bidder, bid);
+        actors[WEST_SEAT]->bidDone(bidder, bid);
+        actors[NORTH_SEAT]->bidDone(bidder, bid);
+        actors[EAST_SEAT]->bidDone(bidder, bid);
+        actors[SOUTH_SEAT]->bidDone(bidder, bid);
     }
 
     else if (zBridgeServerIface_israised_bidInfo(&handle))
@@ -326,10 +305,10 @@ void CTblMngrServer::serverActions()
         //Note declarer plays dummy's cards.
         Seat seat = (player == (Seat)zBridgeServerIface_get_dummy(&handle)) ?
                     (Seat)zBridgeServerIface_get_declarer(&handle) : player;
-        if ((protocol != BASIC_PROTOCOL) || (seat != WEST_SEAT)) actors[WEST_SEAT]->playerPlays(player, card);
-        if ((protocol != BASIC_PROTOCOL) || (seat != NORTH_SEAT)) actors[NORTH_SEAT]->playerPlays(player, card);
-        if ((protocol != BASIC_PROTOCOL) || (seat != EAST_SEAT)) actors[EAST_SEAT]->playerPlays(player, card);
-        if ((protocol != BASIC_PROTOCOL) || (seat != SOUTH_SEAT)) actors[SOUTH_SEAT]->playerPlays(player, card);
+        actors[WEST_SEAT]->playerPlays(player, card);
+        actors[NORTH_SEAT]->playerPlays(player, card);
+        actors[EAST_SEAT]->playerPlays(player, card);
+        actors[SOUTH_SEAT]->playerPlays(player, card);
     }
 
     else if (zBridgeServerIface_israised_dummyCards(&handle))
@@ -362,11 +341,11 @@ void CTblMngrServer::serverActions()
 
     else if (zBridgeServerIface_israised_undoPlay(&handle) || zBridgeServerIface_israised_undoBid(&handle))
     {
-        //Undo play (only used with advanced protocol).
+        //Undo play.
         if (zBridgeServerIface_israised_undoPlay(&handle))
             QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_REPLAY , false));
 
-        //Undo bid always follows undo play (only used with advanced protocol).
+        //Undo bid always follows undo play.
         int val = zBridgeServerIface_get_undoBid_value(&handle);
         actors[WEST_SEAT]->undoBid(val == REBID);
         actors[NORTH_SEAT]->undoBid(val == REBID);
@@ -376,7 +355,7 @@ void CTblMngrServer::serverActions()
 
     else if (zBridgeServerIface_israised_undoTrick(&handle))
     {
-        //Undo trick (only used with advanced protocol).
+        //Undo trick.
         int val = zBridgeServerIface_get_undoTrick_value(&handle);
         actors[WEST_SEAT]->undoTrick(val == REPLAY);
         actors[NORTH_SEAT]->undoTrick(val == REPLAY);
@@ -385,7 +364,7 @@ void CTblMngrServer::serverActions()
     }
     else if (zBridgeServerIface_israised_newDealClients(&handle))
     {
-        //New deal for all actors (uses startOfBoard for this - only used with advanced protocol).
+        //New deal for all actors (uses startOfBoard for this).
         actors[WEST_SEAT]->startOfBoard();
         actors[NORTH_SEAT]->startOfBoard();
         actors[EAST_SEAT]->startOfBoard();
@@ -395,15 +374,10 @@ void CTblMngrServer::serverActions()
     //Can come together with bidInfo and must be processed after bidInfo.
     if (zBridgeServerIface_israised_playerToLead(&handle))
     {
-        int delay = (protocol == BASIC_PROTOCOL) ? 1000 : 10;
+        int delay = 10;
 
         //Player to lead next trick.
-        //For the basic protocol wait for one second to assure that the client to lead waits for this
-        //message when it is sent.
-        //The lead client on its side must assure that it has completed its end of trick work within
-        //this second.
-        //This is a requirement of the basic protocol.
-        //For the advanced protocol just make sure the action is not called untill the run cycle of
+        //Just make sure the action is not called untill the run cycle of
         //the thread.
         QTimer::singleShot(delay, this, SLOT(playerToLead()));
     }
@@ -411,34 +385,20 @@ void CTblMngrServer::serverActions()
     //Can come after newDealClients.
     if (zBridgeServerIface_israised_synchronize(&handle))
     {
-        if (protocol == BASIC_PROTOCOL)
-        {
-            zBridgeServerIface_raise_allSync(&handle);
-            serverRunCycle();
-        }
-        else
-        {
-            //Synchronization of server and clients (only used with advanced protocol).
-            zBridgeServerSync_init(&syncHandle);
-            synchronizing = true;
-            zBridgeServerSync_enter(&syncHandle);
-            zBridgeServerSyncIface_raise_continue(&syncHandle);
-            serverSyncRunCycle();
-        }
+        //Synchronization of server and clients.
+        zBridgeServerSync_init(&syncHandle);
+        synchronizing = true;
+        zBridgeServerSync_enter(&syncHandle);
+        zBridgeServerSyncIface_raise_continue(&syncHandle);
+        serverSyncRunCycle();
     }
 
     //Can (in principle - not in practice) come together with bidInfo and must be processed after bidInfo.
     if (zBridgeServerIface_israised_dummyToLead(&handle))
     {
-        int delay = (protocol == BASIC_PROTOCOL) ? 1000 : 10;
+        int delay = 10;
 
-        //Dummy to lead next trick.
-        //For the basic protocol wait for one second to assure that the client to lead waits for this
-        //message when it is sent.
-        //The lead client on its side must assure that it has completed its end of trick work within
-        //this second.
-        //This is a requirement of the basic protocol.
-        //For the advanced protocol just make sure the action is not called until the run cycle of
+        //Just make sure the action is not called until the run cycle of
         //the thread.
         QTimer::singleShot(delay, this, SLOT(dummyToLead()));
     }
@@ -446,8 +406,6 @@ void CTblMngrServer::serverActions()
 
 /**
  * @brief Synchronization between server and clients.
- *
- * Only used with the advanced protocol.
  */
 void CTblMngrServer::serverSyncActions()
 {
@@ -615,7 +573,6 @@ bool CTblMngrServer::giveNewDeal()
  * This method is activated from the main menu. It starts a new session.
  *
  *   - Prepare for a new session.
- *   - Determine protocol (Advanced or Basic).
  *   - Enable/disable relevant main menu actions.
  *   - Set up actors (local or remote etc.).
  *   - Start all actors with a new session.
@@ -632,57 +589,55 @@ void CTblMngrServer::newSession()
     playWaiting = playContinue = false;
     emit sStatusText(QString(""));
 
-    protocol = doc->getSeatOptions().protocol;
-
     //Enable/disable relevant menu actions.
-    QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_SERVER , protocol == ADVANCED_PROTOCOL));
+    QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_SERVER , true));
 
     //Set up actors.
     if (doc->getSeatOptions().westActor == MANUAL_ACTOR)
-        actor = new CActorLocal(true, doc->getSeatOptions().westName, WEST_SEAT, protocol,
+        actor = new CActorLocal(true, doc->getSeatOptions().westName, WEST_SEAT,
                 bidAndPlayEngines, this);
     else if ((remoteActorServer != 0) && remoteActorServer->isConnected(WEST_SEAT))
-        actor = new CActorRemote(WEST_SEAT, protocol, remoteActorServer->getFrontend(WEST_SEAT), this);
+        actor = new CActorRemote(WEST_SEAT, remoteActorServer->getFrontend(WEST_SEAT), this);
     else
-        actor = new CActorLocal(false, doc->getSeatOptions().westName, WEST_SEAT, protocol,
+        actor = new CActorLocal(false, doc->getSeatOptions().westName, WEST_SEAT,
                 bidAndPlayEngines, this);
     actors[WEST_SEAT] = actor;
 
     if (doc->getSeatOptions().northActor == MANUAL_ACTOR)
-        actor = new CActorLocal(true, doc->getSeatOptions().northName, NORTH_SEAT, protocol,
+        actor = new CActorLocal(true, doc->getSeatOptions().northName, NORTH_SEAT,
                 bidAndPlayEngines, this);
     else if ((remoteActorServer != 0) && remoteActorServer->isConnected(NORTH_SEAT))
-        actor = new CActorRemote(NORTH_SEAT, protocol, remoteActorServer->getFrontend(NORTH_SEAT), this);
+        actor = new CActorRemote(NORTH_SEAT, remoteActorServer->getFrontend(NORTH_SEAT), this);
     else
-        actor = new CActorLocal(false, doc->getSeatOptions().northName, NORTH_SEAT, protocol,
+        actor = new CActorLocal(false, doc->getSeatOptions().northName, NORTH_SEAT,
                 bidAndPlayEngines, this);
     actors[NORTH_SEAT] = actor;
 
     if (doc->getSeatOptions().eastActor == MANUAL_ACTOR)
-        actor = new CActorLocal(true, doc->getSeatOptions().eastName, EAST_SEAT, protocol,
+        actor = new CActorLocal(true, doc->getSeatOptions().eastName, EAST_SEAT,
                 bidAndPlayEngines, this);
     else if ((remoteActorServer != 0) && remoteActorServer->isConnected(EAST_SEAT))
-        actor = new CActorRemote(EAST_SEAT, protocol, remoteActorServer->getFrontend(EAST_SEAT), this);
+        actor = new CActorRemote(EAST_SEAT, remoteActorServer->getFrontend(EAST_SEAT), this);
     else
-        actor = new CActorLocal(false, doc->getSeatOptions().eastName, EAST_SEAT, protocol,
+        actor = new CActorLocal(false, doc->getSeatOptions().eastName, EAST_SEAT,
                 bidAndPlayEngines, this);
     actors[EAST_SEAT] = actor;
 
     if (doc->getSeatOptions().southActor == MANUAL_ACTOR)
-        actor = new CActorLocal(true, doc->getSeatOptions().southName, SOUTH_SEAT, protocol,
+        actor = new CActorLocal(true, doc->getSeatOptions().southName, SOUTH_SEAT,
                 bidAndPlayEngines, this);
     else if ((remoteActorServer != 0) && remoteActorServer->isConnected(SOUTH_SEAT))
-        actor = new CActorRemote(SOUTH_SEAT, protocol, remoteActorServer->getFrontend(SOUTH_SEAT), this);
+        actor = new CActorRemote(SOUTH_SEAT, remoteActorServer->getFrontend(SOUTH_SEAT), this);
     else
-        actor = new CActorLocal(false, doc->getSeatOptions().southName, SOUTH_SEAT, protocol,
+        actor = new CActorLocal(false, doc->getSeatOptions().southName, SOUTH_SEAT,
                 bidAndPlayEngines, this);
     actors[SOUTH_SEAT] = actor;
 
     setShowUser(showAll);
     setUpdateGameInfo();
 
-    //Transfer game data to clients (only used with advanced protocol).
-    if ((protocol == ADVANCED_PROTOCOL) && (remoteActorServer != 0) &&
+    //Transfer game data to clients.
+    if ((remoteActorServer != 0) &&
             (remoteActorServer->isConnected(WEST_SEAT) ||
              remoteActorServer->isConnected(NORTH_SEAT) ||
              remoteActorServer->isConnected(EAST_SEAT) ||
@@ -738,7 +693,6 @@ void CTblMngrServer::newDeal()
     serverRunCycle();
 }
 
-//Only used with advanced protocol.
 void CTblMngrServer::showAllCards()
 {
     showAll = !showAll;
@@ -766,7 +720,7 @@ void CTblMngrServer::showDoubleDummyResults()
 }
 
 /**
- * @brief Rebid the current deal (from main menu - only used with advanced protocol).
+ * @brief Rebid the current deal (from main menu).
  */
 void CTblMngrServer::reBid()
 {
@@ -782,7 +736,7 @@ void CTblMngrServer::reBid()
 }
 
 /**
- * @brief Replay the current deal (from main menu - only used with advanced protocol).
+ * @brief Replay the current deal (from main menu).
  */
 void CTblMngrServer::rePlay()
 {
@@ -796,7 +750,7 @@ void CTblMngrServer::rePlay()
 }
 
 /**
- * @brief Undo bid or play (from main menu - only used with advanced protocol).
+ * @brief Undo bid or play (from main menu).
  */
 void CTblMngrServer::undo()
 {
@@ -882,10 +836,7 @@ void CTblMngrServer::setUpdateGameInfo()
  */
 void CTblMngrServer::buttonClicked(int button)
 {
-    if ((protocol == BASIC_PROTOCOL) && (button == BUTTON_LEADER))
-        sContinueLeader();
-    else
-        sContinueSync();
+    sContinueSync();
 }
 
 /**
@@ -951,9 +902,8 @@ void CTblMngrServer::startOfBoard()
     }
     else
     {
-        //Tell auto play that game info is now ready for the current play (only used with advanced protocol).
-        if (protocol == ADVANCED_PROTOCOL)
-            emit sigPlayStart();
+        //Tell auto play that game info is now ready for the current play.
+        emit sigPlayStart();
 
         //The next continue is only needed for the first play in a session, but does no harm otherwise.
         zBridgeServerIface_raise_continue(&handle);
@@ -970,8 +920,7 @@ void CTblMngrServer::startOfBoard()
 /**
  * @brief Player to lead next trick.
  *
- * Send "player to lead" to the relevant client. For the basic protocol this routine is called
- * after a one second delay. It is a requirement of the protocol to have this one second delay.
+ * Send "player to lead" to the relevant client.
  *
  */
 void CTblMngrServer::playerToLead()
@@ -983,8 +932,7 @@ void CTblMngrServer::playerToLead()
 /**
  * @brief Dummy to lead the next trick.
  *
- * Send "dummy to lead" to the relevant client. For the basic protocol this routine is called
- * after a one second delay. It is a requirement of the protocol to have this one second delay.
+ * Send "dummy to lead" to the relevant client.
  */
 void CTblMngrServer::dummyToLead()
 {
@@ -993,7 +941,7 @@ void CTblMngrServer::dummyToLead()
 }
 
 /**
- * @brief Synchronization with auto play (only advanced protocol).
+ * @brief Synchronization with auto play.
  *
  * Is called (via a signal) from auto play to tell auto play has now
  * played the current game.
@@ -1142,8 +1090,6 @@ void CTblMngrServer::sReadyForDummyCards(Seat seat)
 /**
  * @brief Synchronization signal from one of the four clients to the server.
  * @param syncher The clients seat.
- *
- * Only used with advanced protocol.
  */
 void CTblMngrServer::sAttemptSyncFromClientToServer(Seat syncher)
 {
@@ -1157,8 +1103,6 @@ void CTblMngrServer::sAttemptSyncFromClientToServer(Seat syncher)
 /**
  * @brief Synchronization signal from one of the four clients to the server.
  * @param syncher The clients seat.
- *
- * Only used with advanced protocol.
  */
 void CTblMngrServer::sConfirmSyncFromClientToServer(Seat syncher)
 {
@@ -1168,8 +1112,6 @@ void CTblMngrServer::sConfirmSyncFromClientToServer(Seat syncher)
 
 /**
  * @brief Update game info and activate relevant main menu entries.
- *
- * Only used with advanced protocol.
  */
 void CTblMngrServer::sUpdateGame()
 {
@@ -1184,8 +1126,6 @@ void CTblMngrServer::sUpdateGame()
 
 /**
  * @brief Prepare game info for next deal.
- *
- * Only used with advanced protocol.
  */
 void CTblMngrServer::sUpdateGameToNextDeal()
 {
@@ -1233,40 +1173,7 @@ void CTblMngrServer::sShowPlay()
 }
 
 /**
- * @brief Enable Leader button (only basic protocol).
- *
- * For the basic protocol it is assured that the waiting time before the user presses the continue
- * button is less than one second. This is the maximum time the server waits for the clients to be ready.
- * This is a requirement of the basic protocol./n
- */
-void CTblMngrServer::sEnableContinueLeader()
-{
-    if (!waiting)
-    {
-        waiting = true;
-
-        //Waiting time must be less than one second.
-        leaderButton->start(700);
-
-        //Also show and enable continue button.
-        playView->enableLeaderOnTable();
-    }
-}
-
-/**
- * @brief Disable Continue button (only basic protocol).
- */
-void CTblMngrServer::sDisableContinueLeader()
-{
-    if (waiting)
-    {
-        waiting = false;
-        playView->disableLeaderOnTable();
-    }
-}
-
-/**
- * @brief Enable auction, play, leader or next deal button (only advanced protocol).
+ * @brief Enable auction, play, leader or next deal button.
  * @param syncState Identifies the button to enable.
  */
 void CTblMngrServer::sEnableContinueSync(int syncState)
@@ -1314,7 +1221,7 @@ void CTblMngrServer::sEnableContinueSync(int syncState)
 }
 
 /**
- * @brief Disable auction, play, leader or next deal button (only advanced protocol).
+ * @brief Disable auction, play, leader or next deal button.
  * @param syncState Identifies the button to disable.
  */
 void CTblMngrServer::sDisableContinueSync(int syncState)
@@ -1351,20 +1258,7 @@ void CTblMngrServer::sDisableContinueSync(int syncState)
 }
 
 /**
- * @brief Continue play with next trick (only basic protocol).
- */
-void CTblMngrServer::sContinueLeader()
-{
-    leaderButton->stop();
-
-    if (actors[WEST_SEAT]->getActorType() == MANUAL_ACTOR) actors[WEST_SEAT]->continueLeader();
-    if (actors[NORTH_SEAT]->getActorType() == MANUAL_ACTOR) actors[NORTH_SEAT]->continueLeader();
-    if (actors[EAST_SEAT]->getActorType() == MANUAL_ACTOR) actors[EAST_SEAT]->continueLeader();
-    if (actors[SOUTH_SEAT]->getActorType() == MANUAL_ACTOR) actors[SOUTH_SEAT]->continueLeader();
-}
-
-/**
- * @brief Continue after button (only advanced protocol).
+ * @brief Continue after button.
  */
 void CTblMngrServer::sContinueSync()
 {

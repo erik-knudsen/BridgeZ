@@ -49,7 +49,7 @@ class CActorLocal : public CActor
 {
     Q_OBJECT
 public:
-    CActorLocal(bool manual, QString teamName, Seat seat, int protocol,
+    CActorLocal(bool manual, QString teamName, Seat seat,
                CBidAndPlayEngines *bidAndPlayEngines, CTblMngr *tableManager);
 
     void startNewSession();
@@ -58,7 +58,6 @@ public:
 
     void bidValue(Bids bid);
     void playValue(int card);
-    void continueLeader();
     void continueSync();
 
     void setShowUser(bool showUser) { this->showUser = showUser; }
@@ -115,8 +114,6 @@ signals:
     void sDisableBidder(Seat bidder);
     void sEnablePlayer(Seat player);
     void sDisablePlayer(Seat Player);
-    void sEnableContinueLeader();
-    void sDisableContinueLeader();
     void sEnableContinueSync(int syncState);
     void sDisableContinueSync(int syncState)
 ;
@@ -130,7 +127,6 @@ private:
     bool updateCurrentGameInfo;
 
     QString teamName;   /**< Team name. */
-    int protocol;       /**< Protocol (Advanced or Basic). */
 
     CBidAndPlay bidAndPlay; /**< Bid and play handling. */
 

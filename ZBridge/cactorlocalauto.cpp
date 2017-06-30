@@ -80,7 +80,7 @@ void CActorLocalAuto::clientActions()
     if (zBridgeClientIface_israised_connect(&handle))
     {
         //Connect to the server (upon entry of the statechart).
-        emit sConnect(teamName ,  (Seat)zBridgeClientIface_get_client(&handle), ADVANCED_PROTOCOL);
+        emit sConnect(teamName ,  (Seat)zBridgeClientIface_get_client(&handle), 0);
     }
 
     else if (zBridgeClientIface_israised_rTNames(&handle))

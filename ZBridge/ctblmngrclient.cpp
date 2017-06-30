@@ -71,11 +71,6 @@ CTblMngrClient::CTblMngrClient(CZBridgeDoc *doc, CGamesDoc *games,
 
     remoteActorClient = 0;
     actor = 0;
-
-    //Timer for supervision of continue button.
-    leaderButton = new QTimer(this);
-    connect(leaderButton, &QTimer::timeout, this, &CTblMngr::sContinueLeader);
-    leaderButton->setSingleShot(true);
 }
 
 CTblMngrClient::~CTblMngrClient()
@@ -119,7 +114,6 @@ void CTblMngrClient::cleanTableManager()
  *
  *   - Determine IP address (must be IPV4 address).
  *   - Prepare for a new session.
- *   - Determine protocol (Advanced or Basic).
  *   - Enable/disable relevant main menu actions.
  *   - Set up actor (local).
  *   - Start tcp/ip interface to server and try to connect.
@@ -130,29 +124,26 @@ void CTblMngrClient::newSession()
     //Prepare for new session.
     cleanTableManager();
 
-    //Determine protocol.
-    protocol = doc->getSeatOptions().protocol;
-
     //Communication mode.
     comMode = NORMAL_MODE;
 
     //Enable/disable relevant menu actions.
-    QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_CLIENT , protocol == ADVANCED_PROTOCOL));
+    QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_CLIENT , true));
     QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_NEW_SESSION , false));
 
     //Set up actor.
     if (doc->getSeatOptions().seat == WEST_SEAT)
         actor = new CActorLocal((doc->getSeatOptions().westActor == MANUAL_ACTOR), doc->getSeatOptions().westName,
-                                WEST_SEAT, protocol, bidAndPlayEngines, this);
+                                WEST_SEAT, bidAndPlayEngines, this);
     else if (doc->getSeatOptions().seat == NORTH_SEAT)
         actor = new CActorLocal((doc->getSeatOptions().northActor == MANUAL_ACTOR), doc->getSeatOptions().northName,
-                                NORTH_SEAT, protocol, bidAndPlayEngines, this);
+                                NORTH_SEAT, bidAndPlayEngines, this);
     else if (doc->getSeatOptions().seat == EAST_SEAT)
         actor = new CActorLocal((doc->getSeatOptions().eastActor == MANUAL_ACTOR), doc->getSeatOptions().eastName,
-                                EAST_SEAT, protocol, bidAndPlayEngines, this);
+                                EAST_SEAT, bidAndPlayEngines, this);
     else
         actor = new CActorLocal((doc->getSeatOptions().southActor == MANUAL_ACTOR), doc->getSeatOptions().southName,
-                                SOUTH_SEAT, protocol, bidAndPlayEngines, this);
+                                SOUTH_SEAT, bidAndPlayEngines, this);
 
     actor->setShowUser((actor->getActorType() == MANUAL_ACTOR) || showAll);
     actor->setUpdateGameInfo(true);
@@ -170,12 +161,8 @@ void CTblMngrClient::newSession()
     handle = actor->getHandle();
 }
 
-//Only used with advanced protocol.
 void CTblMngrClient::showAllCards()
 {
-    if (protocol == BASIC_PROTOCOL)
-        return;
-
     showAll = !showAll;
 
     bool showWest = showAll || ((actor->getSeat() == WEST_SEAT) && (actor->getActorType() == MANUAL_ACTOR)) ||
@@ -208,10 +195,7 @@ void CTblMngrClient::showDoubleDummyResults()
  */
 void CTblMngrClient::buttonClicked(int button)
 {
-    if ((protocol == BASIC_PROTOCOL) && (button == BUTTON_LEADER))
-        sContinueLeader();
-    else
-        sContinueSync();
+    sContinueSync();
 }
 
 /**
@@ -368,8 +352,6 @@ void CTblMngrClient::sReadyForDummyCards(Seat seat)
 /**
  * @brief Synchronization signal from client to the server.
  * @param syncher The clients seat.
- *
- * Only used with advanced protocol.
  */
 void CTblMngrClient::sAttemptSyncFromClientToServer(Seat syncher)
 {
@@ -380,8 +362,6 @@ void CTblMngrClient::sAttemptSyncFromClientToServer(Seat syncher)
 /**
  * @brief Synchronization signal from client to the server.
  * @param syncher The clients seat.
- *
- * Only used with advanced protocol.
  */
 void CTblMngrClient::sConfirmSyncFromClientToServer(Seat syncher)
 {
@@ -443,33 +423,7 @@ void CTblMngrClient::sShowPlay()
 }
 
 /**
- * @brief Enable Leader button (only basic protocol).
- *
- * For the basic protocol it is assured that the waiting time before the user presses the continue
- * button is less than one second. This is the maximun time the server waits for the clients to be ready.
- * This is a requirement of the basic protocol./n
- */
-void CTblMngrClient::sEnableContinueLeader()
-{
-    //Waiting time must be less than one second. This is the maximum time the server waits
-    //for the clients to be ready.
-    //This is a requirement of the protocol.
-    leaderButton->start(700);
-
-    //Also show and enable continue button.
-    playView->enableLeaderOnTable();
-}
-
-/**
- * @brief Disable Leader button (only basic protocol).
- */
-void CTblMngrClient::sDisableContinueLeader()
-{
-    playView->disableLeaderOnTable();
-}
-
-/**
- * @brief Enable auction, play, leader or next deal button (only advanced protocol).
+ * @brief Enable auction, play, leader or next deal button.
  * @param syncState Identifies the button to enable.
  */
 void CTblMngrClient::sEnableContinueSync(int syncState)
@@ -493,8 +447,7 @@ void CTblMngrClient::sEnableContinueSync(int syncState)
         QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_SHOW_ALL , false));
         QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_PAR , false));
 
-        if (protocol == ADVANCED_PROTOCOL)
-            emit sShowScore();
+        emit sShowScore();
 
         playView->showInfoNextButton(true, BUTTON_DEAL);
         break;
@@ -505,7 +458,7 @@ void CTblMngrClient::sEnableContinueSync(int syncState)
 }
 
 /**
- * @brief Disable auction, play, leader or next deal button (only advanced protocol).
+ * @brief Disable auction, play, leader or next deal button.
  * @param syncState Identifies the button to disable.
  */
 void CTblMngrClient::sDisableContinueSync(int syncState)
@@ -533,16 +486,7 @@ void CTblMngrClient::sDisableContinueSync(int syncState)
 }
 
 /**
- * @brief Continue play with next trick (only basic protocol).
- */
-void CTblMngrClient::sContinueLeader()
-{
-    leaderButton->stop();
-    actor->continueLeader();
-}
-
-/**
- * @brief Continue after button (only advanced protocol).
+ * @brief Continue after button.
  */
 void CTblMngrClient::sContinueSync()
 {
@@ -635,20 +579,12 @@ void CTblMngrClient::receiveLine(QString line)
         CTeamNamesMsg teamNamesMsg(line);
         actor->teamNames(teamNamesMsg.nsTeamName, teamNamesMsg.ewTeamName);
 
-        if (protocol == BASIC_PROTOCOL)
-        {
-            teamNames[NORTH_SEAT] = teamNames[SOUTH_SEAT] = teamNamesMsg.nsTeamName;
-            teamNames[EAST_SEAT] = teamNames[WEST_SEAT] = teamNamesMsg.ewTeamName;
-        }
-        else
-        {
-            int inx = teamNamesMsg.nsTeamName.indexOf(":");
-            teamNames[NORTH_SEAT] = teamNamesMsg.nsTeamName.left(inx);
-            teamNames[SOUTH_SEAT] = teamNamesMsg.nsTeamName.mid(inx + 1);
-            inx = teamNamesMsg.ewTeamName.indexOf(":");
-            teamNames[EAST_SEAT] = teamNamesMsg.ewTeamName.left(inx);
-            teamNames[WEST_SEAT] = teamNamesMsg.ewTeamName.mid(inx + 1);
-        }
+        int inx = teamNamesMsg.nsTeamName.indexOf(":");
+        teamNames[NORTH_SEAT] = teamNamesMsg.nsTeamName.left(inx);
+        teamNames[SOUTH_SEAT] = teamNamesMsg.nsTeamName.mid(inx + 1);
+        inx = teamNamesMsg.ewTeamName.indexOf(":");
+        teamNames[EAST_SEAT] = teamNamesMsg.ewTeamName.left(inx);
+        teamNames[WEST_SEAT] = teamNamesMsg.ewTeamName.mid(inx + 1);
         break;
     }
 
@@ -667,8 +603,7 @@ void CTblMngrClient::receiveLine(QString line)
         //Deal info message was received.
         CDealInfoMsg dealInfoMsg(line);
         actor->dealInfo(dealInfoMsg.boardNumber, dealInfoMsg.dealer, dealInfoMsg.vulnerability);
-        if (protocol == ADVANCED_PROTOCOL)
-            games->setNextDeal(dealInfoMsg.boardNumber, dealInfoMsg.dealer, dealInfoMsg.vulnerability);
+        games->setNextDeal(dealInfoMsg.boardNumber, dealInfoMsg.dealer, dealInfoMsg.vulnerability);
         noHands = 0;
         break;
     }
@@ -677,59 +612,35 @@ void CTblMngrClient::receiveLine(QString line)
     {
         //Cards message was received.
         CCardsMsg cardsMsg(line);
-        if (protocol == ADVANCED_PROTOCOL)
-        {
-            //Initialize all hands of current cards.
-            for (int i = 0; i < 13; i++)
-                currentCards[cardsMsg.player][i] = cardsMsg.cards[i];
-            noHands++;
-        }
-        else
-        {
-            //initialize only the clients hand of current cards.
-            for (int i = 0; i < 13; i++)
-                currentCards[cardsMsg.player][i] = cardsMsg.cards[i];
-            noHands = 4;
-        }
+        //Initialize all hands of current cards.
+        for (int i = 0; i < 13; i++)
+            currentCards[cardsMsg.player][i] = cardsMsg.cards[i];
+        noHands++;
 
         //Have we received all hands?
         if (noHands == 4)
         {
-            //Determine which cards to show and for the advanced protocol also save cards.
+            //Determine which cards to show and also save cards.
             bool hasWest, showWest, hasNorth, showNorth, hasEast, showEast, hasSouth, showSouth;
 
-            if (protocol == ADVANCED_PROTOCOL)
-            {
-                hasWest = hasNorth = hasEast = hasSouth = true;
+            hasWest = hasNorth = hasEast = hasSouth = true;
 
-                showDummy = false;
+            showDummy = false;
 
-                showWest = showAll || ((actor->getSeat() == WEST_SEAT) && (actor->getActorType() == MANUAL_ACTOR));
-                showNorth = showAll || ((actor->getSeat() == NORTH_SEAT) && (actor->getActorType() == MANUAL_ACTOR));
-                showEast = showAll || ((actor->getSeat() == EAST_SEAT) && (actor->getActorType() == MANUAL_ACTOR));
-                showSouth = showAll || ((actor->getSeat() == SOUTH_SEAT) && (actor->getActorType() == MANUAL_ACTOR));
+            showWest = showAll || ((actor->getSeat() == WEST_SEAT) && (actor->getActorType() == MANUAL_ACTOR));
+            showNorth = showAll || ((actor->getSeat() == NORTH_SEAT) && (actor->getActorType() == MANUAL_ACTOR));
+            showEast = showAll || ((actor->getSeat() == EAST_SEAT) && (actor->getActorType() == MANUAL_ACTOR));
+            showSouth = showAll || ((actor->getSeat() == SOUTH_SEAT) && (actor->getActorType() == MANUAL_ACTOR));
 
-                games->setNextDeal(currentCards);
-            }
-            else
-            {
-                hasWest = showWest = (actor->getSeat() == WEST_SEAT) && (actor->getActorType() == MANUAL_ACTOR);
-                hasNorth = showNorth = (actor->getSeat() == NORTH_SEAT) && (actor->getActorType() == MANUAL_ACTOR);
-                hasEast = showEast = (actor->getSeat() == EAST_SEAT) && (actor->getActorType() == MANUAL_ACTOR);
-                hasSouth = showSouth = (actor->getSeat() == SOUTH_SEAT) && (actor->getActorType() == MANUAL_ACTOR);
-
-            }
+            games->setNextDeal(currentCards);
 
             //Show cards in play view.
             playView->setAndShowAllCards(hasWest, showWest, currentCards[WEST_SEAT], hasNorth, showNorth, currentCards[NORTH_SEAT],
                        hasEast, showEast, currentCards[EAST_SEAT], hasSouth, showSouth, currentCards[SOUTH_SEAT]);
 
             //Enable Show All and Double Dummy Results menu actions.
-            if (protocol == ADVANCED_PROTOCOL)
-            {
-                QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_SHOW_ALL , true));
-                QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_PAR , true));
-            }
+            QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_SHOW_ALL , true));
+            QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_PAR , true));
 
             //Set actor cards.
             actor->cards(currentCards);
@@ -790,7 +701,7 @@ void CTblMngrClient::receiveLine(QString line)
 
     case UNDOBID_MSG:
     {
-        //Undo bid message was received (only advanced protocol).
+        //Undo bid message was received.
         CUndoBidMsg undoBidMsg(line);
         actor->undoBid(false);
         break;
@@ -798,7 +709,7 @@ void CTblMngrClient::receiveLine(QString line)
 
     case  UNDOTRICK_MSG:
     {
-        //Undo trick message was received (only advanced protocol).
+        //Undo trick message was received.
         CUndoTrickMsg undoTrickMsg(line);
         actor->undoTrick(false);
         break;
@@ -806,7 +717,7 @@ void CTblMngrClient::receiveLine(QString line)
 
     case REBID_MSG:
     {
-        //Rebid message was received (only advanced protocol).
+        //Rebid message was received.
         CReBidMsg reBidMsg(line);
         actor->undoBid(true);
         break;
@@ -814,7 +725,7 @@ void CTblMngrClient::receiveLine(QString line)
 
     case REPLAY_MSG:
     {
-        //Replay message was received (only advanced protocol).
+        //Replay message was received.
         CRePlayMsg rePlayMsg(line);
         actor->undoTrick(true);
         break;
@@ -830,7 +741,7 @@ void CTblMngrClient::receiveLine(QString line)
 
     case ATTEMPT_SYNCHRONIZE_MSG:
     {
-        //Attempt synchronize message was received (only advanced protocol).
+        //Attempt synchronize message was received.
         CAttemptSynchronizeMsg attemptSynchronize(line);
         actor->attemptSyncFromServerToClient();
         break;
@@ -838,7 +749,7 @@ void CTblMngrClient::receiveLine(QString line)
 
     case CONFIRM_SYNCHRONIZE_MSG:
     {
-        //Confirm synchronize message was received (only advanced protocol).
+        //Confirm synchronize message was received.
         CConfirmSynchronizeMsg confirmSynchronize(line);
         actor->confirmSyncFromServerToClient();
         break;
@@ -854,7 +765,7 @@ void CTblMngrClient::receiveLine(QString line)
 
     case ORIGINAL_PBN_START_MSG:
     {
-        //Start of original PBN stream (comes always before played PBN stream - only advanced protocol).
+        //Start of original PBN stream (comes always before played PBN stream).
         COriginalPBNStartMsg originalPBNStartMsg(line);
         games->clearGames(originalPBNStartMsg.scoringMethod);
         bidAndPlayEngines->setScoringMethod(originalPBNStartMsg.scoringMethod);
@@ -867,7 +778,7 @@ void CTblMngrClient::receiveLine(QString line)
 
     case PLAYED_PBN_START_MSG:
     {
-        //Start of played PBN stream (comes allways after original PBN stream - only advanced protocol).
+        //Start of played PBN stream (comes allways after original PBN stream).
         playedBytes.open(QIODevice::ReadWrite);
         playedStream.setDevice(&playedBytes);
         comMode = PLAYED_PBN_STREAM_MODE;
@@ -877,7 +788,7 @@ void CTblMngrClient::receiveLine(QString line)
 
     case PBN_LINE_MSG:
     {
-        //Receiving a PBN file  (only advanced protocol).
+        //Receiving a PBN file.
         if (comMode == ORIGINAL_PBN_STREAM_MODE)
             originalStream << line;
         else if (comMode == PLAYED_PBN_STREAM_MODE)
@@ -889,7 +800,7 @@ void CTblMngrClient::receiveLine(QString line)
     {
         if (comMode == PLAYED_PBN_STREAM_MODE)
         {
-            //Has now received Original and Played pbn data (only advanced protocol).
+            //Has now received Original and Played pbn data.
             originalStream.flush();
             playedStream.flush();
             originalStream.seek(0);

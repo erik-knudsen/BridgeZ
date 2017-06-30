@@ -33,11 +33,10 @@
  *
  * Saves parameters for later use and connects to the front end.
  */
-CActorRemote::CActorRemote(Seat seat, int protocol, CRemoteActorFrontEnd *frontEnd, CTblMngr *tableManager) :
+CActorRemote::CActorRemote(Seat seat, CRemoteActorFrontEnd *frontEnd, CTblMngr *tableManager) :
     CActor(tableManager)
 {
     this->seat = seat;
-    this->protocol = protocol;
     this->frontEnd = frontEnd;
     this->tableManager = tableManager;
 
@@ -47,7 +46,7 @@ CActorRemote::CActorRemote(Seat seat, int protocol, CRemoteActorFrontEnd *frontE
 }
 
 /**
- * @brief Xmit PBN files to remote client (only used with advanced protocol).
+ * @brief Xmit PBN files to remote client.
  * @param originalStream Original PBN data.
  * @param playedStream Played PBN data.
  */
@@ -138,12 +137,6 @@ void CActorRemote::dealInfo(int boardNumber, Seat dealer, Team vulnerability)
  */
 void CActorRemote::cards(int cards[4][13])
 {
-    if (protocol == BASIC_PROTOCOL)
-    {
-        CCardsMsg cardsMsg(seat, cards[seat]);
-        emit sendLine(cardsMsg.line);
-    }
-    else
     for (int i = 0; i < 4; i++)
     {
         CCardsMsg cardsMsg((Seat)i, cards[i]);

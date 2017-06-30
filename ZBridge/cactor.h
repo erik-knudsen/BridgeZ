@@ -50,7 +50,6 @@ public:
                               ScoringMethod scoringMethod) { }
     virtual void bidValue(Bids bid) {}
     virtual void playValue(int card) {}
-    virtual void continueLeader() {}
     virtual void continueSync() {}
 
     virtual Seat getSeat() = 0;

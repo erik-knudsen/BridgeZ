@@ -111,12 +111,9 @@ public slots:
 
     void sShowAuction();
     void sShowPlay();
-    void sEnableContinueLeader();
-    void sDisableContinueLeader();
     void sEnableContinueSync(int syncState);
     void sDisableContinueSync(int syncState);
 
-    void sContinueLeader();
     void sContinueSync();
     /*@}*/
 
@@ -163,8 +160,6 @@ private:
     CBidHistory bidHistory;
     CPlayHistory playHistory;
     CBidAndPlayEngines *bidAndPlayEngines;
-
-    int protocol;
 
     int currentBoardNo;
     Team currentVulnerable;
