@@ -285,12 +285,6 @@ void CTblMngrServerAuto::serverActions()
         actors[SOUTH_SEAT]->startOfBoard();
     }
 
-    else if (zBridgeServerIface_israised_endOfSession(&handle))
-    {
-        //End of session.
-        cleanTableManager();
-    }
-
     //Can come together with bidInfo and must be processed after bidInfo.
     if (zBridgeServerIface_israised_playerToLead(&handle))
     {
@@ -366,8 +360,20 @@ void CTblMngrServerAuto::serverSyncActions()
         zBridgeServerSyncIface_raise_continue(&syncHandle);
         serverSyncRunCycle();
 
-        //Check if game info should be updated (can only happen with 4 remote clients).
         int syncState = zBridgeServerIface_get_syncState(&handle);
+        //Synchronization after bid and before play.
+        if (syncState == SP)
+        {
+            Seat declarer = bidHistory.getDeclarer();
+            Seat dummy = (Seat)((declarer + 2) % 4);
+            Seat leader = (Seat)((declarer + 1) % 4);
+            zBridgeServerIface_set_declarer(&handle, declarer);
+            zBridgeServerIface_set_dummy(&handle, dummy);
+            zBridgeServerIface_set_leader(&handle, leader);
+            zBridgeServerIface_set_player(&handle, leader);
+        }
+
+        //Check if game info should be updated (can only happen with 4 remote clients).
         if (updateGameInfo && (syncState == SS))
             sUpdateGame();
 

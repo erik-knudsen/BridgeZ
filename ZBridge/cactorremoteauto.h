@@ -59,6 +59,7 @@ public:
     void undoBid(bool reBid);
     void undoTrick(bool rePlay);
     void endOfSession();
+    void reStart() {}
 
     void attemptSyncFromServerToClient();
     void confirmSyncFromServerToClient();

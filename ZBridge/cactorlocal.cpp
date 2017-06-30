@@ -331,6 +331,17 @@ void CActorLocal::clientSyncActions()
     {
         //Might pause here (show button etc.).
         int syncState = zBridgeClientSyncIface_get_syncState(&syncHandle);
+        //Synchronization after bid and before play?
+        if (syncState == SP)
+        {
+            Seat declarer = bidAndPlay.getBidHistory().getDeclarer();
+            Seat dummy = (Seat)((declarer + 2) % 4);
+            Seat leader = (Seat)((declarer + 1) % 4);
+            zBridgeClientIface_set_declarer(&handle, declarer);
+            zBridgeClientIface_set_dummy(&handle, dummy);
+            zBridgeClientIface_set_leader(&handle, leader);
+            zBridgeClientIface_set_player(&handle, leader);
+        }
         if (updateGameInfo && (syncState == SS))
             emit sUpdateGameToNextDeal();
         if (manual && ((syncState == SA) || (syncState == SP) || (syncState == SS) || (syncState == SL)))

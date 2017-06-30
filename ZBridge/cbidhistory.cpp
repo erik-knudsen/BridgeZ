@@ -71,6 +71,29 @@ void CBidHistory::resetBidHistory()
         initializeFeatures();
 }
 
+Seat CBidHistory::getDeclarer()
+{
+    int size = bidList.size();
+
+    //Find last proper bid;
+    int i;
+    for (i = size - 1; i >= 0; i--)
+        if (IS_BID(bidList[i].bid))
+            break;
+    if (i < 0)
+        return NO_SEAT;
+
+    Suit suit = BID_SUIT(bidList[i].bid);
+
+    int first = i % 2;
+    int j;
+    for (j = first; j <= i; j +=2)
+        if (suit == BID_SUIT(bidList[j].bid))
+            break;
+
+    return (bidList[j].bidder);
+}
+
 /**
  * @brief Undo some of the bid history.
  *

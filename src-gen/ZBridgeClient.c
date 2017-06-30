@@ -273,7 +273,6 @@ void zBridgeClient_init(ZBridgeClient* handle)
 	handle->internal.firstBidRound = bool_false;
 	handle->internal.noPasses = 0;
 	handle->internal.lastBidder = 0;
-	handle->internal.leader = 0;
 	handle->internal.playNo = 0;
 	handle->internal.firstTrick = bool_false;
 	handle->iface.boardNumber = 0;
@@ -287,6 +286,7 @@ void zBridgeClient_init(ZBridgeClient* handle)
 	handle->iface.bidEnable = 0;
 	handle->iface.declarer = 0;
 	handle->iface.dummy = 0;
+	handle->iface.leader = 0;
 	handle->iface.noTrick = 0;
 	handle->iface.player = 0;
 	handle->iface.cardVal = 0;
@@ -781,6 +781,14 @@ sc_integer zBridgeClientIface_get_dummy(const ZBridgeClient* handle)
 void zBridgeClientIface_set_dummy(ZBridgeClient* handle, sc_integer value)
 {
 	handle->iface.dummy = value;
+}
+sc_integer zBridgeClientIface_get_leader(const ZBridgeClient* handle)
+{
+	return handle->iface.leader;
+}
+void zBridgeClientIface_set_leader(ZBridgeClient* handle, sc_integer value)
+{
+	handle->iface.leader = value;
 }
 sc_integer zBridgeClientIface_get_noTrick(const ZBridgeClient* handle)
 {
@@ -1297,7 +1305,7 @@ static void zBridgeClient_effect_main_region_Play_tr0(ZBridgeClient* handle)
 	zBridgeClient_exseq_main_region_Play(handle);
 	handle->iface.cardVal = handle->iface.playerPlays_value;
 	handle->internal.playNo += 1;
-	handle->iface.player = (handle->internal.leader + handle->internal.playNo) & 3;
+	handle->iface.player = (handle->iface.leader + handle->internal.playNo) & 3;
 	zBridgeClient_react_main_region__choice_5(handle);
 }
 
@@ -1336,8 +1344,8 @@ static void zBridgeClient_effect_main_region_Play_tr5(ZBridgeClient* handle)
 static void zBridgeClient_effect_main_region_WaitLeader_tr0(ZBridgeClient* handle)
 {
 	zBridgeClient_exseq_main_region_WaitLeader(handle);
-	handle->internal.leader = handle->iface.newLeader_value;
-	handle->iface.player = handle->internal.leader;
+	handle->iface.leader = handle->iface.newLeader_value;
+	handle->iface.player = handle->iface.leader;
 	handle->internal.playNo = 0;
 	handle->iface.synchronize_raised = bool_true;
 	zBridgeClient_enseq_main_region_SyncLeader_default(handle);
@@ -1416,7 +1424,7 @@ static void zBridgeClient_effect_main_region_SyncAuction_tr2(ZBridgeClient* hand
 static void zBridgeClient_effect_main_region_SyncPlay_tr0(ZBridgeClient* handle)
 {
 	zBridgeClient_exseq_main_region_SyncPlay(handle);
-	handle->iface.bidInfo_value = handle->internal.leader;
+	handle->iface.bidInfo_value = handle->iface.leader;
 	handle->iface.bidInfo_raised = bool_true;
 	zBridgeClient_react_main_region__choice_4(handle);
 }
@@ -1477,9 +1485,9 @@ static void zBridgeClient_effect_main_region__choice_2_tr1(ZBridgeClient* handle
 	handle->iface.dummy = (handle->iface.declarer + 2) & 3;
 	handle->internal.firstTrick = bool_true;
 	handle->iface.noTrick = 0;
-	handle->internal.leader = (handle->iface.declarer + 1) & 3;
+	handle->iface.leader = (handle->iface.declarer + 1) & 3;
 	handle->internal.playNo = 0;
-	handle->iface.player = handle->internal.leader;
+	handle->iface.player = handle->iface.leader;
 	handle->iface.synchronize_raised = bool_true;
 	zBridgeClient_enseq_main_region_SyncPlay_default(handle);
 }
@@ -1644,9 +1652,9 @@ static void zBridgeClient_effect_main_region__choice_20_tr0(ZBridgeClient* handl
 {
 	handle->internal.firstTrick = bool_true;
 	handle->iface.noTrick = 0;
-	handle->internal.leader = (handle->iface.declarer + 1) & 3;
+	handle->iface.leader = (handle->iface.declarer + 1) & 3;
 	handle->internal.playNo = 0;
-	handle->iface.player = handle->internal.leader;
+	handle->iface.player = handle->iface.leader;
 	handle->iface.undoTrick_value = handle->internal.REPLAY;
 	handle->iface.undoTrick_raised = bool_true;
 	handle->iface.synchronize_raised = bool_true;
@@ -1672,8 +1680,8 @@ static void zBridgeClient_effect_main_region__choice_22_tr0(ZBridgeClient* handl
 
 static void zBridgeClient_effect_main_region__choice_23_tr0(ZBridgeClient* handle)
 {
-	handle->internal.leader = handle->iface.undo_value;
-	handle->iface.player = handle->internal.leader;
+	handle->iface.leader = handle->iface.undo_value;
+	handle->iface.player = handle->iface.leader;
 	handle->internal.playNo = 0;
 	handle->iface.synchronize_raised = bool_true;
 	zBridgeClient_enseq_main_region_SyncLeader_default(handle);

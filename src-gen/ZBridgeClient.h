@@ -53,7 +53,6 @@ typedef struct
 	sc_boolean firstBidRound;
 	sc_integer noPasses;
 	sc_integer lastBidder;
-	sc_integer leader;
 	sc_integer playNo;
 	sc_boolean firstTrick;
 } ZBridgeClientInternal;
@@ -112,6 +111,7 @@ typedef struct
 	sc_integer bidEnable;
 	sc_integer declarer;
 	sc_integer dummy;
+	sc_integer leader;
 	sc_integer noTrick;
 	sc_integer player;
 	sc_integer cardVal;
@@ -300,6 +300,10 @@ extern void zBridgeClientIface_set_declarer(ZBridgeClient* handle, sc_integer va
 extern sc_integer zBridgeClientIface_get_dummy(const ZBridgeClient* handle);
 /*! Sets the value of the variable 'dummy' that is defined in the default interface scope. */ 
 extern void zBridgeClientIface_set_dummy(ZBridgeClient* handle, sc_integer value);
+/*! Gets the value of the variable 'leader' that is defined in the default interface scope. */ 
+extern sc_integer zBridgeClientIface_get_leader(const ZBridgeClient* handle);
+/*! Sets the value of the variable 'leader' that is defined in the default interface scope. */ 
+extern void zBridgeClientIface_set_leader(ZBridgeClient* handle, sc_integer value);
 /*! Gets the value of the variable 'noTrick' that is defined in the default interface scope. */ 
 extern sc_integer zBridgeClientIface_get_noTrick(const ZBridgeClient* handle);
 /*! Sets the value of the variable 'noTrick' that is defined in the default interface scope. */ 

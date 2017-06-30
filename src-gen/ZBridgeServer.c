@@ -553,7 +553,6 @@ void zBridgeServer_init(ZBridgeServer* handle)
 	handle->internal.firstBidRound = bool_false;
 	handle->internal.lastBidder = 0;
 	handle->internal.noPasses = 0;
-	handle->internal.leader = 0;
 	handle->internal.playNo = 0;
 	handle->iface.noOfBoards = 0;
 	handle->iface.dealer = 0;
@@ -562,6 +561,7 @@ void zBridgeServer_init(ZBridgeServer* handle)
 	handle->iface.lastBid = 0;
 	handle->iface.bidDouble = 0;
 	handle->iface.declarer = 0;
+	handle->iface.leader = 0;
 	handle->iface.dummy = 0;
 	handle->iface.player = 0;
 	handle->iface.noTrick = 0;
@@ -1429,6 +1429,14 @@ void zBridgeServerIface_set_declarer(ZBridgeServer* handle, sc_integer value)
 {
 	handle->iface.declarer = value;
 }
+sc_integer zBridgeServerIface_get_leader(const ZBridgeServer* handle)
+{
+	return handle->iface.leader;
+}
+void zBridgeServerIface_set_leader(ZBridgeServer* handle, sc_integer value)
+{
+	handle->iface.leader = value;
+}
 sc_integer zBridgeServerIface_get_dummy(const ZBridgeServer* handle)
 {
 	return handle->iface.dummy;
@@ -1924,7 +1932,7 @@ static sc_boolean zBridgeServer_check_entry___choice_3_tr1_tr1(const ZBridgeServ
 
 static sc_boolean zBridgeServer_check_entry___choice_4_tr0_tr0(const ZBridgeServer* handle)
 {
-	return (handle->internal.leader == handle->iface.dummy) ? bool_true : bool_false;
+	return (handle->iface.leader == handle->iface.dummy) ? bool_true : bool_false;
 }
 
 static sc_boolean zBridgeServer_check_entry___choice_4_tr1_tr1(const ZBridgeServer* handle)
@@ -2454,8 +2462,8 @@ static void zBridgeServer_effect_entry__Playing_South_Sync_tr0(ZBridgeServer* ha
 static void zBridgeServer_effect_entry__WaitLeader_tr0(ZBridgeServer* handle)
 {
 	zBridgeServer_exseq_entry__WaitLeader(handle);
-	handle->internal.leader = handle->iface.newLeader_value;
-	handle->iface.player = handle->internal.leader;
+	handle->iface.leader = handle->iface.newLeader_value;
+	handle->iface.player = handle->iface.leader;
 	handle->internal.playNo = 0;
 	handle->iface.synchronize_raised = bool_true;
 	zBridgeServer_enseq_entry__SyncLeader_default(handle);
@@ -2485,7 +2493,7 @@ static void zBridgeServer_effect_entry__SyncAuction_tr1(ZBridgeServer* handle)
 static void zBridgeServer_effect_entry__SyncPlay_tr0(ZBridgeServer* handle)
 {
 	zBridgeServer_exseq_entry__SyncPlay(handle);
-	handle->iface.bidInfo_value = handle->internal.leader;
+	handle->iface.bidInfo_value = handle->iface.leader;
 	handle->iface.bidInfo_raised = bool_true;
 	zBridgeServer_react_entry___choice_4(handle);
 }
@@ -2555,8 +2563,8 @@ static void zBridgeServer_effect_entry___choice_1_tr1(ZBridgeServer* handle)
 	handle->iface.declarer = handle->internal.lastBidder;
 	handle->iface.dummy = (handle->iface.declarer + 2) & 3;
 	handle->iface.noTrick = 0;
-	handle->internal.leader = (handle->iface.declarer + 1) & 3;
-	handle->iface.player = handle->internal.leader;
+	handle->iface.leader = (handle->iface.declarer + 1) & 3;
+	handle->iface.player = handle->iface.leader;
 	handle->internal.playNo = 0;
 	handle->iface.synchronize_raised = bool_true;
 	zBridgeServer_enseq_entry__SyncPlay_default(handle);
@@ -2608,7 +2616,7 @@ static void zBridgeServer_effect_entry___choice_4_tr0(ZBridgeServer* handle)
 
 static void zBridgeServer_effect_entry___choice_4_tr1(ZBridgeServer* handle)
 {
-	handle->iface.playerToLead_value = handle->internal.leader;
+	handle->iface.playerToLead_value = handle->iface.leader;
 	handle->iface.playerToLead_raised = bool_true;
 	zBridgeServer_enseq_entry__Playing_default(handle);
 }
@@ -2658,8 +2666,8 @@ static void zBridgeServer_effect_entry___choice_8_tr0(ZBridgeServer* handle)
 static void zBridgeServer_effect_entry___choice_9_tr0(ZBridgeServer* handle)
 {
 	handle->iface.noTrick = 0;
-	handle->internal.leader = (handle->iface.declarer + 1) & 3;
-	handle->iface.player = handle->internal.leader;
+	handle->iface.leader = (handle->iface.declarer + 1) & 3;
+	handle->iface.player = handle->iface.leader;
 	handle->internal.playNo = 0;
 	handle->iface.undoTrick_value = handle->internal.REPLAY;
 	handle->iface.undoTrick_raised = bool_true;
@@ -2669,8 +2677,8 @@ static void zBridgeServer_effect_entry___choice_9_tr0(ZBridgeServer* handle)
 
 static void zBridgeServer_effect_entry___choice_10_tr0(ZBridgeServer* handle)
 {
-	handle->internal.leader = handle->iface.undo_value;
-	handle->iface.player = handle->internal.leader;
+	handle->iface.leader = handle->iface.undo_value;
+	handle->iface.player = handle->iface.leader;
 	handle->internal.playNo = 0;
 	handle->iface.synchronize_raised = bool_true;
 	zBridgeServer_enseq_entry__SyncLeader_default(handle);
@@ -5868,7 +5876,7 @@ static void zBridgeServer_react_entry___sync3(ZBridgeServer* handle)
 {
 	/* The reactions of state null. */
 	handle->internal.playNo += 1;
-	handle->iface.player = (handle->internal.leader + handle->internal.playNo) & 3;
+	handle->iface.player = (handle->iface.leader + handle->internal.playNo) & 3;
 	zBridgeServer_react_entry___choice_7(handle);
 }
 

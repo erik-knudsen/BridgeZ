@@ -62,7 +62,7 @@ public:
     void writePlayedGames(QTextStream &stream);
     void clearGames(ScoringMethod scoringMethod);
     void prepNextDeal();
-    void getNextDeal(int *board, int cards[][13], Seat *dealer, Team *vulnerable);
+    bool getNextDeal(int *board, int cards[][13], Seat *dealer, Team *vulnerable);
     void getCurrentDeal(int *board, int cards[][13], Seat *dealer, Team *vulnerable);
     bool getDeal(int relInx, int *board, int cards[][13], Seat *dealer, Team *vulnerable);
     int setDeal(int relInx, int board, int cards[][13], Seat dealer, Team vulnerable);

@@ -188,12 +188,16 @@ void CGamesDoc::prepNextDeal()
  * @param[out] cards The cards for the next game.
  * @param[out] dealer The dealer for the next game.
  * @param[out] vulnerable The vulnerability for the next game.
+ * @return true if ok. false if no more deals.
  *
  * Retrieves the next game in the current game set. Depending on the game set type (random or original),
  * then this might be a random generated game or the next game in a game set read from a pbn file.
  */
-void CGamesDoc::getNextDeal(int *board, int cards[][13], Seat *dealer, Team *vulnerable)
+bool CGamesDoc::getNextDeal(int *board, int cards[][13], Seat *dealer, Team *vulnerable)
 {
+    if (getNumberOfNotPlayedGames() == 0)
+        return false;
+
     //Give random card distribution etc.?
     if (dealType == RANDOM_DEAL)
     {
@@ -265,6 +269,7 @@ void CGamesDoc::getNextDeal(int *board, int cards[][13], Seat *dealer, Team *vul
             }
         }
     }
+    return true;
 }
 
 /**
@@ -766,16 +771,16 @@ int CGamesDoc::getDuplicateScore(int gameIndex, int auctionAndPlayIndex, bool ns
     int level = BID_LEVEL(contract);
 
     bool declarerVulnerable = (vulnerable == BOTH) ||
-           ((vulnerable == NORTH_SOUTH) && (declarer == SOUTH_SEAT) || (declarer == NORTH_SEAT)) ||
-          ((vulnerable ==EAST_WEST) && (declarer == EAST_SEAT) || (declarer == WEST_SEAT));
+           ((vulnerable == NORTH_SOUTH) && ((declarer == SOUTH_SEAT) || (declarer == NORTH_SEAT))) ||
+           ((vulnerable ==EAST_WEST) && ((declarer == EAST_SEAT) || (declarer == WEST_SEAT)));
 
     //Contract made?
     if (result >= (level + 6))
     {
         //Contract points.
         int contractPoints = ISNOTRUMP(suit) ? (40) : ISMAJOR(suit) ? (30) : (20);
-        if (result > 7)
-            contractPoints += (ISMINOR(suit) ? (20) : (30)) * (result - 7);
+        if (level > 1)
+            contractPoints += (ISMINOR(suit) ? (20) : (30)) * (level - 1);
         if (IS_DOUBLE_BID(contractModifier))
             contractPoints *=2;
         else if (IS_REDOUBLE_BID(contractModifier))
@@ -1082,8 +1087,8 @@ int CGamesDoc::getBelowTheLine(int gameIndex)
 
         //Contract points.
         contractPoints = ISNOTRUMP(suit) ? (40) : ISMAJOR(suit) ? (30) : (20);
-        if (result > 7)
-            contractPoints += (ISMINOR(suit) ? (20) : (30)) * (result - 7);
+        if (level > 1)
+            contractPoints += (ISMINOR(suit) ? (20) : (30)) * (level - 1);
         if (IS_DOUBLE_BID(contractModifier))
             contractPoints *=2;
         else if (IS_REDOUBLE_BID(contractModifier))
@@ -1128,8 +1133,8 @@ int CGamesDoc::getAboveTheLine(int gameIndex)
     int level = BID_LEVEL(contract);
 
     bool declarerVulnerable = (vulnerable == BOTH) ||
-           ((vulnerable == NORTH_SOUTH) && (declarer == SOUTH_SEAT) || (declarer == NORTH_SEAT)) ||
-          ((vulnerable ==EAST_WEST) && (declarer == EAST_SEAT) || (declarer == WEST_SEAT));
+           ((vulnerable == NORTH_SOUTH) && ((declarer == SOUTH_SEAT) || (declarer == NORTH_SEAT))) ||
+           ((vulnerable ==EAST_WEST) && ((declarer == EAST_SEAT) || (declarer == WEST_SEAT)));
 
     //Contract made?
     if (result >= (level + 6))

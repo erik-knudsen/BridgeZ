@@ -42,6 +42,7 @@ public:
     void setSeat(Seat seat);
     void appendBid(CBid &bid);
     void resetBidHistory();
+    Seat getDeclarer();
     int undo(Bids *bid);
     bool passedOut();
     CFeatures &getLowFeatures(Seat seat) { return lowFeatures[seat]; }

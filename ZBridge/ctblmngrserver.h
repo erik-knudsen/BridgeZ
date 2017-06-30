@@ -146,7 +146,7 @@ public slots:
 
 private:    
     void cleanTableManager();
-    void giveNewDeal();
+    bool giveNewDeal();
 
     void serverActions();
     void serverSyncActions();

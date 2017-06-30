@@ -392,18 +392,6 @@ void CTblMngrServer::serverActions()
         actors[SOUTH_SEAT]->startOfBoard();
     }
 
-    else if (zBridgeServerIface_israised_endOfSession(&handle))
-    {
-        //End of session.
-        //Disable New Deal, Show All and Double Dummy Results menu actions (still possible to save the game).
-        QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_NEW_DEAL , false));
-        QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_SHOW_ALL , false));
-        QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_PAR , false));
-        cleanTableManager();
-        QMessageBox::information(0, tr("ZBridge"), tr("Session finished."));
-        emit sShowScore();
-    }
-
     //Can come together with bidInfo and must be processed after bidInfo.
     if (zBridgeServerIface_israised_playerToLead(&handle))
     {
@@ -497,8 +485,20 @@ void CTblMngrServer::serverSyncActions()
         zBridgeServerSyncIface_raise_continue(&syncHandle);
         serverSyncRunCycle();
 
-        //Check if game info should be updated (can only happen with 4 remote clients).
         int syncState = zBridgeServerIface_get_syncState(&handle);
+        //Synchronization after bid and before play.
+        if (syncState == SP)
+        {
+            Seat declarer = bidHistory.getDeclarer();
+            Seat dummy = (Seat)((declarer + 2) % 4);
+            Seat leader = (Seat)((declarer + 1) % 4);
+            zBridgeServerIface_set_declarer(&handle, declarer);
+            zBridgeServerIface_set_dummy(&handle, dummy);
+            zBridgeServerIface_set_leader(&handle, leader);
+            zBridgeServerIface_set_player(&handle, leader);
+        }
+
+        //Check if game info should be updated (can only happen with 4 remote clients).
         if (updateGameInfo && (syncState == SS))
             sUpdateGame();
 
@@ -595,12 +595,16 @@ void CTblMngrServer::connectError(QString text)
 /**
  * @brief Give a new deal in accordance with what the user has selected.
  */
-void CTblMngrServer::giveNewDeal()
+bool CTblMngrServer::giveNewDeal()
 {
     Seat currentDealer;
 
-    games->getNextDeal(&currentBoardNo, currentCards, &currentDealer, &currentVulnerable);
+    if (!games->getNextDeal(&currentBoardNo, currentCards, &currentDealer, &currentVulnerable))
+        return false;
+
     zBridgeServerIface_set_dealer(&handle, currentDealer);
+
+    return true;
 }
 
 //Methods activated by user through main frame menus.
@@ -704,16 +708,21 @@ void CTblMngrServer::newSession()
     }
 
     //Start server state table.
-    zBridgeServer_init(&handle);
-    zBridgeServerIface_set_noOfBoards(&handle, games->getNumberOfNotPlayedGames());
-    zBridgeServer_enter(&handle);
-    serverActions();
+    if (games->getNumberOfNotPlayedGames() > 0)
+    {
+        zBridgeServer_init(&handle);
+        zBridgeServerIface_set_noOfBoards(&handle, games->getNumberOfNotPlayedGames() + 10);
+        zBridgeServer_enter(&handle);
+        serverActions();
 
-    //Start actors.
-    actors[WEST_SEAT]->startNewSession();
-    actors[NORTH_SEAT]->startNewSession();
-    actors[EAST_SEAT]->startNewSession();
-    actors[SOUTH_SEAT]->startNewSession();
+        //Start actors.
+        actors[WEST_SEAT]->startNewSession();
+        actors[NORTH_SEAT]->startNewSession();
+        actors[EAST_SEAT]->startNewSession();
+        actors[SOUTH_SEAT]->startNewSession();
+    }
+    else
+        QMessageBox::information(0, tr("ZBridge"), tr("Session finished."));
 }
 
 /**
@@ -925,21 +934,37 @@ void CTblMngrServer::startOfBoard()
     //At this point we must intiate a new deal.
     //We could be here because of first play in a session, pass out, play finished or user
     //wanted a new deal.
-    giveNewDeal();
+    if (!giveNewDeal())
+    {
+        //Disable New Deal, Show All and Double Dummy Results menu actions (still possible to save the game).
+        QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_NEW_DEAL , false));
+        QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_SHOW_ALL , false));
+        QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_PAR , false));
 
-    //Tell auto play that game info is now ready for the current play (only used with advanced protocol).
-    if (protocol == ADVANCED_PROTOCOL)
-        emit sigPlayStart();
+        QMessageBox::information(0, tr("ZBridge"), tr("Session finished."));
 
-    //The next continue is only needed for the first play in a session, but does no harm otherwise.
-    zBridgeServerIface_raise_continue(&handle);
-    serverRunCycle();
+        //Required for remote actors.
+        actors[WEST_SEAT]->endOfSession();
+        actors[NORTH_SEAT]->endOfSession();
+        actors[EAST_SEAT]->endOfSession();
+        actors[SOUTH_SEAT]->endOfSession();
+    }
+    else
+    {
+        //Tell auto play that game info is now ready for the current play (only used with advanced protocol).
+        if (protocol == ADVANCED_PROTOCOL)
+            emit sigPlayStart();
 
-    //Start all actors.
-    actors[WEST_SEAT]->startOfBoard();
-    actors[NORTH_SEAT]->startOfBoard();
-    actors[EAST_SEAT]->startOfBoard();
-    actors[SOUTH_SEAT]->startOfBoard();
+        //The next continue is only needed for the first play in a session, but does no harm otherwise.
+        zBridgeServerIface_raise_continue(&handle);
+        serverRunCycle();
+
+        //Start all actors.
+        actors[WEST_SEAT]->startOfBoard();
+        actors[NORTH_SEAT]->startOfBoard();
+        actors[EAST_SEAT]->startOfBoard();
+        actors[SOUTH_SEAT]->startOfBoard();
+    }
 }
 
 /**
