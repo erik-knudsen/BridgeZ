@@ -142,7 +142,7 @@ void CTblMngrClientAuto::sltDisconnect()
  * @brief Actor requests connect (actor slot).
  * @param name Team name for actor.
  * @param seat Seat for actor.
- * @param protocol Protocol to use (always advanced protocol).
+ * @param protocol Protocol to use.
  *
  * The name is set in the statechart and connect is signalled to the statechart.
  */

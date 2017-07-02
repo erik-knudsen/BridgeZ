@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>290</width>
-    <height>271</height>
+    <height>310</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -194,9 +194,6 @@
              </size>
             </property>
            </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QComboBox" name="protocol"/>
           </item>
           <item row="1" column="1">
            <spacer name="horizontalSpacer_2">

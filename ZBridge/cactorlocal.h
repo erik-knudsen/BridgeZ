@@ -87,6 +87,7 @@ public:
 
     Actor getActorType() { return (manual ? MANUAL_ACTOR : AUTO_ACTOR); }
     Seat getSeat() {return (Seat)zBridgeClientIface_get_client(&handle); }
+    void setManual(bool manual) { this->manual = manual; }
 
     ZBridgeClient *getHandle() { return &handle; }
 
@@ -122,6 +123,7 @@ private:
     void clientSyncActions();
 
     bool manual;        /**< Automatic or Manual actor ? */
+    bool defManual;
     bool showUser;      /**< Control what is shown to the user? */
     bool updateGameInfo;/**< Control who updates game info? */
     bool updateCurrentGameInfo;

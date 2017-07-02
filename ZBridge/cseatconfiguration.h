@@ -46,27 +46,15 @@ public:
     ~CSeatConfiguration();
     
 private slots:
-
     void on_west_clicked();
-
     void on_north_clicked();
-
     void on_east_clicked();
-
     void on_south_clicked();
-
     void on_westActor_currentIndexChanged(int index);
-
     void on_northActor_currentIndexChanged(int index);
-
     void on_eastActor_currentIndexChanged(int index);
-
     void on_southActor_currentIndexChanged(int index);
-
     void on_role_currentIndexChanged(int index);
-
-    void on_protocol_currentIndexChanged(int index);
-
     void on_buttonBox_accepted();
 
 private:

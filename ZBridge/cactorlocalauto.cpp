@@ -409,8 +409,7 @@ void CActorLocalAuto::bidDone(Seat bidder, Bids bid)
  * @param player The player to lead.
  *
  * This signal requires special attention. It might be received in the Bid state and
- * in the Play state and in the Lead state. This somewhat messy handling is due to the
- * way the protocol is structured.
+ * in the Play state and in the Lead state.
  */
 void CActorLocalAuto::playerToLead(Seat player)
 {
@@ -422,7 +421,7 @@ void CActorLocalAuto::playerToLead(Seat player)
  * @brief Dummy to lead message from table manager.
  *
  * This signal requires special attention. It might be received in the Play state and in the
- * Lead state. This somewhat messy handling is due to the way the protocol is structured.
+ * Lead state.
  */
 void CActorLocalAuto::dummyToLead()
 {
@@ -525,8 +524,6 @@ void CActorLocalAuto::reStart()
 
 /**
  * @brief Synchronization signal from server to client.
- *
- * Only used with advanced protocol.
  */
 void CActorLocalAuto::attemptSyncFromServerToClient()
 {
@@ -539,8 +536,6 @@ void CActorLocalAuto::attemptSyncFromServerToClient()
 
 /**
  * @brief Synchronization signal from server to client.
- *
- * Only used with advanced protocol.
  */
 void CActorLocalAuto::confirmSyncFromServerToClient()
 {
@@ -550,8 +545,6 @@ void CActorLocalAuto::confirmSyncFromServerToClient()
 
 /**
  * @brief Synchronization signal from server to client.
- *
- * Only used with advanced protocol.
  */
 void CActorLocalAuto::allSyncFromServerToClient()
 {

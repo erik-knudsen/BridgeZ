@@ -49,7 +49,8 @@ CActorLocal::CActorLocal(bool manual, QString teamName, Seat seat,
                        CBidAndPlayEngines *bidAndPlayEngines, CTblMngr *tableManager) :
     CActor(tableManager)
 {
-    this->manual = manual;
+    this->defManual = manual;
+    this->manual = defManual;
     this->teamName = teamName;
     bidAndPlay.setBidAndPlayEngines(bidAndPlayEngines);
     bidAndPlay.setSeat(seat);
@@ -125,6 +126,7 @@ void CActorLocal::clientActions()
     else if (zBridgeClientIface_israised_rDealInfo(&handle))
     {
         //Actor has received start of board and is ready for deal information.
+        manual = defManual;
         emit sRDealInfo( (Seat)zBridgeClientIface_get_client(&handle));
     }
 
@@ -384,9 +386,6 @@ void CActorLocal::bidValue(Bids bid)
     //Server must continue to next (Bidding Wait) states before clients can send
     //signals to these states.
     emit sBid(bidder, bid);  //Server first then clients.
-
-//    if (protocol == BASIC_PROTOCOL)
-//        bidDone(bidder, bid);    //This client.
 }
 
 /**
@@ -421,7 +420,6 @@ void CActorLocal::playValue(int card)
             emit sDisablePlayer(player);
             emit sClearYourTurnOnTable();
         }
-
 
         //Server must continue to next (Playing Wait) states before clients can send
         //signals to these states.
@@ -557,8 +555,7 @@ void CActorLocal::bidDone(Seat bidder, Bids bid)
  * @param player The player to lead.
  *
  * This signal requires special attention. It might be received in the Bid state and
- * in the Play state and in the Lead state. This somewhat messy handling is due to the
- * way the protocol is structured.
+ * in the Play state and in the Lead state.
  */
 void CActorLocal::playerToLead(Seat player)
 {
@@ -570,7 +567,7 @@ void CActorLocal::playerToLead(Seat player)
  * @brief Dummy to lead message from table manager.
  *
  * This signal requires special attention. It might be received in the Play state and in the
- * Lead state. This somewhat messy handling is due to the way the protocol is structured.
+ * Lead state.
  */
 void CActorLocal::dummyToLead()
 {

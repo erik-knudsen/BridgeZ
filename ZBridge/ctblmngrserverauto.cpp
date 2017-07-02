@@ -212,7 +212,7 @@ void CTblMngrServerAuto::serverActions()
     else if (zBridgeServerIface_israised_bidInfo(&handle))
     {
         //Bidding is finished.
-        //Set bid, double and declarer (last bidder) in play history.
+        //Set bid, double and open leader in play history.
         playHistory.setBidInfo((Bids)zBridgeServerIface_get_lastBid(&handle),
                                (Bids)zBridgeServerIface_get_bidDouble(&handle),
                                (Seat)zBridgeServerIface_get_bidInfo_value(&handle));
@@ -321,8 +321,6 @@ void CTblMngrServerAuto::serverActions()
 
 /**
  * @brief Synchronization between server and clients.
- *
- * Only used with the advanced protocol.
  */
 void CTblMngrServerAuto::serverSyncActions()
 {

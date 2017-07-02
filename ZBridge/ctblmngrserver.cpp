@@ -277,7 +277,7 @@ void CTblMngrServer::serverActions()
             sShowPlay();        //Show play widget in play view.
         }
 
-        //Set bid, double and declarer (last bidder) in play history.
+        //Set bid, double and open leader in play history.
         playHistory.setBidInfo((Bids)zBridgeServerIface_get_lastBid(&handle),
                                (Bids)zBridgeServerIface_get_bidDouble(&handle),
                                (Seat)zBridgeServerIface_get_bidInfo_value(&handle));
@@ -303,8 +303,6 @@ void CTblMngrServer::serverActions()
 
         //Then inform other players about play (they might send signals back to server).
         //Note declarer plays dummy's cards.
-        Seat seat = (player == (Seat)zBridgeServerIface_get_dummy(&handle)) ?
-                    (Seat)zBridgeServerIface_get_declarer(&handle) : player;
         actors[WEST_SEAT]->playerPlays(player, card);
         actors[NORTH_SEAT]->playerPlays(player, card);
         actors[EAST_SEAT]->playerPlays(player, card);
@@ -447,6 +445,7 @@ void CTblMngrServer::serverSyncActions()
         //Synchronization after bid and before play.
         if (syncState == SP)
         {
+            //Update declarer etc. properly in state table.
             Seat declarer = bidHistory.getDeclarer();
             Seat dummy = (Seat)((declarer + 2) % 4);
             Seat leader = (Seat)((declarer + 1) % 4);
@@ -698,13 +697,13 @@ void CTblMngrServer::showAllCards()
     showAll = !showAll;
 
     //Determine which cards to show in play view.
-    bool showWest = showAll || (doc->getSeatOptions().westActor == MANUAL_ACTOR) ||
+    bool showWest = showAll || (actors[WEST_SEAT] ->getActorType() == MANUAL_ACTOR) ||
             (showDummy && (WEST_SEAT == dummy));
-    bool showNorth = showAll || (doc->getSeatOptions().northActor == MANUAL_ACTOR) ||
+    bool showNorth = showAll || (actors[NORTH_SEAT] ->getActorType() == MANUAL_ACTOR) ||
             (showDummy && (NORTH_SEAT == dummy));
-    bool showEast = showAll || (doc->getSeatOptions().eastActor == MANUAL_ACTOR) ||
+    bool showEast = showAll || (actors[EAST_SEAT] ->getActorType() == MANUAL_ACTOR) ||
             (showDummy && (EAST_SEAT == dummy));
-    bool showSouth = showAll || (doc->getSeatOptions().southActor == MANUAL_ACTOR) ||
+    bool showSouth = showAll || (actors[SOUTH_SEAT] ->getActorType() == MANUAL_ACTOR) ||
             (showDummy && (SOUTH_SEAT == dummy));
 
     playView->showCards(WEST_SEAT, showWest);
@@ -1238,10 +1237,24 @@ void CTblMngrServer::sDisableContinueSync(int syncState)
             break;
 
         case BUTTON_PLAY:
+        {
             playView->showInfoPlayButton(false, BUTTON_PLAY);
+
+            //if declarer is auto and partner is manual then instead of declarer playing
+            //partners cards then we let partner play declarers cards.
+            //(this is only implemented with local actors. In other cases auto declarer plays the cards.).
+            Seat declarer = (Seat)zBridgeServerIface_get_declarer(&handle);
+            Seat dummy = (Seat)zBridgeServerIface_get_dummy(&handle);
+            if ((actors[declarer]->getActorType() == AUTO_ACTOR) &&
+                    (actors[dummy]->getActorType() == MANUAL_ACTOR))
+            {
+                playView->showCards(declarer, true);
+                actors[declarer]->setManual(true);
+            }
             QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_UNDO , true));
             QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_REBID , true));
             QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_REPLAY , true));
+        }
             break;
 
         case BUTTON_LEADER:

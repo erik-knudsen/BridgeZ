@@ -47,7 +47,7 @@ class CBidAndPlayEngines;
  * plays the current (user controlled) game automatically. This can happen when the MP or IMP score
  * method is being used for the play and there is a need for something to compare with. It performs
  * the same basic functionality as the CTblMngrClient class except the user interaction has been
- * stripped. And it can only be used with the advanced protocol.
+ * stripped.
  */
 class CTblMngrClientAuto : public CTblMngrBase
 {

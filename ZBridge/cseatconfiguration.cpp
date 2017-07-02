@@ -24,10 +24,6 @@
 #include "czbridgeapp.h"
 #include "czbridgedoc.h"
 
-//Protocol name index.
-const int PROTOCOL_BASIC = 0;
-const int PROTOCOL_ADVANCED = 1;
-
 CSeatConfiguration::CSeatConfiguration(CZBridgeApp *app, CZBridgeDoc *doc, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::CSeatConfiguration)
@@ -48,10 +44,6 @@ CSeatConfiguration::CSeatConfiguration(CZBridgeApp *app, CZBridgeDoc *doc, QWidg
     labels.clear();
     labels << tr("Server") << tr("Client") << tr("Standalone");
     ui->role->addItems(labels);
-
-    labels.clear();
-    labels << tr("Basic") << tr("Advanced");
-    ui->protocol->addItems(labels);
 
     //Next set up dialog based on saved values.
     seatOptionDoc = doc->getSeatOptions();
@@ -74,9 +66,6 @@ CSeatConfiguration::CSeatConfiguration(CZBridgeApp *app, CZBridgeDoc *doc, QWidg
     ui->northActor->setCurrentIndex(seatOptionDoc.northActor);
     ui->eastActor->setCurrentIndex(seatOptionDoc.eastActor);
     ui->southActor->setCurrentIndex(seatOptionDoc.southActor);
-
-    ui->role->setCurrentIndex(seatOptionDoc.role);
-    ui->protocol->setCurrentIndex((seatOptionDoc.protocol == BASIC_PROTOCOL) ? PROTOCOL_BASIC : PROTOCOL_ADVANCED);
 
     //Enable/disable based on saved values.
     updateHostAndPort();
@@ -141,11 +130,6 @@ void CSeatConfiguration::on_role_currentIndexChanged(int index)
     seatOptionDoc.role = (Role)index;
     updateHostAndPort();
     updateSeatAndActor();
-}
-
-void CSeatConfiguration::on_protocol_currentIndexChanged(int index)
-{
-    seatOptionDoc.protocol = (index == PROTOCOL_BASIC) ? BASIC_PROTOCOL : ADVANCED_PROTOCOL;
 }
 
 void CSeatConfiguration::on_buttonBox_accepted()

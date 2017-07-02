@@ -27,7 +27,6 @@
 /**
  * @brief Constructor for actor remote class.
  * @param seat The seat for the actor.
- * @param protocol The protocol to use (advanced or basic).
  * @param frontEnd Pointer to the front end communicating with the client.
  * @param tableManager The table manager.
  *
