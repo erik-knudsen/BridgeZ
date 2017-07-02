@@ -317,7 +317,7 @@ void CActorLocal::clientSyncActions()
         if (manual && ((syncState == SA) || (syncState == SP) || (syncState == SS) || (syncState == SL)))
             emit sEnableContinueSync(zBridgeClientSyncIface_get_syncState(&syncHandle));
         else
-            continueSync();
+            continueSync();                 //Never when showUser is true.
     }
 
     else if (zBridgeClientSyncIface_israised_okSync(&syncHandle))
