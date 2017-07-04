@@ -314,3 +314,19 @@ void CPlayHistory::getTrickInfo(int trickNo, int &ewTricks, int &nsTricks, Seat 
     nsTricks = playStack[trickNo].nsTricks;
     nextLeader = playStack[trickNo].nextLeader;
 }
+
+void CPlayHistory::getNoPlayed(Seat seat, Suit suit, int *noOwn, int *noOpp)
+{
+    *noOwn = *noOpp = 0;
+    for (int i = 0; i < 13; i++)
+    {
+        if (CARD_SUIT(play[seat][i]) == suit)
+            (*noOwn)++;
+        if (CARD_SUIT(play[(seat + 1) & 3][i]) == suit)
+            (*noOpp)++;
+        if (CARD_SUIT(play[(seat + 2) & 3][i]) == suit)
+            (*noOwn)++;
+        if (CARD_SUIT(play[(seat + 3) & 3][i]) == suit)
+            (*noOpp)++;
+    }
+}

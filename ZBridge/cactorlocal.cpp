@@ -33,10 +33,7 @@
  * @param manual If true then the actor is manual else it is automatic.
  * @param teamName The team name for the cooperating pair of actors.
  * @param seat This actors seat.
- * @param nsBbidOptionDoc NS bid options.
- * @param ewBbidOptionDoc EW bid options.
- * @param bidDB The bid database.
- * @param bidDesc Description of the bid database.
+ * @param bidAndPlayEngines Bid and Play engines.
  * @param tableManager The controlling table manager.
  *
  * The constructor:
@@ -287,7 +284,7 @@ void CActorLocal::clientSyncActions()
     {
         //Update Table Manager game info.
         int syncState = zBridgeClientSyncIface_get_syncState(&syncHandle);
-        if (updateCurrentGameInfo && (syncState == SS))
+        if (updateCurrentGameInfo && (syncState == SS))     //Sync Start of Board.
         {
             emit sUpdateGame();
             updateCurrentGameInfo = false;
@@ -302,7 +299,7 @@ void CActorLocal::clientSyncActions()
         //Might pause here (show button etc.).
         int syncState = zBridgeClientSyncIface_get_syncState(&syncHandle);
         //Synchronization after bid and before play?
-        if (syncState == SP)
+        if (syncState == SP)                            //Sync Play.
         {
             Seat declarer = bidAndPlay.getBidHistory().getDeclarer();
             Seat dummy = (Seat)((declarer + 2) % 4);
@@ -312,7 +309,7 @@ void CActorLocal::clientSyncActions()
             zBridgeClientIface_set_leader(&handle, leader);
             zBridgeClientIface_set_player(&handle, leader);
         }
-        if (updateGameInfo && (syncState == SS))
+        if (updateGameInfo && (syncState == SS))            //Sync Start of Board.
             emit sUpdateGameToNextDeal();
         if (manual && ((syncState == SA) || (syncState == SP) || (syncState == SS) || (syncState == SL)))
             emit sEnableContinueSync(zBridgeClientSyncIface_get_syncState(&syncHandle));

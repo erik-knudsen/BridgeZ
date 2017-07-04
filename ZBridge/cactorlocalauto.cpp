@@ -31,10 +31,7 @@
  * @brief Constructor for local automatic actor.
  * @param teamName The team name for the cooperating pair of actors.
  * @param seat This actors seat.
- * @param nsBidOptionDoc NS bid options.
- * @param ewBidOptionDoc EW bid options.
- * @param bidDB The bid database.
- * @param bidDesc Description of the bid database.
+ * @param bidAndPlayEngines Bid and Play engines.
  * @param tableManager The controlling table manager.
  *
  * The constructor:

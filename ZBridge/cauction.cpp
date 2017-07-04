@@ -42,7 +42,7 @@ QDataStream &operator>>(QDataStream &in, CAuction &auction)
 }
 
 /**
- * @brief operator < Sorting opeerator for auctions.
+ * @brief operator < Sorting operator for auctions.
  */
 bool operator<(const CAuction &auction_1, const CAuction &auction_2)
 {

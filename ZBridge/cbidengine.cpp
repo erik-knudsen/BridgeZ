@@ -867,20 +867,20 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
             //if too high  //escape from slam try.
             int maxLevel = (agree == NOTRUMP) ? (3) : ((agree == SPADES) || (agree == HEARTS)) ? (4) : (5);
             Bids escBid = MAKE_BID(agree, maxLevel);
-            if (highOwnBid > escBid)
+            if (highOPBid > escBid)
             {
-                int level = BID_LEVEL(highOwnBid);
+                int level = BID_LEVEL(highOPBid);
                 nextBid = BID_PASS;
-                if (BID_SUIT(highOwnBid) != agree)                      //Might happen with control bid after agreement.
+                if (BID_SUIT(highOPBid) != agree)                      //Might happen with control bid after agreement.
                 {
                     level++;
-                    nextBid = MAKE_BID(agree, BID_LEVEL(highOwnBid) + 1);
+                    nextBid = MAKE_BID(agree, level);
                 }
 
                 Bids cmpBid = MAKE_BID(agree, level);
                 if (highOppBid < cmpBid)
                     bid.bid = nextBid;
-                else if ((nextBid >= BID_3NT) && canDouble(bidHistory) && (highOppBid >= cmpBid))
+                else if ((cmpBid >= BID_3NT) && canDouble(bidHistory))
                     bid.bid = BID_DOUBLE;
                 else
                     bid.bid = BID_PASS;

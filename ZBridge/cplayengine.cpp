@@ -76,7 +76,7 @@ int CPlayEngine::getNextPlay(Seat seat, Seat dummySeat, int ownCards[], int dumm
         for (int i = 0; i < 52; i++)
             cardValues[i] = i;
 
-        //Own cards are always known, therefore remove own cards..
+        //Own cards are always known, therefore remove own cards.
         for (int i = 0; i < 13; i++)
             cardValues[ownCards[i]] = -1;
 
@@ -265,6 +265,62 @@ int CPlayEngine::getNextPlay(Seat seat, Seat dummySeat, int ownCards[], int dumm
         assert(i < 13);
 
         card = crds[i];
+    }
+    else
+    {
+        //Get trump suit for the hand.
+        Suit suit = BID_SUIT(playHistory.getContract());
+
+        //Get current leader.
+        Seat currentLeader = playHistory.getCurrentLeader();
+        Seat declarer = playHistory.getDeclarer();
+
+        //In the current trick, 3 cards can be played.
+        Seat seat_0 = currentLeader;
+        Seat seat_1 = (Seat)((currentLeader + 1) % 4);
+        Seat seat_2 = (Seat)((currentLeader + 2) % 4);
+        int trick[4];
+        playHistory.getTrick(playHistory.getNoTrick(), trick);
+        if (((declarer == currentLeader) || (((declarer  + 2) & 3) == currentLeader)) && (suit != NOTRUMP) &&
+                (trick[seat_0] == -1) && (trick[seat_1] == -1) && (trick[seat_2] == -1))
+        {
+            //Declarer or dummy is leading a trump play.
+            CFeatures declarerFeatures;
+            CFeatures dummyFeatures;
+            declarerFeatures.setCardFeatures(ownCards);
+            dummyFeatures.setCardFeatures(dummyCards);
+            //Should we play trump?
+            int no = declarerFeatures.getSuitLen(suit) + dummyFeatures.getSuitLen(suit);
+            if (no >= 7)
+            {
+                int noOwn, noOpp;
+                playHistory.getNoPlayed(declarer, suit, &noOwn, &noOpp);
+                if ((no + noOpp) < 13)
+                {
+                    //Declarer or dummy leads trump if this is one of the best plays.
+                    int i;
+                    for (i = 0; i < 52; i++)
+                    {
+                        if ((cards[i] == max) && (CARD_SUIT(i) == suit))
+                            break;
+                    }
+                    if (i < 52)
+                        card = i;
+                }
+                else
+                {
+                    //Declarer or dummy leads non trump if this is one of the best plays.
+                    int i;
+                    for (i = 0; i < 52; i++)
+                    {
+                        if ((cards[i] == max) && (CARD_SUIT(i) != suit))
+                            break;
+                    }
+                    if (i < 52)
+                        card = i;
+                }
+            }
+        }
     }
 
     return card;

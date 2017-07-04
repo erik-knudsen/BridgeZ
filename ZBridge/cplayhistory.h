@@ -54,6 +54,7 @@ public:
     int getResult();
     void getTrick(int trickNo, int trick[]);
     void getTrickInfo(int trickNo, int &ewTricks, int &nsTricks, Seat &nextLeader);
+    void getNoPlayed(Seat seat, Suit suit, int *noOwn, int *noOpp);
 
 private:
     int noTrick;
