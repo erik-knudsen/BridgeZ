@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>357</width>
-    <height>338</height>
+    <width>382</width>
+    <height>383</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -30,20 +30,6 @@
           <layout class="QHBoxLayout" name="horizontalLayout_5">
            <item>
             <layout class="QVBoxLayout" name="verticalLayout_5">
-             <item>
-              <widget class="QCheckBox" name="autoPlayLastCard">
-               <property name="text">
-                <string>Automatically play the last card in the suit led</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QCheckBox" name="autoJumpCursor">
-               <property name="text">
-                <string>Automatically jump cursor to player</string>
-               </property>
-              </widget>
-             </item>
              <item>
               <widget class="QGroupBox" name="insertBiddingPause">
                <property name="title">
@@ -170,19 +156,6 @@
                </layout>
               </widget>
              </item>
-             <item>
-              <spacer name="verticalSpacer">
-               <property name="orientation">
-                <enum>Qt::Vertical</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>20</width>
-                 <height>40</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
             </layout>
            </item>
            <item>
@@ -194,241 +167,6 @@
               <size>
                <width>40</width>
                <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-          </layout>
-         </item>
-        </layout>
-       </widget>
-       <widget class="QWidget" name="gameOptsMechanicsPage">
-        <attribute name="title">
-         <string>Mechanics</string>
-        </attribute>
-        <layout class="QVBoxLayout" name="verticalLayout_14">
-         <item>
-          <layout class="QVBoxLayout" name="verticalLayout_6">
-           <item>
-            <widget class="QCheckBox" name="autoBidStart">
-             <property name="text">
-              <string>Automatically start bidding after each deal</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QCheckBox" name="computerCanClaim">
-             <property name="text">
-              <string>Computer player can claim</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QCheckBox" name="allowRebidPassedHands">
-             <property name="text">
-              <string>Allow rebidding of passed hands</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_3">
-             <item>
-              <widget class="QCheckBox" name="enableTracing">
-               <property name="text">
-                <string>Enable computer analysis tracing</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QComboBox" name="traceLevel"/>
-             </item>
-            </layout>
-           </item>
-           <item>
-            <widget class="QCheckBox" name="showPassedHands">
-             <property name="text">
-              <string>Show all the cards when a hand is passed out</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QCheckBox" name="enableAnalysisDuringHints">
-             <property name="text">
-              <string>Display analysis tracing for hints</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <spacer name="verticalSpacer_2">
-             <property name="orientation">
-              <enum>Qt::Vertical</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>20</width>
-               <height>40</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-          </layout>
-         </item>
-        </layout>
-       </widget>
-       <widget class="QWidget" name="gameOptsCountingPage">
-        <attribute name="title">
-         <string>Counting</string>
-        </attribute>
-        <layout class="QVBoxLayout" name="verticalLayout_17">
-         <item>
-          <layout class="QVBoxLayout" name="verticalLayout_13">
-           <item>
-            <widget class="QGroupBox" name="groupBox">
-             <property name="title">
-              <string>Honors Valuation</string>
-             </property>
-             <layout class="QVBoxLayout" name="verticalLayout_8">
-              <item>
-               <layout class="QVBoxLayout" name="verticalLayout_7">
-                <item>
-                 <widget class="QRadioButton" name="gorenValuationMode">
-                  <property name="text">
-                   <string>4 - 3 - 2 - 1 (Standard Goren)</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QRadioButton" name="ginsburgValuationMode">
-                  <property name="text">
-                   <string>4.7 - 3.0 - 1.5 - 0.8 (Ginsburg)</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QRadioButton" name="customValuationMode">
-                  <property name="text">
-                   <string>Custom</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <layout class="QHBoxLayout" name="horizontalLayout_4">
-                  <item>
-                   <widget class="QLabel" name="label_3">
-                    <property name="text">
-                     <string>A:</string>
-                    </property>
-                    <property name="buddy">
-                     <cstring>aceValue</cstring>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLineEdit" name="aceValue">
-                    <property name="maximumSize">
-                     <size>
-                      <width>35</width>
-                      <height>16777215</height>
-                     </size>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLabel" name="label_4">
-                    <property name="text">
-                     <string>K:</string>
-                    </property>
-                    <property name="buddy">
-                     <cstring>kingValue</cstring>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLineEdit" name="kingValue">
-                    <property name="maximumSize">
-                     <size>
-                      <width>35</width>
-                      <height>16777215</height>
-                     </size>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLabel" name="label_5">
-                    <property name="text">
-                     <string>Q:</string>
-                    </property>
-                    <property name="buddy">
-                     <cstring>queenValue</cstring>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLineEdit" name="queenValue">
-                    <property name="maximumSize">
-                     <size>
-                      <width>35</width>
-                      <height>16777215</height>
-                     </size>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLabel" name="label_6">
-                    <property name="text">
-                     <string>J:</string>
-                    </property>
-                    <property name="buddy">
-                     <cstring>jackValue</cstring>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLineEdit" name="jackValue">
-                    <property name="maximumSize">
-                     <size>
-                      <width>35</width>
-                      <height>16777215</height>
-                     </size>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLabel" name="label_7">
-                    <property name="text">
-                     <string>T:</string>
-                    </property>
-                    <property name="buddy">
-                     <cstring>tenValue</cstring>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLineEdit" name="tenValue">
-                    <property name="maximumSize">
-                     <size>
-                      <width>35</width>
-                      <height>16777215</height>
-                     </size>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
-                </item>
-               </layout>
-              </item>
-             </layout>
-            </widget>
-           </item>
-           <item>
-            <spacer name="verticalSpacer_5">
-             <property name="orientation">
-              <enum>Qt::Vertical</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>20</width>
-               <height>40</height>
               </size>
              </property>
             </spacer>
@@ -530,44 +268,6 @@
            </item>
            <item>
             <spacer name="verticalSpacer_6">
-             <property name="orientation">
-              <enum>Qt::Vertical</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>20</width>
-               <height>40</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-          </layout>
-         </item>
-        </layout>
-       </widget>
-       <widget class="QWidget" name="gameOptsFilesPage">
-        <attribute name="title">
-         <string>Files</string>
-        </attribute>
-        <layout class="QVBoxLayout" name="verticalLayout_11">
-         <item>
-          <layout class="QVBoxLayout" name="verticalLayout_10">
-           <item>
-            <widget class="QCheckBox" name="saveIntermediatePositions">
-             <property name="text">
-              <string>Save Intermediate Positions</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QCheckBox" name="exposePBNGameCards">
-             <property name="text">
-              <string>Show all cards face up when a PBN game is loaded</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <spacer name="verticalSpacer_4">
              <property name="orientation">
               <enum>Qt::Vertical</enum>
              </property>

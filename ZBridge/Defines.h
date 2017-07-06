@@ -679,16 +679,6 @@ const int MAX_TOT_DP = 9;
 const int MAX_SUIT_SIZE = 13;
 
 //------------------------- Display options. ------------------------
-//Suits.
-const int SHCD_SUIT_SEQUENCE = 0;
-const int SHDC_SUIT_SEQUENCE = 1;
-const int DCHS_SUIT_SEQUENCE = 2;
-const int CDHS_SUIT_SEQUENCE = 3;
-const int HSDC_SUIT_SEQUENCE = 4;
-
-//Cards.
-const int DEFAULT_ANIMATION_GRANULARITY = 9;
-
 //Card Backs.
 const int CARD_BACK_0 = 0;
 const int CARD_BACK_1 = 1;
@@ -705,40 +695,10 @@ const QString CARD_BACK_NAME[6] = { ":/newPrefix/resources/cardback1.png",
                                     ":/newPrefix/resources/cardback11.png",
                                     ":/newPrefix/resources/cardback2.png"
                                    };
-//Misc.
-const int TILE_BITMAP_MODE = 0;
-const int CENTER_BITMAP_MODE = 1;
-
-//----------------------------- Game Options. ------------------------
-//Interface.
-const int LEVEL_1_TRACE_LEVEL = 0;
-const int LEVEL_2_TRACE_LEVEL = 1;
-const int LEVEL_3_TRACE_LEVEL = 2;
-const int LEVEL_4_TRACE_LEVEL = 3;
-const int LEVEL_5_TRACE_LEVEL = 4;
-
-//Counting.
-const int GOREN_VALUATION_MODE = 0;
-const int GINSBURG_VALUATION_MODE = 1;
-const int CUSTOM_VALUATION_MODE = 3;
-
 //Scoring.
 enum Forcing { NON_FORCING=0, FORCING=1, GAME_FORCING=2, MUST_PASS=3};
 enum Vulnerability { VUL_II=0, VUL_NI=1, VUL_YI=2, VUL_NN=3, VUL_NY=4, VUL_YN=5, VUL_YY=6 };
 enum ScoringMethod { IMP=0, MP=1, RUBBER=2, PRACTICE=3, NOSCORE=4, FORSCORE=5};
-
-//----------------------------- Wizard. -------------------------------
-//Help Level.
-const int BEGIN_HELP_LEVEL = 0;
-const int BASIC_HELP_LEVEL = 1;
-const int MINIMUM_HELP_LEVEL = 2;
-
-//Bidding Style.
-const int NATURAL_BIDDING_STYLE = 0;
-const int GOREN_BIDDING_STYLE = 1;
-const int STANDARD_AMERICAN_BASIC_BIDDING_STYLE = 2;
-const int STANDARD_AMERICAN_YELLOW_CARD_BIDDING_STYLE = 3;
-const int ACOL_BIDDING_STYLE = 4;
 
 //------------------------- Play View definitions ----------------------
 const int CARD_VER_SIZE = 96;

@@ -22,7 +22,7 @@
      <x>0</x>
      <y>0</y>
      <width>942</width>
-     <height>21</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -35,9 +35,7 @@
     <addaction name="actionDelete"/>
     <addaction name="separator"/>
     <addaction name="actionPrint"/>
-    <addaction name="actionPrint_PreView"/>
     <addaction name="separator"/>
-    <addaction name="actionProperties"/>
     <addaction name="separator"/>
     <addaction name="actionRecent_File"/>
     <addaction name="separator"/>
@@ -60,11 +58,8 @@
     <addaction name="action_Expose_All_Cards"/>
     <addaction name="action_Score"/>
     <addaction name="actionDouble_Dummy_Results"/>
-    <addaction name="action_File_Comments"/>
-    <addaction name="actionBidding_Play_History"/>
     <addaction name="separator"/>
     <addaction name="action_Toolbar"/>
-    <addaction name="actionSecondary_Toolbar"/>
     <addaction name="actionStatus_Bar"/>
     <addaction name="separator"/>
    </widget>
@@ -85,10 +80,6 @@
     <addaction name="actionConcede"/>
     <addaction name="separator"/>
     <addaction name="actionHint"/>
-    <addaction name="actionAuto_Hints"/>
-    <addaction name="actionAuto_Play_Card"/>
-    <addaction name="actionAuto_Play_All_Cards"/>
-    <addaction name="actionAuto_Play_to_Completion"/>
     <addaction name="separator"/>
    </widget>
    <widget class="QMenu" name="menuOptions">
@@ -101,7 +92,6 @@
     <addaction name="action_Di_splay_Options"/>
     <addaction name="action_Game_Options"/>
     <addaction name="separator"/>
-    <addaction name="actionConfiguration_Wizard"/>
    </widget>
    <widget class="QMenu" name="menuSpecial">
     <property name="title">
@@ -110,8 +100,6 @@
     <addaction name="actionSelect_Bid_Database"/>
     <addaction name="actionEdit_Bid_Database"/>
     <addaction name="separator"/>
-    <addaction name="actionEnable_Analysis_Tracing"/>
-    <addaction name="actionShow_Player_Analyses"/>
     <addaction name="separator"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
@@ -119,19 +107,9 @@
      <string>Help</string>
     </property>
     <addaction name="action_Contents"/>
-    <addaction name="actionIn_troduction"/>
-    <addaction name="action_Rules_of_the_Game"/>
-    <addaction name="action_Menu_Commands"/>
-    <addaction name="actionMi_scellaneous_Topics"/>
-    <addaction name="action_Glossary_of_Terms"/>
     <addaction name="separator"/>
-    <addaction name="action_Search_for_Help_On"/>
     <addaction name="separator"/>
-    <addaction name="actionQuick_Start"/>
-    <addaction name="actionFrequently_Asked_Questions"/>
-    <addaction name="actionTip_of_the_Day"/>
     <addaction name="separator"/>
-    <addaction name="action_View_README_File"/>
     <addaction name="separator"/>
     <addaction name="action_About_ZBridge"/>
    </widget>
@@ -169,44 +147,22 @@
    <addaction name="action_Bid_Rebid"/>
    <addaction name="separator"/>
    <addaction name="actionHint"/>
-   <addaction name="actionAuto_Hints"/>
    <addaction name="separator"/>
-   <addaction name="actionAuto_Play_Card"/>
-   <addaction name="actionAuto_Play_All_Cards"/>
-   <addaction name="actionAuto_Play_to_Completion"/>
    <addaction name="separator"/>
    <addaction name="actionClaim_All"/>
    <addaction name="actionClaim_Contract"/>
    <addaction name="actionConcede"/>
    <addaction name="separator"/>
-   <addaction name="actionBidding_Play_History"/>
-   <addaction name="actionShow_Player_Analyses"/>
-   <addaction name="actionEnable_Analysis_Tracing"/>
    <addaction name="action_Expose_All_Cards"/>
    <addaction name="separator"/>
    <addaction name="action_Score"/>
    <addaction name="actionDouble_Dummy_Results"/>
-   <addaction name="action_File_Comments"/>
    <addaction name="separator"/>
   </widget>
   <widget class="CStatusBar" name="statusBar">
    <property name="sizeGripEnabled">
     <bool>true</bool>
    </property>
-  </widget>
-  <widget class="QToolBar" name="toolBar_Secondary">
-   <property name="windowTitle">
-    <string>toolBar_2</string>
-   </property>
-   <attribute name="toolBarArea">
-    <enum>TopToolBarArea</enum>
-   </attribute>
-   <attribute name="toolBarBreak">
-    <bool>true</bool>
-   </attribute>
-   <addaction name="action_Contents"/>
-   <addaction name="actionTip_of_the_Day"/>
-   <addaction name="action_About_ZBridge"/>
   </widget>
   <action name="actionOpen">
    <property name="icon">
@@ -259,19 +215,6 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+P</string>
-   </property>
-  </action>
-  <action name="actionPrint_PreView">
-   <property name="text">
-    <string>Print Pre&amp;view</string>
-   </property>
-  </action>
-  <action name="actionProperties">
-   <property name="text">
-    <string>P&amp;roperties...</string>
-   </property>
-   <property name="shortcut">
-    <string>Alt+Return</string>
    </property>
   </action>
   <action name="actionRecent_File">
@@ -329,33 +272,6 @@
     <string>Ctrl+V</string>
    </property>
   </action>
-  <action name="action_File_Comments">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="images.qrc">
-     <normaloff>:/newPrefix/resources/ViewFileComments.bmp</normaloff>:/newPrefix/resources/ViewFileComments.bmp</iconset>
-   </property>
-   <property name="text">
-    <string>&amp;File Comments</string>
-   </property>
-  </action>
-  <action name="actionBidding_Play_History">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="images.qrc">
-     <normaloff>:/newPrefix/resources/history.bmp</normaloff>:/newPrefix/resources/history.bmp</iconset>
-   </property>
-   <property name="text">
-    <string>Bidding &amp;&amp; Play History</string>
-   </property>
-   <property name="shortcut">
-    <string>F10</string>
-   </property>
-  </action>
   <action name="action_Score">
    <property name="enabled">
     <bool>false</bool>
@@ -383,17 +299,6 @@
    </property>
    <property name="text">
     <string>&amp;Toolbar</string>
-   </property>
-  </action>
-  <action name="actionSecondary_Toolbar">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="checked">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>Secondary Toolbar</string>
    </property>
   </action>
   <action name="actionStatus_Bar">
@@ -509,66 +414,6 @@
     <string>Space</string>
    </property>
   </action>
-  <action name="actionAuto_Hints">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="images.qrc">
-     <normaloff>:/newPrefix/resources/AutoHint.bmp</normaloff>:/newPrefix/resources/AutoHint.bmp</iconset>
-   </property>
-   <property name="text">
-    <string>Auto Hints</string>
-   </property>
-   <property name="shortcut">
-    <string>Shift+Space</string>
-   </property>
-  </action>
-  <action name="actionAuto_Play_Card">
-   <property name="enabled">
-    <bool>false</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="images.qrc">
-     <normaloff>:/newPrefix/resources/AutoPlayCard.bmp</normaloff>:/newPrefix/resources/AutoPlayCard.bmp</iconset>
-   </property>
-   <property name="text">
-    <string>Auto Play Card</string>
-   </property>
-   <property name="shortcut">
-    <string>F7</string>
-   </property>
-  </action>
-  <action name="actionAuto_Play_All_Cards">
-   <property name="enabled">
-    <bool>false</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="images.qrc">
-     <normaloff>:/newPrefix/resources/AutoPlayAll.bmp</normaloff>:/newPrefix/resources/AutoPlayAll.bmp</iconset>
-   </property>
-   <property name="text">
-    <string>Auto Play All Cards</string>
-   </property>
-   <property name="shortcut">
-    <string>F8</string>
-   </property>
-  </action>
-  <action name="actionAuto_Play_to_Completion">
-   <property name="enabled">
-    <bool>false</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="images.qrc">
-     <normaloff>:/newPrefix/resources/AutoPlayExpress.bmp</normaloff>:/newPrefix/resources/AutoPlayExpress.bmp</iconset>
-   </property>
-   <property name="text">
-    <string>Auto Play to Completion</string>
-   </property>
-   <property name="shortcut">
-    <string>Shift+F8</string>
-   </property>
-  </action>
   <action name="action_Lay_Out_Cards">
    <property name="checkable">
     <bool>true</bool>
@@ -604,15 +449,6 @@
     <string>&amp;Game...</string>
    </property>
   </action>
-  <action name="actionConfiguration_Wizard">
-   <property name="icon">
-    <iconset resource="images.qrc">
-     <normaloff>:/newPrefix/resources/wizard.bmp</normaloff>:/newPrefix/resources/wizard.bmp</iconset>
-   </property>
-   <property name="text">
-    <string>Configuration Wizard...</string>
-   </property>
-  </action>
   <action name="action_Expose_All_Cards">
    <property name="checkable">
     <bool>true</bool>
@@ -628,36 +464,6 @@
     <string>Ctrl+E</string>
    </property>
   </action>
-  <action name="actionEnable_Analysis_Tracing">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="images.qrc">
-     <normaloff>:/newPrefix/resources/EnableAnalysis.bmp</normaloff>:/newPrefix/resources/EnableAnalysis.bmp</iconset>
-   </property>
-   <property name="text">
-    <string>Enable &amp;Analysis Tracing</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+Z</string>
-   </property>
-  </action>
-  <action name="actionShow_Player_Analyses">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="images.qrc">
-     <normaloff>:/newPrefix/resources/ShowAnalysisAll.bmp</normaloff>:/newPrefix/resources/ShowAnalysisAll.bmp</iconset>
-   </property>
-   <property name="text">
-    <string>Show Player Analyses</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+A</string>
-   </property>
-  </action>
   <action name="action_Contents">
    <property name="icon">
     <iconset resource="images.qrc">
@@ -665,64 +471,6 @@
    </property>
    <property name="text">
     <string>&amp;Contents</string>
-   </property>
-  </action>
-  <action name="actionIn_troduction">
-   <property name="text">
-    <string>In&amp;troduction</string>
-   </property>
-  </action>
-  <action name="action_Rules_of_the_Game">
-   <property name="text">
-    <string>&amp;Rules of the Game</string>
-   </property>
-  </action>
-  <action name="action_Menu_Commands">
-   <property name="text">
-    <string>&amp;Menu Commands</string>
-   </property>
-  </action>
-  <action name="actionMi_scellaneous_Topics">
-   <property name="text">
-    <string>Mi&amp;scellaneous Topics</string>
-   </property>
-  </action>
-  <action name="action_Glossary_of_Terms">
-   <property name="text">
-    <string>&amp;Glossary of Terms</string>
-   </property>
-  </action>
-  <action name="action_Search_for_Help_On">
-   <property name="icon">
-    <iconset resource="images.qrc">
-     <normaloff>:/newPrefix/resources/HelpSearch.bmp</normaloff>:/newPrefix/resources/HelpSearch.bmp</iconset>
-   </property>
-   <property name="text">
-    <string>&amp;Search for Help On...</string>
-   </property>
-  </action>
-  <action name="actionQuick_Start">
-   <property name="text">
-    <string>Quick Start</string>
-   </property>
-  </action>
-  <action name="actionFrequently_Asked_Questions">
-   <property name="text">
-    <string>Frequently Asked Questions</string>
-   </property>
-  </action>
-  <action name="actionTip_of_the_Day">
-   <property name="icon">
-    <iconset resource="images.qrc">
-     <normaloff>:/newPrefix/resources/HelpDailyTip.bmp</normaloff>:/newPrefix/resources/HelpDailyTip.bmp</iconset>
-   </property>
-   <property name="text">
-    <string>Tip of the Day</string>
-   </property>
-  </action>
-  <action name="action_View_README_File">
-   <property name="text">
-    <string>&amp;View README File</string>
    </property>
   </action>
   <action name="action_About_ZBridge">
@@ -831,22 +579,6 @@
     <hint type="destinationlabel">
      <x>470</x>
      <y>34</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>actionSecondary_Toolbar</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>toolBar_Secondary</receiver>
-   <slot>setVisible(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>470</x>
-     <y>68</y>
     </hint>
    </hints>
   </connection>

@@ -30,6 +30,8 @@
 
 /**
  * @brief Constructor for local actor.
+ * @param bidDelay Delay in msec between bids.
+ * @param playDelay Delay in msec between plays.
  * @param manual If true then the actor is manual else it is automatic.
  * @param teamName The team name for the cooperating pair of actors.
  * @param seat This actors seat.
@@ -42,10 +44,12 @@
  *   - Initializes the Yakindu client state chart.
  *   - Connects signals, mostly meant to control the play view, to the table manager.
  */
-CActorLocal::CActorLocal(bool manual, QString teamName, Seat seat,
+CActorLocal::CActorLocal(int bidDelay, int playDelay, bool manual, QString teamName, Seat seat,
                        CBidAndPlayEngines *bidAndPlayEngines, CTblMngr *tableManager) :
     CActor(tableManager)
 {
+    this->bidDelay = bidDelay;
+    this->playDelay = playDelay;
     this->defManual = manual;
     this->manual = defManual;
     this->teamName = teamName;
@@ -531,6 +535,8 @@ void CActorLocal::cards(int cards[4][13])
  */
 void CActorLocal::bidDone(Seat bidder, Bids bid)
 {
+    int delay = 0;
+
     //Save bid in bid history.
     bidAndPlay.appendBid(bidder, bid, (Team)zBridgeClientIface_get_vulnerability(&handle));
 
@@ -541,8 +547,14 @@ void CActorLocal::bidDone(Seat bidder, Bids bid)
         //Show bid in play view.
         emit sShowBid(bidder, bid, features, alert);
         emit sShowBid((Seat)((bidder + 1) & 3), BID_PLAYER);
+        delay = this->bidDelay;
     }
+    this->bid = bid;
+    QTimer::singleShot(delay, this, SLOT(bidDoneF()));
+}
 
+void CActorLocal::bidDoneF()
+{
     zBridgeClientIface_raise_bidDone(&handle, bid);
     clientRunCycle();
 }
@@ -579,14 +591,24 @@ void CActorLocal::dummyToLead()
  */
 void CActorLocal::playerPlays(Seat player, int card)
 {
+    int delay = 0;
+
     //Update play history.
     int trick = zBridgeClientIface_get_noTrick(&handle);
     bidAndPlay.setPlay(player, trick, card);
 
     //Show in play view.
     if (showUser)
+    {
         emit sShowPlayerPlays(player, card);
+        delay = this->playDelay;
+    }
+    this->card = card;
+    QTimer::singleShot(delay, this, SLOT(playerPlaysF()));
+}
 
+void CActorLocal::playerPlaysF()
+{
     zBridgeClientIface_raise_playerPlays(&handle, card);
     clientRunCycle();
 }

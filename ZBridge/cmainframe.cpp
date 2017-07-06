@@ -40,16 +40,11 @@
 #include "czbridgedoc.h"
 #include "cgamesdoc.h"
 #include "cplayview.h"
-#include "cfilepropertiesdialog.h"
 #include "caboutdlg.h"
-#include "cfilecommentsdialog.h"
-#include "cstatuswnd.h"
-#include "chistorywnd.h"
 #include "cbidoptions.h"
 #include "cdealoptionspropsheet.h"
 #include "cdispoptionspropsheet.h"
 #include "cgameoptionspropsheet.h"
-#include "cprogramconfigwizard.h"
 #include "cbiddialog.h"
 #include "cseatconfiguration.h"
 #include "ctblmngrserver.h"
@@ -116,22 +111,6 @@ CMainFrame::CMainFrame(CZBridgeApp *app, CZBridgeDoc *doc, CGamesDoc *games) :
     resize(QSize(SCENE_HOR_SIZE + 50, SCENE_VER_SIZE + 175));
     setMinimumSize(QSize((SCENE_HOR_SIZE + 50) * .75, (SCENE_VER_SIZE + 175) * .75));
     setMaximumSize(QSize((SCENE_HOR_SIZE + 50) * 1.25, (SCENE_VER_SIZE + 175) * 1.25));
-
-    //File comment dialog (EAK).
-    m_pFileCommentsDlg = new CFileCommentsDialog(app, doc, this);
-    connect(m_pFileCommentsDlg, &CFileCommentsDialog::UpdateViewFileComments, this, &CMainFrame::OnUpdateViewFileComments);
-
-    //Status window (EAK)
-    m_pWndStatus = new CStatusWnd(app, doc, this);
-    addDockWidget(Qt::BottomDockWidgetArea, m_pWndStatus);
-    m_pWndStatus->hide();
-    connect(m_pWndStatus, &CStatusWnd::UpdateShowAnalysis, this, &CMainFrame::OnUpdateShowAnalysis);
-
-    //History window (EAK).
-    m_pWndHistory = new CHistoryWnd(app, doc, this);
-    addDockWidget(Qt::LeftDockWidgetArea, m_pWndHistory);
-    m_pWndHistory->hide();
-    connect(m_pWndHistory, &CHistoryWnd::UpdateViewHistory, this, &CMainFrame::OnUpdateViewHistory);
  }
 
 CMainFrame::~CMainFrame()
@@ -341,15 +320,10 @@ void CMainFrame::enableUIActions(actionIndicator actions)
 
     ui->actionRecent_File->setEnabled((actions == INITIAL_ACTIONS) || (actions == SERVER_ACTIONS));
     ui->action_Lay_Out_Cards->setEnabled((actions == INITIAL_ACTIONS) || (actions == SERVER_ACTIONS));
-    ui->actionBidding_Play_History->setEnabled((actions == SERVER_ACTIONS) || (actions == CLIENT_ACTIONS));
     ui->actionClaim_All->setEnabled(((actions == SERVER_ACTIONS) || (actions == CLIENT_ACTIONS)));
     ui->actionClaim_Contract->setEnabled(((actions == SERVER_ACTIONS) || (actions == CLIENT_ACTIONS)));
     ui->actionConcede->setEnabled(((actions == SERVER_ACTIONS) || (actions == CLIENT_ACTIONS)));
     ui->actionHint->setEnabled(((actions == SERVER_ACTIONS) || (actions == CLIENT_ACTIONS)));
-    ui->actionAuto_Hints->setEnabled(((actions == SERVER_ACTIONS) || (actions == CLIENT_ACTIONS)));
-    ui->actionAuto_Play_Card->setEnabled((actions == SERVER_ACTIONS) || (actions == CLIENT_ACTIONS));
-    ui->actionAuto_Play_All_Cards->setEnabled((actions == SERVER_ACTIONS) || (actions == CLIENT_ACTIONS));
-    ui->actionAuto_Play_to_Completion->setEnabled((actions == SERVER_ACTIONS) || (actions == CLIENT_ACTIONS));
 
     ui->actionSave->setEnabled(false);
     ui->actionSave_As->setEnabled(false);
@@ -542,33 +516,6 @@ void CMainFrame::open(QString &originalFileName)
 }
 
 /**
- * @brief CMainFrame::OnUpdateViewFileComments
- * EAK
- */
-void CMainFrame::OnUpdateViewFileComments()
-{
-    ui->action_File_Comments->setChecked(false);
-}
-
-/**
- * @brief CMainFrame::OnUpdateViewHistory
- * EAK
- */
-void CMainFrame::OnUpdateViewHistory()
-{
-    ui->actionBidding_Play_History->setChecked(false);
-}
-
-/**
- * @brief CMainFrame::OnUpdateShowAnalysis
- * EAK
- */
-void CMainFrame::OnUpdateShowAnalysis()
-{
-    ui->actionShow_Player_Analyses->setChecked(false);
-}
-
-/**
  * @brief CMainFrame::createPopupMenu
  *
  * Not used yet.
@@ -730,21 +677,6 @@ void CMainFrame::on_actionPrint_triggered()
 
 }
 
-void CMainFrame::on_actionPrint_PreView_triggered()
-{
-
-}
-
-/**
- * @brief Main menu properties triggered.
- */
-void CMainFrame::on_actionProperties_triggered()
-{
-    //Show properties dialog.
-    CFilePropertiesDialog properties(app, doc);
-    properties.exec();
-}
-
 void CMainFrame::on_actionRecent_File_triggered()
 {
 
@@ -830,36 +762,7 @@ void CMainFrame::on_actionDouble_Dummy_Results_triggered()
     tableManager->showDoubleDummyResults();
 }
 
-/**
- * @brief Main menu file comments triggered.
- */
-void CMainFrame::on_action_File_Comments_triggered()
-{
-    //Togle hide and show.
-    if (m_pFileCommentsDlg->isVisible())
-        m_pFileCommentsDlg->hide();
-    else
-        m_pFileCommentsDlg->show();
-}
-
-/**
- * @brief Main menu bidding play history triggered.
- */
-void CMainFrame::on_actionBidding_Play_History_triggered()
-{
-    //Togle hide and show.
-    if (m_pWndHistory->isVisible())
-        m_pWndHistory->hide();
-    else
-        m_pWndHistory->show();
-}
-
 void CMainFrame::on_action_Toolbar_triggered()
-{
-
-}
-
-void CMainFrame::on_actionSecondary_Toolbar_triggered()
 {
 
 }
@@ -974,31 +877,6 @@ void CMainFrame::on_actionConcede_triggered()
 
 }
 
-void CMainFrame::on_actionHint_triggered()
-{
-
-}
-
-void CMainFrame::on_actionAuto_Hints_triggered()
-{
-
-}
-
-void CMainFrame::on_actionAuto_Play_Card_triggered()
-{
-
-}
-
-void CMainFrame::on_actionAuto_Play_All_Cards_triggered()
-{
-
-}
-
-void CMainFrame::on_actionAuto_Play_to_Completion_triggered()
-{
-
-}
-
 /**
  * @brief Main menu seat configuration triggered.
  *
@@ -1069,21 +947,6 @@ void CMainFrame::on_action_Game_Options_triggered()
 }
 
 /**
- * @brief main menu configuration wizard triggered.
- *
- * Activate configuration wizard.
- */
-void CMainFrame::on_actionConfiguration_Wizard_triggered()
-{
-    CProgramConfigWizard programConfigWizard(app, doc, this);
-    if (programConfigWizard.exec() == QDialog::Accepted)
-    {
-        doc->WriteWizardOptions();
-        doc->synchronizeOptions(true);
-    }
-}
-
-/**
  * @brief Select bidding system database.
  */
 void CMainFrame::on_actionSelect_Bid_Database_triggered()
@@ -1131,70 +994,7 @@ void CMainFrame::on_actionEdit_Bid_Database_triggered()
             doc->LoadBidDB();
 }
 
-void CMainFrame::on_actionEnable_Analysis_Tracing_triggered()
-{
-
-}
-
-void CMainFrame::on_actionShow_Player_Analyses_triggered()
-{
-    if (m_pWndStatus->isVisible())
-        m_pWndStatus->hide();
-    else
-        m_pWndStatus->show();
-}
-
 void CMainFrame::on_action_Contents_triggered()
-{
-
-}
-
-void CMainFrame::on_actionIn_troduction_triggered()
-{
-
-}
-
-void CMainFrame::on_action_Rules_of_the_Game_triggered()
-{
-
-}
-
-void CMainFrame::on_action_Menu_Commands_triggered()
-{
-
-}
-
-void CMainFrame::on_actionMi_scellaneous_Topics_triggered()
-{
-
-}
-
-void CMainFrame::on_action_Glossary_of_Terms_triggered()
-{
-
-}
-
-void CMainFrame::on_action_Search_for_Help_On_triggered()
-{
-
-}
-
-void CMainFrame::on_actionQuick_Start_triggered()
-{
-
-}
-
-void CMainFrame::on_actionFrequently_Asked_Questions_triggered()
-{
-
-}
-
-void CMainFrame::on_actionTip_of_the_Day_triggered()
-{
-
-}
-
-void CMainFrame::on_action_View_README_File_triggered()
 {
 
 }

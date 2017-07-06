@@ -49,7 +49,7 @@ class CActorLocal : public CActor
 {
     Q_OBJECT
 public:
-    CActorLocal(bool manual, QString teamName, Seat seat,
+    CActorLocal(int bidDelay, int playDelay, bool manual, QString teamName, Seat seat,
                CBidAndPlayEngines *bidAndPlayEngines, CTblMngr *tableManager);
 
     void startNewSession();
@@ -94,7 +94,8 @@ public:
 public slots:
     void bidValue();
     void playValue();
-
+    void bidDoneF();
+    void playerPlaysF();
 signals:
     void sShowAuction();
     void sShowPlay();
@@ -116,8 +117,7 @@ signals:
     void sEnablePlayer(Seat player);
     void sDisablePlayer(Seat Player);
     void sEnableContinueSync(int syncState);
-    void sDisableContinueSync(int syncState)
-;
+    void sDisableContinueSync(int syncState);
 private:
     void clientActions();
     void clientSyncActions();
@@ -138,6 +138,10 @@ private:
     ZBridgeClientSync syncHandle; /**< Handle to client Yakindu state chart synchronization. */
 
     bool synchronizing;
+    Bids bid;
+    int card;
+    int bidDelay;
+    int playDelay;
 };
 
 #endif // CACTORLOCAL_H

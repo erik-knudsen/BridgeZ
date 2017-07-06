@@ -31,7 +31,6 @@
 #include "cdealoptiondoc.h"
 #include "cdisplayoptiondoc.h"
 #include "cgameoptiondoc.h"
-#include "cwizardoptiondoc.h"
 #include "cbiddb.h"
 #include "cbiddesc.h"
 
@@ -64,9 +63,6 @@ public:
     void setDisplayOptions(CDisplayOptionDoc &displayOptions) { this->displayOptions = displayOptions; }
     CGameOptionDoc &getGameOptions() { return gameOptions; }
     void setGameOptions(CGameOptionDoc &gameOptions) { this->gameOptions = gameOptions; }
-    CWizardOptionDoc &getWizardOptions() { return wizardOptions; }
-    void setWizardOptions(CWizardOptionDoc &wizardOptions) { this->wizardOptions = wizardOptions; }
-    void synchronizeOptions(bool onlyDefaultBid);
     CBidOptionDoc &getNSBidOptions();
     CBidOptionDoc &getEWBidOptions();
     QString getBidDBFileName() { return bidDBFileName; }
@@ -88,8 +84,6 @@ public:
     void ReadDisplayOptions();
     void WriteGameOptions();
     void ReadGameOptions();
-    void WriteWizardOptions();
-    void ReadWizardOptions();
     void WriteBidDBFileName();
     void ReadBidDBFileName();
 
@@ -118,7 +112,6 @@ private:
     CDealOptionDoc dealOptions;
     CDisplayOptionDoc displayOptions;
     CGameOptionDoc gameOptions;
-    CWizardOptionDoc wizardOptions;
 
     //Bid database.
     QString bidDBFileName;

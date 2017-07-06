@@ -47,36 +47,8 @@ public:
     ~CDispOptionsPropSheet();
 
 private slots:
-    void on_setAutoHintDialogFont_clicked();
-    void on_setHistoryDialogFont_clicked();
-    void on_setAnalysisDialogFont_clicked();
-    void on_browse_clicked();
     void on_backgroundColor_clicked();
-    void on_shcdSuitSequence_clicked();
-    void on_shdcSuitSequence_clicked();
-    void on_dchsSuitSequence_clicked();
-    void on_cdhsSuitSequence_clicked();
-    void on_hsdcSuitSequence_clicked();
-    void on_showDummyTrumpsOnLeft_clicked(bool checked);
-    void on_tripleBuffer_clicked(bool checked);
-    void on_animateCards_clicked(bool checked);
-    void on_granularity_valueChanged(int value);
-    void on_autoShowBidHistory_clicked(bool checked);
-    void on_autoHideBidHistory_clicked(bool checked);
-    void on_autoShowPlayHistory_clicked(bool checked);
-    void on_autoHidePlayHistory_clicked(bool checked);
-    void on_showLayoutWhenEditing_clicked(bool checked);
-    void on_useSuitSymbols_clicked(bool checked);
-    void on_lowResOption_clicked(bool checked);
-    void on_showStarupBanner_clicked(bool checked);
-    void on_showBackgroundBitmap_clicked(bool checked);
-    void on_tileBitmapMode_clicked();
-    void on_centerBitmapMode_clicked();
-    void on_scaleLargeBitmaps_clicked(bool checked);
     void on_buttonBox_accepted();
-    void on_resetAutoHintDialogFont_clicked();
-    void on_resetHistoryDialogFont_clicked();
-    void on_resetAnalysisDialogFont_clicked();
     void on_cardBack0_clicked();
     void on_cardBack1_clicked();
     void on_cardBack2_clicked();

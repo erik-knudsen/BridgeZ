@@ -37,32 +37,7 @@ public:
 
     CDisplayOptionDoc& operator=(const CDisplayOptionDoc& displayOptionDoc);
 
-    int suitSequence;
-    bool showDummyTrumpsOnLeft;
-
-    bool tripleBuffer;
-    bool animateCards;
-    bool granularity;
-
     int cardBack;
-
-    bool autoShowBidHistory;
-    bool autoHideBidHistory;
-    bool autoShowPlayHistory;
-    bool autoHidePlayHistory;
-    bool showLayoutWhenEditing;
-
-    QString autoHintDialogFont;
-    QString bidAndPlayHistoryDialogFont;
-    QString analysisDialogFont;
-    bool useSuitSymbols;
-
-    bool lowResolutionOption;
-    bool showStartupBanner;
-    bool showBackgroundBitmap;
-    int bitmapMode;
-    bool scaleLargeBitmaps;
-    QString filePath;
     int backgroundRed, backgroundGreen, backgroundBlue;
 
     void WriteSettings();

@@ -17,25 +17,12 @@ SOURCES +=\
         cmainframe.cpp \
     czbridgedoc.cpp \
     czbridgeapp.cpp \
-    cfilepropertiesdialog.cpp \
     caboutdlg.cpp \
-    cfilecommentsdialog.cpp \
     cbidoptionspropsheet.cpp \
     cdealoptionspropsheet.cpp \
     cdispoptionspropsheet.cpp \
     cgameoptionspropsheet.cpp \
-    cprogramconfigwizard.cpp \
-    cprogconfigintropage.cpp \
-    cprogconfighelplevelpage.cpp \
-    cprogconfigviewsettingspage.cpp \
-    cprogconfigsuitsdisplaypage.cpp \
-    cprogconfiggamemechanicspage.cpp \
-    cprogconfigpausespage.cpp \
-    cprogconfigbiddingpage.cpp \
-    cprogconfigfinishpage.cpp \
-    cstatuswnd.cpp \
     cstatusbar.cpp \
-    chistorywnd.cpp \
     cbiddialog.cpp \
     cseatconfiguration.cpp \
     cbidoptions.cpp \
@@ -45,7 +32,6 @@ SOURCES +=\
     cdealoptiondoc.cpp \
     cdisplayoptiondoc.cpp \
     cgameoptiondoc.cpp \
-    cwizardoptiondoc.cpp \
     cplayview.cpp \
     ctopinfoplay.cpp \
     ctopinfoauction.cpp \
@@ -117,26 +103,13 @@ SOURCES +=\
 HEADERS  += cmainframe.h \
     czbridgedoc.h \
     czbridgeapp.h \
-    cfilepropertiesdialog.h \
     caboutdlg.h \
-    cfilecommentsdialog.h \
     Defines.h \
     cbidoptionspropsheet.h \
     cdealoptionspropsheet.h \
     cdispoptionspropsheet.h \
     cgameoptionspropsheet.h \
-    cprogramconfigwizard.h \
-    cprogconfigintropage.h \
-    cprogconfighelplevelpage.h \
-    cprogconfigviewsettingspage.h \
-    cprogconfigsuitsdisplaypage.h \
-    cprogconfiggamemechanicspage.h \
-    cprogconfigpausespage.h \
-    cprogconfigbiddingpage.h \
-    cprogconfigfinishpage.h \
-    cstatuswnd.h \
     cstatusbar.h \
-    chistorywnd.h \
     cbiddialog.h \
     cseatconfiguration.h \
     cbidoptions.h \
@@ -146,7 +119,6 @@ HEADERS  += cmainframe.h \
     cdealoptiondoc.h \
     cdisplayoptiondoc.h \
     cgameoptiondoc.h \
-    cwizardoptiondoc.h \
     cplayview.h \
     ctopinfoplay.h \
     ctopinfoauction.h \
@@ -219,24 +191,11 @@ HEADERS  += cmainframe.h \
     cpopup.h
 
 FORMS    += cmainframe.ui \
-    cfilepropertiesdialog.ui \
     caboutdlg.ui \
-    cfilecommentsdialog.ui \
     cbidoptionspropsheet.ui \
     cdealoptionspropsheet.ui \
     cdispoptionspropsheet.ui \
     cgameoptionspropsheet.ui \
-    cprogramconfigwizard.ui \
-    cprogconfigintropage.ui \
-    cprogconfighelplevelpage.ui \
-    cprogconfigviewsettingspage.ui \
-    cprogconfigsuitsdisplaypage.ui \
-    cprogconfiggamemechanicspage.ui \
-    cprogconfigpausespage.ui \
-    cprogconfigbiddingpage.ui \
-    cprogconfigfinishpage.ui \
-    cstatuswnd.ui \
-    chistorywnd.ui \
     cbiddialog.ui \
     cseatconfiguration.ui \
     cbidoptions.ui \

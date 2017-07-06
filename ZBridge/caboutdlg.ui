@@ -94,7 +94,7 @@
      <item>
       <widget class="QLabel" name="label_4">
        <property name="text">
-        <string notr="true">e-mail shan@nyx.net</string>
+        <string notr="true">e-mail eak.erik@gmail.com</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -107,7 +107,7 @@
      <item>
       <widget class="QLabel" name="label_5">
        <property name="text">
-        <string notr="true">www.nyx.net/~shan/EasyBridge.html</string>
+        <string notr="true"> </string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -120,7 +120,7 @@
      <item>
       <widget class="QLabel" name="label_6">
        <property name="text">
-        <string>Version 4.02</string>
+        <string>Version 0.1</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -130,7 +130,7 @@
      <item>
       <widget class="QLabel" name="label_7">
        <property name="text">
-        <string>Build Date: 2002</string>
+        <string>Build Date: 6-jul-2017</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -150,7 +150,7 @@
      <item>
       <widget class="QLabel" name="label_9">
        <property name="text">
-        <string>This program is freeware.  There are no warranties, expressed or implied, provided with the application.  Any commercial or fee-based redistribution is strictly prohibited without the author's express written consent.</string>
+        <string>This program is Open Source.  There are no warranties, expressed or implied, provided with the application.  Any commercial or fee-based redistribution is strictly prohibited without the author's express written consent.</string>
        </property>
        <property name="wordWrap">
         <bool>true</bool>

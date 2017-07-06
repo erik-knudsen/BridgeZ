@@ -35,40 +35,14 @@ public:
     void WriteSettings();
     void ReadSettings();
 
-    //Help level.
-    int helpLevel;
-
     //Interface.
-    bool autoPlayLastCard;
-    bool autoJumpCursor;
     bool insertBiddingPause;
     int biddingPause;
     bool insertPlayPause;
     int playPause;
 
-    //Mechanics.
-    bool autoBidStart;
-    bool computerCanClaim;
-    bool allowRebidPassedHands;
-    bool enableTracing;
-    int traceLevel;
-    bool showPassedHands;
-    bool enableAnalysisDuringHints;
-
-    //Counting.
-    int valuationMode;
-    float aceValue;
-    float kingValue;
-    float queenValue;
-    float jackValue;
-    float tenValue;
-
     //Scoring.
     ScoringMethod scoringMethod;
-
-    //Files.
-    bool saveIntermediatePositions;
-    bool exposePBNGameCards;
 };
 
 #endif // CGAMEOPTIONDOC_H

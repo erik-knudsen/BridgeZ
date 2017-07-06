@@ -271,7 +271,7 @@ int CPlayEngine::getNextPlay(Seat seat, Seat dummySeat, int ownCards[], int dumm
         //Get trump suit for the hand.
         Suit suit = BID_SUIT(playHistory.getContract());
 
-        //Get current leader.
+        //Get current leader and declarer.
         Seat currentLeader = playHistory.getCurrentLeader();
         Seat declarer = playHistory.getDeclarer();
 

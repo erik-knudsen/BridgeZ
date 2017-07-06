@@ -1212,7 +1212,7 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
                 }
 
                 //Found a bid (fall through otherwise)?
-                if (newBid != BID_NONE)
+                if ((newBid != BID_NONE) && (newBid > highBid))
                 {
                     CFeatures lowFeatures;
                     CFeatures highFeatures;
