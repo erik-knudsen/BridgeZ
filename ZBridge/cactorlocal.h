@@ -94,8 +94,6 @@ public:
 public slots:
     void bidValue();
     void playValue();
-    void bidDoneF();
-    void playerPlaysF();
 signals:
     void sShowAuction();
     void sShowPlay();
@@ -138,8 +136,6 @@ private:
     ZBridgeClientSync syncHandle; /**< Handle to client Yakindu state chart synchronization. */
 
     bool synchronizing;
-    Bids bid;
-    int card;
     int bidDelay;
     int playDelay;
 };

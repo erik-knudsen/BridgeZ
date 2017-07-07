@@ -21,6 +21,7 @@
 
 #include <QResizeEvent>
 #include <QSizePolicy>
+#include <QSettings>
 #include <QFileDialog>
 #include <QFile>
 #include <QFileInfo>
@@ -59,6 +60,8 @@
 #include "cbiddingsystemdialog.h"
 #include "cbidandplayengines.h"
 
+const int MAX_RECENT_FILES = 4;
+
 //Static pointer to mainframe singleton.
 CMainFrame *CMainFrame::m_pInstance = 0;
 
@@ -91,6 +94,22 @@ CMainFrame::CMainFrame(CZBridgeApp *app, CZBridgeDoc *doc, CGamesDoc *games) :
 
     //Set up user interface (main menu etc.)
     ui->setupUi(this);
+
+    //Recent files actions and connections.
+    QAction *recentFileAction = 0;
+    for (int i = 0; i < MAX_RECENT_FILES; i++)
+    {
+        recentFileAction = new QAction(this);
+        recentFileAction->setVisible(true);
+        QObject::connect(recentFileAction, &QAction::triggered, this, CMainFrame::openRecent);
+        recentFileActionList.append(recentFileAction);
+    }
+
+    //Recent files menu.
+    for (int i = 0; i < MAX_RECENT_FILES; i++)
+        ui->menuRecent_Files->addAction(recentFileActionList.at(i));
+
+    updateRecentActionList();
 
     //Allocate and initialize play view.
     playView = new CPlayView(this);
@@ -144,6 +163,47 @@ void CMainFrame::resizeEvent(QResizeEvent *resizeEvent)
        float scaleYFactor = float(size.height() - 130)/(oldSize.height() - 130);
        playView->scale(scaleXFactor, scaleYFactor);
     }
+}
+
+void CMainFrame::updateRecentActionList()
+{
+    QSettings settings("ZBridge settings", "recent");
+
+    QStringList recentFilePaths =
+            settings.value("recentFiles").toStringList();
+
+    auto itEnd = 0;
+    if(recentFilePaths.size() <= MAX_RECENT_FILES)
+        itEnd = recentFilePaths.size();
+    else
+        itEnd = MAX_RECENT_FILES;
+
+    for (auto i = 0; i < itEnd; ++i)
+    {
+        QString strippedName = QFileInfo(recentFilePaths.at(i)).fileName();
+        recentFileActionList.at(i)->setText(strippedName);
+        recentFileActionList.at(i)->setData(recentFilePaths.at(i));
+        recentFileActionList.at(i)->setVisible(true);
+    }
+
+    for (auto i = itEnd; i < MAX_RECENT_FILES; ++i)
+        recentFileActionList.at(i)->setVisible(false);
+}
+
+void CMainFrame::adjustForCurrentFile(const QString &filePath, bool add)
+{
+    QSettings settings("ZBridge settings", "recent");
+
+    QStringList recentFilePaths =
+            settings.value("recentFiles").toStringList();
+    recentFilePaths.removeAll(filePath);
+    if (add)
+        recentFilePaths.prepend(filePath);
+    while (recentFilePaths.size() > MAX_RECENT_FILES)
+        recentFilePaths.removeLast();
+    settings.setValue("recentFiles", recentFilePaths);
+
+    updateRecentActionList();
 }
 
 /**
@@ -318,7 +378,6 @@ void CMainFrame::enableUIActions(actionIndicator actions)
 {
     ui->actionOpen->setEnabled((actions == INITIAL_ACTIONS) || (actions == SERVER_ACTIONS));
 
-    ui->actionRecent_File->setEnabled((actions == INITIAL_ACTIONS) || (actions == SERVER_ACTIONS));
     ui->action_Lay_Out_Cards->setEnabled((actions == INITIAL_ACTIONS) || (actions == SERVER_ACTIONS));
     ui->actionClaim_All->setEnabled(((actions == SERVER_ACTIONS) || (actions == CLIENT_ACTIONS)));
     ui->actionClaim_Contract->setEnabled(((actions == SERVER_ACTIONS) || (actions == CLIENT_ACTIONS)));
@@ -423,6 +482,8 @@ void CMainFrame::resetPlay()
     //No current file.
     fileName = "";
     eventIndex = 0;
+
+    setWindowTitle("");
 }
 
 /**
@@ -506,6 +567,13 @@ void CMainFrame::open(QString &originalFileName)
         playedFile.close();
         QApplication::postEvent(this, new UPDATE_UI_ACTION_Event(UPDATE_UI_DELETE , true));
     }
+
+    //Update recent open files list.
+    adjustForCurrentFile(originalFileName, true);
+
+    setWindowTitle(originalFileName);
+
+    //Can now be saved with another name.
     QApplication::postEvent(this, new UPDATE_UI_ACTION_Event(UPDATE_UI_SAVEAS , true));
     }
     catch (PlayException &e)
@@ -650,6 +718,10 @@ void CMainFrame::on_actionSave_As_triggered()
     originalFile.close();
     playedFile.close();
 
+    //Update recent open files list.
+    adjustForCurrentFile(originalFileName, true);
+    setWindowTitle(originalFileName);
+
     QApplication::postEvent(this, new UPDATE_UI_ACTION_Event(UPDATE_UI_SAVE , false));
     QApplication::postEvent(this, new UPDATE_UI_ACTION_Event(UPDATE_UI_DELETE , true));
 }
@@ -677,14 +749,26 @@ void CMainFrame::on_actionPrint_triggered()
 
 }
 
-void CMainFrame::on_actionRecent_File_triggered()
+void CMainFrame::openRecent()
 {
+    QAction *action = qobject_cast<QAction *>(sender());
+    if (action)
+    {
+        //If non saved game then ask if it should be saved (save can only be enabled on server).
+        if ((ui->actionSave->isEnabled()) &&
+            (QMessageBox::question(0, tr("ZBridge"),
+                   tr("Do you want to save played games?")) == QMessageBox::Yes))
+            on_actionSave_triggered();
 
+        //Open file and prepare for play.
+        QString fileName = action->data().toString();
+        open(fileName);
+    }
 }
 
 void CMainFrame::on_actionExit_triggered()
 {
-
+    exit(0);
 }
 
 /**
@@ -720,22 +804,7 @@ void CMainFrame::on_action_Lay_Out_Cards_triggered()
     if (fileName.size() != 0)
         open(fileName);
     else
-        games->clearGames(doc->getGameOptions().scoringMethod);
-}
-
-void CMainFrame::on_actionCu_t_triggered()
-{
-
-}
-
-void CMainFrame::on_action_Copy_triggered()
-{
-
-}
-
-void CMainFrame::on_action_Paste_triggered()
-{
-
+        games->clearGames(doc->getGameOptions().scoringMethod);    
 }
 
 /**
@@ -790,6 +859,8 @@ void CMainFrame::on_actionNew_Session_triggered()
         games->clearDealOptions();
     fileName.clear();
     eventIndex = 0;
+
+    setWindowTitle("");
 
     //Initialize bid and play engines.
     bidAndPlayEngines->initialize(doc->getBidDB(), doc->getBidDesc(),

@@ -178,7 +178,7 @@ void CActorLocal::clientActions()
         {
             //Must get card to play from automatic play.
             //Calculate automatic play.
-            playValue();
+            QTimer::singleShot(playDelay, this, SLOT(playValue()));
         }
     }
 
@@ -242,7 +242,7 @@ void CActorLocal::clientActions()
         {
             //Must get bid from automatic player.
             //Calculate automatic bid.
-            bidValue();
+            QTimer::singleShot(bidDelay, this, SLOT(bidValue()));
         }
     }
 
@@ -535,8 +535,6 @@ void CActorLocal::cards(int cards[4][13])
  */
 void CActorLocal::bidDone(Seat bidder, Bids bid)
 {
-    int delay = 0;
-
     //Save bid in bid history.
     bidAndPlay.appendBid(bidder, bid, (Team)zBridgeClientIface_get_vulnerability(&handle));
 
@@ -547,14 +545,8 @@ void CActorLocal::bidDone(Seat bidder, Bids bid)
         //Show bid in play view.
         emit sShowBid(bidder, bid, features, alert);
         emit sShowBid((Seat)((bidder + 1) & 3), BID_PLAYER);
-        delay = this->bidDelay;
     }
-    this->bid = bid;
-    QTimer::singleShot(delay, this, SLOT(bidDoneF()));
-}
 
-void CActorLocal::bidDoneF()
-{
     zBridgeClientIface_raise_bidDone(&handle, bid);
     clientRunCycle();
 }
@@ -591,24 +583,14 @@ void CActorLocal::dummyToLead()
  */
 void CActorLocal::playerPlays(Seat player, int card)
 {
-    int delay = 0;
-
     //Update play history.
     int trick = zBridgeClientIface_get_noTrick(&handle);
     bidAndPlay.setPlay(player, trick, card);
 
     //Show in play view.
     if (showUser)
-    {
         emit sShowPlayerPlays(player, card);
-        delay = this->playDelay;
-    }
-    this->card = card;
-    QTimer::singleShot(delay, this, SLOT(playerPlaysF()));
-}
 
-void CActorLocal::playerPlaysF()
-{
     zBridgeClientIface_raise_playerPlays(&handle, card);
     clientRunCycle();
 }

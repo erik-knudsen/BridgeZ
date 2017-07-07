@@ -23,6 +23,7 @@
 #define CMAINFRAME_H
 
 #include <QMainWindow>
+#include <QList>
 #include <QHostAddress>
 #include <QSemaphore>
 
@@ -84,7 +85,9 @@ private:
 
     void enableUIActions(actionIndicator actions);
     void resetPlay();
-    void open(QString &originalFileName);
+    void open(QString &originalFileName);    
+    void updateRecentActionList();
+    void adjustForCurrentFile(const QString& filePath, bool add);
 
     Ui::CMainFrame *ui;
     CZBridgeApp *app;
@@ -103,6 +106,8 @@ private:
     QHostAddress hostAddress;
     QSemaphore sem1, sem2;
 
+    QList<QAction *> recentFileActionList;
+
 private slots:
     //Menu actions.
     void on_actionOpen_triggered();
@@ -110,13 +115,10 @@ private slots:
     void on_actionSave_As_triggered();
     void on_actionDelete_triggered();
     void on_actionPrint_triggered();
-    void on_actionRecent_File_triggered();
+    void openRecent();
     void on_actionExit_triggered();
 
     void on_action_Lay_Out_Cards_triggered();
-    void on_actionCu_t_triggered();
-    void on_action_Copy_triggered();
-    void on_action_Paste_triggered();
 
     void on_action_Expose_All_Cards_triggered();
     void on_action_Score_triggered();
