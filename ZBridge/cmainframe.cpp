@@ -165,6 +165,9 @@ void CMainFrame::resizeEvent(QResizeEvent *resizeEvent)
     }
 }
 
+/**
+ * @brief Update action list for recent open files.
+ */
 void CMainFrame::updateRecentActionList()
 {
     QSettings settings("ZBridge settings", "recent");
@@ -190,6 +193,11 @@ void CMainFrame::updateRecentActionList()
         recentFileActionList.at(i)->setVisible(false);
 }
 
+/**
+ * @brief Adjust recent open files for the current file.
+ * @param filePath Current file.
+ * @param add if true the add the file to the list, otherwise remove the file from the list.
+ */
 void CMainFrame::adjustForCurrentFile(const QString &filePath, bool add)
 {
     QSettings settings("ZBridge settings", "recent");
@@ -325,6 +333,11 @@ void CMainFrame::customEvent(QEvent *event)
         case UPDATE_UI_LAY_OUT_CARDS:
             ui->action_Lay_Out_Cards->setEnabled(param);
             break;
+
+            //Enable/Disable hint.
+        case UPDATE_UI_HINT:
+            ui->actionHint->setEnabled(param);
+            break;
         }
     }
 }
@@ -382,7 +395,7 @@ void CMainFrame::enableUIActions(actionIndicator actions)
     ui->actionClaim_All->setEnabled(((actions == SERVER_ACTIONS) || (actions == CLIENT_ACTIONS)));
     ui->actionClaim_Contract->setEnabled(((actions == SERVER_ACTIONS) || (actions == CLIENT_ACTIONS)));
     ui->actionConcede->setEnabled(((actions == SERVER_ACTIONS) || (actions == CLIENT_ACTIONS)));
-    ui->actionHint->setEnabled(((actions == SERVER_ACTIONS) || (actions == CLIENT_ACTIONS)));
+    ui->actionHint->setEnabled(false);
 
     ui->actionSave->setEnabled(false);
     ui->actionSave_As->setEnabled(false);
@@ -749,9 +762,14 @@ void CMainFrame::on_actionPrint_triggered()
 
 }
 
+/**
+ * @brief Open recent files.
+ */
 void CMainFrame::openRecent()
 {
+    //Get action pointer of signal.
     QAction *action = qobject_cast<QAction *>(sender());
+
     if (action)
     {
         //If non saved game then ask if it should be saved (save can only be enabled on server).
@@ -766,6 +784,9 @@ void CMainFrame::openRecent()
     }
 }
 
+/**
+ * @brief Exit from the program.
+ */
 void CMainFrame::on_actionExit_triggered()
 {
     exit(0);
@@ -946,6 +967,11 @@ void CMainFrame::on_actionClaim_Contract_triggered()
 void CMainFrame::on_actionConcede_triggered()
 {
 
+}
+
+void CMainFrame::on_actionHint_triggered()
+{
+    tableManager->hint();
 }
 
 /**

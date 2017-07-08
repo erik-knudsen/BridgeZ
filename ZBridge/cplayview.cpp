@@ -60,6 +60,8 @@ CPlayView::CPlayView(QWidget *parent) :
     createSceneAndWidgetsAndLayout();
     createChildren();
     setParams(SOUTH_SEAT, 0);
+    hintSeat = NO_SEAT;
+    hintCardValue = 0;
 
     m_pBidDlg = new CBidDialog(this);
     m_pBidDlg->hide();
@@ -258,7 +260,9 @@ void CPlayView::createChildren()
 void CPlayView::customEvent(QEvent *event)
 {
     if (event->type() == WMS_CARD_CLICKED)
-    {
+    {        
+        setPlayHint(NO_SEAT, 0);
+
         CARD_CLICKED_Event * ev = static_cast<CARD_CLICKED_Event *>(event);
 
         int cardValue = ev->getCardValue();
@@ -283,6 +287,7 @@ void CPlayView::customEvent(QEvent *event)
     }
     else if (event->type() == WMS_BID_CLICKED)
     {
+        //Not used.
         BID_CLICKED_Event *ev = static_cast<BID_CLICKED_Event *>(event);
         Seat seat = ev->getSeat();
         Bids bid = ev->getBid();
@@ -354,6 +359,8 @@ void CPlayView::resetView()
         actorCards[i]->clearCards();
         actorCards[i]->setTrumpSuit(ANY);
     }
+    setBidHint(BID_NONE);
+    setPlayHint(NO_SEAT, 0);
 
     //Reset and clean up the center.
     centerCards->setEnabled(false);
@@ -666,6 +673,24 @@ void CPlayView::clearCard(Seat seat, int cardValue)
 }
 
 /**
+ * @brief Set hint for a card to play.
+ * @param seat The seat.
+ * @param cardValue The card value.
+ */
+void CPlayView::setPlayHint(Seat seat, int cardValue)
+{
+    assert((cardValue >= 0) && (cardValue <= 51));
+
+    if (hintSeat != NO_SEAT)
+        actorCards[seatToPos[hintSeat]]->setHint(hintCardValue, false);
+    if (seat != NO_SEAT)
+        actorCards[seatToPos[seat]]->setHint(cardValue, true);
+
+    hintSeat = seat;
+    hintCardValue = cardValue;
+}
+
+/**
  * @brief Show hidden card again in cards display of scene.
  * @param seat The seat with the card to shoe.
  * @param noCard Number of cards to still not show.
@@ -714,6 +739,8 @@ void CPlayView::undoTrick(int noTrick, int nsTricks, int ewTricks, Seat dummy, b
 {
     assert(noTrick == (nsTricks + ewTricks));
 
+    setPlayHint(NO_SEAT, 0);
+
     //Clear cards in center  display.
     clearCardsOnTable();
 
@@ -751,7 +778,9 @@ void CPlayView::undoTrick(int noTrick, int nsTricks, int ewTricks, Seat dummy, b
  *
  */
 void CPlayView::undoCard(Seat seat, bool unstack)
-{
+{    
+    setPlayHint(NO_SEAT, 0);
+
     if (unstack)
     {
         Position pos = seatToPos[seat];
@@ -798,6 +827,11 @@ void CPlayView::showBidDialog(bool show)
         m_pBidDlg->hide();
 }
 
+void CPlayView::setBidHint(Bids bid)
+{
+    m_pBidDlg->setHint(bid);
+}
+
 /**
  * @brief Show bid in mid info auction widget.
  * @param seat The seat to show the bid for.
@@ -816,6 +850,7 @@ void CPlayView::showBid(Seat seat, Bids bid, QString features, QString alert)
  */
 void CPlayView::undoBid(int noBid)
 {
+    setBidHint(BID_NONE);
     midInfoAuction->undoBid(noBid);
 }
 

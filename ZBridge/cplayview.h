@@ -109,6 +109,7 @@ public:
     void setAndShowCards(Seat seat, bool hasSeat, bool showSeat, int *cards);
     void showCards(Seat seat, bool showSeat);
     void clearCard(Seat seat, int cardValue);
+    void setPlayHint(Seat seat, int cardValue);
     void showClearedCard(Seat seat, int noCard);
     void enablePlayer(Seat player);
     void disablePlayer(Seat player);
@@ -121,6 +122,7 @@ public:
      */
     /*@{*/
     void showBidDialog(bool show);
+    void setBidHint(Bids bid);
     void showBid(Seat seat, Bids bid, QString features = "", QString alert = "");
     void undoBid(int noBid);
     void enableBidder(Seat bidder, Bids lastBid, Bids doubleBid);
@@ -184,6 +186,9 @@ private:
     Seat posToSeat[4];
     Position seatToPos[4];
     Suit trumpSuit;
+
+    Seat hintSeat;
+    int hintCardValue;
 };
 
 #endif // CPLAYVIEW_H

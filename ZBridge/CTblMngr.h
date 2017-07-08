@@ -56,6 +56,7 @@ public:
     virtual void reBid();
     virtual void rePlay();
     virtual void undo();
+    virtual void hint();
     /*@}*/
 
 signals:
@@ -81,12 +82,14 @@ public slots:
     virtual void sShowPlay() = 0;
     void sShowBidDialog(bool show);
     void sShowBid(Seat seat, Bids bid, QString features = "", QString alert = "");
+    void sBidHint(Bids bid);
     void sShowCenter(Team vulnerable);
     void sShowDummyCards(Seat seat, int cards[13]);
     void sShowDummyOnTable(Seat seat);
     void sShowYourTurnOnTable(Seat seat);
     void sClearYourTurnOnTable();
     void sShowPlayerPlays(Seat player, int card);
+    void sPlayHint(Seat player, int card);
     void sClearCardsOnTable();
     void sShowTricks(int ewTricks, int nsTricks);
     void sUndoBid(int noBid);

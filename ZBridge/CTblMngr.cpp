@@ -19,6 +19,8 @@
  * strategy classes.
  */
 
+#include <QApplication>
+
 #include "cplayview.h"
 #include "CTblMngr.h"
 
@@ -87,6 +89,11 @@ void CTblMngr::undo()
 {
 }
 
+void CTblMngr::hint()
+{
+
+}
+
 //Slots for actor, common for all kinds of table manager.
 //-------------------------------------------------------
 /**
@@ -106,6 +113,11 @@ void CTblMngr::sShowBidDialog(bool show)
 void CTblMngr::sShowBid(Seat seat, Bids bid, QString features, QString alert)
 {
     playView->showBid(seat, bid, features, alert);
+}
+
+void CTblMngr::sBidHint(Bids bid)
+{
+    playView->setBidHint(bid);
 }
 
 /**
@@ -172,6 +184,11 @@ void CTblMngr::sShowPlayerPlays(Seat player, int card)
     playView->clearCard(player, card);
 }
 
+void CTblMngr::sPlayHint(Seat player, int card)
+{
+    playView->setPlayHint(player, card);
+}
+
 /**
  * @brief Clear cards played in current trick on play view table.
  */
@@ -214,6 +231,8 @@ void CTblMngr::sUndoTrick(int noTrick, int nsTricks, int ewTricks)
  */
 void CTblMngr::sEnableBidder(Seat bidder, Bids lastBid, Bids doubleBid)
 {
+    QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_HINT , true));
+
     playView->enableBidder(bidder, lastBid, doubleBid);
 }
 
@@ -223,6 +242,8 @@ void CTblMngr::sEnableBidder(Seat bidder, Bids lastBid, Bids doubleBid)
  */
 void CTblMngr::sDisableBidder(Seat bidder)
 {
+    QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_HINT , false));
+
     playView->disableBidder();
 }
 
@@ -232,6 +253,8 @@ void CTblMngr::sDisableBidder(Seat bidder)
  */
 void CTblMngr::sEnablePlayer(Seat player)
 {
+    QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_HINT , true));
+
     playView->enablePlayer(player);
 }
 
@@ -241,5 +264,7 @@ void CTblMngr::sEnablePlayer(Seat player)
  */
 void CTblMngr::sDisablePlayer(Seat player)
 {
+    QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_HINT , false));
+
     playView->disablePlayer(player);
 }

@@ -49,6 +49,18 @@ void CCard::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWi
     painter->drawPixmap(0, 0, pixmap);
 }
 
+void CCard::setHint(bool set)
+{
+    if (set)
+    {
+        QGraphicsColorizeEffect *hint = new QGraphicsColorizeEffect();
+        hint->setColor(QColor(0, 0, 255));
+        setGraphicsEffect(hint);
+    }
+    else
+        setGraphicsEffect(0);
+}
+
 void CCard::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     QGraphicsItem::mousePressEvent(event);

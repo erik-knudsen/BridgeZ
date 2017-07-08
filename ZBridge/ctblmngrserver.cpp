@@ -782,6 +782,24 @@ void CTblMngrServer::undo()
     }
 }
 
+void CTblMngrServer::hint()
+{
+    assert(zBridgeServer_isStateActive(&handle, ZBridgeServer_entry__Bidding) ||
+           zBridgeServer_isStateActive(&handle, ZBridgeServer_entry__Playing));
+
+    if (zBridgeServer_isStateActive(&handle, ZBridgeServer_entry__Bidding))
+        actors[zBridgeServerIface_get_bidder(&handle)]->getHint();
+    else
+    {
+        Seat declarer = (Seat)zBridgeServerIface_get_declarer(&handle);
+        Seat dummy = (Seat)zBridgeServerIface_get_dummy(&handle);
+        Seat player = (Seat)zBridgeServerIface_get_player(&handle);
+
+        Seat seat = (player == dummy) ? (declarer) : (player);
+        actors[seat]->getHint();
+    }
+}
+
 /**
  * @brief Determine who controls the play view.
  * @param showAll If true all cards should be shown in the play view.

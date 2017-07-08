@@ -19,6 +19,9 @@
  * Bid dialog (definition).
  */
 
+#include <cassert>
+#include <QGraphicsColorizeEffect>
+
 #include "cbiddialog.h"
 #include "ui_cbiddialog.h"
 
@@ -40,6 +43,7 @@ CBidDialog::CBidDialog(QWidget *parent) :
     setWindowFlags(Qt::Window | Qt::CustomizeWindowHint | Qt::WindowTitleHint| Qt::WindowSystemMenuHint);
 
     setEnabled(false);
+    hint = BID_NONE;
 
     //Initialize array for identification of bid buttons.
     m_pBidButtons[BID_1C] = ui->bid1C;
@@ -299,6 +303,7 @@ void CBidDialog::on_bidRedouble_clicked()
  */
 void CBidDialog::bidClicked(Bids nBid)
 {
+    setHint(BID_NONE);
     emit bidValue(nBid);
 }
 
@@ -341,4 +346,20 @@ void CBidDialog::disableBidder()
     setWindowTitle(QString(""));
 
     setEnabled(false);
+}
+
+void CBidDialog::setHint(Bids bid)
+{
+    assert((bid >= BID_NONE) && (bid <= BID_REDOUBLE));
+    if (hint != BID_NONE)
+        m_pBidButtons[hint]->setGraphicsEffect(0);
+
+    if (bid != BID_NONE)
+    {
+        QGraphicsColorizeEffect *effect = new QGraphicsColorizeEffect();
+        effect->setColor(QColor(0, 0, 255));
+        m_pBidButtons[bid]->setGraphicsEffect(effect);
+    }
+
+    hint = bid;
 }

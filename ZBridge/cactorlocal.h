@@ -75,6 +75,7 @@ public:
     void playerToLead(Seat player);
     void dummyToLead();
     void playerPlays(Seat player, int card);
+    void getHint();
     void dummyCards(int cards[13]);
     void undoBid(bool reBid);
     void undoTrick(bool rePlay);
@@ -99,12 +100,14 @@ signals:
     void sShowPlay();
     void sShowBidDialog(bool show);
     void sShowBid(Seat seat, Bids bid, QString features = "", QString alert = "");
+    void sBidHint(Bids bid);
     void sShowCenter(Team vulnerable);
     void sShowDummyOnTable(Seat seat);
     void sShowDummyCards(Seat seat, int cards[13]);
     void sShowYourTurnOnTable(Seat seat);
     void sClearYourTurnOnTable();
     void sShowPlayerPlays(Seat player, int card);
+    void sPlayHint(Seat player, int card);
     void sClearCardsOnTable();
     void sShowTricks(int ewTricks, int nsTricks);
     void sUndoBid(int noBid);

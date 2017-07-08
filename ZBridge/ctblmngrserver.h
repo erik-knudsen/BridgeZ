@@ -75,6 +75,7 @@ public:
     void reBid();
     void rePlay();
     void undo();
+    void hint();
     /*@}*/
 
 public slots:

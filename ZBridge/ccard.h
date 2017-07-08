@@ -23,6 +23,7 @@
 #define CCARD_H
 
 #include <QGraphicsItem>
+#include <QGraphicsColorizeEffect>
 
 #include "defines.h"
 
@@ -45,6 +46,7 @@ public:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
                QWidget *widget);
     void setValue(int value) { this->value = value; }
+    void setHint(bool set);
     int getValue() { return value; }
     void setBackValue(int backValue) { this->backValue = backValue; }
     void setShowBack(bool showBack) { this->showBack = showBack; }

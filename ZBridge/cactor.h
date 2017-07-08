@@ -55,6 +55,7 @@ public:
     virtual Seat getSeat() = 0;
     virtual void setShowUser(bool showUser) {}
     virtual void setManual(bool manual) { }
+    virtual void getHint() { }
 };
 
 #endif // CACTOR_H

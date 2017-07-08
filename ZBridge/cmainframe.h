@@ -135,6 +135,7 @@ private slots:
     void on_actionClaim_All_triggered();
     void on_actionClaim_Contract_triggered();
     void on_actionConcede_triggered();
+    void on_actionHint_triggered();
 
     void on_actionSeat_Configuration_triggered();
     void on_action_Bidding_Options_triggered();

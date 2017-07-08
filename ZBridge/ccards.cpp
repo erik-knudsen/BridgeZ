@@ -167,6 +167,22 @@ void CCards::clearCard(int cardValue)
 }
 
 /**
+ * @brief Set hint for a card.
+ * @param cardValue The card to hint.
+ */
+void CCards::setHint(int cardValue, bool set)
+{
+    if (showBack)
+        return;
+
+    int i = getCardIndex(cardValue);
+
+    //Hint card.
+    if (i < 13)
+        cards[i].setHint(set);
+}
+
+/**
  * @brief Show played card(s) again after having been cleared
  * @param noTrick Number of cards to keep cleared (undo remaining).
  */

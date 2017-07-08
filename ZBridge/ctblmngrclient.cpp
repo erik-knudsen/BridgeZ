@@ -189,6 +189,11 @@ void CTblMngrClient::showDoubleDummyResults()
     ddTable.exec();
 }
 
+void CTblMngrClient::hint()
+{
+
+}
+
 //Slots for play view.
 //-----------------------------------------------------------------------------
 /**

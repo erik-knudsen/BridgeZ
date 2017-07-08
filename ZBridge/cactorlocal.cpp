@@ -67,12 +67,14 @@ CActorLocal::CActorLocal(int bidDelay, int playDelay, bool manual, QString teamN
     connect(this, &CActorLocal::sShowPlay, tableManager, &CTblMngr::sShowPlay);
     connect(this, &CActorLocal::sShowBidDialog, tableManager, &CTblMngr::sShowBidDialog);
     connect(this, &CActorLocal::sShowBid, tableManager, &CTblMngr::sShowBid);
+    connect(this, &CActorLocal::sBidHint, tableManager, &CTblMngr::sBidHint);
     connect(this, &CActorLocal::sShowCenter, tableManager, &CTblMngr::sShowCenter);
     connect(this, &CActorLocal::sShowDummyCards, tableManager, &CTblMngr::sShowDummyCards);
     connect(this, &CActorLocal::sShowDummyOnTable, tableManager, &CTblMngr::sShowDummyOnTable);
     connect(this, &CActorLocal::sShowYourTurnOnTable, tableManager, &CTblMngr::sShowYourTurnOnTable);
     connect(this, &CActorLocal::sClearYourTurnOnTable, tableManager, &CTblMngr::sClearYourTurnOnTable);
     connect(this, &CActorLocal::sShowPlayerPlays, tableManager, &CTblMngr::sShowPlayerPlays);
+    connect(this, &CActorLocal::sPlayHint, tableManager, &CTblMngr::sPlayHint);
     connect(this, &CActorLocal::sClearCardsOnTable, tableManager, &CTblMngr::sClearCardsOnTable);
     connect(this, &CActorLocal::sShowTricks, tableManager, &CTblMngr::sShowTricks);
     connect(this, &CActorLocal::sUndoBid, tableManager, &CTblMngr::sUndoBid);
@@ -399,6 +401,33 @@ void CActorLocal::playValue()
     int nextPlay = bidAndPlay.getNextPlay((Seat)zBridgeClientIface_get_player(&handle),
                                           (Seat)zBridgeClientIface_get_dummy(&handle));
     playValue(nextPlay);
+}
+
+/**
+ * @brief Get bid or play hint.
+ */
+void CActorLocal::getHint()
+{
+    assert(zBridgeClient_isStateActive(&handle, ZBridgeClient_main_region_Bid) ||
+           zBridgeClient_isStateActive(&handle, ZBridgeClient_main_region_Play));
+
+    if (zBridgeClient_isStateActive(&handle, ZBridgeClient_main_region_Bid))
+    {
+        CBid nextBid = bidAndPlay.getNextBid((Seat)zBridgeClientIface_get_bidder(&handle),
+                                             (Team)zBridgeClientIface_get_vulnerability(&handle));
+        nextBid.delRules = true;            //Delete non db rules on destroy.
+
+        emit sBidHint(nextBid.bid);
+    }
+    else
+    {
+        assert(zBridgeClient_isStateActive(&handle, ZBridgeClient_main_region_Play));
+
+        Seat player = (Seat)zBridgeClientIface_get_player(&handle);
+        int nextPlay = bidAndPlay.getNextPlay(player, (Seat)zBridgeClientIface_get_dummy(&handle));
+
+        emit sPlayHint(player, nextPlay);
+    }
 }
 
 /**
