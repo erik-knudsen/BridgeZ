@@ -22,6 +22,9 @@
      <height>131</height>
     </rect>
    </property>
+   <property name="whatsThis">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Current distribution of cards. Click on hand to choose this hand  for insertion of cards.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
    <property name="title">
     <string>Hands</string>
    </property>
@@ -30,8 +33,8 @@
      <rect>
       <x>11</x>
       <y>10</y>
-      <width>382</width>
-      <height>101</height>
+      <width>442</width>
+      <height>122</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout">
@@ -55,6 +58,9 @@
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
+       </property>
+       <property name="whatsThis">
+        <string/>
        </property>
        <property name="text">
         <string>West</string>
@@ -456,16 +462,19 @@
      <height>171</height>
     </rect>
    </property>
+   <property name="whatsThis">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Distribute cards. Click on a filled card to insert in the chosen hand. Click on an empty card to remove from hands&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
    <property name="title">
     <string>Cards</string>
    </property>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>10</x>
       <y>20</y>
-      <width>381</width>
-      <height>131</height>
+      <width>393</width>
+      <height>134</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout_2">
@@ -1453,13 +1462,16 @@
     <rect>
      <x>40</x>
      <y>460</y>
-     <width>372</width>
-     <height>25</height>
+     <width>407</width>
+     <height>30</height>
     </rect>
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
      <widget class="QPushButton" name="clearDeal">
+      <property name="whatsThis">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Clear cards from hands&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
       <property name="text">
        <string>Clear Deal</string>
       </property>
@@ -1467,6 +1479,9 @@
     </item>
     <item>
      <widget class="QPushButton" name="dealRemaining">
+      <property name="whatsThis">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Deal remaining cards&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
       <property name="text">
        <string>Deal Remaining</string>
       </property>
@@ -1502,8 +1517,8 @@
     <rect>
      <x>30</x>
      <y>350</y>
-     <width>370</width>
-     <height>80</height>
+     <width>372</width>
+     <height>95</height>
     </rect>
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout_4">
@@ -1514,6 +1529,9 @@
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
+      </property>
+      <property name="whatsThis">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Select board&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
       <property name="title">
        <string>Select</string>
@@ -1633,6 +1651,9 @@
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
+      <property name="whatsThis">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Dealers seat&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
       <property name="title">
        <string>Dealer</string>
       </property>
@@ -1650,6 +1671,9 @@
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
+      </property>
+      <property name="whatsThis">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Vulnerability&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
       <property name="title">
        <string>Vulnerability</string>

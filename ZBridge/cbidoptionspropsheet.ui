@@ -22,6 +22,9 @@
      <height>391</height>
     </rect>
    </property>
+   <property name="whatsThis">
+    <string/>
+   </property>
    <property name="currentIndex">
     <number>0</number>
    </property>
@@ -100,6 +103,9 @@
            </item>
            <item>
             <widget class="QSlider" name="biddingAggressiveness">
+             <property name="whatsThis">
+              <string>Set bidding aggressivenes</string>
+             </property>
              <property name="minimum">
               <number>-3</number>
              </property>
@@ -157,6 +163,9 @@
        <height>81</height>
       </rect>
      </property>
+     <property name="whatsThis">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Set bidding style&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
      <property name="title">
       <string>Style</string>
      </property>
@@ -190,6 +199,9 @@
        <height>81</height>
       </rect>
      </property>
+     <property name="whatsThis">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Set whether playing with four card majors or with five card majors&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
      <property name="title">
       <string>Majors</string>
      </property>
@@ -222,6 +234,9 @@
        <width>111</width>
        <height>111</height>
       </rect>
+     </property>
+     <property name="whatsThis">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Choose slam conventions&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <property name="title">
       <string>Slam Conventions</string>
@@ -262,6 +277,9 @@
        <width>161</width>
        <height>171</height>
       </rect>
+     </property>
+     <property name="whatsThis">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Choose whether playing with Stayman or Jacoby&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <property name="title">
       <string>After No Trump Opening</string>
@@ -340,6 +358,9 @@
        <height>131</height>
       </rect>
      </property>
+     <property name="whatsThis">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Choose different other conventions. Some are mutually exclusive and some depends on other choices&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
      <property name="title">
       <string>Misc</string>
      </property>
@@ -416,6 +437,9 @@
        <height>91</height>
       </rect>
      </property>
+     <property name="whatsThis">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Choose meaning of 2C - 2D bid&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
      <property name="title">
       <string>2C - 2D Bid</string>
      </property>
@@ -448,6 +472,9 @@
        <width>121</width>
        <height>151</height>
       </rect>
+     </property>
+     <property name="whatsThis">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Choose 2C open values&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <property name="title">
       <string>2C Open Values</string>
@@ -501,6 +528,9 @@
        <width>131</width>
        <height>251</height>
       </rect>
+     </property>
+     <property name="whatsThis">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Choose weak two bids and choices for weak two bids&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <property name="title">
       <string>Weak Two-Bids</string>
@@ -592,6 +622,9 @@
        <height>121</height>
       </rect>
      </property>
+     <property name="whatsThis">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Choose 2NT opening range&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
      <property name="title">
       <string>2NT Opening Range</string>
      </property>
@@ -631,6 +664,9 @@
        <width>181</width>
        <height>141</height>
       </rect>
+     </property>
+     <property name="whatsThis">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Choose 1NT opening range and whether you can open 1NT with a weak 5 card major&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <property name="title">
       <string>1NT Opening Range</string>
@@ -679,6 +715,9 @@
        <height>121</height>
       </rect>
      </property>
+     <property name="whatsThis">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Choose 3NT opening type&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
      <property name="title">
       <string>3NT Openings</string>
      </property>
@@ -724,6 +763,9 @@
        <height>301</height>
       </rect>
      </property>
+     <property name="whatsThis">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Choose meaning of 3S/3H/3D/3C after 1NT open&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
      <property name="title">
       <string>After 1NT Openers</string>
      </property>
@@ -732,6 +774,9 @@
        <layout class="QVBoxLayout" name="verticalLayout_62">
         <item>
          <widget class="QGroupBox" name="groupBox_51">
+          <property name="whatsThis">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Choose meaning of 3C/3D rebid after 1NT open&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
           <property name="title">
            <string>3C/3D Rebid</string>
           </property>
@@ -766,6 +811,9 @@
         </item>
         <item>
          <widget class="QGroupBox" name="groupBox_52">
+          <property name="whatsThis">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Choose meaning of 3H/3S after 1NT open&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
           <property name="title">
            <string>3H/3S Rebid</string>
           </property>
@@ -821,6 +869,9 @@
      <layout class="QVBoxLayout" name="verticalLayout_64">
       <item>
        <widget class="QGroupBox" name="groupBox_32">
+        <property name="whatsThis">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Choose 2NT rebid type&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
         <property name="title">
          <string>2NT Rebids</string>
         </property>
@@ -829,6 +880,9 @@
           <layout class="QVBoxLayout" name="verticalLayout_48">
            <item>
             <widget class="QGroupBox" name="groupBox_6">
+             <property name="whatsThis">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Choose point range etc. for 2NT after 1 over 1&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
              <property name="title">
               <string>After 1 0ver 1</string>
              </property>
@@ -856,6 +910,9 @@
            </item>
            <item>
             <widget class="QGroupBox" name="twoNT21">
+             <property name="whatsThis">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Choose point range etc. for 2NT after 2 over 1&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
              <property name="title">
               <string>After 2 Over 1</string>
              </property>
@@ -888,6 +945,9 @@
       </item>
       <item>
        <widget class="QGroupBox" name="groupBox_36">
+        <property name="whatsThis">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Choose new minor type after openers 1NT rebid&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
         <property name="title">
          <string>After Openers 1NT Rebid</string>
         </property>
@@ -928,6 +988,9 @@
        <width>181</width>
        <height>191</height>
       </rect>
+     </property>
+     <property name="whatsThis">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Choose advanced conventions&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <property name="title">
       <string>Advanced</string>
@@ -990,6 +1053,9 @@
        <height>151</height>
       </rect>
      </property>
+     <property name="whatsThis">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Choose jump overcall weak and meaning of 2NT response&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
      <property name="title">
       <string>Jump Overcalls Weak</string>
      </property>
@@ -1042,6 +1108,9 @@
        <height>111</height>
       </rect>
      </property>
+     <property name="whatsThis">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Choose type of 3 level preempts&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
      <property name="title">
       <string>Three Level Preempts</string>
      </property>
@@ -1090,6 +1159,9 @@
      <layout class="QVBoxLayout" name="verticalLayout_34">
       <item>
        <widget class="QGroupBox" name="openBox">
+        <property name="whatsThis">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Choose 1 bid open allowable hands&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
         <property name="title">
          <string>Optional Allowable Hands for Opening 1 Bids</string>
         </property>
@@ -1182,7 +1254,11 @@
          </spacer>
         </item>
         <item>
-         <widget class="QComboBox" name="openingLeadType"/>
+         <widget class="QComboBox" name="openingLeadType">
+          <property name="whatsThis">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Choose lead type and set leads&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+         </widget>
         </item>
         <item>
          <spacer name="horizontalSpacer_3">
@@ -4114,6 +4190,9 @@
         </item>
         <item>
          <widget class="QGroupBox" name="groupBox_27">
+          <property name="whatsThis">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Set length leads&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
           <property name="title">
            <string>Lenght Leads</string>
           </property>
@@ -4183,6 +4262,9 @@
     <layout class="QVBoxLayout" name="verticalLayout_42">
      <item>
       <widget class="QGroupBox" name="groupBox_45">
+       <property name="whatsThis">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Choose suit lead types for partner, declarer and discards&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
        <property name="title">
         <string>Suit</string>
        </property>
@@ -4255,6 +4337,9 @@
      </item>
      <item>
       <widget class="QGroupBox" name="groupBox_66">
+       <property name="whatsThis">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Choose NT lead type for partner, declarer and discards&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
        <property name="title">
         <string>NT</string>
        </property>

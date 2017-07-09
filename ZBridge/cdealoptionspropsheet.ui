@@ -22,6 +22,9 @@
      <height>179</height>
     </rect>
    </property>
+   <property name="whatsThis">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Set High Card Point ranges for hands. This is used for the deal profile&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
    <property name="title">
     <string>HCP</string>
    </property>
@@ -286,6 +289,9 @@
      <height>152</height>
     </rect>
    </property>
+   <property name="whatsThis">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Set suit length ranges for hands. This is used for the deal profile&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
    <property name="title">
     <string>Length</string>
    </property>
@@ -508,6 +514,9 @@
      <width>192</width>
      <height>81</height>
     </rect>
+   </property>
+   <property name="whatsThis">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Set distribution point ranges for hands. This is used for the deal profile.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
    <property name="title">
     <string>Distrbution Points</string>

@@ -32,6 +32,9 @@
             <layout class="QVBoxLayout" name="verticalLayout_5">
              <item>
               <widget class="QGroupBox" name="insertBiddingPause">
+               <property name="whatsThis">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Choose pause in seconds between bids&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
                <property name="title">
                 <string>Insert pause between bids</string>
                </property>
@@ -95,6 +98,9 @@
              </item>
              <item>
               <widget class="QGroupBox" name="insertPlayPause">
+               <property name="whatsThis">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Choose pause in seconds between plays&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
                <property name="title">
                 <string>Insert pause between plays</string>
                </property>
@@ -212,6 +218,9 @@
              </item>
              <item>
               <widget class="QGroupBox" name="groupBox_2">
+               <property name="whatsThis">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Choose scoring method Teams IMP and Duplicate MP implies that the computer also autoplays the cards for comparison.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
                <property name="title">
                 <string>Scoring Method</string>
                </property>

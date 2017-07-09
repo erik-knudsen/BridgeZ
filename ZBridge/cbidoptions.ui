@@ -6,12 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>454</width>
-    <height>147</height>
+    <width>462</width>
+    <height>161</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Convention</string>
+  </property>
+  <property name="whatsThis">
+   <string/>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_4">
    <item>
@@ -41,6 +44,9 @@
                 <height>0</height>
                </size>
               </property>
+              <property name="whatsThis">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Conventions used by North/South pair&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
              </widget>
             </item>
             <item row="1" column="0">
@@ -58,6 +64,9 @@
                 <height>0</height>
                </size>
               </property>
+              <property name="whatsThis">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Conventions used by East/West pair&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
              </widget>
             </item>
            </layout>
@@ -69,6 +78,9 @@
         <layout class="QVBoxLayout" name="verticalLayout_2">
          <item>
           <widget class="QPushButton" name="newConvention">
+           <property name="whatsThis">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Create a new convention set&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
            <property name="text">
             <string>New</string>
            </property>
@@ -76,6 +88,9 @@
          </item>
          <item>
           <widget class="QPushButton" name="editConvention">
+           <property name="whatsThis">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Edit current convention set&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
            <property name="text">
             <string>Edit</string>
            </property>
@@ -83,6 +98,9 @@
          </item>
          <item>
           <widget class="QPushButton" name="DeleteConvention">
+           <property name="whatsThis">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Delete convention set&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
            <property name="text">
             <string>Delete</string>
            </property>

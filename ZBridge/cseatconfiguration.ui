@@ -18,6 +18,9 @@
     <layout class="QVBoxLayout" name="verticalLayout_3">
      <item>
       <widget class="QGroupBox" name="seats">
+       <property name="whatsThis">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Choose seat type for players. Manual played by user, Auto played by computer or remote. Also supply the name of players.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
        <property name="title">
         <string>Seat and seat actor types</string>
        </property>
@@ -141,6 +144,9 @@
      </item>
      <item>
       <widget class="QGroupBox" name="groupBox_3">
+       <property name="whatsThis">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Choose role. Standalone for this computer only, Server if remote computers can be connected to this computer or client if this computer is a remote computer. For client Host address and Port must also be supplied.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
        <property name="title">
         <string>Role</string>
        </property>

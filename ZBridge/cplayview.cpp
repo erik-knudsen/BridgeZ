@@ -683,6 +683,7 @@ void CPlayView::setPlayHint(Seat seat, int cardValue)
 
     if (hintSeat != NO_SEAT)
         actorCards[seatToPos[hintSeat]]->setHint(hintCardValue, false);
+
     if (seat != NO_SEAT)
         actorCards[seatToPos[seat]]->setHint(cardValue, true);
 
@@ -829,7 +830,7 @@ void CPlayView::showBidDialog(bool show)
 
 void CPlayView::setBidHint(Bids bid)
 {
-    m_pBidDlg->setHint(bid);
+    m_pBidDlg->setBidHint(bid);
 }
 
 /**

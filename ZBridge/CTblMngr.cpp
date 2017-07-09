@@ -89,11 +89,6 @@ void CTblMngr::undo()
 {
 }
 
-void CTblMngr::hint()
-{
-
-}
-
 //Slots for actor, common for all kinds of table manager.
 //-------------------------------------------------------
 /**
@@ -115,6 +110,10 @@ void CTblMngr::sShowBid(Seat seat, Bids bid, QString features, QString alert)
     playView->showBid(seat, bid, features, alert);
 }
 
+/**
+ * @brief Show bid hint.
+ * @param bid The bid hint to set.
+ */
 void CTblMngr::sBidHint(Bids bid)
 {
     playView->setBidHint(bid);
@@ -184,6 +183,11 @@ void CTblMngr::sShowPlayerPlays(Seat player, int card)
     playView->clearCard(player, card);
 }
 
+/**
+ * @brief Show play hint.
+ * @param player The players seat.
+ * @param card The card to show as hint.
+ */
 void CTblMngr::sPlayHint(Seat player, int card)
 {
     playView->setPlayHint(player, card);

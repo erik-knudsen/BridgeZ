@@ -40,13 +40,16 @@
       <rect>
        <x>230</x>
        <y>150</y>
-       <width>271</width>
-       <height>87</height>
+       <width>293</width>
+       <height>99</height>
       </rect>
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout_14">
       <item>
        <widget class="QGroupBox" name="groupBox_10">
+        <property name="whatsThis">
+         <string>Scoring method and vulnerability for the rule</string>
+        </property>
         <property name="title">
          <string>Parameters</string>
         </property>
@@ -88,6 +91,9 @@
       </item>
       <item>
        <widget class="QGroupBox" name="groupBox_9">
+        <property name="whatsThis">
+         <string>Alert id for the rule (0 if no alert).</string>
+        </property>
         <property name="title">
          <string>Alert Id</string>
         </property>
@@ -113,6 +119,9 @@
        <height>130</height>
       </rect>
      </property>
+     <property name="whatsThis">
+      <string>Id, priority and forcing type for the rule</string>
+     </property>
      <property name="title">
       <string>Rule</string>
      </property>
@@ -130,6 +139,9 @@
           </item>
           <item>
            <widget class="QLineEdit" name="ruleId">
+            <property name="whatsThis">
+             <string/>
+            </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
             </property>
@@ -148,6 +160,9 @@
           </item>
           <item>
            <widget class="QSpinBox" name="rulePriority">
+            <property name="whatsThis">
+             <string/>
+            </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
             </property>
@@ -168,7 +183,11 @@
            </widget>
           </item>
           <item>
-           <widget class="QComboBox" name="ruleForcing"/>
+           <widget class="QComboBox" name="ruleForcing">
+            <property name="whatsThis">
+             <string/>
+            </property>
+           </widget>
           </item>
          </layout>
         </item>
@@ -206,6 +225,9 @@
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
+      <property name="whatsThis">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The bid the rule is for&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
       </property>
@@ -222,6 +244,9 @@
        <width>231</width>
        <height>91</height>
       </rect>
+     </property>
+     <property name="whatsThis">
+      <string>Textual description of the rule</string>
      </property>
      <property name="title">
       <string>Rule Id Description</string>
@@ -245,6 +270,9 @@
        <width>231</width>
        <height>91</height>
       </rect>
+     </property>
+     <property name="whatsThis">
+      <string>Textual description of the alert</string>
      </property>
      <property name="title">
       <string>Alert Id Description</string>
@@ -273,6 +301,9 @@
        <width>361</width>
        <height>178</height>
       </rect>
+     </property>
+     <property name="whatsThis">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Quality of cards for the rule&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <property name="title">
       <string>Quality</string>
@@ -719,6 +750,9 @@
        <width>509</width>
        <height>178</height>
       </rect>
+     </property>
+     <property name="whatsThis">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Limits of high card parameters for the rule&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <property name="title">
       <string>High Cards</string>
@@ -1712,6 +1746,9 @@
        <height>161</height>
       </rect>
      </property>
+     <property name="whatsThis">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Suit lengths for the rule&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
      <property name="title">
       <string>Length</string>
      </property>
@@ -1791,8 +1828,8 @@
        <rect>
         <x>10</x>
         <y>20</y>
-        <width>129</width>
-        <height>125</height>
+        <width>150</width>
+        <height>141</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout_3">
@@ -1937,6 +1974,9 @@
        <height>126</height>
       </rect>
      </property>
+     <property name="whatsThis">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Difference in length for the rule&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
      <property name="title">
       <string>Difference in length</string>
      </property>
@@ -2074,6 +2114,9 @@
        <height>126</height>
       </rect>
      </property>
+     <property name="whatsThis">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Sum length for the rule&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
      <property name="title">
       <string>Total Length</string>
      </property>
@@ -2210,6 +2253,9 @@
        <width>281</width>
        <height>81</height>
       </rect>
+     </property>
+     <property name="whatsThis">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Other parameters for the rule&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <property name="title">
       <string>Other</string>

@@ -47,7 +47,7 @@ public:
     void closeEvent(QCloseEvent *event);
     void enableBidder(Seat seat, Bids lastBid, Bids doubleBid);
     void disableBidder();
-    void setHint(Bids bid);
+    void setBidHint(Bids bid);
 
 signals:
     void bidValue(Bids bid);
@@ -99,7 +99,7 @@ private slots:
 private:
     Ui::CBidDialog *ui;
     QToolButton *m_pBidButtons[38];
-    Bids hint;
+    Bids bidHint;
 };
 
 #endif // CBIDDIALOG_H

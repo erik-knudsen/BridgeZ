@@ -70,7 +70,6 @@ SOURCES +=\
     ../src-gen/ZBridgeClientSync.c \
     ../src-gen/ZBridgeServerSync.c \
     cmainscoredialog.cpp \
-    cauctionandplaydialog.cpp \
     crubberscoredialog.cpp \
     cgamesdoc.cpp \
     cpointscoredialog.cpp \
@@ -160,7 +159,6 @@ HEADERS  += cmainframe.h \
     ../src-gen/ZBridgeClientSync.h \
     ../src-gen/ZBridgeServerSync.h \
     cmainscoredialog.h \
-    cauctionandplaydialog.h \
     crubberscoredialog.h \
     cgamesdoc.h \
     cpointscoredialog.h \
@@ -201,7 +199,6 @@ FORMS    += cmainframe.ui \
     cbidoptions.ui \
     cnewconvention.ui \
     cmainscoredialog.ui \
-    cauctionandplaydialog.ui \
     crubberscoredialog.ui \
     cpointscoredialog.ui \
     cplaydialog.ui \

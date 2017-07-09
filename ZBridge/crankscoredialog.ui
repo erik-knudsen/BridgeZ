@@ -54,7 +54,11 @@
       </layout>
      </item>
      <item>
-      <widget class="QTableWidget" name="rankScoreTable"/>
+      <widget class="QTableWidget" name="rankScoreTable">
+       <property name="whatsThis">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Rank scores for all players&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>

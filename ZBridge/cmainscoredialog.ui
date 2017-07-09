@@ -62,6 +62,9 @@
                   <height>0</height>
                  </size>
                 </property>
+                <property name="whatsThis">
+                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;North/South names&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                </property>
                 <property name="frameShape">
                  <enum>QFrame::Box</enum>
                 </property>
@@ -91,6 +94,9 @@
                   <width>200</width>
                   <height>0</height>
                  </size>
+                </property>
+                <property name="whatsThis">
+                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;East/West names&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                 </property>
                 <property name="frameShape">
                  <enum>QFrame::Box</enum>
@@ -164,6 +170,9 @@
      </item>
      <item>
       <widget class="QTableWidget" name="scoreTable">
+       <property name="whatsThis">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Score table for all played boards&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
        <property name="editTriggers">
         <set>QAbstractItemView::AnyKeyPressed|QAbstractItemView::EditKeyPressed|QAbstractItemView::SelectedClicked</set>
        </property>

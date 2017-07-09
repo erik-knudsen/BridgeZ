@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>497</width>
-    <height>238</height>
+    <height>299</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,7 +19,7 @@
      <x>9</x>
      <y>9</y>
      <width>481</width>
-     <height>221</height>
+     <height>281</height>
     </rect>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout">
@@ -36,12 +36,15 @@
            <x>11</x>
            <y>21</y>
            <width>221</width>
-           <height>25</height>
+           <height>30</height>
           </rect>
          </property>
          <layout class="QHBoxLayout" name="horizontalLayout_3">
           <item>
            <widget class="QPushButton" name="createPage">
+            <property name="whatsThis">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Create a new page. An entry in the first level of the bid database. Identified by (page) on the first level of the bid database.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
             <property name="text">
              <string>Create</string>
             </property>
@@ -49,6 +52,9 @@
           </item>
           <item>
            <widget class="QPushButton" name="deletePage">
+            <property name="whatsThis">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Delete a page from the bid datbase. Identified by (page) on the first level of the bid database.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
             <property name="text">
              <string>Delete</string>
             </property>
@@ -60,10 +66,13 @@
          <property name="geometry">
           <rect>
            <x>90</x>
-           <y>50</y>
+           <y>60</y>
            <width>71</width>
            <height>20</height>
           </rect>
+         </property>
+         <property name="whatsThis">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Current pages in the bid database.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
         </widget>
        </widget>
@@ -79,7 +88,7 @@
            <x>0</x>
            <y>20</y>
            <width>231</width>
-           <height>55</height>
+           <height>63</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -87,6 +96,9 @@
            <layout class="QHBoxLayout" name="horizontalLayout">
             <item>
              <widget class="QPushButton" name="createAuction">
+              <property name="whatsThis">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Create an auction in the bid database. This is the second level in the bid databaase. Identified by (page, auction).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
               <property name="text">
                <string>Create</string>
               </property>
@@ -94,6 +106,9 @@
             </item>
             <item>
              <widget class="QPushButton" name="deleteAuction">
+              <property name="whatsThis">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Delete an auction from the bid database. Identified by (page, auction) on the second level of the bid database.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
               <property name="text">
                <string>Delete</string>
               </property>
@@ -104,7 +119,11 @@
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_5">
             <item>
-             <widget class="QComboBox" name="auctions"/>
+             <widget class="QComboBox" name="auctions">
+              <property name="whatsThis">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Current auctions whose first level is (page) in the bid database.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+             </widget>
             </item>
            </layout>
           </item>
@@ -127,12 +146,15 @@
            <x>10</x>
            <y>20</y>
            <width>221</width>
-           <height>25</height>
+           <height>30</height>
           </rect>
          </property>
          <layout class="QHBoxLayout" name="horizontalLayout_4">
           <item>
            <widget class="QPushButton" name="createLink">
+            <property name="whatsThis">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Create a substitute auction in the bid database. Identified by (page, auction, substitute auction) on the third level of the bid database.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
             <property name="text">
              <string>Create</string>
             </property>
@@ -140,6 +162,9 @@
           </item>
           <item>
            <widget class="QPushButton" name="deleteLink">
+            <property name="whatsThis">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Delete a substitute auction from the bid database. Identified by (page, auction, substitute auction) on the third level of the bid database.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
             <property name="text">
              <string>Delete</string>
             </property>
@@ -153,12 +178,15 @@
            <x>0</x>
            <y>50</y>
            <width>231</width>
-           <height>22</height>
+           <height>24</height>
           </rect>
          </property>
          <layout class="QHBoxLayout" name="horizontalLayout_7">
           <item>
            <widget class="QLineEdit" name="link">
+            <property name="whatsThis">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The substitute auction to create or delete on the third level of the bid database.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
             </property>
@@ -182,7 +210,7 @@
            <x>10</x>
            <y>20</y>
            <width>221</width>
-           <height>55</height>
+           <height>63</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -190,6 +218,9 @@
            <layout class="QHBoxLayout" name="horizontalLayout_2">
             <item>
              <widget class="QPushButton" name="createRule">
+              <property name="whatsThis">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Create a next bid/rule in the bid database. Identified by (page, auction, next bid/rule) on the third level of the bid database.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
               <property name="text">
                <string>Create</string>
               </property>
@@ -197,6 +228,9 @@
             </item>
             <item>
              <widget class="QPushButton" name="deleteRule">
+              <property name="whatsThis">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Delete a next bid/rule from the bid database. Identified by (page, auction, next bid/rule) on the third level of the bid database.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
               <property name="text">
                <string>Delete</string>
               </property>
@@ -220,7 +254,11 @@
              </spacer>
             </item>
             <item>
-             <widget class="QComboBox" name="rules"/>
+             <widget class="QComboBox" name="rules">
+              <property name="whatsThis">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Current next bid/rules identified by (page, auction) on the third level of the bid database.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+             </widget>
             </item>
             <item>
              <spacer name="horizontalSpacer_6">

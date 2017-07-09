@@ -129,6 +129,9 @@
      </item>
      <item>
       <widget class="QTableWidget" name="pointScoreTable">
+       <property name="whatsThis">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Point scores for a given board&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
        <property name="rowCount">
         <number>0</number>
        </property>

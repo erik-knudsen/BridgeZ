@@ -43,7 +43,7 @@ CBidDialog::CBidDialog(QWidget *parent) :
     setWindowFlags(Qt::Window | Qt::CustomizeWindowHint | Qt::WindowTitleHint| Qt::WindowSystemMenuHint);
 
     setEnabled(false);
-    hint = BID_NONE;
+    bidHint = BID_NONE;
 
     //Initialize array for identification of bid buttons.
     m_pBidButtons[BID_1C] = ui->bid1C;
@@ -303,7 +303,8 @@ void CBidDialog::on_bidRedouble_clicked()
  */
 void CBidDialog::bidClicked(Bids nBid)
 {
-    setHint(BID_NONE);
+    setBidHint(BID_NONE);
+
     emit bidValue(nBid);
 }
 
@@ -348,11 +349,12 @@ void CBidDialog::disableBidder()
     setEnabled(false);
 }
 
-void CBidDialog::setHint(Bids bid)
+void CBidDialog::setBidHint(Bids bid)
 {
     assert((bid >= BID_NONE) && (bid <= BID_REDOUBLE));
-    if (hint != BID_NONE)
-        m_pBidButtons[hint]->setGraphicsEffect(0);
+
+    if (bidHint != BID_NONE)
+        m_pBidButtons[bidHint]->setGraphicsEffect(0);
 
     if (bid != BID_NONE)
     {
@@ -361,5 +363,5 @@ void CBidDialog::setHint(Bids bid)
         m_pBidButtons[bid]->setGraphicsEffect(effect);
     }
 
-    hint = bid;
+    bidHint = bid;
 }

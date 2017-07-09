@@ -174,6 +174,9 @@
    <property name="text">
     <string>&amp;Open...</string>
    </property>
+   <property name="toolTip">
+    <string>Open a PBN file</string>
+   </property>
    <property name="shortcut">
     <string>Ctrl+O</string>
    </property>
@@ -190,6 +193,9 @@
    <property name="text">
     <string>&amp;Save</string>
    </property>
+   <property name="toolTip">
+    <string>Save as PBN file</string>
+   </property>
    <property name="shortcut">
     <string>Ctrl+S</string>
    </property>
@@ -200,6 +206,9 @@
    </property>
    <property name="text">
     <string>Save &amp;As...</string>
+   </property>
+   <property name="toolTip">
+    <string>Save as PBN file with a new name</string>
    </property>
   </action>
   <action name="actionPrint">
@@ -235,7 +244,7 @@
     <string> &amp;Score</string>
    </property>
    <property name="toolTip">
-    <string>Score</string>
+    <string>Show score table</string>
    </property>
    <property name="shortcut">
     <string>F12</string>
@@ -271,6 +280,9 @@
    <property name="text">
     <string>&amp;Deal New Hand</string>
    </property>
+   <property name="toolTip">
+    <string>Deal the next hand</string>
+   </property>
    <property name="shortcut">
     <string>F1</string>
    </property>
@@ -285,6 +297,9 @@
    </property>
    <property name="text">
     <string>&amp;Rebid</string>
+   </property>
+   <property name="toolTip">
+    <string>Restart with the bidding phase</string>
    </property>
    <property name="shortcut">
     <string>F3</string>
@@ -301,6 +316,9 @@
    <property name="text">
     <string>&amp;Replay</string>
    </property>
+   <property name="toolTip">
+    <string>Restart with the playing phase</string>
+   </property>
    <property name="shortcut">
     <string>F4</string>
    </property>
@@ -316,6 +334,9 @@
    <property name="text">
     <string>Claim All</string>
    </property>
+   <property name="toolTip">
+    <string>Claim all</string>
+   </property>
    <property name="shortcut">
     <string>F5</string>
    </property>
@@ -330,6 +351,9 @@
    </property>
    <property name="text">
     <string>Claim Contract</string>
+   </property>
+   <property name="toolTip">
+    <string>Claim contract</string>
    </property>
    <property name="shortcut">
     <string>Shift+F5</string>
@@ -361,6 +385,9 @@
    <property name="text">
     <string>Hint</string>
    </property>
+   <property name="toolTip">
+    <string>Get a hint (bid or play)</string>
+   </property>
    <property name="shortcut">
     <string>Space</string>
    </property>
@@ -376,6 +403,9 @@
    <property name="text">
     <string>&amp;Lay Out Cards</string>
    </property>
+   <property name="toolTip">
+    <string>Lay out cards</string>
+   </property>
    <property name="shortcut">
     <string>F9</string>
    </property>
@@ -384,20 +414,32 @@
    <property name="text">
     <string>&amp;Bidding/Play...</string>
    </property>
+   <property name="toolTip">
+    <string>Set bidding/play options</string>
+   </property>
   </action>
   <action name="action_Deal_Options">
    <property name="text">
     <string>&amp;Deal...</string>
+   </property>
+   <property name="toolTip">
+    <string>Set deal options</string>
    </property>
   </action>
   <action name="action_Di_splay_Options">
    <property name="text">
     <string>&amp;Di&amp;splay Options...</string>
    </property>
+   <property name="toolTip">
+    <string>Set display options</string>
+   </property>
   </action>
   <action name="action_Game_Options">
    <property name="text">
     <string>&amp;Game...</string>
+   </property>
+   <property name="toolTip">
+    <string>Set game options</string>
    </property>
   </action>
   <action name="action_Expose_All_Cards">
@@ -410,6 +452,9 @@
    </property>
    <property name="text">
     <string>&amp;Expose All Cards</string>
+   </property>
+   <property name="toolTip">
+    <string>Expose all cards</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+E</string>
@@ -441,6 +486,9 @@
    <property name="text">
     <string>New Session</string>
    </property>
+   <property name="toolTip">
+    <string>Start a new session</string>
+   </property>
   </action>
   <action name="actionUndo">
    <property name="enabled">
@@ -464,6 +512,9 @@
    <property name="text">
     <string>&amp;Delete</string>
    </property>
+   <property name="toolTip">
+    <string>Delete played games</string>
+   </property>
    <property name="shortcut">
     <string>Ctrl+D</string>
    </property>
@@ -479,10 +530,16 @@
    <property name="text">
     <string>Activate Deal Profile</string>
    </property>
+   <property name="toolTip">
+    <string>Activate deal profile</string>
+   </property>
   </action>
   <action name="actionSeat_Configuration">
    <property name="text">
     <string>Seat Configuration</string>
+   </property>
+   <property name="toolTip">
+    <string>Set seat configuration</string>
    </property>
   </action>
   <action name="actionDouble_Dummy_Results">
@@ -493,15 +550,24 @@
    <property name="text">
     <string>Double Dummy Results</string>
    </property>
+   <property name="toolTip">
+    <string>Show double dummy Results</string>
+   </property>
   </action>
   <action name="actionSelect_Bid_Database">
    <property name="text">
     <string>Select Bid Database</string>
    </property>
+   <property name="toolTip">
+    <string>Select bid database</string>
+   </property>
   </action>
   <action name="actionEdit_Bid_Database">
    <property name="text">
     <string>Edit Bid Database</string>
+   </property>
+   <property name="toolTip">
+    <string>Edit bid database</string>
    </property>
   </action>
  </widget>

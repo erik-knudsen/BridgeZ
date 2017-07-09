@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>374</width>
-    <height>106</height>
+    <width>392</width>
+    <height>112</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -36,6 +36,9 @@
            <height>0</height>
           </size>
          </property>
+         <property name="whatsThis">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Convention name with conventions used for reference&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
          <property name="autoFillBackground">
           <bool>false</bool>
          </property>
@@ -61,6 +64,9 @@
            <width>200</width>
            <height>0</height>
           </size>
+         </property>
+         <property name="whatsThis">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Type new convention name&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
         </widget>
        </item>

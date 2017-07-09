@@ -35,6 +35,9 @@
        <layout class="QVBoxLayout" name="verticalLayout_10">
         <item>
          <widget class="QWidget" name="widget" native="true">
+          <property name="whatsThis">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Choose card back&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
           <layout class="QVBoxLayout" name="verticalLayout_27">
            <item>
             <layout class="QVBoxLayout" name="verticalLayout_26">
@@ -183,7 +186,7 @@
        <attribute name="title">
         <string>Misc</string>
        </attribute>
-       <widget class="QWidget" name="">
+       <widget class="QWidget" name="layoutWidget">
         <property name="geometry">
          <rect>
           <x>50</x>
@@ -195,6 +198,9 @@
         <layout class="QHBoxLayout" name="horizontalLayout_10">
          <item>
           <widget class="QPushButton" name="backgroundColor">
+           <property name="whatsThis">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Choose background color&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
            <property name="text">
             <string>Background Color...</string>
            </property>

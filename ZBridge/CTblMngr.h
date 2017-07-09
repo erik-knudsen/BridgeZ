@@ -56,7 +56,7 @@ public:
     virtual void reBid();
     virtual void rePlay();
     virtual void undo();
-    virtual void hint();
+    virtual void hint() = 0;
     /*@}*/
 
 signals:

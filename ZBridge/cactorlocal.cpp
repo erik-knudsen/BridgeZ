@@ -421,8 +421,6 @@ void CActorLocal::getHint()
     }
     else
     {
-        assert(zBridgeClient_isStateActive(&handle, ZBridgeClient_main_region_Play));
-
         Seat player = (Seat)zBridgeClientIface_get_player(&handle);
         int nextPlay = bidAndPlay.getNextPlay(player, (Seat)zBridgeClientIface_get_dummy(&handle));
 

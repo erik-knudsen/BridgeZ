@@ -191,7 +191,7 @@ void CTblMngrClient::showDoubleDummyResults()
 
 void CTblMngrClient::hint()
 {
-
+        actor->getHint();
 }
 
 //Slots for play view.

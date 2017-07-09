@@ -53,9 +53,9 @@ void CCard::setHint(bool set)
 {
     if (set)
     {
-        QGraphicsColorizeEffect *hint = new QGraphicsColorizeEffect();
-        hint->setColor(QColor(0, 0, 255));
-        setGraphicsEffect(hint);
+        QGraphicsColorizeEffect *effect = new QGraphicsColorizeEffect();
+        effect->setColor(QColor(0, 0, 255));
+        setGraphicsEffect(effect);
     }
     else
         setGraphicsEffect(0);
