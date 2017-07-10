@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui network
+QT       += core gui network help
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -97,7 +97,8 @@ SOURCES +=\
     cruledialog.cpp \
     cbiddbdefine.cpp \
     cbidandplayengines.cpp \
-    cpopup.cpp
+    cpopup.cpp \
+    chelpbrowser.cpp
 
 HEADERS  += cmainframe.h \
     czbridgedoc.h \
@@ -186,7 +187,8 @@ HEADERS  += cmainframe.h \
     cruledialog.h \
     cbiddbdefine.h \
     cbidandplayengines.h \
-    cpopup.h
+    cpopup.h \
+    chelpbrowser.h
 
 FORMS    += cmainframe.ui \
     caboutdlg.ui \

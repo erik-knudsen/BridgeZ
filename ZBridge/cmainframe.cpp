@@ -33,6 +33,11 @@
 #include <QInputDialog>
 #include <QMessageBox>
 #include <QThread>
+#include <QHelpEngine>
+#include <QHelpContentWidget>
+#include <QHelpIndexWidget>
+#include <QHelpSearchQueryWidget>
+#include <QTableWidget>
 
 #include "ZBridgeException.h"
 #include "cmainframe.h"
@@ -59,6 +64,7 @@
 #include "cbiddesc.h"
 #include "cbiddingsystemdialog.h"
 #include "cbidandplayengines.h"
+#include "chelpbrowser.h"
 
 const int MAX_RECENT_FILES = 4;
 
@@ -130,7 +136,10 @@ CMainFrame::CMainFrame(CZBridgeApp *app, CZBridgeDoc *doc, CGamesDoc *games) :
     resize(QSize(SCENE_HOR_SIZE + 50, SCENE_VER_SIZE + 175));
     setMinimumSize(QSize((SCENE_HOR_SIZE + 50) * .75, (SCENE_VER_SIZE + 175) * .75));
     setMaximumSize(QSize((SCENE_HOR_SIZE + 50) * 1.25, (SCENE_VER_SIZE + 175) * 1.25));
- }
+
+    //Help.
+    createHelpWindow();
+}
 
 CMainFrame::~CMainFrame()
 {
@@ -212,6 +221,36 @@ void CMainFrame::adjustForCurrentFile(const QString &filePath, bool add)
     settings.setValue("recentFiles", recentFilePaths);
 
     updateRecentActionList();
+}
+
+void CMainFrame::createHelpWindow()
+{
+    QHelpEngine* helpEngine = new QHelpEngine(
+                QApplication::applicationDirPath() +
+                "/documentation/zbridge.qhc");
+    helpEngine->setupData();
+
+    QTabWidget* tWidget = new QTabWidget;
+    tWidget->setMaximumWidth(200);
+    tWidget->addTab(helpEngine->contentWidget(), "Contents");
+    tWidget->addTab(helpEngine->indexWidget(), "Index");
+
+    CHelpBrowser *textViewer = new CHelpBrowser(helpEngine);
+
+    connect(helpEngine->contentWidget(),
+            SIGNAL(linkActivated(QUrl)),
+            textViewer, SLOT(setSource(QUrl)));
+    connect(helpEngine->indexWidget(),
+            SIGNAL(linkActivated(QUrl, QString)),
+            textViewer, SLOT(setSource(QUrl)));
+
+    helpWindow = new QSplitter(Qt::Horizontal);
+    helpWindow->setWindowTitle(tr("Help"));
+
+    helpWindow->insertWidget(0, tWidget);
+    helpWindow->insertWidget(1, textViewer);
+
+    helpWindow->hide();
 }
 
 /**
@@ -1093,7 +1132,7 @@ void CMainFrame::on_actionEdit_Bid_Database_triggered()
 
 void CMainFrame::on_action_Contents_triggered()
 {
-
+    helpWindow->show();
 }
 
 /**

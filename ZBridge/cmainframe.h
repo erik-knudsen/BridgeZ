@@ -26,6 +26,7 @@
 #include <QList>
 #include <QHostAddress>
 #include <QSemaphore>
+#include <QSplitter>
 
 namespace Ui {
 class CMainFrame;
@@ -88,6 +89,7 @@ private:
     void open(QString &originalFileName);    
     void updateRecentActionList();
     void adjustForCurrentFile(const QString& filePath, bool add);
+    void createHelpWindow();
 
     Ui::CMainFrame *ui;
     CZBridgeApp *app;
@@ -107,6 +109,7 @@ private:
     QSemaphore sem1, sem2;
 
     QList<QAction *> recentFileActionList;
+    QSplitter* helpWindow;
 
 private slots:
     //Menu actions.
