@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<QtHelpProject version="1.0">
+    <namespace>erik.aagaard.knudsen</namespace>
+    <virtualFolder>doc</virtualFolder>
+    <filterSection>
+        <toc>
+            <section title="ZBridge" ref="content.html">
+                <section title="Introduction" ref="intro_2.html">
+                    <section title="Introduction" ref="intro_1.html"></section>
+                    <section title="Quick Start" ref="quickstart.html"></section>
+                </section>
+                <section title="Background" ref="background.html">
+                    <section title="Rules of the Game" ref="rules.html">
+                        <section title="Overview" ref="overview.html"></section>
+                        <section title="Bidding" ref="bidding.html"></section>
+                        <section title="Card Play" ref="cardplay.html"></section>
+                        <section title="Scoring" ref="scoring.html"></section>
+                    </section>
+                </section>
+                <section title="Computer Player Logic" ref="cpl.html">
+                    <section title="Computer Player Strategy" ref="cps.html"></section>
+                    <section title="General Logic Notes" ref="gln.html"></section>
+                </section>
+                <section title="Using the Program" ref="using.html">
+                    <section title="Menu Options" ref="menus.html">
+                        <section title="File" ref="file.html"></section>
+                        <section title="Edit" ref="edit.html"></section>
+                        <section title="View" ref="view.html"></section>
+                        <section title="Game" ref="game.html"></section>
+                        <section title="Options" ref="options.html"></section>
+                        <section title="Special" ref="special.html"></section>
+                        <section title="Help" ref="help.html"></section>
+                    </section>
+                    <section title="Dialogs" ref="dialogs.html">
+                        <section title="Score" ref="scoredialogs.html"></section>
+                        <section title="Double Dummy Results" ref="doubledummyresultsdialog.html"></section>
+                        <section title="Deal Profile" ref="dealprofiledialog.html"></section>
+                        <section title="Seat Configuration" ref="seatconfigurationdialog.html"></section>
+                        <section title="Bidding" ref="bidandplaydialogs.html"></section>
+                        <section title="Display Options" ref="displayoptionsdialog.html"></section>
+                        <section title="Game Options" ref="gameoptionsdialog.html"></section>
+                  </section>
+                </section>
+                <section title="Appendices" ref="appendices.html">
+                    <section title="Bidding Conventions" ref="bidconv.html"></section>
+                    <section title="Frequently Asked Questions" ref="faq.html"></section>
+                    <section title="Glossary of Terms" ref="glossary.html"></section>
+                </section>
+            </section>
+        </toc>
+        <keywords>
+            <keyword name="Session" ref="session.html"/>
+            <keyword name="Scores" ref="scoring.html"/>
+            <keyword name="Bidding" ref="bidding.html"/>
+            <keyword name="Playing" ref="playing.html"/>
+            <keyword name="Laying Out Cards Manually" ref="layingoutcardsmanually.html"/>
+        </keywords>
+        <files>
+            <file>content.html</file>
+            <file>intro_1.html</file>
+            <file>intro_2.html</file>
+            <file>quickstart.html</file>
+            <file>background.html</file>
+            <file>rules.html</file>
+            <file>overview.html</file>
+            <file>bidding.html</file>
+            <file>cardplay.html</file>
+            <file>scoring.html</file>
+            <file>cpl.html</file>
+            <file>cps.html</file>
+            <file>gln.html</file>
+            <file>using.html</file>
+            <file>menus.html</file>
+            <file>dialogs.html</file>
+            <file>appendices.html</file>
+            <file>bidconv.html</file>
+            <file>faq.html</file>
+            <file>glossary.html</file>
+            <file>session.html</file>
+             <file>playing.html</file>
+            <file>file.html</file>
+            <file>edit.html</file>
+            <file>view.html</file>
+            <file>game.html</file>
+            <file>options.html</file>
+            <file>special.html</file>
+            <file>help.html</file>
+            <file>layingoutcardsmanually.html</file>
+            <file>scoredialogs.html</file>
+            <file>doubledummyresultsdialog.html</file>
+            <file>dealprofiledialog.html</file>
+            <file>seatconfigurationdialog.html</file>
+            <file>bidandplaydialogsdialog.html</file>
+            <file>displayoptionsdialog.html</file>
+            <file>gameoptionsdialog.html</file>
+            <file>images/Rubber_Bridge_Scoring.png</file>
+            <file>images/FILEOPEN.BMP</file>
+            <file>images/FILESAVE.BMP</file>
+            <file>images/Fileprint.bmp</file>
+            <file>images/LayOutCards.bmp</file>
+            <file>images/ViewScore.bmp</file>
+            <file>images/ExposeAllCards.bmp</file>
+            <file>images/ViewPlayHistory.bmp</file>
+            <file>images/ManualDefend.bmp</file>
+            <file>images/DealNewHand.bmp</file>
+            <file>images/numbered.bmp</file>
+            <file>images/EDITUNDO.BMP</file>
+            <file>images/BidHand.bmp</file>
+            <file>images/review_first_game.ico</file>
+            <file>images/ClaimTricks.bmp</file>
+            <file>images/ClaimContract.bmp</file>
+            <file>images/ConcedeTricks.bmp</file>
+            <file>images/GetHint.bmp</file>
+        </files>
+    </filterSection>
+</QtHelpProject>
