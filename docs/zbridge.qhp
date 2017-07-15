@@ -18,8 +18,6 @@
                     </section>
                 </section>
                 <section title="Computer Player Logic" ref="cpl.html">
-                    <section title="Computer Player Strategy" ref="cps.html"></section>
-                    <section title="General Logic Notes" ref="gln.html"></section>
                 </section>
                 <section title="Using the Program" ref="using.html">
                     <section title="Menu Options" ref="menus.html">
@@ -39,6 +37,7 @@
                         <section title="Bidding" ref="bidandplaydialogs.html"></section>
                         <section title="Display Options" ref="displayoptionsdialog.html"></section>
                         <section title="Game Options" ref="gameoptionsdialog.html"></section>
+                        <section title="Bid Database" ref="biddatabase.html"></section>
                   </section>
                 </section>
                 <section title="Appendices" ref="appendices.html">
@@ -67,8 +66,6 @@
             <file>cardplay.html</file>
             <file>scoring.html</file>
             <file>cpl.html</file>
-            <file>cps.html</file>
-            <file>gln.html</file>
             <file>using.html</file>
             <file>menus.html</file>
             <file>dialogs.html</file>
@@ -93,6 +90,7 @@
             <file>bidandplaydialogsdialog.html</file>
             <file>displayoptionsdialog.html</file>
             <file>gameoptionsdialog.html</file>
+            <file>biddatabase.html</file>
             <file>images/Rubber_Bridge_Scoring.png</file>
             <file>images/FILEOPEN.BMP</file>
             <file>images/FILESAVE.BMP</file>
@@ -111,6 +109,8 @@
             <file>images/ClaimContract.bmp</file>
             <file>images/ConcedeTricks.bmp</file>
             <file>images/GetHint.bmp</file>
+            <file>images/HelpContents.bmp</file>
+            <file>images/HelpAppAbout.bmp</file>
         </files>
     </filterSection>
 </QtHelpProject>
