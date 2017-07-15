@@ -225,13 +225,12 @@ void CMainFrame::adjustForCurrentFile(const QString &filePath, bool add)
 
 void CMainFrame::createHelpWindow()
 {
-    QHelpEngine* helpEngine = new QHelpEngine(
-                QApplication::applicationDirPath() +
-                "/documentation/zbridge.qhc");
+    QString qhcPath = QApplication::applicationDirPath() + "/zbridge.qhc";
+    QHelpEngine* helpEngine = new QHelpEngine(qhcPath);
     helpEngine->setupData();
 
     QTabWidget* tWidget = new QTabWidget;
-    tWidget->setMaximumWidth(200);
+    tWidget->setMaximumWidth(300);
     tWidget->addTab(helpEngine->contentWidget(), "Contents");
     tWidget->addTab(helpEngine->indexWidget(), "Index");
 
