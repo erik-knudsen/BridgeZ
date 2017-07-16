@@ -248,6 +248,7 @@ void CMainFrame::createHelpWindow()
 
     helpWindow->insertWidget(0, tWidget);
     helpWindow->insertWidget(1, textViewer);
+    helpWindow->resize(1000, 600);
 
     helpWindow->hide();
 }

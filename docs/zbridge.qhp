@@ -30,11 +30,14 @@
                         <section title="Help" ref="help.html"></section>
                     </section>
                     <section title="Dialogs" ref="dialogs.html">
-                        <section title="Score" ref="scoredialogs.html"></section>
+                        <section title="Main Window" ref="mainwindow.html"></section>
+                        <section title="Open Dialog" ref="opendialog.html"></section>
+                        <section title="Save As Dialog" ref="saveasdialog.html"></section>
+                        <section title="Score Dialogs" ref="scoredialogs.html"></section>
                         <section title="Double Dummy Results" ref="doubledummyresultsdialog.html"></section>
-                        <section title="Deal Profile" ref="dealprofiledialog.html"></section>
                         <section title="Seat Configuration" ref="seatconfigurationdialog.html"></section>
                         <section title="Bidding" ref="bidandplaydialogs.html"></section>
+                        <section title="Deal Profile" ref="dealprofiledialog.html"></section>
                         <section title="Display Options" ref="displayoptionsdialog.html"></section>
                         <section title="Game Options" ref="gameoptionsdialog.html"></section>
                         <section title="Bid Database" ref="biddatabase.html"></section>
@@ -83,11 +86,14 @@
             <file>special.html</file>
             <file>help.html</file>
             <file>layingoutcardsmanually.html</file>
+            <file>mainwindow.html</file>
+            <file>opendialog.html</file>
+            <file>saveasdialog.html</file>
             <file>scoredialogs.html</file>
             <file>doubledummyresultsdialog.html</file>
             <file>dealprofiledialog.html</file>
             <file>seatconfigurationdialog.html</file>
-            <file>bidandplaydialogsdialog.html</file>
+            <file>bidandplaydialogs.html</file>
             <file>displayoptionsdialog.html</file>
             <file>gameoptionsdialog.html</file>
             <file>biddatabase.html</file>
@@ -111,6 +117,16 @@
             <file>images/GetHint.bmp</file>
             <file>images/HelpContents.bmp</file>
             <file>images/HelpAppAbout.bmp</file>
+            <file>images/mainwindow.png</file>
+            <file>images/opendialog.png</file>
+            <file>images/saveasdialog.png</file>
+            <file>images/playedscores.png</file>
+            <file>images/playwindow.png</file>
+            <file>images/boardscores.png</file>
+            <file>images/rankscores.png</file>
+            <file>images/playedscorerrubber.png</file>
+            <file>images/rubberscore.png</file>
+            <file>images/doubledummyresults.png</file>
         </files>
     </filterSection>
 </QtHelpProject>
