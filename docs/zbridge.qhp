@@ -127,6 +127,23 @@
             <file>images/playedscorerrubber.png</file>
             <file>images/rubberscore.png</file>
             <file>images/doubledummyresults.png</file>
+            <file>images/seatconfiguration.png</file>
+            <file>images/convention.png</file>
+            <file>images/newconvention.png</file>
+            <file>images/BPCconfig.png</file>
+            <file>images/BPCgeneral.png</file>
+            <file>images/BPC2-bids.png</file>
+            <file>images/BPCntrange.png</file>
+            <file>images/BPCntother.png</file>
+            <file>images/BPCmisc.png</file>
+            <file>images/BPCopening.png</file>
+            <file>images/BPCleads.png</file>
+            <file>images/BPCsignals.png</file>
+            <file>images/dealoptions.png</file>
+            <file>images/DOcardbacks.png</file>
+            <file>images/DOmisc.png</file>
+            <file>images/GOinterface.png</file>
+            <file>images/GOscoring.png</file>
         </files>
     </filterSection>
 </QtHelpProject>
