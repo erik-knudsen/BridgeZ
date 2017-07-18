@@ -144,6 +144,11 @@
             <file>images/DOmisc.png</file>
             <file>images/GOinterface.png</file>
             <file>images/GOscoring.png</file>
+            <file>images/biddingsystem.png</file>
+            <file>images/pagedescription.png</file>
+            <file>images/rule.png</file>
+            <file>images/highcardsandquality.png</file>
+            <file>images/length.png</file>
         </files>
     </filterSection>
 </QtHelpProject>

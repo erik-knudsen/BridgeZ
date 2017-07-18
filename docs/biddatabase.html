@@ -1,3 +1,146 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html><head><meta content="text/html; charset=ISO-8859-1" http-equiv="content-type"><title>contents</title></head>
-<body></body></html>
+<html><head>
+<meta content="text/html; charset=ISO-8859-1" http-equiv="content-type"><title>contents</title>
+
+</head>
+<body>
+<h1><span style="color: rgb(0, 0, 204);">Bid
+Database.</span></h1>
+<p><big>The intention of the bid database is </big><big>to
+identify the best next bid</big><big>.
+This is based on&nbsp;selected conventions, </big><big>the
+auction
+(bidding sequence) till now</big><big> and the given hand
+(13 cards).
+<br><br>
+The database has three
+levels:<br>
+<ul>
+<li>&nbsp;The first level (page)
+selects a top level of rules, based on selected conventions. The first
+level is a one to one
+mapping (injective).</li>
+<br>
+<li>The second level (auction)
+delimits the rules in the top level set, to rules relevant for
+a given auction (bidding
+sequence). The second level is also a one to one mapping.&nbsp;</li>
+<br>
+<li>The third level (next bid)
+further delimits the rules to one rule based on the hand (13 card)
+features
+(High card points etc.) and
+in some cases also to selected conventions. The selected rule
+identifies the next bid. The
+third level is a one to many mapping (the next bid can be selected
+by more than one rule).
+In some cases the third
+level instead identifies a substitute auction (sequence of bids).
+It might also happen that
+the database cannot find a best next bid. In which case the computer
+uses an algoritmic approach for finding the next bid.</li>
+</ul>
+<br>
+In the following dialogs you can create/examine the bid database.
+</big></p>
+<h3>Bidding System.</h3>
+<div style="margin-left: 60px;"><img style="width: 350px; height: 237px;" alt="Bidding System" src="images/biddingsystem.png"><br>
+</div>
+<p><big>The "Pages" box allows you to create or examine or
+edit or delete a page, the first level of the bid database.&nbsp;</big><big>The
+Page Id identifies the page and is used by the bidding
+algorithms for including or excluding the page in the determination of
+the next bid.</big><big> A textual
+description of the page is also shown for examination or for editing:
+</big></p>
+<div style="margin-left: 70px;"><img style="width: 300px; height: 131px;" alt="Page Description" src="images/pagedescription.png"><br>
+</div>
+<br>
+<p><big>The "Auctions" box in the "Bidding System" dialog allows you to create or examine
+or edit or delete an auction, the second level of the bid database.
+<br>
+The "Link" box allows you to create or examine or edit or delete a link
+(a substitute auction). If an auction on the second level has a link to
+another auction then the link is substituted for the original auction. <br>
+The "Rules" box allows you to create or examine or edit or delete a
+next bid, the third level of the bid database.
+<br>
+<br>
+The rules are described by the following dialogs.</big></p>
+<h3><big>Rule.</big></h3>
+<br>
+<div style="margin-left: 50px;"><img style="width: 400px; height: 378px;" alt="Rule" src="images/rule.png">
+<br>
+</div>
+<p><big>Here parameters for the rule is shown and can be
+edited. <br>
+The Rule Id identifies the rule and is used by the bidding
+algorithms for including or excluding the rule in the determination of
+the next bid. A Rule Id of 0 means that it is always included.<br>
+The Rule
+Priority is used when a number of rules are chosen by the bidding
+algorithm as equal valid. The rule with the highest priority is then
+chosen. In cases where the Rule Id is not 0 you can write a textual
+description of the rule in the Rule Id Description box.&nbsp;
+<br>
+The Alert Id identifies the alert and must be not 0 for rules which
+must be alerted. In cases where the Alert Id is not 0 you can write a
+textual description of the alert in the Alert Id Description box.
+</big></p>
+<h3>High Cards and Quality.</h3>
+<div style="margin-left: 50px;"><img style="width: 400px; height: 378px;" alt="High Cards abd Quality" src="images/highcardsandquality.png"><br ="">
+</div>
+<br>
+<p><big>Range for High Cards and Quality can be defined in
+this dialog. Range is defined for each suit. S for Spades, H for
+Hearts, D for Diamonds, C for Clubs and A for all. Range is defined as
+[from]-[to], [from]+ or +[to]. Where [from] and [to] are numbers. The
+number is included in the range.
+<br>
+<br>
+The following parameters are defined in the dialog (max range is shown
+with suits first and all second):
+<ul>
+<li>HCP, weight of High Cards. Ace counts 4, King counts 3,
+Queen counts 2, Jack counts 1. Range [0-10], [0-37].</li>
+<li>Controls, weight of High Cards. Ace counts 2, King counts
+1. Range [0-3], [0-12].</li>
+<li>HC, count of aces, kings and queens.&nbsp; Range [0-3],
+[0-12]</li>
+<li>Honor, count of cards higher than 9. Range [0-5], [0-13]</li>
+<li>Ace, count of aces. Range [0-1], [0-4]</li>
+<li>King, count of kings. Range [0-1], [0-4]</li>
+<li>Queen, count of queens. Range [0-1], [0-4]</li>
+<li>Jack, count of Jacks. Range [0-1], [0-4]</li>
+<li>Ten, count of Tens. Range [0-1], [0-4]</li>
+<li>RKCB, count of aces + king in the suit. Range [0-5].</li>
+<li>Inter, weighed count of intermediate cards. Range [0-7],
+[0-28]</li>
+<li>Looser, loosers. Range [0-3], [0-12]</li>
+<li>Quick, quick tricks. Range [0-4], [0-16]. Multiplied with 2.</li>
+<li>Play, playing tricks. Range [0-26]. Multiplied with 2.</li>
+<li>StopNT, stoppers in NT for a given suit. Range [0-4].</li>
+<li>Qlty, general quality of cards for a given suit. Range
+[0-6].</li>
+<li>Points, HCP + distribution points + lenght points. Range
+[0-37], [0-37].</li>
+<li>Dist, distribution points. Double counts 1, single counts
+2, renonce counts 3. Range [0-9][0-9].</li>
+</ul>
+</big></p>
+<h3>Length.</h3>
+<div style="margin-left: 50px;"><img style="width: 400px; height: 378px;" alt="Lenght" src="images/length.png"></div>
+<br>
+<p><big>This dialog shows length ranges, which are
+straightforward and other parameters in the Other box.
+<br>
+<ul>
+<li>Balanced, 0 = balanced, 9 = freak.</li>
+<li>Longer Than 3, number of suits longer than 3.</li>
+<li>Longer Major, length of longest major.</li>
+<li>Longer Minor, lenght of longest minor.</li>
+</ul>
+</big></p>
+<br>
+<br>
+</body></html>
