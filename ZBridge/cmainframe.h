@@ -27,6 +27,7 @@
 #include <QHostAddress>
 #include <QSemaphore>
 #include <QSplitter>
+#include <QHelpEngine>
 
 namespace Ui {
 class CMainFrame;
@@ -77,6 +78,15 @@ signals:
 public slots:
     void sStatusText(QString text);
 
+private slots:
+/*For debugging search for help.
+    void inxStarted();
+    void inxFinished();
+    void searchStarted();
+    void searchFinished(int hits);
+*/
+    void search();
+
 protected:
     virtual void resizeEvent(QResizeEvent *resizeEvent);
 
@@ -110,6 +120,8 @@ private:
 
     QList<QAction *> recentFileActionList;
     QSplitter* helpWindow;
+
+    QHelpEngine* helpEngine;
 
 private slots:
     //Menu actions.

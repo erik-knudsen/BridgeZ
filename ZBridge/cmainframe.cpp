@@ -33,7 +33,6 @@
 #include <QInputDialog>
 #include <QMessageBox>
 #include <QThread>
-#include <QHelpEngine>
 #include <QHelpContentWidget>
 #include <QHelpIndexWidget>
 #include <QHelpSearchQueryWidget>
@@ -223,26 +222,64 @@ void CMainFrame::adjustForCurrentFile(const QString &filePath, bool add)
     updateRecentActionList();
 }
 
+/**
+ * @brief Create Help window with contents, index and search.
+ */
 void CMainFrame::createHelpWindow()
 {
     QString qhcPath = QApplication::applicationDirPath() + "/zbridge.qhc";
-    QHelpEngine* helpEngine = new QHelpEngine(qhcPath);
+    helpEngine = new QHelpEngine(qhcPath);
     helpEngine->setupData();
 
+    //Tabs for contents, index and search (use build in widgets).
     QTabWidget* tWidget = new QTabWidget;
     tWidget->setMaximumWidth(300);
     tWidget->addTab(helpEngine->contentWidget(), "Contents");
     tWidget->addTab(helpEngine->indexWidget(), "Index");
+    QVBoxLayout *searchBox = new QVBoxLayout;
+    searchBox->addWidget(helpEngine->searchEngine()->queryWidget());
+    searchBox->addWidget((QWidget *)(helpEngine->searchEngine()->resultWidget()));
+    QWidget *searchWidget = new QWidget;
+    searchWidget->setLayout(searchBox);
+    tWidget->addTab(searchWidget, "Search");
 
+    //Browser.
     CHelpBrowser *textViewer = new CHelpBrowser(helpEngine);
 
+    //Conect contents, index and search to browser.
     connect(helpEngine->contentWidget(),
             SIGNAL(linkActivated(QUrl)),
             textViewer, SLOT(setSource(QUrl)));
     connect(helpEngine->indexWidget(),
             SIGNAL(linkActivated(QUrl, QString)),
             textViewer, SLOT(setSource(QUrl)));
+    connect((QWidget *)(helpEngine->searchEngine()->resultWidget()),
+            SIGNAL(requestShowLink(QUrl)),
+            textViewer, SLOT(setSource(QUrl)));
 
+    //Connect search query to search slot.
+    connect(helpEngine->searchEngine()->queryWidget(),
+            SIGNAL(search()),
+            this, SLOT(search()));
+
+/*  For debugging search for help.
+    connect(helpEngine->searchEngine(),
+            SIGNAL(indexingStarted()),
+            this, SLOT(inxStarted()));
+    connect(helpEngine->searchEngine(),
+            SIGNAL(indexingFinished()),
+            this, SLOT(inxFinished()));
+    connect(helpEngine->searchEngine(),
+            SIGNAL(searchingStarted()),
+            this, SLOT(searchStarted()));
+    connect(helpEngine->searchEngine(),
+            SIGNAL(searchingFinished(int hits)),
+            this, SLOT(searchFinished(int hits)));
+*/
+    //Must index documentation.
+    helpEngine->searchEngine()->reindexDocumentation();
+
+    //Set up help window.
     helpWindow = new QSplitter(Qt::Horizontal);
     helpWindow->setWindowTitle(tr("Help"));
 
@@ -251,6 +288,37 @@ void CMainFrame::createHelpWindow()
     helpWindow->resize(1000, 600);
 
     helpWindow->hide();
+}
+
+/*For debugging search for help.
+void CMainFrame::inxStarted()
+{
+    ;
+}
+
+void CMainFrame::inxFinished()
+{
+    ;
+}
+
+void CMainFrame::searchStarted()
+{
+    ;
+}
+
+void CMainFrame::searchFinished(int hits)
+{
+    ;
+}
+*/
+
+/**
+ * @brief Get help search query and start search.
+ */
+void CMainFrame::search()
+{
+    QList<QHelpSearchQuery> query = helpEngine->searchEngine()->queryWidget()->query();
+    helpEngine->searchEngine()->search(query);
 }
 
 /**
