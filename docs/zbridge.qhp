@@ -34,9 +34,10 @@
                         <section title="Open Dialog" ref="opendialog.html"></section>
                         <section title="Save As Dialog" ref="saveasdialog.html"></section>
                         <section title="Score Dialogs" ref="scoredialogs.html"></section>
+                        <section title="Lay Out Cards" ref="layingoutcardsmanually.html"></section>
                         <section title="Double Dummy Results" ref="doubledummyresultsdialog.html"></section>
                         <section title="Seat Configuration" ref="seatconfigurationdialog.html"></section>
-                        <section title="Bidding" ref="bidandplaydialogs.html"></section>
+                        <section title="Bid and Play Configuration" ref="bidandplaydialogs.html"></section>
                         <section title="Deal Profile" ref="dealprofiledialog.html"></section>
                         <section title="Display Options" ref="displayoptionsdialog.html"></section>
                         <section title="Game Options" ref="gameoptionsdialog.html"></section>
@@ -45,8 +46,6 @@
                 </section>
                 <section title="Appendices" ref="appendices.html">
                     <section title="Bidding Conventions" ref="bidconv.html"></section>
-                    <section title="Frequently Asked Questions" ref="faq.html"></section>
-                    <section title="Glossary of Terms" ref="glossary.html"></section>
                 </section>
             </section>
         </toc>
@@ -54,7 +53,7 @@
             <keyword name="Session" ref="session.html"/>
             <keyword name="Scores" ref="scoring.html"/>
             <keyword name="Bidding" ref="bidding.html"/>
-            <keyword name="Playing" ref="playing.html"/>
+            <keyword name="Playing" ref="cardplay.html"/>
             <keyword name="Laying Out Cards Manually" ref="layingoutcardsmanually.html"/>
         </keywords>
         <files>
@@ -74,10 +73,7 @@
             <file>dialogs.html</file>
             <file>appendices.html</file>
             <file>bidconv.html</file>
-            <file>faq.html</file>
-            <file>glossary.html</file>
             <file>session.html</file>
-             <file>playing.html</file>
             <file>file.html</file>
             <file>edit.html</file>
             <file>view.html</file>
@@ -149,6 +145,7 @@
             <file>images/rule.png</file>
             <file>images/highcardsandquality.png</file>
             <file>images/length.png</file>
+            <file>images/layoutcards.png</file>
         </files>
     </filterSection>
 </QtHelpProject>

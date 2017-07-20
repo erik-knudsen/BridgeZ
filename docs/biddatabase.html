@@ -1,8 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html><head>
-<meta content="text/html; charset=ISO-8859-1" http-equiv="content-type"><title>contents</title>
-
-</head>
+<meta content="text/html; charset=ISO-8859-1" http-equiv="content-type"><title>contents</title></head>
 <body>
 <h1><span style="color: rgb(0, 0, 204);">Bid
 Database.</span></h1>
@@ -44,7 +42,7 @@ uses an algoritmic approach for finding the next bid.</li>
 In the following dialogs you can create/examine the bid database.
 </big></p>
 <h3>Bidding System.</h3>
-<div style="margin-left: 60px;"><img style="width: 350px; height: 237px;" alt="Bidding System" src="images/biddingsystem.png"><br>
+<div style="margin-left: 60px;"><img src="images/biddingsystem.png" style="width: 350px; height: 237px;" alt="Bidding System"><br>
 </div>
 <p><big>The "Pages" box allows you to create or examine or
 edit or delete a page, the first level of the bid database.&nbsp;</big><big>The
@@ -53,7 +51,7 @@ algorithms for including or excluding the page in the determination of
 the next bid.</big><big> A textual
 description of the page is also shown for examination or for editing:
 </big></p>
-<div style="margin-left: 70px;"><img style="width: 300px; height: 131px;" alt="Page Description" src="images/pagedescription.png"><br>
+<div style="margin-left: 70px;"><img src="images/pagedescription.png" style="width: 300px; height: 131px;" alt="Page Description"><br>
 </div>
 <br>
 <p><big>The "Auctions" box in the "Bidding System" dialog allows you to create or examine
@@ -69,7 +67,7 @@ next bid, the third level of the bid database.
 The rules are described by the following dialogs.</big></p>
 <h3><big>Rule.</big></h3>
 <br>
-<div style="margin-left: 50px;"><img style="width: 400px; height: 378px;" alt="Rule" src="images/rule.png">
+<div style="margin-left: 50px;"><img src="images/rule.png" style="width: 400px; height: 378px;" alt="Rule">
 <br>
 </div>
 <p><big>Here parameters for the rule is shown and can be
@@ -88,7 +86,7 @@ must be alerted. In cases where the Alert Id is not 0 you can write a
 textual description of the alert in the Alert Id Description box.
 </big></p>
 <h3>High Cards and Quality.</h3>
-<div style="margin-left: 50px;"><img style="width: 400px; height: 378px;" alt="High Cards abd Quality" src="images/highcardsandquality.png"><br ="">
+<div style="margin-left: 50px;"><img src="images/highcardsandquality.png" style="width: 400px; height: 378px;" alt="High Cards abd Quality"><br ="">
 </div>
 <br>
 <p><big>Range for High Cards and Quality can be defined in
@@ -114,11 +112,13 @@ Queen counts 2, Jack counts 1. Range [0-10], [0-37].</li>
 <li>Jack, count of Jacks. Range [0-1], [0-4]</li>
 <li>Ten, count of Tens. Range [0-1], [0-4]</li>
 <li>RKCB, count of aces + king in the suit. Range [0-5].</li>
-<li>Inter, weighed count of intermediate cards. Range [0-7],
+<li>Inter, weighed count of intermediate cards. 10 counts 4, 9 counts 2, 8 counts 1. Range [0-7],
 [0-28]</li>
-<li>Looser, loosers. Range [0-3], [0-12]</li>
-<li>Quick, quick tricks. Range [0-4], [0-16]. Multiplied with 2.</li>
-<li>Play, playing tricks. Range [0-26]. Multiplied with 2.</li>
+<li>Looser, loosers. Only the first three cards in the suit are
+potential losers. Ace King and Queen are not loosers. Range [0-3],
+[0-12]</li>
+<li>Quick, quick tricks. Only Ace, King and Queen counts. Range [0-4], [0-16]. Multiplied with 2.</li>
+<li>Play, playing tricks.&nbsp; Range [0-26]. Multiplied with 2.</li>
 <li>StopNT, stoppers in NT for a given suit. Range [0-4].</li>
 <li>Qlty, general quality of cards for a given suit. Range
 [0-6].</li>
@@ -129,11 +129,12 @@ Queen counts 2, Jack counts 1. Range [0-10], [0-37].</li>
 </ul>
 </big></p>
 <h3>Length.</h3>
-<div style="margin-left: 50px;"><img style="width: 400px; height: 378px;" alt="Lenght" src="images/length.png"></div>
+<div style="margin-left: 50px;"><img src="images/length.png" style="width: 400px; height: 378px;" alt="Lenght"></div>
 <br>
 <p><big>This dialog shows length ranges, which are
-straightforward and other parameters in the Other box.
-<br>
+straightforward. The "Longest" column in the "Length" box is 1 if the
+suit is the longest, 0 otherwise. The "Long" column in the "Length" box
+is 1 if the suit is not the shortest. The parameters in the Other box:<br>
 <ul>
 <li>Balanced, 0 = balanced, 9 = freak.</li>
 <li>Longer Than 3, number of suits longer than 3.</li>
