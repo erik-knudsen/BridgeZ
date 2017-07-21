@@ -120,7 +120,6 @@ private:
 
     QList<QAction *> recentFileActionList;
     QSplitter* helpWindow;
-
     QHelpEngine* helpEngine;
 
 private slots:

@@ -1,6 +1,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html><head>
-<meta content="text/html; charset=ISO-8859-1" http-equiv="content-type"><title>contents</title></head>
+<meta content="text/html; charset=ISO-8859-1" http-equiv="content-type"><title>contents</title>
+
+</head>
 <body>
 <h1><span style="color: rgb(0, 0, 204);">Bid
 Database.</span></h1>
@@ -10,7 +12,8 @@ This is based on&nbsp;selected conventions, </big><big>the
 auction
 (bidding sequence) till now</big><big> and the given hand
 (13 cards).
-<br><br>
+<br>
+<br>
 The database has three
 levels:<br>
 <ul>
@@ -41,7 +44,7 @@ uses an algoritmic approach for finding the next bid.</li>
 <br>
 In the following dialogs you can create/examine the bid database.
 </big></p>
-<h3>Bidding System.</h3>
+<h3 id="C1">Bidding System.</h3>
 <div style="margin-left: 60px;"><img src="images/biddingsystem.png" style="width: 350px; height: 237px;" alt="Bidding System"><br>
 </div>
 <p><big>The "Pages" box allows you to create or examine or
@@ -54,7 +57,8 @@ description of the page is also shown for examination or for editing:
 <div style="margin-left: 70px;"><img src="images/pagedescription.png" style="width: 300px; height: 131px;" alt="Page Description"><br>
 </div>
 <br>
-<p><big>The "Auctions" box in the "Bidding System" dialog allows you to create or examine
+<p><big>The "Auctions" box in the "Bidding System" dialog
+allows you to create or examine
 or edit or delete an auction, the second level of the bid database.
 <br>
 The "Link" box allows you to create or examine or edit or delete a link
@@ -65,7 +69,7 @@ next bid, the third level of the bid database.
 <br>
 <br>
 The rules are described by the following dialogs.</big></p>
-<h3><big>Rule.</big></h3>
+<h3 id="C2"><big>Rule.</big></h3>
 <br>
 <div style="margin-left: 50px;"><img src="images/rule.png" style="width: 400px; height: 378px;" alt="Rule">
 <br>
@@ -85,7 +89,7 @@ The Alert Id identifies the alert and must be not 0 for rules which
 must be alerted. In cases where the Alert Id is not 0 you can write a
 textual description of the alert in the Alert Id Description box.
 </big></p>
-<h3>High Cards and Quality.</h3>
+<h3 id="C3">High Cards and Quality.</h3>
 <div style="margin-left: 50px;"><img src="images/highcardsandquality.png" style="width: 400px; height: 378px;" alt="High Cards abd Quality"><br ="">
 </div>
 <br>
@@ -112,13 +116,16 @@ Queen counts 2, Jack counts 1. Range [0-10], [0-37].</li>
 <li>Jack, count of Jacks. Range [0-1], [0-4]</li>
 <li>Ten, count of Tens. Range [0-1], [0-4]</li>
 <li>RKCB, count of aces + king in the suit. Range [0-5].</li>
-<li>Inter, weighed count of intermediate cards. 10 counts 4, 9 counts 2, 8 counts 1. Range [0-7],
+<li>Inter, weighed count of intermediate cards. 10 counts 4, 9
+counts 2, 8 counts 1. Range [0-7],
 [0-28]</li>
 <li>Looser, loosers. Only the first three cards in the suit are
 potential losers. Ace King and Queen are not loosers. Range [0-3],
 [0-12]</li>
-<li>Quick, quick tricks. Only Ace, King and Queen counts. Range [0-4], [0-16]. Multiplied with 2.</li>
-<li>Play, playing tricks.&nbsp; Range [0-26]. Multiplied with 2.</li>
+<li>Quick, quick tricks. Only Ace, King and Queen counts. Range
+[0-4], [0-16]. Multiplied with 2.</li>
+<li>Play, playing tricks.&nbsp; Range [0-26]. Multiplied
+with 2.</li>
 <li>StopNT, stoppers in NT for a given suit. Range [0-4].</li>
 <li>Qlty, general quality of cards for a given suit. Range
 [0-6].</li>
@@ -128,7 +135,7 @@ potential losers. Ace King and Queen are not loosers. Range [0-3],
 2, renonce counts 3. Range [0-9][0-9].</li>
 </ul>
 </big></p>
-<h3>Length.</h3>
+<h3 id="C4">Length.</h3>
 <div style="margin-left: 50px;"><img src="images/length.png" style="width: 400px; height: 378px;" alt="Lenght"></div>
 <br>
 <p><big>This dialog shows length ranges, which are

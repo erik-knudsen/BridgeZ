@@ -4,13 +4,13 @@
     <virtualFolder>doc</virtualFolder>
     <filterSection>
         <toc>
-            <section title="ZBridge" ref="content.html">
-                <section title="Introduction" ref="intro_2.html">
+            <section title="ZBridge">
+                <section title="Introduction">
                     <section title="Introduction" ref="intro_1.html"></section>
                     <section title="Quick Start" ref="quickstart.html"></section>
                 </section>
-                <section title="Background" ref="background.html">
-                    <section title="Rules of the Game" ref="rules.html">
+                <section title="Background">
+                    <section title="Rules of the Game">
                         <section title="Overview" ref="overview.html"></section>
                         <section title="Bidding" ref="bidding.html"></section>
                         <section title="Card Play" ref="cardplay.html"></section>
@@ -19,8 +19,8 @@
                 </section>
                 <section title="Computer Player Logic" ref="cpl.html">
                 </section>
-                <section title="Using the Program" ref="using.html">
-                    <section title="Menu Options" ref="menus.html">
+                <section title="Using the Program">
+                    <section title="Menu Options">
                         <section title="File" ref="file.html"></section>
                         <section title="Edit" ref="edit.html"></section>
                         <section title="View" ref="view.html"></section>
@@ -29,7 +29,7 @@
                         <section title="Special" ref="special.html"></section>
                         <section title="Help" ref="help.html"></section>
                     </section>
-                    <section title="Dialogs" ref="dialogs.html">
+                    <section title="Dialogs">
                         <section title="Main Window" ref="mainwindow.html"></section>
                         <section title="Open Dialog" ref="opendialog.html"></section>
                         <section title="Save As Dialog" ref="saveasdialog.html"></section>
@@ -44,36 +44,52 @@
                         <section title="Bid Database" ref="biddatabase.html"></section>
                   </section>
                 </section>
-                <section title="Appendices" ref="appendices.html">
+                <section title="Appendices">
                     <section title="Bidding Conventions" ref="bidconv.html"></section>
                 </section>
             </section>
         </toc>
         <keywords>
-            <keyword name="Session" ref="session.html"/>
+            <keyword name="Four/Five Card Major" ref="bidconv.html#C1"/>
+            <keyword name="Strong 2-Bids" ref="bidconv.html#C2"/>
+            <keyword name="Weak 2-Bids" ref="bidconv.html#C3"/>
+            <keyword name="Strong 2-Club" ref="bidconv.html#C4"/>
+            <keyword name="Weak Jump Overcall" ref="bidconv.html#C5"/>
+            <keyword name="Stayman" ref="bidconv.html#C6"/>
+            <keyword name="Jacoby Transfer" ref="bidconv.html#C7"/>
+            <keyword name="Four-Suit transfer" ref="bidconv.html#C8"/>
+            <keyword name="Limit Raises" ref="bidconv.html#C9"/>
+            <keyword name="Takeout Double" ref="bidconv.html#C10"/>
+            <keyword name="Negative Double" ref="bidconv.html#C11"/>
+            <keyword name="Unusual No Trump" ref="bidconv.html#C12"/>
+            <keyword name="Michaels Cue Bid" ref="bidconv.html#C13"/>
+            <keyword name="Jacoby 2NT" ref="bidconv.html#C14"/>
+            <keyword name="Gambling 3NT" ref="bidconv.html#C15"/>
+            <keyword name="Four Suit Forcing" ref="bidconv.html#C16"/>
+            <keyword name="Blackwood" ref="bidconv.html#C17"/>
+            <keyword name="Gerber" ref="bidconv.html#C18"/>
+            <keyword name="Control Bids" ref="bidconv.html#C19"/>
+            <keyword name="Splinter Bids" ref="bidconv.html#C20"/>
+            <keyword name="NT Opening Ranges" ref="bidconv.html#C21"/>
+            <keyword name="Reverse Restrictions" ref="bidconv.html#C22"/>
+            <keyword name="Computer Player Logic" ref="cpl.html"/>
+            <keyword name="ZBridge Bidding" ref="cpl.html#C3"/>
+            <keyword name="Hand Valuation of ZBridge" ref="cpl.html#C9"/>
+            <keyword name="Bid Database" ref="biddatabase.html"/>
             <keyword name="Scores" ref="scoring.html"/>
             <keyword name="Bidding" ref="bidding.html"/>
             <keyword name="Playing" ref="cardplay.html"/>
             <keyword name="Laying Out Cards Manually" ref="layingoutcardsmanually.html"/>
         </keywords>
         <files>
-            <file>content.html</file>
-            <file>intro_1.html</file>
-            <file>intro_2.html</file>
-            <file>quickstart.html</file>
-            <file>background.html</file>
-            <file>rules.html</file>
+           <file>intro_1.html</file>
+           <file>quickstart.html</file>
             <file>overview.html</file>
             <file>bidding.html</file>
             <file>cardplay.html</file>
             <file>scoring.html</file>
             <file>cpl.html</file>
-            <file>using.html</file>
-            <file>menus.html</file>
-            <file>dialogs.html</file>
-            <file>appendices.html</file>
             <file>bidconv.html</file>
-            <file>session.html</file>
             <file>file.html</file>
             <file>edit.html</file>
             <file>view.html</file>

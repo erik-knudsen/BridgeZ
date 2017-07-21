@@ -231,7 +231,7 @@ void CMainFrame::createHelpWindow()
     helpEngine = new QHelpEngine(qhcPath);
     helpEngine->setupData();
 
-    //Tabs for contents, index and search (use build in widgets).
+    //Tabs for contents, index and search (uses build in widgets).
     QTabWidget* tWidget = new QTabWidget;
     tWidget->setMaximumWidth(300);
     tWidget->addTab(helpEngine->contentWidget(), "Contents");
@@ -243,8 +243,25 @@ void CMainFrame::createHelpWindow()
     searchWidget->setLayout(searchBox);
     tWidget->addTab(searchWidget, "Search");
 
-    //Browser.
+    //Browser with backward and forward buttons.
     CHelpBrowser *textViewer = new CHelpBrowser(helpEngine);
+    QVBoxLayout *mainLayout = new QVBoxLayout;
+    QHBoxLayout *buttonLayout = new QHBoxLayout();
+    QToolButton *leftButton = new QToolButton;
+    leftButton->setArrowType(Qt::LeftArrow);
+    leftButton->setDisabled(true);
+    QToolButton *rightButton = new QToolButton;
+    rightButton->setArrowType(Qt::RightArrow);
+    rightButton->setDisabled(true);
+    buttonLayout->addWidget(leftButton);
+    buttonLayout->addWidget(rightButton);
+    buttonLayout->addStretch(1);
+    QWidget *buttonWidget = new QWidget;
+    buttonWidget->setLayout(buttonLayout);
+    mainLayout->addWidget(buttonWidget);
+    mainLayout->addWidget(textViewer);
+    QWidget *browserWidget = new QWidget;
+    browserWidget->setLayout(mainLayout);
 
     //Conect contents, index and search to browser.
     connect(helpEngine->contentWidget(),
@@ -261,6 +278,12 @@ void CMainFrame::createHelpWindow()
     connect(helpEngine->searchEngine()->queryWidget(),
             SIGNAL(search()),
             this, SLOT(search()));
+
+    //Connect back and forward buttons to browser.
+    connect(leftButton, SIGNAL(clicked()), textViewer, SLOT(backward()));
+    connect(rightButton, SIGNAL(clicked()), textViewer, SLOT(forward()));
+    connect(textViewer, SIGNAL(backwardAvailable(bool)), leftButton, SLOT(setEnabled(bool)));
+    connect(textViewer, SIGNAL(forwardAvailable(bool)), rightButton, SLOT(setEnabled(bool)));
 
 /*  For debugging search for help.
     connect(helpEngine->searchEngine(),
@@ -284,7 +307,7 @@ void CMainFrame::createHelpWindow()
     helpWindow->setWindowTitle(tr("Help"));
 
     helpWindow->insertWidget(0, tWidget);
-    helpWindow->insertWidget(1, textViewer);
+    helpWindow->insertWidget(1, browserWidget);
     helpWindow->resize(1000, 600);
 
     helpWindow->hide();
