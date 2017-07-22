@@ -223,10 +223,15 @@ void CMainFrame::adjustForCurrentFile(const QString &filePath, bool add)
 }
 
 /**
- * @brief Create Help window with contents, index and search.
+ * @brief Create Help window.
+ *
+ *  Help Window is created as a 2 split screen window with contents, index and search
+ *  tabs on the left window. And browser with forward and backward buttons in the
+ *  right windows.
  */
 void CMainFrame::createHelpWindow()
 {
+    //Help file is located in same folder as exe file.
     QString qhcPath = QApplication::applicationDirPath() + "/zbridge.qhc";
     helpEngine = new QHelpEngine(qhcPath);
     helpEngine->setupData();
