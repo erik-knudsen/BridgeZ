@@ -98,7 +98,8 @@ SOURCES +=\
     cbiddbdefine.cpp \
     cbidandplayengines.cpp \
     cpopup.cpp \
-    chelpbrowser.cpp
+    chelpbrowser.cpp \
+    cassistant.cpp
 
 HEADERS  += cmainframe.h \
     czbridgedoc.h \
@@ -188,7 +189,8 @@ HEADERS  += cmainframe.h \
     cbiddbdefine.h \
     cbidandplayengines.h \
     cpopup.h \
-    chelpbrowser.h
+    chelpbrowser.h \
+    cassistant.h
 
 FORMS    += cmainframe.ui \
     caboutdlg.ui \

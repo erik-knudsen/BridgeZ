@@ -42,6 +42,7 @@ class CSeatConfiguration;
 class CBidDialog;
 class CMainScoreDialog;
 class CBidAndPlayEngines;
+class CAssistant;
 
 //Enums for initial enable/disable of menu items.
 enum actionIndicator { INITIAL_ACTIONS, SERVER_ACTIONS, CLIENT_ACTIONS };
@@ -121,6 +122,7 @@ private:
     QList<QAction *> recentFileActionList;
     QSplitter* helpWindow;
     QHelpEngine* helpEngine;
+    CAssistant *assistant;
 
 private slots:
     //Menu actions.
@@ -161,6 +163,7 @@ private slots:
     void on_actionEdit_Bid_Database_triggered();
 
     void on_action_Contents_triggered();
+    void on_actionAssistant_triggered();
     void on_action_About_ZBridge_triggered();
 };
 

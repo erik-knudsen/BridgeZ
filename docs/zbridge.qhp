@@ -4,13 +4,13 @@
     <virtualFolder>doc</virtualFolder>
     <filterSection>
         <toc>
-            <section title="ZBridge">
-                <section title="Introduction">
+            <section title="ZBridge" ref="index.html">
+                <section title="Introduction" ref="introduction.html">
                     <section title="Introduction" ref="intro_1.html"></section>
                     <section title="Quick Start" ref="quickstart.html"></section>
                 </section>
-                <section title="Background">
-                    <section title="Rules of the Game">
+                <section title="Background" ref="background.html">
+                    <section title="Rules of the Game" ref ="rules.html">
                         <section title="Overview" ref="overview.html"></section>
                         <section title="Bidding" ref="bidding.html"></section>
                         <section title="Card Play" ref="cardplay.html"></section>
@@ -19,8 +19,8 @@
                 </section>
                 <section title="Computer Player Logic" ref="cpl.html">
                 </section>
-                <section title="Using the Program">
-                    <section title="Menu Options">
+                <section title="Using the Program" ref ="using.html">
+                    <section title="Menu Options" ref="menus.html">
                         <section title="File" ref="file.html"></section>
                         <section title="Edit" ref="edit.html"></section>
                         <section title="View" ref="view.html"></section>
@@ -29,7 +29,7 @@
                         <section title="Special" ref="special.html"></section>
                         <section title="Help" ref="help.html"></section>
                     </section>
-                    <section title="Dialogs">
+                    <section title="Dialogs" ref="dialogs.html">
                         <section title="Main Window" ref="mainwindow.html"></section>
                         <section title="Open Dialog" ref="opendialog.html"></section>
                         <section title="Save As Dialog" ref="saveasdialog.html"></section>
@@ -44,7 +44,7 @@
                         <section title="Bid Database" ref="biddatabase.html"></section>
                   </section>
                 </section>
-                <section title="Appendices">
+                <section title="Appendices" ref="appendices.html">
                     <section title="Bidding Conventions" ref="bidconv.html"></section>
                 </section>
             </section>
@@ -82,14 +82,19 @@
             <keyword name="Laying Out Cards Manually" ref="layingoutcardsmanually.html"/>
         </keywords>
         <files>
-           <file>intro_1.html</file>
-           <file>quickstart.html</file>
+            <file>index.html</file>
+            <file>introduction.html</file>
+            <file>intro_1.html</file>
+            <file>quickstart.html</file>
+            <file>background.html</file>
+            <file>rules.html</file>
             <file>overview.html</file>
             <file>bidding.html</file>
             <file>cardplay.html</file>
             <file>scoring.html</file>
             <file>cpl.html</file>
-            <file>bidconv.html</file>
+            <file>using.html</file>
+            <file>menus.html</file>
             <file>file.html</file>
             <file>edit.html</file>
             <file>view.html</file>
@@ -97,11 +102,12 @@
             <file>options.html</file>
             <file>special.html</file>
             <file>help.html</file>
-            <file>layingoutcardsmanually.html</file>
+            <file>dialogs.html</file>
             <file>mainwindow.html</file>
             <file>opendialog.html</file>
             <file>saveasdialog.html</file>
             <file>scoredialogs.html</file>
+            <file>layingoutcardsmanually.html</file>
             <file>doubledummyresultsdialog.html</file>
             <file>dealprofiledialog.html</file>
             <file>seatconfigurationdialog.html</file>
@@ -109,6 +115,8 @@
             <file>displayoptionsdialog.html</file>
             <file>gameoptionsdialog.html</file>
             <file>biddatabase.html</file>
+            <file>appendices.html</file>
+            <file>bidconv.html</file>
             <file>images/Rubber_Bridge_Scoring.png</file>
             <file>images/FILEOPEN.BMP</file>
             <file>images/FILESAVE.BMP</file>

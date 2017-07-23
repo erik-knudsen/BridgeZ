@@ -1,0 +1,7 @@
+ZBridge enables the user to play bridge with the
+help of a computer.
+
+One or more of the 4 players are played by a user
+either on a local computer or on a remote computer.
+The remaining players are played by a computer,
+which can also be either local or remote.

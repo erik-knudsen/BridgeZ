@@ -1,5 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <QHelpCollectionProject version="1.0">
+    <assistant>
+        <title>ZBridge</title>
+        <applicationIcon>images/IDR_MAIN.ICO</applicationIcon>
+        <cacheDirectory>QtProject/ZBridge</cacheDirectory>
+        <startPage>qthelp://erik.aagaard.knudsen/doc/index.html</startPage>
+        <aboutMenuText>
+            <text>About ZBridge</text>
+        </aboutMenuText>
+        <aboutDialog>
+            <file>about.txt</file>
+            <icon>images/IDR_MAIN.ICO</icon>
+        </aboutDialog>
+        <enableDocumentationManager>false</enableDocumentationManager>
+        <enableAddressBar>false</enableAddressBar>
+        <enableFilterFunctionality>false</enableFilterFunctionality>
+    </assistant>
     <docFiles>
         <generate>
             <file>

@@ -108,10 +108,7 @@
      <string>Help</string>
     </property>
     <addaction name="action_Contents"/>
-    <addaction name="separator"/>
-    <addaction name="separator"/>
-    <addaction name="separator"/>
-    <addaction name="separator"/>
+    <addaction name="actionAssistant"/>
     <addaction name="action_About_ZBridge"/>
    </widget>
    <addaction name="menuFile"/>
@@ -568,6 +565,11 @@
    </property>
    <property name="toolTip">
     <string>Edit bid database</string>
+   </property>
+  </action>
+  <action name="actionAssistant">
+   <property name="text">
+    <string>Assistant</string>
    </property>
   </action>
  </widget>

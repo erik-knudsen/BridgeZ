@@ -64,6 +64,7 @@
 #include "cbiddingsystemdialog.h"
 #include "cbidandplayengines.h"
 #include "chelpbrowser.h"
+#include "cassistant.h"
 
 const int MAX_RECENT_FILES = 4;
 
@@ -138,12 +139,15 @@ CMainFrame::CMainFrame(CZBridgeApp *app, CZBridgeDoc *doc, CGamesDoc *games) :
 
     //Help.
     createHelpWindow();
+
+    assistant = new CAssistant;
 }
 
 CMainFrame::~CMainFrame()
 {
     delete ui;
     delete bidAndPlayEngines;
+    delete assistant;
 }
 
 /**
@@ -1229,6 +1233,11 @@ void CMainFrame::on_actionEdit_Bid_Database_triggered()
 void CMainFrame::on_action_Contents_triggered()
 {
     helpWindow->show();
+}
+
+void CMainFrame::on_actionAssistant_triggered()
+{
+    assistant->showDocumentation("index.html");
 }
 
 /**
