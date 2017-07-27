@@ -254,6 +254,7 @@ void CMainFrame::createHelpWindow()
 
     //Browser with backward and forward buttons.
     CHelpBrowser *textViewer = new CHelpBrowser(helpEngine);
+    textViewer->setSource(QUrl("qthelp://erik.aagaard.knudsen/doc/index.html"));
     QVBoxLayout *mainLayout = new QVBoxLayout;
     QHBoxLayout *buttonLayout = new QHBoxLayout();
     QToolButton *leftButton = new QToolButton;

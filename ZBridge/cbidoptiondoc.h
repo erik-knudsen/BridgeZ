@@ -95,7 +95,7 @@ public:
 
     //Leads.
     int lengthLead;
-    int openingLead[4][MAXOPENINGLEADS];
+    int openingLead[2][MAXOPENINGLEADS];
 
     //Signals.
     int partnerLeadSuit;

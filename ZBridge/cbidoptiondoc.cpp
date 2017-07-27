@@ -88,11 +88,9 @@ CBidOptionDoc::CBidOptionDoc()
 
     //Leads.
     lengthLead = LOW_ENCOURAGING;
-    for (i = 0; i< 4; i++)
+    for (i = 0; i < 2; i++)
     for(j = 0; j < MAXOPENINGLEADS; j++)
-    {
         openingLead[i][j] = 0;
-    }
 
     //Signals.
     partnerLeadSuit = SIGNAL_ATTITUDE_LOW;
@@ -174,11 +172,9 @@ CBidOptionDoc& CBidOptionDoc::operator=(const CBidOptionDoc& bidOptionDoc)
 
     //Leads.
     lengthLead = bidOptionDoc.lengthLead;
-    for (i = 0; i< 4; i++)
+    for (i = 0; i < 2; i++)
     for(j = 0; j < MAXOPENINGLEADS; j++)
-    {
         openingLead[i][j] = bidOptionDoc.openingLead[i][j];
-    }
 
     //Signals.
     partnerLeadSuit = bidOptionDoc.partnerLeadSuit;
@@ -218,7 +214,7 @@ QDataStream& operator <<( QDataStream& stream, const CBidOptionDoc& bidOptionDoc
         << bidOptionDoc.fourteenTPsGs << bidOptionDoc.fourteenTPsLs << bidOptionDoc.thirteenTPsLs
         << bidOptionDoc.lengthLead;
 
-    for (i = 0; i < 4; i++)
+    for (i = 0; i < 2; i++)
     for (j = 0; j < MAXOPENINGLEADS; j++)
         stream << bidOptionDoc.openingLead[i][j];
 
@@ -257,7 +253,7 @@ QDataStream& operator >>( QDataStream& stream, CBidOptionDoc& bidOptionDoc )
         >> bidOptionDoc.fourteenTPsGs >> bidOptionDoc.fourteenTPsLs >> bidOptionDoc.thirteenTPsLs
         >> bidOptionDoc.lengthLead;
 
-    for (i = 0; i < 4; i++)
+    for (i = 0; i < 2; i++)
     for (j = 0; j < MAXOPENINGLEADS; j++)
         stream >> bidOptionDoc.openingLead[i][j];
 

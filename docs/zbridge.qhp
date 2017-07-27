@@ -10,14 +10,16 @@
                     <section title="Quick Start" ref="quickstart.html"></section>
                 </section>
                 <section title="Background" ref="background.html">
-                    <section title="Rules of the Game" ref ="rules.html">
+                    <section title="About Bridge" ref ="rules.html">
                         <section title="Overview" ref="overview.html"></section>
                         <section title="Bidding" ref="bidding.html"></section>
                         <section title="Card Play" ref="cardplay.html"></section>
                         <section title="Scoring" ref="scoring.html"></section>
                     </section>
-                </section>
-                <section title="Computer Player Logic" ref="cpl.html">
+                    <section title="About ZBridge" ref="aboutzbridge.html">
+                        <section title="Opening Leads and Signals" ref="signals.html"></section>
+                        <section title="Computer Player Logics" ref="cpl.html"></section>
+                    </section>
                 </section>
                 <section title="Using the Program" ref ="using.html">
                     <section title="Menu Options" ref="menus.html">
@@ -72,6 +74,9 @@
             <keyword name="Splinter Bids" ref="bidconv.html#C20"/>
             <keyword name="NT Opening Ranges" ref="bidconv.html#C21"/>
             <keyword name="Reverse Restrictions" ref="bidconv.html#C22"/>
+            <keyword name="3 Suit Responses to 1NT" ref="bidconv.html#C23"/>
+            <keyword name="2NT Rebids" ref="bidconv.html#C24"/>
+            <keyword name="Overcalls" ref="bidconv.html#C25"/>
             <keyword name="Computer Player Logic" ref="cpl.html"/>
             <keyword name="ZBridge Bidding" ref="cpl.html#C3"/>
             <keyword name="Hand Valuation of ZBridge" ref="cpl.html#C9"/>
@@ -80,6 +85,8 @@
             <keyword name="Bidding" ref="bidding.html"/>
             <keyword name="Playing" ref="cardplay.html"/>
             <keyword name="Laying Out Cards Manually" ref="layingoutcardsmanually.html"/>
+            <keyword name="Computer Player Logics" ref="cpl.html"/>
+            <keyword name="Signals" ref="signals.html"/>
         </keywords>
         <files>
             <file>index.html</file>
@@ -92,6 +99,8 @@
             <file>bidding.html</file>
             <file>cardplay.html</file>
             <file>scoring.html</file>
+            <file>aboutzbridge.html</file>
+            <file>signals.html</file>
             <file>cpl.html</file>
             <file>using.html</file>
             <file>menus.html</file>
