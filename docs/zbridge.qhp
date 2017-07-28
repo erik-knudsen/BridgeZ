@@ -18,7 +18,7 @@
                     </section>
                     <section title="About ZBridge" ref="aboutzbridge.html">
                         <section title="Opening Leads and Signals" ref="signals.html"></section>
-                        <section title="Computer Player Logics" ref="cpl.html"></section>
+                        <section title="Computer Player Logic" ref="cpl.html"></section>
                     </section>
                 </section>
                 <section title="Using the Program" ref ="using.html">
@@ -67,7 +67,7 @@
             <keyword name="Michaels Cue Bid" ref="bidconv.html#C13"/>
             <keyword name="Jacoby 2NT" ref="bidconv.html#C14"/>
             <keyword name="Gambling 3NT" ref="bidconv.html#C15"/>
-            <keyword name="Four Suit Forcing" ref="bidconv.html#C16"/>
+            <keyword name="Fourth Suit Forcing" ref="bidconv.html#C16"/>
             <keyword name="Blackwood" ref="bidconv.html#C17"/>
             <keyword name="Gerber" ref="bidconv.html#C18"/>
             <keyword name="Control Bids" ref="bidconv.html#C19"/>
@@ -77,7 +77,6 @@
             <keyword name="3 Suit Responses to 1NT" ref="bidconv.html#C23"/>
             <keyword name="2NT Rebids" ref="bidconv.html#C24"/>
             <keyword name="Overcalls" ref="bidconv.html#C25"/>
-            <keyword name="Computer Player Logic" ref="cpl.html"/>
             <keyword name="ZBridge Bidding" ref="cpl.html#C3"/>
             <keyword name="Hand Valuation of ZBridge" ref="cpl.html#C9"/>
             <keyword name="Bid Database" ref="biddatabase.html"/>
@@ -85,7 +84,7 @@
             <keyword name="Bidding" ref="bidding.html"/>
             <keyword name="Playing" ref="cardplay.html"/>
             <keyword name="Laying Out Cards Manually" ref="layingoutcardsmanually.html"/>
-            <keyword name="Computer Player Logics" ref="cpl.html"/>
+            <keyword name="Computer Player Logic" ref="cpl.html"/>
             <keyword name="Signals" ref="signals.html"/>
         </keywords>
         <files>
