@@ -57,7 +57,7 @@ void CBidAndPlayEngines::initialize(CBidDB *bidDB, CBidDesc *bidDesc, CBidOption
 
     //Allocate bid and play engines.
     bidEngine = new CBidEngine(bidDB, bidDesc, nsBidOptionDoc, ewBidOptionDoc);
-    playEngine = new CPlayEngine();
+    playEngine = new CPlayEngine(nsBidOptionDoc, ewBidOptionDoc);
 
     //params.
     this->scoringMethod = scoringMethod;

@@ -27,11 +27,13 @@
 #include "cplayhistory.h"
 #include "cplayengine.h"
 
-const int NO_HANDS_DD = 10;
+const int NO_HANDS_DD = 25;
 const int MAX_ITER = 1000;
 
-CPlayEngine::CPlayEngine()
+CPlayEngine::CPlayEngine(CBidOptionDoc &nsBidOptionDoc, CBidOptionDoc &ewBidOptionDoc)
 {
+    nsBidOptions = nsBidOptionDoc;
+    ewBidOptions = ewBidOptionDoc;
 }
 
 /**
@@ -65,6 +67,7 @@ int CPlayEngine::getNextPlay(Seat seat, Seat dummySeat, int ownCards[], int dumm
 
     //Calculate a number of possible hands and double dummy solutions to these hands.
     futureTricks fut[NO_HANDS_DD];
+    int weight[NO_HANDS_DD];
     int hands[NO_HANDS_DD][4][13];
     int handNo = 0;
     int iter = 0;
@@ -141,6 +144,7 @@ int CPlayEngine::getNextPlay(Seat seat, Seat dummySeat, int ownCards[], int dumm
         int i;
         for (i = 0; i < 4; i++)
         {
+            //Only check for hands with unknown cards.
             if (((i != dummySeat) && (i != ownSeat)) || (firstPlay && (i == dummySeat)))
             {
                 int cards[13];
@@ -225,6 +229,9 @@ int CPlayEngine::getNextPlay(Seat seat, Seat dummySeat, int ownCards[], int dumm
             //Double dummy solver.
             res = SolveBoard(dl, target, solutions, mode, &fut[handNo], threadIndex);
 
+            //Calculate weight.
+            weight[handNo] = calcWeight(hands[handNo], seat, dummySeat, bidHistory, playHistory, nsBidOptions, ewBidOptions);
+
             //Next hand.
             handNo++; iter = 0; maxFailures = 0;
         }
@@ -238,25 +245,81 @@ int CPlayEngine::getNextPlay(Seat seat, Seat dummySeat, int ownCards[], int dumm
     for (int i = 0; i < NO_HANDS_DD; i++)
     for (int j = 0; j < fut[i].cards; j++)
     {
+        //Highest ranking card.
         Suit suit = (Suit)(3 - fut[i].suit[j]);
         int face = fut[i].rank[j] - 2;
         int card = MAKE_CARD(suit, face);
-        cards[card] += fut[i].score[j];
+        cards[card] += fut[i].score[j] * weight[j];
+
+        //Lower ranking equals.
+        for (int k = 2; k < 15; k++)            //From deuce to ace (DDS format)
+        if (((1 << k) & fut[i].equals[j]) != 0)
+        {
+            card = MAKE_CARD(suit, (k - 2));    //Own format.
+            cards[card] += fut[i].score[j] * weight[j];
+        }
     }
 
+    return getBestCard(cards, ownCards, dummyCards, seat, dummySeat, bidHistory, playHistory, nsBidOptions, ewBidOptions);
+}
+
+/**
+ * @brief Calculate weight to use for a given hand of cards.
+ *
+ * The weight is calculated in %. A figure from 0 to 100. The weight is calculated based on the
+ * bid history and the play history and on rules implicit assumed and rules explicit stated in
+ * the options. It is meant to give a propability measure of the likelihood of the hand could actually
+ * be the right hand.
+ *
+ * @param hands Remaining cards to be played for the four hands. Already played cards are in the play history.
+ * @param seat The seat to play the next card (declarer plays dummys cards).
+ * @param dummySeat Dummys seat.
+ * @param bidHistory The bid history.
+ * @param playHistory The play history.
+ * @param nsBidOptions Bid and play options with rules for the N/S pair.
+ * @param ewBidOptions Bid and play options with rules for the E/W pair.
+ * @return The weight.
+ */
+int CPlayEngine::calcWeight(int hands[4][13], Seat seat, Seat dummySeat, CBidHistory &bidHistory, CPlayHistory &playHistory,
+                            CBidOptionDoc &nsBidOptions, CBidOptionDoc &ewBidOptions)
+{
+    return 100;
+}
+
+/**
+ * @brief Get the best card to play.
+ *
+ * The best card to play is calculated based on the double dummy calculated and weighed result scores and rules implicit
+ * assumed and rules explicit stated in the options. Rules for leads and for signals are used for this.
+ *
+ * @param cards Double dummy calculated and weighed result scores
+ * @param ownCards Players own cards (all 13 cards).
+ * @param dummyCards Dummy own cards (all 13 cards)
+ * @param seat Players seat (declarer plays dummys cards).
+ * @param dummySeat The dummys seat.
+ * @param bidHistory The bid history.
+ * @param playHistory The play history.
+ * @param nsBidOptions Bid and play options with rules for the N/S pair.
+ * @param ewBidOptions Bid and play options with rules for the E/W pair.
+ * @return The best card to play.
+ */
+int CPlayEngine::getBestCard(int cards[], int ownCards[], int dummyCards[], Seat seat, Seat dummySeat, CBidHistory &bidHistory,
+                             CPlayHistory &playHistory, CBidOptionDoc &nsBidOptions, CBidOptionDoc &ewBidOptions)
+{
     int card = -1;
     int max = 0;
     for (int i = 0; i < 52; i++)
-        if (cards[i] > max)
-        {
-            card  = i;
-            max = cards[i];
-        }
+    if (cards[i] > max)
+    {
+        card  = i;
+        max = cards[i];
+    }
+
+    int *crds = (seat == dummySeat) ? dummyCards : ownCards;
 
     //If none is found, just take one that is allowable.
     if (card == -1)
     {
-        int *crds = (seat == dummySeat) ? dummyCards : ownCards;
         int i;
         for (i = 0; i < 13; i++)
             if (playHistory.cardOk(crds[i], seat, crds))
@@ -281,7 +344,7 @@ int CPlayEngine::getNextPlay(Seat seat, Seat dummySeat, int ownCards[], int dumm
         Seat seat_2 = (Seat)((currentLeader + 2) % 4);
         int trick[4];
         playHistory.getTrick(playHistory.getNoTrick(), trick);
-        if (((declarer == currentLeader) || (((declarer  + 2) & 3) == currentLeader)) && (suit != NOTRUMP) &&
+        if (((declarer == currentLeader) || (((declarer + 2) & 3) == currentLeader)) && (suit != NOTRUMP) &&
                 (trick[seat_0] == -1) && (trick[seat_1] == -1) && (trick[seat_2] == -1))
         {
             //Declarer or dummy is leading a trump play.
@@ -320,6 +383,11 @@ int CPlayEngine::getNextPlay(Seat seat, Seat dummySeat, int ownCards[], int dumm
                         card = i;
                 }
             }
+        }
+        else if ((seat != declarer) && (seat != ((declarer + 2) & 3)))
+        {
+            //Opponent play.
+            ;
         }
     }
 

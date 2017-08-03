@@ -21,6 +21,7 @@
 #ifndef CPLAYENGINE_H
 #define CPLAYENGINE_H
 
+#include "cbidoptiondoc.h"
 #include "Defines.h"
 
 class CBidHistory;
@@ -38,10 +39,19 @@ class CPlayHistory;
 class CPlayEngine
 {
 public:
-    CPlayEngine();
+    CPlayEngine(CBidOptionDoc &nsBidOptionDoc, CBidOptionDoc &ewBidOptionDoc);
 
     int getNextPlay(Seat seat, Seat dummySeat, int ownCards[], int dummyCards[], CBidHistory &bidHistory,
                     CPlayHistory &playHistory);
+
+private:
+    int calcWeight(int hands[4][13], Seat seat, Seat dummySeat, CBidHistory &bidHistory, CPlayHistory &playHistory,
+                        CBidOptionDoc &nsBidOptions, CBidOptionDoc &ewBidOptions);
+    int getBestCard(int cards[], int ownCards[], int dummyCards[], Seat seat, Seat dummySeat, CBidHistory &bidHistory,
+                    CPlayHistory &playHistory, CBidOptionDoc &nsBidOptions, CBidOptionDoc &ewBidOptions);
+
+    CBidOptionDoc nsBidOptions;
+    CBidOptionDoc ewBidOptions;
 };
 
 #endif // CPLAYENGINE_H
