@@ -253,6 +253,50 @@ Seat CPlayHistory::getNextLeader()
     return nextLeader;
 }
 
+bool CPlayHistory::takeTrick(int card)
+{
+    int faceNextLeader = -1;
+
+    Suit suitCard = CARD_SUIT(card);
+    int faceCard = CARD_FACE(card);
+
+    if (trumpSuit != NOTRUMP)
+    {
+        for (int player = 0; player < 4; player++)
+        if (play[player][noTrick] != -1)
+        {
+            int cardPlayer = play[player][noTrick];
+            Suit suitPlayer = CARD_SUIT(cardPlayer);
+            int facePlayer = CARD_FACE(cardPlayer);
+            if ((suitPlayer == trumpSuit) && (facePlayer > faceNextLeader))
+                faceNextLeader = facePlayer;
+        }
+        if ((suitCard == trumpSuit) && (faceCard > faceNextLeader))
+            return true;
+    }
+    if (faceNextLeader == -1)
+    {
+        if (play[currentLeader][noTrick] == -1)
+            return true;
+
+        Suit suitNextLeader = CARD_SUIT(play[currentLeader][noTrick]);
+
+        for (int player = 0; player < 4; player++)
+        if (play[player][noTrick] != -1)
+        {
+            int cardPlayer = play[player][noTrick];
+            Suit suitPlayer = CARD_SUIT(cardPlayer);
+            int facePlayer = CARD_FACE(cardPlayer);
+            if ((suitPlayer == suitNextLeader) && (facePlayer > faceNextLeader))
+                faceNextLeader = facePlayer;
+        }
+        if ((suitCard == suitNextLeader) && (faceCard > faceNextLeader))
+            return true;
+    }
+
+    return false;
+}
+
 /**
  * @brief Undo trick.
  * @param undoType PT: undo partial trick. CT: undo complete(finished) trick.

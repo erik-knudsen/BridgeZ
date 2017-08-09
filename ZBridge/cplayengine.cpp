@@ -306,31 +306,34 @@ int CPlayEngine::calcWeight(int hands[4][13], Seat seat, Seat dummySeat, CBidHis
 int CPlayEngine::getBestCard(int cards[], int ownCards[], int dummyCards[], Seat seat, Seat dummySeat, CBidHistory &bidHistory,
                              CPlayHistory &playHistory, CBidOptionDoc &nsBidOptions, CBidOptionDoc &ewBidOptions)
 {
-    int card = -1;
+    int cardC = -1;
+
     int max = 0;
     for (int i = 0; i < 52; i++)
     if (cards[i] > max)
-    {
-        card  = i;
         max = cards[i];
+
+    int cardL = -1;
+    int cardH;
+    for (int i = 0; i < 52; i++)
+    if (cards[i] == max)
+    {
+        if (cardL < 0)
+            cardL = i;
+        cardH = i;
     }
 
-    int *crds = (seat == dummySeat) ? dummyCards : ownCards;
-
-    //If none is found, just take one that is allowable.
-    if (card == -1)
+    //DD found preferences?
+    if (max > 0)
     {
-        int i;
-        for (i = 0; i < 13; i++)
-            if (playHistory.cardOk(crds[i], seat, crds))
-                    break;
+        QString txt = QString("%1 equals:").arg(SEAT_NAMES[seat]);
+        for (int i = 0; i < 52;i++)
+        if (cards[i] == max)
+        {
+            txt += QString("  %1%2").arg(SUIT_NAMES[CARD_SUIT(i)]).arg(FACE_NAMES[CARD_FACE(i)]);
+        }
+        qDebug() << txt;
 
-        assert(i < 13);
-
-        card = crds[i];
-    }
-    else
-    {
         //Get trump suit for the hand.
         Suit suit = BID_SUIT(playHistory.getContract());
 
@@ -344,53 +347,101 @@ int CPlayEngine::getBestCard(int cards[], int ownCards[], int dummyCards[], Seat
         Seat seat_2 = (Seat)((currentLeader + 2) % 4);
         int trick[4];
         playHistory.getTrick(playHistory.getNoTrick(), trick);
-        if (((declarer == currentLeader) || (((declarer + 2) & 3) == currentLeader)) && (suit != NOTRUMP) &&
-                (trick[seat_0] == -1) && (trick[seat_1] == -1) && (trick[seat_2] == -1))
+
+        //First hand (leader)?
+        if (trick[seat_0] == -1)
         {
-            //Declarer or dummy is leading a trump play.
-            CFeatures declarerFeatures;
-            CFeatures dummyFeatures;
-            declarerFeatures.setCardFeatures(ownCards);
-            dummyFeatures.setCardFeatures(dummyCards);
-            //Should we play trump?
-            int no = declarerFeatures.getSuitLen(suit) + dummyFeatures.getSuitLen(suit);
-            if (no >= 7)
+            //Declarer or dummy leading a trump play?
+            if (((declarer == currentLeader) || (((declarer + 2) & 3) == currentLeader)) && (suit != NOTRUMP))
             {
-                int noOwn, noOpp;
-                playHistory.getNoPlayed(declarer, suit, &noOwn, &noOpp);
-                if ((no + noOpp) < 13)
+                CFeatures declarerFeatures;
+                CFeatures dummyFeatures;
+                declarerFeatures.setCardFeatures(ownCards);
+                dummyFeatures.setCardFeatures(dummyCards);
+                //Should we play trump?
+                int no = declarerFeatures.getSuitLen(suit) + dummyFeatures.getSuitLen(suit);
+                int cardLS = -1;
+                int cardHS;
+                if (no >= 7)
                 {
-                    //Declarer or dummy leads trump if this is one of the best plays.
-                    int i;
-                    for (i = 0; i < 52; i++)
+                    int noOwn, noOpp;
+                    playHistory.getNoPlayed(declarer, suit, &noOwn, &noOpp);
+                    if ((no + noOpp) < 13)
                     {
+                        //Declarer or dummy leads trump if this is one of the best plays.
+                        for (int i = 0; i < 52; i++)
                         if ((cards[i] == max) && (CARD_SUIT(i) == suit))
-                            break;
+                        {
+                            if (cardLS < 0)
+                                cardLS = i;
+                            cardHS = i;
+                        }
+                        if (cardLS >= 0)
+                            cardC = (CARD_FACE(cardHS) >= JACK) ? (cardHS) : (cardLS);
                     }
-                    if (i < 52)
-                        card = i;
                 }
-                else
+                if (cardC == -1)
                 {
                     //Declarer or dummy leads non trump if this is one of the best plays.
-                    int i;
-                    for (i = 0; i < 52; i++)
+                    for (int i = 0; i < 52; i++)
+                    if ((cards[i] == max) && (CARD_SUIT(i) != suit))
                     {
-                        if ((cards[i] == max) && (CARD_SUIT(i) != suit))
-                            break;
+                        if (cardLS < 0)
+                            cardLS = i;
+                        cardHS = i;
                     }
-                    if (i < 52)
-                        card = i;
+                    if (cardLS >= 0)
+                        cardC = (CARD_FACE(cardHS) >= JACK) ? (cardHS) : (cardLS);
                 }
             }
+            //Declarer or dummy leading a non trump play?
+            else if ((declarer == currentLeader) || (((declarer + 2) & 3) == currentLeader))
+            {
+            }
+            //Opponent leading.
+            else
+            {
+            }
         }
-        else if ((seat != declarer) && (seat != ((declarer + 2) & 3)))
+
+        //Second hand?
+        else if (trick[seat_1] == -1)
         {
-            //Opponent play.
-            ;
+            cardC = cardL;
+        }
+
+        //Third hand?
+        else if (trick[seat_2] == -1)
+        {
+            cardC = playHistory.takeTrick(cardH) ? (cardH) : (cardL);
+        }
+
+        //Fourth hand.
+        else
+        {
+            cardC = playHistory.takeTrick(cardL) ? (cardL) : (playHistory.takeTrick(cardH)) ? (cardH) : (cardL);
+       }
+    }
+
+    //If none is found, just take one that is allowable.
+    if (cardC == -1)
+    {
+        if (max > 0)
+            cardC = (CARD_FACE(cardH) >= JACK) ? (cardH) : (cardL);
+        else
+        {
+            int *crds = (seat == dummySeat) ? dummyCards : ownCards;
+            int i;
+            for (i = 0; i < 13; i++)
+                if (playHistory.cardOk(crds[i], seat, crds))
+                    break;
+
+            assert(i < 13);
+
+            cardC = crds[i];
         }
     }
 
-    return card;
+    return cardC;
 }
 
