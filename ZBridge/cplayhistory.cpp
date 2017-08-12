@@ -253,6 +253,58 @@ Seat CPlayHistory::getNextLeader()
     return nextLeader;
 }
 
+/**
+ * @brief Determine leader till now (not all card has been played).
+ * @return The leader untill now.
+ */
+Seat CPlayHistory::getLeader()
+{
+    Seat leader;
+    int faceLeader = -1;
+
+    if (trumpSuit != NOTRUMP)
+    {
+        for (int player = 0; player < 4; player++)
+        if (play[player][noTrick] != -1)
+        {
+            int cardPlayer = play[player][noTrick];
+            Suit suitPlayer = CARD_SUIT(cardPlayer);
+            int facePlayer = CARD_FACE(cardPlayer);
+            if ((suitPlayer == trumpSuit) && (facePlayer > faceLeader))
+            {
+                leader = (Seat)player;
+                faceLeader = facePlayer;
+            }
+        }
+    }
+    if (faceLeader == -1)
+    {
+        if (play[currentLeader][noTrick] == -1)
+            return currentLeader;
+
+        Suit suitLeader = CARD_SUIT(play[currentLeader][noTrick]);
+
+        for (int player = 0; player < 4; player++)
+        if (play[player][noTrick] != -1)
+        {
+            int cardPlayer = play[player][noTrick];
+            Suit suitPlayer = CARD_SUIT(cardPlayer);
+            int facePlayer = CARD_FACE(cardPlayer);
+            if ((suitPlayer == suitLeader) && (facePlayer > faceLeader))
+            {
+                leader = (Seat)player;
+                faceLeader = facePlayer;
+            }
+        }
+    }
+    return leader;
+}
+
+/**
+ * @brief Can the card given take the next trick?
+ * @param card The card in question.
+ * @return true if the card can take the trick, false otherwise.
+ */
 bool CPlayHistory::takeTrick(int card)
 {
     int faceNextLeader = -1;

@@ -77,6 +77,24 @@ const char * const SUIT_NAMES[5] =
     QT_TRANSLATE_NOOP("defines", "NT")
 };
 
+//Face names (indexed by face value).
+const char * const FACE_NAMES[13] =
+{
+    QT_TRANSLATE_NOOP("defines", "2"),
+    QT_TRANSLATE_NOOP("defines", "3"),
+    QT_TRANSLATE_NOOP("defines", "4"),
+    QT_TRANSLATE_NOOP("defines", "5"),
+    QT_TRANSLATE_NOOP("defines", "6"),
+    QT_TRANSLATE_NOOP("defines", "7"),
+    QT_TRANSLATE_NOOP("defines", "8"),
+    QT_TRANSLATE_NOOP("defines", "9"),
+    QT_TRANSLATE_NOOP("defines", "T"),
+    QT_TRANSLATE_NOOP("defines", "J"),
+    QT_TRANSLATE_NOOP("defines", "Q"),
+    QT_TRANSLATE_NOOP("defines", "K"),
+    QT_TRANSLATE_NOOP("defines", "A")
+};
+
 //Team names (indexed by enum Team).
 const char * const TEAM_NAMES[4] =
 {

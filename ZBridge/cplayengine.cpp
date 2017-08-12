@@ -413,14 +413,14 @@ int CPlayEngine::getBestCard(int cards[], int ownCards[], int dummyCards[], Seat
         //Third hand?
         else if (trick[seat_2] == -1)
         {
-            cardC = playHistory.takeTrick(cardH) ? (cardH) : (cardL);
+            cardC = (playHistory.getLeader() == seat_0) ? (cardL) : playHistory.takeTrick(cardH) ? (cardH) : (cardL);
         }
 
         //Fourth hand.
         else
         {
-            cardC = playHistory.takeTrick(cardL) ? (cardL) : (playHistory.takeTrick(cardH)) ? (cardH) : (cardL);
-       }
+            cardC = (playHistory.getLeader() == seat_1) ? (cardL) : playHistory.takeTrick(cardL) ? (cardL) : (playHistory.takeTrick(cardH)) ? (cardH) : (cardL);
+        }
     }
 
     //If none is found, just take one that is allowable.
