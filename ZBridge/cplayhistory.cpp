@@ -190,6 +190,16 @@ bool CPlayHistory::isFirstPlay()
     return ((play[0][0] == -1) && (play[1][0] == -1) && (play[2][0] == -1) && (play[3][0] == -1));
 }
 
+bool CPlayHistory::isFirstTimeSuitPlayed(Suit suit)
+{
+    for (int i = 0; i < noTrick; i++)
+    for (int j = 0; j < 4; j++)
+    if (CARD_SUIT(play[j][i]) == suit)
+        return false;
+
+    return true;
+}
+
 bool CPlayHistory::isCardPlayed(Seat seat, int card)
 {
     for (int i = 0; i < 13; i++)
@@ -347,6 +357,15 @@ bool CPlayHistory::takeTrick(int card)
     }
 
     return false;
+}
+
+/**
+ * @brief Get played card in this trick.
+ * @return The card played.
+ */
+int CPlayHistory::getCard(Seat seat)
+{
+    return play[seat][noTrick];
 }
 
 /**

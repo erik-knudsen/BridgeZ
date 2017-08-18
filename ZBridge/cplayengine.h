@@ -49,6 +49,12 @@ private:
                         CBidOptionDoc &nsBidOptions, CBidOptionDoc &ewBidOptions);
     int getBestCard(int cards[], int ownCards[], int dummyCards[], Seat seat, Seat dummySeat, CBidHistory &bidHistory,
                     CPlayHistory &playHistory, CBidOptionDoc &nsBidOptions, CBidOptionDoc &ewBidOptions);
+    int getOppLead(Seat seat, Suit suit, int cardsLH[13], int numBest, CPlayHistory &playHistory,
+        CBidOptionDoc &nsBidOptions, CBidOptionDoc &ewBidOptions);
+    int getFollowSuit(Suit cardLeadSuit, int cardsLH[], int numBest, int signalLead, CFeatures &ownFeatures,
+                      CPlayHistory &playHistory);
+    int getDiscardSuit(Suit cardLeadSuit, int cardsLH[], int numBest, int signalDiscard, CFeatures &ownFeatures,
+                       CPlayHistory &playHistory);
 
     CBidOptionDoc nsBidOptions;
     CBidOptionDoc ewBidOptions;

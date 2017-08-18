@@ -263,6 +263,7 @@ int CPlayEngine::getNextPlay(Seat seat, Seat dummySeat, int ownCards[], int dumm
     return getBestCard(cards, ownCards, dummyCards, seat, dummySeat, bidHistory, playHistory, nsBidOptions, ewBidOptions);
 }
 
+
 /**
  * @brief Calculate weight to use for a given hand of cards.
  *
@@ -313,14 +314,19 @@ int CPlayEngine::getBestCard(int cards[], int ownCards[], int dummyCards[], Seat
     if (cards[i] > max)
         max = cards[i];
 
-    int cardL = -1;
+    int cardL;
     int cardH;
+    int cardsLH[13];
+    for (int i = 0; i < 13; i++)
+        cardsLH[i] = -1;
+    int numBest = 0;
     for (int i = 0; i < 52; i++)
-    if (cards[i] == max)
+        if (cards[i] == max)
+            cardsLH[numBest++] = i;
+    if (numBest > 0)
     {
-        if (cardL < 0)
-            cardL = i;
-        cardH = i;
+        cardL = cardsLH[0];
+        cardH = cardsLH[numBest - 1];
     }
 
     //DD found preferences?
@@ -348,18 +354,24 @@ int CPlayEngine::getBestCard(int cards[], int ownCards[], int dummyCards[], Seat
         int trick[4];
         playHistory.getTrick(playHistory.getNoTrick(), trick);
 
+        int cardLeadFace = CARD_FACE(playHistory.getCard(seat_0));
+        Suit cardLeadSuit = CARD_SUIT(playHistory.getCard(seat_0));
+
+        CFeatures ownFeatures;
+        ownFeatures.setCardFeatures(ownCards);
+        CBidOptionDoc &bidOptions = ((seat == WEST_SEAT) || (seat == EAST_SEAT)) ? (ewBidOptions) : (nsBidOptions);
+
         //First hand (leader)?
         if (trick[seat_0] == -1)
         {
             //Declarer or dummy leading a trump play?
             if (((declarer == currentLeader) || (((declarer + 2) & 3) == currentLeader)) && (suit != NOTRUMP))
             {
-                CFeatures declarerFeatures;
                 CFeatures dummyFeatures;
-                declarerFeatures.setCardFeatures(ownCards);
                 dummyFeatures.setCardFeatures(dummyCards);
+
                 //Should we play trump?
-                int no = declarerFeatures.getSuitLen(suit) + dummyFeatures.getSuitLen(suit);
+                int no = ownFeatures.getSuitLen(suit) + dummyFeatures.getSuitLen(suit);
                 int cardLS = -1;
                 int cardHS;
                 if (no >= 7)
@@ -397,29 +409,81 @@ int CPlayEngine::getBestCard(int cards[], int ownCards[], int dummyCards[], Seat
             //Declarer or dummy leading a non trump play?
             else if ((declarer == currentLeader) || (((declarer + 2) & 3) == currentLeader))
             {
+                cardC = (CARD_FACE(cardH) >= JACK) ? (cardH) : (cardL);
             }
             //Opponent leading.
             else
             {
+                cardC = getOppLead(seat, suit, cardsLH, numBest, playHistory, nsBidOptions, ewBidOptions);
             }
         }
 
         //Second hand?
         else if (trick[seat_1] == -1)
         {
-            cardC = cardL;
+            //Declarer lead?
+            if ((declarer == currentLeader) || (((declarer + 2) & 3) == currentLeader))
+            {
+                //Follow suit to first time lead (no signal for trump lead)?
+                if ((cardLeadSuit != suit) && (cardLeadSuit == CARD_SUIT(cardsLH[0])) &&
+                        playHistory.isFirstTimeSuitPlayed(cardLeadSuit))
+                {
+                    //Find largest small and smallest small card in the lead suit.
+                    int signalLead = (suit != NOTRUMP) ? bidOptions.declarerLeadSuit : bidOptions.declarerLeadNT;
+                    cardC = getFollowSuit(cardLeadSuit, cardsLH, numBest, signalLead, ownFeatures, playHistory);
+                }
+
+                //Discard?
+                else if ((cardLeadSuit != CARD_SUIT(cardsLH[0])))
+                {
+                    int signalDiscard = (suit != NOTRUMP) ? bidOptions.discardingSuit : bidOptions.discardingNT;
+                    cardC = getDiscardSuit(cardLeadSuit, cardsLH, numBest, signalDiscard, ownFeatures, playHistory);
+                }
+            }
+            //Select default card?
+            if (cardC == -1)
+                cardC = cardL;
         }
 
         //Third hand?
         else if (trick[seat_2] == -1)
         {
-            cardC = (playHistory.getLeader() == seat_0) ? (cardL) : playHistory.takeTrick(cardH) ? (cardH) : (cardL);
+            //Is a non trump card lead by opponent?
+            if ((declarer != currentLeader) && (((declarer + 2) & 3) != currentLeader) && (cardLeadSuit != suit))
+            {
+                //Follow suit to first time lead?
+                if ((cardLeadSuit == CARD_SUIT(cardsLH[0])) && playHistory.isFirstTimeSuitPlayed(cardLeadSuit))
+                {
+                    //Find largest small and smallest small card in the lead suit.
+                    int signalLead = (suit != NOTRUMP) ? bidOptions.partnerLeadSuit : bidOptions.partnerLeadNT;
+                    cardC = getFollowSuit(cardLeadSuit, cardsLH, numBest, signalLead, ownFeatures, playHistory);
+                }
+
+                //Discard?
+                else if ((cardLeadSuit != CARD_SUIT(cardsLH[0])))
+                {
+                    int signalDiscard = (suit != NOTRUMP) ? bidOptions.discardingSuit : bidOptions.discardingNT;
+                    cardC = getDiscardSuit(cardLeadSuit, cardsLH, numBest, signalDiscard, ownFeatures, playHistory);
+                }
+            }
+            //Select default card?
+            if (cardC == -1)
+                cardC = ((playHistory.getLeader() == seat_0) && (cardLeadFace >= JACK)) ? (cardL) : playHistory.takeTrick(cardH) ? (cardH) : (cardL);
         }
 
         //Fourth hand.
         else
         {
-            cardC = (playHistory.getLeader() == seat_1) ? (cardL) : playHistory.takeTrick(cardL) ? (cardL) : (playHistory.takeTrick(cardH)) ? (cardH) : (cardL);
+            //Is declarer leading and opponent discarding?
+            if ((declarer == currentLeader) || (((declarer + 2) & 3) == currentLeader) &&
+                    ((cardLeadSuit != CARD_SUIT(cardsLH[0]))))
+            {
+                int signalDiscard = (suit != NOTRUMP) ? bidOptions.discardingSuit : bidOptions.discardingNT;
+                cardC = getDiscardSuit(cardLeadSuit, cardsLH, numBest, signalDiscard, ownFeatures, playHistory);
+            }
+            //Select default card?
+            if (cardC == -1)
+                cardC = (playHistory.getLeader() == seat_1) ? (cardL) : playHistory.takeTrick(cardL) ? (cardL) : (playHistory.takeTrick(cardH)) ? (cardH) : (cardL);
         }
     }
 
@@ -445,3 +509,94 @@ int CPlayEngine::getBestCard(int cards[], int ownCards[], int dummyCards[], Seat
     return cardC;
 }
 
+int CPlayEngine::getOppLead(Seat seat, Suit suit, int cardsLH[], int numBest, CPlayHistory &playHistory,
+                            CBidOptionDoc &nsBidOptions, CBidOptionDoc &ewBidOptions)
+{
+    CBidOptionDoc &bidOptions = ((seat == WEST_SEAT) || (seat == EAST_SEAT)) ? (ewBidOptions) : (nsBidOptions);
+
+    if (suit == NOTRUMP)
+    {
+
+    }
+    else
+    {
+
+    }
+
+    return -1;
+}
+
+int CPlayEngine::getFollowSuit(Suit cardLeadSuit, int cardsLH[], int numBest, int signalLead, CFeatures &ownFeatures,
+                               CPlayHistory &playHistory)
+{
+    int cardC = -1;
+
+    //Find largest small and smallest small card in the lead suit.
+    int lowCard = 60;
+    int highCard = -1;
+    for (int i = 0; i < numBest; i++)
+    if ((CARD_FACE(cardsLH[i]) <= NINE) && (CARD_SUIT(cardsLH[i]) == cardLeadSuit))
+    {
+        if (cardsLH[i] > highCard)
+            highCard = cardsLH[i];
+        if (cardsLH[i] < lowCard)
+            lowCard = cardsLH[i];
+    }
+
+    //Select card according to signal options.
+    if (signalLead == SIGNAL_COUNT_HIGH)
+        cardC = ((ownFeatures.getSuitLen(cardLeadSuit) & 1) == 0) ? highCard : lowCard;
+    else if (signalLead == SIGNAL_COUNT_LOW)
+        cardC = ((ownFeatures.getSuitLen(cardLeadSuit) & 1) == 0) ? lowCard : highCard;
+    else if (signalLead == SIGNAL_ATTITUDE_HIGH)
+        cardC = (ownFeatures.getHcp(cardLeadSuit) > 1) ? highCard : lowCard;
+    else if (signalLead == SIGNAL_ATTITUDE_LOW)
+        cardC = (ownFeatures.getHcp(cardLeadSuit) > 1) ? lowCard : highCard;
+
+    return cardC;
+}
+
+int CPlayEngine::getDiscardSuit(Suit cardLeadSuit, int cardsLH[], int numBest, int signalDiscard, CFeatures &ownFeatures,
+                                CPlayHistory &playHistory)
+{
+    int cardC = -1;
+
+    //Find longest suit among best dd plays.
+    int k = -1;
+    int countMax = 0;
+    for (int i = 0; i < 4; i++)
+    if (i != cardLeadSuit)
+    {
+        int count = 0;
+        for (int j = 0; j < numBest; j++)
+        if (i == CARD_SUIT(cardsLH[j]))
+            count++;
+        if ((count > countMax) && playHistory.isFirstTimeSuitPlayed((Suit)i))
+        {
+            k = i;
+            countMax = count;
+        }
+    }
+
+    //Find largest small and smallest small card in the longest suit among best dd plays.
+    if (k != -1)
+    {
+        int lowCard = 60;
+        int highCard = -1;
+        for (int i = 0; i < numBest; i++)
+        if ((CARD_FACE(cardsLH[i]) <= NINE) && (CARD_SUIT(cardsLH[i]) == k))
+        {
+            if (cardsLH[i] > highCard)
+                highCard = cardsLH[i];
+            if (cardsLH[i] < lowCard)
+                lowCard = cardsLH[i];
+        }
+
+        //Select card according to signal options.
+        if (signalDiscard == SIGNAL_COUNT_HIGH)
+            cardC = ((ownFeatures.getSuitLen((Suit)k) & 1) == 0) ? highCard : lowCard;
+        else if (signalDiscard == SIGNAL_COUNT_LOW)
+            cardC = ((ownFeatures.getSuitLen((Suit)k) & 1) == 0) ? lowCard : highCard;
+    }
+    return cardC;
+}

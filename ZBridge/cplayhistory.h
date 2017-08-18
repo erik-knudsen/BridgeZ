@@ -41,11 +41,13 @@ public:
     int getEWTricks() { return ewTricks; }
     int getNSTricks() { return nsTricks; }
     bool isFirstPlay();
+    bool isFirstTimeSuitPlayed(Suit suit);
     bool isCardPlayed(Seat seat, int card);
 
     Seat getNextLeader();
     Seat getLeader();
     bool takeTrick(int card);
+    int getCard(Seat seat);
     int undo(int undoType);
     int getNoTrick() { return noTrick; }
     Seat getOpenLeader() { return openLeader; }
