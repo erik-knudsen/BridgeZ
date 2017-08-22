@@ -220,7 +220,7 @@ CBidOptionsPropSheet::CBidOptionsPropSheet(CBidOptionDoc &bidOptionDoc, CZBridge
     //Leads.
     if (bidOptionDoc.lengthLead == FOURTH_BEST)
         ui->fourthBest->setChecked(true);
-    else if (bidOptionDoc.lengthLead == THIRDBEST)
+    else if (bidOptionDoc.lengthLead == THIRD_FIFTH_BEST)
         ui->thirdBest->setChecked(true);
     else
         ui->lowEncouraging->setChecked(true);
@@ -688,7 +688,7 @@ void CBidOptionsPropSheet::on_fourthBest_clicked()
 
 void CBidOptionsPropSheet::on_thirdBest_clicked()
 {
-    bidOptionDoc.lengthLead = THIRDBEST;
+    bidOptionDoc.lengthLead = THIRD_FIFTH_BEST;
 }
 
 void CBidOptionsPropSheet::on_lowEncouraging_clicked()

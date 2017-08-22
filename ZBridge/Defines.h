@@ -365,7 +365,7 @@ const int SIGNAL_ATTITUDE_LOW = 4;
 
 //Leads.
 const int FOURTH_BEST = 0;
-const int THIRDBEST = 1;
+const int THIRD_FIFTH_BEST = 1;
 const int LOW_ENCOURAGING = 2;
 
 const int OPEN_SUIT = 0;

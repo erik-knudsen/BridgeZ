@@ -290,8 +290,9 @@ int CPlayEngine::calcWeight(int hands[4][13], Seat seat, Seat dummySeat, CBidHis
 /**
  * @brief Get the best card to play.
  *
- * The best card to play is calculated based on the double dummy calculated and weighed result scores and rules implicit
- * assumed and rules explicit stated in the options. Rules for leads and for signals are used for this.
+ * The best card to play is calculated based on the double dummy calculated and weighed result scores and
+ * on rules implicit assumed and rules explicit stated in the options. Rules for leads and for signals are
+ * used for this.
  *
  * @param cards Double dummy calculated and weighed result scores
  * @param ownCards Players own cards (all 13 cards).
@@ -357,8 +358,6 @@ int CPlayEngine::getBestCard(int cards[], int ownCards[], int dummyCards[], Seat
         int cardLeadFace = CARD_FACE(playHistory.getCard(seat_0));
         Suit cardLeadSuit = CARD_SUIT(playHistory.getCard(seat_0));
 
-        CFeatures ownFeatures;
-        ownFeatures.setCardFeatures(ownCards);
         CBidOptionDoc &bidOptions = ((seat == WEST_SEAT) || (seat == EAST_SEAT)) ? (ewBidOptions) : (nsBidOptions);
 
         //First hand (leader)?
@@ -367,6 +366,8 @@ int CPlayEngine::getBestCard(int cards[], int ownCards[], int dummyCards[], Seat
             //Declarer or dummy leading a trump play?
             if (((declarer == currentLeader) || (((declarer + 2) & 3) == currentLeader)) && (suit != NOTRUMP))
             {
+                CFeatures ownFeatures;
+                ownFeatures.setCardFeatures(ownCards);
                 CFeatures dummyFeatures;
                 dummyFeatures.setCardFeatures(dummyCards);
 
@@ -414,14 +415,14 @@ int CPlayEngine::getBestCard(int cards[], int ownCards[], int dummyCards[], Seat
             //Opponent leading.
             else
             {
-                cardC = getOppLead(seat, suit, cardsLH, numBest, playHistory, nsBidOptions, ewBidOptions);
+                cardC = getOppLead(seat, suit, cardsLH, numBest, ownCards, playHistory, bidOptions);
             }
         }
 
         //Second hand?
         else if (trick[seat_1] == -1)
         {
-            //Declarer lead?
+            //Declarer lead i.e. opponent plays second hand?
             if ((declarer == currentLeader) || (((declarer + 2) & 3) == currentLeader))
             {
                 //Follow suit to first time lead (no signal for trump lead)?
@@ -430,14 +431,14 @@ int CPlayEngine::getBestCard(int cards[], int ownCards[], int dummyCards[], Seat
                 {
                     //Find largest small and smallest small card in the lead suit.
                     int signalLead = (suit != NOTRUMP) ? bidOptions.declarerLeadSuit : bidOptions.declarerLeadNT;
-                    cardC = getFollowSuit(cardLeadSuit, cardsLH, numBest, signalLead, ownFeatures, playHistory);
+                    cardC = getFollow(cardLeadSuit, cardsLH, numBest, signalLead, ownCards, playHistory);
                 }
 
                 //Discard?
                 else if ((cardLeadSuit != CARD_SUIT(cardsLH[0])))
                 {
                     int signalDiscard = (suit != NOTRUMP) ? bidOptions.discardingSuit : bidOptions.discardingNT;
-                    cardC = getDiscardSuit(cardLeadSuit, cardsLH, numBest, signalDiscard, ownFeatures, playHistory);
+                    cardC = getDiscard(cardLeadSuit, cardsLH, numBest, signalDiscard, ownCards, playHistory);
                 }
             }
             //Select default card?
@@ -456,14 +457,14 @@ int CPlayEngine::getBestCard(int cards[], int ownCards[], int dummyCards[], Seat
                 {
                     //Find largest small and smallest small card in the lead suit.
                     int signalLead = (suit != NOTRUMP) ? bidOptions.partnerLeadSuit : bidOptions.partnerLeadNT;
-                    cardC = getFollowSuit(cardLeadSuit, cardsLH, numBest, signalLead, ownFeatures, playHistory);
+                    cardC = getFollow(cardLeadSuit, cardsLH, numBest, signalLead, ownCards, playHistory);
                 }
 
                 //Discard?
                 else if ((cardLeadSuit != CARD_SUIT(cardsLH[0])))
                 {
                     int signalDiscard = (suit != NOTRUMP) ? bidOptions.discardingSuit : bidOptions.discardingNT;
-                    cardC = getDiscardSuit(cardLeadSuit, cardsLH, numBest, signalDiscard, ownFeatures, playHistory);
+                    cardC = getDiscard(cardLeadSuit, cardsLH, numBest, signalDiscard, ownCards, playHistory);
                 }
             }
             //Select default card?
@@ -479,7 +480,7 @@ int CPlayEngine::getBestCard(int cards[], int ownCards[], int dummyCards[], Seat
                     ((cardLeadSuit != CARD_SUIT(cardsLH[0]))))
             {
                 int signalDiscard = (suit != NOTRUMP) ? bidOptions.discardingSuit : bidOptions.discardingNT;
-                cardC = getDiscardSuit(cardLeadSuit, cardsLH, numBest, signalDiscard, ownFeatures, playHistory);
+                cardC = getDiscard(cardLeadSuit, cardsLH, numBest, signalDiscard, ownCards, playHistory);
             }
             //Select default card?
             if (cardC == -1)
@@ -509,27 +510,430 @@ int CPlayEngine::getBestCard(int cards[], int ownCards[], int dummyCards[], Seat
     return cardC;
 }
 
-int CPlayEngine::getOppLead(Seat seat, Suit suit, int cardsLH[], int numBest, CPlayHistory &playHistory,
-                            CBidOptionDoc &nsBidOptions, CBidOptionDoc &ewBidOptions)
+/**
+ * @brief Get best lead card for opponent.
+ *
+ * Only used the first time a suit is played.
+ *
+ * @param seat Opponents seat.
+ * @param suit Trump suit.
+ * @param cardsLH Best cards to play. Determined by double dummy analysis.
+ * @param numBest Number of best cards to play.
+ * @param ownCards Own cards.
+ * @param playHistory Play history.
+ * @param bidOptions Bid and play options for the opponent.
+ * @return The best card to play.
+ */
+int CPlayEngine::getOppLead(Seat seat, Suit suit, int cardsLH[], int numBest, int ownCards[], CPlayHistory &playHistory,
+                            CBidOptionDoc &bidOptions)
 {
-    CBidOptionDoc &bidOptions = ((seat == WEST_SEAT) || (seat == EAST_SEAT)) ? (ewBidOptions) : (nsBidOptions);
+    int cardC = -1;
+
+    int noCrdsLH[4];
+    for (int i = 0; i < 4; i++)
+        noCrdsLH[i] = 0;
+    for (int i = 0; i < numBest; i++)
+        noCrdsLH[CARD_SUIT(cardsLH[i])]++;
+
+    int noOwnCrds[4];
+    for (int i = 0; i < 4; i++)
+        noOwnCrds[i] = 0;
+    for (int i = 0; i < 13; i++)
+        noOwnCrds[CARD_SUIT(ownCards[i])]++;
+
+    bool crdsLH[4][13];
+    for (int i = 0; i < 4; i++)
+    for (int j = 0; j < 13; j++)
+        crdsLH[i][j] = false;
+    for (int i = 0; i < numBest; i++)
+        crdsLH[CARD_SUIT(cardsLH[i])][CARD_FACE(cardsLH[i])] = true;
+
+    bool ownCrds[4][13];
+    for (int i = 0; i < 4; i++)
+    for (int j = 0; j < 13; j++)
+        ownCrds[i][j] = false;
+    for (int i = 0; i < 13; i++)
+        ownCrds[CARD_SUIT(ownCards[i])][CARD_FACE(ownCards[i])] = true;
 
     if (suit == NOTRUMP)
     {
+        //Ace, King doubleton --------------------------------------------------------------
+        for (int i = 0; i < 4; i++)
+        if (playHistory.isFirstTimeSuitPlayed((Suit)i) && crdsLH[i][ACE] && crdsLH[i][KING] && (noOwnCrds[i] == 2))
+        {
+            int crd = MAKE_CARD(i, KING);
+            cardC = (bidOptions.openingLead[OPEN_NT][AK_INX] == aK_VAL) ? (crd) : (crd + 1);
+            return cardC;
+        }
 
+        //Sequence --------------------------------------------------------------------------
+        //Ace, King, Queen.
+        for (int i = 0; i < 4; i++)
+        if (playHistory.isFirstTimeSuitPlayed((Suit)i) && crdsLH[i][ACE] && ownCrds[i][KING] && ownCrds[i][QUEEN])
+        {
+            cardC = MAKE_CARD(i, ACE);
+            return cardC;
+        }
+
+        //King, Queen, Jack.
+        for (int i = 0; i < 4; i++)
+        if (playHistory.isFirstTimeSuitPlayed((Suit)i) && crdsLH[i][KING] && ownCrds[i][QUEEN] && ownCrds[i][JACK])
+        {
+            cardC = MAKE_CARD(i, KING);
+            return cardC;
+        }
+
+        //Queen, Jack, Ten.
+        for (int i = 0; i < 4; i++)
+        if (playHistory.isFirstTimeSuitPlayed((Suit)i) && crdsLH[i][QUEEN] && ownCrds[i][JACK] && ownCrds[i][TEN])
+        {
+            cardC = MAKE_CARD(i, QUEEN);
+            return cardC;
+        }
+
+        //Ace, King, not Queen, Jack.
+        for (int i = 0; i < 4; i++)
+        if (playHistory.isFirstTimeSuitPlayed((Suit)i) && crdsLH[i][ACE] && ownCrds[i][KING] &&
+                !ownCrds[i][QUEEN] && ownCrds[i][JACK])
+        {
+            cardC = MAKE_CARD(i, ACE);
+            return cardC;
+        }
+
+        //King, Queen, not Jack, Ten.
+        for (int i = 0; i < 4; i++)
+        if (playHistory.isFirstTimeSuitPlayed((Suit)i) && crdsLH[i][KING] && ownCrds[i][QUEEN] &&
+                !ownCrds[i][JACK] && ownCrds[i][TEN])
+        {
+            cardC = MAKE_CARD(i, KING);
+            return cardC;
+        }
+
+        //Ace, not King, Queen, Jack.
+        for (int i = 0; i < 4; i++)
+        if (playHistory.isFirstTimeSuitPlayed((Suit)i) && ownCrds[i][ACE] && !ownCrds[i][KING] &&
+                crdsLH[i][QUEEN] && ownCrds[i][JACK])
+        {
+            cardC = MAKE_CARD(i, QUEEN);
+            return cardC;
+        }
+
+        //King, not Queen, Jack, Ten.
+        for (int i = 0; i < 4; i++)
+        if (playHistory.isFirstTimeSuitPlayed((Suit)i) && ownCrds[i][KING] && !ownCrds[i][QUEEN] &&
+                crdsLH[i][JACK] && ownCrds[i][TEN])
+        {
+            cardC = MAKE_CARD(i, JACK);
+            return cardC;
+        }
+
+        //Fourth best, third/fifth best or low encouraging --------------------------------------------
+        for (int i = 0; i < 4; i++)
+        if (playHistory.isFirstTimeSuitPlayed((Suit)i) &&
+                ownCrds[i][ACE] || ownCrds[i][KING] || ownCrds[i][QUEEN] || ownCrds[i][JACK] &&
+                (noOwnCrds[i] >= 4))
+        {
+            if (bidOptions.lengthLead == FOURTH_BEST)
+            {
+                int cnt = 0;
+                int j;
+                for (j = 12; (j >= 0) && (cnt != 4); j--)
+                    if (ownCrds[i][j])
+                        cnt++;
+                if (crdsLH[i][j])
+                {
+                    cardC = MAKE_CARD(i, j);
+                    return cardC;
+                }
+            }
+            else if (bidOptions.lengthLead == THIRD_FIFTH_BEST)
+            {
+                int lead = (noOwnCrds[i] > 4) ? (5) : (3);
+
+                int cnt = 0;
+                int j;
+                for (j = 12; (j >= 0) && (cnt != lead); j--)
+                    if (ownCrds[i][j])
+                        cnt++;
+                if (crdsLH[i][j])
+                {
+                    cardC = MAKE_CARD(i, j);
+                    return cardC;
+                }
+            }
+            else //if (bidOptions.lengthLead == LOW_ENCOURAGING)
+            {
+                for (int j = 0; j < 13; j++)
+                if (crdsLH[i][j] && (j < TEN))
+                {
+                    cardC = MAKE_CARD(i, j);
+                    return cardC;
+                }
+            }
+        }
+
+        //Tripleton with honour --------------------------------------------
+        for (int i = 0; i < 4; i++)
+        if (playHistory.isFirstTimeSuitPlayed((Suit)i) &&
+                ownCrds[i][ACE] || ownCrds[i][KING] || ownCrds[i][QUEEN] || ownCrds[i][JACK] &&
+                (noOwnCrds[i] == 3))
+        {
+            for (int j = 0; j < 13; j++)
+            if (crdsLH[i][j] && (j < TEN))
+            {
+                cardC = MAKE_CARD(i, j);
+                return cardC;
+            }
+        }
+
+        //Only low with 4 card or more --------------------------------------------
+        for (int i = 0; i < 4; i++)
+        if (playHistory.isFirstTimeSuitPlayed((Suit)i) &&
+                !ownCrds[i][ACE] && !ownCrds[i][KING] && !ownCrds[i][QUEEN] && !ownCrds[i][JACK] &&
+                (noOwnCrds[i] >= 4))
+        {
+            for (int j = 0; j < 13; j++)
+            if (crdsLH[i][j])
+            {
+                cardC = MAKE_CARD(i, j);
+                return cardC;
+            }
+        }
+
+        //Tripleton with only low --------------------------------------------
+        for (int i = 0; i < 4; i++)
+        if (playHistory.isFirstTimeSuitPlayed((Suit)i) &&
+                !crdsLH[i][ACE] && !crdsLH[i][KING] && !crdsLH[i][QUEEN] && !crdsLH[i][JACK] &&
+                (noCrdsLH[i] == 3) && (noOwnCrds[i] == 3))
+        {
+            int tri[3];
+            int n = 0;
+            for (int j = 0; j < 13; j++)
+            if (crdsLH[i][j])
+                tri[n++] = j;
+            if (bidOptions.openingLead[OPEN_NT][XXX_INX] == Xxx_VAL)
+                cardC = MAKE_CARD(i, tri[2]);
+            else if (bidOptions.openingLead[OPEN_NT][XXX_INX] == xXx_VAL)
+                cardC = MAKE_CARD(i, tri[1]);
+            else //if (bidOptions.openingLead[OPEN_NT][XXX_INX] == xxX_VAL)
+                cardC = MAKE_CARD(i, tri[0]);
+            return cardC;
+        }
+
+        //Doubleton --------------------------------------------
+        for (int i = 0; i < 4; i++)
+        if (playHistory.isFirstTimeSuitPlayed((Suit)i) && (noCrdsLH[i] == 2) && (noOwnCrds[i] == 2))
+        {
+            for (int j = 12; j >= 0; j--)
+            if (crdsLH[i][j])
+            {
+                cardC = MAKE_CARD(i, j);
+                return cardC;
+            }
+        }
     }
     else
     {
+        //Ace, King doubleton --------------------------------------------------------------
+        for (int i = 0; i < 4; i++)
+        if (playHistory.isFirstTimeSuitPlayed((Suit)i) && crdsLH[i][ACE] && crdsLH[i][KING] && (noOwnCrds[i] == 2))
+        {
+            int crd = MAKE_CARD(i, KING);
+            cardC = (bidOptions.openingLead[OPEN_SUIT][AK_INX] == aK_VAL) ? (crd) : (crd + 1);
+            return cardC;
+        }
 
+        //Sequence --------------------------------------------------------------------------
+        //Ace, King.
+        for (int i = 0; i < 4; i++)
+        if (playHistory.isFirstTimeSuitPlayed((Suit)i) && crdsLH[i][ACE] && ownCrds[i][KING])
+        {
+            cardC = MAKE_CARD(i, ACE);
+            return cardC;
+        }
+
+        //King, Queen.
+        for (int i = 0; i < 4; i++)
+        if (playHistory.isFirstTimeSuitPlayed((Suit)i) && crdsLH[i][KING] && ownCrds[i][QUEEN])
+        {
+            cardC = MAKE_CARD(i, KING);
+            return cardC;
+        }
+
+        //Queen, Jack.
+        for (int i = 0; i < 4; i++)
+        if (playHistory.isFirstTimeSuitPlayed((Suit)i) && crdsLH[i][QUEEN] && ownCrds[i][JACK])
+        {
+            cardC = MAKE_CARD(i, QUEEN);
+            return cardC;
+        }
+
+        //Ace, King, not Queen, Jack.
+        for (int i = 0; i < 4; i++)
+        if (playHistory.isFirstTimeSuitPlayed((Suit)i) && crdsLH[i][ACE] && ownCrds[i][KING] &&
+                !ownCrds[i][QUEEN] && ownCrds[i][JACK])
+        {
+            cardC = MAKE_CARD(i, ACE);
+            return cardC;
+        }
+
+        //King, Queen, not Jack, Ten.
+        for (int i = 0; i < 4; i++)
+        if (playHistory.isFirstTimeSuitPlayed((Suit)i) && crdsLH[i][KING] && ownCrds[i][QUEEN] &&
+                !ownCrds[i][JACK] && ownCrds[i][TEN])
+        {
+            cardC = MAKE_CARD(i, KING);
+            return cardC;
+        }
+
+        //Ace, not King, Queen, Jack.
+        for (int i = 0; i < 4; i++)
+        if (playHistory.isFirstTimeSuitPlayed((Suit)i) && ownCrds[i][ACE] && !ownCrds[i][KING] &&
+                crdsLH[i][QUEEN] && ownCrds[i][JACK])
+        {
+            cardC = MAKE_CARD(i, QUEEN);
+            return cardC;
+        }
+
+        //King, not Queen, Jack, Ten.
+        for (int i = 0; i < 4; i++)
+        if (playHistory.isFirstTimeSuitPlayed((Suit)i) && ownCrds[i][KING] && !ownCrds[i][QUEEN] &&
+                crdsLH[i][JACK] && ownCrds[i][TEN])
+        {
+            cardC = MAKE_CARD(i, JACK);
+            return cardC;
+        }
+
+        //Fourth best, third/fifth best or low encouraging --------------------------------------------
+        for (int i = 0; i < 4; i++)
+        if (playHistory.isFirstTimeSuitPlayed((Suit)i) &&
+                ownCrds[i][ACE] || ownCrds[i][KING] || ownCrds[i][QUEEN] || ownCrds[i][JACK] &&
+                (noOwnCrds[i] >= 4))
+        {
+            if (bidOptions.lengthLead == FOURTH_BEST)
+            {
+                int cnt = 0;
+                int j;
+                for (j = 12; (j >= 0) && (cnt != 4); j--)
+                    if (ownCrds[i][j])
+                        cnt++;
+                if (crdsLH[i][j])
+                {
+                    cardC = MAKE_CARD(i, j);
+                    return cardC;
+                }
+            }
+            else if (bidOptions.lengthLead == THIRD_FIFTH_BEST)
+            {
+                int lead = (noOwnCrds[i] > 4) ? (5) : (3);
+
+                int cnt = 0;
+                int j;
+                for (j = 12; (j >= 0) && (cnt != lead); j--)
+                    if (ownCrds[i][j])
+                        cnt++;
+                if (crdsLH[i][j])
+                {
+                    cardC = MAKE_CARD(i, j);
+                    return cardC;
+                }
+            }
+            else //if (bidOptions.lengthLead == LOW_ENCOURAGING)
+            {
+                for (int j = 0; j < 13; j++)
+                if (crdsLH[i][j] && (j < TEN))
+                {
+                    cardC = MAKE_CARD(i, j);
+                    return cardC;
+                }
+            }
+        }
+
+        //Tripleton with honour --------------------------------------------
+        for (int i = 0; i < 4; i++)
+        if (playHistory.isFirstTimeSuitPlayed((Suit)i) &&
+                ownCrds[i][ACE] || ownCrds[i][KING] || ownCrds[i][QUEEN] || ownCrds[i][JACK] &&
+                (noOwnCrds[i] == 3))
+        {
+            for (int j = 0; j < 13; j++)
+            if (crdsLH[i][j] && (j < TEN))
+            {
+                cardC = MAKE_CARD(i, j);
+                return cardC;
+            }
+        }
+
+        //Only low with 4 card or more --------------------------------------------
+        for (int i = 0; i < 4; i++)
+        if (playHistory.isFirstTimeSuitPlayed((Suit)i) &&
+                !ownCrds[i][ACE] && !ownCrds[i][KING] && !ownCrds[i][QUEEN] && !ownCrds[i][JACK] &&
+                (noOwnCrds[i] >= 4))
+        {
+            for (int j = 0; j < 13; j++)
+            if (crdsLH[i][j])
+            {
+                cardC = MAKE_CARD(i, j);
+                return cardC;
+            }
+        }
+
+        //Tripleton with only low --------------------------------------------
+        for (int i = 0; i < 4; i++)
+        if (playHistory.isFirstTimeSuitPlayed((Suit)i) &&
+                !crdsLH[i][ACE] && !crdsLH[i][KING] && !crdsLH[i][QUEEN] && !crdsLH[i][JACK] &&
+                (noCrdsLH[i] == 3) && (noOwnCrds[i] == 3))
+        {
+            int tri[3];
+            int n = 0;
+            for (int j = 0; j < 13; j++)
+            if (crdsLH[i][j])
+                tri[n++] = j;
+            if (bidOptions.openingLead[OPEN_SUIT][XXX_INX] == Xxx_VAL)
+                cardC = MAKE_CARD(i, tri[2]);
+            else if (bidOptions.openingLead[OPEN_SUIT][XXX_INX] == xXx_VAL)
+                cardC = MAKE_CARD(i, tri[1]);
+            else //if (bidOptions.openingLead[OPEN_SUIT][XXX_INX] == xxX_VAL)
+                cardC = MAKE_CARD(i, tri[0]);
+            return cardC;
+        }
+
+        //Doubleton --------------------------------------------
+        for (int i = 0; i < 4; i++)
+        if (playHistory.isFirstTimeSuitPlayed((Suit)i) && (noCrdsLH[i] == 2) && (noOwnCrds[i] == 2))
+        {
+            for (int j = 12; j >= 0; j--)
+            if (crdsLH[i][j])
+            {
+                cardC = MAKE_CARD(i, j);
+                return cardC;
+            }
+        }
     }
 
-    return -1;
+    return cardC;
 }
 
-int CPlayEngine::getFollowSuit(Suit cardLeadSuit, int cardsLH[], int numBest, int signalLead, CFeatures &ownFeatures,
+/**
+ * @brief Get the best card to play for opponent not leading, but following suit.
+ *
+ * The card is determined according to signal options. Only used the first time a suit
+ * is played.
+ *
+ * @param cardLeadSuit The suit of the leading card.
+ * @param cardsLH Best cards to play. Determined by double dummy analysis.
+ * @param numBest Number of best cards to play.
+ * @param signalLead Signal options.
+ * @param ownCards Own cards.
+ * @param playHistory Play history.
+ * @return The best card to play.
+ */
+int CPlayEngine::getFollow(Suit cardLeadSuit, int cardsLH[], int numBest, int signalLead, int ownCards[],
                                CPlayHistory &playHistory)
 {
     int cardC = -1;
+
+    CFeatures ownFeatures;
+    ownFeatures.setCardFeatures(ownCards);
 
     //Find largest small and smallest small card in the lead suit.
     int lowCard = 60;
@@ -556,10 +960,27 @@ int CPlayEngine::getFollowSuit(Suit cardLeadSuit, int cardsLH[], int numBest, in
     return cardC;
 }
 
-int CPlayEngine::getDiscardSuit(Suit cardLeadSuit, int cardsLH[], int numBest, int signalDiscard, CFeatures &ownFeatures,
+/**
+ * @brief Get the best card to play for opponent not leading and discarding.
+ *
+ * The card is determined according to signal options. Only used the first time a suit
+ * is played.
+ *
+ * @param cardLeadSuit The suit of the leading card.
+ * @param cardsLH Best cards to play. Determined by double dummy analysis.
+ * @param numBest Number of best cards to play.
+ * @param signalDiscard Signal options.
+ * @param ownCards Own cards.
+ * @param playHistory Play history.
+ * @return The best card to play.
+ */
+int CPlayEngine::getDiscard(Suit cardLeadSuit, int cardsLH[], int numBest, int signalDiscard, int ownCards[],
                                 CPlayHistory &playHistory)
 {
     int cardC = -1;
+
+    CFeatures ownFeatures;
+    ownFeatures.setCardFeatures(ownCards);
 
     //Find longest suit among best dd plays.
     int k = -1;
