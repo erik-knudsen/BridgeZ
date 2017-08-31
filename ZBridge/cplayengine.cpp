@@ -310,8 +310,8 @@ int CPlayEngine::calcWeight(int hands[4][13], Seat seat, Seat dummySeat, CBidHis
 
     CBidOptionDoc &bidOptions = ((dummySeat == WEST_SEAT) || (dummySeat == EAST_SEAT)) ?
                 ewBidOptions : nsBidOptions;
-    Suit trumpSuit = CARD_SUIT(playHistory.getContract());
-    float p = 0.0;
+    Bids contract = playHistory.getContract();
+    float p = 1.0;
     for (int i = 0; i <= playHistory.getNoTrick(); i++)
     {
         Seat nextLeader = playHistory.getNextLeader(i);
@@ -319,28 +319,28 @@ int CPlayEngine::calcWeight(int hands[4][13], Seat seat, Seat dummySeat, CBidHis
 
         for (int j = 0; j < 4; j++)
         {
-            Seat seat = (Seat)((j + nextLeader) & 3);
-            if ((seat != dummySeat) && (seat != ((dummySeat + 2 & 3))) && (seat != j))
+            Seat seatIterator = (Seat)((j + nextLeader) & 3);
+            if ((seatIterator != dummySeat) && (seatIterator != ((dummySeat + 2 & 3))) && (seatIterator != seat))
             {
-                int card = playHistory.getCard(seat, i);
+                int card = playHistory.getCard(seatIterator, i);
                 if (card == -1)
                     break;
                 Suit suit = CARD_SUIT(card);
-                if (playHistory.isFirstTimeSuitPlayed(suit) && (suit != trumpSuit))
+                if (playHistory.isFirstTimeSuitPlayed(suit))
                 {
                     //Opponent is opener?
                     if (j == 0)
-                        p *= oppIsOpener(card, cards[seat], features[seat], bidOptions);
+                        p *= oppIsOpener(card, contract, cards[seatIterator], features[seatIterator], bidOptions);
 
                     //Opponent is openers partner?
                     else if (j == 2)
-                        p *= oppIsOpenersPartner(card, openCard, cards[seat], features[seat],
+                        p *= oppIsOpenersPartner(card, openCard, contract, cards[seatIterator], features[seatIterator],
                                                  bidOptions);
 
                     //Declarer or dummy is opener.
                     else
-                        p *= declarerOrDummyIsOpener(card, openCard, trumpSuit, cards[seat],
-                                                     features[seat], bidOptions);
+                        p *= declarerOrDummyIsOpener(card, openCard, contract, cards[seatIterator],
+                                                     features[seatIterator], bidOptions);
                 }
             }
         }
@@ -1084,20 +1084,147 @@ int CPlayEngine::getDiscard(Suit cardLeadSuit, int cardsLH[], int numBest, int s
     return cardC;
 }
 
-float CPlayEngine::oppIsOpener(int card, int cards[], CFeatures &features,
-                               CBidOptionDoc &bidOptions)
+float CPlayEngine::oppIsOpener(int card, Bids contract, int cards[],
+                               CFeatures &features, CBidOptionDoc &bidOptions)
 {
-    return 1.0;
+    int face = CARD_FACE(card);
+    Suit suit = CARD_SUIT(card);
+
+    int contractLevel = BID_LEVEL(contract);
+    Suit contractSuit = BID_SUIT(contract);
+
+    //Opponent plays trump?
+    if (suit == contractSuit)
+        return (features.getSuitLen(suit) <= 1) ? (1.0) : (0.5);
+
+    bool ace = (features.getCountCard(suit, ACE) == 1);
+    bool king = (features.getCountCard(suit, KING) == 1);
+    bool queen = (features.getCountCard(suit, QUEEN) == 1);
+    bool jack = (features.getCountCard(suit, JACK) == 1);
+    bool ten = (features.getCountCard(suit, TEN) == 1);
+
+    //Ace (not trump) played?
+    if (face == ACE)
+    {
+        //At high contract levels assure you get your tricks.
+        if (contractLevel >= 5)
+            return 1.0;
+
+        //Doubleton ace, king.
+        if ((((contractSuit != NOTRUMP) && (bidOptions.openingLead[OPEN_SUIT][AK_INX] == Ak_VAL)) ||
+                ((contractSuit == NOTRUMP) && (bidOptions.openingLead[OPEN_NT][AK_INX] == Ak_VAL))) &&
+                (features.getSuitLen(suit) == 2) && king)
+            return 1.0;
+
+        //Doubleton.
+        if (features.getSuitLen(suit) == 2)
+            return 1.0;
+
+        //NT contract and ace, king, queen or ace, king, jack.
+        if ((contractSuit == NOTRUMP) && king && (queen || jack))
+            return 1.0;
+
+        //Trump contract and ace, king, a small.
+        if ((contractSuit != NOTRUMP) && king && (features.getSuitLen(suit) > 2))
+            return 1.0;
+    }
+    else if (face == KING)
+    {
+        //Doubleton ace, king.
+        if ((((contractSuit != NOTRUMP) && (bidOptions.openingLead[OPEN_SUIT][AK_INX] == aK_VAL)) ||
+                ((contractSuit == NOTRUMP) && (bidOptions.openingLead[OPEN_NT][AK_INX] == aK_VAL))) &&
+                (features.getSuitLen(suit) == 2) && ace)
+            return 1.0;
+
+        //Doubleton.
+        if ((features.getSuitLen(suit) == 2) && !ace)
+            return 1.0;
+
+        //NT contract and king, queen, jack or king, queen, ten.
+        if ((contractSuit == NOTRUMP) && queen && (jack || ten))
+            return 1.0;
+
+        //Trump contract and king, queen, a small.
+        if ((contractSuit != NOTRUMP) && queen && (features.getSuitLen(suit) > 2))
+            return 1.0;
+    }
+    else if (face == QUEEN)
+    {
+        //Doubleton.
+        if ((features.getSuitLen(suit) == 2) && !ace && !king)
+            return 1.0;
+
+        //NT contract and queen, jack, ten or ace, queen, jack.
+        if ((contractSuit == NOTRUMP) && jack && (ten || ace))
+            return 1.0;
+
+        //Trump contract and queen, jack, a small.
+        if ((contractSuit != NOTRUMP) && jack && (features.getSuitLen(suit) > 2))
+            return 1.0;
+    }
+    else if (face == JACK)
+    {
+        //Doubleton.
+        if ((features.getSuitLen(suit) == 2) && !ace && !king && !queen)
+            return 1.0;
+
+        //NT contract and king, jack, ten.
+        if ((contractSuit == NOTRUMP) && ten && king)
+            return 1.0;
+
+        //Trump contract and jack, ten, a small.
+        if ((contractSuit != NOTRUMP) && ten && (features.getSuitLen(suit) > 2))
+            return 1.0;
+    }
+    else
+    {
+        int lowest = getLowest(suit, cards);
+        int highest = getHighest(suit, cards);
+
+        //Doubleton.
+        if (features.getSuitLen(suit) == 2)
+            return (lowest != face) ? 1.0 : 0,5;
+
+        if (ace || king || queen || jack)
+        {
+            if (features.getSuitLen(suit) == 3)
+                return (lowest == face) ? (1.0) : (0.5);
+
+            int fifthBest = getFifthBest(suit, cards);
+            int fourthBest = getFourthBest(suit, cards);
+            int thirdBest = getThirdBest(suit, cards);
+            if ((bidOptions.lengthLead == THIRD_FIFTH_BEST) && (features.getSuitLen(suit) >= 5) &&
+                    (fifthBest == face))
+                return 1.0;
+            if ((bidOptions.lengthLead == FOURTH_BEST) && (features.getSuitLen(suit) >= 4) &&
+                    (fourthBest == face))
+                return 1.0;
+            if ((bidOptions.lengthLead == THIRD_FIFTH_BEST) && (features.getSuitLen(suit) >= 3) &&
+                    (thirdBest == face))
+                return 1.0;
+            if ((bidOptions.lengthLead == LOW_ENCOURAGING) && (lowest == face))
+                return 1.0;
+        }
+        else
+        {
+            if (features.getSuitLen(suit) == 3)
+                return (bidOptions.openingLead[OPEN_SUIT][XXX_INX] == Xxx_VAL)
+            if (highest == face)
+                return (1.0);
+        }
+    }
+
+    return 0.5;
 }
 
-float CPlayEngine::oppIsOpenersPartner(int card, int openCard, int cards[],
+float CPlayEngine::oppIsOpenersPartner(int card, int openCard, Bids contract, int cards[],
                                        CFeatures &features, CBidOptionDoc &bidOptions)
 {
     return 1.0;
 }
 
-float CPlayEngine::declarerOrDummyIsOpener(int card, int openCard, Suit trumpSuit,
-                                           int cards[], CFeatures &features, CBidOptionDoc &bidOptions)
+float CPlayEngine::declarerOrDummyIsOpener(int card, int openCard, Bids contract, int cards[],
+                                           CFeatures &features, CBidOptionDoc &bidOptions)
 {
     return 1.0;
 }

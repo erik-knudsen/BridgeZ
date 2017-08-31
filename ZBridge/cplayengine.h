@@ -56,10 +56,10 @@ private:
                       CPlayHistory &playHistory);
     int getDiscard(Suit cardLeadSuit, int cardsLH[], int numBest, int signalDiscard, int ownCards[],
                        CPlayHistory &playHistory);
-    float oppIsOpener(int card, int cards[], CFeatures &features, CBidOptionDoc &bidOptions);
-    float oppIsOpenersPartner(int card, int openCard, int cards[], CFeatures &features,
+    float oppIsOpener(int card, Bids contract, int cards[], CFeatures &features, CBidOptionDoc &bidOptions);
+    float oppIsOpenersPartner(int card, int openCard, Bids contract, int cards[], CFeatures &features,
                               CBidOptionDoc &bidOptions);
-    float declarerOrDummyIsOpener(int card, int openCard, Suit trumpSuit, int cards[],
+    float declarerOrDummyIsOpener(int card, int openCard, Bids contract, int cards[],
                                   CFeatures &features, CBidOptionDoc &bidOptions);
 
     CBidOptionDoc nsBidOptions;
