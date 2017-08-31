@@ -263,6 +263,14 @@ Seat CPlayHistory::getNextLeader()
     return nextLeader;
 }
 
+Seat CPlayHistory::getNextLeader(int trickNo)
+{
+    if (trickNo == 0)
+        return openLeader;
+
+    return playStack[trickNo - 1].nextLeader;
+}
+
 /**
  * @brief Determine leader till now (not all card has been played).
  * @return The leader untill now.
@@ -366,6 +374,11 @@ bool CPlayHistory::takeTrick(int card)
 int CPlayHistory::getCard(Seat seat)
 {
     return play[seat][noTrick];
+}
+
+int CPlayHistory::getCard(Seat seat, int trickNo)
+{
+    return play[seat][trickNo];
 }
 
 /**

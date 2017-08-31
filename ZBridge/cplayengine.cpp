@@ -284,7 +284,69 @@ int CPlayEngine::getNextPlay(Seat seat, Seat dummySeat, int ownCards[], int dumm
 int CPlayEngine::calcWeight(int hands[4][13], Seat seat, Seat dummySeat, CBidHistory &bidHistory, CPlayHistory &playHistory,
                             CBidOptionDoc &nsBidOptions, CBidOptionDoc &ewBidOptions)
 {
-    return 100;
+    int cards[4][13];
+    CFeatures features[4];
+
+    //Only calculate for opponent and not known hands.
+    for (int i = 0; i < 4; i++)
+    if ((i != dummySeat) && (i != ((dummySeat + 2 & 3))) && (i != seat))
+    {
+        int newNo;
+        for (newNo = 0; (newNo < 13) && (hands[i][newNo] != -1); newNo++)
+            cards[i][newNo] = hands[i][newNo];
+
+        if (newNo < 13)
+        {
+            int played[13];
+            int  noPlayed = playHistory.getPlayed((Seat)i, played);
+
+            assert((noPlayed + newNo) == 13);
+
+            for (int k = 0; k < noPlayed; k++)
+                cards[i][newNo++] = played[k];
+        }
+        features[i].setCardFeatures(cards[i]);
+    }
+
+    CBidOptionDoc &bidOptions = ((dummySeat == WEST_SEAT) || (dummySeat == EAST_SEAT)) ?
+                ewBidOptions : nsBidOptions;
+    Suit trumpSuit = CARD_SUIT(playHistory.getContract());
+    float p = 0.0;
+    for (int i = 0; i <= playHistory.getNoTrick(); i++)
+    {
+        Seat nextLeader = playHistory.getNextLeader(i);
+        int openCard = playHistory.getCard(nextLeader, i);
+
+        for (int j = 0; j < 4; j++)
+        {
+            Seat seat = (Seat)((j + nextLeader) & 3);
+            if ((seat != dummySeat) && (seat != ((dummySeat + 2 & 3))) && (seat != j))
+            {
+                int card = playHistory.getCard(seat, i);
+                if (card == -1)
+                    break;
+                Suit suit = CARD_SUIT(card);
+                if (playHistory.isFirstTimeSuitPlayed(suit) && (suit != trumpSuit))
+                {
+                    //Opponent is opener?
+                    if (j == 0)
+                        p *= oppIsOpener(card, cards[seat], features[seat], bidOptions);
+
+                    //Opponent is openers partner?
+                    else if (j == 2)
+                        p *= oppIsOpenersPartner(card, openCard, cards[seat], features[seat],
+                                                 bidOptions);
+
+                    //Declarer or dummy is opener.
+                    else
+                        p *= declarerOrDummyIsOpener(card, openCard, trumpSuit, cards[seat],
+                                                     features[seat], bidOptions);
+                }
+            }
+        }
+    }
+
+    return (int)(p*100);
 }
 
 /**
@@ -692,7 +754,7 @@ int CPlayEngine::getOppLead(Seat seat, Suit suit, int cardsLH[], int numBest, in
                 !ownCrds[i][ACE] && !ownCrds[i][KING] && !ownCrds[i][QUEEN] && !ownCrds[i][JACK] &&
                 (noOwnCrds[i] >= 4))
         {
-            for (int j = 0; j < 13; j++)
+            for (int j = 12; j >= 0; j--)
             if (crdsLH[i][j])
             {
                 cardC = MAKE_CARD(i, j);
@@ -869,7 +931,7 @@ int CPlayEngine::getOppLead(Seat seat, Suit suit, int cardsLH[], int numBest, in
                 !ownCrds[i][ACE] && !ownCrds[i][KING] && !ownCrds[i][QUEEN] && !ownCrds[i][JACK] &&
                 (noOwnCrds[i] >= 4))
         {
-            for (int j = 0; j < 13; j++)
+            for (int j = 12; j >= 0; j--)
             if (crdsLH[i][j])
             {
                 cardC = MAKE_CARD(i, j);
@@ -1020,4 +1082,22 @@ int CPlayEngine::getDiscard(Suit cardLeadSuit, int cardsLH[], int numBest, int s
             cardC = ((ownFeatures.getSuitLen((Suit)k) & 1) == 0) ? lowCard : highCard;
     }
     return cardC;
+}
+
+float CPlayEngine::oppIsOpener(int card, int cards[], CFeatures &features,
+                               CBidOptionDoc &bidOptions)
+{
+    return 1.0;
+}
+
+float CPlayEngine::oppIsOpenersPartner(int card, int openCard, int cards[],
+                                       CFeatures &features, CBidOptionDoc &bidOptions)
+{
+    return 1.0;
+}
+
+float CPlayEngine::declarerOrDummyIsOpener(int card, int openCard, Suit trumpSuit,
+                                           int cards[], CFeatures &features, CBidOptionDoc &bidOptions)
+{
+    return 1.0;
 }

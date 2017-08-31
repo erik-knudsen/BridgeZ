@@ -45,9 +45,11 @@ public:
     bool isCardPlayed(Seat seat, int card);
 
     Seat getNextLeader();
+    Seat getNextLeader(int trickNo);
     Seat getLeader();
     bool takeTrick(int card);
     int getCard(Seat seat);
+    int getCard(Seat seat, int trickNo);
     int undo(int undoType);
     int getNoTrick() { return noTrick; }
     Seat getOpenLeader() { return openLeader; }

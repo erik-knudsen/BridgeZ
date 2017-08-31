@@ -22,6 +22,7 @@
 #define CPLAYENGINE_H
 
 #include "cbidoptiondoc.h"
+#include "cfeatures.h"
 #include "Defines.h"
 
 class CBidHistory;
@@ -55,6 +56,11 @@ private:
                       CPlayHistory &playHistory);
     int getDiscard(Suit cardLeadSuit, int cardsLH[], int numBest, int signalDiscard, int ownCards[],
                        CPlayHistory &playHistory);
+    float oppIsOpener(int card, int cards[], CFeatures &features, CBidOptionDoc &bidOptions);
+    float oppIsOpenersPartner(int card, int openCard, int cards[], CFeatures &features,
+                              CBidOptionDoc &bidOptions);
+    float declarerOrDummyIsOpener(int card, int openCard, Suit trumpSuit, int cards[],
+                                  CFeatures &features, CBidOptionDoc &bidOptions);
 
     CBidOptionDoc nsBidOptions;
     CBidOptionDoc ewBidOptions;
