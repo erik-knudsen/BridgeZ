@@ -1190,9 +1190,9 @@ float CPlayEngine::oppIsOpener(int card, Bids contract, int cards[],
             if (features.getSuitLen(suit) == 3)
                 return (lowest == face) ? (1.0) : (0.5);
 
-            int fifthBest = getFifthBest(suit, cards);
-            int fourthBest = getFourthBest(suit, cards);
-            int thirdBest = getThirdBest(suit, cards);
+            int fifthBest = getBest(suit, cards, 5);
+            int fourthBest = getBest(suit, cards, 4);
+            int thirdBest = getBest(suit, cards, 3);
             if ((bidOptions.lengthLead == THIRD_FIFTH_BEST) && (features.getSuitLen(suit) >= 5) &&
                     (fifthBest == face))
                 return 1.0;
@@ -1208,9 +1208,16 @@ float CPlayEngine::oppIsOpener(int card, Bids contract, int cards[],
         else
         {
             if (features.getSuitLen(suit) == 3)
-                return (bidOptions.openingLead[OPEN_SUIT][XXX_INX] == Xxx_VAL)
-            if (highest == face)
+            {
+                if ((bidOptions.openingLead[OPEN_SUIT][XXX_INX] == Xxx_VAL) && (highest == face))
                 return (1.0);
+                if ((bidOptions.openingLead[OPEN_SUIT][XXX_INX] == xXx_VAL) && (highest != face) && (lowest != face))
+                return (1.0);
+                if ((bidOptions.openingLead[OPEN_SUIT][XXX_INX] == xxX_VAL) && (lowest == face))
+                return (1.0);
+            }
+            else if (highest == face)
+                return 1.0;
         }
     }
 
@@ -1220,11 +1227,130 @@ float CPlayEngine::oppIsOpener(int card, Bids contract, int cards[],
 float CPlayEngine::oppIsOpenersPartner(int card, int openCard, Bids contract, int cards[],
                                        CFeatures &features, CBidOptionDoc &bidOptions)
 {
-    return 1.0;
+    int face = CARD_FACE(card);
+    Suit suit = CARD_SUIT(card);
+
+    Suit openSuit = CARD_SUIT(openCard);
+    Suit contractSuit = BID_SUIT(contract);
+
+    //Discarding opening play?
+    if (suit != openSuit)
+    {
+        int signalDiscard = (contractSuit != NOTRUMP) ? bidOptions.discardingSuit : bidOptions.discardingNT;
+        if ((signalDiscard == SIGNAL_COUNT_HIGH) &&
+                (((features.getSuitLen(suit) & 1) == 0) && (face > 3)) || (((features.getSuitLen(suit) & 1) != 0) && (face <= 3)))
+            return 1.0;
+        if ((signalDiscard == SIGNAL_COUNT_LOW) &&
+                (((features.getSuitLen(suit) & 1) == 0) && (face <= 3)) || (((features.getSuitLen(suit) & 1) != 0) && (face > 3)))
+            return 1.0;
+    }
+
+    //Opponent plays trump and is followed by partner?
+    else if (openSuit == contractSuit)
+        return 1.0;
+
+    //Opponent playes non trump and is followed by partner.
+    else if (face < TEN)
+    {
+        int signalLead = (contractSuit != NOTRUMP) ? bidOptions.partnerLeadSuit : bidOptions.partnerLeadNT;
+        if ((signalLead == SIGNAL_ATTITUDE_HIGH) &&
+                ((features.getHcp(suit) >= 1) && (face > 3)) || ((features.getHcp(suit) == 0) && (face <= 3)))
+            return 1.0;
+        if ((signalLead == SIGNAL_ATTITUDE_LOW) &&
+                ((features.getHcp(suit) >= 1) && (face <= 3)) || (((features.getHcp(suit) == 0) && (face > 3))))
+            return 1.0;
+        if ((signalLead == SIGNAL_COUNT_HIGH) &&
+                (((features.getSuitLen(suit) & 1) == 0) && (face > 3)) || (((features.getSuitLen(suit) & 1) != 0) && (face <= 3)))
+            return 1.0;
+        if ((signalLead == SIGNAL_COUNT_LOW) &&
+                (((features.getSuitLen(suit) & 1) == 0) && (face <= 3)) || (((features.getSuitLen(suit) & 1) != 0) && (face > 3)))
+            return 1.0;
+    }
+    else
+        return 1.0;
+
+    return 0.5;
 }
 
 float CPlayEngine::declarerOrDummyIsOpener(int card, int openCard, Bids contract, int cards[],
                                            CFeatures &features, CBidOptionDoc &bidOptions)
 {
-    return 1.0;
+    int face = CARD_FACE(card);
+    Suit suit = CARD_SUIT(card);
+
+    Suit openSuit = CARD_SUIT(openCard);
+    Suit contractSuit = BID_SUIT(contract);
+
+    //Discarding opening play?
+    if (suit != openSuit)
+    {
+        int signalDiscard = (contractSuit != NOTRUMP) ? bidOptions.discardingSuit : bidOptions.discardingNT;
+        if ((signalDiscard == SIGNAL_COUNT_HIGH) &&
+                (((features.getSuitLen(suit) & 1) == 0) && (face > 3)) || (((features.getSuitLen(suit) & 1) != 0) && (face <= 3)))
+            return 1.0;
+        if ((signalDiscard == SIGNAL_COUNT_LOW) &&
+                (((features.getSuitLen(suit) & 1) == 0) && (face <= 3)) || (((features.getSuitLen(suit) & 1) != 0) && (face > 3)))
+            return 1.0;
+    }
+
+    //Declarer/dummy plays trump and is followed by opponent?
+    else if (openSuit == contractSuit)
+        return 1.0;
+
+    //Declarer/dummy plays non trump and is followed by opponent.
+    else if (face < TEN)
+    {
+        int signalLead = (contractSuit != NOTRUMP) ? bidOptions.declarerLeadSuit : bidOptions.declarerLeadNT;
+        if ((signalLead == SIGNAL_ATTITUDE_HIGH) &&
+                ((features.getHcp(suit) >= 1) && (face > 3)) || ((features.getHcp(suit) == 0) && (face <= 3)))
+            return 1.0;
+        if ((signalLead == SIGNAL_ATTITUDE_LOW) &&
+                ((features.getHcp(suit) >= 1) && (face <= 3)) || (((features.getHcp(suit) == 0) && (face > 3))))
+            return 1.0;
+        if ((signalLead == SIGNAL_COUNT_HIGH) &&
+                (((features.getSuitLen(suit) & 1) == 0) && (face > 3)) || (((features.getSuitLen(suit) & 1) != 0) && (face <= 3)))
+            return 1.0;
+        if ((signalLead == SIGNAL_COUNT_LOW) &&
+                (((features.getSuitLen(suit) & 1) == 0) && (face <= 3)) || (((features.getSuitLen(suit) & 1) != 0) && (face > 3)))
+            return 1.0;
+    }
+    else
+        return 1.0;
+
+    return 0.5;
+}
+
+int CPlayEngine::getLowest(Suit suit, int cards[])
+{
+    int lowest = 13;
+    for (int i = 0; i < 13; i++)
+        if ((CARD_SUIT(cards[i]) == suit) && (CARD_FACE(cards[i]) < lowest))
+            lowest = CARD_FACE(cards[i]);
+
+    return lowest;
+}
+
+int CPlayEngine::getHighest(Suit suit, int cards[])
+{
+    int highest = -1;
+    for (int i = 0; i < 13; i++)
+        if ((CARD_SUIT(cards[i]) == suit) && (CARD_FACE(cards[i]) > highest))
+            highest = CARD_FACE(cards[i]);
+
+    return highest;
+}
+
+int CPlayEngine::getBest(Suit suit, int cards[], int noBest)
+{
+    QVector<int> faces;
+
+    for (int i = 0; i < 13; i++)
+        if (CARD_SUIT(cards[i]) == suit)
+            faces.append(CARD_FACE(cards[i]));
+
+    qSort(faces.begin(), faces.end(), qGreater<int>());
+    if (faces.size() < noBest)
+        return -1;
+
+    return (faces.at(noBest - 1));
 }

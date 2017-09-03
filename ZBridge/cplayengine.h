@@ -61,6 +61,9 @@ private:
                               CBidOptionDoc &bidOptions);
     float declarerOrDummyIsOpener(int card, int openCard, Bids contract, int cards[],
                                   CFeatures &features, CBidOptionDoc &bidOptions);
+    int getLowest(Suit suit, int cards[]);
+    int getHighest(Suit suit, int cards[]);
+    int getBest(Suit suit, int cards[], int noBest);
 
     CBidOptionDoc nsBidOptions;
     CBidOptionDoc ewBidOptions;
