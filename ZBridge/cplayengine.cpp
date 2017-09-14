@@ -534,7 +534,9 @@ int CPlayEngine::getBestCard(int cards[], int ownCards[], int dummyCards[], Seat
             }
             //Select default card?
             if (cardC == -1)
-                cardC = ((playHistory.getLeader() == seat_0) && (cardLeadFace >= JACK)) ? (cardL) : playHistory.takeTrick(cardH) ? (cardH) : (cardL);
+                cardC = (((playHistory.getLeader() == seat_0) && (cardLeadFace >= JACK)) ||
+                         (playHistory.takeTrick(cardL) && (CARD_SUIT(cardL) == contractSuit))) ? (cardL) :
+                                                                 playHistory.takeTrick(cardH) ? (cardH) : (cardL);
         }
 
         //Fourth hand.
@@ -565,22 +567,28 @@ int CPlayEngine::getBestCard(int cards[], int ownCards[], int dummyCards[], Seat
         }
     }
 
-    //If none is found, just take one that is allowable.
+    //If none is found, just take the smallest that is allowable.
     if (cardC == -1)
     {
         if (max > 0)
-            cardC = (CARD_FACE(cardH) >= JACK) ? (cardH) : (cardL);
+            cardC = cardL;
         else
         {
             int *crds = (seat == dummySeat) ? dummyCards : ownCards;
-            int i;
-            for (i = 0; i < 13; i++)
-                if (playHistory.cardOk(crds[i], seat, crds))
-                    break;
+            int j;
+            int face = 15;
+            for (int i = 0; i < 13; i++)
+            {
+                if (playHistory.cardOk(crds[i], seat, crds) && (face > CARD_FACE(crds[i])))
+                {
+                    j = i;
+                    face = CARD_FACE(crds[i]);
+                }
+            }
 
-            assert(i < 13);
+            assert(face != 15);
 
-            cardC = crds[i];
+            cardC = crds[j];
         }
     }
 
