@@ -44,10 +44,11 @@
  *   - Initializes the Yakindu client state chart.
  *   - Connects signals, mostly meant to control the play view, to the table manager.
  */
-CActorLocal::CActorLocal(int bidDelay, int playDelay, bool manual, QString teamName, Seat seat,
-                       CBidAndPlayEngines *bidAndPlayEngines, CTblMngr *tableManager) :
+CActorLocal::CActorLocal(Protocol protocol, int bidDelay, int playDelay, bool manual, QString teamName,
+          Seat seat, CBidAndPlayEngines *bidAndPlayEngines, CTblMngr *tableManager) :
     CActor(tableManager)
 {
+    this->protocol = protocol;
     this->bidDelay = bidDelay;
     this->playDelay = playDelay;
     this->defManual = manual;
@@ -111,7 +112,7 @@ void CActorLocal::clientActions()
     if (zBridgeClientIface_israised_connect(&handle))
     {
         //Connect to the server (upon entry of the statechart).
-        emit sConnect(teamName ,  (Seat)zBridgeClientIface_get_client(&handle), 0);
+        emit sConnect(teamName ,  (Seat)zBridgeClientIface_get_client(&handle), protocol);
     }
 
     else if (zBridgeClientIface_israised_rTNames(&handle))

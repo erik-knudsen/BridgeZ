@@ -592,45 +592,46 @@ void CTblMngrServer::newSession()
     QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_SERVER , true));
 
     //Set up actors.
+    Protocol protocol = doc->getSeatOptions().protocol;
     int bidDelay = (doc->getGameOptions().insertBiddingPause) ? (doc->getGameOptions().biddingPause * 100) : 0;
     int playDelay = (doc->getGameOptions().insertPlayPause) ? (doc->getGameOptions().playPause * 100) : 0;
     if (doc->getSeatOptions().westActor == MANUAL_ACTOR)
-        actor = new CActorLocal(bidDelay, playDelay, true, doc->getSeatOptions().westName, WEST_SEAT,
+        actor = new CActorLocal(protocol, bidDelay, playDelay, true, doc->getSeatOptions().westName, WEST_SEAT,
                 bidAndPlayEngines, this);
     else if ((remoteActorServer != 0) && remoteActorServer->isConnected(WEST_SEAT))
         actor = new CActorRemote(WEST_SEAT, remoteActorServer->getFrontend(WEST_SEAT), this);
     else
-        actor = new CActorLocal(bidDelay, playDelay, false, doc->getSeatOptions().westName, WEST_SEAT,
+        actor = new CActorLocal(protocol, bidDelay, playDelay, false, doc->getSeatOptions().westName, WEST_SEAT,
                 bidAndPlayEngines, this);
     actors[WEST_SEAT] = actor;
 
     if (doc->getSeatOptions().northActor == MANUAL_ACTOR)
-        actor = new CActorLocal(bidDelay, playDelay, true, doc->getSeatOptions().northName, NORTH_SEAT,
+        actor = new CActorLocal(protocol, bidDelay, playDelay, true, doc->getSeatOptions().northName, NORTH_SEAT,
                 bidAndPlayEngines, this);
     else if ((remoteActorServer != 0) && remoteActorServer->isConnected(NORTH_SEAT))
         actor = new CActorRemote(NORTH_SEAT, remoteActorServer->getFrontend(NORTH_SEAT), this);
     else
-        actor = new CActorLocal(bidDelay, playDelay, false, doc->getSeatOptions().northName, NORTH_SEAT,
+        actor = new CActorLocal(protocol, bidDelay, playDelay, false, doc->getSeatOptions().northName, NORTH_SEAT,
                 bidAndPlayEngines, this);
     actors[NORTH_SEAT] = actor;
 
     if (doc->getSeatOptions().eastActor == MANUAL_ACTOR)
-        actor = new CActorLocal(bidDelay, playDelay, true, doc->getSeatOptions().eastName, EAST_SEAT,
+        actor = new CActorLocal(protocol, bidDelay, playDelay, true, doc->getSeatOptions().eastName, EAST_SEAT,
                 bidAndPlayEngines, this);
     else if ((remoteActorServer != 0) && remoteActorServer->isConnected(EAST_SEAT))
         actor = new CActorRemote(EAST_SEAT, remoteActorServer->getFrontend(EAST_SEAT), this);
     else
-        actor = new CActorLocal(bidDelay, playDelay, false, doc->getSeatOptions().eastName, EAST_SEAT,
+        actor = new CActorLocal(protocol, bidDelay, playDelay, false, doc->getSeatOptions().eastName, EAST_SEAT,
                 bidAndPlayEngines, this);
     actors[EAST_SEAT] = actor;
 
     if (doc->getSeatOptions().southActor == MANUAL_ACTOR)
-        actor = new CActorLocal(bidDelay, playDelay, true, doc->getSeatOptions().southName, SOUTH_SEAT,
+        actor = new CActorLocal(protocol, bidDelay, playDelay, true, doc->getSeatOptions().southName, SOUTH_SEAT,
                 bidAndPlayEngines, this);
     else if ((remoteActorServer != 0) && remoteActorServer->isConnected(SOUTH_SEAT))
         actor = new CActorRemote(SOUTH_SEAT, remoteActorServer->getFrontend(SOUTH_SEAT), this);
     else
-        actor = new CActorLocal(bidDelay, playDelay, false, doc->getSeatOptions().southName, SOUTH_SEAT,
+        actor = new CActorLocal(protocol, bidDelay, playDelay, false, doc->getSeatOptions().southName, SOUTH_SEAT,
                 bidAndPlayEngines, this);
     actors[SOUTH_SEAT] = actor;
 

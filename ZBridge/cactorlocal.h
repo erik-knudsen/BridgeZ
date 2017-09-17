@@ -49,8 +49,8 @@ class CActorLocal : public CActor
 {
     Q_OBJECT
 public:
-    CActorLocal(int bidDelay, int playDelay, bool manual, QString teamName, Seat seat,
-               CBidAndPlayEngines *bidAndPlayEngines, CTblMngr *tableManager);
+    CActorLocal(Protocol protocol, int bidDelay, int playDelay, bool manual, QString teamName,
+            Seat seat, CBidAndPlayEngines *bidAndPlayEngines, CTblMngr *tableManager);
 
     void startNewSession();
     void clientRunCycle();
@@ -128,6 +128,8 @@ private:
     bool showUser;      /**< Control what is shown to the user? */
     bool updateGameInfo;/**< Control who updates game info? */
     bool updateCurrentGameInfo;
+
+    Protocol protocol;  /**< Protocol. */
 
     QString teamName;   /**< Team name. */
 

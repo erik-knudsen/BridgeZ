@@ -132,19 +132,20 @@ void CTblMngrClient::newSession()
     QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_NEW_SESSION , false));
 
     //Set up actor.
+    Protocol protocol = doc->getSeatOptions().protocol;
     int bidDelay = (doc->getGameOptions().insertBiddingPause) ? (doc->getGameOptions().biddingPause * 100) : 0;
     int playDelay = (doc->getGameOptions().insertPlayPause) ? (doc->getGameOptions().playPause * 100) : 0;
     if (doc->getSeatOptions().seat == WEST_SEAT)
-        actor = new CActorLocal(bidDelay, playDelay, (doc->getSeatOptions().westActor == MANUAL_ACTOR),
+        actor = new CActorLocal(protocol, bidDelay, playDelay, (doc->getSeatOptions().westActor == MANUAL_ACTOR),
                                 doc->getSeatOptions().westName, WEST_SEAT, bidAndPlayEngines, this);
     else if (doc->getSeatOptions().seat == NORTH_SEAT)
-        actor = new CActorLocal(bidDelay, playDelay, (doc->getSeatOptions().northActor == MANUAL_ACTOR),
+        actor = new CActorLocal(protocol, bidDelay, playDelay, (doc->getSeatOptions().northActor == MANUAL_ACTOR),
                                 doc->getSeatOptions().northName, NORTH_SEAT, bidAndPlayEngines, this);
     else if (doc->getSeatOptions().seat == EAST_SEAT)
-        actor = new CActorLocal(bidDelay, playDelay, (doc->getSeatOptions().eastActor == MANUAL_ACTOR),
+        actor = new CActorLocal(protocol, bidDelay, playDelay, (doc->getSeatOptions().eastActor == MANUAL_ACTOR),
                                 doc->getSeatOptions().eastName, EAST_SEAT, bidAndPlayEngines, this);
     else
-        actor = new CActorLocal(bidDelay, playDelay, (doc->getSeatOptions().southActor == MANUAL_ACTOR),
+        actor = new CActorLocal(protocol, bidDelay, playDelay, (doc->getSeatOptions().southActor == MANUAL_ACTOR),
                                 doc->getSeatOptions().southName, SOUTH_SEAT, bidAndPlayEngines, this);
 
     actor->setShowUser((actor->getActorType() == MANUAL_ACTOR) || showAll);

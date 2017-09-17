@@ -39,10 +39,11 @@
  *   - Generates bid and play engines.
  *   - Initializes the Yakindu client state chart.
  */
-CActorLocalAuto::CActorLocalAuto(QString teamName, Seat seat, CBidAndPlayEngines *bidAndPlayEngines,
-                         CTblMngrBase *tableManager) :
+CActorLocalAuto::CActorLocalAuto(Protocol protocol, QString teamName, Seat seat,
+           CBidAndPlayEngines *bidAndPlayEngines, CTblMngrBase *tableManager) :
     CActorBase(tableManager)
 {
+    this->protocol = protocol;
     this->teamName = teamName;
     bidAndPlay.setBidAndPlayEngines(bidAndPlayEngines);
     bidAndPlay.setSeat(seat);
@@ -77,7 +78,7 @@ void CActorLocalAuto::clientActions()
     if (zBridgeClientIface_israised_connect(&handle))
     {
         //Connect to the server (upon entry of the statechart).
-        emit sConnect(teamName ,  (Seat)zBridgeClientIface_get_client(&handle), 0);
+        emit sConnect(teamName ,  (Seat)zBridgeClientIface_get_client(&handle), protocol);
     }
 
     else if (zBridgeClientIface_israised_rTNames(&handle))

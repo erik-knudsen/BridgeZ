@@ -102,17 +102,18 @@ void CTblMngrClientAuto::sNewSession()
     cleanTableManager();
 
     //Set up actor.
+    Protocol protocol = doc->getSeatOptions().protocol;
     if (doc->getSeatOptions().seat == WEST_SEAT)
-        actor = new CActorLocalAuto(AUTO_SEAT_NAME_PREFIX + SEAT_NAMES[WEST_SEAT],
+        actor = new CActorLocalAuto(protocol, AUTO_SEAT_NAME_PREFIX + SEAT_NAMES[WEST_SEAT],
                                 WEST_SEAT, bidAndPlayEngines, this);
     else if (doc->getSeatOptions().seat == NORTH_SEAT)
-        actor = new CActorLocalAuto(AUTO_SEAT_NAME_PREFIX + SEAT_NAMES[NORTH_SEAT],
+        actor = new CActorLocalAuto(protocol, AUTO_SEAT_NAME_PREFIX + SEAT_NAMES[NORTH_SEAT],
                                 NORTH_SEAT, bidAndPlayEngines, this);
     else if (doc->getSeatOptions().seat == EAST_SEAT)
-        actor = new CActorLocalAuto(AUTO_SEAT_NAME_PREFIX + SEAT_NAMES[EAST_SEAT],
+        actor = new CActorLocalAuto(protocol, AUTO_SEAT_NAME_PREFIX + SEAT_NAMES[EAST_SEAT],
                                 EAST_SEAT, bidAndPlayEngines, this);
     else
-        actor = new CActorLocalAuto(AUTO_SEAT_NAME_PREFIX + SEAT_NAMES[SOUTH_SEAT],
+        actor = new CActorLocalAuto(protocol, AUTO_SEAT_NAME_PREFIX + SEAT_NAMES[SOUTH_SEAT],
                                 SOUTH_SEAT, bidAndPlayEngines, this);
 
     //Only for update of Table Manager game info.

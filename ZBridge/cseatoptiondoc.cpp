@@ -86,8 +86,8 @@ void CSeatOptionDoc::ReadSettings()
     seat = ((tmp >= WEST_SEAT) && (tmp <= SOUTH_SEAT)) ? (Seat)tmp : SOUTH_SEAT;
     tmp = settings.value("role", STANDALONE_ROLE).toInt();
     role = ((tmp >= SERVER_ROLE) && (tmp <= STANDALONE_ROLE)) ? (Role)tmp : STANDALONE_ROLE;
-    tmp = settings.value("protocol", ADVANCED_PROTOCOL).toInt();
-    protocol = ((tmp == BASIC_PROTOCOL) || (tmp == ADVANCED_PROTOCOL)) ? (Protocol)tmp : ADVANCED_PROTOCOL;
+    tmp = settings.value("protocol", PROTOCOL_V0).toInt();
+    protocol = PROTOCOL_V0;         //Only this protocol at present.
     hostServer = settings.value("hostServer", "").toString();
     portServer = settings.value("portServer", "").toString();
     hostClient = settings.value("hostClient", "").toString();
