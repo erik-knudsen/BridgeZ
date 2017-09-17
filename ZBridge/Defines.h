@@ -261,7 +261,7 @@ const int PT = 2;
 enum Seat { NO_SEAT=-1, WEST_SEAT=0, NORTH_SEAT=1, EAST_SEAT=2, SOUTH_SEAT=3};
 enum Actor { MANUAL_ACTOR = 0, AUTO_ACTOR = 1, REMOTE_ACTOR = 2 };
 enum Role { SERVER_ROLE = 0, CLIENT_ROLE = 1,STANDALONE_ROLE = 2 };
-enum Protocol { PROTOCOL_V0 = 18 };
+enum Protocol { PROTOCOL_V0 = 20 };
 
 //-------------------------- Bid/Play Options --------------------
 //Bid configuration file name.
