@@ -67,6 +67,8 @@ CSeatConfiguration::CSeatConfiguration(CZBridgeApp *app, CZBridgeDoc *doc, QWidg
     ui->eastActor->setCurrentIndex(seatOptionDoc.eastActor);
     ui->southActor->setCurrentIndex(seatOptionDoc.southActor);
 
+    ui->role->setCurrentIndex(seatOptionDoc.role);
+
     //Enable/disable based on saved values.
     updateHostAndPort();
     updateSeatAndActor();
