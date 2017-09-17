@@ -2180,6 +2180,8 @@ int CFeatures::calcBal(int count[])
         bal = 7;
     else
         bal = 8;
+
+    return bal;
 }
 
 /**
