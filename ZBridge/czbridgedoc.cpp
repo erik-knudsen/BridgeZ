@@ -38,7 +38,6 @@ CZBridgeDoc::CZBridgeDoc(QObject *parent) :
     QObject(parent)
 {
     ReadSeatOptions();
-    seatOptions.role = STANDALONE_ROLE;
     ReadSettings();
     LoadBidOptions();
     ReadDealOptions();
