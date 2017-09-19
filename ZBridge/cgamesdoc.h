@@ -74,6 +74,7 @@ public:
                    QString &eastName, QString &southName);
     void determineEvents(QTextStream &original, QStringList &events);
 
+    int getNumberOfGames() { return games.size(); }
     int getNumberOfNotPlayedGames(int noRandomDeals = NO_RANDOM_DEALS);
     int getNumberPlayedGames();
     int getNumberAuctionAndPlay(int gameIndex);

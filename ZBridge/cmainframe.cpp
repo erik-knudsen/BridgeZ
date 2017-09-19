@@ -1026,7 +1026,7 @@ void CMainFrame::on_actionNew_Session_triggered()
     //Initialize bid and play engines.
     bidAndPlayEngines->initialize(doc->getBidDB(), doc->getBidDesc(),
                                   doc->getNSBidOptions(), doc->getEWBidOptions(),
-                                  games->getScoringMethod());
+                                  doc->getGameOptions().scoringMethod);
 
     //Set up synchronization (auto play or not).
     if (!hostAddress.isNull() &&

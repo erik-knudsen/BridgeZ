@@ -655,10 +655,13 @@ void CTblMngrServer::newSession()
         games->writeOriginalGames(originalStream);
         games->writePlayedGames(playedStream);
 
-        actors[WEST_SEAT]->xmitPBNFiles(originalStream, playedStream, games->getScoringMethod());
-        actors[NORTH_SEAT]->xmitPBNFiles(originalStream, playedStream, games->getScoringMethod());
-        actors[EAST_SEAT]->xmitPBNFiles(originalStream, playedStream, games->getScoringMethod());
-        actors[SOUTH_SEAT]->xmitPBNFiles(originalStream, playedStream, games->getScoringMethod());
+        ScoringMethod scoringMethod = (games->getNumberOfGames() == 0) ?
+                    (doc->getGameOptions().scoringMethod) : (games->getScoringMethod());
+
+        actors[WEST_SEAT]->xmitPBNFiles(originalStream, playedStream, scoringMethod);
+        actors[NORTH_SEAT]->xmitPBNFiles(originalStream, playedStream, scoringMethod);
+        actors[EAST_SEAT]->xmitPBNFiles(originalStream, playedStream, scoringMethod);
+        actors[SOUTH_SEAT]->xmitPBNFiles(originalStream, playedStream, scoringMethod);
 
         originalBytes.close();
         playedBytes.close();
