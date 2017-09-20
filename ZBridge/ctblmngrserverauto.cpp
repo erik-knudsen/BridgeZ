@@ -634,6 +634,7 @@ void CTblMngrServerAuto::sltPlayStart()
  */
 void CTblMngrServerAuto::sAutoQuit()
 {
+    deleteLater();
     thread()->quit();
 }
 
