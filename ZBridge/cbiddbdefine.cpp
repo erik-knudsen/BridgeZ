@@ -706,9 +706,9 @@ void CBidDBDefine::calcIds(CBidOptionDoc &bidOptions, QSet<qint16> &pages, QSet<
         rules<<O_1N_WM;                 //Open 1NT  with weak major.
 
     if (((bidOptions.bidStyle == AMERICAN_STYLE) && (bidOptions.limitRaises &&
-                     (bidOptions.majorsMode == MAJOR_FOUR) || (bidOptions.jacoby2NT))) ||
-         (bidOptions.bidStyle == EUROPEAN_STYLE) &&
-                     (bidOptions.jacoby2NT || bidOptions.splinterbids))
+                     ((bidOptions.majorsMode == MAJOR_FOUR) || (bidOptions.jacoby2NT)))) ||
+         ((bidOptions.bidStyle == EUROPEAN_STYLE) &&
+                     (bidOptions.jacoby2NT || bidOptions.splinterbids)))
           rules<<SPL_O<<SPL_D;          //Splinter offensive and defensive side.
       else
           rules<<SPL_N;                 //No splinter.
@@ -729,8 +729,8 @@ void CBidDBDefine::calcIds(CBidOptionDoc &bidOptions, QSet<qint16> &pages, QSet<
         rules<<OR_11_3N_N;              //3N after 1/1: 19+ HCP
 
     if (((bidOptions.bidStyle == AMERICAN_STYLE) && (bidOptions.limitRaises &&
-                     (bidOptions.majorsMode == MAJOR_FOUR) || (bidOptions.jacoby2NT))) ||
-         (bidOptions.bidStyle == EUROPEAN_STYLE) && (bidOptions.jacoby2NT))
+                     ((bidOptions.majorsMode == MAJOR_FOUR) || (bidOptions.jacoby2NT)))) ||
+         ((bidOptions.bidStyle == EUROPEAN_STYLE) && (bidOptions.jacoby2NT)))
         rules<<R_M_2N_J;              //Jacoby 2NT major raise.
 
     if (bidOptions.oneNT3m == ONE_NT_3m_SI)

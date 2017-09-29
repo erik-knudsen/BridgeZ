@@ -45,6 +45,7 @@ const int OPEN_RESPONSE = 1;            //Next bid is response to opener by part
 const int OPEN_REBID = 2;               //Next bid is rebid of opener.
 const int OPEN_REBID_RESPONSE = 3;      //Next bid is second response to opener by partner.
 const int OPEN_OTHER = -1;              //Next bid is other bids.
+const int OPEN_ALERT = -2;              //Next bid is preceeded by an alert in bidding sequence.
 const int CATCHALL_NT_L = 6;            //Catch all NT low point level by partner.
 const int CATCHALL_NT_H = 9;            //Catch all NT high point level by partner.
 const int NEWSUIT_P1_1 = 6;             //Low point for response to opener on 1. level by partner.
@@ -1053,7 +1054,7 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
                         (!oppSuit[newSuit]) && (ownFeatures.getSuitLen((Suit)newSuit) >= 4))
                     break;
             //Found new suit?
-            if ((newSuit < 4) && ((BID_SUIT(highBid) > newSuit) || (newSuitAgree != NOTRUMP)))
+            if ((newSuit < 4) && ((BID_SUIT(highBid) < newSuit) || (newSuitAgree != NOTRUMP)))
             {
                 int low = -1;
                 int  high = -1;
@@ -1170,8 +1171,17 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
                         newBid = (Bids)(newBid + (4 - level) * 5);
                     }
                 }
-                else
+
+                //None of the above.
+                else if (bidder == OPEN_OTHER)
                     newBid = BID_NONE;
+
+                //An alert was bidded in the bid sequence.
+                else
+                {
+                    int level = (newSuit > BID_SUIT(highOPBid)) ? (BID_LEVEL(highOPBid)) : (BID_LEVEL(highOPBid) + 1);
+                    newBid = MAKE_BID(newSuit, level);
+                }
 
                 //Check for forcing.
                 if (((newBid == BID_NONE) || (newBid == BID_PASS)) && (bidHistory.bidList.size() >= 2) &&
@@ -1253,7 +1263,8 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
             {
                 //Check for forcing.
                 if ((bidHistory.bidList.size() >= 2) &&
-                        ((bidHistory.bidList[size - 2].rules[0]->getStatus() == FORCING)))
+                        ((bidHistory.bidList[size - 2].rules[0]->getStatus() == FORCING) ||
+                         (bidHistory.bidList[size - 2].rules[0]->getAlertId() > 0)))
                 {
                     int level = (NOTRUMP > BID_SUIT(highOPBid)) ? (BID_LEVEL(highOPBid)) : (BID_LEVEL(highOPBid) + 1);
                     Bids newBid = MAKE_BID(NOTRUMP, level);
@@ -1348,7 +1359,8 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
 
                 //Check for forcing.
                 if ((((nextBid < highPartnerBid) || (nextBid) < highOwnBid)) &&
-                        ((bidHistory.bidList.size() >= 2) && (bidHistory.bidList[size - 2].rules[0]->getStatus() == FORCING)))
+                        ((bidHistory.bidList.size() >= 2) && ((bidHistory.bidList[size - 2].rules[0]->getStatus() == FORCING) ||
+                                                              (bidHistory.bidList[size - 2].rules[0]->getAlertId() > 0))))
                 {
                     int level = (suit > BID_SUIT(highOPBid)) ? (BID_LEVEL(highOPBid)) : (BID_LEVEL(highOPBid) + 1);
                     Bids newBid = MAKE_BID(suit, level);
@@ -1839,8 +1851,8 @@ void CBidEngine::calculatepRules(Seat seat, CBidHistory &bidHistory, Bids bid, S
 
     //Limit bid in nt, major or minor.
     if (((suitAgree == NOTRUMP) && (BID_SUIT(bid) == NOTRUMP)) ||
-            ((newSuitAgree == SPADES) || (newSuitAgree == HEARTS) || (newSuitAgree == DIAMONDS) || (newSuitAgree == CLUBS))
-            && (BID_SUIT(bid) == newSuitAgree))
+            (((newSuitAgree == SPADES) || (newSuitAgree == HEARTS) || (newSuitAgree == DIAMONDS) || (newSuitAgree == CLUBS))
+            && (BID_SUIT(bid) == newSuitAgree)))
     {
         Suit agree = ((suitAgree == NOTRUMP) && (BID_SUIT(bid) == NOTRUMP)) ? (suitAgree) : (newSuitAgree);
         Bids game = (agree == SPADES) ? (BID_4S) : (agree == HEARTS) ? (BID_4H) :
@@ -1895,7 +1907,7 @@ void CBidEngine::calculatepRules(Seat seat, CBidHistory &bidHistory, Bids bid, S
 
     //New suit or catch all NT.
     if ((isNewSuit(newSuitAgree, bid) && !isRebid(bidHistory, suitAgree, bid)) ||
-            (nextBidder(bidHistory) == OPEN_RESPONSE) && (bid == BID_1NT))
+            ((nextBidder(bidHistory) == OPEN_RESPONSE) && (bid == BID_1NT)))
     {
         CFeatures lowFeatures;
         CFeatures highFeatures;
@@ -2340,8 +2352,8 @@ Bids CBidEngine::blackwoodOrGerberAsk(CBidHistory &bidHistory, int noAces, int n
 
     if (agree == NOTRUMP)
     {
-        if ((size < 4) || (bidHistory.bidList[size - 4].bid != BID_4C) &&
-                ((noAces <= 2) || ((noAces == 3) && (lowTotPoints >= BID_NT_POINT[BID_GRAND_SLAM_INX]))))
+        if ((size < 4) || ((bidHistory.bidList[size - 4].bid != BID_4C) &&
+                ((noAces <= 2) || ((noAces == 3) && (lowTotPoints >= BID_NT_POINT[BID_GRAND_SLAM_INX])))))
             return BID_4C;
         else if ((size > 4) && ((bidHistory.bidList[size - 4].bid == BID_4C)) &&
                  (noKings <= 3) && (lowTotPoints >= BID_NT_POINT[BID_GRAND_SLAM_INX]))
@@ -2349,8 +2361,8 @@ Bids CBidEngine::blackwoodOrGerberAsk(CBidHistory &bidHistory, int noAces, int n
     }
     else
     {
-        if ((size < 4) || (bidHistory.bidList[size - 4].bid != BID_4NT) &&
-                ((noAces <= 2) || ((noAces == 3) && (lowTotPoints >= BID_SUIT_POINT[BID_GRAND_SLAM_INX]))))
+        if ((size < 4) || ((bidHistory.bidList[size - 4].bid != BID_4NT) &&
+                ((noAces <= 2) || ((noAces == 3) && (lowTotPoints >= BID_SUIT_POINT[BID_GRAND_SLAM_INX])))))
             return BID_4NT;
         else if ((size > 4) && ((bidHistory.bidList[size - 4].bid == BID_4NT)) &&
                  (noKings <= 3) && (lowTotPoints >= BID_SUIT_POINT[BID_GRAND_SLAM_INX]))
@@ -2513,6 +2525,10 @@ int CBidEngine::nextBidder(CBidHistory &bidHistory)
 {
     int size = bidHistory.bidList.size();
 
+    for (int i = 0; i < size; i++)
+        if (bidHistory.bidList[i].rules[0]->getAlertId() > 0)
+            return OPEN_ALERT;
+
     int first = size % 2;
     int i;
     for (i = first; i < size; i += 2)
@@ -2553,7 +2569,7 @@ bool CBidEngine::isNTBidded(CBidHistory &bidHistory)
         bidHistory.bidList[j].rules[0]->getFeatures(&lowFeatures, &highFeatures);
 
         if ((BID_SUIT(bidHistory.bidList[j].bid) == NOTRUMP) &&
-            (!(((j - i) == 2) &&((bidHistory.bidList[j].bid == BID_1NT) && (highFeatures.getDp(NOTRUMP) == highFeatures.getMaxDp())) ||
+            (!((((j - i) == 2) && ((bidHistory.bidList[j].bid == BID_1NT) && (highFeatures.getDp(NOTRUMP) == highFeatures.getMaxDp()))) ||
              (bidHistory.bidList[j].alert > 0))))
             ntBid = true;
     }

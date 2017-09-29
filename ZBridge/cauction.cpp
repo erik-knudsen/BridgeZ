@@ -31,6 +31,8 @@ CAuction::CAuction()
 QDataStream &operator<<(QDataStream &out, const CAuction &auction)
 {
     out<<auction.auction;
+
+    return out;
 }
 
 /**
@@ -39,6 +41,8 @@ QDataStream &operator<<(QDataStream &out, const CAuction &auction)
 QDataStream &operator>>(QDataStream &in, CAuction &auction)
 {
     in>>auction.auction;
+
+    return in;
 }
 
 /**

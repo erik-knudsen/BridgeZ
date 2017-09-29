@@ -9,7 +9,7 @@
 
 #include <QTextBrowser>
 #include <QHelpEngine>
-#include <QDebug>
+//#include <QDebug>
 
 class CHelpBrowser : public QTextBrowser
 {

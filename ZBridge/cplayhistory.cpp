@@ -214,7 +214,7 @@ bool CPlayHistory::isCardPlayed(Seat seat, int card)
  */
 Seat CPlayHistory::getNextLeader()
 {
-    Seat nextLeader;
+    Seat nextLeader = NO_SEAT;
     int faceNextLeader = -1;
 
     if (trumpSuit != NOTRUMP)
@@ -277,7 +277,7 @@ Seat CPlayHistory::getNextLeader(int trickNo)
  */
 Seat CPlayHistory::getLeader()
 {
-    Seat leader;
+    Seat leader = NO_SEAT;
     int faceLeader = -1;
 
     if (trumpSuit != NOTRUMP)
@@ -388,8 +388,8 @@ int CPlayHistory::getCard(Seat seat, int trickNo)
  */
 int CPlayHistory::undo(int undoType)
 {
-    assert ((undoType == PT) && ((noTrick >= 0) && (noTrick < 13))||
-            (undoType == CT) && ((noTrick > 0) && (noTrick <= 13)));
+    assert (((undoType == PT) && ((noTrick >= 0) && (noTrick < 13)))||
+            ((undoType == CT) && ((noTrick > 0) && (noTrick <= 13))));
 
     if (undoType == CT)
     {

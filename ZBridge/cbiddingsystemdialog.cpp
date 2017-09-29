@@ -1427,7 +1427,7 @@ bool CBiddingSystemDialog::textToAuction(CAuction *auction, QString &text)
     Bids lastProperBid = BID_NONE;
     Bids bidEnableDouble = BID_NONE;
     bool firstPass = true;
-    bool noPass = 0;
+    int noPass = 0;
     for (int i = 0; i < auction->auction.size(); i++)
     {
         if (auction->auction.at(i) == BID_PASS)

@@ -32,7 +32,7 @@ CBidDesc::~CBidDesc()
     clearBidDesc();
 }
 
-CBidDesc::clearBidDesc()
+void CBidDesc::clearBidDesc()
 {
     pages.clear();
     ruleIds.clear();

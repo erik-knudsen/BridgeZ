@@ -104,7 +104,7 @@ void CMidInfoAuction::showBid(Seat seat, Bids bid, QString features, QString ale
 
 void CMidInfoAuction::undoBid(int noBid)
 {
-    Seat nextBidder;
+    Seat nextBidder = NO_SEAT;
 
     if (noBid == REBID)
         while (!bidValues.empty())
@@ -126,7 +126,8 @@ void CMidInfoAuction::undoBid(int noBid)
         if (bidValues.at(i)->getSeat() == WEST_SEAT)
             line++;
 
-    showBid(nextBidder, BID_PLAYER);
+    if (nextBidder != NO_SEAT)
+        showBid(nextBidder, BID_PLAYER);
 }
 
 void CMidInfoAuction::reset()

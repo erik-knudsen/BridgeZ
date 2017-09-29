@@ -129,13 +129,13 @@ int CPlayEngine::getNextPlay(Seat seat, Seat dummySeat, int ownCards[], int dumm
         int j = 0;
         for (int i = 0; i < 13; i++)
         {
-            if ((seat_0 !=dummySeat) && (seat_0 != ownSeat) || (firstPlay && (seat_0 == dummySeat)))
+            if (((seat_0 !=dummySeat) && (seat_0 != ownSeat)) || (firstPlay && (seat_0 == dummySeat)))
                 hands[handNo][seat_0][i] = cardValues[j++];
-            if ((seat_1 !=dummySeat) && (seat_1 != ownSeat) || (firstPlay && (seat_1 == dummySeat)))
+            if (((seat_1 !=dummySeat) && (seat_1 != ownSeat)) || (firstPlay && (seat_1 == dummySeat)))
                 hands[handNo][seat_1][i] = cardValues[j++];
-            if ((seat_2 !=dummySeat) && (seat_2 != ownSeat) || (firstPlay && (seat_2 == dummySeat)))
+            if (((seat_2 !=dummySeat) && (seat_2 != ownSeat)) || (firstPlay && (seat_2 == dummySeat)))
                 hands[handNo][seat_2][i] = cardValues[j++];
-            if ((seat_3 !=dummySeat) && (seat_3 != ownSeat) || (firstPlay && (seat_3 == dummySeat)))
+            if (((seat_3 !=dummySeat) && (seat_3 != ownSeat)) || (firstPlay && (seat_3 == dummySeat)))
                 hands[handNo][seat_3][i] = cardValues[j++];
         }
 
@@ -188,7 +188,6 @@ int CPlayEngine::getNextPlay(Seat seat, Seat dummySeat, int ownCards[], int dumm
             int solutions = 2;      //Return all optimum cards and scores.
             int mode = 0;           //Do not search to find score if only one card can be played.
             int threadIndex = 0;    //For parallel execution (not here).
-            int res;
 
             //Get trump suit for the hand.
             Suit suit = BID_SUIT(playHistory.getContract());
@@ -227,7 +226,7 @@ int CPlayEngine::getNextPlay(Seat seat, Seat dummySeat, int ownCards[], int dumm
                     }
 
             //Double dummy solver.
-            res = SolveBoard(dl, target, solutions, mode, &fut[handNo], threadIndex);
+            int res = SolveBoard(dl, target, solutions, mode, &fut[handNo], threadIndex);
 
             //Calculate weight.
             weight[handNo] = calcWeight(hands[handNo], seat, dummySeat, bidHistory, playHistory, nsBidOptions, ewBidOptions);
@@ -289,7 +288,7 @@ int CPlayEngine::calcWeight(int hands[4][13], Seat seat, Seat dummySeat, CBidHis
 
     //Only calculate for opponent and not known hands.
     for (int i = 0; i < 4; i++)
-    if ((i != dummySeat) && (i != ((dummySeat + 2 & 3))) && (i != seat))
+    if ((i != dummySeat) && (i != ((dummySeat + 2) & 3)) && (i != seat))
     {
         int newNo;
         for (newNo = 0; (newNo < 13) && (hands[i][newNo] != -1); newNo++)
@@ -320,7 +319,7 @@ int CPlayEngine::calcWeight(int hands[4][13], Seat seat, Seat dummySeat, CBidHis
         for (int j = 0; j < 4; j++)
         {
             Seat seatIterator = (Seat)((j + nextLeader) & 3);
-            if ((seatIterator != dummySeat) && (seatIterator != ((dummySeat + 2 & 3))) && (seatIterator != seat))
+            if ((seatIterator != dummySeat) && (seatIterator != ((dummySeat + 2) & 3)) && (seatIterator != seat))
             {
                 int card = playHistory.getCard(seatIterator, i);
                 if (card == -1)
@@ -377,8 +376,8 @@ int CPlayEngine::getBestCard(int cards[], int ownCards[], int dummyCards[], Seat
     if (cards[i] > max)
         max = cards[i];
 
-    int cardL;
-    int cardH;
+    int cardL = -1;
+    int cardH = -1;
     int cardsLH[13];
     for (int i = 0; i < 13; i++)
         cardsLH[i] = -1;
@@ -438,7 +437,7 @@ int CPlayEngine::getBestCard(int cards[], int ownCards[], int dummyCards[], Seat
                 //Should we play trump?
                 int no = ownFeatures.getSuitLen(contractSuit) + dummyFeatures.getSuitLen(contractSuit);
                 int cardLS = -1;
-                int cardHS;
+                int cardHS = -1;
                 if (no >= 7)
                 {
                     int noOwn, noOpp;
@@ -575,7 +574,7 @@ int CPlayEngine::getBestCard(int cards[], int ownCards[], int dummyCards[], Seat
         else
         {
             int *crds = (seat == dummySeat) ? dummyCards : ownCards;
-            int j;
+            int j = 0;
             int face = 15;
             for (int i = 0; i < 13; i++)
             {
@@ -717,7 +716,7 @@ int CPlayEngine::getOppLead(Seat seat, Suit contractSuit, int cardsLH[], int num
         //Fourth best, third/fifth best or low encouraging --------------------------------------------
         for (int i = 0; i < 4; i++)
         if (playHistory.isFirstTimeSuitPlayed((Suit)i) &&
-                ownCrds[i][ACE] || ownCrds[i][KING] || ownCrds[i][QUEEN] || ownCrds[i][JACK] &&
+                (ownCrds[i][ACE] || ownCrds[i][KING] || ownCrds[i][QUEEN] || ownCrds[i][JACK]) &&
                 (noOwnCrds[i] >= 4))
         {
             if (bidOptions.lengthLead == FOURTH_BEST)
@@ -765,7 +764,7 @@ int CPlayEngine::getOppLead(Seat seat, Suit contractSuit, int cardsLH[], int num
         //Tripleton with honour --------------------------------------------
         for (int i = 0; i < 4; i++)
         if (playHistory.isFirstTimeSuitPlayed((Suit)i) &&
-                ownCrds[i][ACE] || ownCrds[i][KING] || ownCrds[i][QUEEN] || ownCrds[i][JACK] &&
+                (ownCrds[i][ACE] || ownCrds[i][KING] || ownCrds[i][QUEEN] || ownCrds[i][JACK]) &&
                 (noOwnCrds[i] == 3))
         {
             for (int j = 0; j < 13; j++)
@@ -897,7 +896,7 @@ int CPlayEngine::getOppLead(Seat seat, Suit contractSuit, int cardsLH[], int num
         //Fourth best, third/fifth best or low encouraging --------------------------------------------
         for (int i = 0; i < 4; i++)
         if (playHistory.isFirstTimeSuitPlayed((Suit)i) &&
-                ownCrds[i][ACE] || ownCrds[i][KING] || ownCrds[i][QUEEN] || ownCrds[i][JACK] &&
+                (ownCrds[i][ACE] || ownCrds[i][KING] || ownCrds[i][QUEEN] || ownCrds[i][JACK]) &&
                 (noOwnCrds[i] >= 4))
         {
             if (bidOptions.lengthLead == FOURTH_BEST)
@@ -945,7 +944,7 @@ int CPlayEngine::getOppLead(Seat seat, Suit contractSuit, int cardsLH[], int num
         //Tripleton with honour --------------------------------------------
         for (int i = 0; i < 4; i++)
         if (playHistory.isFirstTimeSuitPlayed((Suit)i) &&
-                ownCrds[i][ACE] || ownCrds[i][KING] || ownCrds[i][QUEEN] || ownCrds[i][JACK] &&
+                (ownCrds[i][ACE] || ownCrds[i][KING] || ownCrds[i][QUEEN] || ownCrds[i][JACK]) &&
                 (noOwnCrds[i] == 3))
         {
             for (int j = 0; j < 13; j++)
@@ -1222,7 +1221,7 @@ float CPlayEngine::oppIsOpener(int card, Bids contract, int cards[],
 
         //Doubleton.
         if (features.getSuitLen(suit) == 2)
-            return (lowest != face) ? 1.0 : 0,5;
+            return (lowest != face) ? 1.0 : 0.5;
 
         if (ace || king || queen || jack)
         {
@@ -1277,10 +1276,10 @@ float CPlayEngine::oppIsOpenersPartner(int card, int openCard, Bids contract, in
     {
         int signalDiscard = (contractSuit != NOTRUMP) ? bidOptions.discardingSuit : bidOptions.discardingNT;
         if ((signalDiscard == SIGNAL_COUNT_HIGH) &&
-                (((features.getSuitLen(suit) & 1) == 0) && (face > 3)) || (((features.getSuitLen(suit) & 1) != 0) && (face <= 3)))
+                ((((features.getSuitLen(suit) & 1) == 0) && (face > 3)) || (((features.getSuitLen(suit) & 1) != 0) && (face <= 3))))
             return 1.0;
         if ((signalDiscard == SIGNAL_COUNT_LOW) &&
-                (((features.getSuitLen(suit) & 1) == 0) && (face <= 3)) || (((features.getSuitLen(suit) & 1) != 0) && (face > 3)))
+                ((((features.getSuitLen(suit) & 1) == 0) && (face <= 3)) || (((features.getSuitLen(suit) & 1) != 0) && (face > 3))))
             return 1.0;
     }
 
@@ -1293,16 +1292,16 @@ float CPlayEngine::oppIsOpenersPartner(int card, int openCard, Bids contract, in
     {
         int signalLead = (contractSuit != NOTRUMP) ? bidOptions.partnerLeadSuit : bidOptions.partnerLeadNT;
         if ((signalLead == SIGNAL_ATTITUDE_HIGH) &&
-                ((features.getHcp(suit) >= 1) && (face > 3)) || ((features.getHcp(suit) == 0) && (face <= 3)))
+                (((features.getHcp(suit) >= 1) && (face > 3)) || ((features.getHcp(suit) == 0) && (face <= 3))))
             return 1.0;
         if ((signalLead == SIGNAL_ATTITUDE_LOW) &&
-                ((features.getHcp(suit) >= 1) && (face <= 3)) || (((features.getHcp(suit) == 0) && (face > 3))))
+                (((features.getHcp(suit) >= 1) && (face <= 3)) || (((features.getHcp(suit) == 0) && (face > 3)))))
             return 1.0;
         if ((signalLead == SIGNAL_COUNT_HIGH) &&
-                (((features.getSuitLen(suit) & 1) == 0) && (face > 3)) || (((features.getSuitLen(suit) & 1) != 0) && (face <= 3)))
+                ((((features.getSuitLen(suit) & 1) == 0) && (face > 3)) || (((features.getSuitLen(suit) & 1) != 0) && (face <= 3))))
             return 1.0;
         if ((signalLead == SIGNAL_COUNT_LOW) &&
-                (((features.getSuitLen(suit) & 1) == 0) && (face <= 3)) || (((features.getSuitLen(suit) & 1) != 0) && (face > 3)))
+                ((((features.getSuitLen(suit) & 1) == 0) && (face <= 3)) || (((features.getSuitLen(suit) & 1) != 0) && (face > 3))))
             return 1.0;
     }
     else
@@ -1325,10 +1324,10 @@ float CPlayEngine::declarerOrDummyIsOpener(int card, int openCard, Bids contract
     {
         int signalDiscard = (contractSuit != NOTRUMP) ? bidOptions.discardingSuit : bidOptions.discardingNT;
         if ((signalDiscard == SIGNAL_COUNT_HIGH) &&
-                (((features.getSuitLen(suit) & 1) == 0) && (face > 3)) || (((features.getSuitLen(suit) & 1) != 0) && (face <= 3)))
+                ((((features.getSuitLen(suit) & 1) == 0) && (face > 3)) || (((features.getSuitLen(suit) & 1) != 0) && (face <= 3))))
             return 1.0;
         if ((signalDiscard == SIGNAL_COUNT_LOW) &&
-                (((features.getSuitLen(suit) & 1) == 0) && (face <= 3)) || (((features.getSuitLen(suit) & 1) != 0) && (face > 3)))
+                ((((features.getSuitLen(suit) & 1) == 0) && (face <= 3)) || (((features.getSuitLen(suit) & 1) != 0) && (face > 3))))
             return 1.0;
     }
 
@@ -1341,16 +1340,16 @@ float CPlayEngine::declarerOrDummyIsOpener(int card, int openCard, Bids contract
     {
         int signalLead = (contractSuit != NOTRUMP) ? bidOptions.declarerLeadSuit : bidOptions.declarerLeadNT;
         if ((signalLead == SIGNAL_ATTITUDE_HIGH) &&
-                ((features.getHcp(suit) >= 1) && (face > 3)) || ((features.getHcp(suit) == 0) && (face <= 3)))
+                (((features.getHcp(suit) >= 1) && (face > 3)) || ((features.getHcp(suit) == 0) && (face <= 3))))
             return 1.0;
         if ((signalLead == SIGNAL_ATTITUDE_LOW) &&
-                ((features.getHcp(suit) >= 1) && (face <= 3)) || (((features.getHcp(suit) == 0) && (face > 3))))
+                (((features.getHcp(suit) >= 1) && (face <= 3)) || (((features.getHcp(suit) == 0) && (face > 3)))))
             return 1.0;
         if ((signalLead == SIGNAL_COUNT_HIGH) &&
-                (((features.getSuitLen(suit) & 1) == 0) && (face > 3)) || (((features.getSuitLen(suit) & 1) != 0) && (face <= 3)))
+                ((((features.getSuitLen(suit) & 1) == 0) && (face > 3)) || (((features.getSuitLen(suit) & 1) != 0) && (face <= 3))))
             return 1.0;
         if ((signalLead == SIGNAL_COUNT_LOW) &&
-                (((features.getSuitLen(suit) & 1) == 0) && (face <= 3)) || (((features.getSuitLen(suit) & 1) != 0) && (face > 3)))
+                ((((features.getSuitLen(suit) & 1) == 0) && (face <= 3)) || (((features.getSuitLen(suit) & 1) != 0) && (face > 3))))
             return 1.0;
     }
     else

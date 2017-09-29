@@ -1239,11 +1239,11 @@ int CGamesDoc::getHonorBonus(int gameIndex)
 
     if (suit != NOTRUMP)
     {
-        int ace = SUIT_INTERVAL[suit][2];
-        int king = SUIT_INTERVAL[suit][2] - 1;
-        int queen = SUIT_INTERVAL[suit][2] - 2;
-        int jack = SUIT_INTERVAL[suit][2] - 3;
-        int ten = SUIT_INTERVAL[suit][2] - 4;
+        int ace = SUIT_INTERVAL[suit][1];
+        int king = SUIT_INTERVAL[suit][1] - 1;
+        int queen = SUIT_INTERVAL[suit][1] - 2;
+        int jack = SUIT_INTERVAL[suit][1] - 3;
+        int ten = SUIT_INTERVAL[suit][1] - 4;
 
         int west, north, east, south;
         west = north = east = south = 0;
@@ -1278,10 +1278,10 @@ int CGamesDoc::getHonorBonus(int gameIndex)
     }
     else
     {
-        int aceS = SUIT_INTERVAL[SPADES][2];
-        int aceH = SUIT_INTERVAL[HEARTS][2];
-        int aceD = SUIT_INTERVAL[DIAMONDS][2];
-        int aceC = SUIT_INTERVAL[CLUBS][2];
+        int aceS = SUIT_INTERVAL[SPADES][1];
+        int aceH = SUIT_INTERVAL[HEARTS][1];
+        int aceD = SUIT_INTERVAL[DIAMONDS][1];
+        int aceC = SUIT_INTERVAL[CLUBS][1];
 
         int west, north, east, south;
         west = north = east = south = 0;
@@ -1338,7 +1338,7 @@ bool CGamesDoc::getRubberPoints(int gameIndex, bool *gameDone,
 {
     assert(gameIndex < games.size());
 
-    int belowTheLineNSPoint, belowTheLineEWPoint, aboveTheLineNSPoint, aboveTheLineEWPoint;
+    int belowTheLineNSPoint = 0, belowTheLineEWPoint = 0, aboveTheLineNSPoint = 0, aboveTheLineEWPoint = 0;
 
     int belowTheLineNSTotal = 0, belowTheLineEWTotal = 0;
     int aboveTheLineNSTotal = 0, aboveTheLineEWTotal = 0;

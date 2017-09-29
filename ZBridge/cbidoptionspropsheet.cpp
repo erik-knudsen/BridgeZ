@@ -347,7 +347,7 @@ void CBidOptionsPropSheet::on_limitRaises_clicked(bool checked)
 
 void CBidOptionsPropSheet::on_jacoby2NT_clicked(bool checked)
 {
-    if ((bidOptionDoc.bidStyle == AMERICAN_STYLE) && (bidOptionDoc.majorsMode == MAJOR_FIVE) ||
+    if (((bidOptionDoc.bidStyle == AMERICAN_STYLE) && (bidOptionDoc.majorsMode == MAJOR_FIVE)) ||
             (bidOptionDoc.bidStyle == EUROPEAN_STYLE))
         bidOptionDoc.jacoby2NT = checked;
     setDependencies();

@@ -671,7 +671,7 @@ void CActorLocal::undoBid(bool reBid)
  */
 void CActorLocal::undoTrick(bool rePlay)
 {
-    int leader;
+    int leader = NO_SEAT;
 
     if (rePlay)
     {
