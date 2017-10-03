@@ -120,7 +120,7 @@ CBid CBidEngine::getNextBid(Seat seat, CFeatures &ownFeatures, CBidHistory &bidH
 {
     assert ((bidHistory.bidList.size() == 0) ? true : (((bidHistory.bidList.last().bidder + 1) % 4) == seat));
 
-    CBid bid;
+    CBid bid(seat, BID_PASS, "");
     bid.bidder = seat;
 
     CAuction auction;
@@ -135,8 +135,28 @@ CBid CBidEngine::getNextBid(Seat seat, CFeatures &ownFeatures, CBidHistory &bidH
     //Get auction till now.
     for (int i = 0; i < bidHistory.bidList.size(); i++)
     {
+        //Is it a substitute auction?
         if (bidHistory.bidList[i].substitute)
-            auction = findSubstituteAuction(auction, pages);
+        {
+            CAuction oldAuction = auction;
+            auction = findSubstituteAuction(oldAuction, pages);
+
+            //Did we find the substitute auction?
+            if (auction.auction.size() == 0)
+            {
+                //No it was not there. Try removing initial passes.
+                int first;
+                for (first = 0; first < oldAuction.auction.size(); first++)
+                    if (oldAuction.auction[first] != BID_PASS)
+                        break;
+                for (int i = first; i < oldAuction.auction.size(); i++)
+                    auction.auction.append(oldAuction.auction[i]);
+                auction = findSubstituteAuction(auction, pages);
+
+                //It must be there.
+                assert(auction.auction.size() > 0);
+            }
+        }
         auction.auction.append(bidHistory.bidList[i].bid);
     }
 
@@ -280,8 +300,28 @@ QList<CRule *> CBidEngine::getpRules(Seat seat, CBidHistory &bidHistory, Bids bi
     //Get auction till now.
     for (int i = 0; i < bidHistory.bidList.size(); i++)
     {
+        //Maybe a substitute auction?
         if (bidHistory.bidList[i].substitute)
-            auction = findSubstituteAuction(auction, pages);
+        {
+            CAuction oldAuction = auction;
+            auction = findSubstituteAuction(oldAuction, pages);
+
+            //Did we find it?
+            if (auction.auction.size() == 0)
+            {
+                //No it was not there. Try removing initial passes.
+                int first;
+                for (first = 0; first < oldAuction.auction.size(); first++)
+                    if (oldAuction.auction[first] != BID_PASS)
+                        break;
+                for (int i = first; i < oldAuction.auction.size(); i++)
+                    auction.auction.append(oldAuction.auction[i]);
+                auction = findSubstituteAuction(auction, pages);
+
+                //It must be there.
+                assert(auction.auction.size() > 0);
+            }
+        }
         auction.auction.append(bidHistory.bidList[i].bid);
     }
 
