@@ -84,6 +84,7 @@ private:
     bool isNextBidOverCall(CBidHistory bidHistory);
     int nextBidder(CBidHistory &bidHistory);
     bool isNTBidded(CBidHistory &bidHistory);
+    Bids getLastNotAlertedBid(CBidHistory bidHistory);
 
     bool isMin(int lowValue, int highValue, int value);
     bool isMax(int lowValue, int highValue, int value);
