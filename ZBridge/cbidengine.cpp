@@ -33,7 +33,7 @@
 //Bid limit levels.
 const int BID_POINT_SIZE = 8;
 const int BID_SUIT_POINT[BID_POINT_SIZE] = {17, 20, 22, 25, 28, 33, 37, 40};
-const int BID_NT_POINT[BID_POINT_SIZE] = {17, 23, 26, 28, 29, 33, 37, 40};
+const int BID_NT_POINT[BID_POINT_SIZE] = {17, 22, 26, 28, 29, 33, 37, 40};
 const int BID_SUIT_MAJOR_GAME_INX = 3;
 const int BID_SUIT_MINOR_GAME_INX = 4;
 const int BID_NT_GAME_INX = 2;
@@ -212,7 +212,7 @@ CBid CBidEngine::getNextBid(Seat seat, CFeatures &ownFeatures, CBidHistory &bidH
         if (pDefRules.size() == 0)
         {
             //We did not find anything. Should we try a substitute auction?
-            if (subAuction.size() != 0)
+            if ((subAuction.size() != 0) && !(auction.auction == subAuction[0].auction))
             {
                 auction = subAuction[0];
                 cont = true;
@@ -374,7 +374,7 @@ QList<CRule *> CBidEngine::getpRules(Seat seat, CBidHistory &bidHistory, Bids bi
         if (pDefRules.size() == 0)
         {
             //We did not find anything. Should we try a substitute auction?
-            if (subAuction.size() != 0)
+            if ((subAuction.size() != 0) && !(auction.auction == subAuction[0].auction))
             {
                 auction = subAuction[0];
                 *substitute = true;
@@ -1128,9 +1128,10 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
                     findLevel((Suit)suit, lowP, level, &low, &high);
                 }
 
-                //Check for forcing.
+                //Check for forcing or game forcing.
                 if ((((nextBid < highPartnerBid) || (nextBid) < highOwnBid)) &&
                         ((bidHistory.bidList.size() >= 2) && ((bidHistory.bidList[size - 2].rules[0]->getStatus() == FORCING) ||
+                                                              (bidHistory.bidList[size - 2].rules[0]->getStatus() == GAME_FORCING) ||
                                                               (bidHistory.bidList[size - 2].rules[0]->getAlertId() > 0))))
                 {
                     int level = (suit > BID_SUIT(highOPBid)) ? (BID_LEVEL(highOPBid)) : (BID_LEVEL(highOPBid) + 1);
@@ -1318,9 +1319,10 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
                     newBid = MAKE_BID(newSuit, level);
                 }
 
-                //Check for forcing.
+                //Check for forcing or game forcing.
                 if (((newBid == BID_NONE) || (newBid == BID_PASS)) && (bidHistory.bidList.size() >= 2) &&
-                        (bidHistory.bidList[size - 2].rules[0]->getStatus() == FORCING))
+                        ((bidHistory.bidList[size - 2].rules[0]->getStatus() == FORCING) ||
+                         (bidHistory.bidList[size - 2].rules[0]->getStatus() == GAME_FORCING)))
                 {
                     int level = (newSuit > BID_SUIT(highOPBid)) ? (BID_LEVEL(highOPBid)) : (BID_LEVEL(highOPBid) + 1);
                     Bids newBid = MAKE_BID(newSuit, level);

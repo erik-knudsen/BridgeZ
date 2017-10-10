@@ -63,3 +63,22 @@ bool operator<(const CAuction &auction_1, const CAuction &auction_2)
     return (s1 < s2);
 }
 
+/**
+ * @brief operator == Equal operator for auctions.
+ */
+bool operator==(const CAuction &auction_1, const CAuction &auction_2)
+{
+    int s1 = auction_1.auction.size();
+    int s2 = auction_2.auction.size();
+
+    if (s1 != s2)
+        return false;
+
+    for (int i = 0; i < s1; i++)
+    {
+        if (auction_1.auction[i] != auction_2.auction[i])
+            return false;
+    }
+    return (true);
+}
+

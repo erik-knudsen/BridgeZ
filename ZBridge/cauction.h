@@ -38,8 +38,9 @@ public:
     friend QDataStream &operator<<(QDataStream &out, const CAuction &auction);
     friend QDataStream &operator>>(QDataStream &in, CAuction &auction);
 
-    //Sorting operator.
+    //Sorting and equal operators.
     friend bool operator<(const CAuction &auction_1, const CAuction &auction_2);
+    friend bool operator==(const CAuction &auction_1, const CAuction &auction_2);
 
     QList<qint8> auction;
 };
