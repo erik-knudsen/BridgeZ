@@ -38,7 +38,7 @@ CBid::CBid(Seat bidder, Bids bid, QString alert, QList<CRule *> &rules, bool sub
     this->alert = alert;
     this->rules = rules;
     this->substitute = substitute;
-    delRules = false;
+//    delRules = false;
 }
 
 CBid::CBid(Seat bidder, Bids bid, QString alert)
@@ -47,7 +47,7 @@ CBid::CBid(Seat bidder, Bids bid, QString alert)
     this->bid = bid;
     this->alert = alert;
     substitute = false;
-    delRules = false;
+//    delRules = false;
 }
 
 /**
@@ -60,7 +60,16 @@ CBid::CBid(Seat bidder, Bids bid, QString alert)
  */
 CBid::~CBid()
 {
-    if (delRules)
+    //Below does not work on all implementations (when in a list it seems there
+    //are internal copying of elements, so it is not sufficient to clear the list).
+/*    if (delRules)
+    for (int i = 0; i < rules.size(); i++)
+        if (!rules[i]->isdBRule())
+            delete rules[i];
+*/}
+
+void CBid::deleteRules()
+{
     for (int i = 0; i < rules.size(); i++)
         if (!rules[i]->isdBRule())
             delete rules[i];

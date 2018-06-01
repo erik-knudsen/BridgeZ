@@ -695,7 +695,7 @@ void CMainFrame::open(QString &originalFileName)
     fileName = originalFileName;
 
     //Initialize bid and play engines.
-    bidAndPlayEngines->initialize(doc->getBidDB(), doc->getBidDesc(),
+    bidAndPlayEngines->initialize(doc->getGameOptions().computerLevel, doc->getBidDB(), doc->getBidDesc(),
                                   doc->getNSBidOptions(), doc->getEWBidOptions(),
                                   games->getScoringMethod());
 
@@ -1024,7 +1024,7 @@ void CMainFrame::on_actionNew_Session_triggered()
     setWindowTitle("");
 
     //Initialize bid and play engines.
-    bidAndPlayEngines->initialize(doc->getBidDB(), doc->getBidDesc(),
+    bidAndPlayEngines->initialize(doc->getGameOptions().computerLevel, doc->getBidDB(), doc->getBidDesc(),
                                   doc->getNSBidOptions(), doc->getEWBidOptions(),
                                   doc->getGameOptions().scoringMethod);
 

@@ -59,6 +59,16 @@ CGameOptionsPropSheet::CGameOptionsPropSheet(CZBridgeApp *app, CZBridgeDoc *doc,
         ui->RubberBridge->setChecked(true);
     else
         ui->practice->setChecked(true);
+
+    //Computer level.
+    if (gameOptionDoc.computerLevel == 0)
+        ui->level0->setChecked(true);
+    else if (gameOptionDoc.computerLevel == 1)
+        ui->level1->setChecked(true);
+    else if (gameOptionDoc.computerLevel == 2)
+        ui->level2->setChecked(true);
+    else
+        ui->level3->setChecked(true);
 }
 
 CGameOptionsPropSheet::~CGameOptionsPropSheet()
@@ -115,4 +125,24 @@ void CGameOptionsPropSheet::on_RubberBridge_clicked()
 void CGameOptionsPropSheet::on_practice_clicked()
 {
     gameOptionDoc.scoringMethod = PRACTICE;
+}
+
+void CGameOptionsPropSheet::on_level0_clicked()
+{
+    gameOptionDoc.computerLevel = 0;
+}
+
+void CGameOptionsPropSheet::on_level1_clicked()
+{
+    gameOptionDoc.computerLevel = 1;
+}
+
+void CGameOptionsPropSheet::on_level2_clicked()
+{
+    gameOptionDoc.computerLevel = 2;
+}
+
+void CGameOptionsPropSheet::on_level3_clicked()
+{
+    gameOptionDoc.computerLevel = 3;
 }

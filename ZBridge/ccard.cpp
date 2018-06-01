@@ -63,7 +63,14 @@ void CCard::setHint(bool set)
 
 void CCard::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    QGraphicsItem::mousePressEvent(event);
+    if (boundingRect().contains(event->pos()))
+    {
+        QGraphicsColorizeEffect *effect = new QGraphicsColorizeEffect();
+        effect->setColor(QColor(0, 255, 0));
+        setGraphicsEffect(effect);
+    }
+
+//    QGraphicsItem::mousePressEvent(event);
 }
 
 
@@ -77,16 +84,32 @@ void CCard::mousePressEvent(QGraphicsSceneMouseEvent *event)
  */
 void CCard::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
-    if (event->button() == Qt::LeftButton)
+    setGraphicsEffect(0);
+
+    if (boundingRect().contains(event->pos()))
     {
-        CARD_CLICKED_Event *cardClickedEvent = new CARD_CLICKED_Event(cardPosition, value);
-        QApplication::postEvent(cardSignal, cardClickedEvent);
+        if (event->button() == Qt::LeftButton)
+        {
+            CARD_CLICKED_Event *cardClickedEvent = new CARD_CLICKED_Event(cardPosition, value);
+            QApplication::postEvent(cardSignal, cardClickedEvent);
+        }
+        else if (event->button() == Qt::RightButton)
+        {
+            HAND_CLICKED_Event *handClickedEvent = new HAND_CLICKED_Event(cardPosition);
+            QApplication::postEvent(cardSignal, handClickedEvent);
+        }
     }
-    else if (event->button() == Qt::RightButton)
+//        QGraphicsItem::mouseReleaseEvent(event);
+}
+
+void CCard::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
+{
+    if (boundingRect().contains(event->pos()))
     {
-        HAND_CLICKED_Event *handClickedEvent = new HAND_CLICKED_Event(cardPosition);
-        QApplication::postEvent(cardSignal, handClickedEvent);
+        QGraphicsColorizeEffect *effect = new QGraphicsColorizeEffect();
+        effect->setColor(QColor(0, 255, 0));
+        setGraphicsEffect(effect);
     }
     else
-      QGraphicsItem::mouseReleaseEvent(event);
+        setGraphicsEffect(0);
 }

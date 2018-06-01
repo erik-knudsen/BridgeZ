@@ -49,7 +49,7 @@ void CBidHistory::appendBid(CBid &bid)
 
     if (seat != NO_SEAT)
     {
-        bidList.last().delRules = true;     //Delete non db rules on destroy.
+//        bidList.last().delRules = true;     //Delete non db rules on destroy.
         CalculateBidRuleRange((bidList.size() - 1), lowFeatures[bid.bidder], highFeatures[bid.bidder]);
     }
 }

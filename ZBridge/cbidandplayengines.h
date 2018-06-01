@@ -42,7 +42,7 @@ public:
     CBidAndPlayEngines();
     virtual ~CBidAndPlayEngines();
 
-    void initialize(CBidDB *bidDB, CBidDesc *bidDesc,
+    void initialize(int computerLevel, CBidDB *bidDB, CBidDesc *bidDesc,
                     CBidOptionDoc &nsBidOptionDoc, CBidOptionDoc &ewBidOptionDoc,
                     ScoringMethod scoringMethod);
     void setScoringMethod(ScoringMethod scoringMethod) { this->scoringMethod = scoringMethod; }

@@ -41,13 +41,14 @@ CBidAndPlayEngines::~CBidAndPlayEngines()
 /**
  * @brief Allocate bid and play engines.
  *
+ * @param computerLevel Computing level for the double dummy solver.
  * @param bidDB The bid database.
  * @param bidDesc Textual descriptions related to the bid database.
  * @param nsBidOptionDoc Options for the north/south pair.
  * @param ewBidOptionDoc Options for the east/west pair.
  * @param scoringMethod The scoringmethod.
  */
-void CBidAndPlayEngines::initialize(CBidDB *bidDB, CBidDesc *bidDesc, CBidOptionDoc &nsBidOptionDoc,
+void CBidAndPlayEngines::initialize(int computerLevel, CBidDB *bidDB, CBidDesc *bidDesc, CBidOptionDoc &nsBidOptionDoc,
                                     CBidOptionDoc &ewBidOptionDoc, ScoringMethod scoringMethod)
 {
     if (bidEngine != 0)
@@ -57,7 +58,7 @@ void CBidAndPlayEngines::initialize(CBidDB *bidDB, CBidDesc *bidDesc, CBidOption
 
     //Allocate bid and play engines.
     bidEngine = new CBidEngine(bidDB, bidDesc, nsBidOptionDoc, ewBidOptionDoc);
-    playEngine = new CPlayEngine(nsBidOptionDoc, ewBidOptionDoc);
+    playEngine = new CPlayEngine(computerLevel, nsBidOptionDoc, ewBidOptionDoc);
 
     //params.
     this->scoringMethod = scoringMethod;

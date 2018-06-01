@@ -23,6 +23,7 @@
 #include <QString>
 
 #include "dll.h"
+#include "cddslock.h"
 #include "cddtable.h"
 #include "ui_cddtable.h"
 
@@ -51,6 +52,8 @@ CDDTable::CDDTable(int cards[][13], Seat dealer, Team vulnerable, QWidget *paren
             tableDeal.cards[hand][3 - suit] |= (1 << (face + 2));
         }
 
+    CddsLock::mutex.lock();     //Static lock to protect dds static data.
+
     int res = CalcDDtable(tableDeal, &table);
     if (res != RETURN_NO_FAULT)
     {
@@ -65,6 +68,8 @@ CDDTable::CDDTable(int cards[][13], Seat dealer, Team vulnerable, QWidget *paren
     int deal = (dealer == WEST_SEAT) ? (3) : (dealer == NORTH_SEAT) ? (0) :
                (dealer == EAST_SEAT) ? (1) : (2);
     res = DealerPar(&table, &pRes, deal, vul);
+
+    CddsLock::mutex.unlock();
 
     QString txt;
 

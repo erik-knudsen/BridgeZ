@@ -40,6 +40,7 @@ public:
     int biddingPause;
     bool insertPlayPause;
     int playPause;
+    int computerLevel;
 
     //Scoring.
     ScoringMethod scoringMethod;

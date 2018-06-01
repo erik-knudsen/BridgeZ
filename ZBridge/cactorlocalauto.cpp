@@ -262,7 +262,9 @@ void CActorLocalAuto::bidValue()
 {
     CBid nextBid = bidAndPlay.getNextBid((Seat)zBridgeClientIface_get_bidder(&handle),
                                          (Team)zBridgeClientIface_get_vulnerability(&handle));
-    nextBid.delRules = true;            //Delete non db rules on destroy.
+//    nextBid.delRules = true;            //Delete non db rules on destroy.
+    nextBid.deleteRules();
+
     bidValue(nextBid.bid);
 }
 

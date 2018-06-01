@@ -25,13 +25,18 @@
 #include "mt19937ar.h"
 #include "cbidhistory.h"
 #include "cplayhistory.h"
+#include "cddslock.h"
 #include "cplayengine.h"
 
-const int NO_HANDS_DD = 25;
-const int MAX_ITER = 1000;
+const int BATCH_SIZE = 5;       //Batch size for double dummy solver.
+const int MAX_NO_HANDS = 50;    //MSVC does not support dynamic arrays (newer versions of gcc does).
+const int MAX_ITER = 1000;      //Maximum number of iterations for finding a hand.
 
-CPlayEngine::CPlayEngine(CBidOptionDoc &nsBidOptionDoc, CBidOptionDoc &ewBidOptionDoc)
+CPlayEngine::CPlayEngine(int computerLevel, CBidOptionDoc &nsBidOptionDoc, CBidOptionDoc &ewBidOptionDoc)
 {
+    noHandsDD = (computerLevel == 0) ? (5) : (computerLevel == 1) ? (10) : (computerLevel == 2) ? (25) : (50);
+    assert(noHandsDD <= MAX_NO_HANDS);
+
     nsBidOptions = nsBidOptionDoc;
     ewBidOptions = ewBidOptionDoc;
 }
@@ -66,13 +71,16 @@ int CPlayEngine::getNextPlay(Seat seat, Seat dummySeat, int ownCards[], int dumm
     }
 
     //Calculate a number of possible hands and double dummy solutions to these hands.
-    futureTricks fut[NO_HANDS_DD];
-    int weight[NO_HANDS_DD];
-    int hands[NO_HANDS_DD][4][13];
+    futureTricks fut[MAX_NO_HANDS];
+    boards batchBoards;
+    solvedBoards batchSolvedBoards;
+    int weight[MAX_NO_HANDS];
+    int hands[MAX_NO_HANDS][4][13];
     int handNo = 0;
     int iter = 0;
     int maxFailures = 0;
-    while (handNo < NO_HANDS_DD)
+    int curBoard = 0;
+    while (handNo < noHandsDD)
     {
         //Initialize cards.
         int cardValues[52];
@@ -187,7 +195,6 @@ int CPlayEngine::getNextPlay(Seat seat, Seat dummySeat, int ownCards[], int dumm
             int target = -1;        //Find the maximum number of tricks.
             int solutions = 2;      //Return all optimum cards and scores.
             int mode = 0;           //Do not search to find score if only one card can be played.
-            int threadIndex = 0;    //For parallel execution (not here).
 
             //Get trump suit for the hand.
             Suit suit = BID_SUIT(playHistory.getContract());
@@ -225,14 +232,30 @@ int CPlayEngine::getNextPlay(Seat seat, Seat dummySeat, int ownCards[], int dumm
                         dl.remainCards[hand][3 - suit] |= (1 << (face + 2));            //Double dummy solver format.
                     }
 
-            //Double dummy solver.
-            int res = SolveBoard(dl, target, solutions, mode, &fut[handNo], threadIndex);
-
             //Calculate weight.
             weight[handNo] = calcWeight(hands[handNo], seat, dummySeat, bidHistory, playHistory, nsBidOptions, ewBidOptions);
 
+            //Double dummy solver batch parameters.
+            batchBoards.deals[curBoard] = dl;
+            batchBoards.target[curBoard] = target;
+            batchBoards.solutions[curBoard] = solutions;
+            batchBoards.mode[curBoard] = mode;
+
             //Next hand.
             handNo++; iter = 0; maxFailures = 0;
+            curBoard++;
+
+            //Solve with double dummy solver?
+            if ((curBoard == BATCH_SIZE) || (handNo == noHandsDD))
+            {
+                batchBoards.noOfBoards = curBoard;
+                CddsLock::mutex.lock();         //Static lock to protect dds static data.
+                int res = SolveAllChunksBin(&batchBoards, &batchSolvedBoards, 2);
+                CddsLock::mutex.unlock();
+                for (int i = 1; i <= curBoard; i++)
+                    fut[handNo - i] = batchSolvedBoards.solvedBoard[curBoard - i];
+                curBoard = 0;
+            }
         }
     }
 
@@ -241,7 +264,7 @@ int CPlayEngine::getNextPlay(Seat seat, Seat dummySeat, int ownCards[], int dumm
     for (int i = 0; i < 52; i++)
         cards[i] = 0;
 
-    for (int i = 0; i < NO_HANDS_DD; i++)
+    for (int i = 0; i < noHandsDD; i++)
     for (int j = 0; j < fut[i].cards; j++)
     {
         //Highest ranking card.
@@ -382,24 +405,25 @@ int CPlayEngine::getBestCard(int cards[], int ownCards[], int dummyCards[], Seat
     for (int i = 0; i < 13; i++)
         cardsLH[i] = -1;
     int numBest = 0;
-    for (int i = 0; i < 52; i++)
-        if (cards[i] == max)
-            cardsLH[numBest++] = i;
-    if (numBest > 0)
-    {
-        cardL = cardsLH[0];
-        cardH = cardsLH[numBest - 1];
-    }
 
     //DD found preferences?
     if (max > 0)
     {
+        for (int i = 0; i < 52; i++)
+            if (cards[i] == max)
+                cardsLH[numBest++] = i;
+        if (numBest > 0)
+        {
+            cardL = cardsLH[0];
+            cardH = cardsLH[numBest - 1];
+        }
         QString txt = QString("%1 equals:").arg(SEAT_NAMES[seat]);
         for (int i = 0; i < 52;i++)
         if (cards[i] == max)
         {
             txt += QString("  %1%2").arg(SUIT_NAMES[CARD_SUIT(i)]).arg(FACE_NAMES[CARD_FACE(i)]);
         }
+
         qDebug() << txt;
 
         //Get contract suit for the hand.
@@ -1037,7 +1061,7 @@ int CPlayEngine::getFollow(Suit cardLeadSuit, int cardsLH[], int numBest, int si
             highCard = cardsLH[i];
         if (cardsLH[i] < lowCard)
             lowCard = cardsLH[i];
-    }    
+    }
     if (highCard == -1)
         return cardC;
 

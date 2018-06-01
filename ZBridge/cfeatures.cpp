@@ -401,7 +401,7 @@ void CFeatures::setCardFeatures(int cards[13])
                 hcpTricks += 5;
             else if ((ace && king) || (ace && queen && ten) || (ace && jack && ten) || (king && queen && jack))
                 hcpTricks += 4;
-            else if ((ace && queen) || (king && queen && ten) || (king && jack and ten))
+            else if ((ace && queen) || (king && queen && ten) || (king && jack && ten))
                 hcpTricks += 3;
             else if (ace || (king && queen) || (king && jack && (count[suit] > 2)) || (queen && jack && ten))
                 hcpTricks += 2;

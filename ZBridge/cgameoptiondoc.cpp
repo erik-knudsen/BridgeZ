@@ -33,6 +33,9 @@ CGameOptionDoc::CGameOptionDoc()
 
    //Scoring.
    scoringMethod = MP;
+
+   //Computer level for DD play.
+   computerLevel = 3;
 }
 
 void CGameOptionDoc::WriteSettings()
@@ -45,6 +48,8 @@ void CGameOptionDoc::WriteSettings()
     settings.setValue("playPause", playPause);
 
     settings.setValue("scoringMethod", scoringMethod);
+
+    settings.setValue("computerLevel", computerLevel);
 }
 
 void CGameOptionDoc::ReadSettings()
@@ -58,4 +63,6 @@ void CGameOptionDoc::ReadSettings()
 
     int tmp = settings.value("scoringMethod", MP).toInt();
     scoringMethod = ((tmp >= IMP) && (tmp <= PRACTICE)) ? (ScoringMethod)tmp : MP;
+
+    computerLevel = settings.value("computerLevel", 1).toInt();
 }

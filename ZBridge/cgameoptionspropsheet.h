@@ -56,6 +56,10 @@ private slots:
     void on_duplicateMP_clicked();
     void on_RubberBridge_clicked();
     void on_practice_clicked();
+    void on_level0_clicked();
+    void on_level1_clicked();
+    void on_level2_clicked();
+    void on_level3_clicked();
 
 private:
     Ui::CGameOptionsPropSheet *ui;

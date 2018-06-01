@@ -28,6 +28,7 @@
 #include "czbridgedoc.h"
 #include "cgamesdoc.h"
 #include "Defines.h"
+#include "dll.h"
 
 Q_DECLARE_METATYPE(Seat)
 
@@ -39,6 +40,8 @@ Q_DECLARE_METATYPE(Seat)
  */
 int main(int argc, char *argv[])
 {
+    SetMaxThreads(0);
+
     CZBridgeApp app(argc, argv);
 
     qRegisterMetaType<QAbstractSocket::SocketError>();

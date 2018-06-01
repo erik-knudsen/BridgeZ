@@ -40,7 +40,7 @@ class CPlayHistory;
 class CPlayEngine
 {
 public:
-    CPlayEngine(CBidOptionDoc &nsBidOptionDoc, CBidOptionDoc &ewBidOptionDoc);
+    CPlayEngine(int computerLevel, CBidOptionDoc &nsBidOptionDoc, CBidOptionDoc &ewBidOptionDoc);
 
     int getNextPlay(Seat seat, Seat dummySeat, int ownCards[], int dummyCards[], CBidHistory &bidHistory,
                     CPlayHistory &playHistory);
@@ -67,6 +67,7 @@ private:
 
     CBidOptionDoc nsBidOptions;
     CBidOptionDoc ewBidOptions;
+    int noHandsDD;
 };
 
 #endif // CPLAYENGINE_H

@@ -99,7 +99,8 @@ SOURCES +=\
     cbidandplayengines.cpp \
     cpopup.cpp \
     chelpbrowser.cpp \
-    cassistant.cpp
+    cassistant.cpp \
+    cddslock.cpp
 
 HEADERS  += cmainframe.h \
     czbridgedoc.h \
@@ -190,7 +191,8 @@ HEADERS  += cmainframe.h \
     cbidandplayengines.h \
     cpopup.h \
     chelpbrowser.h \
-    cassistant.h
+    cassistant.h \
+    cddslock.h
 
 FORMS    += cmainframe.ui \
     caboutdlg.ui \
