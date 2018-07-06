@@ -145,11 +145,16 @@ void CZBridgeDoc::SaveBidOptions()
 {
     QFile file(BIDOPTIONFILENAME);
     file.open(QIODevice::WriteOnly);
-    QDataStream out(&file);
-    out << bidOptions;
-    if (out.status() != QDataStream::Ok)
-        QMessageBox::warning(0, tr("ZBridge"), tr("Bid options could not be saved."));
-    file.close();
+    if (bidOptions.size() == 0)
+        file.remove();
+    else
+    {
+        QDataStream out(&file);
+        out << bidOptions;
+        if (out.status() != QDataStream::Ok)
+            QMessageBox::warning(0, tr("ZBridge"), tr("Bid options could not be saved."));
+        file.close();
+    }
 }
 
 /**
@@ -157,7 +162,10 @@ void CZBridgeDoc::SaveBidOptions()
  */
 void CZBridgeDoc::LoadBidOptions()
 {
-    QFile file(BIDOPTIONFILENAME);
+    QFile file;
+    file.setFileName(BIDOPTIONFILENAME);
+    if (!file.exists())
+        file.setFileName(QString(":/") + BIDOPTIONFILENAME);
     file.open(QIODevice::ReadOnly);
     QDataStream in(&file);
     in >> bidOptions;

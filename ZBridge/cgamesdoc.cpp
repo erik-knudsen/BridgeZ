@@ -963,7 +963,7 @@ float CGamesDoc::getDuplicatePointBoard(int gameIndex, int auctionAndPlayIndex,
             point = -point;
 
         //Normalize.
-        point /= maxNumberAuctionAndPlay;
+        point /= (maxNumberAuctionAndPlay - 1);
     }
     delete []scores;
 

@@ -128,7 +128,8 @@ CPointScoreDialog::CPointScoreDialog(CGamesDoc *games, int scoringMethod, int in
 
         //Points (MP or IMP).
         float point = games->getDuplicatePointBoard(index,auctionAndPlayIndex, scoringMethod);
-        QTableWidgetItem *nsewPointItem = new QTableWidgetItem(QString("%1").arg(point, 0, 'f', 1));
+        int precision = (scoringMethod == IMP) ? (1) : (0);
+        QTableWidgetItem *nsewPointItem = new QTableWidgetItem(QString("%1").arg(point, 0, 'f', precision));
         nsewPointItem->setTextAlignment(Qt::AlignCenter);
         nsewPointItem->setFlags(Qt::ItemIsEnabled);
         ui->pointScoreTable->setItem(auctionAndPlayIndex, 4, nsewPointItem);

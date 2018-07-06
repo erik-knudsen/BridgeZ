@@ -92,14 +92,14 @@ void CMainScoreDialog::sUpdateTable()
     {
         ui->scoreTable->setColumnCount(7);
         horizontalHeader << tr("Board") << tr("Vulnerability") << tr("Contract") <<
-                            tr("Tricks") << tr("Score") << tr("Board") << tr("All");
+                            tr("Tricks") << tr("Score") << tr("Result") << tr("All");
         ui->ScoringMethod->setText(tr("Scoring method is IMP"));
 }
     else if (scoringMethod == MP)
     {
         ui->scoreTable->setColumnCount(7);
         horizontalHeader << tr("Board") << tr("Vulnerability") << tr("Contract") <<
-                            tr("Tricks") << tr("Score") << tr("Board") << tr("All");
+                            tr("Tricks") << tr("Score") << tr("Result") << tr("All");
         ui->ScoringMethod->setText(tr("Scoring method is MP"));
     }
     int noPlayed = games->getNumberPlayedGames();
@@ -257,7 +257,8 @@ void CMainScoreDialog::sUpdateTable()
             {
                 float result = games->getDuplicatePointBoard(gameIndex, playedAuctionAndPlayIndex,
                                              scoringMethod);
-                QTableWidgetItem *gameItem = new QTableWidgetItem(QString("%1").arg(result, 0, 'f', 1));
+                int precision = (scoringMethod == IMP) ? (1) : (0);
+                QTableWidgetItem *gameItem = new QTableWidgetItem(QString("%1").arg(result, 0, 'f', precision));
                 gameItem->setTextAlignment(Qt::AlignCenter);
                 gameItem->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
                 ui->scoreTable->setItem(gameIndex, 5, gameItem);
@@ -274,7 +275,7 @@ void CMainScoreDialog::sUpdateTable()
                     nameES = southName;
                 }
                 result = games->getDuplicateResultAll(gameIndex, nameWN, nameES, scoringMethod);
-                QTableWidgetItem *allItem = new QTableWidgetItem(QString("%1").arg(result, 0, 'f', 1));
+                QTableWidgetItem *allItem = new QTableWidgetItem(QString("%1").arg(result, 0, 'f', precision));
                 allItem->setTextAlignment(Qt::AlignCenter);
                 allItem->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
                 ui->scoreTable->setItem(gameIndex, 6, allItem);

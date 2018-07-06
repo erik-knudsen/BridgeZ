@@ -48,6 +48,7 @@
                 </section>
                 <section title="Appendices" ref="appendices.html">
                     <section title="Bidding Conventions" ref="bidconv.html"></section>
+                    <section title="Bidding Systems" ref="bidsys.html"></section>
                 </section>
             </section>
         </toc>
@@ -125,6 +126,7 @@
             <file>biddatabase.html</file>
             <file>appendices.html</file>
             <file>bidconv.html</file>
+            <file>bidsys.html</file>
             <file>images/Rubber_Bridge_Scoring.png</file>
             <file>images/FILEOPEN.BMP</file>
             <file>images/FILESAVE.BMP</file>
