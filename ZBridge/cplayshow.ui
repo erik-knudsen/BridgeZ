@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>130</width>
-    <height>42</height>
+    <height>46</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -22,8 +22,8 @@
         <string>...</string>
        </property>
        <property name="icon">
-        <iconset resource="images.qrc">
-         <normaloff>:/newPrefix/resources/review_prev.ico</normaloff>:/newPrefix/resources/review_prev.ico</iconset>
+        <iconset>
+         <normaloff>:/resources/review_prev.ico</normaloff>:/resources/review_prev.ico</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -42,8 +42,8 @@
         <string>...</string>
        </property>
        <property name="icon">
-        <iconset resource="images.qrc">
-         <normaloff>:/newPrefix/resources/review_next.ico</normaloff>:/newPrefix/resources/review_next.ico</iconset>
+        <iconset>
+         <normaloff>:/resources/review_next.ico</normaloff>:/resources/review_next.ico</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -60,8 +60,6 @@
    </item>
   </layout>
  </widget>
- <resources>
-  <include location="images.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

@@ -20,7 +20,7 @@
       <string/>
      </property>
      <property name="pixmap">
-      <pixmap resource="images.qrc">:/newPrefix/resources/BridgeScene.bmp</pixmap>
+      <pixmap>:/resources/BridgeScene.bmp</pixmap>
      </property>
     </widget>
    </item>
@@ -107,7 +107,7 @@
      <item>
       <widget class="QLabel" name="label_5">
        <property name="text">
-        <string notr="true"> </string>
+        <string notr="true"/>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -171,9 +171,7 @@
    </item>
   </layout>
  </widget>
- <resources>
-  <include location="images.qrc"/>
- </resources>
+ <resources/>
  <connections>
   <connection>
    <sender>OKButton</sender>

@@ -240,7 +240,7 @@ void CZBridgeDoc::ReadBidDBFileName()
 {
     QSettings settings("ZBridge settings", "div");
 
-    bidDBFileName = settings.value("bidDBFileName","").toString();
+    bidDBFileName = settings.value("bidDBFileName",":/biddb.bsf").toString();
 }
 
 /**

@@ -130,7 +130,7 @@
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap resource="images.qrc">:/newPrefix/resources/suit_spade.ico</pixmap>
+        <pixmap>:/resources/suit_spade.ico</pixmap>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -213,7 +213,7 @@
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap resource="images.qrc">:/newPrefix/resources/suit_heart.ico</pixmap>
+        <pixmap>:/resources/suit_heart.ico</pixmap>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -296,7 +296,7 @@
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap resource="images.qrc">:/newPrefix/resources/suit_diamond.ico</pixmap>
+        <pixmap>:/resources/suit_diamond.ico</pixmap>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -379,7 +379,7 @@
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap resource="images.qrc">:/newPrefix/resources/suit_club.ico</pixmap>
+        <pixmap>:/resources/suit_club.ico</pixmap>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -838,7 +838,7 @@
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap resource="images.qrc">:/newPrefix/resources/suit_spade.ico</pixmap>
+        <pixmap>:/resources/suit_spade.ico</pixmap>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -870,7 +870,7 @@
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap resource="images.qrc">:/newPrefix/resources/suit_heart.ico</pixmap>
+        <pixmap>:/resources/suit_heart.ico</pixmap>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -1064,7 +1064,7 @@
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap resource="images.qrc">:/newPrefix/resources/suit_diamond.ico</pixmap>
+        <pixmap>:/resources/suit_diamond.ico</pixmap>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -1187,7 +1187,7 @@
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap resource="images.qrc">:/newPrefix/resources/suit_club.ico</pixmap>
+        <pixmap>:/resources/suit_club.ico</pixmap>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -1551,8 +1551,8 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="images.qrc">
-             <normaloff>:/newPrefix/resources/review_first_game.ico</normaloff>:/newPrefix/resources/review_first_game.ico</iconset>
+            <iconset>
+             <normaloff>:/resources/review_first_game.ico</normaloff>:/resources/review_first_game.ico</iconset>
            </property>
           </widget>
          </item>
@@ -1568,8 +1568,8 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="images.qrc">
-             <normaloff>:/newPrefix/resources/review_prev.ico</normaloff>:/newPrefix/resources/review_prev.ico</iconset>
+            <iconset>
+             <normaloff>:/resources/review_prev.ico</normaloff>:/resources/review_prev.ico</iconset>
            </property>
           </widget>
          </item>
@@ -1585,8 +1585,8 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset resource="images.qrc">
-             <normaloff>:/newPrefix/resources/review_next.ico</normaloff>:/newPrefix/resources/review_next.ico</iconset>
+            <iconset>
+             <normaloff>:/resources/review_next.ico</normaloff>:/resources/review_next.ico</iconset>
            </property>
           </widget>
          </item>
@@ -1602,8 +1602,8 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset resource="images.qrc">
-             <normaloff>:/newPrefix/resources/review_last_game.ico</normaloff>:/newPrefix/resources/review_last_game.ico</iconset>
+            <iconset>
+             <normaloff>:/resources/review_last_game.ico</normaloff>:/resources/review_last_game.ico</iconset>
            </property>
           </widget>
          </item>
@@ -1688,9 +1688,7 @@
    </layout>
   </widget>
  </widget>
- <resources>
-  <include location="images.qrc"/>
- </resources>
+ <resources/>
  <connections>
   <connection>
    <sender>buttonBox</sender>

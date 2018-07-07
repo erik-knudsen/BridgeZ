@@ -76,7 +76,7 @@
            <string/>
           </property>
           <property name="pixmap">
-           <pixmap resource="images.qrc">:/newPrefix/resources/suit_nt.ico</pixmap>
+           <pixmap>:/resources/suit_nt.ico</pixmap>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
@@ -109,7 +109,7 @@
            <string/>
           </property>
           <property name="pixmap">
-           <pixmap resource="images.qrc">:/newPrefix/resources/suit_spade.ico</pixmap>
+           <pixmap>:/resources/suit_spade.ico</pixmap>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
@@ -142,7 +142,7 @@
            <string/>
           </property>
           <property name="pixmap">
-           <pixmap resource="images.qrc">:/newPrefix/resources/suit_heart.ico</pixmap>
+           <pixmap>:/resources/suit_heart.ico</pixmap>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
@@ -175,7 +175,7 @@
            <string/>
           </property>
           <property name="pixmap">
-           <pixmap resource="images.qrc">:/newPrefix/resources/suit_diamond.ico</pixmap>
+           <pixmap>:/resources/suit_diamond.ico</pixmap>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
@@ -208,7 +208,7 @@
            <string/>
           </property>
           <property name="pixmap">
-           <pixmap resource="images.qrc">:/newPrefix/resources/suit_club.ico</pixmap>
+           <pixmap>:/resources/suit_club.ico</pixmap>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
@@ -302,8 +302,6 @@
    </item>
   </layout>
  </widget>
- <resources>
-  <include location="images.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

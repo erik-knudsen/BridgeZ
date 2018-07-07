@@ -164,9 +164,9 @@
   </widget>
   <action name="actionOpen">
    <property name="icon">
-    <iconset resource="images.qrc">
-     <normaloff>:/newPrefix/resources/FILEOPEN.BMP</normaloff>
-     <normalon>:/newPrefix/resources/Open.ico</normalon>:/newPrefix/resources/FILEOPEN.BMP</iconset>
+    <iconset>
+     <normaloff>:/resources/FILEOPEN.BMP</normaloff>
+     <normalon>:/resources/Open.ico</normalon>:/resources/FILEOPEN.BMP</iconset>
    </property>
    <property name="text">
     <string>&amp;Open...</string>
@@ -183,9 +183,9 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="images.qrc">
-     <normaloff>:/newPrefix/resources/FILESAVE.BMP</normaloff>
-     <normalon>:/newPrefix/resources/Save.ico</normalon>:/newPrefix/resources/FILESAVE.BMP</iconset>
+    <iconset>
+     <normaloff>:/resources/FILESAVE.BMP</normaloff>
+     <normalon>:/resources/Save.ico</normalon>:/resources/FILESAVE.BMP</iconset>
    </property>
    <property name="text">
     <string>&amp;Save</string>
@@ -213,9 +213,9 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="images.qrc">
-     <normaloff>:/newPrefix/resources/Fileprint.bmp</normaloff>
-     <normalon>:/newPrefix/resources/Print.ico</normalon>:/newPrefix/resources/Fileprint.bmp</iconset>
+    <iconset>
+     <normaloff>:/resources/Fileprint.bmp</normaloff>
+     <normalon>:/resources/Print.ico</normalon>:/resources/Fileprint.bmp</iconset>
    </property>
    <property name="text">
     <string>&amp;Print</string>
@@ -234,8 +234,8 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="images.qrc">
-     <normaloff>:/newPrefix/resources/ViewScore.bmp</normaloff>:/newPrefix/resources/ViewScore.bmp</iconset>
+    <iconset>
+     <normaloff>:/resources/ViewScore.bmp</normaloff>:/resources/ViewScore.bmp</iconset>
    </property>
    <property name="text">
     <string> &amp;Score</string>
@@ -271,8 +271,8 @@
   </action>
   <action name="action_Deal_New_Hand">
    <property name="icon">
-    <iconset resource="images.qrc">
-     <normaloff>:/newPrefix/resources/DealNewHand.bmp</normaloff>:/newPrefix/resources/DealNewHand.bmp</iconset>
+    <iconset>
+     <normaloff>:/resources/DealNewHand.bmp</normaloff>:/resources/DealNewHand.bmp</iconset>
    </property>
    <property name="text">
     <string>&amp;Deal New Hand</string>
@@ -289,8 +289,8 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="images.qrc">
-     <normaloff>:/newPrefix/resources/BidHand.bmp</normaloff>:/newPrefix/resources/BidHand.bmp</iconset>
+    <iconset>
+     <normaloff>:/resources/BidHand.bmp</normaloff>:/resources/BidHand.bmp</iconset>
    </property>
    <property name="text">
     <string>&amp;Rebid</string>
@@ -307,8 +307,8 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="images.qrc">
-     <normaloff>:/newPrefix/resources/RestartPlay.bmp</normaloff>:/newPrefix/resources/RestartPlay.bmp</iconset>
+    <iconset>
+     <normaloff>:/resources/RestartPlay.bmp</normaloff>:/resources/RestartPlay.bmp</iconset>
    </property>
    <property name="text">
     <string>&amp;Replay</string>
@@ -325,8 +325,8 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="images.qrc">
-     <normaloff>:/newPrefix/resources/ClaimTricks.bmp</normaloff>:/newPrefix/resources/ClaimTricks.bmp</iconset>
+    <iconset>
+     <normaloff>:/resources/ClaimTricks.bmp</normaloff>:/resources/ClaimTricks.bmp</iconset>
    </property>
    <property name="text">
     <string>Claim All</string>
@@ -343,8 +343,8 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="images.qrc">
-     <normaloff>:/newPrefix/resources/ClaimContract.bmp</normaloff>:/newPrefix/resources/ClaimContract.bmp</iconset>
+    <iconset>
+     <normaloff>:/resources/ClaimContract.bmp</normaloff>:/resources/ClaimContract.bmp</iconset>
    </property>
    <property name="text">
     <string>Claim Contract</string>
@@ -361,8 +361,8 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="images.qrc">
-     <normaloff>:/newPrefix/resources/ConcedeTricks.bmp</normaloff>:/newPrefix/resources/ConcedeTricks.bmp</iconset>
+    <iconset>
+     <normaloff>:/resources/ConcedeTricks.bmp</normaloff>:/resources/ConcedeTricks.bmp</iconset>
    </property>
    <property name="text">
     <string>Concede</string>
@@ -376,8 +376,8 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="images.qrc">
-     <normaloff>:/newPrefix/resources/HelpAppAbout.bmp</normaloff>:/newPrefix/resources/HelpAppAbout.bmp</iconset>
+    <iconset>
+     <normaloff>:/resources/HelpAppAbout.bmp</normaloff>:/resources/HelpAppAbout.bmp</iconset>
    </property>
    <property name="text">
     <string>Hint</string>
@@ -394,8 +394,8 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="images.qrc">
-     <normaloff>:/newPrefix/resources/LayOutCards.bmp</normaloff>:/newPrefix/resources/LayOutCards.bmp</iconset>
+    <iconset>
+     <normaloff>:/resources/LayOutCards.bmp</normaloff>:/resources/LayOutCards.bmp</iconset>
    </property>
    <property name="text">
     <string>&amp;Lay Out Cards</string>
@@ -444,8 +444,8 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="images.qrc">
-     <normaloff>:/newPrefix/resources/ExposeAllCards.bmp</normaloff>:/newPrefix/resources/ExposeAllCards.bmp</iconset>
+    <iconset>
+     <normaloff>:/resources/ExposeAllCards.bmp</normaloff>:/resources/ExposeAllCards.bmp</iconset>
    </property>
    <property name="text">
     <string>&amp;Expose All Cards</string>
@@ -459,8 +459,8 @@
   </action>
   <action name="action_Contents">
    <property name="icon">
-    <iconset resource="images.qrc">
-     <normaloff>:/newPrefix/resources/HelpContents.bmp</normaloff>:/newPrefix/resources/HelpContents.bmp</iconset>
+    <iconset>
+     <normaloff>:/resources/HelpContents.bmp</normaloff>:/resources/HelpContents.bmp</iconset>
    </property>
    <property name="text">
     <string>&amp;Contents</string>
@@ -468,8 +468,8 @@
   </action>
   <action name="action_About_ZBridge">
    <property name="icon">
-    <iconset resource="images.qrc">
-     <normaloff>:/newPrefix/resources/HelpAppAbout.bmp</normaloff>:/newPrefix/resources/HelpAppAbout.bmp</iconset>
+    <iconset>
+     <normaloff>:/resources/HelpAppAbout.bmp</normaloff>:/resources/HelpAppAbout.bmp</iconset>
    </property>
    <property name="text">
     <string>&amp;About ZBridge...</string>
@@ -477,8 +477,8 @@
   </action>
   <action name="actionNew_Session">
    <property name="icon">
-    <iconset resource="images.qrc">
-     <normaloff>:/newPrefix/resources/ManualDefend.bmp</normaloff>:/newPrefix/resources/ManualDefend.bmp</iconset>
+    <iconset>
+     <normaloff>:/resources/ManualDefend.bmp</normaloff>:/resources/ManualDefend.bmp</iconset>
    </property>
    <property name="text">
     <string>New Session</string>
@@ -492,8 +492,8 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="images.qrc">
-     <normaloff>:/newPrefix/resources/EDITUNDO.BMP</normaloff>:/newPrefix/resources/EDITUNDO.BMP</iconset>
+    <iconset>
+     <normaloff>:/resources/EDITUNDO.BMP</normaloff>:/resources/EDITUNDO.BMP</iconset>
    </property>
    <property name="text">
     <string>Undo</string>
@@ -521,8 +521,8 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="images.qrc">
-     <normaloff>:/newPrefix/resources/numbered.bmp</normaloff>:/newPrefix/resources/numbered.bmp</iconset>
+    <iconset>
+     <normaloff>:/resources/numbered.bmp</normaloff>:/resources/numbered.bmp</iconset>
    </property>
    <property name="text">
     <string>Activate Deal Profile</string>
@@ -541,8 +541,8 @@
   </action>
   <action name="actionDouble_Dummy_Results">
    <property name="icon">
-    <iconset resource="images.qrc">
-     <normaloff>:/newPrefix/resources/ViewPlayHistory.bmp</normaloff>:/newPrefix/resources/ViewPlayHistory.bmp</iconset>
+    <iconset>
+     <normaloff>:/resources/ViewPlayHistory.bmp</normaloff>:/resources/ViewPlayHistory.bmp</iconset>
    </property>
    <property name="text">
     <string>Double Dummy Results</string>
@@ -581,9 +581,7 @@
    <header>cstatusbar.h</header>
   </customwidget>
  </customwidgets>
- <resources>
-  <include location="images.qrc"/>
- </resources>
+ <resources/>
  <connections>
   <connection>
    <sender>action_Toolbar</sender>

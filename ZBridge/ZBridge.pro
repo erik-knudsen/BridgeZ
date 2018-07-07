@@ -217,4 +217,5 @@ FORMS    += cmainframe.ui \
     cruledialog.ui \
     cpopup.ui
 
-RESOURCES = images.qrc
+RESOURCES = \
+    resources.qrc

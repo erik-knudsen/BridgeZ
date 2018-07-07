@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>198</width>
-    <height>214</height>
+    <width>206</width>
+    <height>218</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -47,8 +47,8 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset resource="images.qrc">
-             <normaloff>:/newPrefix/resources/ico_1c.ico</normaloff>:/newPrefix/resources/ico_1c.ico</iconset>
+            <iconset>
+             <normaloff>:/resources/ico_1c.ico</normaloff>:/resources/ico_1c.ico</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -85,8 +85,8 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset resource="images.qrc">
-             <normaloff>:/newPrefix/resources/ico_1d.ico</normaloff>:/newPrefix/resources/ico_1d.ico</iconset>
+            <iconset>
+             <normaloff>:/resources/ico_1d.ico</normaloff>:/resources/ico_1d.ico</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -117,8 +117,8 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset resource="images.qrc">
-             <normaloff>:/newPrefix/resources/ico_1h.ico</normaloff>:/newPrefix/resources/ico_1h.ico</iconset>
+            <iconset>
+             <normaloff>:/resources/ico_1h.ico</normaloff>:/resources/ico_1h.ico</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -149,8 +149,8 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset resource="images.qrc">
-             <normaloff>:/newPrefix/resources/ico_1s.ico</normaloff>:/newPrefix/resources/ico_1s.ico</iconset>
+            <iconset>
+             <normaloff>:/resources/ico_1s.ico</normaloff>:/resources/ico_1s.ico</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -181,8 +181,8 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset resource="images.qrc">
-             <normaloff>:/newPrefix/resources/ico_1nt.ico</normaloff>:/newPrefix/resources/ico_1nt.ico</iconset>
+            <iconset>
+             <normaloff>:/resources/ico_1nt.ico</normaloff>:/resources/ico_1nt.ico</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -211,8 +211,8 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset resource="images.qrc">
-             <normaloff>:/newPrefix/resources/ico_2c.ico</normaloff>:/newPrefix/resources/ico_2c.ico</iconset>
+            <iconset>
+             <normaloff>:/resources/ico_2c.ico</normaloff>:/resources/ico_2c.ico</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -237,8 +237,8 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset resource="images.qrc">
-             <normaloff>:/newPrefix/resources/ico_2d.ico</normaloff>:/newPrefix/resources/ico_2d.ico</iconset>
+            <iconset>
+             <normaloff>:/resources/ico_2d.ico</normaloff>:/resources/ico_2d.ico</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -263,8 +263,8 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset resource="images.qrc">
-             <normaloff>:/newPrefix/resources/ico_2h.ico</normaloff>:/newPrefix/resources/ico_2h.ico</iconset>
+            <iconset>
+             <normaloff>:/resources/ico_2h.ico</normaloff>:/resources/ico_2h.ico</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -289,8 +289,8 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset resource="images.qrc">
-             <normaloff>:/newPrefix/resources/ico_2s.ico</normaloff>:/newPrefix/resources/ico_2s.ico</iconset>
+            <iconset>
+             <normaloff>:/resources/ico_2s.ico</normaloff>:/resources/ico_2s.ico</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -315,8 +315,8 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset resource="images.qrc">
-             <normaloff>:/newPrefix/resources/ico_2nt.ico</normaloff>:/newPrefix/resources/ico_2nt.ico</iconset>
+            <iconset>
+             <normaloff>:/resources/ico_2nt.ico</normaloff>:/resources/ico_2nt.ico</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -345,8 +345,8 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset resource="images.qrc">
-             <normaloff>:/newPrefix/resources/ico_3c.ico</normaloff>:/newPrefix/resources/ico_3c.ico</iconset>
+            <iconset>
+             <normaloff>:/resources/ico_3c.ico</normaloff>:/resources/ico_3c.ico</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -371,8 +371,8 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset resource="images.qrc">
-             <normaloff>:/newPrefix/resources/ico_3d.ico</normaloff>:/newPrefix/resources/ico_3d.ico</iconset>
+            <iconset>
+             <normaloff>:/resources/ico_3d.ico</normaloff>:/resources/ico_3d.ico</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -397,8 +397,8 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset resource="images.qrc">
-             <normaloff>:/newPrefix/resources/ico_3h.ico</normaloff>:/newPrefix/resources/ico_3h.ico</iconset>
+            <iconset>
+             <normaloff>:/resources/ico_3h.ico</normaloff>:/resources/ico_3h.ico</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -423,8 +423,8 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset resource="images.qrc">
-             <normaloff>:/newPrefix/resources/ico_3s.ico</normaloff>:/newPrefix/resources/ico_3s.ico</iconset>
+            <iconset>
+             <normaloff>:/resources/ico_3s.ico</normaloff>:/resources/ico_3s.ico</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -449,8 +449,8 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset resource="images.qrc">
-             <normaloff>:/newPrefix/resources/ico_3nt.ico</normaloff>:/newPrefix/resources/ico_3nt.ico</iconset>
+            <iconset>
+             <normaloff>:/resources/ico_3nt.ico</normaloff>:/resources/ico_3nt.ico</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -479,8 +479,8 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset resource="images.qrc">
-             <normaloff>:/newPrefix/resources/ico_4c.ico</normaloff>:/newPrefix/resources/ico_4c.ico</iconset>
+            <iconset>
+             <normaloff>:/resources/ico_4c.ico</normaloff>:/resources/ico_4c.ico</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -505,8 +505,8 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset resource="images.qrc">
-             <normaloff>:/newPrefix/resources/ico_4d.ico</normaloff>:/newPrefix/resources/ico_4d.ico</iconset>
+            <iconset>
+             <normaloff>:/resources/ico_4d.ico</normaloff>:/resources/ico_4d.ico</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -531,8 +531,8 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset resource="images.qrc">
-             <normaloff>:/newPrefix/resources/ico_4h.ico</normaloff>:/newPrefix/resources/ico_4h.ico</iconset>
+            <iconset>
+             <normaloff>:/resources/ico_4h.ico</normaloff>:/resources/ico_4h.ico</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -557,8 +557,8 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset resource="images.qrc">
-             <normaloff>:/newPrefix/resources/ico_4s.ico</normaloff>:/newPrefix/resources/ico_4s.ico</iconset>
+            <iconset>
+             <normaloff>:/resources/ico_4s.ico</normaloff>:/resources/ico_4s.ico</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -583,8 +583,8 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset resource="images.qrc">
-             <normaloff>:/newPrefix/resources/ico_4nt.ico</normaloff>:/newPrefix/resources/ico_4nt.ico</iconset>
+            <iconset>
+             <normaloff>:/resources/ico_4nt.ico</normaloff>:/resources/ico_4nt.ico</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -613,8 +613,8 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset resource="images.qrc">
-             <normaloff>:/newPrefix/resources/ico_5c.ico</normaloff>:/newPrefix/resources/ico_5c.ico</iconset>
+            <iconset>
+             <normaloff>:/resources/ico_5c.ico</normaloff>:/resources/ico_5c.ico</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -639,8 +639,8 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset resource="images.qrc">
-             <normaloff>:/newPrefix/resources/ico_5d.ico</normaloff>:/newPrefix/resources/ico_5d.ico</iconset>
+            <iconset>
+             <normaloff>:/resources/ico_5d.ico</normaloff>:/resources/ico_5d.ico</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -665,8 +665,8 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset resource="images.qrc">
-             <normaloff>:/newPrefix/resources/ico_5h.ico</normaloff>:/newPrefix/resources/ico_5h.ico</iconset>
+            <iconset>
+             <normaloff>:/resources/ico_5h.ico</normaloff>:/resources/ico_5h.ico</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -691,8 +691,8 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset resource="images.qrc">
-             <normaloff>:/newPrefix/resources/ico_5s.ico</normaloff>:/newPrefix/resources/ico_5s.ico</iconset>
+            <iconset>
+             <normaloff>:/resources/ico_5s.ico</normaloff>:/resources/ico_5s.ico</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -717,8 +717,8 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset resource="images.qrc">
-             <normaloff>:/newPrefix/resources/ico_5nt.ico</normaloff>:/newPrefix/resources/ico_5nt.ico</iconset>
+            <iconset>
+             <normaloff>:/resources/ico_5nt.ico</normaloff>:/resources/ico_5nt.ico</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -747,8 +747,8 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset resource="images.qrc">
-             <normaloff>:/newPrefix/resources/ico_6c.ico</normaloff>:/newPrefix/resources/ico_6c.ico</iconset>
+            <iconset>
+             <normaloff>:/resources/ico_6c.ico</normaloff>:/resources/ico_6c.ico</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -773,8 +773,8 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset resource="images.qrc">
-             <normaloff>:/newPrefix/resources/ico_6d.ico</normaloff>:/newPrefix/resources/ico_6d.ico</iconset>
+            <iconset>
+             <normaloff>:/resources/ico_6d.ico</normaloff>:/resources/ico_6d.ico</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -799,8 +799,8 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset resource="images.qrc">
-             <normaloff>:/newPrefix/resources/ico_6h.ico</normaloff>:/newPrefix/resources/ico_6h.ico</iconset>
+            <iconset>
+             <normaloff>:/resources/ico_6h.ico</normaloff>:/resources/ico_6h.ico</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -825,8 +825,8 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset resource="images.qrc">
-             <normaloff>:/newPrefix/resources/ico_6s.ico</normaloff>:/newPrefix/resources/ico_6s.ico</iconset>
+            <iconset>
+             <normaloff>:/resources/ico_6s.ico</normaloff>:/resources/ico_6s.ico</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -851,8 +851,8 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset resource="images.qrc">
-             <normaloff>:/newPrefix/resources/ico_6nt.ico</normaloff>:/newPrefix/resources/ico_6nt.ico</iconset>
+            <iconset>
+             <normaloff>:/resources/ico_6nt.ico</normaloff>:/resources/ico_6nt.ico</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -881,8 +881,8 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset resource="images.qrc">
-             <normaloff>:/newPrefix/resources/ico_7c.ico</normaloff>:/newPrefix/resources/ico_7c.ico</iconset>
+            <iconset>
+             <normaloff>:/resources/ico_7c.ico</normaloff>:/resources/ico_7c.ico</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -907,8 +907,8 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset resource="images.qrc">
-             <normaloff>:/newPrefix/resources/ico_7d.ico</normaloff>:/newPrefix/resources/ico_7d.ico</iconset>
+            <iconset>
+             <normaloff>:/resources/ico_7d.ico</normaloff>:/resources/ico_7d.ico</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -933,8 +933,8 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset resource="images.qrc">
-             <normaloff>:/newPrefix/resources/ico_7h.ico</normaloff>:/newPrefix/resources/ico_7h.ico</iconset>
+            <iconset>
+             <normaloff>:/resources/ico_7h.ico</normaloff>:/resources/ico_7h.ico</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -959,8 +959,8 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset resource="images.qrc">
-             <normaloff>:/newPrefix/resources/ico_7s.ico</normaloff>:/newPrefix/resources/ico_7s.ico</iconset>
+            <iconset>
+             <normaloff>:/resources/ico_7s.ico</normaloff>:/resources/ico_7s.ico</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -985,8 +985,8 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset resource="images.qrc">
-             <normaloff>:/newPrefix/resources/ico_7nt.ico</normaloff>:/newPrefix/resources/ico_7nt.ico</iconset>
+            <iconset>
+             <normaloff>:/resources/ico_7nt.ico</normaloff>:/resources/ico_7nt.ico</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -1024,8 +1024,8 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset resource="images.qrc">
-             <normaloff>:/newPrefix/resources/ico_pass.ico</normaloff>:/newPrefix/resources/ico_pass.ico</iconset>
+            <iconset>
+             <normaloff>:/resources/ico_pass.ico</normaloff>:/resources/ico_pass.ico</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -1062,8 +1062,8 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset resource="images.qrc">
-             <normaloff>:/newPrefix/resources/ico_double.ico</normaloff>:/newPrefix/resources/ico_double.ico</iconset>
+            <iconset>
+             <normaloff>:/resources/ico_double.ico</normaloff>:/resources/ico_double.ico</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -1094,8 +1094,8 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset resource="images.qrc">
-             <normaloff>:/newPrefix/resources/ico_redouble.ico</normaloff>:/newPrefix/resources/ico_redouble.ico</iconset>
+            <iconset>
+             <normaloff>:/resources/ico_redouble.ico</normaloff>:/resources/ico_redouble.ico</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -1159,8 +1159,6 @@
   <tabstop>bid1NT</tabstop>
   <tabstop>bid2C</tabstop>
  </tabstops>
- <resources>
-  <include location="images.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>
