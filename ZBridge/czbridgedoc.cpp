@@ -259,6 +259,9 @@ void CZBridgeDoc::SaveBidDB()
             if (out.status() != QDataStream::Ok)
                 throw PlayException(tr("Bid DB: Write of bid DB failed").toStdString());
         }
+        else
+            throw PlayException(tr("Bid DB: Could not write to bid database").toStdString());
+
         QString descFilename = bidDBFileName.left(bidDBFileName.indexOf(".bsf", 0, Qt::CaseInsensitive)) + ".dsc";
         QFile descFile(descFilename);
         if (descFile.open(QIODevice::WriteOnly))
@@ -269,6 +272,8 @@ void CZBridgeDoc::SaveBidDB()
             if (out.status() != QDataStream::Ok)
                 throw PlayException(tr("Bid DB: Write of bid description failed").toStdString());
         }
+        else
+            throw PlayException(tr("Bid DB: Could not write to bid database").toStdString());
     }
     catch (PlayException &e)
     {
@@ -281,42 +286,14 @@ void CZBridgeDoc::SaveBidDB()
  */
 void CZBridgeDoc::LoadBidDB()
 {
-    if (bidDBFileName.size() == 0)
-        return;
-
-    try
+    if (!LoadBidDB(bidDBFileName))
     {
-        bidDB.clearBidDB();
-        bidDesc.clearBidDesc();
+        QMessageBox::critical(0, tr("ZBridge"), tr("Bid DB: Falling back to default bid database"));
 
-        QFile file(bidDBFileName);
-        if (file.open(QIODevice::ReadOnly))
-        {
-            QDataStream in(&file);
-            in >> bidDB;
-            file.close();
-            if (in.status() != QDataStream::Ok)
-                throw PlayException(tr("Bid DB: Corrupt or version not supported or not a bid database").toStdString());
-        }
-
-        //Open file with text description of pages etc. in the bid database.
-        QString descFilename = bidDBFileName.left(bidDBFileName.indexOf(".bsf", 0, Qt::CaseInsensitive)) + ".dsc";
-        QFile descFile(descFilename);
-        if (descFile.open(QIODevice::ReadOnly))
-        {
-            QDataStream in(&descFile);
-            in >> bidDesc;
-            descFile.close();
-            if (in.status() != QDataStream::Ok)
-                throw PlayException(tr("Bid DB: Corrupt or version not supported or not a bid description").toStdString());
-        }
-    }
-    catch (PlayException &e)
-    {
-        bidDB.clearBidDB();
-        bidDesc.clearBidDesc();
-
-        QMessageBox::critical(0, tr("ZBridge"), e.what());
+        bidDBFileName = QString(":/biddb.bsf");
+        WriteBidDBFileName();
+        if (!LoadBidDB(bidDBFileName))
+            QMessageBox::critical(0, tr("ZBridge"), tr("Bid DB: ZBridge application image is corrupt"));
     }
 }
 
@@ -353,4 +330,52 @@ void CZBridgeDoc::setShowCommentsUponOpen(bool autoShow)
 bool CZBridgeDoc::getShowCommentsUponOpen()
 {
     return false;
+}
+
+bool CZBridgeDoc::LoadBidDB(QString &bidDBFileName)
+{
+    bool ok = false;
+
+    try
+    {
+        bidDB.clearBidDB();
+        bidDesc.clearBidDesc();
+
+        QFile file(bidDBFileName);
+        if (file.open(QIODevice::ReadOnly))
+        {
+            QDataStream in(&file);
+            in >> bidDB;
+            file.close();
+            if (in.status() != QDataStream::Ok)
+                throw PlayException(tr("Bid DB: Corrupt or version not supported or not a bid database").toStdString());
+        }
+        else
+            throw PlayException(tr("Bid DB: Bid database does not exist.").toStdString());
+
+        //Open file with text description of pages etc. in the bid database.
+        QString descFilename = bidDBFileName.left(bidDBFileName.indexOf(".bsf", 0, Qt::CaseInsensitive)) + ".dsc";
+        QFile descFile(descFilename);
+        if (descFile.open(QIODevice::ReadOnly))
+        {
+            QDataStream in(&descFile);
+            in >> bidDesc;
+            descFile.close();
+            if (in.status() != QDataStream::Ok)
+                throw PlayException(tr("Bid DB: Corrupt or version not supported or not a bid description").toStdString());
+        }
+        else
+            throw PlayException(tr("Bid DB: Bid database does not exist.").toStdString());
+
+        ok = true;
+    }
+    catch (PlayException &e)
+    {
+        bidDB.clearBidDB();
+        bidDesc.clearBidDesc();
+
+        QMessageBox::critical(0, tr("ZBridge"), e.what());
+    }
+
+    return ok;
 }

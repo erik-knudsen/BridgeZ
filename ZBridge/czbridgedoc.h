@@ -102,6 +102,7 @@ signals:
 public slots:
 
 private:
+    bool LoadBidDB(QString& bidDBFileName);
     static CZBridgeDoc* instance;   //Reference to singleton instance.
 
     //Option variables.
