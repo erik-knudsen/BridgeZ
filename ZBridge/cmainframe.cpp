@@ -1224,6 +1224,7 @@ void CMainFrame::on_actionEdit_Bid_Database_triggered()
                           tr("Save Bidding System"), "", tr("Bidding System File (*.bsf)"))).size() == 0)
                     ;
                 doc->setBidDBFileName(fileName);
+                doc->WriteBidDBFileName();
             }
             doc->SaveBidDB();
         }
