@@ -684,6 +684,8 @@ void CMainFrame::open(QString &originalFileName)
     if (playedFile.open(QIODevice::ReadOnly | QIODevice::Text))
         played.setDevice(&playedFile);
 
+    emit sNewSession();     //Start new session for table manager auto.
+
     //Read games.
     original.seek(0);
     games->readGames(original, played, event, doc->getGameOptions().scoringMethod);
@@ -709,7 +711,6 @@ void CMainFrame::open(QString &originalFileName)
     {
         connect(tableManager, &CTblMngrBase::sigPlayStart, tableManagerAuto, &CTblMngrBase::sltPlayStart);
         connect(tableManagerAuto, &CTblMngrBase::sigPlayStart, tableManager, &CTblMngrBase::sltPlayStart);
-        emit sNewSession();     //To start new session for table manager auto.
     }
 
     //Start new session for table manager.
@@ -1007,6 +1008,8 @@ void CMainFrame::on_actionStatus_Bar_triggered()
  */
 void CMainFrame::on_actionNew_Session_triggered()
 {
+    emit sNewSession();     //Start new session for table manager auto.
+
     //If non saved game then ask if it should be saved (save can only be enabled on server).
     if ((ui->actionSave->isEnabled()) &&
         (QMessageBox::question(0, tr("ZBridge"),
@@ -1029,22 +1032,15 @@ void CMainFrame::on_actionNew_Session_triggered()
                                   doc->getGameOptions().scoringMethod);
 
     //Set up synchronization (auto play or not).
-    if (!hostAddress.isNull() &&
-            (doc->getSeatOptions().role == CLIENT_ROLE))
-        emit sNewSession();     //To start new client session for table manager auto.
+    //Implicit standalone or server session.
+    disconnect(tableManager, &CTblMngrBase::sigPlayStart, 0, 0);
+    disconnect(tableManagerAuto, &CTblMngrBase::sigPlayStart, 0, 0);
+    if (!games->getComputerPlays())
+        connect(tableManager, &CTblMngrBase::sigPlayStart, tableManager, &CTblMngrBase::sltPlayStart);
     else
     {
-        //Implicit standalone or server session.
-        disconnect(tableManager, &CTblMngrBase::sigPlayStart, 0, 0);
-        disconnect(tableManagerAuto, &CTblMngrBase::sigPlayStart, 0, 0);
-        if (!games->getComputerPlays())
-            connect(tableManager, &CTblMngrBase::sigPlayStart, tableManager, &CTblMngrBase::sltPlayStart);
-        else
-        {
-            connect(tableManager, &CTblMngrBase::sigPlayStart, tableManagerAuto, &CTblMngrBase::sltPlayStart);
-            connect(tableManagerAuto, &CTblMngrBase::sigPlayStart, tableManager, &CTblMngrBase::sltPlayStart);
-            emit sNewSession();     //To start new standalone or server session for table manager auto.
-        }
+        connect(tableManager, &CTblMngrBase::sigPlayStart, tableManagerAuto, &CTblMngrBase::sltPlayStart);
+        connect(tableManagerAuto, &CTblMngrBase::sigPlayStart, tableManager, &CTblMngrBase::sltPlayStart);
     }
 
     //Start new session (client or server).
