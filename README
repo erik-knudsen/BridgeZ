@@ -4,9 +4,6 @@ computer(s) plays the missing players. Players can be either local on the local
 computer or remote on one or more remote computers. I started development of the
 program because I was not satisfied with the (to my knowledge) existing
 bridge programs with regard to their net abilities.
-I have until now concentrated on the man machine interface and not payed much
-attention to the computers automatic play capability. 
-This is work in progress and still misses a lot. Nothing is finished yet.
 
 
 Development environment is Qt with the use of Qt Creator as IDE.
@@ -27,3 +24,9 @@ Installation for ZBridge development:
 		Install Graphviz
 		Install mscgen
 		Set dot and mscgen pathes in DoxyFile
+                
+5. Install Visual Studio Community 2015. Start Visual Studio and create a
+   new c++ project and install required parts.
+   The Double Dummy Solver by Bo Haglund is generated as a dll. Makefile_Visual
+   is used to generate .lib and .dll files. The .lib file is for the linker
+   and the .dll file is for the executable.
