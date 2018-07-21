@@ -36,9 +36,12 @@ Installation for ZBridge development:
 5. Install Visual Studio Community 2015. Start Visual Studio and create a
    new c++ project and install required parts.
    The Double Dummy Solver by Bo Haglund is generated as a dll. Makefile_Visual
-   is used to generate .lib and .dll files. The .lib file is for the linker
-   and the .dll file is for the executable.
+   is used to generate dds.lib and dds.dll files. The dds.lib file is for the linker
+   and the dds.dll file is for the executable.
    You can instead use the MinGW c++ compiler, which can be installed as a part
-   of Qt. To generate DDS as a dll in this case use Makefile_mingw.
+   of Qt. To generate DDS as a dll in this case use Makefile_mingw. Use the dds.dll
+   file for both linker and executable.
    In both cases I have found it necessary to remove the automatic initialization
    of the DDS dll and instead initialize in the startup of ZBridge (SetMaxThreads(0)).
+   The docs folder has help files used by the Qt help framework to generate help for
+   ZBridge. zbridge.qch and zbridge.qhc is for the executable.

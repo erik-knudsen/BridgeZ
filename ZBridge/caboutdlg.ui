@@ -20,7 +20,7 @@
       <string/>
      </property>
      <property name="pixmap">
-      <pixmap>:/resources/BridgeScene.bmp</pixmap>
+      <pixmap resource="resources.qrc">:/resources/BridgeScene.bmp</pixmap>
      </property>
     </widget>
    </item>
@@ -160,7 +160,7 @@
      <item>
       <widget class="QLabel" name="label_10">
        <property name="text">
-        <string>See the help file for copyright information and additional details on the terms of use and redistribution.</string>
+        <string>The terms of use and redistribution is covered by GNU General Public License version 3 (GPLv3).</string>
        </property>
        <property name="wordWrap">
         <bool>true</bool>
@@ -171,7 +171,9 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>OKButton</sender>
