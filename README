@@ -1,9 +1,17 @@
-ZBridge will, when it is finished, be a program for bridge players who wants to play
+ZBridge is a program for bridge players who wants to play
 bridge with the help of a computer. There can be from 0 to 4 human players. The
-computer(s) plays the missing players. Players can be either local on the local
+computer(s) plays the non human players. Players can be either local on the local
 computer or remote on one or more remote computers. I started development of the
 program because I was not satisfied with the (to my knowledge) existing
 bridge programs with regard to their net abilities.
+ZBridge is for Windows computers. Its companion ZBridgeE is for embedded computers
+(currently only Android). They use the same communication protocol i.e. they can
+play bridge with each other on the internet. 
+Yakindu is used for modelling the states of the communication protocol.
+Bridge bidding is implemented by means of a table. Bo Haglunds Double Dummy Solver
+is used for calculating the best card to play.
+
+The ZBridgeE software is covered by the GNU GENERAL PUBLIC LICENSE Version3 (GPLv3).
 
 
 Development environment is Qt with the use of Qt Creator as IDE.
@@ -30,3 +38,7 @@ Installation for ZBridge development:
    The Double Dummy Solver by Bo Haglund is generated as a dll. Makefile_Visual
    is used to generate .lib and .dll files. The .lib file is for the linker
    and the .dll file is for the executable.
+   You can instead use the MinGW c++ compiler, which can be installed as a part
+   of Qt. To generate DDS as a dll in this case use Makefile_mingw.
+   In both cases I have found it necessary to remove the automatic initialization
+   of the dll and instead initialize in the startup of ZBridge (SetMaxThreads(0)).
