@@ -41,4 +41,4 @@ Installation for ZBridge development:
    You can instead use the MinGW c++ compiler, which can be installed as a part
    of Qt. To generate DDS as a dll in this case use Makefile_mingw.
    In both cases I have found it necessary to remove the automatic initialization
-   of the dll and instead initialize in the startup of ZBridge (SetMaxThreads(0)).
+   of the DDS dll and instead initialize in the startup of ZBridge (SetMaxThreads(0)).
