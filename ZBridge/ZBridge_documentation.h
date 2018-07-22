@@ -273,6 +273,8 @@
  *
  *\n
  * <b>Alerting (introductory note)</b>\n
+ * <i><b>Alerting is implemented as part of a bid database in the advanced protocol and not as described below for
+ * the basic protocol.</b></i>
  *
  *   1. In standard bridge played between humans, a bidder's partner is required to inform his/her opponents
  *      of an artificial bid or call (as defined by the laws of bridge).   Such a bid or call is referred to
@@ -298,6 +300,8 @@
  *
  *\n
  * <b>Alerting (implementation)</b>\n
+ * <i><b>Alerting is implemented as part of a bid database in the advanced protocol and not as described below for
+ * the basic protocol.</b></i>
  *
  *   1. An alertable bid is in the following format :\n
  *      [bid (as defined above)] [space] "Alert." [full-stop (ASCII #46) space] followed by information as
@@ -360,6 +364,8 @@
  *
  *\n
  * <b>Pausing for manual alerting</b>\n
+ * <i><b>Alerting is implemented as part of a bid database in the advanced protocol and not as described below for
+ * the basic protocol.</b></i>
  *
  *   1. As an interim stage to fully automatic alerting, it has been decided to implement three variations
  *      of optional "manual alerting", i.e. to be used where the bidding computer does not itself make the
@@ -463,6 +469,7 @@
  *
  *\n
  * <b>Claiming</b>\n
+ * <i><b>Claiming is not implemented in the advanced protocol.</b></i>
  *
  *   1. It has been suggested that the protocol should include provisions for programs to make and accept
  *      claims for remaining tricks.  Bearing in mind the speed of computer-players (particularly in the
@@ -488,6 +495,8 @@
  *
  *\n
  * <b>Taking-back of bids and cards</b>\n
+ * <i><b>Taking-back of bids and cards is implemented differently in the advanced protocol and not as described below for
+ * the basic protocol.</b></i>
  *
  *   1. The taking back of bids and cards is not a normal part of bridge, but the matter has been raised,
  *      again in the context of humans playing against programs.\n\n
