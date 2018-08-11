@@ -80,9 +80,6 @@ CMainFrame *CMainFrame::m_pInstance = 0;
  *   - Allocate playview. This is the view where the play is visualized.
  *   - Determine (server or client) and allocate table manager. The table manager is\n
  *     the controller of what happens.
- *   - Allocate and initialize file comment dialog (EAK).
- *   - Allocate and initialize status window (EAK).
- *   - Allocate and initialize history window (EAK).
  *
  * @param app Pointer to application.
  * @param doc Pointer to data container.

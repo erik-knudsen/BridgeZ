@@ -64,6 +64,7 @@ private:
     int value, backValue;
     bool showBack;
     QObject *cardSignal;
+    qreal zVal;
 };
 
 #endif // CCARD_H

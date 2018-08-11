@@ -67,6 +67,8 @@ void CCard::mousePressEvent(QGraphicsSceneMouseEvent *event)
     {
         QGraphicsColorizeEffect *effect = new QGraphicsColorizeEffect();
         effect->setColor(QColor(0, 255, 0));
+        zVal = zValue();
+        setZValue(20.);
         setGraphicsEffect(effect);
     }
 
@@ -84,6 +86,7 @@ void CCard::mousePressEvent(QGraphicsSceneMouseEvent *event)
  */
 void CCard::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
+    setZValue(zVal);
     setGraphicsEffect(0);
 
     if (boundingRect().contains(event->pos()))
@@ -108,8 +111,12 @@ void CCard::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     {
         QGraphicsColorizeEffect *effect = new QGraphicsColorizeEffect();
         effect->setColor(QColor(0, 255, 0));
+        setZValue(20.);
         setGraphicsEffect(effect);
     }
     else
+    {
+        setZValue(zVal);
         setGraphicsEffect(0);
+    }
 }
