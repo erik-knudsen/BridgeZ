@@ -28,13 +28,13 @@
 #include "cddslock.h"
 #include "cplayengine.h"
 
-const int BATCH_SIZE = 5;       //Batch size for double dummy solver.
-const int MAX_NO_HANDS = 50;    //MSVC does not support dynamic arrays (newer versions of gcc does).
+const int BATCH_SIZE = 8;       //Batch size for double dummy solver.
+const int MAX_NO_HANDS = 100;   //MSVC does not support dynamic arrays (newer versions of gcc does).
 const int MAX_ITER = 1000;      //Maximum number of iterations for finding a hand.
 
 CPlayEngine::CPlayEngine(int computerLevel, CBidOptionDoc &nsBidOptionDoc, CBidOptionDoc &ewBidOptionDoc)
 {
-    noHandsDD = (computerLevel == 0) ? (5) : (computerLevel == 1) ? (10) : (computerLevel == 2) ? (25) : (50);
+    noHandsDD = (computerLevel == 0) ? (5) : (computerLevel == 1) ? (10) : (computerLevel == 2) ? (25) : (40);
     assert(noHandsDD <= MAX_NO_HANDS);
 
     nsBidOptions = nsBidOptionDoc;
@@ -80,7 +80,16 @@ int CPlayEngine::getNextPlay(Seat seat, Seat dummySeat, int ownCards[], int dumm
     int iter = 0;
     int maxFailures = 0;
     int curBoard = 0;
-    while (handNo < noHandsDD)
+    int noHands = noHandsDD;
+    if (playHistory.getNoTrick() >= 4)
+        noHands += 20;
+    if (playHistory.getNoTrick() >= 8)
+        noHands += 20;
+    if (playHistory.getNoTrick() >= 12)
+        noHands += 20;
+    if (noHands > MAX_NO_HANDS)
+        noHands = MAX_NO_HANDS;
+    while (handNo < noHands)
     {
         //Initialize cards.
         int cardValues[52];
@@ -246,7 +255,7 @@ int CPlayEngine::getNextPlay(Seat seat, Seat dummySeat, int ownCards[], int dumm
             curBoard++;
 
             //Solve with double dummy solver?
-            if ((curBoard == BATCH_SIZE) || (handNo == noHandsDD))
+            if ((curBoard == BATCH_SIZE) || (handNo == noHands))
             {
                 batchBoards.noOfBoards = curBoard;
                 CddsLock::mutex.lock();         //Static lock to protect dds static data.
@@ -264,7 +273,7 @@ int CPlayEngine::getNextPlay(Seat seat, Seat dummySeat, int ownCards[], int dumm
     for (int i = 0; i < 52; i++)
         cards[i] = 0;
 
-    for (int i = 0; i < noHandsDD; i++)
+    for (int i = 0; i < noHands; i++)
     for (int j = 0; j < fut[i].cards; j++)
     {
         //Highest ranking card.
