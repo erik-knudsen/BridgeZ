@@ -761,7 +761,7 @@
         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Choose meaning of 3S/3H/3D/3C after 1NT open&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
        <property name="title">
-        <string>After 1NT Openers</string>
+        <string>After 1NT Opener</string>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_63">
         <item>
@@ -772,7 +772,7 @@
              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Choose meaning of 3C/3D rebid after 1NT open&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
             <property name="title">
-             <string>3C/3D Rebid</string>
+             <string>3C/3D Response</string>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_59">
              <item>
@@ -809,7 +809,7 @@
              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Choose meaning of 3H/3S after 1NT open&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
             <property name="title">
-             <string>3H/3S Rebid</string>
+             <string>3H/3S Response</string>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_61">
              <item>
@@ -1222,7 +1222,7 @@
       <attribute name="title">
        <string>Leads</string>
       </attribute>
-      <widget class="QWidget" name="">
+      <widget class="QWidget" name="layoutWidget">
        <property name="geometry">
         <rect>
          <x>0</x>
