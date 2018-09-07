@@ -11,7 +11,7 @@ Yakindu is used for modelling the states of the communication protocol.
 Bridge bidding is implemented by means of a table. Bo Haglunds Double Dummy Solver
 is used for calculating the best card to play.
 
-The ZBridgeE software is covered by the GNU GENERAL PUBLIC LICENSE Version3 (GPLv3).
+The ZBridge software is covered by the GNU GENERAL PUBLIC LICENSE Version3 (GPLv3).
 
 
 Development environment is Qt with the use of Qt Creator as IDE.
@@ -38,6 +38,7 @@ Installation for ZBridge development:
    The Double Dummy Solver by Bo Haglund is generated as a dll. Makefile_Visual
    is used to generate dds.lib and dds.dll files. The dds.lib file is for the linker
    and the dds.dll file is for the executable.
+   Use CC_FULL_FLAGS = $(CC_FLAGS) to turn off warnings.
    You can instead use the MinGW c++ compiler, which can be installed as a part
    of Qt. To generate DDS as a dll in this case use Makefile_mingw. Use the dds.dll
    file for both linker and executable.
