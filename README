@@ -9,7 +9,7 @@ ZBridge is for Windows computers. Its companion ZBridgeE is for embedded compute
 play bridge with each other on the internet. 
 Yakindu is used for modelling the states of the communication protocol.
 Bridge bidding is implemented by means of a table. Bo Haglunds Double Dummy Solver
-is used for calculating the best card to play.
+is used for calculating the best card to play (version DDS 2.8.4).
 
 The ZBridge software is covered by the GNU GENERAL PUBLIC LICENSE Version3 (GPLv3).
 
