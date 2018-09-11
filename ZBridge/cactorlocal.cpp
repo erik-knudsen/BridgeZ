@@ -367,7 +367,7 @@ void CActorLocal::bidValue()
                 (Team)zBridgeClientIface_get_vulnerability(&handle));
 //    nextBid.delRules = true;            //Delete non db rules on destroy.
 
-    qDebug() << QString(SEAT_NAMES[nextBid.bidder]) + ":  " + bidAndPlay.featuresOfBid(nextBid);
+//    qDebug() << QString(SEAT_NAMES[nextBid.bidder]) + ":  " + bidAndPlay.featuresOfBid(nextBid);
 
     nextBid.deleteRules();
 

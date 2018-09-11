@@ -471,7 +471,7 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
         auction.auction.append(bidHistory.bidList[i].bid);
     QString txt;
     auctionToText(auction, &txt);
-    qDebug() << QString(SEAT_NAMES[seat]) + ": " + txt;
+//    qDebug() << QString(SEAT_NAMES[seat]) + ": " + txt;
     //***********************for debugging****************************
 
     int size = bidHistory.bidList.size();
@@ -1761,7 +1761,7 @@ void CBidEngine::calculatepRules(Seat seat, CBidHistory &bidHistory, Bids bid, S
             CFeatures lowFeatures;
             CFeatures highFeatures;
 
-            qDebug() << QString("Entry slam");
+//            qDebug() << QString("Entry slam");
 
             pRule->getFeatures(&lowFeatures, &highFeatures);
             if (acesAsked(bidHistory) > 0)
@@ -1774,7 +1774,7 @@ void CBidEngine::calculatepRules(Seat seat, CBidHistory &bidHistory, Bids bid, S
                 int noPartnerKings = CalculateNoCards(highPartnerFeatures, KING);
                 lowFeatures.setCountCard(ANY, KING, ((3 - noPartnerKings) > 0) ? (3 - noPartnerKings) : (0));
             }
-            qDebug() << QString("Points: %1").arg(lowPartnerFeatures.getPoints(newSuitAgree));
+//            qDebug() << QString("Points: %1").arg(lowPartnerFeatures.getPoints(newSuitAgree));
             lowFeatures.updPoints(newSuitAgree, true);
             int points = 40 - lowPartnerFeatures.getPoints(newSuitAgree);
             if (points > 37)

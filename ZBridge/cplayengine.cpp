@@ -435,7 +435,7 @@ int CPlayEngine::getBestCard(int cards[], int ownCards[], int dummyCards[], Seat
             txt += QString("  %1%2").arg(SUIT_NAMES[CARD_SUIT(i)]).arg(FACE_NAMES[CARD_FACE(i)]);
         }
 
-        qDebug() << txt;
+//        qDebug() << txt;
 
         //Get contract suit for the hand.
         Suit contractSuit = BID_SUIT(playHistory.getContract());
@@ -626,7 +626,7 @@ int CPlayEngine::getBestCard(int cards[], int ownCards[], int dummyCards[], Seat
         }
     }
 
-    qDebug() << QString("  %1%2").arg(SUIT_NAMES[CARD_SUIT(cardC)]).arg(FACE_NAMES[CARD_FACE(cardC)]);
+//    qDebug() << QString("  %1%2").arg(SUIT_NAMES[CARD_SUIT(cardC)]).arg(FACE_NAMES[CARD_FACE(cardC)]);
 
     return cardC;
 }
