@@ -369,7 +369,6 @@ QList<CRule *> CBidEngine::getpRules(Seat seat, CBidHistory &bidHistory, Bids bi
             }
         }
 
-
         //Remove initial pass bids (if any) in the auction and get also any seat opening.
         if ((auction.auction.size() > 0) && (auction.auction[0] == BID_PASS))
         {
