@@ -208,29 +208,28 @@ CBid CBidEngine::getNextBid(Seat seat, CFeatures &ownFeatures, CBidHistory &bidH
             }
         }
 
+        //Remove initial pass bids (if any) in the auction and get also any seat opening.
+        if ((auction.auction.size() > 0) &&
+                (auction.auction[0] == BID_PASS))
+        {
+            cont = true;
+            CAuction oldAuction = auction;
+            int first;
+            for (first = 0; first < auction.auction.size(); first++)
+                if (auction.auction[first] != BID_PASS)
+                    break;
+            auction.auction.clear();
+            for (int i = first; i < oldAuction.auction.size(); i++)
+                auction.auction.append(oldAuction.auction[i]);
+        }
         //Did we find anything?
-        if (pDefRules.size() == 0)
+        else if (pDefRules.size() == 0)
         {
             //We did not find anything. Should we try a substitute auction?
             if ((subAuction.size() != 0) && !(auction.auction == subAuction[0].auction))
             {
                 auction = subAuction[0];
                 cont = true;
-            }
-
-            //As a last resort try to remove initial pass bids (if any) in the auction.
-            else if ((auction.auction.size() > 0) &&
-                    (auction.auction[0] == BID_PASS))
-            {
-                cont = true;
-                CAuction oldAuction = auction;
-                int first;
-                for (first = 0; first < auction.auction.size(); first++)
-                    if (auction.auction[first] != BID_PASS)
-                        break;
-                auction.auction.clear();
-                for (int i = first; i < oldAuction.auction.size(); i++)
-                    auction.auction.append(oldAuction.auction[i]);
             }
         }
     }
@@ -370,8 +369,22 @@ QList<CRule *> CBidEngine::getpRules(Seat seat, CBidHistory &bidHistory, Bids bi
             }
         }
 
+
+        //Remove initial pass bids (if any) in the auction and get also any seat opening.
+        if ((auction.auction.size() > 0) && (auction.auction[0] == BID_PASS))
+        {
+            cont = true;
+            CAuction oldAuction = auction;
+            int first;
+            for (first = 0; first < auction.auction.size(); first++)
+                if (auction.auction[first] != BID_PASS)
+                    break;
+            auction.auction.clear();
+            for (int i = first; i < oldAuction.auction.size(); i++)
+                auction.auction.append(oldAuction.auction[i]);
+        }
         //Did we find anything?
-        if (pDefRules.size() == 0)
+        else if (pDefRules.size() == 0)
         {
             //We did not find anything. Should we try a substitute auction?
             if ((subAuction.size() != 0) && !(auction.auction == subAuction[0].auction))
@@ -379,20 +392,6 @@ QList<CRule *> CBidEngine::getpRules(Seat seat, CBidHistory &bidHistory, Bids bi
                 auction = subAuction[0];
                 *substitute = true;
                 cont = true;
-            }
-
-            //As a last resort try to remove initial pass bids (if any) in the auction.
-            else if ((auction.auction.size() > 0) && (auction.auction[0] == BID_PASS))
-            {
-                cont = true;
-                CAuction oldAuction = auction;
-                int first;
-                for (first = 0; first < auction.auction.size(); first++)
-                    if (auction.auction[first] != BID_PASS)
-                        break;
-                auction.auction.clear();
-                for (int i = first; i < oldAuction.auction.size(); i++)
-                    auction.auction.append(oldAuction.auction[i]);
             }
         }
     }
