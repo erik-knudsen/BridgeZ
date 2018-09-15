@@ -1076,6 +1076,17 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
             else if ((nextBid >= BID_3NT) && canDouble(bidHistory) && (highOppBid >= nextBid))
                 bid.bid = BID_DOUBLE;
             else
+                //Assure forcing is taken care of.
+                if ((bidHistory.bidList[size - 2].rules[0]->getStatus() == FORCING) &&
+                    !IS_BID(bidHistory.bidList[size - 1].bid))
+                {
+                    Suit highSuit = BID_SUIT(highBid);
+                    int level = BID_LEVEL(highBid);
+                    if (highSuit > agree)
+                        level++;
+                    bid.bid = MAKE_BID(agree, level);
+                }
+            else
                 bid.bid = BID_PASS;
 
             return bid;
@@ -1853,6 +1864,10 @@ void CBidEngine::calculatepRules(Seat seat, CBidHistory &bidHistory, Bids bid, S
             (((newSuitAgree == SPADES) || (newSuitAgree == HEARTS) || (newSuitAgree == DIAMONDS) || (newSuitAgree == CLUBS))
             && (BID_SUIT(bid) == newSuitAgree)))
     {
+        int size = bidHistory.bidList.size();
+        if (bidHistory.bidList[size - 2].rules[0]->getStatus() == FORCING)
+            return;
+
         Suit agree = ((suitAgree == NOTRUMP) && (BID_SUIT(bid) == NOTRUMP)) ? (suitAgree) : (newSuitAgree);
         Bids game = (agree == SPADES) ? (BID_4S) : (agree == HEARTS) ? (BID_4H) :
                     (agree == DIAMONDS) ? (BID_5D) : (agree == CLUBS) ? (BID_5C) : (BID_3NT);
@@ -2195,7 +2210,7 @@ bool CBidEngine::isPenaltyDouble(CBidHistory &bidHistory, CFeatures lowPartnerFe
             break;
 
     return ((i >= (size - 5)) &&
-            ((BID_LEVEL(bidHistory.bidList[i].bid) >= 4) || (lowPartnerFeatures.getExtPoints(NOTRUMP, true) >= 12)));
+            ((BID_LEVEL(bidHistory.bidList[i].bid) >= 4) && (lowPartnerFeatures.getExtPoints(NOTRUMP, true) >= 12)));
 }
 
 //Have we bidded double?
