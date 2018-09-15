@@ -219,3 +219,5 @@ FORMS    += cmainframe.ui \
 
 RESOURCES = \
     resources.qrc
+
+RC_ICONS = resources/IDR_MAIN.ICO
