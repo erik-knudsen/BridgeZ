@@ -88,7 +88,7 @@ public:
 
     Actor getActorType() { return (manual ? MANUAL_ACTOR : AUTO_ACTOR); }
     Seat getSeat() {return (Seat)zBridgeClientIface_get_client(&handle); }
-    void setManual(bool manual) { this->manual = manual; }
+    void setManual(bool manual) { this->manual = (manual) ? manual : defManual; }
 
     ZBridgeClient *getHandle() { return &handle; }
 

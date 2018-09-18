@@ -741,6 +741,7 @@ void CPlayView::undoTrick(int noTrick, int nsTricks, int ewTricks, Seat dummy, b
     assert(noTrick == (nsTricks + ewTricks));
 
     setPlayHint(NO_SEAT, 0);
+    clearYourTurnOnTable();
 
     //Clear cards in center  display.
     clearCardsOnTable();

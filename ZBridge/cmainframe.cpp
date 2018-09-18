@@ -433,7 +433,8 @@ void CMainFrame::customEvent(QEvent *event)
 
             //Enable/Disable new deal menu entry.
         case UPDATE_UI_NEW_DEAL:
-            ui->action_Deal_New_Hand->setEnabled(param);
+            if (!games->getComputerPlays())
+                ui->action_Deal_New_Hand->setEnabled(param);
             break;
 
             //Enable/Disable undo bid or trick menu entry.

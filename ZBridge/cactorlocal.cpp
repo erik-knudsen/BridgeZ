@@ -319,7 +319,7 @@ void CActorLocal::clientSyncActions()
         if (updateGameInfo && (syncState == SS))            //Sync Start of Board.
             emit sUpdateGameToNextDeal();
         if (manual && ((syncState == SA) || (syncState == SP) || (syncState == SS) || (syncState == SL)))
-            emit sEnableContinueSync(zBridgeClientSyncIface_get_syncState(&syncHandle));
+            emit sEnableContinueSync(syncState);
         else
             continueSync();                 //Never when showUser is true.
     }

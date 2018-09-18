@@ -341,9 +341,20 @@ void CTblMngrServer::serverActions()
     {
         //Undo play.
         if (zBridgeServerIface_israised_undoPlay(&handle))
+        {
             QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_REPLAY , false));
+            //if declarer is auto and partner is manual then instead of declarer playing
+            //partners cards then we let partner play declarers cards.
+            //(this is only implemented with local actors. In other cases auto declarer plays the cards.).
+            Seat declarer = (Seat)zBridgeServerIface_get_declarer(&handle);
+            Seat dummy = (Seat)zBridgeServerIface_get_dummy(&handle);
+            actors[declarer]->setManual(false);
+            if ((actors[declarer]->getActorType() == AUTO_ACTOR) &&
+                    (actors[dummy]->getActorType() == MANUAL_ACTOR))
+                playView->showCards(declarer, false);
+        }
 
-        //Undo bid always follows undo play.
+        //Undo bid always is after undo play.
         int val = zBridgeServerIface_get_undoBid_value(&handle);
         actors[WEST_SEAT]->undoBid(val == REBID);
         actors[NORTH_SEAT]->undoBid(val == REBID);
@@ -691,6 +702,11 @@ void CTblMngrServer::newSession()
 void CTblMngrServer::newDeal()
 {
     waiting = false;
+
+    QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_UNDO , false));
+    QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_REBID , false));
+    QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_REPLAY , false));
+    QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_HINT , false));
 
     playView->resetView();
 
@@ -1201,7 +1217,7 @@ void CTblMngrServer::sShowPlay()
  */
 void CTblMngrServer::sEnableContinueSync(int syncState)
 {
-    if (!waiting)
+//    if (!waiting)
     {
         waiting = true;
         switch (syncState)
@@ -1249,7 +1265,7 @@ void CTblMngrServer::sEnableContinueSync(int syncState)
  */
 void CTblMngrServer::sDisableContinueSync(int syncState)
 {
-    if (waiting)
+//    if (waiting)
     {
         waiting = false;
         switch (syncState)
