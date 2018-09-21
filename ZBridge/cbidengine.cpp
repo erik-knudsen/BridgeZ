@@ -1,4 +1,4 @@
-﻿/* Erik Aagaard Knudsen.
+/* Erik Aagaard Knudsen.
   Copyright © 2013 - All Rights Reserved
 
   Project: ZBridge
@@ -62,7 +62,7 @@ const int NEWSUIT_P2_3_H = 12;          //High point for partners 2. bid on leve
 const int NEWSUIT_P2_4 = 13;            //Low point for partners 2. bid on level 4.
 
 //Rebid of suit definitions.
-const int REBID_SL = 6;                 //Minimum suit length.
+const int REBID_SL = 5;                 //Minimum suit length.
 const int REBID_O = 12;                 //Base level for openers rebid.
 const int REBID_P = 6;                  //Base level for partners rebid.
 
@@ -79,6 +79,20 @@ const int ZERO_OR_FOUR_KINGS = 179;     //Zero or four kings.
 const int ONE_KING = 180;               //One king.
 const int TWO_KINGS = 181;              //Two kings.
 const int THREE_KINGS = 182;            //Three kings.
+
+//Bid names (indexed by enum Bids).
+const QString BID_NAMES[] =
+{
+    "P",
+    "1C", "1D", "1H", "1S", "1N",
+    "2C", "2D", "2H", "2S", "2N",
+    "3C", "3D", "3H", "3S", "3N",
+    "4C", "4D", "4H", "4S", "4N",
+    "5C", "5D", "5H", "5S", "5N",
+    "6C", "6D", "6H", "6S", "6N",
+    "7C", "7D", "7H", "7S", "7N",
+    "X", "XX", "?"
+};
 
 /**
  * @brief Generate bid engine.
@@ -471,7 +485,7 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
         auction.auction.append(bidHistory.bidList[i].bid);
     QString txt;
     auctionToText(auction, &txt);
-//    qDebug() << QString(SEAT_NAMES[seat]) + ": " + txt;
+//    qDebug() << QString(SEAT_NAMES[seat]) + "cB: " + txt;
     //***********************for debugging****************************
 
     int size = bidHistory.bidList.size();
@@ -1445,7 +1459,25 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
             return bid;
         }
     }
-    bid.bid = BID_PASS;
+
+    //Assure forcing is taken care of (just bid the longest suit).
+    if ((bidHistory.bidList[size - 2].rules[0]->getStatus() == FORCING) &&
+        !IS_BID(bidHistory.bidList[size - 1].bid))
+    {
+        int i, length, suit;
+        length = 0;
+        for (i = 0; i < 4; i++)
+            if (ownFeatures.getSuitLen((Suit)i) >= length)
+            {
+                length = ownFeatures.getSuitLen((Suit)i);
+                suit = i;
+            }
+
+        int level = (suit > BID_SUIT(highBid)) ? (BID_LEVEL(highBid)) : (BID_LEVEL(highBid) + 1);
+        bid.bid = MAKE_BID(suit, level);
+    }
+    else
+        bid.bid = BID_PASS;
 
     return bid;
 }
@@ -1469,6 +1501,8 @@ void CBidEngine::calculatepRules(Seat seat, CBidHistory &bidHistory, Bids bid, S
     CRule *pRule = new CRule();
     pRule->setdBRule(false);
     pDefRules.append(pRule);
+
+//    qDebug() << QString(SEAT_NAMES[seat]) + "pB: " + BID_NAMES[bid];
 
     int size = bidHistory.bidList.size();
 
@@ -2618,22 +2652,6 @@ bool CBidEngine::isMax(int lowValue, int highValue, int value)
 {
     return (value > (highValue - (highValue - lowValue) / 4));
 }
-
-
-
-//Bid names (indexed by enum Bids).
-const QString BID_NAMES[] =
-{
-    "P",
-    "1C", "1D", "1H", "1S", "1N",
-    "2C", "2D", "2H", "2S", "2N",
-    "3C", "3D", "3H", "3S", "3N",
-    "4C", "4D", "4H", "4S", "4N",
-    "5C", "5D", "5H", "5S", "5N",
-    "6C", "6D", "6H", "6S", "6N",
-    "7C", "7D", "7H", "7S", "7N",
-    "X", "XX", "?"
-};
 
 //Convert auction to text (to display).
 void CBidEngine::auctionToText(CAuction &auction, QString *text)
