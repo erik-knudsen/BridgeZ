@@ -70,7 +70,7 @@ public:
     int getEWTricks() { return playHistory.getEWTricks(); }
     int getNSTricks() { return playHistory.getNSTricks(); }
     void setPlay(Seat player, int trick, int cardVal) { playHistory.setPlay(player, trick, cardVal); }
-    void resetPlayHistory() { playHistory.resetPlayHistory(); }
+    void resetPlayHistory(bool resetBidInfo = true) { playHistory.resetPlayHistory(resetBidInfo); }
     int playUndo(int val) { return playHistory.undo(val); }
     int getNoTrick() { return playHistory.getNoTrick(); }
     int getNextPlay(Seat player, Seat dummySeat);

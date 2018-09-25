@@ -764,7 +764,7 @@ void CTblMngrServer::rePlay()
     assert(zBridgeServer_isStateActive(&handle, ZBridgeServer_entry__Playing) ||
            zBridgeServer_isStateActive(&handle, ZBridgeServer_entry__SyncLeader));
 
-    playHistory.resetPlayHistory();
+    playHistory.resetPlayHistory(false);
 
     zBridgeServerIface_raise_undo(&handle, REPLAY);
     serverRunCycle();

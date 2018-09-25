@@ -678,7 +678,7 @@ void CActorLocal::undoTrick(bool rePlay)
 
     if (rePlay)
     {
-        bidAndPlay.resetPlayHistory();
+        bidAndPlay.resetPlayHistory(false);
         leader = REPLAY;
     }
     else if (zBridgeClient_isStateActive(&handle, ZBridgeClient_main_region_Play))

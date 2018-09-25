@@ -29,14 +29,17 @@ CPlayHistory::CPlayHistory()
     resetPlayHistory();
 }
 
-void CPlayHistory::resetPlayHistory()
+void CPlayHistory::resetPlayHistory(bool resetBidInfo)
 {
     noTrick = 0;
     ewTricks = 0;
     nsTricks = 0;
 
-    bid = BID_NONE;
-    bidDouble = BID_NONE;
+    if (resetBidInfo)
+    {
+        bid = BID_NONE;
+        bidDouble = BID_NONE;
+    }
 
     for (int i = 0; i < 4; i++)
         for (int j = 0; j < 13; j++)

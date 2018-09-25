@@ -32,7 +32,7 @@ class CPlayHistory
 public:
     CPlayHistory();
 
-    void resetPlayHistory();
+    void resetPlayHistory(bool resetBidInfo = true);
     void setBidInfo(Bids bid, Bids bidDouble, Seat openLeader);
     void setPlay(Seat player, int trick, int cardVal);
     int getPlayed(Seat seat, int cards[13]);

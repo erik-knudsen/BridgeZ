@@ -39,6 +39,7 @@ const int BID_SUIT_MINOR_GAME_INX = 4;
 const int BID_NT_GAME_INX = 2;
 const int BID_SMALL_SLAM_INX = 5;
 const int BID_GRAND_SLAM_INX = 6;
+const int DOUBLE_LIMIT = 12;
 
 //Newbid definitions. For new suit bidding.
 const int OPEN_RESPONSE = 1;            //Next bid is response to opener by partner.
@@ -485,7 +486,7 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
         auction.auction.append(bidHistory.bidList[i].bid);
     QString txt;
     auctionToText(auction, &txt);
-//    qDebug() << QString(SEAT_NAMES[seat]) + "cB: " + txt;
+    qDebug() << QString(SEAT_NAMES[seat]) + "cB: " + txt;
     //***********************for debugging****************************
 
     int size = bidHistory.bidList.size();
@@ -1338,7 +1339,7 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
                 if (((level >= 5) && ((newSuit == CLUBS) || (newSuit == DIAMONDS))) ||
                         ((level >= 4) && ((newSuit == HEARTS) || (newSuit == SPADES))))
                 {
-                    level = ((newSuit == CLUBS) || (newSuit == DIAMONDS)) ? (4) : (5);
+                    level = ((newSuit == CLUBS) || (newSuit == DIAMONDS)) ? (4) : (3);
                     newBid = MAKE_BID(newSuit, level);
                 }
 
@@ -1502,7 +1503,7 @@ void CBidEngine::calculatepRules(Seat seat, CBidHistory &bidHistory, Bids bid, S
     pRule->setdBRule(false);
     pDefRules.append(pRule);
 
-//    qDebug() << QString(SEAT_NAMES[seat]) + "pB: " + BID_NAMES[bid];
+    qDebug() << QString(SEAT_NAMES[seat]) + "pB: " + BID_NAMES[bid];
 
     int size = bidHistory.bidList.size();
 
@@ -1794,6 +1795,22 @@ void CBidEngine::calculatepRules(Seat seat, CBidHistory &bidHistory, Bids bid, S
 
         pRule->setFeatures(lowFeatures, highFeatures);
         pRule->setStatus(FORCING);
+
+        return;
+    }
+
+    //If the bid is Double then it is a penalty double (other doubles are handled
+    //by the bidding tables and never comes here).
+    if (bid == BID_DOUBLE)
+    {
+        CFeatures lowFeatures;
+        CFeatures highFeatures;
+
+        pRule->getFeatures(&lowFeatures, &highFeatures);
+
+        lowFeatures.setPoints(NOTRUMP, DOUBLE_LIMIT);
+        pRule->setFeatures(lowFeatures, highFeatures);
+        pRule->setStatus(MUST_PASS);
 
         return;
     }
@@ -2244,7 +2261,7 @@ bool CBidEngine::isPenaltyDouble(CBidHistory &bidHistory, CFeatures lowPartnerFe
             break;
 
     return ((i >= (size - 5)) &&
-            ((BID_LEVEL(bidHistory.bidList[i].bid) >= 4) && (lowPartnerFeatures.getExtPoints(NOTRUMP, true) >= 12)));
+            ((bidHistory.bidList[i].bid >= BID_3NT) && (lowPartnerFeatures.getExtPoints(NOTRUMP, true) >= DOUBLE_LIMIT)));
 }
 
 //Have we bidded double?
@@ -2302,11 +2319,16 @@ Bids CBidEngine::getTakeoutDouble(CFeatures &lowPartnerFeatures, CFeatures &ownF
         }
     }
 
-    //Did not work with NT. Find the longest suit.
+    //Did not work with NT. Find the longest suit (not the doubled suit).
     int suit = 0;
+    int doubleSuit = (int)BID_SUIT(doubleBid);
+    int len = 0;
     for (int i = 0; i < 4; i++)
-        if ((ownFeatures.getPoints((Suit)i) > ownFeatures.getPoints((Suit)suit)))
+        if ((i != doubleSuit) && (ownFeatures.getSuitLen((Suit)i) > len))
+        {
             suit = i;
+            len = ownFeatures.getSuitLen((Suit)suit);
+        }
 
     int points = ownFeatures.getPoints((Suit)suit);
     int firstLevel = (suit > BID_SUIT(doubleBid)) ? (BID_LEVEL(doubleBid)) : (BID_LEVEL(doubleBid) + 1);
@@ -2587,6 +2609,9 @@ int CBidEngine::nextBidder(CBidHistory &bidHistory)
     for (i = first; i < size; i += 2)
         if (bidHistory.bidList[i].bid != BID_PASS)
             break;
+
+    if ((i < size) && (!IS_BID(bidHistory.bidList[i].bid)))
+        return OPEN_OTHER;
 
     int retVal;
 

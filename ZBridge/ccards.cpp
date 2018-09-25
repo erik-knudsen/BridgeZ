@@ -192,7 +192,7 @@ void CCards::showClearedCard(int noTrick)
     while (notVisibleValues.size() > noTrick)
     {
         int cardValue = notVisibleValues.last();
-        int i = showBack ? notVisibleValues.size() : getCardIndex(cardValue);
+        int i = showBack ? (notVisibleValues.size() - 1) : getCardIndex(cardValue);
         if ( i < 13)
         {
             cards[i].setVisible(true);
@@ -210,7 +210,7 @@ void CCards::showTopClearedCard()
     if (notVisibleValues.size() > 0)
     {
         int cardValue = notVisibleValues.last();
-        int i = showBack ? notVisibleValues.size() : getCardIndex(cardValue);
+        int i = showBack ? (notVisibleValues.size() - 1) : getCardIndex(cardValue);
         if ( i < 13)
         {
             cards[i].setVisible(true);
