@@ -486,7 +486,7 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
         auction.auction.append(bidHistory.bidList[i].bid);
     QString txt;
     auctionToText(auction, &txt);
-    qDebug() << QString(SEAT_NAMES[seat]) + "cB: " + txt;
+//    qDebug() << QString(SEAT_NAMES[seat]) + "cB: " + txt;
     //***********************for debugging****************************
 
     int size = bidHistory.bidList.size();
@@ -1097,7 +1097,7 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
                 {
                     Suit highSuit = BID_SUIT(highBid);
                     int level = BID_LEVEL(highBid);
-                    if (highSuit > agree)
+                    if (highSuit >= agree)
                         level++;
                     bid.bid = MAKE_BID(agree, level);
                 }
@@ -1503,7 +1503,7 @@ void CBidEngine::calculatepRules(Seat seat, CBidHistory &bidHistory, Bids bid, S
     pRule->setdBRule(false);
     pDefRules.append(pRule);
 
-    qDebug() << QString(SEAT_NAMES[seat]) + "pB: " + BID_NAMES[bid];
+//    qDebug() << QString(SEAT_NAMES[seat]) + "pB: " + BID_NAMES[bid];
 
     int size = bidHistory.bidList.size();
 
@@ -1578,7 +1578,7 @@ void CBidEngine::calculatepRules(Seat seat, CBidHistory &bidHistory, Bids bid, S
         pRule->getFeatures(&lowFeatures, &highFeatures);
 
         int low, high;
-        Suit suit = findTakeoutDouble(bid, highBid, &low, &high);
+        Suit suit = findTakeoutDouble(lowPartnerFeatures.getExtPoints(NOTRUMP, true), bid, highBid, &low, &high);
         if (suit == NOTRUMP)
         {
             pRule->getFeatures(&lowFeatures, &highFeatures);
@@ -2313,7 +2313,7 @@ Bids CBidEngine::getTakeoutDouble(CFeatures &lowPartnerFeatures, CFeatures &ownF
         if (i == 4)
         {
             Bids bid;
-            getLevel(NOTRUMP, 12, ownFeatures.getPoints(NOTRUMP), &bid, low, high);
+            getLevel(NOTRUMP, lowPartnerFeatures.getExtPoints(NOTRUMP, true), ownFeatures.getPoints(NOTRUMP), &bid, low, high);
             if ((bid <= BID_3NT) && (bid != BID_PASS) && (bid > highBid))
                 return bid;
         }
@@ -2332,21 +2332,28 @@ Bids CBidEngine::getTakeoutDouble(CFeatures &lowPartnerFeatures, CFeatures &ownF
 
     int points = ownFeatures.getPoints((Suit)suit);
     int firstLevel = (suit > BID_SUIT(doubleBid)) ? (BID_LEVEL(doubleBid)) : (BID_LEVEL(doubleBid) + 1);
-    *low = 0;
-    *high = 8;
+    int off = 12 - lowPartnerFeatures.getExtPoints(NOTRUMP, true);
+    *low = 0 + off;
+    *high = 8 + off;
     int level = 0;
-    if ((points > 8))
+    if ((points > (8 + off)))
     {
-        *low = 9;
-        *high = 11;
+        *low = 9 + off;
+        *high = 11 + off;
         level++;
     }
-    if (points > 11)
+    if (points > (11  + off))
     {
-        *low = 12;
+        *low = 12 + off;
         *high = ownFeatures.getMaxPoints();
         level++;
     }
+
+    if (*low < 0)
+        *low = 0;
+    if (*high > ownFeatures.getMaxPoints())
+        *high = ownFeatures.getMaxPoints();
+
     if ((firstLevel + level) > 4)
     {
         level = 4;
@@ -2362,7 +2369,7 @@ Bids CBidEngine::getTakeoutDouble(CFeatures &lowPartnerFeatures, CFeatures &ownF
 }
 
 //Find takeout double point intervals.
-Suit CBidEngine::findTakeoutDouble(Bids bid, Bids highBid, int *low, int *high)
+Suit CBidEngine::findTakeoutDouble(int lowPartner, Bids bid, Bids highBid, int *low, int *high)
 {
     Suit suit = BID_SUIT(bid);
     int level = BID_LEVEL(bid);
@@ -2370,7 +2377,7 @@ Suit CBidEngine::findTakeoutDouble(Bids bid, Bids highBid, int *low, int *high)
     int highLevel = BID_LEVEL(highBid);
 
     if (suit == NOTRUMP)
-        findLevel(suit, 12, level, low, high);
+        findLevel(suit, lowPartner, level, low, high);
 
     else if (suit != ANY)
     {
@@ -2378,7 +2385,7 @@ Suit CBidEngine::findTakeoutDouble(Bids bid, Bids highBid, int *low, int *high)
 
         if ((level - firstLevel) == 0)
         {
-            *low = 0;
+            *low = 0 ;
             *high = 8;
         }
         else if ((level - firstLevel) == 1)
@@ -2391,6 +2398,15 @@ Suit CBidEngine::findTakeoutDouble(Bids bid, Bids highBid, int *low, int *high)
             *low = 12;
             *high = 37;
         }
+
+        int off = 12 - lowPartner;
+        *low += off;
+        *high += off;
+
+        if (*low < 0)
+            *low = 0;
+        if (*high > 37)
+            *high = 37;
     }
     return suit;
 }

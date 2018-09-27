@@ -70,7 +70,7 @@ private:
     bool canDouble(CBidHistory &bidHistory);
     Bids getTakeoutDouble(CFeatures &lowPartnerFeatures, CFeatures &ownFeatures,
                        Bids highBid, Bids doubleBid, int *low, int *high);
-    Suit findTakeoutDouble(Bids bid, Bids highBid, int *low, int *high);
+    Suit findTakeoutDouble(int lowPartner, Bids bid, Bids highBid, int *low, int *high);
     bool isBlackwoodOrGerberQuestion(CBidHistory &bidHistory, Suit agree);
     Bids blackwoodOrGerberAsk(CBidHistory &bidHistory, int noAces, int noKings, int lowTotPoints, Suit agree);
     int acesAsked(CBidHistory &bidHistory);

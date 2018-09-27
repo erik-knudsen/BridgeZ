@@ -781,10 +781,10 @@ void CBidDBDefine::calcIds(CBidOptionDoc &bidOptions, QSet<qint16> &pages, QSet<
     else
         rules<<R_1N_4R_S;             //4-response Stayman.
 
-//    if (bidOptions.oneNTtwoNT == NAT_1N_2N)
+    if (!bidOptions.fourSuitTransfers)
           rules<<R_1N_2N_N;             //1N-2N natural.
-//    else
-//        rules<<R_1N_2N_T;             //1N-2N transfer.
+    else
+        rules<<R_1N_2N_T;             //1N-2N transfer.
 
 //    rules<<R_2N_3M;               //2N-3M: natural forcing.
 
