@@ -486,7 +486,7 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
         auction.auction.append(bidHistory.bidList[i].bid);
     QString txt;
     auctionToText(auction, &txt);
-//    qDebug() << QString(SEAT_NAMES[seat]) + "cB: " + txt;
+    qDebug() << QString(SEAT_NAMES[seat]) + "cB: " + txt;
     //***********************for debugging****************************
 
     int size = bidHistory.bidList.size();
@@ -793,7 +793,7 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
                 noPartnerKings = 4;
             int noAces = noPartnerAces + noOwnAces;
             int noKings = noPartnerKings + noOwnKings;
-            Bids nextBid = blackwoodOrGerberAsk(bidHistory, noAces, noKings, lowTotPoints, agree);
+            Bids nextBid = blackwoodOrGerberAsk(bidHistory, noAces, noKings, lowTotPoints, agree, suitAgree);
             if (nextBid != BID_NONE)
             {
                 CFeatures lowFeatures;
@@ -921,27 +921,27 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
 
             //if too high  //escape from slam try.
             int maxLevel = (agree == NOTRUMP) ? (3) : ((agree == SPADES) || (agree == HEARTS)) ? (4) : (5);
-            Bids escBid = MAKE_BID(agree, maxLevel);
-            if (highOPBid > escBid)
+            nextBid = MAKE_BID(agree, maxLevel);
+            int level = BID_LEVEL(highOPBid);
+            if (highOPBid >= nextBid)
             {
-                int level = BID_LEVEL(highOPBid);
                 nextBid = BID_PASS;
                 if (BID_SUIT(highOPBid) != agree)                      //Might happen with control bid after agreement.
                 {
                     level++;
                     nextBid = MAKE_BID(agree, level);
                 }
-
-                Bids cmpBid = MAKE_BID(agree, level);
-                if (highOppBid < cmpBid)
-                    bid.bid = nextBid;
-                else if ((cmpBid >= BID_3NT) && canDouble(bidHistory))
-                    bid.bid = BID_DOUBLE;
-                else
-                    bid.bid = BID_PASS;
-
-                return bid;
             }
+
+            Bids cmpBid = MAKE_BID(agree, level);
+            if (highOppBid < cmpBid)
+                bid.bid = nextBid;
+            else if ((cmpBid >= BID_3NT) && canDouble(bidHistory))
+                bid.bid = BID_DOUBLE;
+            else
+                bid.bid = BID_PASS;
+
+            return bid;
         }
 
         //if (game is possible in minor - check if we should play for 3NT instead)
@@ -1133,12 +1133,14 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
 
                 //Get point interval and bid to bid.
                 int lowP;
-                if (nextBidder(bidHistory) == OPEN_ALERT)
+/*                if (nextBidder(bidHistory) == OPEN_ALERT)
                     lowP = lowPartnerFeatures.getExtPoints(NOTRUMP, true);      //There was an alert.
                 else
                     lowP = isNextBidOpen(bidHistory) ? (REBID_P) : (REBID_O);   //6, 12
                 if (lowPartnerFeatures.getExtPoints(NOTRUMP, true) > lowP)
                     lowP = lowPartnerFeatures.getExtPoints(NOTRUMP, true);
+*/
+                lowP = lowPartnerFeatures.getExtPoints(NOTRUMP, true);
                 getLevel((Suit)suit, lowP, ownFeatures.getPoints((Suit)suit), &nextBid,
                          &low, &high);
 
@@ -1503,7 +1505,7 @@ void CBidEngine::calculatepRules(Seat seat, CBidHistory &bidHistory, Bids bid, S
     pRule->setdBRule(false);
     pDefRules.append(pRule);
 
-//    qDebug() << QString(SEAT_NAMES[seat]) + "pB: " + BID_NAMES[bid];
+    qDebug() << QString(SEAT_NAMES[seat]) + "pB: " + BID_NAMES[bid];
 
     int size = bidHistory.bidList.size();
 
@@ -1823,8 +1825,6 @@ void CBidEngine::calculatepRules(Seat seat, CBidHistory &bidHistory, Bids bid, S
             CFeatures lowFeatures;
             CFeatures highFeatures;
 
-//            qDebug() << QString("Entry slam");
-
             pRule->getFeatures(&lowFeatures, &highFeatures);
             if (acesAsked(bidHistory) > 0)
             {
@@ -1836,7 +1836,6 @@ void CBidEngine::calculatepRules(Seat seat, CBidHistory &bidHistory, Bids bid, S
                 int noPartnerKings = CalculateNoCards(highPartnerFeatures, KING);
                 lowFeatures.setCountCard(ANY, KING, ((3 - noPartnerKings) > 0) ? (3 - noPartnerKings) : (0));
             }
-//            qDebug() << QString("Points: %1").arg(lowPartnerFeatures.getPoints(newSuitAgree));
             lowFeatures.updPoints(newSuitAgree, true);
             int points = 40 - lowPartnerFeatures.getPoints(newSuitAgree);
             if (points > 37)
@@ -2435,7 +2434,7 @@ bool CBidEngine::isBlackwoodOrGerberQuestion(CBidHistory &bidHistory, Suit agree
 
 //Should we ask a Blackwood or Gerber question?
 Bids CBidEngine::blackwoodOrGerberAsk(CBidHistory &bidHistory, int noAces, int noKings,
-                                      int lowTotPoints, Suit agree)
+                                      int lowTotPoints, Suit agree, Suit suitAgree)
 {
     int size = bidHistory.bidList.size();
     if (size < 2)
@@ -2450,7 +2449,7 @@ Bids CBidEngine::blackwoodOrGerberAsk(CBidHistory &bidHistory, int noAces, int n
                  (noKings <= 3) && (lowTotPoints >= BID_NT_POINT[BID_GRAND_SLAM_INX]))
             return BID_5C;
     }
-    else
+    else if ((suitAgree != ANY) || ((suitAgree == ANY) && (agree == BID_SUIT(bidHistory.bidList[size - 2].bid))))
     {
         if ((size < 4) || ((bidHistory.bidList[size - 4].bid != BID_4NT) &&
                 ((noAces <= 2) || ((noAces == 3) && (lowTotPoints >= BID_SUIT_POINT[BID_GRAND_SLAM_INX])))))
