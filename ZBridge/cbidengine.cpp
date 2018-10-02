@@ -63,7 +63,7 @@ const int NEWSUIT_P2_3_H = 12;          //High point for partners 2. bid on leve
 const int NEWSUIT_P2_4 = 13;            //Low point for partners 2. bid on level 4.
 
 //Rebid of suit definitions.
-const int REBID_SL = 5;                 //Minimum suit length.
+const int REBID_SL = 6;                 //Minimum suit length.
 const int REBID_O = 12;                 //Base level for openers rebid.
 const int REBID_P = 6;                  //Base level for partners rebid.
 
@@ -209,6 +209,7 @@ CBid CBidEngine::getNextBid(Seat seat, CFeatures &ownFeatures, CBidHistory &bidH
                             {
                                 defBids.append(bids[i]);
                                 pDefRules.append(pRules[i]);
+                                qDebug() << QString("page: %1 Bid: %2").arg(page).arg(BID_NAMES[bids[i]]);
                             }
                         }
                 }
@@ -926,9 +927,10 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
             if (highOPBid >= nextBid)
             {
                 nextBid = BID_PASS;
-                if (BID_SUIT(highOPBid) != agree)                      //Might happen with control bid after agreement.
+                if (BID_SUIT(highOPBid) != agree)
                 {
-                    level++;
+                    if (BID_SUIT(highOPBid) > agree)
+                        level++;
                     nextBid = MAKE_BID(agree, level);
                 }
             }
@@ -1769,36 +1771,47 @@ void CBidEngine::calculatepRules(Seat seat, CBidHistory &bidHistory, Bids bid, S
     //Gerber?
     if ((suitAgree == NOTRUMP) && ((bid == BID_4C) || (bid == BID_5C)))
     {
-        CFeatures lowFeatures;
-        CFeatures highFeatures;
-
-        pRule->getFeatures(&lowFeatures, &highFeatures);
-
-        if (bid == BID_4C)
+        bool oneOrTwoNt = true;
+        for (int i = size - 2; i >= 0; i -= 2)
         {
-            //Gerber ace asking.
-            pRule->setAlertId(GERBER_ACE);
-
-            int points = BID_NT_POINT[BID_SMALL_SLAM_INX] - lowPartnerFeatures.getExtPoints(suitAgree, true);
-            if (points < 0) points = 0;
-            lowFeatures.setPoints(suitAgree, points);
-            highFeatures.updPoints(suitAgree, false);
+           Suit suit = BID_SUIT(bidHistory.bidList[i].bid);
+           int level = BID_LEVEL(bidHistory.bidList[i].bid);
+           if ((suit == NOTRUMP) && (level >= 3))
+               oneOrTwoNt = false;
         }
-        else if (bid == BID_5C)
+        if (oneOrTwoNt)
         {
-            //Gerber king asking.
-            pRule->setAlertId(GERBER_KING);
+            CFeatures lowFeatures;
+            CFeatures highFeatures;
 
-            int points = BID_NT_POINT[BID_GRAND_SLAM_INX] - lowPartnerFeatures.getExtPoints(suitAgree, true);
-            if (points < 0) points = 0;
-            lowFeatures.setPoints(suitAgree, points);
-            highFeatures.updPoints(suitAgree, false);
+            pRule->getFeatures(&lowFeatures, &highFeatures);
+
+            if (bid == BID_4C)
+            {
+                //Gerber ace asking.
+                pRule->setAlertId(GERBER_ACE);
+
+                int points = BID_NT_POINT[BID_SMALL_SLAM_INX] - lowPartnerFeatures.getExtPoints(suitAgree, true);
+                if (points < 0) points = 0;
+                lowFeatures.setPoints(suitAgree, points);
+                highFeatures.updPoints(suitAgree, false);
+            }
+            else if (bid == BID_5C)
+            {
+                //Gerber king asking.
+                pRule->setAlertId(GERBER_KING);
+
+                int points = BID_NT_POINT[BID_GRAND_SLAM_INX] - lowPartnerFeatures.getExtPoints(suitAgree, true);
+                if (points < 0) points = 0;
+                lowFeatures.setPoints(suitAgree, points);
+                highFeatures.updPoints(suitAgree, false);
+            }
+
+            pRule->setFeatures(lowFeatures, highFeatures);
+            pRule->setStatus(FORCING);
+
+            return;
         }
-
-        pRule->setFeatures(lowFeatures, highFeatures);
-        pRule->setStatus(FORCING);
-
-        return;
     }
 
     //If the bid is Double then it is a penalty double (other doubles are handled
@@ -1915,7 +1928,8 @@ void CBidEngine::calculatepRules(Seat seat, CBidHistory &bidHistory, Bids bid, S
             && (BID_SUIT(bid) == newSuitAgree)))
     {
         int size = bidHistory.bidList.size();
-        if (bidHistory.bidList[size - 2].rules[0]->getStatus() == FORCING)
+        if ((size >= 2) && ((bidHistory.bidList[size - 2].rules[0]->getStatus() == FORCING) ||
+                            (bidHistory.bidList[size - 2].rules[0]->getStatus() == GAME_FORCING)))
             return;
 
         Suit agree = ((suitAgree == NOTRUMP) && (BID_SUIT(bid) == NOTRUMP)) ? (suitAgree) : (newSuitAgree);
@@ -2423,7 +2437,17 @@ bool CBidEngine::isBlackwoodOrGerberQuestion(CBidHistory &bidHistory, Suit agree
 
     //Gerber.
     if ((agree == NOTRUMP) && ((bid == BID_4C) || (bid == BID_5C)))
-        return true;
+    {
+        bool oneOrTwoNt = true;
+        for (int i = size - 4; i >= 0; i -= 2)
+        {
+           Suit suit = BID_SUIT(bidHistory.bidList[i].bid);
+           int level = BID_LEVEL(bidHistory.bidList[i].bid);
+           if ((suit == NOTRUMP) && (level >= 3))
+               oneOrTwoNt = false;
+        }
+        return oneOrTwoNt;
+    }
 
     //Blackwood.
     if (((bid == BID_4NT) || (bid == BID_5NT)) && (agree != NOTRUMP))
@@ -2442,7 +2466,17 @@ Bids CBidEngine::blackwoodOrGerberAsk(CBidHistory &bidHistory, int noAces, int n
 
     if (agree == NOTRUMP)
     {
-        if ((size < 4) || ((bidHistory.bidList[size - 4].bid != BID_4C) &&
+        bool oneOrTwoNt = true;
+        for (int i = size - 2; i >= 0; i -= 2)
+        {
+           Suit suit = BID_SUIT(bidHistory.bidList[i].bid);
+           int level = BID_LEVEL(bidHistory.bidList[i].bid);
+           if ((suit == NOTRUMP) && (level >= 3))
+               oneOrTwoNt = false;
+        }
+        if (!oneOrTwoNt)
+            ;
+        else if ((size < 4) || ((bidHistory.bidList[size - 4].bid != BID_4C) &&
                 ((noAces <= 2) || ((noAces == 3) && (lowTotPoints >= BID_NT_POINT[BID_GRAND_SLAM_INX])))))
             return BID_4C;
         else if ((size > 4) && ((bidHistory.bidList[size - 4].bid == BID_4C)) &&
