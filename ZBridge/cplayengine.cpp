@@ -181,12 +181,10 @@ int CPlayEngine::getNextPlay(Seat seat, Seat dummySeat, int ownCards[], int dumm
                     for (int k = 0; k < noPlayed; k++)
                         cards[newNo++] = played[k];
                 }
-                CFeatures features;
-                features.setCardFeatures(cards);
-                int res = features.featureIsOk(bidHistory.getHighFeatures((Seat)i), bidHistory.getLowFeatures((Seat)i));
-                if (res != 0)
+                bool res = bidHistory.checkCardFeatures(cards, (Seat)i);
+                if (res)
                     noFailures++;
-                if ((res != 0) && (noFailures > maxFailures))
+                if ((res) && (noFailures > maxFailures))
                     break;
             }
         }

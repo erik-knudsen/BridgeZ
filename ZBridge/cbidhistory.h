@@ -47,6 +47,7 @@ public:
     bool passedOut();
     CFeatures &getLowFeatures(Seat seat) { return lowFeatures[seat]; }
     CFeatures &getHighFeatures(Seat seat) { return highFeatures[seat]; }
+    bool checkCardFeatures(int cards[], Seat seat);
 
     QList<CBid> bidList;            /**< The list of the given bids. Public for easy access. */
 

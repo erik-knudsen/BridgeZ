@@ -140,6 +140,34 @@ bool CBidHistory::passedOut()
             (bidList[3].bid == BID_PASS));
 }
 
+bool CBidHistory::checkCardFeatures(int cards[], Seat seat)
+{
+    CFeatures features;
+    features.setCardFeatures(cards);
+
+//    int res = features.featureIsOk(getHighFeatures(seat), getLowFeatures(seat));
+
+    int size = bidList.size();
+    int res = 0;
+
+    for (int i = 0; (i < size) && (bidList[i].bidder == seat); i++)
+    {
+        for (int j = 0; j < bidList[i].rules.size(); j++)
+        {
+            CFeatures low;
+            CFeatures high;
+            bidList[i].rules[j]->getFeatures(&low, &high);
+            res = features.featureIsOk(high, low);
+            if (res == 0)
+                break;
+        }
+        if (res != 0)
+            break;
+    }
+
+    return (res == 0);
+}
+
 /**
  * @brief Set the bidders seat.
  *
@@ -191,9 +219,9 @@ void CBidHistory::calculateRange(Seat seat, CFeatures &lowFeatures, CFeatures &h
  * combined bids has the most narrow "or" range for a given feature. The bid database
  * handles (sufficiently - to be seen though) this. Example could be Stayman after 1NT.
  * This shows either 4+ cards in either hearts or spades or both. But which is revealed
- * in later bidding.\n
- * The bid database is in some cases corrected for HCP/Points. And it is marked whether
- * the bid potentially can be a NT bid.
+ * in later bidding. [Distribution of cards in the play phase solved by double dummy play
+ * to get the best next card to play does also use these combined features (to be seen
+ * if this is sufficient)].\n
  *
  * @param[in] inx Index of the bid in the bid history.
  * @param[in,out] lowFeatures Low limit of features.
