@@ -477,9 +477,14 @@ void CTblMngrServer::serverSyncActions()
             emit sStatusText(QString(tr("Waiting for auto play.")));
         }
         else
+        {
+            if (syncState == SS)
+                playContinue = false;
+
             //Tell clients.
             for (int i = 0; i < 4; i++)
                 actors[i]->confirmSyncFromServerToClient();
+        }
     }
 }
 
@@ -992,6 +997,7 @@ void CTblMngrServer::sltPlayStart()
     {
         emit sStatusText(QString(""));
         playWaiting = false;
+        playContinue = false;
 
         //Tell clients to continue synchronization with server.
         for (int i = 0; i < 4; i++)
@@ -1217,7 +1223,7 @@ void CTblMngrServer::sShowPlay()
  */
 void CTblMngrServer::sEnableContinueSync(int syncState)
 {
-//    if (!waiting)
+    if (!waiting)
     {
         waiting = true;
         switch (syncState)
@@ -1265,7 +1271,7 @@ void CTblMngrServer::sEnableContinueSync(int syncState)
  */
 void CTblMngrServer::sDisableContinueSync(int syncState)
 {
-//    if (waiting)
+    if (waiting)
     {
         waiting = false;
         switch (syncState)

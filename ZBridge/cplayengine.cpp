@@ -84,9 +84,9 @@ int CPlayEngine::getNextPlay(Seat seat, Seat dummySeat, int ownCards[], int dumm
     if (playHistory.getNoTrick() >= 2)
         noHands += 20;
     if (playHistory.getNoTrick() >= 5)
-        noHands += 20;
+        noHands += 10;
     if (playHistory.getNoTrick() >= 8)
-        noHands += 20;
+        noHands += 10;
     if (playHistory.getNoTrick() >= 11)
         noHands = noHandsDD;
     if (noHands > MAX_NO_HANDS)

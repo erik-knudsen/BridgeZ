@@ -609,6 +609,7 @@ void CTblMngrServerAuto::sltPlayStart()
     if (playWaiting)
     {
         playWaiting = false;
+        playContinue = false;
         if (firstAutoSync)
         {
             firstAutoSync = false;

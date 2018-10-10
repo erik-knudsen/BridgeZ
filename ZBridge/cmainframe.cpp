@@ -597,8 +597,8 @@ void CMainFrame::resetPlay()
     {
         tableManager = new CTblMngrClient(doc, games, bidAndPlayEngines, hostAddress, playView, this);
         tableManagerAuto = new CTblMngrClientAuto(doc, games, bidAndPlayEngines, hostAddress, 0);
-        connect(tableManager, &CTblMngrBase::sigDisconnect, tableManagerAuto, &CTblMngrBase::sltDisconnect);
-        connect(tableManagerAuto, &CTblMngrBase::sigDisconnect, tableManager, &CTblMngrBase::sltDisconnect);
+        connect(tableManager, &CTblMngrBase::sigDisconnect, tableManagerAuto, &CTblMngrBase::sltDisconnect, Qt::QueuedConnection);
+        connect(tableManagerAuto, &CTblMngrBase::sigDisconnect, tableManager, &CTblMngrBase::sltDisconnect, Qt::QueuedConnection);
     }
 
     //Table manager standalone?
@@ -611,8 +611,8 @@ void CMainFrame::resetPlay()
     QThread *thread = new QThread();
     tableManagerAuto->moveToThread(thread);
     connect(thread, &QThread::finished, thread, &QThread::deleteLater);
-    connect(this, &CMainFrame::sAutoQuit, tableManagerAuto, &CTblMngrBase::sAutoQuit);
-    connect(this, &CMainFrame::sNewSession, tableManagerAuto, &CTblMngrBase::sNewSession);
+    connect(this, &CMainFrame::sAutoQuit, tableManagerAuto, &CTblMngrBase::sAutoQuit, Qt::QueuedConnection);
+    connect(this, &CMainFrame::sNewSession, tableManagerAuto, &CTblMngrBase::sNewSession, Qt::QueuedConnection);
     connect(tableManager, &CTblMngrBase::sStatusText , this, &CMainFrame::sStatusText);
     thread->start();
 
@@ -707,8 +707,8 @@ void CMainFrame::open(QString &originalFileName)
         connect(tableManager, &CTblMngrBase::sigPlayStart, tableManager, &CTblMngrBase::sltPlayStart);
     else
     {
-        connect(tableManager, &CTblMngrBase::sigPlayStart, tableManagerAuto, &CTblMngrBase::sltPlayStart);
-        connect(tableManagerAuto, &CTblMngrBase::sigPlayStart, tableManager, &CTblMngrBase::sltPlayStart);
+        connect(tableManager, &CTblMngrBase::sigPlayStart, tableManagerAuto, &CTblMngrBase::sltPlayStart, Qt::QueuedConnection);
+        connect(tableManagerAuto, &CTblMngrBase::sigPlayStart, tableManager, &CTblMngrBase::sltPlayStart, Qt::QueuedConnection);
     }
 
     //Start new session for table manager.
