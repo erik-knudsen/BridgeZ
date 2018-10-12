@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>206</width>
-    <height>218</height>
+    <width>250</width>
+    <height>275</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -32,7 +32,7 @@
          <item>
           <widget class="QToolButton" name="bid1C">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -47,7 +47,7 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset>
+            <iconset resource="resources.qrc">
              <normaloff>:/resources/ico_1c.ico</normaloff>:/resources/ico_1c.ico</iconset>
            </property>
            <property name="iconSize">
@@ -70,7 +70,7 @@
          <item>
           <widget class="QToolButton" name="bid1D">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -85,7 +85,7 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset>
+            <iconset resource="resources.qrc">
              <normaloff>:/resources/ico_1d.ico</normaloff>:/resources/ico_1d.ico</iconset>
            </property>
            <property name="iconSize">
@@ -102,7 +102,7 @@
          <item>
           <widget class="QToolButton" name="bid1H">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -117,7 +117,7 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset>
+            <iconset resource="resources.qrc">
              <normaloff>:/resources/ico_1h.ico</normaloff>:/resources/ico_1h.ico</iconset>
            </property>
            <property name="iconSize">
@@ -134,7 +134,7 @@
          <item>
           <widget class="QToolButton" name="bid1S">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -149,7 +149,7 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset>
+            <iconset resource="resources.qrc">
              <normaloff>:/resources/ico_1s.ico</normaloff>:/resources/ico_1s.ico</iconset>
            </property>
            <property name="iconSize">
@@ -166,7 +166,7 @@
          <item>
           <widget class="QToolButton" name="bid1NT">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -181,7 +181,7 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset>
+            <iconset resource="resources.qrc">
              <normaloff>:/resources/ico_1nt.ico</normaloff>:/resources/ico_1nt.ico</iconset>
            </property>
            <property name="iconSize">
@@ -189,6 +189,9 @@
              <width>18</width>
              <height>12</height>
             </size>
+           </property>
+           <property name="toolButtonStyle">
+            <enum>Qt::ToolButtonIconOnly</enum>
            </property>
            <property name="autoRaise">
             <bool>true</bool>
@@ -201,6 +204,12 @@
         <layout class="QHBoxLayout" name="horizontalLayout_5">
          <item>
           <widget class="QToolButton" name="bid2C">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="minimumSize">
             <size>
              <width>30</width>
@@ -211,7 +220,7 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset>
+            <iconset resource="resources.qrc">
              <normaloff>:/resources/ico_2c.ico</normaloff>:/resources/ico_2c.ico</iconset>
            </property>
            <property name="iconSize">
@@ -227,6 +236,12 @@
          </item>
          <item>
           <widget class="QToolButton" name="bid2D">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="minimumSize">
             <size>
              <width>30</width>
@@ -237,7 +252,7 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset>
+            <iconset resource="resources.qrc">
              <normaloff>:/resources/ico_2d.ico</normaloff>:/resources/ico_2d.ico</iconset>
            </property>
            <property name="iconSize">
@@ -253,6 +268,12 @@
          </item>
          <item>
           <widget class="QToolButton" name="bid2H">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="minimumSize">
             <size>
              <width>30</width>
@@ -263,7 +284,7 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset>
+            <iconset resource="resources.qrc">
              <normaloff>:/resources/ico_2h.ico</normaloff>:/resources/ico_2h.ico</iconset>
            </property>
            <property name="iconSize">
@@ -279,6 +300,12 @@
          </item>
          <item>
           <widget class="QToolButton" name="bid2S">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="minimumSize">
             <size>
              <width>30</width>
@@ -289,7 +316,7 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset>
+            <iconset resource="resources.qrc">
              <normaloff>:/resources/ico_2s.ico</normaloff>:/resources/ico_2s.ico</iconset>
            </property>
            <property name="iconSize">
@@ -305,6 +332,12 @@
          </item>
          <item>
           <widget class="QToolButton" name="bid2NT">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="minimumSize">
             <size>
              <width>30</width>
@@ -315,7 +348,7 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset>
+            <iconset resource="resources.qrc">
              <normaloff>:/resources/ico_2nt.ico</normaloff>:/resources/ico_2nt.ico</iconset>
            </property>
            <property name="iconSize">
@@ -335,6 +368,12 @@
         <layout class="QHBoxLayout" name="horizontalLayout_6">
          <item>
           <widget class="QToolButton" name="bid3C">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="minimumSize">
             <size>
              <width>30</width>
@@ -345,7 +384,7 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset>
+            <iconset resource="resources.qrc">
              <normaloff>:/resources/ico_3c.ico</normaloff>:/resources/ico_3c.ico</iconset>
            </property>
            <property name="iconSize">
@@ -361,6 +400,12 @@
          </item>
          <item>
           <widget class="QToolButton" name="bid3D">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="minimumSize">
             <size>
              <width>30</width>
@@ -371,7 +416,7 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset>
+            <iconset resource="resources.qrc">
              <normaloff>:/resources/ico_3d.ico</normaloff>:/resources/ico_3d.ico</iconset>
            </property>
            <property name="iconSize">
@@ -387,6 +432,12 @@
          </item>
          <item>
           <widget class="QToolButton" name="bid3H">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="minimumSize">
             <size>
              <width>30</width>
@@ -397,7 +448,7 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset>
+            <iconset resource="resources.qrc">
              <normaloff>:/resources/ico_3h.ico</normaloff>:/resources/ico_3h.ico</iconset>
            </property>
            <property name="iconSize">
@@ -413,6 +464,12 @@
          </item>
          <item>
           <widget class="QToolButton" name="bid3S">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="minimumSize">
             <size>
              <width>30</width>
@@ -423,7 +480,7 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset>
+            <iconset resource="resources.qrc">
              <normaloff>:/resources/ico_3s.ico</normaloff>:/resources/ico_3s.ico</iconset>
            </property>
            <property name="iconSize">
@@ -439,6 +496,12 @@
          </item>
          <item>
           <widget class="QToolButton" name="bid3NT">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="minimumSize">
             <size>
              <width>30</width>
@@ -449,7 +512,7 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset>
+            <iconset resource="resources.qrc">
              <normaloff>:/resources/ico_3nt.ico</normaloff>:/resources/ico_3nt.ico</iconset>
            </property>
            <property name="iconSize">
@@ -469,6 +532,12 @@
         <layout class="QHBoxLayout" name="horizontalLayout_7">
          <item>
           <widget class="QToolButton" name="bid4C">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="minimumSize">
             <size>
              <width>30</width>
@@ -479,7 +548,7 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset>
+            <iconset resource="resources.qrc">
              <normaloff>:/resources/ico_4c.ico</normaloff>:/resources/ico_4c.ico</iconset>
            </property>
            <property name="iconSize">
@@ -495,6 +564,12 @@
          </item>
          <item>
           <widget class="QToolButton" name="bid4D">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="minimumSize">
             <size>
              <width>30</width>
@@ -505,7 +580,7 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset>
+            <iconset resource="resources.qrc">
              <normaloff>:/resources/ico_4d.ico</normaloff>:/resources/ico_4d.ico</iconset>
            </property>
            <property name="iconSize">
@@ -521,6 +596,12 @@
          </item>
          <item>
           <widget class="QToolButton" name="bid4H">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="minimumSize">
             <size>
              <width>30</width>
@@ -531,7 +612,7 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset>
+            <iconset resource="resources.qrc">
              <normaloff>:/resources/ico_4h.ico</normaloff>:/resources/ico_4h.ico</iconset>
            </property>
            <property name="iconSize">
@@ -547,6 +628,12 @@
          </item>
          <item>
           <widget class="QToolButton" name="bid4S">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="minimumSize">
             <size>
              <width>30</width>
@@ -557,7 +644,7 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset>
+            <iconset resource="resources.qrc">
              <normaloff>:/resources/ico_4s.ico</normaloff>:/resources/ico_4s.ico</iconset>
            </property>
            <property name="iconSize">
@@ -573,6 +660,12 @@
          </item>
          <item>
           <widget class="QToolButton" name="bid4NT">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="minimumSize">
             <size>
              <width>30</width>
@@ -583,7 +676,7 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset>
+            <iconset resource="resources.qrc">
              <normaloff>:/resources/ico_4nt.ico</normaloff>:/resources/ico_4nt.ico</iconset>
            </property>
            <property name="iconSize">
@@ -603,6 +696,12 @@
         <layout class="QHBoxLayout" name="horizontalLayout_8">
          <item>
           <widget class="QToolButton" name="bid5C">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="minimumSize">
             <size>
              <width>30</width>
@@ -613,7 +712,7 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset>
+            <iconset resource="resources.qrc">
              <normaloff>:/resources/ico_5c.ico</normaloff>:/resources/ico_5c.ico</iconset>
            </property>
            <property name="iconSize">
@@ -629,6 +728,12 @@
          </item>
          <item>
           <widget class="QToolButton" name="bid5D">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="minimumSize">
             <size>
              <width>30</width>
@@ -639,7 +744,7 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset>
+            <iconset resource="resources.qrc">
              <normaloff>:/resources/ico_5d.ico</normaloff>:/resources/ico_5d.ico</iconset>
            </property>
            <property name="iconSize">
@@ -655,6 +760,12 @@
          </item>
          <item>
           <widget class="QToolButton" name="bid5H">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="minimumSize">
             <size>
              <width>30</width>
@@ -665,7 +776,7 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset>
+            <iconset resource="resources.qrc">
              <normaloff>:/resources/ico_5h.ico</normaloff>:/resources/ico_5h.ico</iconset>
            </property>
            <property name="iconSize">
@@ -681,6 +792,12 @@
          </item>
          <item>
           <widget class="QToolButton" name="bid5S">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="minimumSize">
             <size>
              <width>30</width>
@@ -691,7 +808,7 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset>
+            <iconset resource="resources.qrc">
              <normaloff>:/resources/ico_5s.ico</normaloff>:/resources/ico_5s.ico</iconset>
            </property>
            <property name="iconSize">
@@ -707,6 +824,12 @@
          </item>
          <item>
           <widget class="QToolButton" name="bid5NT">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="minimumSize">
             <size>
              <width>30</width>
@@ -717,7 +840,7 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset>
+            <iconset resource="resources.qrc">
              <normaloff>:/resources/ico_5nt.ico</normaloff>:/resources/ico_5nt.ico</iconset>
            </property>
            <property name="iconSize">
@@ -737,6 +860,12 @@
         <layout class="QHBoxLayout" name="horizontalLayout_9">
          <item>
           <widget class="QToolButton" name="bid6C">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="minimumSize">
             <size>
              <width>30</width>
@@ -747,7 +876,7 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset>
+            <iconset resource="resources.qrc">
              <normaloff>:/resources/ico_6c.ico</normaloff>:/resources/ico_6c.ico</iconset>
            </property>
            <property name="iconSize">
@@ -763,6 +892,12 @@
          </item>
          <item>
           <widget class="QToolButton" name="bid6D">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="minimumSize">
             <size>
              <width>30</width>
@@ -773,7 +908,7 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset>
+            <iconset resource="resources.qrc">
              <normaloff>:/resources/ico_6d.ico</normaloff>:/resources/ico_6d.ico</iconset>
            </property>
            <property name="iconSize">
@@ -789,6 +924,12 @@
          </item>
          <item>
           <widget class="QToolButton" name="bid6H">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="minimumSize">
             <size>
              <width>30</width>
@@ -799,7 +940,7 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset>
+            <iconset resource="resources.qrc">
              <normaloff>:/resources/ico_6h.ico</normaloff>:/resources/ico_6h.ico</iconset>
            </property>
            <property name="iconSize">
@@ -815,6 +956,12 @@
          </item>
          <item>
           <widget class="QToolButton" name="bid6S">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="minimumSize">
             <size>
              <width>30</width>
@@ -825,7 +972,7 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset>
+            <iconset resource="resources.qrc">
              <normaloff>:/resources/ico_6s.ico</normaloff>:/resources/ico_6s.ico</iconset>
            </property>
            <property name="iconSize">
@@ -841,6 +988,12 @@
          </item>
          <item>
           <widget class="QToolButton" name="bid6NT">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="minimumSize">
             <size>
              <width>30</width>
@@ -851,7 +1004,7 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset>
+            <iconset resource="resources.qrc">
              <normaloff>:/resources/ico_6nt.ico</normaloff>:/resources/ico_6nt.ico</iconset>
            </property>
            <property name="iconSize">
@@ -871,6 +1024,12 @@
         <layout class="QHBoxLayout" name="horizontalLayout_10">
          <item>
           <widget class="QToolButton" name="bid7C">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="minimumSize">
             <size>
              <width>30</width>
@@ -881,7 +1040,7 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset>
+            <iconset resource="resources.qrc">
              <normaloff>:/resources/ico_7c.ico</normaloff>:/resources/ico_7c.ico</iconset>
            </property>
            <property name="iconSize">
@@ -897,6 +1056,12 @@
          </item>
          <item>
           <widget class="QToolButton" name="bid7D">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="minimumSize">
             <size>
              <width>30</width>
@@ -907,7 +1072,7 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset>
+            <iconset resource="resources.qrc">
              <normaloff>:/resources/ico_7d.ico</normaloff>:/resources/ico_7d.ico</iconset>
            </property>
            <property name="iconSize">
@@ -923,6 +1088,12 @@
          </item>
          <item>
           <widget class="QToolButton" name="bid7H">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="minimumSize">
             <size>
              <width>30</width>
@@ -933,7 +1104,7 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset>
+            <iconset resource="resources.qrc">
              <normaloff>:/resources/ico_7h.ico</normaloff>:/resources/ico_7h.ico</iconset>
            </property>
            <property name="iconSize">
@@ -949,6 +1120,12 @@
          </item>
          <item>
           <widget class="QToolButton" name="bid7S">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="minimumSize">
             <size>
              <width>30</width>
@@ -959,7 +1136,7 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset>
+            <iconset resource="resources.qrc">
              <normaloff>:/resources/ico_7s.ico</normaloff>:/resources/ico_7s.ico</iconset>
            </property>
            <property name="iconSize">
@@ -975,6 +1152,12 @@
          </item>
          <item>
           <widget class="QToolButton" name="bid7NT">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="minimumSize">
             <size>
              <width>30</width>
@@ -985,7 +1168,7 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset>
+            <iconset resource="resources.qrc">
              <normaloff>:/resources/ico_7nt.ico</normaloff>:/resources/ico_7nt.ico</iconset>
            </property>
            <property name="iconSize">
@@ -1006,7 +1189,7 @@
          <item>
           <widget class="QToolButton" name="bidPass">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -1024,7 +1207,7 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset>
+            <iconset resource="resources.qrc">
              <normaloff>:/resources/ico_pass.ico</normaloff>:/resources/ico_pass.ico</iconset>
            </property>
            <property name="iconSize">
@@ -1044,7 +1227,7 @@
          <item>
           <widget class="QToolButton" name="bidDouble">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -1062,7 +1245,7 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset>
+            <iconset resource="resources.qrc">
              <normaloff>:/resources/ico_double.ico</normaloff>:/resources/ico_double.ico</iconset>
            </property>
            <property name="iconSize">
@@ -1081,6 +1264,12 @@
          </item>
          <item>
           <widget class="QToolButton" name="bidRedouble">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="minimumSize">
             <size>
              <width>30</width>
@@ -1094,7 +1283,7 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset>
+            <iconset resource="resources.qrc">
              <normaloff>:/resources/ico_redouble.ico</normaloff>:/resources/ico_redouble.ico</iconset>
            </property>
            <property name="iconSize">
@@ -1159,6 +1348,8 @@
   <tabstop>bid1NT</tabstop>
   <tabstop>bid2C</tabstop>
  </tabstops>
- <resources/>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
  <connections/>
 </ui>

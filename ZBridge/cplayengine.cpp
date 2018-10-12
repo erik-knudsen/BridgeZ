@@ -34,7 +34,7 @@ const int MAX_ITER = 1000;      //Maximum number of iterations for finding a han
 
 CPlayEngine::CPlayEngine(int computerLevel, CBidOptionDoc &nsBidOptionDoc, CBidOptionDoc &ewBidOptionDoc)
 {
-    noHandsDD = (computerLevel == 0) ? (5) : (computerLevel == 1) ? (10) : (computerLevel == 2) ? (25) : (40);
+    noHandsDD = (computerLevel == 0) ? (8) : (computerLevel == 1) ? (16) : (computerLevel == 2) ? (32) : (64);
     assert(noHandsDD <= MAX_NO_HANDS);
 
     nsBidOptions = nsBidOptionDoc;
@@ -82,11 +82,11 @@ int CPlayEngine::getNextPlay(Seat seat, Seat dummySeat, int ownCards[], int dumm
     int curBoard = 0;
     int noHands = noHandsDD;
     if (playHistory.getNoTrick() >= 2)
-        noHands += 20;
+        noHands += 8;
     if (playHistory.getNoTrick() >= 5)
-        noHands += 10;
+        noHands += 8;
     if (playHistory.getNoTrick() >= 8)
-        noHands += 10;
+        noHands += 8;
     if (playHistory.getNoTrick() >= 11)
         noHands = noHandsDD;
     if (noHands > MAX_NO_HANDS)
