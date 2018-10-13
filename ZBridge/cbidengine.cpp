@@ -959,13 +959,8 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
                 //Possibility for 3NT?
                 if (BID_LEVEL(highBid) <= 3)
                 {
-                    //if (3NT)
-                    int i;
-                    for (i = 0; i < 4; i++)
-                        if (((Suit)i != newSuitAgree) &&
-                                (ownFeatures.getStopNT((Suit)i) < 3) && (lowPartnerFeatures.getStopNT((Suit)i) < 3))
-                            break;
-                    if ( i == 4)
+                    if (nextBidCanBeNT(ownFeatures, lowPartnerFeatures, highPartnerFeatures,
+                                       lowRHFeatures, highRHFeatures, lowLHFeatures, highLHFeatures))
                     {
                         CFeatures lowFeatures;
                         CFeatures highFeatures;
@@ -1038,6 +1033,13 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
                     (nextBid < game))
                 nextBid = game;
 
+            //Choose 3NT over 4C, 5C, 4D, 5D if NT is possible.
+            if (((nextBid == BID_4C) || (nextBid == BID_5C) ||
+                (nextBid == BID_4D) || (nextBid == BID_5D)) &&
+                    nextBidCanBeNT(ownFeatures, lowPartnerFeatures, highPartnerFeatures,
+                                   lowRHFeatures, highRHFeatures, lowLHFeatures, highLHFeatures))
+                nextBid = game = BID_3NT;
+
             //No reason to get higher than necessary.
             //If small slam is bidded, then this is based on points only (falls sometimes through to here).
             if ((nextBid > game) && (nextBid < BID_6C))
@@ -1104,6 +1106,14 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
                     int level = BID_LEVEL(highBid);
                     if (highSuit >= agree)
                         level++;
+                    if ((highBid < BID_3NT) && ((agree == CLUBS) || (agree == DIAMONDS)) &&
+                        ((level == 4) || (level == 5)) &&
+                        nextBidCanBeNT(ownFeatures, lowPartnerFeatures, highPartnerFeatures,
+                                       lowRHFeatures, highRHFeatures, lowLHFeatures, highLHFeatures))
+                    {
+                        level = 3;
+                        agree = NOTRUMP;
+                    }
                     bid.bid = MAKE_BID(agree, level);
                 }
             else
@@ -1479,7 +1489,7 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
         }
     }
 
-    //Assure forcing is taken care of (just bid the longest suit).
+    //Assure forcing is taken care of (just bid the longest suit or 3NT if possible).
     if ((bidHistory.bidList[size - 2].rules[0]->getStatus() == FORCING) &&
         !IS_BID(bidHistory.bidList[size - 1].bid))
     {
@@ -1493,6 +1503,14 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
             }
 
         int level = (suit > BID_SUIT(highBid)) ? (BID_LEVEL(highBid)) : (BID_LEVEL(highBid) + 1);
+        if ((highBid < BID_3NT) && ((suit == CLUBS) || (suit == DIAMONDS)) &&
+            ((level == 4) || (level == 5)) &&
+            nextBidCanBeNT(ownFeatures, lowPartnerFeatures, highPartnerFeatures,
+                           lowRHFeatures, highRHFeatures, lowLHFeatures, highLHFeatures))
+        {
+            level = 3;
+            suit = NOTRUMP;
+        }
         bid.bid = MAKE_BID(suit, level);
     }
     else
