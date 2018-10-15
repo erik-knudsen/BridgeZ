@@ -1028,7 +1028,6 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
             }
 
             //Assure game is bidded if status is game forcing.
-            int size = bidHistory.bidList.size();
             if ((bidHistory.bidList[size - 2].rules[0]->getStatus() == GAME_FORCING) &&
                     (nextBid < game))
                 nextBid = game;
@@ -1036,17 +1035,18 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
             //Choose 3NT over 4C, 5C, 4D, 5D if NT is possible.
             if (((nextBid == BID_4C) || (nextBid == BID_5C) ||
                 (nextBid == BID_4D) || (nextBid == BID_5D)) &&
+                 (highBid < BID_3NT) &&
                     nextBidCanBeNT(ownFeatures, lowPartnerFeatures, highPartnerFeatures,
                                    lowRHFeatures, highRHFeatures, lowLHFeatures, highLHFeatures))
                 nextBid = game = BID_3NT;
 
             //No reason to get higher than necessary.
             //If small slam is bidded, then this is based on points only (falls sometimes through to here).
-            if ((nextBid > game) && (nextBid < BID_6C))
+            if ((nextBid > game) && (nextBid < BID_6C) && (game > highBid))
                     nextBid = game;
-            if ((nextBid <= highOPBid) || ((highOPBid > game) &&
-                 !IS_BID(bidHistory.bidList[size - 1].bid) &&
-                 (bidHistory.bidList[size - 2].bid >= game)))
+
+            if ((nextBid <= highOPBid) || ((highOPBid >= game) &&
+                 !IS_BID(bidHistory.bidList[size - 1].bid)))
                 nextBid = BID_PASS;
 
             //Find the proper bid to bid.
@@ -1097,24 +1097,25 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
             }
             else if ((nextBid >= BID_3NT) && canDouble(bidHistory) && (highOppBid >= nextBid))
                 bid.bid = BID_DOUBLE;
-            else
-                //Assure forcing is taken care of.
-                if ((bidHistory.bidList[size - 2].rules[0]->getStatus() == FORCING) &&
-                    !IS_BID(bidHistory.bidList[size - 1].bid))
+
+            //Assure forcing is taken care of.
+            else if (((bidHistory.bidList[size - 2].rules[0]->getStatus() == FORCING) ||
+                      (bidHistory.bidList[size - 2].rules[0]->getAlertId() > 0)) &&
+                     !IS_BID(bidHistory.bidList[size - 1].bid))
                 {
                     Suit highSuit = BID_SUIT(highBid);
                     int level = BID_LEVEL(highBid);
                     if (highSuit >= agree)
                         level++;
+                    nextBid = MAKE_BID(agree, level);
+
                     if ((highBid < BID_3NT) && ((agree == CLUBS) || (agree == DIAMONDS)) &&
-                        ((level == 4) || (level == 5)) &&
+                        (level == 4) &&
                         nextBidCanBeNT(ownFeatures, lowPartnerFeatures, highPartnerFeatures,
                                        lowRHFeatures, highRHFeatures, lowLHFeatures, highLHFeatures))
-                    {
-                        level = 3;
-                        agree = NOTRUMP;
-                    }
-                    bid.bid = MAKE_BID(agree, level);
+                        nextBid = BID_3NT;
+
+                    bid.bid = nextBid;
                 }
             else
                 bid.bid = BID_PASS;
@@ -1125,7 +1126,7 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
 
     //Not agreed on suit?
     else
-    {        
+    {
         //Rebid of own suit.
         {
             bool found = false;
@@ -1148,7 +1149,7 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
 
                 //Get point interval and bid to bid.
                 int lowP;
-/*                if (nextBidder(bidHistory) == OPEN_ALERT)
+                /*                if (nextBidder(bidHistory) == OPEN_ALERT)
                     lowP = lowPartnerFeatures.getExtPoints(NOTRUMP, true);      //There was an alert.
                 else
                     lowP = isNextBidOpen(bidHistory) ? (REBID_P) : (REBID_O);   //6, 12
@@ -1173,28 +1174,27 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
                         findLevel((Suit)suit, lowP, level, &low, &high);
                     }
 
-                    //Check for forcing or game forcing.
-                    if ((((nextBid < highPartnerBid) || (nextBid) < highOwnBid)) &&
-                            ((bidHistory.bidList.size() >= 2) && ((bidHistory.bidList[size - 2].rules[0]->getStatus() == FORCING) ||
-                                                                  (bidHistory.bidList[size - 2].rules[0]->getStatus() == GAME_FORCING) ||
-                                                                  (bidHistory.bidList[size - 2].rules[0]->getAlertId() > 0))))
-                    {
-                        int level = (suit > BID_SUIT(highOPBid)) ? (BID_LEVEL(highOPBid)) : (BID_LEVEL(highOPBid) + 1);
-                        Bids newBid = MAKE_BID(suit, level);
-                        if (newBid > highBid)
-                        {
-                            CFeatures lowFeatures;
-                            CFeatures highFeatures;
-                            pRule->getFeatures(&lowFeatures, &highFeatures);
-                            lowFeatures.setSuitLen((Suit)suit, REBID_SL);
-                            pRule->setFeatures(lowFeatures, highFeatures);
+                    //Bid game if game forcing.
+                    Bids game = (suit == SPADES) ? (BID_4S) : (suit == HEARTS) ? (BID_4H) :
+                                (suit == DIAMONDS) ? (BID_5D) : (suit == CLUBS) ? (BID_5C) : (BID_3NT);
+                    if ((size >= 2) &&
+                            (bidHistory.bidList[size - 2].rules[0]->getStatus() == GAME_FORCING) &&
+                            (nextBid < game))
+                        nextBid = game;
 
-                            bid.bid = newBid;
-                            return bid;
-                        }
-                    }
+                    //Choose 3NT over 4C, 5C, 4D, 5D if NT is possible.
+                    if (((nextBid == BID_4C) || (nextBid == BID_5C) ||
+                         (nextBid == BID_4D) || (nextBid == BID_5D)) &&
+                            (highBid < BID_3NT) &&
+                            nextBidCanBeNT(ownFeatures, lowPartnerFeatures, highPartnerFeatures,
+                                           lowRHFeatures, highRHFeatures, lowLHFeatures, highLHFeatures))
+                        nextBid = game = BID_3NT;
 
-                    //Is the found bid ok (otherwise fall through)?
+                    if ((nextBid <= highOPBid) || ((highOPBid >= game) &&
+                         !IS_BID(bidHistory.bidList[size - 1].bid)))
+                        nextBid = BID_PASS;
+
+                    //Is the found bid ok?
                     if ((nextBid) > highBid)
                     {
                         CFeatures lowFeatures;
@@ -1211,6 +1211,25 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
                     }
                     else if ((nextBid >= BID_3NT) && canDouble(bidHistory) && (highOppBid >= nextBid))
                         bid.bid = BID_DOUBLE;
+
+                    //Assure forcing is taken care of.
+                    else if ((size >= 2) &&
+                             ((bidHistory.bidList[size - 2].rules[0]->getStatus() == FORCING) ||
+                              (bidHistory.bidList[size - 2].rules[0]->getAlertId() > 0)) &&
+                             !IS_BID(bidHistory.bidList[size - 1].bid))
+                    {
+                        Suit highSuit = BID_SUIT(highBid);
+                        int level = BID_LEVEL(highBid);
+                        if (highSuit >= suit)
+                            level++;
+                        nextBid = MAKE_BID(suit, level);
+
+                        if ((highBid < BID_3NT) && ((suit == CLUBS) || (suit == DIAMONDS)) &&
+                                (level == 4) && (newSuitAgree == NOTRUMP))
+                            nextBid = BID_3NT;
+
+                        bid.bid = nextBid;
+                    }
                     else
                         bid.bid = BID_PASS;
 
@@ -1236,7 +1255,6 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
                 int points = ownFeatures.getPoints(NOTRUMP);
                 Bids newBid = MAKE_BID(newSuit, newLevel);
 
-                int size = bidHistory.bidList.size();
                 int bidder = nextBidder(bidHistory);
 
                 //Response from openers partner.
@@ -1358,11 +1376,11 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
 
                 //Try with NT instead?
                 int level = BID_LEVEL(newBid);
-                if ((level < 4) || (((newSuit != CLUBS)  && (newSuit != DIAMONDS)) ||
-                                    (newSuitAgree != NOTRUMP)))
+                if ((level >= 0) &&
+                        ((level < 4) || (((newSuit != CLUBS)  && (newSuit != DIAMONDS)) ||
+                                         (newSuitAgree != NOTRUMP))))
                 {
                     //Assure game is not bidded.
-                    int level = BID_LEVEL(newBid);
                     if (((level >= 5) && ((newSuit == CLUBS) || (newSuit == DIAMONDS))) ||
                             ((level >= 4) && ((newSuit == HEARTS) || (newSuit == SPADES))))
                     {
@@ -1370,50 +1388,44 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
                         newBid = MAKE_BID(newSuit, level);
                     }
 
-                    //Check for forcing or game forcing.
-                    if (((newBid == BID_NONE) || (newBid == BID_PASS)) && (bidHistory.bidList.size() >= 2) &&
-                            ((bidHistory.bidList[size - 2].rules[0]->getStatus() == FORCING) ||
-                             (bidHistory.bidList[size - 2].rules[0]->getStatus() == GAME_FORCING)))
+                    //Assure game is bidded if status is game forcing.
+                    Bids game = (newSuit == SPADES) ? (BID_4S) : (newSuit == HEARTS) ? (BID_4H) :
+                                (newSuit == DIAMONDS) ? (BID_5D) : (newSuit == CLUBS) ? (BID_5C) : (BID_3NT);
+                    if ((size >= 2) &&
+                            (bidHistory.bidList[size - 2].rules[0]->getStatus() == GAME_FORCING) &&
+                            (newBid < game))
+                        newBid = game;
+
+                    //Choose 3NT over 4C, 5C, 4D, 5D if NT is possible.
+                    if (((newSuit == BID_4C) || (newSuit == BID_5C) ||
+                         (newSuit == BID_4D) || (newSuit == BID_5D)) &&
+                            (highBid < BID_3NT) && (newSuitAgree == NOTRUMP))
+                        newBid = game = BID_3NT;
+                }
+
+                //Found a bid (fall through otherwise)?
+                if ((newBid != BID_NONE) && (newBid > highBid))
+                {
+                    CFeatures lowFeatures;
+                    CFeatures highFeatures;
+                    pRule->getFeatures(&lowFeatures, &highFeatures);
+                    if (low != -1)
                     {
-                        int level = (newSuit > BID_SUIT(highOPBid)) ? (BID_LEVEL(highOPBid)) : (BID_LEVEL(highOPBid) + 1);
-                        Bids newBid = MAKE_BID(newSuit, level);
-                        if (newBid > highBid)
-                        {
-                            CFeatures lowFeatures;
-                            CFeatures highFeatures;
-                            pRule->getFeatures(&lowFeatures, &highFeatures);
-                            lowFeatures.setSuitLen((Suit)newSuit, 4);
-                            pRule->setFeatures(lowFeatures, highFeatures);
-
-                            bid.bid = newBid;
-                            return bid;
-                        }
+                        lowFeatures.setPoints(NOTRUMP, low);
+                        highFeatures.updPoints(NOTRUMP, false);
                     }
-
-                    //Found a bid (fall through otherwise)?
-                    if ((newBid != BID_NONE) && (newBid > highBid))
+                    if (high != -1)
                     {
-                        CFeatures lowFeatures;
-                        CFeatures highFeatures;
-                        pRule->getFeatures(&lowFeatures, &highFeatures);
-                        if (low != -1)
-                        {
-                            lowFeatures.setPoints(NOTRUMP, low);
-                            highFeatures.updPoints(NOTRUMP, false);
-                        }
-                        if (high != -1)
-                        {
-                            lowFeatures.updPoints(NOTRUMP, true);
-                            highFeatures.setPoints(NOTRUMP, high);
-                        }
-                        if (newBid != BID_1NT)
-                            lowFeatures.setSuitLen((Suit)newSuit, 4);
-                        pRule->setFeatures(lowFeatures, highFeatures);
-
-                        bid.bid = newBid;
-
-                        return bid;
+                        lowFeatures.updPoints(NOTRUMP, true);
+                        highFeatures.setPoints(NOTRUMP, high);
                     }
+                    if (newBid != BID_1NT)
+                        lowFeatures.setSuitLen((Suit)newSuit, 4);
+                    pRule->setFeatures(lowFeatures, highFeatures);
+
+                    bid.bid = newBid;
+
+                    return bid;
                 }
             }
         }
@@ -1428,28 +1440,16 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
             getLevel(NOTRUMP, lowPartnerFeatures.getExtPoints(newSuitAgree, true), ownFeatures.getPoints(newSuitAgree), &nextBid,
                      &low, &high);
 
-            //Should we bid pass instead (too low)?
-            if ((nextBid < highPartnerBid) || (nextBid < highOwnBid))
-            {
-                //Check for forcing.
-                if ((bidHistory.bidList.size() >= 2) &&
-                        ((bidHistory.bidList[size - 2].rules[0]->getStatus() == FORCING) ||
-                         (bidHistory.bidList[size - 2].rules[0]->getAlertId() > 0)))
-                {
-                    int level = (NOTRUMP > BID_SUIT(highOPBid)) ? (BID_LEVEL(highOPBid)) : (BID_LEVEL(highOPBid) + 1);
-                    Bids newBid = MAKE_BID(NOTRUMP, level);
-                    if (newBid > highBid)
-                    {
-                        bid.bid = newBid;
-                        return bid;
-                    }
-                }
-                nextBid = BID_PASS;
-            }
-
             //Do not go higher than 3NT.
             if ((nextBid > BID_3NT) && (highBid < BID_3NT) && (nextBid < BID_6C))
                 nextBid = BID_3NT;
+
+            //Assure game is bidded if status is game forcing.
+            Bids game = BID_3NT;
+            if ((size >= 2) &&
+                    (bidHistory.bidList[size - 2].rules[0]->getStatus() == GAME_FORCING) &&
+                    (nextBid < game))
+                nextBid = game;
 
             //Find useable bid.
             if (nextBid > highBid)
@@ -1475,47 +1475,65 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
                 }
                 pRule->setFeatures(lowFeatures, highFeatures);
                 if (((highPartnerFeatures.getExtPoints(newSuitAgree, false) + high) < BID_NT_POINT[BID_NT_GAME_INX]) || //26
-                    ((nextBid == BID_3NT) || (nextBid >= BID_6C)))
+                        ((nextBid == BID_3NT) || (nextBid >= BID_6C)))
                     pRule->setStatus(MUST_PASS);                //Game is not possible or game is bidden.
 
                 bid.bid = nextBid;
             }
             else if ((nextBid >= BID_3NT) && canDouble(bidHistory) && (highOppBid >= nextBid))
                 bid.bid = BID_DOUBLE;
+            else if ((size >= 2) &&
+                     ((bidHistory.bidList[size - 2].rules[0]->getStatus() == FORCING) ||
+                      (bidHistory.bidList[size - 2].rules[0]->getAlertId() > 0)) &&
+                     !IS_BID(bidHistory.bidList[size - 1].bid))
+            {
+                Suit highSuit = BID_SUIT(highBid);
+                int level = BID_LEVEL(highBid);
+                nextBid = MAKE_BID(NOTRUMP, level);
+
+                bid.bid = nextBid;
+            }
             else
                 bid.bid = BID_PASS;
 
             return bid;
         }
-    }
 
-    //Assure forcing is taken care of (just bid the longest suit or 3NT if possible).
-    if ((bidHistory.bidList[size - 2].rules[0]->getStatus() == FORCING) &&
-        !IS_BID(bidHistory.bidList[size - 1].bid))
-    {
-        int i, length, suit;
-        length = 0;
-        for (i = 0; i < 4; i++)
-            if (ownFeatures.getSuitLen((Suit)i) >= length)
-            {
-                length = ownFeatures.getSuitLen((Suit)i);
-                suit = i;
-            }
-
-        int level = (suit > BID_SUIT(highBid)) ? (BID_LEVEL(highBid)) : (BID_LEVEL(highBid) + 1);
-        if ((highBid < BID_3NT) && ((suit == CLUBS) || (suit == DIAMONDS)) &&
-            ((level == 4) || (level == 5)) &&
-            nextBidCanBeNT(ownFeatures, lowPartnerFeatures, highPartnerFeatures,
-                           lowRHFeatures, highRHFeatures, lowLHFeatures, highLHFeatures))
         {
-            level = 3;
-            suit = NOTRUMP;
-        }
-        bid.bid = MAKE_BID(suit, level);
-    }
-    else
-        bid.bid = BID_PASS;
+            //Assure forcing and game forcing is taken care of (just bid the longest suit).
+            if ((size >= 2) &&
+                    ((bidHistory.bidList[size - 2].rules[0]->getStatus() == FORCING) ||
+                     (bidHistory.bidList[size - 2].rules[0]->getStatus() == GAME_FORCING) ||
+                     (bidHistory.bidList[size - 2].rules[0]->getAlertId() > 0)) &&
+                    !IS_BID(bidHistory.bidList[size - 1].bid))
+            {
+                int i, length, suit;
+                length = 0;
+                for (i = 0; i < 4; i++)
+                    if ((ownFeatures.getSuitLen((Suit)i) + (lowPartnerFeatures.getSuitLen((Suit)i))) >= length)
+                    {
+                        length = ownFeatures.getSuitLen((Suit)i) + lowPartnerFeatures.getSuitLen((Suit)i);
+                        suit = i;
+                    }
 
+                int level = (suit > BID_SUIT(highBid)) ? (BID_LEVEL(highBid)) : (BID_LEVEL(highBid) + 1);
+                Bids nextBid = MAKE_BID(suit, level);
+
+                //Bid game if game forcing.
+                Bids game = (suit == SPADES) ? (BID_4S) : (suit == HEARTS) ? (BID_4H) :
+                            (suit == DIAMONDS) ? (BID_5D) : (suit == CLUBS) ? (BID_5C) : (BID_3NT);
+
+                if ((size >= 2) &&
+                        (bidHistory.bidList[size - 2].rules[0]->getStatus() == GAME_FORCING) &&
+                        (nextBid < game))
+                    nextBid = game;
+
+                bid.bid = nextBid;
+            }
+            else
+                bid.bid = BID_PASS;
+        }
+    }
     return bid;
 }
 
