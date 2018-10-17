@@ -639,7 +639,7 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
             highFeatures.setDp(NOTRUMP, 1);
             for (int i = 0; i < 4; i++)
                 if (lowPartnerFeatures.getSuitLen((Suit)i) >= 4)
-                    lowFeatures.setStopNT((Suit)i, 3);
+                    lowFeatures.setStopNT((Suit)i, 2);
         }
         //Otherwise a suit bid.
         else if (nextBid != BID_PASS)
@@ -973,10 +973,6 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
                             highPoints = 0;
                         lowFeatures.setPoints(NOTRUMP, lowPoints);
                         highFeatures.setPoints(NOTRUMP, highPoints);
-                        for (int i = 0; i < 4; i++)
-                            if (((Suit)i != agree) &&
-                                    (lowOwnFeatures.getStopNT((Suit)i) < 3) && (lowPartnerFeatures.getStopNT((Suit)i) < 3))
-                                lowFeatures.setStopNT((Suit)i, 3);
                         pRule->setFeatures(lowFeatures, highFeatures);
                         pRule->setStatus(MUST_PASS);
 
@@ -991,12 +987,20 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
                     if ((Suit)i != agree)
                     {
                         //if (stopper quality is ok)
-                        if (ownFeatures.getStopNT((Suit)i) >= 3)
+                        if (ownFeatures.getStopNT((Suit)i) >= 2)
                         {
                             CFeatures lowFeatures;
                             CFeatures highFeatures;
                             pRule->getFeatures(&lowFeatures, &highFeatures);
-                            lowFeatures.setStopNT((Suit)i, 3);
+                            int lowPoints = BID_NT_POINT[BID_NT_GAME_INX] - lowPartnerFeatures.getExtPoints(NOTRUMP, true);
+                            if (lowPoints < 0)
+                                lowPoints = 0;
+                            int highPoints = BID_NT_POINT[BID_SMALL_SLAM_INX] - lowPartnerFeatures.getExtPoints(NOTRUMP, true);
+                            if (highPoints < 0)
+                                highPoints = 0;
+                            lowFeatures.setPoints(NOTRUMP, lowPoints);
+                            highFeatures.setPoints(NOTRUMP, highPoints);
+                            lowFeatures.setStopNT((Suit)i, 2);
                             pRule->setFeatures(lowFeatures, highFeatures);
                             pRule->setStatus(FORCING);
 
@@ -1641,7 +1645,7 @@ void CBidEngine::calculatepRules(Seat seat, CBidHistory &bidHistory, Bids bid, S
             highFeatures.setDp(NOTRUMP, 1);
             for (int i = 0; i < 4; i++)
                 if (lowPartnerFeatures.getSuitLen((Suit)i) >= 4)
-                    lowFeatures.setStopNT((Suit)i, 3);
+                    lowFeatures.setStopNT((Suit)i, 2);
         }
         else if (suit != ANY)
         {
@@ -1939,10 +1943,6 @@ void CBidEngine::calculatepRules(Seat seat, CBidHistory &bidHistory, Bids bid, S
             highPoints = 0;
         lowFeatures.setPoints(NOTRUMP, lowPoints);
         highFeatures.setPoints(NOTRUMP, highPoints);
-        for (int i = 0; i < 4; i++)
-            if (((Suit)i != suitAgree) &&
-                    (lowOwnFeatures.getStopNT((Suit)i) < 3) && (lowPartnerFeatures.getStopNT((Suit)i) < 3))
-                lowFeatures.setStopNT((Suit)i, 3);
         pRule->setFeatures(lowFeatures, highFeatures);
         pRule->setStatus(MUST_PASS);
 
@@ -1956,7 +1956,15 @@ void CBidEngine::calculatepRules(Seat seat, CBidHistory &bidHistory, Bids bid, S
         CFeatures highFeatures;
 
         pRule->getFeatures(&lowFeatures, &highFeatures);
-        lowFeatures.setStopNT(BID_SUIT(bid), 3);
+        int lowPoints = BID_NT_POINT[BID_NT_GAME_INX] - lowPartnerFeatures.getExtPoints(NOTRUMP, true);
+        if (lowPoints < 0)
+            lowPoints = 0;
+        int highPoints = BID_NT_POINT[BID_SMALL_SLAM_INX] - lowPartnerFeatures.getExtPoints(NOTRUMP, true);
+        if (highPoints < 0)
+            highPoints = 0;
+        lowFeatures.setPoints(NOTRUMP, lowPoints);
+        highFeatures.setPoints(NOTRUMP, highPoints);
+        lowFeatures.setStopNT(BID_SUIT(bid), 2);
         pRule->setFeatures(lowFeatures, highFeatures);
         pRule->setStatus(FORCING);
 
@@ -2094,18 +2102,18 @@ void CBidEngine::calculatepRules(Seat seat, CBidHistory &bidHistory, Bids bid, S
         CFeatures highFeatures;
         pRule->getFeatures(&lowFeatures, &highFeatures);
 
-        if (isNewSuit(newSuitAgree, bid))
+        if (bid != BID_1NT)
             lowFeatures.setSuitLen(BID_SUIT(bid), 4);
 
-        //Check for forcing or game forcing.
+        //Check for game forcing.
         int size = bidHistory.bidList.size();
-        if ((size >= 2) && ((bidHistory.bidList[size - 2].rules[0]->getStatus() == FORCING) ||
-                            (bidHistory.bidList[size - 2].rules[0]->getStatus() == GAME_FORCING)))
+        if ((size >= 2) && (bidHistory.bidList[size - 2].rules[0]->getStatus() == GAME_FORCING))
         {
             pRule->setFeatures(lowFeatures, highFeatures);
             return;
         }
 
+        bool forcing = ((size>= 2) &&(bidHistory.bidList[size - 2].rules[0]->getStatus() == FORCING));
         int low = -1;
         int high = -1;
 
@@ -2114,6 +2122,7 @@ void CBidEngine::calculatepRules(Seat seat, CBidHistory &bidHistory, Bids bid, S
         //Response from openers partner.
         if (bidder == OPEN_RESPONSE)
         {
+            forcing = false;
             Bids partnerBid = bidHistory.bidList[size - 2].bid;
 
             //Points.
@@ -2143,12 +2152,14 @@ void CBidEngine::calculatepRules(Seat seat, CBidHistory &bidHistory, Bids bid, S
             //Jump in new suit.
             if (((bid - cmpBid)/5) > 0)
             {
+                forcing = false;
                 low = NEWSUIT_O_J_L;                //19
                 high = NEWSUIT_O_J_H;               //21
             }
             //Reverse suit.
             else if ((((bid - cmpBid) / 5) == 0) && (((bid - ownBid) / 5) == 1))
             {
+                forcing = false;
                 low = NEWSUIT_O_3_L;                //16
                 high = NEWSUIT_O_3_H;               //21
             }
@@ -2163,6 +2174,7 @@ void CBidEngine::calculatepRules(Seat seat, CBidHistory &bidHistory, Bids bid, S
         //Rebid of openers partner.
         else if (bidder == OPEN_REBID_RESPONSE)
         {
+            forcing = false;
             int level = BID_LEVEL(bid);
             if (level == 3)
             {
@@ -2172,6 +2184,9 @@ void CBidEngine::calculatepRules(Seat seat, CBidHistory &bidHistory, Bids bid, S
             else if (level == 4)
                 low = NEWSUIT_P2_4;                 //13
         }
+
+        if (forcing)
+            low = high = -1;
 
         if (low != -1)
         {
@@ -2183,8 +2198,6 @@ void CBidEngine::calculatepRules(Seat seat, CBidHistory &bidHistory, Bids bid, S
             lowFeatures.updPoints(NOTRUMP, true);
             highFeatures.setPoints(NOTRUMP, high);
         }
-        if (bid != BID_1NT)
-            lowFeatures.setSuitLen(BID_SUIT(bid), 4);
         pRule->setFeatures(lowFeatures, highFeatures);
 
         Suit suit = BID_SUIT(bid);
@@ -2270,7 +2283,8 @@ bool CBidEngine::nextBidCanBeNT(CFeatures ownFeatures,
     //Stoppers.
     for (int i = 0; i < 4; i++)
     {
-        if ((ownFeatures.getStopNT((Suit)i) >= 3) || (lowPartnerFeatures.getStopNT((Suit)i) >= 3))
+        if ((ownFeatures.getStopNT((Suit)i) >= 2) || (ownFeatures.getQlty((Suit)i) >= 2) ||
+                (lowPartnerFeatures.getStopNT((Suit)i) >= 2) || (lowPartnerFeatures.getQlty((Suit)i) >= 2))
             stpSuit[i] = true;
     }
 
@@ -2368,7 +2382,7 @@ Bids CBidEngine::getTakeoutDouble(CFeatures &lowPartnerFeatures, CFeatures &ownF
         //Hold in opponent suits?
         int i;
         for (i = 0; i < 4; i++)
-            if ((lowPartnerFeatures.getSuitLen((Suit)i) >= 4) && (ownFeatures.getStopNT((Suit)i) < 3))
+            if ((lowPartnerFeatures.getSuitLen((Suit)i) >= 4) && (ownFeatures.getStopNT((Suit)i) < 2))
                 break;
 
         //Is NT ok?
