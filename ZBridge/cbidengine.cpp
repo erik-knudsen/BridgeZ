@@ -950,7 +950,7 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
         }
 
         //if (game is possible in minor - check if we should play for 3NT instead)
-        if ((agree == DIAMONDS) || (agree == CLUBS))
+        if ((suitAgree == DIAMONDS) || (suitAgree == CLUBS))
         {
             //if (game is possible - in nt) //Should really be tested on NOTRUMP points, but this is
             //of course not possible. We use minor points instead.
@@ -2527,7 +2527,7 @@ Bids CBidEngine::blackwoodOrGerberAsk(CBidHistory &bidHistory, int noAces, int n
         else if ((noKings <= 3) && (lowTotPoints >= BID_NT_POINT[BID_GRAND_SLAM_INX]))
             return BID_5C;
     }
-    else if ((suitAgree != ANY) || ((suitAgree == ANY) && (agree == BID_SUIT(bidHistory.bidList[size - 2].bid))))
+    else if (((suitAgree != ANY) && (agree != NOTRUMP)) || ((suitAgree == ANY) && (agree == BID_SUIT(bidHistory.bidList[size - 2].bid))))
     {
         if ((size < 4) || ((bidHistory.bidList[size - 4].bid != BID_4NT) &&
                 ((noAces <= 2) || ((noAces == 3) && (lowTotPoints >= BID_SUIT_POINT[BID_GRAND_SLAM_INX])))))
