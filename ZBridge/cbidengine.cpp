@@ -1565,6 +1565,12 @@ void CBidEngine::calculatepRules(Seat seat, CBidHistory &bidHistory, Bids bid, S
 
     int size = bidHistory.bidList.size();
 
+    //Highest bid.
+    Bids highBid = BID_NONE;
+    for (int i = 0; i < size; i++)
+        if (BID_LEVEL(bidHistory.bidList[i].bid) != -1)
+            highBid = bidHistory.bidList[i].bid;
+
     CFeatures& lowPartnerFeatures = bidHistory.getLowFeatures((Seat)((seat +2) % 4));
     CFeatures& highPartnerFeatures = bidHistory.getHighFeatures((Seat)((seat +2) % 4));
     CFeatures& lowOwnFeatures = bidHistory.getLowFeatures(seat);
@@ -1597,20 +1603,13 @@ void CBidEngine::calculatepRules(Seat seat, CBidHistory &bidHistory, Bids bid, S
         newSuitAgree = DIAMONDS;
     else if ((lowPartnerFeatures.getSuitLen(CLUBS) > 0) && (BID_SUIT(bid) == CLUBS))
         newSuitAgree = CLUBS;
-    else if (((bid == BID_4NT) || (bid == BID_5NT)) && (size >= 2) &&
+    else if (((bid == BID_4NT) || (bid == BID_5NT)) && (size >= 2) && (BID_LEVEL(highBid) <= 2) &&
            (BID_SUIT(bidHistory.bidList[size -2].bid) >= CLUBS) && (BID_SUIT(bidHistory.bidList[size -2].bid) <= SPADES))
         newSuitAgree = BID_SUIT(bidHistory.bidList[size -2].bid);
     else if ((BID_SUIT(bid) == NOTRUMP) && !((nextBidder(bidHistory) == OPEN_RESPONSE) && (bid == BID_1NT)))
         newSuitAgree = NOTRUMP;
     else
         newSuitAgree = ANY;
-
-    //Highest bid.
-    Bids highBid = BID_NONE;
-    for (int i = 0; i < size; i++)
-        if (BID_LEVEL(bidHistory.bidList[i].bid) != -1)
-            highBid = bidHistory.bidList[i].bid;
-
 
     //Must pass is replicated to the next rule (always followed by pass).
     if (mustPass(bidHistory))
