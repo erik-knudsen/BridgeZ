@@ -1651,7 +1651,7 @@ void CBidEngine::calculatepRules(Seat seat, CBidHistory &bidHistory, Bids bid, S
             pRule->getFeatures(&lowFeatures, &highFeatures);
             lowFeatures.setPoints((Suit)suit, low);
             highFeatures.setPoints((Suit)suit, high);
-            lowFeatures.setSuitLen((Suit)suit, 4);
+//            lowFeatures.setSuitLen((Suit)suit, 4);
             pRule->setFeatures(lowFeatures, highFeatures);
         }
 
@@ -2399,10 +2399,10 @@ Bids CBidEngine::getTakeoutDouble(CFeatures &lowPartnerFeatures, CFeatures &ownF
     int doubleSuit = (int)BID_SUIT(doubleBid);
     int len = 0;
     for (int i = 0; i < 4; i++)
-        if ((i != doubleSuit) && (ownFeatures.getSuitLen((Suit)i) > len))
+        if ((i != doubleSuit) && ((ownFeatures.getSuitLen((Suit)i) + lowPartnerFeatures.getSuitLen((Suit)i)) > len))
         {
             suit = i;
-            len = ownFeatures.getSuitLen((Suit)suit);
+            len = ownFeatures.getSuitLen((Suit)suit) + lowPartnerFeatures.getSuitLen((Suit)i);
         }
 
     int points = ownFeatures.getPoints((Suit)suit);
