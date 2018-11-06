@@ -1049,8 +1049,9 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
             if ((nextBid > game) && (nextBid < BID_6C) && (game > highBid))
                     nextBid = game;
 
-            if ((nextBid <= highOPBid) || ((highOPBid >= game) &&
-                 !IS_BID(bidHistory.bidList[size - 1].bid)))
+            if ((BID_SUIT(nextBid) == BID_SUIT(highOPBid)) &&
+                    ((nextBid <= highOPBid) || ((highOPBid >= game) &&
+                 !IS_BID(bidHistory.bidList[size - 1].bid))))
                 nextBid = BID_PASS;
 
             //Find the proper bid to bid.
@@ -1104,6 +1105,7 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
 
             //Assure forcing is taken care of.
             else if (((bidHistory.bidList[size - 2].rules[0]->getStatus() == FORCING) ||
+                      (bidHistory.bidList[size - 2].rules[0]->getStatus() == GAME_FORCING) ||
                       (bidHistory.bidList[size - 2].rules[0]->getAlertId() > 0)) &&
                      !IS_BID(bidHistory.bidList[size - 1].bid))
                 {
