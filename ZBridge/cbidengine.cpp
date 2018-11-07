@@ -1023,7 +1023,7 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
                      &low, &high);
 
             //Assure agreed suit is bidded as the last bidded suit (escape for slam control bids).
-            if ((BID_SUIT(highOPBid) != agree) && (highOPBid > nextBid) && (nextBid >= BID_3S))
+            if ((agree != NOTRUMP) && (BID_SUIT(highOPBid) != agree) && (highOPBid > nextBid) && (nextBid >= BID_3S))
             {
                 Suit highSuit = BID_SUIT(highOPBid);
                 int highLevel = BID_LEVEL(highOPBid);
