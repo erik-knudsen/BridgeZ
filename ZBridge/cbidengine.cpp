@@ -514,16 +514,19 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
         suitAgree = DIAMONDS;
     else if ((lowPartnerFeatures.getSuitLen(CLUBS) + lowOwnFeatures.getSuitLen(CLUBS)) >= 8)
         suitAgree = CLUBS;
-    else if (isNTBidded(bidHistory))
+    else if (nextBidCanBeNT(ownFeatures, lowPartnerFeatures, highPartnerFeatures,
+                            lowRHFeatures, highRHFeatures, lowLHFeatures, highLHFeatures))
         suitAgree = NOTRUMP;
+//    else if (isNTBidded(bidHistory))
+//        suitAgree = NOTRUMP;
     else
         suitAgree = ANY;
 
     //Agrement on suit in next bid.
     Suit newSuitAgree;
-    if (suitAgree != ANY)
-        newSuitAgree = suitAgree;
-    else if ((lowPartnerFeatures.getSuitLen(SPADES) + ownFeatures.getSuitLen(SPADES)) >= 8)
+//    if (suitAgree != ANY)
+//        newSuitAgree = suitAgree;
+    if ((lowPartnerFeatures.getSuitLen(SPADES) + ownFeatures.getSuitLen(SPADES)) >= 8)
         newSuitAgree = SPADES;
     else if ((lowPartnerFeatures.getSuitLen(HEARTS) + ownFeatures.getSuitLen(HEARTS)) >= 8)
         newSuitAgree = HEARTS;
@@ -531,11 +534,11 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
         newSuitAgree = DIAMONDS;
     else if ((lowPartnerFeatures.getSuitLen(CLUBS) + ownFeatures.getSuitLen(CLUBS)) >= 8)
         newSuitAgree = CLUBS;
-    else if (nextBidCanBeNT(ownFeatures, lowPartnerFeatures, highPartnerFeatures,
-                            lowRHFeatures, highRHFeatures, lowLHFeatures, highLHFeatures))
-        newSuitAgree = NOTRUMP;
     else
         newSuitAgree = ANY;
+
+    if ((suitAgree == NOTRUMP) && ((newSuitAgree == SPADES) || (newSuitAgree == HEARTS)))
+        suitAgree = ANY;
 
     //Get bidded suits and highest level.
     bool oppSuit[5];
@@ -1054,6 +1057,10 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
                  !IS_BID(bidHistory.bidList[size - 1].bid))))
                 nextBid = BID_PASS;
 
+            if ((agree == NOTRUMP) && (nextBid >= BID_3NT) &&
+                ((highOPBid == BID_4H) || (highOPBid == BID_4S) || (highOPBid == BID_5C) || (highOPBid == BID_5D)))
+                nextBid = BID_PASS;
+
             //Find the proper bid to bid.
             if (nextBid > highBid)
             {
@@ -1268,8 +1275,11 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
                 {
                     //Check if new bid is possible. Otherwise skip.
                     Bids partnerBid = bidHistory.bidList[size - 2].bid;
+                    //Not on level 3 and higher.
+                    if (newLevel >= 3)
+                        newBid = BID_NONE;
                     //Jump in new suit.
-                    if ((((newBid - partnerBid) / 5) > 0) && (points < NEWSUIT_P1_J))                 //16
+                    else if ((((newBid - partnerBid) / 5) > 0) && (points < NEWSUIT_P1_J))                 //16
                         newBid = BID_NONE;
                     //New suit level 1.
                     else if ((((newBid - partnerBid) / 5) == 0) && (newLevel == 1) && (points < NEWSUIT_P1_1)) //6
@@ -1311,15 +1321,18 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
                     Bids ownBid = bidHistory.bidList[size - 4].bid;
                     Bids cmpBid = IS_BID(partnerBid) ? (partnerBid) : (ownBid);
 
+                    //Not on level 3 and higher.
+                    if (newLevel >= 3)
+                        newBid = BID_NONE;
                     //Jump in new suit.
-                    if ((((newBid - cmpBid) / 5) > 0) && (points < NEWSUIT_O_J_L))      //19
-                        newBid = BID_PASS;
+                    else if ((((newBid - cmpBid) / 5) > 0) && (points < NEWSUIT_O_J_L))      //19
+                        newBid = BID_NONE;
                     //Reverse suit.
                     else if ((((newBid - cmpBid) / 5) == 0) && (((newBid - ownBid) / 5) == 1) && (points < NEWSUIT_O_3_L))   //16
-                        newBid = BID_PASS;
+                        newBid = BID_NONE;
                     //Simpel new suit.
                     else if ((((newBid - cmpBid) / 5) == 0) && (((newBid - ownBid) / 5) == 0) && (points < NEWSUIT_O_S_L))  //12
-                        newBid = BID_PASS;
+                        newBid = BID_NONE;
 
                     //Check for jump.
                     if ((((newBid - cmpBid)/5) == 0) && (points >= NEWSUIT_O_J_L))          //19
@@ -1352,9 +1365,9 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
                     int level = BID_LEVEL(newBid);
                     if (points < NEWSUIT_P2_3_L)            //10
                         newBid = BID_NONE;
-                    else if ((points >= NEWSUIT_P2_3_L) && (points <= NEWSUIT_P2_3_H) && (level > 3))       //10-12
+                    else if ((points >= NEWSUIT_P2_3_L) && (points <= NEWSUIT_P2_3_H) && (level >= 3))      //10-12
                         newBid = BID_NONE;
-                    else if ((points >= NEWSUIT_P2_3_L) && (points <= NEWSUIT_P2_3_H) && (level <= 3))      //10-12
+                    else if ((points >= NEWSUIT_P2_3_L) && (points <= NEWSUIT_P2_3_H) && (level < 3))       //10-12
                     {
                         low = NEWSUIT_P2_3_L;           //10
                         high = NEWSUIT_P2_3_H;          //12
