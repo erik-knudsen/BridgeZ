@@ -537,6 +537,8 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
     else
         newSuitAgree = ANY;
 
+    if ((suitAgree != NOTRUMP) && (suitAgree != ANY) && (suitAgree != newSuitAgree))
+        newSuitAgree = suitAgree;
     if ((suitAgree == NOTRUMP) && ((newSuitAgree == SPADES) || (newSuitAgree == HEARTS)))
         suitAgree = ANY;
 
