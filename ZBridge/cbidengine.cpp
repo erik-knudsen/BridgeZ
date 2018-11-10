@@ -1114,8 +1114,7 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
 
             //Assure forcing is taken care of.
             else if (((bidHistory.bidList[size - 2].rules[0]->getStatus() == FORCING) ||
-                      (bidHistory.bidList[size - 2].rules[0]->getStatus() == GAME_FORCING) ||
-                      (bidHistory.bidList[size - 2].rules[0]->getAlertId() > 0)) &&
+                      (bidHistory.bidList[size - 2].rules[0]->getStatus() == GAME_FORCING)) &&
                      !IS_BID(bidHistory.bidList[size - 1].bid))
                 {
                     Suit highSuit = BID_SUIT(highBid);
@@ -1229,8 +1228,7 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
 
                     //Assure forcing is taken care of.
                     else if ((size >= 2) &&
-                             ((bidHistory.bidList[size - 2].rules[0]->getStatus() == FORCING) ||
-                              (bidHistory.bidList[size - 2].rules[0]->getAlertId() > 0)) &&
+                             ((bidHistory.bidList[size - 2].rules[0]->getStatus() == FORCING)) &&
                              !IS_BID(bidHistory.bidList[size - 1].bid))
                     {
                         Suit highSuit = BID_SUIT(highBid);
@@ -1504,8 +1502,7 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
             else if ((nextBid >= BID_3NT) && canDouble(bidHistory) && (highOppBid >= nextBid))
                 bid.bid = BID_DOUBLE;
             else if ((size >= 2) &&
-                     ((bidHistory.bidList[size - 2].rules[0]->getStatus() == FORCING) ||
-                      (bidHistory.bidList[size - 2].rules[0]->getAlertId() > 0)) &&
+                     ((bidHistory.bidList[size - 2].rules[0]->getStatus() == FORCING)) &&
                      !IS_BID(bidHistory.bidList[size - 1].bid))
             {
                 Suit highSuit = BID_SUIT(highBid);
@@ -1524,8 +1521,7 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
             //Assure forcing and game forcing is taken care of (just bid the longest suit).
             if ((size >= 2) &&
                     ((bidHistory.bidList[size - 2].rules[0]->getStatus() == FORCING) ||
-                     (bidHistory.bidList[size - 2].rules[0]->getStatus() == GAME_FORCING) ||
-                     (bidHistory.bidList[size - 2].rules[0]->getAlertId() > 0)) &&
+                     (bidHistory.bidList[size - 2].rules[0]->getStatus() == GAME_FORCING)) &&
                     !IS_BID(bidHistory.bidList[size - 1].bid))
             {
                 int i, length, suit;
