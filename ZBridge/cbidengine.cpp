@@ -967,21 +967,25 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
                     if (nextBidCanBeNT(ownFeatures, lowPartnerFeatures, highPartnerFeatures,
                                        lowRHFeatures, highRHFeatures, lowLHFeatures, highLHFeatures))
                     {
-                        CFeatures lowFeatures;
-                        CFeatures highFeatures;
-                        pRule->getFeatures(&lowFeatures, &highFeatures);
-                        int lowPoints = BID_NT_POINT[BID_NT_GAME_INX] - lowPartnerFeatures.getExtPoints(NOTRUMP, true);
-                        if (lowPoints < 0)
-                            lowPoints = 0;
-                        int highPoints = BID_NT_POINT[BID_SMALL_SLAM_INX] - lowPartnerFeatures.getExtPoints(NOTRUMP, true);
-                        if (highPoints < 0)
-                            highPoints = 0;
-                        lowFeatures.setPoints(NOTRUMP, lowPoints);
-                        highFeatures.setPoints(NOTRUMP, highPoints);
-                        pRule->setFeatures(lowFeatures, highFeatures);
-                        pRule->setStatus(MUST_PASS);
-
-                        bid.bid = BID_3NT;
+                        if (highBid != BID_3NT)
+                        {
+                            CFeatures lowFeatures;
+                            CFeatures highFeatures;
+                            pRule->getFeatures(&lowFeatures, &highFeatures);
+                            int lowPoints = BID_NT_POINT[BID_NT_GAME_INX] - lowPartnerFeatures.getExtPoints(NOTRUMP, true);
+                            if (lowPoints < 0)
+                                lowPoints = 0;
+                            int highPoints = BID_NT_POINT[BID_SMALL_SLAM_INX] - lowPartnerFeatures.getExtPoints(NOTRUMP, true);
+                            if (highPoints < 0)
+                                highPoints = 0;
+                            lowFeatures.setPoints(NOTRUMP, lowPoints);
+                            highFeatures.setPoints(NOTRUMP, highPoints);
+                            pRule->setFeatures(lowFeatures, highFeatures);
+                            pRule->setStatus(MUST_PASS);
+                            bid.bid = BID_3NT;
+                        }
+                        else
+                            bid.bid = BID_PASS;
 
                         return bid;
                     }
