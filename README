@@ -4,12 +4,9 @@ computer(s) plays the non human players. Players can be either local on the loca
 computer or remote on one or more remote computers. I started development of the
 program because I was not satisfied with the (to my knowledge) existing
 bridge programs with regard to their net abilities.
-ZBridge is for Windows computers. Its companion ZBridgeE is for embedded computers
-(currently only Android). They use the same communication protocol i.e. they can
-play bridge with each other on the internet. 
-Yakindu is used for modelling the states of the communication protocol.
-Bridge bidding is implemented by means of a table. Bo Haglunds Double Dummy Solver
-is used for calculating the best card to play (version DDS 2.8.4).
+ZBridge is for Windows computers. Its companion ZBridgeE is for embedded computers (currently only Android). They use the same communication protocol i.e. they can play bridge with each other on the internet. 
+Yakindu (ItemisCREATE) is used for modelling the states of the communication protocol.
+Bridge bidding is implemented by means of a table. Bo Haglunds Double Dummy Solver is used for calculating the best card to play (version DDS 2.9.0).
 
 The ZBridge software is covered by the GNU GENERAL PUBLIC LICENSE Version3 (GPLv3).
 
@@ -18,31 +15,33 @@ Development environment is Qt with the use of Qt Creator as IDE.
 
 Installation for ZBridge development:
 
-1. Install smartgit (I do not use Qt Creators GIT functionality).
-	Clone ZBridge to c:/projects/qt/zbridge
+1. Install GitHub Desktop (I do not use Qt Creators GIT functionality).
+	Clone ZBridge to c:/projects/qt/BridgeZ/
 	
-2. Install eclipse (I use eclipse for using yakindu and UMLet).
-	Install yakindu in eclipse.
-	Install UMLet in eclipse.
-	Import project ZBridge to eclipse without copy (default)
+2. Install ItemisCREATE. It is an Eclipse based program.
+	Install UMLet in Eclipse.
+	Import project ZBridge to Eclipse without copy (default)
 	
-3. Install Qt (at least v. 5)
+3. Install Qt.
+	Use the BridgeZ/ZBridge/build/ folder for qt debug and release builds.
 
 4. Install DoxyGen
 		Install Graphviz
 		Install mscgen
-		Set dot and mscgen pathes in DoxyFile
+		Set dot path in DoxyFile
                 
-5. Install Visual Studio Community 2015. Start Visual Studio and create a
-   new c++ project and install required parts.
-   The Double Dummy Solver by Bo Haglund is generated as a dll. Makefile_Visual
-   is used to generate dds.lib and dds.dll files. The dds.lib file is for the linker
-   and the dds.dll file is for the executable.
-   Use CC_FULL_FLAGS = $(CC_FLAGS) to turn off warnings.
-   You can instead use the MinGW c++ compiler, which can be installed as a part
-   of Qt. To generate DDS as a dll in this case use Makefile_mingw. Use the dds.dll
-   file for both linker and executable.
-   In both cases I have found it necessary to remove the automatic initialization
-   of the DDS dll and instead initialize in the startup of ZBridge (SetMaxThreads(0)).
-   The docs folder has help files used by the Qt help framework to generate help for
-   ZBridge. zbridge.qch and zbridge.qhc is for the executable.
+5. The Double Dummy Solver by Bo Haglund is generated as a dll. the dll is in the
+	bin folder (dds.dll). The Double Dummy Solver is also in the dds repository as a Qt projects and can be generated here. Copy dds.dll to c:/projects/qt/BridgeZ/ZBridge/ (library for the linker). After building the
+	zbridge application, copy dds.ddl to the build directory (debug or release) to be used by the zbridge application (where the zbridge.exe file is located)
+	
+    The docs folder has help files used by the Qt help framework to generate help for ZBridge (qhelpgenerator zbridge.qhcp -o zbridge.qhc). zbridge.qch and zbridge.qhc should be copied to the build folder (debug/release).
+	
+6. Deploy zbridge by means of windployqt (uncomment shown lines in zbridge.pro).
+	Deployed files will be generated in the bin folder in BridgeZ/ZBridge/.
+	Copy missing dll's to this folder (dds.ddl,libgcc_s_seh-1.dll, libstdc++-6.dll and libwinpthread-1.dll). Also copy help files zbridge.qch
+	and zbridge.qhc to this folder.
+
+7. Install Inno Setup (for generating a Windows installation file for the
+	zbridge application).
+	Copy the Inno Setup Script file zbridge.iss from BridgeZ/bin/ to BridgeZ/ZBridge/bin/.
+	Open the script file in BridgeZ/Zbridge/bin/ and compile. The Windows installation file zbridge.exe will be generated in BridgeZ/ZBridge/bin/output/. Copy this file to BridgeZ/bin/.

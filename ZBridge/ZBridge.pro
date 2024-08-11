@@ -12,11 +12,11 @@ TARGET = ZBridge
 TEMPLATE = app
 LIBS += c:\Projects\qt\BridgeZ\ZBridge\dds.dll
 
-#Deploy. To deploy uncomment below three lines.
-#win32 {
-#DESTDIR = $$PWD/bin
-#QMAKE_POST_LINK =  windeployqt $$shell_path($$DESTDIR/$${TARGET}.exe)
-#}
+#Deploy. To deploy uncomment below four lines.
+win32 {
+DESTDIR = $$PWD/bin
+QMAKE_POST_LINK =  windeployqt $$shell_path($$DESTDIR/$${TARGET}.exe)
+}
 #Double Dummy Solver library
 #dds.dll
 #and compiler specific libraries
