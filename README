@@ -31,17 +31,24 @@ Installation for ZBridge development:
 		Set dot path in DoxyFile
                 
 5. The Double Dummy Solver by Bo Haglund is generated as a dll. the dll is in the
-	bin folder (dds.dll). The Double Dummy Solver is also in the dds repository as a Qt projects and can be generated here. Copy dds.dll to c:/projects/qt/BridgeZ/ZBridge/ (library for the linker). After building the
-	zbridge application, copy dds.ddl to the build directory (debug or release) to be used by the zbridge application (where the zbridge.exe file is located)
+	bin folder (dds.dll). The Double Dummy Solver is also in the dds repository
+	as a Qt projects and can be generated here. Copy dds.dll to
+	c:/projects/qt/BridgeZ/ZBridge/ (library for the linker). After building the
+	zbridge application, copy dds.ddl to the build directory (debug or release)
+	to be used by the zbridge application (where the zbridge.exe file is located)
 	
     The docs folder has help files used by the Qt help framework to generate help for ZBridge (qhelpgenerator zbridge.qhcp -o zbridge.qhc). zbridge.qch and zbridge.qhc should be copied to the build folder (debug/release).
 	
 6. Deploy zbridge by means of windployqt (uncomment shown lines in zbridge.pro).
 	Deployed files will be generated in the bin folder in BridgeZ/ZBridge/.
-	Copy missing dll's to this folder (dds.ddl,libgcc_s_seh-1.dll, libstdc++-6.dll and libwinpthread-1.dll). Also copy help files zbridge.qch
-	and zbridge.qhc to this folder.
+	Copy missing dll's to this folder (dds.ddl,libgcc_s_seh-1.dll,
+	libstdc++-6.dll and libwinpthread-1.dll). Also copy help files
+	zbridge.qch	and zbridge.qhc to this folder.
 
 7. Install Inno Setup (for generating a Windows installation file for the
 	zbridge application).
-	Copy the Inno Setup Script file zbridge.iss from BridgeZ/bin/ to BridgeZ/ZBridge/bin/.
-	Open the script file in BridgeZ/Zbridge/bin/ and compile. The Windows installation file zbridge.exe will be generated in BridgeZ/ZBridge/bin/output/. Copy this file to BridgeZ/bin/.
+	Copy the Inno Setup Script file zbridge.iss from BridgeZ/bin/ to
+	BridgeZ/ZBridge/bin/.
+	Open the script file in BridgeZ/Zbridge/bin/ and compile. The Windows
+	installation file zbridge.exe will be generated in
+	BridgeZ/ZBridge/bin/output/. Copy this file to BridgeZ/bin/.
