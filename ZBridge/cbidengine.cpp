@@ -2757,7 +2757,7 @@ bool CBidEngine::isNTBidded(CBidHistory &bidHistory)
 
         if ((BID_SUIT(bidHistory.bidList[j].bid) == NOTRUMP) &&
             (!((((j - i) == 2) && ((bidHistory.bidList[j].bid == BID_1NT) && (highFeatures.getDp(NOTRUMP) == highFeatures.getMaxDp()))) ||
-             (bidHistory.bidList[j].alert > 0))))
+                                                                   (!bidHistory.bidList[j].alert.isEmpty()))))
             ntBid = true;
     }
     return ntBid;
@@ -2769,7 +2769,7 @@ Bids CBidEngine::getLastNotAlertedBid(CBidHistory bidHistory)
 
     int i;
     for (i = size - 1; i >= 0; i--)
-        if (bidHistory.bidList[i].alert == 0)
+        if (bidHistory.bidList[i].alert.isEmpty())
             break;
 
     return (i >= 0) ? bidHistory.bidList[i].bid : BID_NONE;

@@ -2160,7 +2160,8 @@ int CFeatures::calcBal(int count[])
     for (int i = 0; i < 4; i++)
         countV.append(count[i]);
 
-    qSort(countV.begin(), countV.end());
+    std::sort(countV.begin(), countV.end());
+//    qSort(countV.begin(), countV.end());
 
     if (countV[0] == 3)
         bal = 0;

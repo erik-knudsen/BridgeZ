@@ -77,7 +77,7 @@ const QString SCORINGMETHODS_NET[6] =
  * @param line The line received.
  * @return The type.
  */
-MsgType getMessageType(QString line) throw(NetProtocolException)
+MsgType getMessageType(QString line)
 {
     if (line.contains("plays", Qt::CaseInsensitive))
         return PLAYERPLAYS_MSG;
@@ -159,7 +159,7 @@ MsgType getMessageType(QString line) throw(NetProtocolException)
  * @param line The line.
  * @return The seat.
  */
-Seat CMsg::getSeat(QString line) throw(NetProtocolException)
+Seat CMsg::getSeat(QString line)
 {
     if (line.contains(SEAT_NAMES_NET[WEST_SEAT], Qt::CaseInsensitive))
         return WEST_SEAT;
@@ -178,7 +178,7 @@ Seat CMsg::getSeat(QString line) throw(NetProtocolException)
  * @param line The line.
  * @return The team.
  */
-Team CMsg::getTeam(QString line) throw(NetProtocolException)
+Team CMsg::getTeam(QString line)
 {
     if (line.contains(VULNERABILITY_NAMES_NET[NEITHER], Qt::CaseInsensitive))
         return NEITHER;
@@ -196,7 +196,7 @@ Team CMsg::getTeam(QString line) throw(NetProtocolException)
  * @brief Get the card values from a cards line received.
  * @param line The line.
  */
-void CMsg::getCardValues(int cards[], QString line, int first) throw(NetProtocolException)
+void CMsg::getCardValues(int cards[], QString line, int first)
 {
     int i, next, face;
 
@@ -248,7 +248,7 @@ void CMsg::getCardValues(int cards[], QString line, int first) throw(NetProtocol
  * @param next Index into line.
  * @return The face value.
  */
-int CMsg::getFaceValue(QString line, int next) throw(NetProtocolException)
+int CMsg::getFaceValue(QString line, int next)
 {
     const QString CARD = "23456789TJQKA";
 
@@ -285,7 +285,8 @@ void CMsg::setFaceValues(int cards[], QString &line)
     for (int i = 0; i < 13; i++)
         handCardValues.append(cards[i]);
 
-    qSort(handCardValues.begin(), handCardValues.end(), qGreater<int>());
+    std::sort(handCardValues.begin(), handCardValues.end(), std::greater<int>());
+//    qSort(handCardValues.begin(), handCardValues.end(), qGreater<int>());
 
     //Get spades.
     line += " S";
@@ -367,7 +368,7 @@ CConnectMsg::CConnectMsg(QString name, Seat seat, int protocol)
     msgToLine();
 }
 
-CConnectMsg::CConnectMsg(QString line) throw(NetProtocolException)
+CConnectMsg::CConnectMsg(QString line)
 {
     msgType = CONNECT_MSG;
 
@@ -381,7 +382,7 @@ void CConnectMsg::msgToLine()
     line = QString("Connecting \"%1\" as %2 using protocol version %3\r\n").arg(name).arg(SEAT_NAMES_NET[seat]).arg(protocol);
 }
 
-void CConnectMsg::lineToMsg() throw (NetProtocolException)
+void CConnectMsg::lineToMsg()
 { 
     if (!line.contains("Connecting", Qt::CaseInsensitive) ||
         !line.contains("as", Qt::CaseInsensitive) ||
@@ -411,7 +412,7 @@ CSeatedMsg::CSeatedMsg(Seat seat, QString teamName)
     msgToLine();
 }
 
-CSeatedMsg::CSeatedMsg(QString line) throw (NetProtocolException)
+CSeatedMsg::CSeatedMsg(QString line)
 {
     msgType = SEATED_MSG;
 
@@ -425,7 +426,7 @@ void CSeatedMsg::msgToLine()
     line = QString("%1 \"%2\" seated\r\n").arg(SEAT_NAMES_NET[seat]).arg(teamName);
 }
 
-void CSeatedMsg::lineToMsg() throw (NetProtocolException)
+void CSeatedMsg::lineToMsg()
 {
     if (!line.contains("seated", Qt::CaseInsensitive) ||
         !(line.count(QChar('"')) == 2))
@@ -446,7 +447,7 @@ CRTNamesMsg::CRTNamesMsg(Seat seat)
     msgToLine();
 }
 
-CRTNamesMsg::CRTNamesMsg(QString line) throw (NetProtocolException)
+CRTNamesMsg::CRTNamesMsg(QString line)
 {
     msgType = RTNAMES_MSG;
 
@@ -460,7 +461,7 @@ void CRTNamesMsg::msgToLine()
     line = QString("%1 ready for teams\r\n").arg(SEAT_NAMES_NET[seat]);
 }
 
-void CRTNamesMsg::lineToMsg() throw (NetProtocolException)
+void CRTNamesMsg::lineToMsg()
 {
     if (!line.contains("ready for teams", Qt::CaseInsensitive))
         throw NetProtocolException("Net - Ready for teams: " + line.toStdString());
@@ -479,7 +480,7 @@ CTeamNamesMsg::CTeamNamesMsg(QString nsTeamName, QString ewTeamName)
     msgToLine();
 }
 
-CTeamNamesMsg::CTeamNamesMsg(QString line) throw (NetProtocolException)
+CTeamNamesMsg::CTeamNamesMsg(QString line)
 {
     msgType = TEAMNAMES_MSG;
 
@@ -493,7 +494,7 @@ void CTeamNamesMsg::msgToLine()
     line = QString("Teams: N/S: \"%1\". E/W: \"%2\"\r\n").arg(nsTeamName).arg(ewTeamName);
 }
 
-void CTeamNamesMsg::lineToMsg() throw (NetProtocolException)
+void CTeamNamesMsg::lineToMsg()
 {
     if (!line.contains("Teams: N/S: ", Qt::CaseInsensitive) ||
         !line.contains(". E/W: ", Qt::CaseInsensitive) ||
@@ -514,7 +515,7 @@ CRSBoardMsg::CRSBoardMsg(Seat seat)
     msgToLine();
 }
 
-CRSBoardMsg::CRSBoardMsg(QString line) throw (NetProtocolException)
+CRSBoardMsg::CRSBoardMsg(QString line)
 {
     msgType = RSBOARD_MSG;
 
@@ -528,7 +529,7 @@ void CRSBoardMsg::msgToLine()
     line = QString("%1 ready to start\r\n").arg(SEAT_NAMES_NET[seat]);
 }
 
-void CRSBoardMsg::lineToMsg() throw (NetProtocolException)
+void CRSBoardMsg::lineToMsg()
 {
     if (!line.contains("ready to start", Qt::CaseInsensitive))
         throw NetProtocolException("Net - Ready to start: " + line.toStdString());
@@ -544,7 +545,7 @@ CStartOfBoardMsg::CStartOfBoardMsg()
     msgToLine();
 }
 
-CStartOfBoardMsg::CStartOfBoardMsg(QString line) throw (NetProtocolException)
+CStartOfBoardMsg::CStartOfBoardMsg(QString line)
 {
     msgType = STARTOFBOARD_MSG;
 
@@ -558,7 +559,7 @@ void CStartOfBoardMsg::msgToLine()
     line = QString("Start of board\r\n");
 }
 
-void CStartOfBoardMsg::lineToMsg() throw (NetProtocolException)
+void CStartOfBoardMsg::lineToMsg()
 {
     if (!line.contains("Start of board", Qt::CaseInsensitive))
         throw NetProtocolException("Net - Start of board: " + line.toStdString());
@@ -574,7 +575,7 @@ CRDealInfoMsg::CRDealInfoMsg(Seat seat)
     msgToLine();
 }
 
-CRDealInfoMsg::CRDealInfoMsg(QString line) throw (NetProtocolException)
+CRDealInfoMsg::CRDealInfoMsg(QString line)
 {
     msgType = RDEALINFO_MSG;
 
@@ -588,7 +589,7 @@ void CRDealInfoMsg::msgToLine()
     line = QString("%1 ready for deal\r\n").arg(SEAT_NAMES_NET[seat]);
 }
 
-void CRDealInfoMsg::lineToMsg() throw (NetProtocolException)
+void CRDealInfoMsg::lineToMsg()
 {
     if (!line.contains("ready for deal", Qt::CaseInsensitive))
         throw NetProtocolException("Net - Ready for deal: " + line.toStdString());
@@ -608,7 +609,7 @@ CDealInfoMsg::CDealInfoMsg(int boardNumber, Seat dealer, Team vulnerability)
     msgToLine();
 }
 
-CDealInfoMsg::CDealInfoMsg(QString line) throw (NetProtocolException)
+CDealInfoMsg::CDealInfoMsg(QString line)
 {
     msgType = DEALINFO_MSG;
 
@@ -622,7 +623,7 @@ void CDealInfoMsg::msgToLine()
     line = QString("Board number %1. Dealer %2. %3\r\n").arg(boardNumber).arg(SEAT_NAMES_NET[dealer]).arg(VULNERABILITY_NAMES_NET[vulnerability]);
 }
 
-void CDealInfoMsg::lineToMsg() throw (NetProtocolException)
+void CDealInfoMsg::lineToMsg()
 {
     int m;
 
@@ -681,7 +682,7 @@ CCardsMsg::CCardsMsg(Seat player, int cards[13])
     msgToLine();
 }
 
-CCardsMsg::CCardsMsg(QString line) throw (NetProtocolException)
+CCardsMsg::CCardsMsg(QString line)
 {
     msgType = CARDS_MSG;
 
@@ -699,7 +700,7 @@ void CCardsMsg::msgToLine()
     line += "\r\n";
 }
 
-void CCardsMsg::lineToMsg() throw (NetProtocolException)
+void CCardsMsg::lineToMsg()
 {
     if (!line.contains("cards", Qt::CaseInsensitive) ||
         !line.contains("S ", Qt::CaseInsensitive) ||
@@ -724,7 +725,7 @@ CBidMsg::CBidMsg(Seat bidder, Bids bid)
     msgToLine();
 }
 
-CBidMsg::CBidMsg(QString line) throw (NetProtocolException)
+CBidMsg::CBidMsg(QString line)
 {
     msgType = BID_MSG;
 
@@ -748,7 +749,7 @@ void CBidMsg::msgToLine()
                 arg(QString().setNum((bid - 1) / 5 + 1)).arg(SUITS_NET[(bid - 1) % 5]);
 }
 
-void CBidMsg::lineToMsg() throw (NetProtocolException)
+void CBidMsg::lineToMsg()
 {
     if (!(line.contains(BIDTYPE_NET[PASSES_NET], Qt::CaseInsensitive) ||
           line.contains(BIDTYPE_NET[DOUBLES_NET], Qt::CaseInsensitive) ||
@@ -804,7 +805,7 @@ CRBidMsg::CRBidMsg(Seat player, Seat bidder)
     msgToLine();
 }
 
-CRBidMsg::CRBidMsg(QString line) throw (NetProtocolException)
+CRBidMsg::CRBidMsg(QString line)
 {
     msgType = RBID_MSG;
 
@@ -818,7 +819,7 @@ void CRBidMsg::msgToLine()
     line = QString("%1 ready for %2's bid\r\n").arg(SEAT_NAMES_NET[player]).arg(SEAT_NAMES_NET[bidder]);
 }
 
-void CRBidMsg::lineToMsg() throw (NetProtocolException)
+void CRBidMsg::lineToMsg()
 {
     if (!line.contains("ready for", Qt::CaseInsensitive) ||
         !line.contains("bid", Qt::CaseInsensitive))
@@ -838,7 +839,7 @@ CPlayerToLeadMsg::CPlayerToLeadMsg(Seat player)
     msgToLine();
 }
 
-CPlayerToLeadMsg::CPlayerToLeadMsg(QString line) throw (NetProtocolException)
+CPlayerToLeadMsg::CPlayerToLeadMsg(QString line)
 {
     msgType = PLAYERTOLEAD_MSG;
 
@@ -852,7 +853,7 @@ void CPlayerToLeadMsg::msgToLine()
     line = QString("%1 to lead\r\n").arg(SEAT_NAMES_NET[player]);
 }
 
-void CPlayerToLeadMsg::lineToMsg() throw (NetProtocolException)
+void CPlayerToLeadMsg::lineToMsg()
 {
     if (!line.contains("to lead", Qt::CaseInsensitive))
         throw NetProtocolException("Net - Player to lead: " + line.toStdString());
@@ -899,7 +900,7 @@ CPlayerPlaysMsg::CPlayerPlaysMsg(Seat player, int card)
     msgToLine();
 }
 
-CPlayerPlaysMsg::CPlayerPlaysMsg(QString line) throw (NetProtocolException)
+CPlayerPlaysMsg::CPlayerPlaysMsg(QString line)
 {
     msgType = PLAYERPLAYS_MSG;
 
@@ -918,7 +919,7 @@ void CPlayerPlaysMsg::msgToLine()
     line = QString("%1 plays %2%3\r\n").arg(SEAT_NAMES_NET[player]).arg(CARD[face]).arg(SUITS_NET[suit]);
 }
 
-void CPlayerPlaysMsg::lineToMsg() throw (NetProtocolException)
+void CPlayerPlaysMsg::lineToMsg()
 {
     const QString CARD = "23456789TJQKA";
 
@@ -963,7 +964,7 @@ CReadyForPlayerMsg::CReadyForPlayerMsg(Seat seat, Seat player, int trick)
     msgToLine();
 }
 
-CReadyForPlayerMsg::CReadyForPlayerMsg(QString line) throw (NetProtocolException)
+CReadyForPlayerMsg::CReadyForPlayerMsg(QString line)
 {
     msgType = READYFORPLAYER_MSG;
 
@@ -977,7 +978,7 @@ void CReadyForPlayerMsg::msgToLine()
     line = QString("%1 ready for %2's card to trick %3\r\n").arg(SEAT_NAMES_NET[seat]).arg(SEAT_NAMES_NET[player]).arg(QString().setNum(trick));
 }
 
-void CReadyForPlayerMsg::lineToMsg() throw (NetProtocolException)
+void CReadyForPlayerMsg::lineToMsg()
 {
     bool ok;
 
@@ -1005,7 +1006,7 @@ CReadyForDummyMsg::CReadyForDummyMsg(Seat seat, int trick)
     msgToLine();
 }
 
-CReadyForDummyMsg::CReadyForDummyMsg(QString line) throw (NetProtocolException)
+CReadyForDummyMsg::CReadyForDummyMsg(QString line)
 {
     msgType = READYFORDUMMY_MSG;
 
@@ -1019,7 +1020,7 @@ void CReadyForDummyMsg::msgToLine()
     line = QString("%1 ready for dummy's card to trick %2\r\n").arg(SEAT_NAMES_NET[seat]).arg(QString().setNum(trick));
 }
 
-void CReadyForDummyMsg::lineToMsg() throw (NetProtocolException)
+void CReadyForDummyMsg::lineToMsg()
 {
     bool ok;
 
@@ -1100,7 +1101,7 @@ CReadyForDummyCardsMsg::CReadyForDummyCardsMsg(Seat seat)
     msgToLine();
 }
 
-CReadyForDummyCardsMsg::CReadyForDummyCardsMsg(QString line) throw (NetProtocolException)
+CReadyForDummyCardsMsg::CReadyForDummyCardsMsg(QString line)
 {
     msgType = READYFORDUMMYCARDS_MSG;
 
@@ -1114,7 +1115,7 @@ void CReadyForDummyCardsMsg::msgToLine()
     line = QString("%1 ready for dummy\r\n").arg(SEAT_NAMES_NET[seat]);
 }
 
-void CReadyForDummyCardsMsg::lineToMsg() throw (NetProtocolException)
+void CReadyForDummyCardsMsg::lineToMsg()
 {
     if (!line.contains("ready for dummy", Qt::CaseInsensitive))
         throw NetProtocolException("Net - Ready for dummy: " + line.toStdString());
@@ -1133,7 +1134,7 @@ CDummyCardsMsg::CDummyCardsMsg(int cards[13])
     msgToLine();
 }
 
-CDummyCardsMsg::CDummyCardsMsg(QString line) throw (NetProtocolException)
+CDummyCardsMsg::CDummyCardsMsg(QString line)
 {
     msgType = DUMMYCARDS_MSG;
 
@@ -1151,7 +1152,7 @@ void CDummyCardsMsg::msgToLine()
     line += "\r\n";
 }
 
-void CDummyCardsMsg::lineToMsg() throw (NetProtocolException)
+void CDummyCardsMsg::lineToMsg()
 {
     if (!line.contains("cards", Qt::CaseInsensitive) &&
         !line.contains("S ", Qt::CaseInsensitive) &&
@@ -1198,7 +1199,7 @@ CUndoBidMsg::CUndoBidMsg()
     msgToLine();
 }
 
-CUndoBidMsg::CUndoBidMsg(QString line) throw (NetProtocolException)
+CUndoBidMsg::CUndoBidMsg(QString line)
 {
     msgType = UNDOBID_MSG;
 
@@ -1212,7 +1213,7 @@ void CUndoBidMsg::msgToLine()
     line = QString("undo bid\r\n");
 }
 
-void CUndoBidMsg::lineToMsg() throw (NetProtocolException)
+void CUndoBidMsg::lineToMsg()
 {
     if (!line.contains("undo bid", Qt::CaseInsensitive))
         throw NetProtocolException("Net - Undo bid: " + line.toStdString());
@@ -1225,7 +1226,7 @@ CUndoTrickMsg::CUndoTrickMsg()
     msgToLine();
 }
 
-CUndoTrickMsg::CUndoTrickMsg(QString line) throw (NetProtocolException)
+CUndoTrickMsg::CUndoTrickMsg(QString line)
 {
     msgType = UNDOTRICK_MSG;
 
@@ -1239,7 +1240,7 @@ void CUndoTrickMsg::msgToLine()
     line = QString("undo trick\r\n");
 }
 
-void CUndoTrickMsg::lineToMsg() throw (NetProtocolException)
+void CUndoTrickMsg::lineToMsg()
 {
     if (!line.contains("undo trick", Qt::CaseInsensitive))
         throw NetProtocolException("Net - Undo trick: " + line.toStdString());
@@ -1252,7 +1253,7 @@ CReBidMsg::CReBidMsg()
     msgToLine();
 }
 
-CReBidMsg::CReBidMsg(QString line) throw (NetProtocolException)
+CReBidMsg::CReBidMsg(QString line)
 {
     msgType = REBID_MSG;
 
@@ -1266,7 +1267,7 @@ void CReBidMsg::msgToLine()
     line = QString("rebid\r\n");
 }
 
-void CReBidMsg::lineToMsg() throw (NetProtocolException)
+void CReBidMsg::lineToMsg()
 {
     if (!line.contains("rebid", Qt::CaseInsensitive))
         throw NetProtocolException("Net - Rebid: " + line.toStdString());
@@ -1279,7 +1280,7 @@ CRePlayMsg::CRePlayMsg()
     msgToLine();
 }
 
-CRePlayMsg::CRePlayMsg(QString line) throw (NetProtocolException)
+CRePlayMsg::CRePlayMsg(QString line)
 {
     msgType = REPLAY_MSG;
 
@@ -1293,7 +1294,7 @@ void CRePlayMsg::msgToLine()
     line = QString("replay\r\n");
 }
 
-void CRePlayMsg::lineToMsg() throw (NetProtocolException)
+void CRePlayMsg::lineToMsg()
 {
     if (!line.contains("replay", Qt::CaseInsensitive))
         throw NetProtocolException("Net - Replay: " + line.toStdString());
@@ -1309,7 +1310,7 @@ CAttemptSynchronizeMsg::CAttemptSynchronizeMsg(Seat seat)
     msgToLine();
 }
 
-CAttemptSynchronizeMsg::CAttemptSynchronizeMsg(QString line) throw (NetProtocolException)
+CAttemptSynchronizeMsg::CAttemptSynchronizeMsg(QString line)
 {
     msgType = ATTEMPT_SYNCHRONIZE_MSG;
 
@@ -1323,7 +1324,7 @@ void CAttemptSynchronizeMsg::msgToLine()
     line = QString("%1 attempt synchronize\r\n").arg(SEAT_NAMES_NET[seat]);
 }
 
-void CAttemptSynchronizeMsg::lineToMsg() throw (NetProtocolException)
+void CAttemptSynchronizeMsg::lineToMsg()
 {
     if (!line.contains("attempt synchronize", Qt::CaseInsensitive))
         throw NetProtocolException("Net - Ready to start: " + line.toStdString());
@@ -1341,7 +1342,7 @@ CConfirmSynchronizeMsg::CConfirmSynchronizeMsg(Seat seat)
     msgToLine();
 }
 
-CConfirmSynchronizeMsg::CConfirmSynchronizeMsg(QString line) throw (NetProtocolException)
+CConfirmSynchronizeMsg::CConfirmSynchronizeMsg(QString line)
 {
     msgType = CONFIRM_SYNCHRONIZE_MSG;
 
@@ -1355,7 +1356,7 @@ void CConfirmSynchronizeMsg::msgToLine()
     line = QString("%1 confirm synchronize\r\n").arg(SEAT_NAMES_NET[seat]);
 }
 
-void CConfirmSynchronizeMsg::lineToMsg() throw (NetProtocolException)
+void CConfirmSynchronizeMsg::lineToMsg()
 {
     if (!line.contains("confirm synchronize", Qt::CaseInsensitive))
         throw NetProtocolException("Net - Ready to start: " + line.toStdString());
@@ -1373,7 +1374,7 @@ CAllSynchronizedMsg::CAllSynchronizedMsg(Seat seat)
     msgToLine();
 }
 
-CAllSynchronizedMsg::CAllSynchronizedMsg(QString line) throw (NetProtocolException)
+CAllSynchronizedMsg::CAllSynchronizedMsg(QString line)
 {
     msgType = ALL_SYNCHRONIZED_MSG;
 
@@ -1387,7 +1388,7 @@ void CAllSynchronizedMsg::msgToLine()
     line = QString("%1 all synchronized\r\n").arg(SEAT_NAMES_NET[seat]);
 }
 
-void CAllSynchronizedMsg::lineToMsg() throw (NetProtocolException)
+void CAllSynchronizedMsg::lineToMsg()
 {
     if (!line.contains("all synchronized", Qt::CaseInsensitive))
         throw NetProtocolException("Net - Ready to start: " + line.toStdString());
@@ -1405,7 +1406,7 @@ COriginalPBNStartMsg::COriginalPBNStartMsg(ScoringMethod scoringMethod)
     msgToLine();
 }
 
-COriginalPBNStartMsg::COriginalPBNStartMsg(QString line) throw (NetProtocolException)
+COriginalPBNStartMsg::COriginalPBNStartMsg(QString line)
 {
     msgType = ORIGINAL_PBN_START_MSG;
 
@@ -1419,7 +1420,7 @@ void COriginalPBNStartMsg::msgToLine()
     line = QString("Original PBN Stream Start. Default scoringmethod is: %1\r\n").arg(SCORINGMETHODS_NET[scoringMethod]);
 }
 
-void COriginalPBNStartMsg::lineToMsg() throw (NetProtocolException)
+void COriginalPBNStartMsg::lineToMsg()
 {
     if (!line.contains("Original PBN Stream Start", Qt::CaseInsensitive) ||
             !line.contains("Default scoringmethod is", Qt::CaseInsensitive))
@@ -1449,7 +1450,7 @@ CPlayedPBNStartMsg::CPlayedPBNStartMsg()
     msgToLine();
 }
 
-CPlayedPBNStartMsg::CPlayedPBNStartMsg(QString line) throw (NetProtocolException)
+CPlayedPBNStartMsg::CPlayedPBNStartMsg(QString line)
 {
     msgType = PLAYED_PBN_START_MSG;
 
@@ -1463,7 +1464,7 @@ void CPlayedPBNStartMsg::msgToLine()
     line = QString("Played PBN Stream Start\r\n");
 }
 
-void CPlayedPBNStartMsg::lineToMsg() throw (NetProtocolException)
+void CPlayedPBNStartMsg::lineToMsg()
 {
     if (!line.contains("Played PBN Stream Start", Qt::CaseInsensitive))
         throw NetProtocolException("Net - Played PBN Start: " + line.toStdString());
@@ -1477,7 +1478,7 @@ CEscapePBNMsg::CEscapePBNMsg()
     msgToLine();
 }
 
-CEscapePBNMsg::CEscapePBNMsg(QString line) throw (NetProtocolException)
+CEscapePBNMsg::CEscapePBNMsg(QString line)
 {
     msgType = ESCAPE_MSG;
 
@@ -1491,7 +1492,7 @@ void CEscapePBNMsg::msgToLine()
     line = QString("Escape PBN Stream\r\n");
 }
 
-void CEscapePBNMsg::lineToMsg() throw (NetProtocolException)
+void CEscapePBNMsg::lineToMsg()
 {
     if (!line.contains("Escape PBN Stream", Qt::CaseInsensitive))
         throw NetProtocolException("Net - Escape PBN: " + line.toStdString());

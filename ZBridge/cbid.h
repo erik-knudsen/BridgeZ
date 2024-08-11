@@ -23,6 +23,7 @@
 #define CBID_H
 
 #include <QString>
+#include <QList>
 
 #include "crule.h"
 #include "Defines.h"

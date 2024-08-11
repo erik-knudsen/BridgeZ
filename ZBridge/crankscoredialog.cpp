@@ -77,7 +77,7 @@ CRankScoreDialog::CRankScoreDialog(CGamesDoc *games, int scoringMethod, int inde
         ui->rankScoreTable->setItem(pairIndex, 1, resultItem);
     }
     ui->rankScoreTable->setSortingEnabled(true);
-    ui->rankScoreTable->sortByColumn(1);
+    ui->rankScoreTable->sortByColumn(1, Qt::AscendingOrder);
 
     //Respond to update of games
     connect(games, &CGamesDoc::sUpdateGame, this, &CRankScoreDialog::sUpdateTable, Qt::QueuedConnection);

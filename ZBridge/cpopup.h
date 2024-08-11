@@ -2,7 +2,7 @@
 #define CPOPUP_H
 
 #include <QDialog>
-#include <QDesktopWidget>
+//#include <QDesktopWidget>
 #include <QMouseEvent>
 
 namespace Ui {

@@ -111,7 +111,7 @@ void CRemoteActorFrontEnd::disConnect()
  * Starts listening for a connect from a remote actor.
  */
 CRemoteActorServer::CRemoteActorServer(Protocol protocol, QHostAddress hostAddress,
-              quint16 port, QObject *parent) throw(NetProtocolException) :
+              quint16 port, QObject *parent) :
     QTcpServer(parent)
 {
     this->protocol = protocol;

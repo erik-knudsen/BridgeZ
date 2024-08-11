@@ -63,7 +63,7 @@ CGamesDoc::CGamesDoc(QObject *parent) :
  * read alredy played games in case there are any.
  */
 void CGamesDoc::readGames(QTextStream &original, QTextStream &played,
-                          QString &event, ScoringMethod scoringMethod) throw(PlayException)
+                          QString &event, ScoringMethod scoringMethod)
 {
     ScoringMethod originalScoringMethod = NOSCORE;
 
@@ -1492,7 +1492,7 @@ bool CGamesDoc::getRubberPoints(int gameIndex, bool *gameDone,
  * maximum two times. The sequence of played games are always the same. The first play for a game is
  * manually played and the second play is auto played.
  */
-void CGamesDoc::readGames(QTextStream &pbnText, QString &event, bool originalGames) throw(PlayException)
+void CGamesDoc::readGames(QTextStream &pbnText, QString &event, bool originalGames)
 {
     int numLines;
     PBNContext context;
@@ -2613,7 +2613,7 @@ tagIds CGamesDoc::parsePBNLine(QString &currentLine, QString &strValue, QMap<QSt
  *
  * @exception PlayException is thrown in case of illegal deal syntax.
  */
-Seat CGamesDoc::getCards(QString &strValue, int wCards[], int nCards[], int eCards[], int sCards[], int board) throw(PlayException)
+Seat CGamesDoc::getCards(QString &strValue, int wCards[], int nCards[], int eCards[], int sCards[], int board)
 {
     Seat dealer;
     int *cards[4] = { wCards, nCards, eCards, sCards };
@@ -2652,7 +2652,7 @@ Seat CGamesDoc::getCards(QString &strValue, int wCards[], int nCards[], int eCar
 }
 
 //Get cards for one hand in a pbn deal line.
-int CGamesDoc::getCards(QString &strValue, int inx, int cards[], int board) throw(PlayException)
+int CGamesDoc::getCards(QString &strValue, int inx, int cards[], int board)
 {
     const Suit SUITS[4] = { SPADES, HEARTS, DIAMONDS, CLUBS};
     int faceValue;
@@ -2683,7 +2683,7 @@ int CGamesDoc::getCards(QString &strValue, int inx, int cards[], int board) thro
 }
 
 //Get face value for a given position in a pbn deal line.
-int CGamesDoc::getFaceValue(QString &strValue, int inx, int board) throw(PlayException)
+int CGamesDoc::getFaceValue(QString &strValue, int inx, int board)
 {
     if (strValue.size() <= inx)
         return -1;

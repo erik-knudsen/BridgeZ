@@ -52,7 +52,7 @@
  */
 CTblMngrServerAuto::CTblMngrServerAuto(CZBridgeDoc *doc, CGamesDoc *games,
                      CBidAndPlayEngines *bidAndPlayEngines, QHostAddress hostAddress,
-                     QObject *parent) throw(NetProtocolException) :
+                     QObject *parent) :
     CTblMngrBase(parent)
 {
     this->doc = doc;

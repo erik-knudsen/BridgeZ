@@ -25,7 +25,7 @@
 #include "ZBridgeException.h"
 #include "Defines.h"
 
-MsgType getMessageType(QString line) throw(NetProtocolException);
+MsgType getMessageType(QString line);
 
 /**
  * @brief Base class for all communication messages.
@@ -48,10 +48,10 @@ private:
     virtual void lineToMsg() = 0;
 
 protected:
-    Seat getSeat(QString line) throw(NetProtocolException);
-    Team getTeam(QString line) throw(NetProtocolException);
-    void getCardValues(int cards[13], QString line, int first) throw(NetProtocolException);
-    int getFaceValue(QString line, int next) throw(NetProtocolException);
+    Seat getSeat(QString line);
+    Team getTeam(QString line);
+    void getCardValues(int cards[13], QString line, int first);
+    int getFaceValue(QString line, int next);
     void setFaceValues(int cards[13], QString &line);
 
 public:
@@ -63,11 +63,11 @@ class CConnectMsg : public CMsg
 {
 public:
     CConnectMsg(QString name, Seat seat, int protocol);
-    CConnectMsg(QString line) throw(NetProtocolException);
+    CConnectMsg(QString line);
 
 private:
     void msgToLine();
-    void lineToMsg() throw(NetProtocolException);
+    void lineToMsg();
 
 public:
     QString name;
@@ -81,11 +81,11 @@ class CSeatedMsg : public CMsg
 {
 public:
     CSeatedMsg(Seat seat, QString teamName);
-    CSeatedMsg(QString line) throw (NetProtocolException);
+    CSeatedMsg(QString line);
 
 private:
     void msgToLine();
-    void lineToMsg() throw (NetProtocolException);
+    void lineToMsg();
 
 public:
     Seat seat;
@@ -98,11 +98,11 @@ class CRTNamesMsg : public CMsg
 {
 public:
     CRTNamesMsg(Seat seat);
-    CRTNamesMsg(QString line) throw (NetProtocolException);
+    CRTNamesMsg(QString line);
 
 private:
     void msgToLine();
-    void lineToMsg() throw (NetProtocolException);
+    void lineToMsg();
 
 public:
     Seat seat;
@@ -114,11 +114,11 @@ class CTeamNamesMsg : public CMsg
 {
 public:
     CTeamNamesMsg(QString nsTeamName, QString ewTeamName);
-    CTeamNamesMsg(QString line) throw (NetProtocolException);
+    CTeamNamesMsg(QString line);
 
 private:
     void msgToLine();
-    void lineToMsg() throw (NetProtocolException);
+    void lineToMsg();
 
 public:
     QString nsTeamName;
@@ -131,11 +131,11 @@ class CRSBoardMsg : public CMsg
 {
 public:
     CRSBoardMsg(Seat seat);
-    CRSBoardMsg(QString line) throw (NetProtocolException);
+    CRSBoardMsg(QString line);
 
 private:
     void msgToLine();
-    void lineToMsg() throw (NetProtocolException);
+    void lineToMsg();
 
 public:
     Seat seat;
@@ -147,11 +147,11 @@ class CStartOfBoardMsg : public CMsg
 {
 public:
     CStartOfBoardMsg();
-    CStartOfBoardMsg(QString line) throw (NetProtocolException);
+    CStartOfBoardMsg(QString line);
 
 private:
     void msgToLine();
-    void lineToMsg() throw (NetProtocolException);
+    void lineToMsg();
 
 public:
     QString line;
@@ -161,11 +161,11 @@ class CRDealInfoMsg : public CMsg
 {
 public:
     CRDealInfoMsg(Seat seat);
-    CRDealInfoMsg(QString line) throw (NetProtocolException);
+    CRDealInfoMsg(QString line);
 
 private:
     void msgToLine();
-    void lineToMsg() throw (NetProtocolException);
+    void lineToMsg();
 
 public:
     Seat seat;
@@ -177,11 +177,11 @@ class CDealInfoMsg : public CMsg
 {
 public:
     CDealInfoMsg(int boardNumber, Seat dealer, Team vulnerability);
-    CDealInfoMsg(QString line) throw (NetProtocolException);
+    CDealInfoMsg(QString line);
 
 private:
     void msgToLine();
-    void lineToMsg() throw (NetProtocolException);
+    void lineToMsg();
 
 public:
     int boardNumber;
@@ -211,11 +211,11 @@ class CCardsMsg : public CMsg
 {
 public:
     CCardsMsg(Seat player, int cards[13]);
-    CCardsMsg(QString line) throw (NetProtocolException);
+    CCardsMsg(QString line);
 
 private:
     void msgToLine();
-    void lineToMsg() throw (NetProtocolException);
+    void lineToMsg();
 
 public:
     Seat player;
@@ -228,11 +228,11 @@ class CBidMsg : public CMsg
 {
 public:
     CBidMsg(Seat bidder, Bids bid);
-    CBidMsg(QString line) throw (NetProtocolException);
+    CBidMsg(QString line);
 
 private:
     void msgToLine();
-    void lineToMsg() throw (NetProtocolException);
+    void lineToMsg();
 
 public:
     Seat bidder;
@@ -245,11 +245,11 @@ class CRBidMsg : public CMsg
 {
 public:
     CRBidMsg(Seat player, Seat bidder);
-    CRBidMsg(QString line) throw (NetProtocolException);
+    CRBidMsg(QString line);
 
 private:
     void msgToLine();
-    void lineToMsg() throw (NetProtocolException);
+    void lineToMsg();
 
 public:
     Seat player;
@@ -262,11 +262,11 @@ class CPlayerToLeadMsg : public CMsg
 {
 public:
     CPlayerToLeadMsg(Seat player);
-    CPlayerToLeadMsg(QString line) throw (NetProtocolException);
+    CPlayerToLeadMsg(QString line);
 
 private:
     void msgToLine();
-    void lineToMsg() throw (NetProtocolException);
+    void lineToMsg();
 
 public:
     Seat player;
@@ -291,11 +291,11 @@ class CPlayerPlaysMsg : public CMsg
 {
 public:
     CPlayerPlaysMsg(Seat player, int card);
-    CPlayerPlaysMsg(QString line) throw (NetProtocolException);
+    CPlayerPlaysMsg(QString line);
 
 private:
     void msgToLine();
-    void lineToMsg() throw (NetProtocolException);
+    void lineToMsg();
 
 public:
     Seat player;
@@ -308,11 +308,11 @@ class CReadyForPlayerMsg : public CMsg
 {
 public:
     CReadyForPlayerMsg(Seat seat, Seat player, int trick);
-    CReadyForPlayerMsg(QString line) throw (NetProtocolException);
+    CReadyForPlayerMsg(QString line);
 
 private:
     void msgToLine();
-    void lineToMsg() throw (NetProtocolException);
+    void lineToMsg();
 
 public:
     Seat seat;
@@ -326,11 +326,11 @@ class CReadyForDummyMsg : public CMsg
 {
 public:
     CReadyForDummyMsg(Seat seat, int trick);
-    CReadyForDummyMsg(QString line) throw (NetProtocolException);
+    CReadyForDummyMsg(QString line);
 
 private:
     void msgToLine();
-    void lineToMsg() throw (NetProtocolException);
+    void lineToMsg();
 
 public:
     Seat seat;
@@ -371,11 +371,11 @@ class CReadyForDummyCardsMsg : public CMsg
 {
 public:
     CReadyForDummyCardsMsg(Seat seat);
-    CReadyForDummyCardsMsg(QString line) throw (NetProtocolException);
+    CReadyForDummyCardsMsg(QString line);
 
 private:
     void msgToLine();
-    void lineToMsg() throw (NetProtocolException);
+    void lineToMsg();
 
 public:
     Seat seat;
@@ -387,11 +387,11 @@ class CDummyCardsMsg : public CMsg
 {
 public:
     CDummyCardsMsg(int cards[13]);
-    CDummyCardsMsg(QString line) throw (NetProtocolException);
+    CDummyCardsMsg(QString line);
 
 private:
     void msgToLine();
-    void lineToMsg() throw (NetProtocolException);
+    void lineToMsg();
 
 public:
     int cards[13];
@@ -417,11 +417,11 @@ class CUndoBidMsg : public CMsg
 {
 public:
     CUndoBidMsg();
-    CUndoBidMsg(QString line) throw (NetProtocolException);
+    CUndoBidMsg(QString line);
 
 private:
     void msgToLine();
-    void lineToMsg() throw (NetProtocolException);
+    void lineToMsg();
 
 public:
     QString line;
@@ -431,11 +431,11 @@ class CUndoTrickMsg : public CMsg
 {
 public:
     CUndoTrickMsg();
-    CUndoTrickMsg(QString line) throw (NetProtocolException);
+    CUndoTrickMsg(QString line);
 
 private:
     void msgToLine();
-    void lineToMsg() throw (NetProtocolException);
+    void lineToMsg();
 
 public:
     QString line;
@@ -446,11 +446,11 @@ class CReBidMsg : public CMsg
 {
 public:
     CReBidMsg();
-    CReBidMsg(QString line) throw (NetProtocolException);
+    CReBidMsg(QString line);
 
 private:
     void msgToLine();
-    void lineToMsg() throw (NetProtocolException);
+    void lineToMsg();
 
 public:
     QString line;
@@ -461,11 +461,11 @@ class CRePlayMsg : public CMsg
 {
 public:
     CRePlayMsg();
-    CRePlayMsg(QString line) throw (NetProtocolException);
+    CRePlayMsg(QString line);
 
 private:
     void msgToLine();
-    void lineToMsg() throw (NetProtocolException);
+    void lineToMsg();
 
 public:
     QString line;
@@ -476,11 +476,11 @@ class CAttemptSynchronizeMsg : public CMsg
 {
 public:
     CAttemptSynchronizeMsg(Seat seat);
-    CAttemptSynchronizeMsg(QString line) throw (NetProtocolException);
+    CAttemptSynchronizeMsg(QString line);
 
 private:
     void msgToLine();
-    void lineToMsg() throw (NetProtocolException);
+    void lineToMsg();
 
 public:
     Seat seat;
@@ -493,11 +493,11 @@ class CConfirmSynchronizeMsg : public CMsg
 {
 public:
     CConfirmSynchronizeMsg(Seat seat);
-    CConfirmSynchronizeMsg(QString line) throw (NetProtocolException);
+    CConfirmSynchronizeMsg(QString line);
 
 private:
     void msgToLine();
-    void lineToMsg() throw (NetProtocolException);
+    void lineToMsg();
 
 public:
     Seat seat;
@@ -510,11 +510,11 @@ class CAllSynchronizedMsg : public CMsg
 {
 public:
     CAllSynchronizedMsg(Seat seat);
-    CAllSynchronizedMsg(QString line) throw (NetProtocolException);
+    CAllSynchronizedMsg(QString line);
 
 private:
     void msgToLine();
-    void lineToMsg() throw (NetProtocolException);
+    void lineToMsg();
 
 public:
     Seat seat;
@@ -527,11 +527,11 @@ class COriginalPBNStartMsg : public CMsg
 {
 public:
     COriginalPBNStartMsg(ScoringMethod scoringMethod);
-    COriginalPBNStartMsg(QString line) throw (NetProtocolException);
+    COriginalPBNStartMsg(QString line);
 
 private:
     void msgToLine();
-    void lineToMsg() throw (NetProtocolException);
+    void lineToMsg();
 
 public:
     ScoringMethod scoringMethod;
@@ -544,11 +544,11 @@ class CPlayedPBNStartMsg : public CMsg
 {
 public:
     CPlayedPBNStartMsg();
-    CPlayedPBNStartMsg(QString line) throw (NetProtocolException);
+    CPlayedPBNStartMsg(QString line);
 
 private:
     void msgToLine();
-    void lineToMsg() throw (NetProtocolException);
+    void lineToMsg();
 
 public:
     QString line;
@@ -559,11 +559,11 @@ class CEscapePBNMsg : public CMsg
 {
 public:
     CEscapePBNMsg();
-    CEscapePBNMsg(QString line) throw (NetProtocolException);
+    CEscapePBNMsg(QString line);
 
 private:
     void msgToLine();
-    void lineToMsg() throw (NetProtocolException);
+    void lineToMsg();
 
 public:
     QString line;

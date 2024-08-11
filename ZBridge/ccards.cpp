@@ -55,7 +55,8 @@ void CCards::setBackValues(int cardBack)
  */
 void CCards::setCardValues()
 {
-    qSort(cardsValues.begin(), cardsValues.end(), qGreater<int>());
+    std::sort(cardsValues.begin(), cardsValues.end(), std::greater<int>());
+//    qSort(cardsValues.begin(), cardsValues.end(), qGreater<int>());
     for (int i = 0; i < 13; i++)
         cards[i].setValue(cardsValues.at(i));
 }

@@ -1419,7 +1419,8 @@ int CPlayEngine::getBest(Suit suit, int cards[], int noBest)
         if (CARD_SUIT(cards[i]) == suit)
             faces.append(CARD_FACE(cards[i]));
 
-    qSort(faces.begin(), faces.end(), qGreater<int>());
+    std::sort(faces.begin(), faces.end(), std::greater<int>());
+//    qSort(faces.begin(), faces.end(), qGreater<int>());
     if (faces.size() < noBest)
         return -1;
 

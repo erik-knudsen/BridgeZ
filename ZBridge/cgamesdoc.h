@@ -57,7 +57,7 @@ class CGamesDoc : public QObject
     Q_OBJECT
 public:
     explicit CGamesDoc(QObject *parent = 0);
-    void readGames(QTextStream &original, QTextStream &played, QString &event, ScoringMethod scoringMethod) throw(PlayException);
+    void readGames(QTextStream &original, QTextStream &played, QString &event, ScoringMethod scoringMethod);
     void writeOriginalGames(QTextStream &stream);
     void writePlayedGames(QTextStream &stream);
     void clearGames(ScoringMethod scoringMethod);
@@ -151,15 +151,15 @@ private:
 
     void setResult(GameType gameType, CBidHistory &bidHistory, CPlayHistory &playHistory, QString &westName,
                    QString &northName, QString &eastName, QString &southName);
-    void readGames(QTextStream &pbnText, QString &event, bool originalGames) throw(PlayException);
+    void readGames(QTextStream &pbnText, QString &event, bool originalGames);
     void writeGame(QTextStream &stream, CGame *game, GameType gameType, QString event);
     int preloadPBNFile(QTextStream &PBNFile, QString event, QStringList &strLines,
                        QMap<int, QString> &auctionNotes,  QMap<int, QString> &playNotes);
     bool searchGame(QString &line, QString &event);
     tagIds parsePBNLine(QString &currentLine, QString &strValue, QMap<QString, tagIds> &tagName);
-    Seat getCards(QString &strValue, int wCards[], int nCards[], int eCards[], int sCards[], int board) throw(PlayException);
-    int getCards(QString &strValue, int inx, int cards[], int board) throw(PlayException);
-    int getFaceValue(QString &strValue, int inx, int board)  throw(PlayException);
+    Seat getCards(QString &strValue, int wCards[], int nCards[], int eCards[], int sCards[], int board);
+    int getCards(QString &strValue, int inx, int cards[], int board);
+    int getFaceValue(QString &strValue, int inx, int board);
     int getBid(QString &line, int inx, Bids *bidCall);
     int getPlay(QString &line, int inx, int *playCall);
     int getNote(QString &line, int inx, int *note);

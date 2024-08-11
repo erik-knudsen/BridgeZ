@@ -10,8 +10,18 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = ZBridge
 TEMPLATE = app
-LIBS += c:\Projects\qt\Zbridge\ZBridge\dds.dll
+LIBS += c:\Projects\qt\BridgeZ\ZBridge\dds.dll
 
+#Deploy. To deploy uncomment below three lines.
+#win32 {
+#DESTDIR = $$PWD/bin
+#QMAKE_POST_LINK =  windeployqt $$shell_path($$DESTDIR/$${TARGET}.exe)
+#}
+#Double Dummy Solver library
+#dds.dll
+#and compiler specific libraries
+#libgcc_s_seh-1.dll, libstdc++-6.dll and libwinpthread-1.dll
+#should be copied to DESTDIR after windeployqt has been run.
 
 SOURCES +=\
         cmainframe.cpp \
