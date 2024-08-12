@@ -1,0 +1,25 @@
+<map id="CBidEngine::getNextBid" name="CBidEngine::getNextBid">
+<area shape="rect" id="Node000001" title="Determine the next bid." alt="" coords="5,233,167,260"/>
+<area shape="rect" id="Node000002" href="$class_c_bid_engine.html#a2c87a975778816485adee094b0ad3de4" title="Calculate the next bid." alt="" coords="215,208,410,235"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="167,235,199,231,200,237,167,240"/>
+<area shape="rect" id="Node000012" href="$class_c_bid_engine.html#a803d2b32eacdc5b6a90b70902fa3b9b1" title="Get text description of alert." alt="" coords="221,259,404,285"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="167,253,206,257,205,263,167,258"/>
+<area shape="rect" id="Node000003" href="$class_c_features.html#ab9bf91c410ef832eaf3cc3413c6fe588" title="Get count of given card (ace, king, queen, jack or ten)." alt="" coords="458,5,626,32"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="319,206,339,173,369,128,409,82,456,42,465,37,468,41,460,46,413,86,374,132,343,176,323,209"/>
+<area shape="rect" id="Node000004" href="$class_c_features.html#a6bce9dff28fb9d77b2bf92b1475b2eed" title="Get high card points + distribution points for a given trump suit." alt="" coords="470,56,614,83"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="324,206,378,151,415,120,457,92,469,86,471,91,459,97,419,124,381,155,328,209"/>
+<area shape="rect" id="Node000005" href="$class_c_features.html#a9c7a941db915f29ae9dbedeea36d2d35" title="Get stopper quality for a given suit." alt="" coords="467,107,617,133"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="335,205,390,175,457,143,475,136,477,141,459,148,392,180,338,210"/>
+<area shape="rect" id="Node000006" href="$class_c_features.html#acebfd569352af4572422ae6d296146cc" title="Get the length of a given suit." alt="" coords="466,157,618,184"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="376,205,463,185,464,191,377,210"/>
+<area shape="rect" id="Node000007" href="$class_c_features.html#acf59527c0e4c320087e0a4241b55342e" title="Set count of given card (ace, king, queen, jack or ten)." alt="" coords="458,208,626,235"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="411,219,442,219,442,224,411,224"/>
+<area shape="rect" id="Node000008" href="$class_c_features.html#af7b9e68ec5cd1d3532b937a2207654fd" title="Set distribution points." alt="" coords="480,259,604,285"/>
+<area shape="poly" id="edge7_Node000002_Node000008" title=" " alt="" coords="377,233,466,253,465,258,376,238"/>
+<area shape="rect" id="Node000009" href="$class_c_features.html#a0b00db9df03cd2c173731a507061a3b3" title="Set high card points + distribution points for a given trump suit." alt="" coords="470,309,614,336"/>
+<area shape="poly" id="edge8_Node000002_Node000009" title=" " alt="" coords="386,233,411,244,427,257,436,270,445,283,460,295,469,300,466,305,456,300,441,287,432,273,423,261,409,249,384,238"/>
+<area shape="rect" id="Node000010" href="$class_c_features.html#a0b182d150631a71fb0d58e5e70eea8f3" title="Set stopper quality for a given suit." alt="" coords="467,360,617,387"/>
+<area shape="poly" id="edge9_Node000002_Node000010" title=" " alt="" coords="393,233,412,245,424,257,431,270,437,296,442,322,449,334,460,346,465,350,462,354,456,350,445,337,437,324,432,298,426,272,419,260,408,249,390,237"/>
+<area shape="rect" id="Node000011" href="$class_c_features.html#a9df2dd5c29b6ebb81f15fa77c1a9df09" title="Set the length of a given suit." alt="" coords="466,411,618,437"/>
+<area shape="poly" id="edge10_Node000002_Node000011" title=" " alt="" coords="395,233,412,245,427,264,435,283,437,322,439,360,446,379,460,397,463,400,459,404,456,400,441,381,434,361,432,322,429,285,422,267,408,249,392,237"/>
+</map>

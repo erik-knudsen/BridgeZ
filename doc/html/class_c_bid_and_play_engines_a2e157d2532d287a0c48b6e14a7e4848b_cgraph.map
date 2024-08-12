@@ -1,0 +1,27 @@
+<map id="CBidAndPlayEngines::getNextBid" name="CBidAndPlayEngines::getNextBid">
+<area shape="rect" id="Node000001" title="Calculate the next bid." alt="" coords="5,225,151,268"/>
+<area shape="rect" id="Node000002" href="$class_c_bid_engine.html#a8e44d3815e83364abbc2966998943d22" title="Determine the next bid." alt="" coords="199,233,360,260"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="151,244,183,244,183,249,151,249"/>
+<area shape="rect" id="Node000003" href="$class_c_bid_engine.html#a2c87a975778816485adee094b0ad3de4" title="Calculate the next bid." alt="" coords="408,208,603,235"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="360,235,392,231,393,237,360,240"/>
+<area shape="rect" id="Node000013" href="$class_c_bid_engine.html#a803d2b32eacdc5b6a90b70902fa3b9b1" title="Get text description of alert." alt="" coords="414,259,597,285"/>
+<area shape="poly" id="edge12_Node000002_Node000013" title=" " alt="" coords="360,253,399,257,399,263,360,258"/>
+<area shape="rect" id="Node000004" href="$class_c_features.html#ab9bf91c410ef832eaf3cc3413c6fe588" title="Get count of given card (ace, king, queen, jack or ten)." alt="" coords="651,5,820,32"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="512,206,532,173,563,128,602,82,650,42,658,37,661,41,653,46,606,86,567,132,536,176,517,209"/>
+<area shape="rect" id="Node000005" href="$class_c_features.html#a6bce9dff28fb9d77b2bf92b1475b2eed" title="Get high card points + distribution points for a given trump suit." alt="" coords="663,56,808,83"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="517,206,571,151,609,120,650,92,662,86,664,91,653,97,612,124,575,155,521,209"/>
+<area shape="rect" id="Node000006" href="$class_c_features.html#a9c7a941db915f29ae9dbedeea36d2d35" title="Get stopper quality for a given suit." alt="" coords="660,107,811,133"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="529,205,583,175,650,143,668,136,670,141,652,148,586,180,531,210"/>
+<area shape="rect" id="Node000007" href="$class_c_features.html#acebfd569352af4572422ae6d296146cc" title="Get the length of a given suit." alt="" coords="660,157,811,184"/>
+<area shape="poly" id="edge6_Node000003_Node000007" title=" " alt="" coords="569,205,656,185,657,191,570,210"/>
+<area shape="rect" id="Node000008" href="$class_c_features.html#acf59527c0e4c320087e0a4241b55342e" title="Set count of given card (ace, king, queen, jack or ten)." alt="" coords="651,208,820,235"/>
+<area shape="poly" id="edge7_Node000003_Node000008" title=" " alt="" coords="604,219,636,219,636,224,604,224"/>
+<area shape="rect" id="Node000009" href="$class_c_features.html#af7b9e68ec5cd1d3532b937a2207654fd" title="Set distribution points." alt="" coords="674,259,797,285"/>
+<area shape="poly" id="edge8_Node000003_Node000009" title=" " alt="" coords="570,233,659,253,658,258,569,238"/>
+<area shape="rect" id="Node000010" href="$class_c_features.html#a0b00db9df03cd2c173731a507061a3b3" title="Set high card points + distribution points for a given trump suit." alt="" coords="663,309,808,336"/>
+<area shape="poly" id="edge9_Node000003_Node000010" title=" " alt="" coords="579,233,605,244,620,257,630,270,638,283,653,295,662,300,660,305,650,300,634,287,625,273,616,261,602,249,577,238"/>
+<area shape="rect" id="Node000011" href="$class_c_features.html#a0b182d150631a71fb0d58e5e70eea8f3" title="Set stopper quality for a given suit." alt="" coords="660,360,811,387"/>
+<area shape="poly" id="edge10_Node000003_Node000011" title=" " alt="" coords="586,233,605,245,617,257,624,270,630,296,636,322,642,334,653,346,658,350,655,354,650,350,638,337,631,324,625,298,619,272,613,260,602,249,583,237"/>
+<area shape="rect" id="Node000012" href="$class_c_features.html#a9df2dd5c29b6ebb81f15fa77c1a9df09" title="Set the length of a given suit." alt="" coords="660,411,811,437"/>
+<area shape="poly" id="edge11_Node000003_Node000012" title=" " alt="" coords="589,233,605,245,620,264,628,283,630,322,632,360,639,379,653,397,656,400,653,404,649,400,635,381,627,361,625,322,623,285,616,267,602,249,586,237"/>
+</map>

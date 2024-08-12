@@ -1,0 +1,127 @@
+<map id="CFeatures::setCardFeatures" name="CFeatures::setCardFeatures">
+<area shape="rect" id="Node000001" title="Calculate features for a given hand (set of 13 cards)." alt="" coords="2821,763,3007,789"/>
+<area shape="rect" id="Node000002" href="$class_c_play_engine.html#a5333160edde82ce42950d179b075323e" title="Calculate weight to use for a given hand of cards." alt="" coords="2386,700,2556,727"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="2868,759,2823,742,2773,728,2717,719,2660,715,2556,712,2556,707,2661,709,2718,714,2774,723,2824,736,2870,754"/>
+<area shape="rect" id="Node000057" href="$class_c_play_engine.html#a26d49f9067f84f6c81af6ce5dddbedc4" title="Get the best card to play." alt="" coords="2383,763,2559,789"/>
+<area shape="poly" id="edge70_Node000001_Node000057" title=" " alt="" coords="2806,779,2559,779,2559,773,2806,773"/>
+<area shape="rect" id="Node000058" href="$class_c_play_engine.html#a94db368c4bada6139eea30a567de5bd2" title="Get the best card to play for opponent not leading and discarding." alt="" coords="2607,839,2773,865"/>
+<area shape="poly" id="edge72_Node000001_Node000058" title=" " alt="" coords="2859,797,2733,841,2731,835,2857,792"/>
+<area shape="rect" id="Node000059" href="$class_c_play_engine.html#a2338ef54a543e0b4f7c3c4bdcd926932" title="Get the best card to play for opponent not leading, but following suit." alt="" coords="2610,737,2770,764"/>
+<area shape="poly" id="edge74_Node000001_Node000059" title=" " alt="" coords="2805,766,2770,762,2771,757,2806,761"/>
+<area shape="rect" id="Node000003" href="$class_c_play_engine.html#ac8ab634e68a0deb9dadf9809d1918653" title="Determine the next card to play." alt="" coords="2159,737,2335,764"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="2373,732,2332,739,2331,734,2372,727"/>
+<area shape="rect" id="Node000004" href="$class_c_bid_and_play_engines.html#ac280eb2dcb9f2b941963eb506ad18e09" title="Determine the next card to play." alt="" coords="1966,729,2111,772"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="2144,753,2112,753,2112,748,2144,748"/>
+<area shape="rect" id="Node000005" href="$class_c_bid_and_play.html#a97c82597c6b142cad73ab5d478b3e26b" title="Based on play engine get next play." alt="" coords="1741,737,1918,764"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="1950,753,1919,753,1919,748,1950,748"/>
+<area shape="rect" id="Node000006" href="$class_c_actor_local.html#a982fb7a3e33cdf66ac5084125f60e612" title="Get bid or play hint." alt="" coords="1530,663,1671,689"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="1777,734,1692,704,1654,692,1655,687,1693,699,1779,729"/>
+<area shape="rect" id="Node000007" href="$class_c_actor_local.html#a839119e0948fb650d9f6d89ef513ebbc" title="Get next play automatically." alt="" coords="1522,737,1679,764"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="1725,753,1680,753,1680,748,1725,748"/>
+<area shape="rect" id="Node000032" href="$class_c_actor_local_auto.html#aa21c04bc05eabd7de33483df593604ef" title="Get next play automatically." alt="" coords="1508,976,1693,1003"/>
+<area shape="poly" id="edge47_Node000005_Node000032" title=" " alt="" coords="1807,777,1617,977,1613,974,1803,773"/>
+<area shape="poly" id="edge46_Node000007_Node000007" title=" " alt="" coords="1640,725,1627,718,1600,716,1576,718,1563,723,1560,728,1566,735,1562,738,1555,729,1560,719,1575,713,1601,711,1628,713,1643,720"/>
+<area shape="rect" id="Node000008" href="$class_c_actor_local.html#acd1310f3d69a154fe6fe07b79859e371" title="Actions for the Yakindu statechart." alt="" coords="1272,509,1447,536"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="1552,732,1507,703,1461,660,1421,613,1367,538,1371,535,1425,610,1465,656,1510,699,1555,728"/>
+<area shape="rect" id="Node000009" href="$class_c_actor_local.html#a689b8a5a0bf51e9b4c2f3b0a7d5e7ac9" title="Run cycle for the Yakindu statechart." alt="" coords="1017,408,1204,435"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="1291,506,1204,471,1132,438,1134,433,1206,466,1293,501"/>
+<area shape="rect" id="Node000030" href="$class_c_actor_local.html#a6c7b576c4925d0bf3846b8403a5d18f0" title="Start a new session for the actor." alt="" coords="1012,611,1210,637"/>
+<area shape="poly" id="edge43_Node000008_Node000030" title=" " alt="" coords="1311,545,1147,613,1145,608,1309,540"/>
+<area shape="poly" id="edge17_Node000009_Node000008" title=" " alt="" coords="1179,438,1265,473,1338,506,1336,511,1263,478,1177,443"/>
+<area shape="rect" id="Node000010" href="$class_c_actor_local.html#afadf98ad396eb2fb1b19072d8c634391" title="A bid has been done." alt="" coords="528,261,675,288"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="1087,398,1035,345,1001,319,963,298,889,277,812,267,739,265,676,268,675,263,739,260,813,262,890,272,965,294,1003,314,1038,341,1091,394"/>
+<area shape="rect" id="Node000013" href="$class_c_actor_local.html#a5d10a7cb8dc8eb879147d7e23633cdf4" title="Cards message from table manager." alt="" coords="791,332,924,359"/>
+<area shape="poly" id="edge12_Node000009_Node000013" title=" " alt="" coords="1048,406,904,362,906,357,1050,400"/>
+<area shape="rect" id="Node000014" href="$class_c_actor_local.html#a76fb0ccd9e7adce5ff2341db78132e9c" title="Dummy cards message from table manager." alt="" coords="512,367,690,393"/>
+<area shape="poly" id="edge20_Node000009_Node000014" title=" " alt="" coords="1001,415,690,390,690,384,1002,410"/>
+<area shape="rect" id="Node000015" href="$class_c_actor_local.html#a4c1c1c6eeeb13f3a27474bbffd711322" title="Deal info message from table manager." alt="" coords="529,417,673,444"/>
+<area shape="poly" id="edge18_Node000009_Node000015" title=" " alt="" coords="1002,426,674,432,674,427,1002,421"/>
+<area shape="rect" id="Node000016" href="$class_c_actor_local.html#ac9991bc5505d676db2407fe5f9277ccb" title="Dummy to lead message from table manager." alt="" coords="508,468,694,495"/>
+<area shape="poly" id="edge21_Node000009_Node000016" title=" " alt="" coords="1002,437,695,473,694,468,1001,431"/>
+<area shape="rect" id="Node000017" href="$class_c_actor_local.html#a8ecd72a2d1409791e951290df77a5f70" title="End of session message from table manager." alt="" coords="767,687,948,713"/>
+<area shape="poly" id="edge23_Node000009_Node000017" title=" " alt="" coords="1097,450,1027,577,990,637,965,670,931,688,929,684,962,666,986,634,1022,574,1093,447"/>
+<area shape="rect" id="Node000022" href="$class_c_actor_local.html#a0dd3d211b933cf8103abe516e253e0c9" title="Player plays message from table manager." alt="" coords="517,519,685,545"/>
+<area shape="poly" id="edge27_Node000009_Node000022" title=" " alt="" coords="1059,443,964,472,817,503,686,524,685,518,817,497,963,467,1057,438"/>
+<area shape="rect" id="Node000023" href="$class_c_actor_local.html#a47c00d1d6f9860765db70e3e3a0ea14f" title="Player to lead message from table manager." alt="" coords="512,569,690,596"/>
+<area shape="poly" id="edge29_Node000009_Node000023" title=" " alt="" coords="1083,447,1030,484,965,518,895,542,822,559,691,579,690,574,821,554,893,537,963,514,1027,480,1080,442"/>
+<area shape="rect" id="Node000024" href="$class_c_actor_local.html#a20eaa1c4fd8e7ce575c55074b38428c8" title="Restart message from table manager." alt="" coords="532,620,671,647"/>
+<area shape="poly" id="edge31_Node000009_Node000024" title=" " alt="" coords="1095,449,1043,515,1006,549,965,577,929,594,890,607,812,625,736,635,672,638,671,632,736,629,811,620,889,602,927,589,962,572,1003,545,1039,511,1091,446"/>
+<area shape="rect" id="Node000025" href="$class_c_actor_local.html#aa747800356ef475b4fd399d59485f133" title="Seated message from table manager." alt="" coords="532,5,671,32"/>
+<area shape="poly" id="edge33_Node000009_Node000025" title=" " alt="" coords="1104,393,1092,326,1068,241,1049,196,1026,153,997,113,962,79,929,58,893,41,854,29,815,21,738,13,671,14,671,9,739,8,816,15,856,24,895,36,932,53,965,75,1001,110,1030,150,1054,193,1073,239,1098,325,1109,392"/>
+<area shape="rect" id="Node000026" href="$class_c_actor_local.html#a8f9b6d15fafc0e6baa7db3a19d777d5c" title="Start of board message from table manager." alt="" coords="514,56,688,83"/>
+<area shape="poly" id="edge35_Node000009_Node000026" title=" " alt="" coords="1102,393,1087,336,1061,263,1042,226,1020,189,993,157,962,129,931,109,897,94,825,74,753,65,688,65,688,59,754,60,826,69,899,89,933,105,965,125,997,153,1024,186,1047,223,1066,261,1092,334,1107,392"/>
+<area shape="rect" id="Node000027" href="$class_c_actor_local.html#a09b7ad0c5b26bf5f39772100b41bc35e" title="Team names message from table manager." alt="" coords="516,107,686,133"/>
+<area shape="poly" id="edge37_Node000009_Node000027" title=" " alt="" coords="1099,394,1082,346,1054,286,1014,226,990,199,962,177,930,158,896,144,823,125,751,117,687,116,687,111,752,111,824,120,898,139,933,154,965,172,994,195,1019,222,1059,283,1087,344,1104,392"/>
+<area shape="rect" id="Node000028" href="$class_c_actor_local.html#a3b1303966ee04d6e8d18fc6d7ade5acf" title="Undo bid message from table manager." alt="" coords="528,157,675,184"/>
+<area shape="poly" id="edge39_Node000009_Node000028" title=" " alt="" coords="1096,395,1076,355,1047,307,1009,260,987,240,962,222,928,205,891,191,815,174,740,167,675,167,675,162,741,162,816,169,893,186,930,200,965,218,990,235,1013,256,1051,304,1081,352,1101,393"/>
+<area shape="rect" id="Node000029" href="$class_c_actor_local.html#a599d0043840b1abe3d6ce7ae016f7e44" title="Undo trick message from table manager." alt="" coords="523,209,679,236"/>
+<area shape="poly" id="edge41_Node000009_Node000029" title=" " alt="" coords="1092,396,1070,364,1041,327,1004,292,962,264,928,249,892,237,816,223,744,218,680,218,680,213,744,212,817,217,893,232,930,244,965,259,1008,288,1044,324,1074,361,1096,393"/>
+<area shape="rect" id="Node000011" href="$class_c_tbl_mngr_client.html#abcda1bcfba54546ef439a22dd43e55e9" title="Receive a line from the server." alt="" coords="255,367,436,393"/>
+<area shape="poly" id="edge10_Node000010_Node000011" title=" " alt="" coords="545,296,500,313,376,369,374,364,498,308,543,291"/>
+<area shape="rect" id="Node000012" href="$class_c_tbl_mngr_client.html#abe7d4246251e95843b4b46c11ef3eb97" title="Start a new session (from main menu)." alt="" coords="5,679,193,705"/>
+<area shape="poly" id="edge11_Node000011_Node000012" title=" " alt="" coords="326,407,113,680,109,677,322,404"/>
+<area shape="poly" id="edge16_Node000013_Node000011" title=" " alt="" coords="776,347,646,349,499,357,419,369,418,363,499,352,645,343,775,342"/>
+<area shape="poly" id="edge13_Node000013_Node000013" title=" " alt="" coords="902,320,887,313,857,311,831,313,816,318,813,323,819,330,815,333,807,323,813,313,830,307,858,305,888,308,904,315"/>
+<area shape="poly" id="edge14_Node000013_Node000014" title=" " alt="" coords="776,359,690,371,690,365,775,354"/>
+<area shape="poly" id="edge15_Node000014_Node000011" title=" " alt="" coords="497,383,437,383,437,377,497,377"/>
+<area shape="poly" id="edge19_Node000015_Node000011" title=" " alt="" coords="515,416,416,397,417,391,516,411"/>
+<area shape="poly" id="edge22_Node000016_Node000011" title=" " alt="" coords="520,466,498,458,427,427,369,396,372,391,429,422,500,454,522,461"/>
+<area shape="rect" id="Node000018" href="$class_c_tbl_mngr_client.html#a0c4c72d565bcc31d3c00326775ee138b" title="Clean table manager so that it can start a new session." alt="" coords="512,671,691,713"/>
+<area shape="poly" id="edge24_Node000017_Node000018" title=" " alt="" coords="751,699,691,697,691,692,751,694"/>
+<area shape="poly" id="edge26_Node000018_Node000011" title=" " alt="" coords="502,664,497,661,465,629,437,593,393,516,364,445,348,395,353,393,369,443,398,514,442,590,469,626,501,657,505,660"/>
+<area shape="poly" id="edge25_Node000018_Node000012" title=" " alt="" coords="496,695,193,695,193,689,496,689"/>
+<area shape="poly" id="edge28_Node000022_Node000011" title=" " alt="" coords="512,516,498,509,454,482,414,451,358,396,361,392,418,447,457,478,500,504,515,511"/>
+<area shape="poly" id="edge30_Node000023_Node000011" title=" " alt="" coords="508,565,498,560,448,520,406,473,373,429,352,395,357,392,378,426,410,470,451,516,500,555,510,561"/>
+<area shape="poly" id="edge32_Node000024_Node000011" title=" " alt="" coords="516,620,497,610,468,586,442,558,398,496,368,437,350,395,355,393,373,435,403,493,446,554,472,582,501,606,518,616"/>
+<area shape="poly" id="edge34_Node000025_Node000011" title=" " alt="" coords="519,35,501,46,464,83,434,126,409,173,389,220,363,308,352,367,346,366,358,306,384,219,404,171,429,124,460,80,497,42,516,30"/>
+<area shape="poly" id="edge36_Node000026_Node000011" title=" " alt="" coords="507,92,501,97,468,128,439,163,415,202,396,242,367,315,353,367,348,365,362,314,391,240,411,200,435,160,464,124,497,93,504,88"/>
+<area shape="poly" id="edge38_Node000027_Node000011" title=" " alt="" coords="508,143,501,147,471,172,445,201,402,264,372,324,354,367,349,365,367,322,397,262,441,198,468,168,497,143,505,138"/>
+<area shape="poly" id="edge40_Node000028_Node000011" title=" " alt="" coords="514,192,500,200,451,240,409,287,378,333,357,367,352,365,373,330,405,284,447,236,498,195,512,187"/>
+<area shape="poly" id="edge42_Node000029_Node000011" title=" " alt="" coords="517,244,500,252,457,279,417,312,361,368,357,364,414,308,454,275,498,247,515,239"/>
+<area shape="rect" id="Node000031" href="$class_c_tbl_mngr_client.html#a8ecaf7b041460a38591236c4da34495c" title="Client is now connected to the server." alt="" coords="241,733,451,760"/>
+<area shape="poly" id="edge44_Node000030_Node000031" title=" " alt="" coords="1086,650,1033,692,1000,712,965,728,898,746,829,759,759,768,690,772,560,771,451,763,451,758,560,766,690,767,758,762,828,754,897,741,963,723,998,708,1030,688,1083,646"/>
+<area shape="poly" id="edge45_Node000031_Node000012" title=" " alt="" coords="267,732,162,709,163,703,268,727"/>
+<area shape="poly" id="edge69_Node000032_Node000032" title=" " alt="" coords="1640,964,1627,957,1600,955,1576,957,1563,961,1560,967,1566,974,1562,977,1555,967,1560,957,1575,951,1601,949,1628,952,1643,959"/>
+<area shape="rect" id="Node000033" href="$class_c_actor_local_auto.html#ae237010fd29cb11b59fe0bc4152c9b5a" title="Actions for the Yakindu statechart." alt="" coords="1258,1141,1460,1168"/>
+<area shape="poly" id="edge48_Node000032_Node000033" title=" " alt="" coords="1568,1014,1382,1143,1379,1139,1565,1009"/>
+<area shape="rect" id="Node000034" href="$class_c_actor_local_auto.html#afe02aa4304e96697000b356d29957ce8" title="Run cycle for the Yakindu statechart." alt="" coords="1020,1133,1202,1176"/>
+<area shape="poly" id="edge49_Node000033_Node000034" title=" " alt="" coords="1242,1166,1202,1166,1202,1161,1242,1161"/>
+<area shape="rect" id="Node000055" href="$class_c_actor_local_auto.html#ae0b565dfc3bbc5d267199c1f0b81769d" title="Start a new session for the actor." alt="" coords="1022,1381,1200,1424"/>
+<area shape="poly" id="edge67_Node000033_Node000055" title=" " alt="" coords="1336,1181,1136,1383,1132,1379,1332,1177"/>
+<area shape="poly" id="edge54_Node000034_Node000033" title=" " alt="" coords="1217,1143,1258,1143,1258,1148,1217,1148"/>
+<area shape="rect" id="Node000035" href="$class_c_actor_local_auto.html#a75e2b2dd1860dc2710beefb873f038b4" title="A bid has been done." alt="" coords="770,889,945,916"/>
+<area shape="poly" id="edge50_Node000034_Node000035" title=" " alt="" coords="1094,1120,1075,1076,1046,1024,1008,973,986,950,962,930,941,919,944,914,965,926,990,946,1013,970,1051,1022,1079,1074,1099,1118"/>
+<area shape="rect" id="Node000038" href="$class_c_actor_local_auto.html#a539f533ee63ffd1a208e6abda1d0185e" title="Cards message from table manager." alt="" coords="778,964,937,991"/>
+<area shape="poly" id="edge51_Node000034_Node000038" title=" " alt="" coords="1082,1123,1031,1066,998,1037,962,1012,921,994,923,989,965,1007,1001,1033,1034,1062,1086,1120"/>
+<area shape="rect" id="Node000039" href="$class_c_actor_local_auto.html#a2db750d381cb20c342b7c7ecfbccc02b" title="Dummy cards message from table manager." alt="" coords="499,989,703,1016"/>
+<area shape="poly" id="edge56_Node000034_Node000039" title=" " alt="" coords="1073,1125,1023,1088,963,1056,897,1035,830,1021,764,1012,704,1007,704,1002,764,1007,831,1015,899,1030,965,1051,1025,1083,1076,1121"/>
+<area shape="rect" id="Node000040" href="$class_c_actor_local_auto.html#a83739f56e2dc1be572481f143def7581" title="Deal info message from table manager." alt="" coords="772,1065,943,1092"/>
+<area shape="poly" id="edge55_Node000034_Node000040" title=" " alt="" coords="1036,1130,963,1107,920,1095,921,1090,964,1101,1037,1125"/>
+<area shape="rect" id="Node000041" href="$class_c_actor_local_auto.html#ae1d5242650c0e2fa38159ee715644322" title="Dummy to lead message from table manager." alt="" coords="751,1116,964,1143"/>
+<area shape="poly" id="edge57_Node000034_Node000041" title=" " alt="" coords="1004,1147,964,1143,964,1137,1005,1141"/>
+<area shape="rect" id="Node000042" href="$class_c_actor_local_auto.html#a57d52b36446378246649d608671860a4" title="End of session message from table manager." alt="" coords="753,1167,962,1193"/>
+<area shape="poly" id="edge58_Node000034_Node000042" title=" " alt="" coords="1005,1168,962,1172,962,1167,1004,1163"/>
+<area shape="rect" id="Node000047" href="$class_c_actor_local_auto.html#ac7cfc7e7fb77a02a366a22a0e52b505f" title="Player plays message from table manager." alt="" coords="760,1217,955,1244"/>
+<area shape="poly" id="edge59_Node000034_Node000047" title=" " alt="" coords="1037,1184,964,1208,921,1219,920,1214,963,1203,1036,1179"/>
+<area shape="rect" id="Node000048" href="$class_c_actor_local_auto.html#a77ebc025b3ab4e86f4a60cd8804ac718" title="Player to lead message from table manager." alt="" coords="755,1268,960,1295"/>
+<area shape="poly" id="edge60_Node000034_Node000048" title=" " alt="" coords="1074,1188,1024,1225,965,1258,933,1270,931,1265,963,1254,1021,1220,1071,1184"/>
+<area shape="rect" id="Node000049" href="$class_c_actor_local_auto.html#a569aa5dfb7f8ecb048dc96de5dbf9b18" title="Restart message from table manager." alt="" coords="774,1319,941,1345"/>
+<area shape="poly" id="edge61_Node000034_Node000049" title=" " alt="" coords="1088,1191,1036,1252,1002,1283,965,1309,939,1320,937,1316,962,1304,999,1279,1032,1248,1084,1187"/>
+<area shape="rect" id="Node000050" href="$class_c_actor_local_auto.html#a4ac376f09a114e387d8edec28da634bb" title="Seated message from table manager." alt="" coords="774,1369,941,1396"/>
+<area shape="poly" id="edge62_Node000034_Node000050" title=" " alt="" coords="1096,1191,1075,1231,1046,1277,1009,1322,965,1360,942,1371,940,1367,962,1355,1006,1318,1042,1273,1071,1228,1092,1189"/>
+<area shape="rect" id="Node000051" href="$class_c_actor_local_auto.html#a0acc465670738b43c48ef1635660a6e3" title="Start of board message from table manager." alt="" coords="774,1420,941,1463"/>
+<area shape="poly" id="edge63_Node000034_Node000051" title=" " alt="" coords="1101,1192,1082,1241,1053,1300,1015,1359,991,1386,965,1410,942,1424,940,1420,962,1406,987,1382,1010,1356,1048,1297,1077,1239,1096,1190"/>
+<area shape="rect" id="Node000052" href="$class_c_actor_local_auto.html#ae6042b15b22fad441a386f5de556b332" title="Team names message from table manager." alt="" coords="759,1487,956,1513"/>
+<area shape="poly" id="edge64_Node000034_Node000052" title=" " alt="" coords="1096,1191,966,1476,947,1488,944,1484,962,1473,1091,1189"/>
+<area shape="rect" id="Node000053" href="$class_c_actor_local_auto.html#a188ae355b938a4b4b9968dbc09817e33" title="Undo bid message from table manager." alt="" coords="770,788,945,815"/>
+<area shape="poly" id="edge65_Node000034_Node000053" title=" " alt="" coords="1101,1118,1087,1055,1061,976,1043,936,1020,896,994,860,962,829,944,817,946,813,965,825,998,857,1025,893,1048,933,1066,974,1092,1054,1107,1117"/>
+<area shape="rect" id="Node000054" href="$class_c_actor_local_auto.html#ac647ffe769be786d3338a2b8b8e743d4" title="Undo trick message from table manager." alt="" coords="766,839,949,865"/>
+<area shape="poly" id="edge66_Node000034_Node000054" title=" " alt="" coords="1098,1119,1081,1065,1054,1000,1014,935,990,905,962,879,943,868,946,864,965,875,994,901,1019,931,1059,998,1086,1063,1103,1118"/>
+<area shape="poly" id="edge52_Node000038_Node000038" title=" " alt="" coords="902,952,887,945,857,943,831,945,816,950,813,955,819,962,815,965,807,955,813,945,830,939,858,937,888,940,904,947"/>
+<area shape="poly" id="edge53_Node000038_Node000039" title=" " alt="" coords="763,989,704,995,703,990,762,984"/>
+<area shape="rect" id="Node000056" href="$class_c_tbl_mngr_client_auto.html#ae57411683e55020986b63a6a06618237" title="Client is now connected to the server." alt="" coords="789,1537,926,1580"/>
+<area shape="poly" id="edge68_Node000055_Node000056" title=" " alt="" coords="1080,1437,1029,1483,965,1528,927,1544,925,1539,962,1523,1026,1479,1077,1433"/>
+<area shape="poly" id="edge71_Node000057_Node000003" title=" " alt="" coords="2367,767,2335,763,2335,758,2367,762"/>
+<area shape="poly" id="edge73_Node000058_Node000057" title=" " alt="" coords="2634,836,2511,792,2513,787,2636,830"/>
+<area shape="poly" id="edge75_Node000059_Node000057" title=" " alt="" coords="2595,764,2560,768,2559,763,2595,759"/>
+</map>

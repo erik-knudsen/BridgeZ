@@ -1,0 +1,9 @@
+<map id="CBiddingSystemDialog::on_rules_activated" name="CBiddingSystemDialog::on_rules_activated">
+<area shape="rect" id="Node000001" title="Another bid was selected in the rules drop down." alt="" coords="282,72,436,115"/>
+<area shape="rect" id="Node000002" href="$class_c_bidding_system_dialog.html#a3ea5033056808aea8a67c88cb1f71539" title="Another auction was selected in the auctions drop down." alt="" coords="5,5,234,48"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="266,70,198,51,200,46,268,65"/>
+<area shape="rect" id="Node000003" href="$class_c_bidding_system_dialog.html#a887291316ec255bd4a34ce33b29bce36" title="Create a new next bid." alt="" coords="39,72,200,115"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="266,96,200,96,200,91,266,91"/>
+<area shape="rect" id="Node000004" href="$class_c_bidding_system_dialog.html#a963691a8b903fa7b4f25f24037ee4cfb" title="Delete the current next bid." alt="" coords="40,139,199,181"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="268,121,200,141,198,135,266,116"/>
+</map>

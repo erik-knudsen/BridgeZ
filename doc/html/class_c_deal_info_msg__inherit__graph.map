@@ -1,0 +1,5 @@
+<map id="CDealInfoMsg" name="CDealInfoMsg">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,80,107,107"/>
+<area shape="rect" id="Node000002" href="$class_c_msg.html" title="Base class for all communication messages." alt="" coords="28,5,84,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="59,48,59,80,53,80,53,48"/>
+</map>

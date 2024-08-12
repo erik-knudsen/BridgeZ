@@ -1,0 +1,35 @@
+<map id="CBiddingSystemDialog::on_readPage_clicked" name="CBiddingSystemDialog::on_readPage_clicked">
+<area shape="rect" id="Node000001" title="Temporary." alt="" coords="5,393,160,436"/>
+<area shape="rect" id="Node000002" href="$class_c_bidding_system_dialog.html#a822f8a17ef70d22d2932d0dfafba7a96" title=" " alt="" coords="223,5,378,48"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="82,393,90,328,110,239,126,191,146,143,173,98,206,58,209,55,213,59,210,62,177,101,151,146,131,193,115,241,96,329,88,393"/>
+<area shape="rect" id="Node000003" href="$class_c_features.html#ab9bf91c410ef832eaf3cc3413c6fe588" title="Get count of given card (ace, king, queen, jack or ten)." alt="" coords="216,72,384,99"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="84,392,93,336,114,259,130,218,150,178,176,141,206,109,211,105,214,109,209,113,180,145,155,181,135,221,119,261,98,337,89,393"/>
+<area shape="rect" id="Node000004" href="$class_c_features.html#a31dd870a28b8e5b80cd1b89a7816ea21" title="Set the weight of aces and kings." alt="" coords="223,123,378,149"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="86,392,98,344,121,281,156,216,179,186,206,159,211,155,215,159,209,163,183,189,161,219,126,283,103,346,91,394"/>
+<area shape="rect" id="Node000005" href="$class_c_features.html#acf59527c0e4c320087e0a4241b55342e" title="Set count of given card (ace, king, queen, jack or ten)." alt="" coords="216,173,384,200"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="88,392,104,353,129,304,162,253,183,230,206,210,213,205,216,210,209,214,187,234,167,256,133,306,109,355,93,394"/>
+<area shape="rect" id="Node000006" href="$class_c_features.html#a6916e83ca1d7445587dd7f952b5d88e0" title="Set difference in length between two given suits." alt="" coords="236,224,365,251"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="93,391,137,327,169,291,206,260,220,253,223,257,209,265,173,295,141,330,98,394"/>
+<area shape="rect" id="Node000007" href="$class_c_features.html#af7b9e68ec5cd1d3532b937a2207654fd" title="Set distribution points." alt="" coords="239,275,362,301"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="103,391,148,350,206,311,223,304,225,308,209,316,151,354,106,395"/>
+<area shape="rect" id="Node000008" href="$class_c_features.html#a03387cc8ea5e814e1df607c6fe2614e5" title="Set the High Card Points." alt="" coords="235,325,366,352"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="132,390,207,361,229,354,231,359,209,367,134,395"/>
+<area shape="rect" id="Node000009" href="$class_c_features.html#ae6b24bb06a203edf7789396cc19d32fe" title="Set maximum features." alt="" coords="209,376,392,403"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="160,403,193,399,193,404,161,408"/>
+<area shape="rect" id="Node000010" href="$class_c_features.html#a76f907bf67c09a0d85479404e58b2d98" title="Set minium features." alt="" coords="211,427,390,453"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="161,421,196,425,195,430,160,426"/>
+<area shape="rect" id="Node000011" href="$class_c_features.html#a7a5b8a1bf063aa961b6cd5f0297be6bf" title="Set playing tricks." alt="" coords="208,477,393,504"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="134,434,209,463,231,470,229,475,207,468,132,439"/>
+<area shape="rect" id="Node000012" href="$class_c_features.html#a0b00db9df03cd2c173731a507061a3b3" title="Set high card points + distribution points for a given trump suit." alt="" coords="228,528,372,555"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="106,434,151,475,209,514,222,520,220,525,206,518,148,479,103,438"/>
+<area shape="rect" id="Node000013" href="$class_c_features.html#a480a4b89d2619e6dc4c2486efe6dcb50" title="Set general quality assesment for a given suit." alt="" coords="235,579,366,605"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="98,435,141,500,173,535,209,564,222,572,219,576,206,569,169,539,137,503,93,438"/>
+<area shape="rect" id="Node000014" href="$class_c_features.html#a0b182d150631a71fb0d58e5e70eea8f3" title="Set stopper quality for a given suit." alt="" coords="225,629,376,656"/>
+<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="93,435,109,474,133,523,167,573,187,596,209,615,216,620,213,624,206,619,183,599,162,576,129,526,104,476,88,437"/>
+<area shape="rect" id="Node000015" href="$class_c_features.html#a9df2dd5c29b6ebb81f15fa77c1a9df09" title="Set the length of a given suit." alt="" coords="225,680,376,707"/>
+<area shape="poly" id="edge14_Node000001_Node000015" title=" " alt="" coords="91,436,103,484,126,546,161,611,183,640,209,666,215,670,211,674,206,670,179,644,156,614,121,548,98,485,86,437"/>
+<area shape="rect" id="Node000016" href="$class_c_bidding_system_dialog.html#a2ecf41edff642967305748a0a04d4e8f" title=" " alt="" coords="223,731,378,773"/>
+<area shape="poly" id="edge15_Node000001_Node000016" title=" " alt="" coords="89,436,100,492,121,567,137,607,157,647,181,684,210,717,212,719,209,723,206,721,177,687,152,649,132,609,116,569,95,493,84,437"/>
+<area shape="rect" id="Node000017" href="$class_c_bidding_system_dialog.html#a1a9684959aa7ac999f6d68cc0be969b2" title=" " alt="" coords="223,797,378,840"/>
+<area shape="poly" id="edge16_Node000001_Node000017" title=" " alt="" coords="87,436,94,503,113,595,129,646,149,695,176,742,210,784,213,786,209,790,206,787,172,745,145,698,124,648,108,597,89,503,82,437"/>
+</map>

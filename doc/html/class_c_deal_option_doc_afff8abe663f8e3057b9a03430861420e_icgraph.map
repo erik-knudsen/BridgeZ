@@ -1,0 +1,49 @@
+<map id="CDealOptionDoc::getDeal" name="CDealOptionDoc::getDeal">
+<area shape="rect" id="Node000001" title="Get deal." alt="" coords="1440,401,1610,428"/>
+<area shape="rect" id="Node000002" href="$class_c_games_doc.html#a709220f9714c61342635b09af10e8779" title="Retrieve the next game in the current game set (server only)." alt="" coords="1218,401,1392,428"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1424,417,1393,417,1393,412,1424,412"/>
+<area shape="rect" id="Node000003" href="$class_c_tbl_mngr_server.html#ad54197552e2ef56ac7618fe1f9b26361" title="Give a new deal in accordance with what the user has selected." alt="" coords="977,401,1170,428"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="1203,417,1170,417,1170,412,1203,412"/>
+<area shape="rect" id="Node000004" href="$class_c_tbl_mngr_server.html#a60dfed3e37d633f2107c8ac294a7fe5f" title="Start of board was raised." alt="" coords="735,401,929,428"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="961,417,929,417,929,412,961,412"/>
+<area shape="rect" id="Node000005" href="$class_c_tbl_mngr_server.html#a3e4ac995b55d4c6fa92570afde984660" title="Actions for the Yakindu statechart." alt="" coords="489,376,687,403"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="720,406,688,402,688,397,720,400"/>
+<area shape="rect" id="Node000006" href="$class_c_tbl_mngr_server.html#ae81fe7ab37b16b43922071793f7c38f4" title="Start a new session (from main menu)." alt="" coords="251,343,441,369"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="473,376,441,372,442,366,474,371"/>
+<area shape="rect" id="Node000007" href="$class_c_tbl_mngr_server.html#a1335223c713164b7ed09bd67b870f0d7" title="Run cycle for the Yakindu statechart." alt="" coords="257,393,434,436"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="514,408,435,417,435,411,514,403"/>
+<area shape="poly" id="edge23_Node000007_Node000004" title=" " alt="" coords="450,412,735,412,735,417,450,417"/>
+<area shape="poly" id="edge12_Node000007_Node000005" title=" " alt="" coords="450,392,488,388,489,393,450,398"/>
+<area shape="rect" id="Node000008" href="$class_c_tbl_mngr_server.html#a20a333ecf7914d7b60cbe4bf6210bf8c" title="Give a new deal (from main menu)." alt="" coords="19,5,189,32"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="250,385,249,383,233,361,223,339,214,295,217,253,226,211,234,169,237,128,227,87,217,67,201,46,187,35,190,30,205,42,221,64,232,85,242,128,240,170,231,212,223,253,220,295,228,337,238,358,253,380,254,381"/>
+<area shape="rect" id="Node000009" href="$class_c_tbl_mngr_server.html#a3d425dc49f2404dde42c6025521d3077" title="Rebid the current deal (from main menu)." alt="" coords="29,56,179,83"/>
+<area shape="poly" id="edge8_Node000007_Node000009" title=" " alt="" coords="250,385,249,383,226,345,218,308,219,272,226,236,232,201,233,166,224,131,201,97,178,81,181,77,205,93,229,129,238,165,237,201,231,237,225,273,223,308,231,344,253,380,254,381"/>
+<area shape="rect" id="Node000010" href="$class_c_tbl_mngr_server.html#a3f6ab93a1cb8d09bb10db4bbd9739e93" title="Replay the current deal (from main menu)." alt="" coords="25,107,183,133"/>
+<area shape="poly" id="edge9_Node000007_Node000010" title=" " alt="" coords="251,385,249,383,229,352,221,322,221,291,225,262,229,233,229,204,221,176,201,147,182,134,185,129,205,143,225,173,234,203,234,233,231,263,227,292,227,321,234,350,253,380,254,382"/>
+<area shape="rect" id="Node000011" href="$class_c_tbl_mngr_server.html#a7e97f1a6fdbc7d7aa3dfefed03fd16ed" title="Bidders bid (actor slot)." alt="" coords="31,157,177,184"/>
+<area shape="poly" id="edge10_Node000007_Node000011" title=" " alt="" coords="251,385,249,383,232,359,225,335,225,288,226,265,225,242,217,220,201,198,176,182,179,178,204,194,222,217,230,241,232,265,230,288,230,334,237,357,253,380,254,381"/>
+<area shape="rect" id="Node000012" href="$class_c_tbl_mngr_server.html#aab1a2d583e74302ce0e4db018ddf621c" title="Actor requests connect (actor slot)." alt="" coords="16,208,192,235"/>
+<area shape="poly" id="edge11_Node000007_Node000012" title=" " alt="" coords="251,386,249,383,235,366,228,348,225,314,221,280,214,264,201,249,184,237,187,233,204,245,219,262,226,279,230,313,233,347,240,363,253,380,255,382"/>
+<area shape="rect" id="Node000013" href="$class_c_tbl_mngr_server.html#a77643a32f6f5ddde6c667cc2af890c48" title="Synchronization between server and clients." alt="" coords="12,259,196,301"/>
+<area shape="poly" id="edge13_Node000007_Node000013" title=" " alt="" coords="255,387,249,383,233,366,224,348,216,332,201,315,183,304,185,300,204,311,221,329,229,346,237,363,252,379,258,383"/>
+<area shape="rect" id="Node000014" href="$class_c_tbl_mngr_server.html#a37c1fa25a41c51fd3c0c31347fd9a2c0" title="Players play (actor slot)." alt="" coords="5,325,203,352"/>
+<area shape="poly" id="edge14_Node000007_Node000014" title=" " alt="" coords="268,390,250,384,202,367,162,355,163,350,203,361,252,379,270,385"/>
+<area shape="rect" id="Node000015" href="$class_c_tbl_mngr_server.html#ae7656cd2d65331fe5dedce5b978b311a" title="Player is ready for bid (actor slot)." alt="" coords="26,376,182,403"/>
+<area shape="poly" id="edge15_Node000007_Node000015" title=" " alt="" coords="241,406,182,400,182,395,242,401"/>
+<area shape="rect" id="Node000016" href="$class_c_tbl_mngr_server.html#ac8b80ac9608dc3c21d711a4f8dc37b89" title="Actor is ready for cards (actor slot)." alt="" coords="19,427,189,453"/>
+<area shape="poly" id="edge16_Node000007_Node000016" title=" " alt="" coords="242,428,190,434,190,428,241,423"/>
+<area shape="rect" id="Node000017" href="$class_c_tbl_mngr_server.html#ad7a4fe50125dcd8ac3b7c18484ff2647" title="Actor is ready for deal info (actor slot)." alt="" coords="13,477,195,504"/>
+<area shape="poly" id="edge17_Node000007_Node000017" title=" " alt="" coords="273,444,203,468,163,479,161,474,202,463,272,439"/>
+<area shape="rect" id="Node000018" href="$class_c_tbl_mngr_server.html#ac6d8edfb772c0d23cac1a0918eb975c5" title="Actor is ready for dummy (actor slot)." alt="" coords="12,528,196,571"/>
+<area shape="poly" id="edge18_Node000007_Node000018" title=" " alt="" coords="309,448,260,484,204,518,178,530,176,525,201,514,257,480,305,444"/>
+<area shape="rect" id="Node000019" href="$class_c_tbl_mngr_server.html#a662910466c7371589907ea845db0c8d5" title="Actor is ready for dummys cards (actor slot)." alt="" coords="12,595,196,637"/>
+<area shape="poly" id="edge19_Node000007_Node000019" title=" " alt="" coords="326,451,275,519,242,554,204,585,183,597,181,592,201,580,238,550,271,515,321,448"/>
+<area shape="rect" id="Node000020" href="$class_c_tbl_mngr_server.html#aacacf809d47eec80308303d413fe443f" title="Actor is ready for player (actor slot)." alt="" coords="12,661,196,704"/>
+<area shape="poly" id="edge20_Node000007_Node000020" title=" " alt="" coords="334,451,315,497,287,550,250,604,204,651,186,663,183,659,201,647,246,601,283,548,310,494,330,449"/>
+<area shape="rect" id="Node000021" href="$class_c_tbl_mngr_server.html#af2b3520817aac80d361cbb192a11b91b" title="Actor is ready for start of board (actor slot)." alt="" coords="14,728,194,755"/>
+<area shape="poly" id="edge21_Node000007_Node000021" title=" " alt="" coords="340,452,325,511,299,582,281,620,260,656,234,689,204,718,186,730,183,725,201,714,230,685,255,653,276,617,294,580,320,509,335,451"/>
+<area shape="rect" id="Node000022" href="$class_c_tbl_mngr_server.html#a3d22cd571c065e2fb7a52398c1e61e8c" title="Actor is ready for team names (actor slot)." alt="" coords="12,779,196,805"/>
+<area shape="poly" id="edge22_Node000007_Node000022" title=" " alt="" coords="343,452,331,520,307,605,288,650,266,693,238,733,204,769,187,780,184,776,201,765,234,730,261,690,284,648,301,603,326,518,338,451"/>
+<area shape="rect" id="Node000023" href="$class_c_tbl_mngr_server.html#a8935b528e7352820e892b579cca2154a" title="Undo bid or play (from main menu)." alt="" coords="30,829,178,856"/>
+<area shape="poly" id="edge24_Node000007_Node000023" title=" " alt="" coords="345,452,336,529,314,628,295,680,272,731,242,778,204,819,180,834,177,830,201,815,237,775,267,728,290,678,308,626,331,528,340,451"/>
+</map>

@@ -1,0 +1,101 @@
+<map id="CLayoutCardsDialog::removeCard" name="CLayoutCardsDialog::removeCard">
+<area shape="rect" id="Node000001" title="Remove a card from the dealt cards." alt="" coords="424,1572,563,1615"/>
+<area shape="rect" id="Node000002" href="$class_c_layout_cards_dialog.html#aead2bd5b6d068ccb530582ff520dc3eb" title="A card was clicked." alt="" coords="237,1572,376,1615"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="409,1596,376,1596,376,1591,409,1591"/>
+<area shape="rect" id="Node000003" href="$class_c_layout_cards_dialog.html#a6faef6995af4f7bf9cca7bc02a1585c5" title="Card to deal or retract was clicked." alt="" coords="27,5,167,48"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="302,1556,296,1246,278,771,263,529,243,315,218,151,203,96,187,62,166,44,169,40,191,58,208,94,223,150,248,314,268,529,283,771,301,1246,307,1556"/>
+<area shape="rect" id="Node000004" href="$class_c_layout_cards_dialog.html#a02f19615a7e851fb9cc2942a2f4050b8" title="Card to deal or retract was clicked." alt="" coords="27,72,167,115"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="302,1557,295,1259,276,805,261,574,241,370,216,214,202,161,187,128,166,111,169,107,191,125,207,159,222,212,246,369,266,574,281,805,300,1259,307,1557"/>
+<area shape="rect" id="Node000005" href="$class_c_layout_cards_dialog.html#a5f9c9e3c8e612951018035bc65bc0209" title="Card to deal or retract was clicked." alt="" coords="27,139,167,181"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="302,1557,294,1271,274,838,259,618,239,424,215,276,201,226,187,195,166,178,169,174,191,192,206,224,220,275,245,424,264,618,279,838,299,1270,307,1556"/>
+<area shape="rect" id="Node000006" href="$class_c_layout_cards_dialog.html#a4e36d1c2e3d7aaa1d6f638c98bbcdc27" title="Card to deal or retract was clicked." alt="" coords="27,205,167,248"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="301,1557,293,1284,272,872,257,664,237,479,214,338,201,291,187,262,165,244,169,240,191,258,206,289,219,337,243,478,262,663,277,872,298,1283,307,1557"/>
+<area shape="rect" id="Node000007" href="$class_c_layout_cards_dialog.html#aff104e08f0068d364ee82c8a1cf8059d" title="Card to deal or retract was clicked." alt="" coords="27,272,167,315"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="301,1557,292,1296,270,906,255,708,236,534,213,401,200,356,187,328,165,311,169,307,191,325,205,354,218,400,241,533,260,708,276,905,297,1296,307,1557"/>
+<area shape="rect" id="Node000008" href="$class_c_layout_cards_dialog.html#a0b696ebfcce038c347cd9e162e1fd1ab" title="Card to deal or retract was clicked." alt="" coords="27,339,167,381"/>
+<area shape="poly" id="edge7_Node000002_Node000008" title=" " alt="" coords="301,1557,290,1307,268,939,253,753,234,588,212,463,199,421,187,395,165,378,169,374,191,392,204,419,217,462,239,588,258,752,274,938,296,1307,306,1556"/>
+<area shape="rect" id="Node000009" href="$class_c_layout_cards_dialog.html#acc41ef679302fe96610d779ecd2cebe2" title="Card to deal or retract was clicked." alt="" coords="27,405,167,448"/>
+<area shape="poly" id="edge8_Node000002_Node000009" title=" " alt="" coords="301,1557,289,1320,266,973,251,798,232,643,210,526,199,486,187,462,165,444,169,440,191,458,204,484,216,524,237,642,256,797,272,972,295,1320,306,1557"/>
+<area shape="rect" id="Node000010" href="$class_c_layout_cards_dialog.html#a400fdd220d7531fdd097c204569b65c4" title="Card to deal or retract was clicked." alt="" coords="27,472,167,515"/>
+<area shape="poly" id="edge9_Node000002_Node000010" title=" " alt="" coords="301,1557,288,1333,264,1006,248,842,230,698,209,588,198,551,187,528,165,511,169,507,191,525,203,549,214,587,235,697,254,842,270,1006,293,1332,306,1557"/>
+<area shape="rect" id="Node000011" href="$class_c_layout_cards_dialog.html#ad0623c914b1cc439ee516e5fcfd3d67b" title="Card to deal or retract was clicked." alt="" coords="27,539,167,581"/>
+<area shape="poly" id="edge10_Node000002_Node000011" title=" " alt="" coords="303,1557,303,1360,299,1221,291,1072,277,923,256,786,242,726,226,673,208,629,187,595,165,578,169,574,191,592,212,626,231,671,247,725,261,785,282,923,296,1072,304,1221,308,1359,308,1557"/>
+<area shape="rect" id="Node000012" href="$class_c_layout_cards_dialog.html#aa3fce42359009d696bd8e343052bcde9" title="Card to deal or retract was clicked." alt="" coords="27,605,167,648"/>
+<area shape="poly" id="edge11_Node000002_Node000012" title=" " alt="" coords="303,1556,301,1370,296,1242,287,1103,273,965,252,839,224,734,206,693,187,662,165,645,169,640,191,658,211,691,229,732,257,838,278,965,292,1103,301,1242,306,1370,308,1556"/>
+<area shape="rect" id="Node000013" href="$class_c_layout_cards_dialog.html#a5b1ba0ecc6a2177ec164a89f180cf13b" title="Card to deal or retract was clicked." alt="" coords="27,672,167,715"/>
+<area shape="poly" id="edge12_Node000002_Node000013" title=" " alt="" coords="302,1556,298,1383,283,1135,269,1008,248,891,221,795,205,757,187,728,166,712,169,707,191,725,210,755,226,793,254,890,274,1007,288,1135,304,1383,308,1556"/>
+<area shape="rect" id="Node000014" href="$class_c_layout_cards_dialog.html#a374df9b86a858d1a67d2be4247202c9e" title="Clear current deal." alt="" coords="21,739,173,781"/>
+<area shape="poly" id="edge13_Node000002_Node000014" title=" " alt="" coords="302,1557,296,1395,279,1167,265,1051,245,944,219,856,204,821,187,795,172,782,176,778,191,792,208,819,224,854,250,943,270,1050,285,1167,302,1395,307,1556"/>
+<area shape="rect" id="Node000015" href="$class_c_layout_cards_dialog.html#a15d9575a34d639399dfb6d24ebe738e1" title="Card to deal or retract was clicked." alt="" coords="27,805,167,848"/>
+<area shape="poly" id="edge14_Node000002_Node000015" title=" " alt="" coords="301,1556,294,1407,275,1199,260,1093,241,996,217,917,202,886,187,862,166,845,169,841,191,858,207,883,221,915,246,995,266,1092,281,1198,299,1406,307,1556"/>
+<area shape="rect" id="Node000016" href="$class_c_layout_cards_dialog.html#af28b56be5d0f5cb3e99f2d03cf73b10f" title="Card to deal or retract was clicked." alt="" coords="27,872,167,915"/>
+<area shape="poly" id="edge15_Node000002_Node000016" title=" " alt="" coords="301,1557,291,1419,271,1231,256,1136,237,1049,214,978,201,950,187,928,165,912,169,908,191,925,206,947,219,976,242,1048,262,1135,277,1231,297,1419,306,1556"/>
+<area shape="rect" id="Node000017" href="$class_c_layout_cards_dialog.html#a100f28fe6040b10ada66242ae7ac41fc" title="Card to deal or retract was clicked." alt="" coords="27,939,167,981"/>
+<area shape="poly" id="edge16_Node000002_Node000017" title=" " alt="" coords="300,1557,289,1432,267,1264,252,1179,234,1102,212,1039,187,995,165,979,169,974,191,992,217,1036,239,1101,257,1178,273,1263,294,1431,305,1556"/>
+<area shape="rect" id="Node000018" href="$class_c_layout_cards_dialog.html#aa4aa767dac6ff71db472e99b6e6a872c" title="Card to deal or retract was clicked." alt="" coords="27,1005,167,1048"/>
+<area shape="poly" id="edge17_Node000002_Node000018" title=" " alt="" coords="299,1557,286,1445,263,1297,248,1223,230,1155,210,1100,187,1062,166,1046,169,1041,191,1058,214,1097,235,1154,253,1221,268,1296,291,1444,304,1557"/>
+<area shape="rect" id="Node000019" href="$class_c_layout_cards_dialog.html#a62706d9c9fafcf4d19ed63cbe8d48dc5" title="Card to deal or retract was clicked." alt="" coords="27,1072,167,1115"/>
+<area shape="poly" id="edge18_Node000002_Node000019" title=" " alt="" coords="298,1557,283,1458,259,1330,226,1208,207,1161,187,1128,165,1112,169,1108,191,1125,212,1158,231,1207,264,1329,288,1457,303,1557"/>
+<area shape="rect" id="Node000020" href="$class_c_layout_cards_dialog.html#a859948ef7cf47fa884d3462e6d991818" title="Card to deal or retract was clicked." alt="" coords="27,1139,167,1181"/>
+<area shape="poly" id="edge19_Node000002_Node000020" title=" " alt="" coords="302,1557,297,1482,280,1386,265,1335,245,1284,219,1237,187,1195,166,1180,169,1175,191,1191,224,1234,250,1282,270,1333,285,1384,302,1481,307,1556"/>
+<area shape="rect" id="Node000021" href="$class_c_layout_cards_dialog.html#a94ef98c9820d01531a005719c3b6f530" title="Card to deal or retract was clicked." alt="" coords="27,1205,167,1248"/>
+<area shape="poly" id="edge20_Node000002_Node000021" title=" " alt="" coords="300,1557,291,1494,271,1415,256,1374,238,1333,215,1296,187,1262,165,1247,168,1242,190,1258,219,1292,243,1331,261,1372,276,1414,296,1493,305,1556"/>
+<area shape="rect" id="Node000022" href="$class_c_layout_cards_dialog.html#a485f9028eda4d77df6a3c5c75f66314e" title="Card to deal or retract was clicked." alt="" coords="27,1272,167,1315"/>
+<area shape="poly" id="edge21_Node000002_Node000022" title=" " alt="" coords="296,1557,283,1506,262,1445,230,1383,210,1354,187,1329,165,1314,168,1310,190,1325,214,1351,235,1380,267,1443,288,1505,301,1556"/>
+<area shape="rect" id="Node000023" href="$class_c_layout_cards_dialog.html#a10caf15217107a14ca8c9ebc77cd21af" title="Card to deal or retract was clicked." alt="" coords="27,1339,167,1381"/>
+<area shape="poly" id="edge22_Node000002_Node000023" title=" " alt="" coords="290,1558,274,1520,252,1477,223,1433,187,1395,166,1382,169,1377,190,1391,227,1430,256,1474,279,1518,295,1556"/>
+<area shape="rect" id="Node000024" href="$class_c_layout_cards_dialog.html#a8844c9c94ad95bf24f3c1f36b0b6dc52" title="Card to deal or retract was clicked." alt="" coords="27,1405,167,1448"/>
+<area shape="poly" id="edge23_Node000002_Node000024" title=" " alt="" coords="280,1561,240,1510,215,1485,187,1462,166,1450,169,1446,190,1458,219,1481,244,1507,285,1557"/>
+<area shape="rect" id="Node000025" href="$class_c_layout_cards_dialog.html#a732f638e506d97bfa3468f8d72a72a02" title="Card to deal or retract was clicked." alt="" coords="27,1472,167,1515"/>
+<area shape="poly" id="edge24_Node000002_Node000025" title=" " alt="" coords="256,1566,188,1529,161,1518,163,1513,190,1524,259,1561"/>
+<area shape="rect" id="Node000026" href="$class_c_layout_cards_dialog.html#a5ece8c14690c12ba07da3ee38da71d4c" title="Deal remaing cards (random) in current deal." alt="" coords="5,1539,189,1581"/>
+<area shape="poly" id="edge25_Node000002_Node000026" title=" " alt="" coords="221,1582,189,1577,190,1572,222,1577"/>
+<area shape="rect" id="Node000027" href="$class_c_layout_cards_dialog.html#ae34420840c8cad462ae2260f0393836e" title="Card to deal or retract was clicked." alt="" coords="27,1605,167,1648"/>
+<area shape="poly" id="edge26_Node000002_Node000027" title=" " alt="" coords="222,1609,168,1618,167,1613,221,1604"/>
+<area shape="rect" id="Node000028" href="$class_c_layout_cards_dialog.html#af661b01f8e6d61a42a60d2846346453c" title="Card to deal or retract was clicked." alt="" coords="27,1672,167,1715"/>
+<area shape="poly" id="edge27_Node000002_Node000028" title=" " alt="" coords="259,1625,190,1662,163,1674,161,1669,188,1658,256,1621"/>
+<area shape="rect" id="Node000029" href="$class_c_layout_cards_dialog.html#a500e6c62e567a15157257c69c52d52cf" title="Card to deal or retract was clicked." alt="" coords="27,1739,167,1781"/>
+<area shape="poly" id="edge28_Node000002_Node000029" title=" " alt="" coords="285,1629,244,1680,219,1706,190,1729,169,1741,166,1736,187,1724,215,1702,240,1677,280,1626"/>
+<area shape="rect" id="Node000030" href="$class_c_layout_cards_dialog.html#ad8872fea9396b588db5802fc22fcafdc" title="Card to deal or retract was clicked." alt="" coords="27,1805,167,1848"/>
+<area shape="poly" id="edge29_Node000002_Node000030" title=" " alt="" coords="295,1631,279,1669,256,1713,227,1757,190,1795,169,1809,166,1805,187,1791,223,1754,252,1710,274,1667,290,1629"/>
+<area shape="rect" id="Node000031" href="$class_c_layout_cards_dialog.html#a9fe585e7f9378764c367b22810463639" title="Card to deal or retract was clicked." alt="" coords="27,1872,167,1915"/>
+<area shape="poly" id="edge30_Node000002_Node000031" title=" " alt="" coords="301,1631,288,1682,267,1744,235,1807,214,1836,190,1862,168,1877,165,1873,187,1858,210,1833,230,1804,262,1742,283,1680,296,1630"/>
+<area shape="rect" id="Node000032" href="$class_c_layout_cards_dialog.html#a617ff1f0df556cde8e66060734ec59f5" title="Card to deal or retract was clicked." alt="" coords="27,1939,167,1981"/>
+<area shape="poly" id="edge31_Node000002_Node000032" title=" " alt="" coords="305,1630,296,1694,276,1773,261,1815,243,1856,219,1894,190,1929,168,1944,165,1940,187,1925,215,1891,238,1853,256,1813,271,1772,291,1693,300,1630"/>
+<area shape="rect" id="Node000033" href="$class_c_layout_cards_dialog.html#a56bbf0a99e5c81c505a5cdfb85b34416" title="Card to deal or retract was clicked." alt="" coords="27,2005,167,2048"/>
+<area shape="poly" id="edge32_Node000002_Node000033" title=" " alt="" coords="307,1630,302,1705,285,1802,270,1854,250,1905,224,1952,191,1995,169,2011,166,2007,187,1991,219,1949,245,1902,265,1852,280,1801,297,1705,302,1630"/>
+<area shape="rect" id="Node000034" href="$class_c_layout_cards_dialog.html#ae468824c1a3d5a756a7248479e44d890" title="Card to deal or retract was clicked." alt="" coords="27,2072,167,2115"/>
+<area shape="poly" id="edge33_Node000002_Node000034" title=" " alt="" coords="303,1630,288,1730,264,1858,231,1980,212,2028,191,2062,169,2079,165,2074,187,2058,207,2026,226,1978,259,1857,283,1729,298,1629"/>
+<area shape="rect" id="Node000035" href="$class_c_layout_cards_dialog.html#a8dc9ffe381dfddb94e54ddeff3a94017" title="Card to deal or retract was clicked." alt="" coords="27,2139,167,2181"/>
+<area shape="poly" id="edge34_Node000002_Node000035" title=" " alt="" coords="304,1630,291,1743,268,1891,253,1965,235,2033,214,2089,191,2128,169,2145,166,2141,187,2125,210,2087,230,2032,248,1964,263,1890,286,1742,299,1629"/>
+<area shape="rect" id="Node000036" href="$class_c_layout_cards_dialog.html#ac713730e916a2365ca3ae7e5b2aee276" title="Card to deal or retract was clicked." alt="" coords="27,2205,167,2248"/>
+<area shape="poly" id="edge35_Node000002_Node000036" title=" " alt="" coords="305,1630,294,1755,273,1923,257,2008,239,2086,217,2150,191,2195,169,2212,165,2208,187,2192,212,2148,234,2085,252,2007,267,1923,289,1755,300,1630"/>
+<area shape="rect" id="Node000037" href="$class_c_layout_cards_dialog.html#a24d9015be33aa61fff24afe418b78fc4" title="Card to deal or retract was clicked." alt="" coords="27,2272,167,2315"/>
+<area shape="poly" id="edge36_Node000002_Node000037" title=" " alt="" coords="306,1630,297,1768,277,1956,262,2052,242,2139,219,2211,206,2240,191,2262,169,2279,165,2275,187,2258,201,2237,214,2209,237,2137,256,2051,271,1955,291,1768,301,1630"/>
+<area shape="rect" id="Node000038" href="$class_c_layout_cards_dialog.html#a2f0097307e19679c126ed1501a7600cf" title="Card to deal or retract was clicked." alt="" coords="27,2339,167,2381"/>
+<area shape="poly" id="edge37_Node000002_Node000038" title=" " alt="" coords="307,1631,299,1780,281,1988,266,2094,246,2192,221,2272,207,2304,191,2328,169,2346,166,2342,187,2325,202,2301,217,2270,241,2190,260,2093,275,1988,294,1780,301,1630"/>
+<area shape="rect" id="Node000039" href="$class_c_layout_cards_dialog.html#aa5cbff3471321fa83d4693ea590978f5" title="Card to deal or retract was clicked." alt="" coords="27,2405,167,2448"/>
+<area shape="poly" id="edge38_Node000002_Node000039" title=" " alt="" coords="307,1630,302,1792,285,2020,270,2137,250,2244,224,2333,208,2368,191,2395,169,2413,166,2408,187,2392,204,2365,219,2331,245,2243,265,2136,279,2019,296,1792,302,1630"/>
+<area shape="rect" id="Node000040" href="$class_c_layout_cards_dialog.html#a3b5ec6a9e40743efe9e65576a64bba93" title="Card to deal or retract was clicked." alt="" coords="27,2472,167,2515"/>
+<area shape="poly" id="edge39_Node000002_Node000040" title=" " alt="" coords="308,1630,304,1804,288,2052,274,2179,254,2297,226,2394,210,2432,191,2462,169,2479,166,2475,187,2458,205,2429,221,2392,248,2295,269,2179,283,2051,298,1804,302,1630"/>
+<area shape="rect" id="Node000041" href="$class_c_layout_cards_dialog.html#afdf70ed420c38929e9a2845e8e5e796c" title="Card to deal or retract was clicked." alt="" coords="27,2539,167,2581"/>
+<area shape="poly" id="edge40_Node000002_Node000041" title=" " alt="" coords="308,1631,306,1816,301,1945,292,2084,278,2222,257,2349,229,2455,211,2496,191,2528,169,2546,165,2542,187,2525,206,2494,224,2453,252,2348,273,2221,287,2083,296,1945,301,1816,303,1630"/>
+<area shape="rect" id="Node000042" href="$class_c_layout_cards_dialog.html#ab12e1cfe5efc513e1f4813c91c3a6126" title="Card to deal or retract was clicked." alt="" coords="27,2605,167,2648"/>
+<area shape="poly" id="edge41_Node000002_Node000042" title=" " alt="" coords="308,1630,308,1827,304,1966,296,2115,282,2264,261,2401,247,2462,231,2515,212,2560,191,2595,169,2613,165,2609,187,2592,208,2558,226,2514,242,2461,256,2400,277,2263,291,2115,299,1965,303,1827,303,1630"/>
+<area shape="rect" id="Node000043" href="$class_c_layout_cards_dialog.html#afa3587e5d7609525238d0194ce1582fb" title="Card to deal or retract was clicked." alt="" coords="27,2672,167,2715"/>
+<area shape="poly" id="edge42_Node000002_Node000043" title=" " alt="" coords="306,1630,293,1855,270,2181,254,2345,235,2489,214,2600,203,2638,191,2662,169,2680,165,2676,187,2658,198,2636,209,2599,230,2489,248,2344,264,2180,288,1854,301,1630"/>
+<area shape="rect" id="Node000044" href="$class_c_layout_cards_dialog.html#a05c126ad4f69638e67a2c4956c70c019" title="Card to deal or retract was clicked." alt="" coords="27,2739,167,2781"/>
+<area shape="poly" id="edge43_Node000002_Node000044" title=" " alt="" coords="306,1630,295,1867,272,2214,256,2390,237,2544,216,2662,204,2703,191,2728,169,2746,165,2742,187,2725,199,2701,210,2661,232,2543,251,2389,266,2214,289,1866,301,1630"/>
+<area shape="rect" id="Node000045" href="$class_c_layout_cards_dialog.html#ad5f7976c575989d05b5ca6d845d3b18b" title="Card to deal or retract was clicked." alt="" coords="27,2805,167,2848"/>
+<area shape="poly" id="edge44_Node000002_Node000045" title=" " alt="" coords="306,1630,296,1880,274,2248,258,2435,239,2599,217,2725,204,2768,191,2795,169,2813,165,2809,187,2792,199,2766,212,2724,234,2598,253,2434,268,2248,290,1879,301,1630"/>
+<area shape="rect" id="Node000046" href="$class_c_layout_cards_dialog.html#a85cf17e522df20ba5ce361e141f46ef8" title="Card to deal or retract was clicked." alt="" coords="27,2872,167,2915"/>
+<area shape="poly" id="edge45_Node000002_Node000046" title=" " alt="" coords="307,1630,297,1891,276,2281,260,2479,241,2654,218,2787,205,2833,191,2862,169,2880,165,2876,187,2858,200,2831,213,2786,236,2653,255,2478,270,2281,292,1891,301,1630"/>
+<area shape="rect" id="Node000047" href="$class_c_layout_cards_dialog.html#a41dde8761aa816710fd49df9619f17db" title="Card to deal or retract was clicked." alt="" coords="27,2939,167,2981"/>
+<area shape="poly" id="edge46_Node000002_Node000047" title=" " alt="" coords="307,1630,298,1903,277,2315,262,2524,243,2708,219,2849,206,2898,191,2928,169,2946,165,2942,187,2925,201,2896,214,2848,237,2708,257,2523,272,2314,293,1903,301,1630"/>
+<area shape="rect" id="Node000048" href="$class_c_layout_cards_dialog.html#a43b0d19c66a835cdb1bd163d45f808e3" title="Card to deal or retract was clicked." alt="" coords="27,3005,167,3048"/>
+<area shape="poly" id="edge47_Node000002_Node000048" title=" " alt="" coords="307,1630,299,1916,279,2349,264,2569,245,2763,220,2912,206,2963,191,2995,169,3013,166,3009,187,2992,201,2961,215,2911,239,2762,259,2568,274,2349,294,1916,302,1630"/>
+<area shape="rect" id="Node000049" href="$class_c_layout_cards_dialog.html#aea1772d6a029edd8d32d20a634c3da3f" title="Card to deal or retract was clicked." alt="" coords="27,3072,167,3115"/>
+<area shape="poly" id="edge48_Node000002_Node000049" title=" " alt="" coords="307,1630,300,1928,281,2382,266,2613,246,2818,222,2974,207,3028,191,3062,169,3080,166,3076,187,3058,202,3026,216,2973,241,2817,261,2612,276,2382,295,1928,302,1630"/>
+<area shape="rect" id="Node000050" href="$class_c_layout_cards_dialog.html#a8fc94663225be04c44ee3c585e8f2149" title="Card to deal or retract was clicked." alt="" coords="27,3139,167,3181"/>
+<area shape="poly" id="edge49_Node000002_Node000050" title=" " alt="" coords="307,1631,301,1941,283,2416,268,2658,248,2873,223,3037,208,3093,191,3128,169,3146,166,3142,187,3125,203,3091,218,3036,243,2872,263,2658,278,2416,296,1941,302,1630"/>
+</map>

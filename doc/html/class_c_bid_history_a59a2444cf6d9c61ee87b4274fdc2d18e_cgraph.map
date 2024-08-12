@@ -1,0 +1,11 @@
+<map id="CBidHistory::calculateRange" name="CBidHistory::calculateRange">
+<area shape="rect" id="Node000001" title="Calculate public range of feature attributes for the bid history of a given seat." alt="" coords="5,32,193,59"/>
+<area shape="rect" id="Node000002" href="$class_c_bid_history.html#a971ff6c2fd31a9905e91f1bdec7925ba" title="Calculate range of feature attributes for a given bid in the bid history." alt="" coords="241,24,412,67"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="193,43,225,43,225,48,193,48"/>
+<area shape="rect" id="Node000003" href="$class_c_features.html#ae6b24bb06a203edf7789396cc19d32fe" title="Set maximum features." alt="" coords="460,5,643,32"/>
+<area shape="poly" id="edge4_Node000001_Node000003" title=" " alt="" coords="146,29,191,18,240,9,345,4,444,7,444,12,345,9,241,15,192,23,147,34"/>
+<area shape="rect" id="Node000004" href="$class_c_features.html#a76f907bf67c09a0d85479404e58b2d98" title="Set minium features." alt="" coords="462,60,641,87"/>
+<area shape="poly" id="edge5_Node000001_Node000004" title=" " alt="" coords="147,57,192,68,241,76,347,82,447,79,447,85,347,87,240,81,191,73,146,62"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="412,33,444,29,445,34,413,38"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="413,53,447,58,446,63,412,59"/>
+</map>

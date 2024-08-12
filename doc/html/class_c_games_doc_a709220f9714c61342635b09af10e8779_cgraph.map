@@ -1,0 +1,9 @@
+<map id="CGamesDoc::getNextDeal" name="CGamesDoc::getNextDeal">
+<area shape="rect" id="Node000001" title="Retrieve the next game in the current game set (server only)." alt="" coords="5,31,180,57"/>
+<area shape="rect" id="Node000002" href="$class_c_deal_option_doc.html#afff8abe663f8e3057b9a03430861420e" title="Get deal." alt="" coords="255,5,424,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="180,32,239,26,240,32,181,38"/>
+<area shape="rect" id="Node000003" href="$class_c_games_doc.html#af78cc811cdb8c057c7fdaee9df4a0f58" title="Calculate rubber vulnerability for the next play after a given (user) played game/play." alt="" coords="228,56,451,83"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="181,50,212,54,212,59,180,56"/>
+<area shape="rect" id="Node000004" href="$class_c_games_doc.html#ad58896d1e877949a0e0b597dad6353a1" title="Get below the line points for a given (user) played game/play in rubber play." alt="" coords="499,56,700,83"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="451,67,484,67,484,72,451,72"/>
+</map>

@@ -1,0 +1,9 @@
+<map id="CBidHistory::appendBid" name="CBidHistory::appendBid">
+<area shape="rect" id="Node000001" title="Append a bid to the bid history." alt="" coords="5,31,165,57"/>
+<area shape="rect" id="Node000002" href="$class_c_bid_history.html#a971ff6c2fd31a9905e91f1bdec7925ba" title="Calculate range of feature attributes for a given bid in the bid history." alt="" coords="213,23,384,65"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="165,41,197,41,197,47,165,47"/>
+<area shape="rect" id="Node000003" href="$class_c_features.html#ae6b24bb06a203edf7789396cc19d32fe" title="Set maximum features." alt="" coords="432,5,615,32"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="384,32,416,28,417,33,385,37"/>
+<area shape="rect" id="Node000004" href="$class_c_features.html#a76f907bf67c09a0d85479404e58b2d98" title="Set minium features." alt="" coords="434,56,613,83"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="385,51,419,55,418,60,384,56"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="CBidMsg" name="CBidMsg">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,80,80,107"/>
+<area shape="rect" id="Node000002" href="$class_c_msg.html" title="Base class for all communication messages." alt="" coords="15,5,70,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="45,48,45,80,40,80,40,48"/>
+</map>

@@ -1,0 +1,15 @@
+<map id="CGamesDoc::clearGames" name="CGamesDoc::clearGames">
+<area shape="rect" id="Node000001" title="Clear all games and prepare initially for a new set of random games." alt="" coords="475,131,648,157"/>
+<area shape="rect" id="Node000002" href="$class_c_games_doc.html#a3ea4930009fa193c684d1236a68178ff" title="Constructor for the games class." alt="" coords="245,5,422,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="533,122,485,83,426,46,397,35,399,30,428,42,488,79,536,118"/>
+<area shape="rect" id="Node000003" href="$class_c_main_frame.html#a34f8fcdcfda23a78473903e14bd48266" title="Layout cards. User defines bridge hands to play." alt="" coords="246,56,422,99"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="498,128,409,102,410,97,500,123"/>
+<area shape="rect" id="Node000004" href="$class_c_main_frame.html#a1762a47b659b878767a7f233d537081c" title="Main menu new (random) session triggered." alt="" coords="242,123,426,165"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="460,147,426,147,426,141,460,141"/>
+<area shape="rect" id="Node000005" href="$class_c_main_frame.html#a9fa91a7b36b06416d578d347d478a941" title="Main menu seat configuration triggered." alt="" coords="241,189,427,232"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="500,165,410,191,409,186,498,160"/>
+<area shape="rect" id="Node000006" href="$class_c_tbl_mngr_client.html#abcda1bcfba54546ef439a22dd43e55e9" title="Receive a line from the server." alt="" coords="243,256,424,283"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="536,170,488,209,428,246,399,258,397,253,426,242,485,205,533,166"/>
+<area shape="rect" id="Node000007" href="$class_c_tbl_mngr_client.html#abe7d4246251e95843b4b46c11ef3eb97" title="Start a new session (from main menu)." alt="" coords="5,256,193,283"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="228,272,193,272,193,267,228,267"/>
+</map>

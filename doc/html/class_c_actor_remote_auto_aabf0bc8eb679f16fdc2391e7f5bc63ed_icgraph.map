@@ -1,0 +1,5 @@
+<map id="CActorRemoteAuto::receiveLine" name="CActorRemoteAuto::receiveLine">
+<area shape="rect" id="Node000001" title="Receive line from client (remote actor)." alt="" coords="235,13,440,40"/>
+<area shape="rect" id="Node000002" href="$class_c_actor_remote_auto.html#adf3f7d5a6f2e2671ba5c8edc1620ca97" title="Constructor for actor remote class for auto play." alt="" coords="5,5,187,48"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="219,29,187,29,187,24,219,24"/>
+</map>

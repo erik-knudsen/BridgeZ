@@ -1,0 +1,5 @@
+<map id="CCards::showClearedCard" name="CCards::showClearedCard">
+<area shape="rect" id="Node000001" title="Show played card(s) again after having been cleared." alt="" coords="5,5,179,32"/>
+<area shape="rect" id="Node000002" href="$class_c_cards.html#ac9ab9da8645755d590480f8efa4c9d54" title="Get index in array of cards for a given card." alt="" coords="227,5,375,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="179,16,211,16,211,21,179,21"/>
+</map>

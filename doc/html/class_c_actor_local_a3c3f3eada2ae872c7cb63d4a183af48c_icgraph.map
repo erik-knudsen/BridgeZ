@@ -1,0 +1,7 @@
+<map id="CActorLocal::continueSync" name="CActorLocal::continueSync">
+<area shape="rect" id="Node000001" title="Continue after synchronization." alt="" coords="503,5,682,32"/>
+<area shape="rect" id="Node000002" href="$class_c_tbl_mngr_client.html#a1ef4fed2b3e5520fc9f8adf3f35a439b" title="Continue after button." alt="" coords="250,5,455,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="487,21,456,21,456,16,487,16"/>
+<area shape="rect" id="Node000003" href="$class_c_tbl_mngr_client.html#a159786728c99f341176e7e75db21a006" title="A button was clicked in the play view." alt="" coords="5,5,202,32"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="234,21,202,21,202,16,234,16"/>
+</map>

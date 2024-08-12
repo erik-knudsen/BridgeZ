@@ -1,0 +1,118 @@
+<map id="CActorLocalAuto::playerPlays" name="CActorLocalAuto::playerPlays">
+<area shape="rect" id="Node000001" title="Player plays message from table manager." alt="" coords="5,219,201,245"/>
+<area shape="rect" id="Node000002" href="$class_c_actor_local_auto.html#afe02aa4304e96697000b356d29957ce8" title="Run cycle for the Yakindu statechart." alt="" coords="249,211,430,253"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="201,229,233,229,233,235,201,235"/>
+<area shape="rect" id="Node000003" href="$class_c_actor_local_auto.html#ae237010fd29cb11b59fe0bc4152c9b5a" title="Actions for the Yakindu statechart." alt="" coords="478,219,680,245"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="430,238,463,238,462,244,430,243"/>
+<area shape="poly" id="edge19_Node000003_Node000002" title=" " alt="" coords="478,226,445,226,445,220,478,220"/>
+<area shape="rect" id="Node000004" href="$class_c_actor_local_auto.html#a1b217ae4cbd7126e64e04755fcff82c9" title="Get next bid automatically." alt="" coords="732,137,909,164"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="621,215,763,167,765,172,622,221"/>
+<area shape="rect" id="Node000019" href="$class_c_actor_local_auto.html#aa21c04bc05eabd7de33483df593604ef" title="Get next play automatically." alt="" coords="728,256,913,283"/>
+<area shape="poly" id="edge20_Node000003_Node000019" title=" " alt="" coords="670,243,715,250,714,256,669,249"/>
+<area shape="poly" id="edge4_Node000004_Node000004" title=" " alt="" coords="782,138,775,129,780,119,795,113,821,111,848,113,863,120,860,125,847,118,820,116,796,118,783,123,780,128,786,135"/>
+<area shape="rect" id="Node000005" href="$class_c_bid_and_play.html#af9a8718b344e518655831c876f2513ae" title="Based on bid engine get next bid." alt="" coords="964,133,1134,160"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="909,146,949,146,949,151,909,152"/>
+<area shape="rect" id="Node000006" href="$class_c_bid_and_play_engines.html#a2e157d2532d287a0c48b6e14a7e4848b" title="Calculate the next bid." alt="" coords="1186,116,1331,159"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="1135,140,1171,139,1171,144,1135,146"/>
+<area shape="rect" id="Node000007" href="$class_c_bid_engine.html#a8e44d3815e83364abbc2966998943d22" title="Determine the next bid." alt="" coords="1841,100,2002,127"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="1332,132,1825,114,1826,119,1332,137"/>
+<area shape="rect" id="Node000008" href="$class_c_bid_engine.html#a2c87a975778816485adee094b0ad3de4" title="Calculate the next bid." alt="" coords="2064,284,2260,311"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="1993,125,2018,136,2058,167,2094,203,2146,269,2142,273,2090,206,2055,171,2015,141,1991,130"/>
+<area shape="rect" id="Node000018" href="$class_c_bid_engine.html#a803d2b32eacdc5b6a90b70902fa3b9b1" title="Get text description of alert." alt="" coords="2071,81,2253,108"/>
+<area shape="poly" id="edge18_Node000007_Node000018" title=" " alt="" coords="2003,104,2055,100,2055,106,2003,110"/>
+<area shape="rect" id="Node000009" href="$class_c_features.html#ab9bf91c410ef832eaf3cc3413c6fe588" title="Get count of given card (ace, king, queen, jack or ten)." alt="" coords="2316,56,2484,83"/>
+<area shape="poly" id="edge9_Node000008_Node000009" title=" " alt="" coords="2231,281,2258,263,2273,243,2280,222,2280,179,2282,136,2289,114,2306,93,2309,90,2313,94,2310,96,2294,117,2287,137,2286,180,2285,223,2277,245,2262,267,2234,286"/>
+<area shape="rect" id="Node000010" href="$class_c_features.html#a6bce9dff28fb9d77b2bf92b1475b2eed" title="Get high card points + distribution points for a given trump suit." alt="" coords="2328,107,2472,133"/>
+<area shape="poly" id="edge10_Node000008_Node000010" title=" " alt="" coords="2229,281,2258,263,2270,249,2276,235,2281,205,2285,174,2293,158,2306,143,2313,138,2316,142,2310,147,2297,161,2291,175,2286,205,2281,236,2274,252,2261,267,2232,286"/>
+<area shape="rect" id="Node000011" href="$class_c_features.html#a9c7a941db915f29ae9dbedeea36d2d35" title="Get stopper quality for a given suit." alt="" coords="2325,157,2476,184"/>
+<area shape="poly" id="edge11_Node000008_Node000011" title=" " alt="" coords="2224,281,2258,263,2273,247,2281,229,2289,211,2306,194,2314,189,2317,193,2309,198,2294,214,2286,231,2278,250,2261,267,2226,286"/>
+<area shape="rect" id="Node000012" href="$class_c_features.html#acebfd569352af4572422ae6d296146cc" title="Get the length of a given suit." alt="" coords="2325,5,2476,32"/>
+<area shape="poly" id="edge12_Node000008_Node000012" title=" " alt="" coords="2233,281,2258,263,2276,236,2283,209,2284,182,2280,154,2277,127,2278,99,2286,70,2306,42,2310,38,2314,42,2310,46,2291,73,2283,99,2283,126,2286,154,2289,182,2288,210,2281,238,2262,267,2236,286"/>
+<area shape="rect" id="Node000013" href="$class_c_features.html#acf59527c0e4c320087e0a4241b55342e" title="Set count of given card (ace, king, queen, jack or ten)." alt="" coords="2316,259,2484,285"/>
+<area shape="poly" id="edge13_Node000008_Node000013" title=" " alt="" coords="2260,284,2300,280,2301,285,2260,290"/>
+<area shape="rect" id="Node000014" href="$class_c_features.html#af7b9e68ec5cd1d3532b937a2207654fd" title="Set distribution points." alt="" coords="2339,309,2462,336"/>
+<area shape="poly" id="edge14_Node000008_Node000014" title=" " alt="" coords="2260,305,2324,312,2323,317,2260,310"/>
+<area shape="rect" id="Node000015" href="$class_c_features.html#a0b00db9df03cd2c173731a507061a3b3" title="Set high card points + distribution points for a given trump suit." alt="" coords="2328,360,2472,387"/>
+<area shape="poly" id="edge15_Node000008_Node000015" title=" " alt="" coords="2201,309,2308,345,2333,353,2331,358,2307,351,2200,314"/>
+<area shape="rect" id="Node000016" href="$class_c_features.html#a0b182d150631a71fb0d58e5e70eea8f3" title="Set stopper quality for a given suit." alt="" coords="2325,411,2476,437"/>
+<area shape="poly" id="edge16_Node000008_Node000016" title=" " alt="" coords="2181,309,2235,352,2271,376,2309,396,2324,403,2322,408,2307,401,2268,380,2232,356,2177,313"/>
+<area shape="rect" id="Node000017" href="$class_c_features.html#a9df2dd5c29b6ebb81f15fa77c1a9df09" title="Set the length of a given suit." alt="" coords="2325,208,2476,235"/>
+<area shape="poly" id="edge17_Node000008_Node000017" title=" " alt="" coords="2206,281,2259,263,2307,244,2330,237,2331,242,2309,249,2261,268,2208,286"/>
+<area shape="poly" id="edge66_Node000019_Node000019" title=" " alt="" coords="782,257,775,247,780,237,795,231,821,229,848,232,863,239,860,244,847,237,820,235,796,237,783,241,780,247,786,254"/>
+<area shape="rect" id="Node000020" href="$class_c_bid_and_play.html#a97c82597c6b142cad73ab5d478b3e26b" title="Based on play engine get next play." alt="" coords="961,345,1138,372"/>
+<area shape="poly" id="edge21_Node000019_Node000020" title=" " alt="" coords="858,281,1000,337,998,342,856,286"/>
+<area shape="rect" id="Node000021" href="$class_c_bid_and_play_engines.html#ac280eb2dcb9f2b941963eb506ad18e09" title="Determine the next card to play." alt="" coords="1186,360,1331,403"/>
+<area shape="poly" id="edge22_Node000020_Node000021" title=" " alt="" coords="1139,366,1171,369,1171,374,1138,371"/>
+<area shape="rect" id="Node000022" href="$class_c_play_engine.html#ac8ab634e68a0deb9dadf9809d1918653" title="Determine the next card to play." alt="" coords="1379,379,1555,405"/>
+<area shape="poly" id="edge23_Node000021_Node000022" title=" " alt="" coords="1332,382,1364,384,1364,389,1332,388"/>
+<area shape="rect" id="Node000023" href="$class_c_play_engine.html#a5333160edde82ce42950d179b075323e" title="Calculate weight to use for a given hand of cards." alt="" coords="1606,607,1776,633"/>
+<area shape="poly" id="edge24_Node000022_Node000023" title=" " alt="" coords="1484,404,1668,594,1664,597,1480,408"/>
+<area shape="rect" id="Node000047" href="$class_c_play_engine.html#a26d49f9067f84f6c81af6ce5dddbedc4" title="Get the best card to play." alt="" coords="1603,379,1779,405"/>
+<area shape="poly" id="edge50_Node000022_Node000047" title=" " alt="" coords="1555,389,1587,389,1587,395,1555,395"/>
+<area shape="rect" id="Node000024" href="$class_c_play_history.html#acd7520ed1a159af7ac58c67411bed6ac" title="Get played card in this trick." alt="" coords="1846,581,1997,608"/>
+<area shape="poly" id="edge25_Node000023_Node000024" title=" " alt="" coords="1776,608,1831,602,1831,607,1776,613"/>
+<area shape="rect" id="Node000025" href="$class_c_play_history.html#a973b9f9dff81361fd50f1e86c4a4710a" title="Determine the next leader and update play stack." alt="" coords="1827,683,2016,709"/>
+<area shape="poly" id="edge26_Node000023_Node000025" title=" " alt="" coords="1735,631,1865,675,1863,680,1733,636"/>
+<area shape="rect" id="Node000026" href="$class_c_features.html#ad5452ae917f2c98bb3e79bcb6894c4b5" title="Calculate features for a given hand (set of 13 cards)." alt="" coords="2069,652,2255,679"/>
+<area shape="poly" id="edge27_Node000023_Node000026" title=" " alt="" coords="1776,625,2054,652,2054,658,1776,631"/>
+<area shape="poly" id="edge32_Node000026_Node000013" title=" " alt="" coords="2162,651,2171,587,2193,491,2212,439,2236,386,2267,338,2306,295,2310,292,2314,296,2310,299,2272,341,2241,389,2217,441,2198,493,2176,588,2167,652"/>
+<area shape="poly" id="edge34_Node000026_Node000014" title=" " alt="" coords="2163,651,2174,595,2200,512,2219,467,2242,423,2271,382,2306,346,2323,335,2326,339,2309,350,2275,385,2247,426,2223,470,2205,514,2180,596,2168,652"/>
+<area shape="poly" id="edge45_Node000026_Node000015" title=" " alt="" coords="2164,651,2178,603,2206,534,2225,497,2248,460,2275,426,2306,397,2313,391,2316,396,2309,401,2279,430,2252,463,2230,499,2211,536,2184,605,2169,653"/>
+<area shape="poly" id="edge48_Node000026_Node000016" title=" " alt="" coords="2166,651,2183,611,2213,556,2254,497,2279,470,2306,447,2314,442,2317,447,2309,451,2282,474,2258,501,2217,558,2188,613,2171,653"/>
+<area shape="poly" id="edge49_Node000026_Node000017" title=" " alt="" coords="2164,651,2183,568,2216,446,2258,325,2282,277,2306,245,2310,241,2313,245,2310,248,2286,280,2263,327,2221,447,2188,569,2169,652"/>
+<area shape="rect" id="Node000027" href="$class_c_features.html#aa62d37235e34bc129191732759509190" title="Get distribution points." alt="" coords="2339,968,2462,995"/>
+<area shape="poly" id="edge28_Node000026_Node000027" title=" " alt="" coords="2174,678,2214,744,2262,835,2274,871,2280,900,2288,927,2309,954,2325,965,2322,969,2306,958,2283,930,2274,902,2269,872,2257,837,2209,747,2170,681"/>
+<area shape="rect" id="Node000028" href="$class_c_features.html#a9ad6830692f7ba54d37ed90be060d8b3" title="Get the High Card Points." alt="" coords="2335,1272,2466,1299"/>
+<area shape="poly" id="edge29_Node000026_Node000028" title=" " alt="" coords="2176,678,2219,743,2243,788,2262,835,2270,877,2274,930,2274,1055,2276,1118,2281,1176,2292,1224,2310,1258,2323,1269,2320,1274,2306,1262,2287,1226,2276,1176,2270,1118,2269,1055,2268,930,2265,877,2257,837,2238,790,2214,746,2171,681"/>
+<area shape="rect" id="Node000029" href="$class_c_features.html#a0f14c6ad6a9a0d4e0cdebfa5b05bab26" title="Set how balanced." alt="" coords="2337,1019,2464,1045"/>
+<area shape="poly" id="edge30_Node000026_Node000029" title=" " alt="" coords="2175,678,2216,744,2262,835,2271,861,2275,885,2277,927,2283,966,2293,985,2309,1005,2325,1016,2322,1020,2306,1009,2289,988,2278,968,2271,928,2269,886,2266,863,2257,837,2211,746,2170,680"/>
+<area shape="rect" id="Node000030" href="$class_c_features.html#a31dd870a28b8e5b80cd1b89a7816ea21" title="Set the weight of aces and kings." alt="" coords="2323,1069,2478,1096"/>
+<area shape="poly" id="edge31_Node000026_Node000030" title=" " alt="" coords="2175,678,2217,744,2241,788,2262,835,2272,869,2275,900,2274,955,2274,980,2279,1004,2290,1029,2310,1056,2312,1058,2308,1062,2306,1059,2285,1032,2273,1006,2269,980,2269,954,2270,900,2267,870,2257,837,2237,790,2213,746,2171,681"/>
+<area shape="rect" id="Node000031" href="$class_c_features.html#a6916e83ca1d7445587dd7f952b5d88e0" title="Set difference in length between two given suits." alt="" coords="2336,1120,2465,1147"/>
+<area shape="poly" id="edge33_Node000026_Node000031" title=" " alt="" coords="2176,678,2218,743,2242,788,2262,835,2273,877,2276,914,2271,981,2270,1012,2274,1043,2286,1074,2310,1106,2323,1117,2320,1121,2306,1110,2281,1076,2269,1044,2264,1013,2266,981,2270,914,2268,878,2257,837,2237,790,2213,746,2171,681"/>
+<area shape="rect" id="Node000032" href="$class_c_features.html#a58608bc058c817363ad1dd2a1785b107" title="Set count of aces and kings and queens." alt="" coords="2339,1171,2462,1197"/>
+<area shape="poly" id="edge35_Node000026_Node000032" title=" " alt="" coords="2176,678,2218,743,2242,788,2262,835,2274,884,2276,929,2268,1008,2265,1045,2269,1081,2282,1118,2310,1157,2326,1170,2323,1174,2306,1161,2278,1120,2264,1082,2260,1045,2263,1008,2271,929,2269,885,2257,837,2238,790,2214,746,2171,681"/>
+<area shape="rect" id="Node000033" href="$class_c_features.html#a03387cc8ea5e814e1df607c6fe2614e5" title="Set the High Card Points." alt="" coords="2335,1221,2466,1248"/>
+<area shape="poly" id="edge36_Node000026_Node000033" title=" " alt="" coords="2176,678,2219,743,2243,788,2262,835,2270,872,2273,919,2276,1029,2278,1084,2283,1135,2293,1177,2310,1208,2322,1218,2319,1222,2306,1211,2288,1179,2278,1136,2273,1085,2270,1029,2268,919,2264,873,2257,837,2238,790,2214,746,2171,681"/>
+<area shape="rect" id="Node000034" href="$class_c_features.html#a6287774fdbc0d1d1860a2e2fd861c281" title="Set count of cards higher than nine." alt="" coords="2330,461,2471,488"/>
+<area shape="poly" id="edge37_Node000026_Node000034" title=" " alt="" coords="2169,650,2220,577,2260,534,2306,498,2316,492,2319,497,2309,502,2264,538,2225,581,2174,653"/>
+<area shape="rect" id="Node000035" href="$class_c_features.html#a5b38c505b525efe98ea2e9224af2f664" title="Set weighed count intermediate cards." alt="" coords="2334,512,2466,539"/>
+<area shape="poly" id="edge38_Node000026_Node000035" title=" " alt="" coords="2175,650,2229,600,2266,572,2306,548,2320,542,2323,547,2309,553,2269,577,2233,604,2179,653"/>
+<area shape="rect" id="Node000036" href="$class_c_features.html#aaff832d7ad111eab57532e53b08e9f20" title="Set the length of the longer major." alt="" coords="2333,563,2468,589"/>
+<area shape="poly" id="edge39_Node000026_Node000036" title=" " alt="" coords="2190,649,2243,624,2307,599,2328,592,2330,597,2309,604,2246,629,2192,654"/>
+<area shape="rect" id="Node000037" href="$class_c_features.html#a0307f3a068ee64ab29fe3a5542a72eec" title="Set the length of the longer minor." alt="" coords="2333,613,2468,640"/>
+<area shape="poly" id="edge40_Node000026_Node000037" title=" " alt="" coords="2248,649,2317,637,2318,643,2249,654"/>
+<area shape="rect" id="Node000038" href="$class_c_features.html#ac226f4f700ca143bc98227eb7cbd2371" title="Set the given suit not shortest in the hand." alt="" coords="2333,664,2468,691"/>
+<area shape="poly" id="edge41_Node000026_Node000038" title=" " alt="" coords="2255,667,2317,671,2317,676,2255,673"/>
+<area shape="rect" id="Node000039" href="$class_c_features.html#a3116e603d8979bc22e454d718dd468c8" title="Set the given suit the longest in the hand." alt="" coords="2324,715,2477,741"/>
+<area shape="poly" id="edge42_Node000026_Node000039" title=" " alt="" coords="2216,677,2332,708,2331,713,2215,682"/>
+<area shape="rect" id="Node000040" href="$class_c_features.html#a8b9e2dc3395a78098767c7172c51df02" title="Set loosers." alt="" coords="2324,765,2477,792"/>
+<area shape="poly" id="edge43_Node000026_Node000040" title=" " alt="" coords="2183,677,2238,713,2309,751,2326,758,2324,763,2307,756,2235,718,2181,681"/>
+<area shape="rect" id="Node000041" href="$class_c_features.html#a7a5b8a1bf063aa961b6cd5f0297be6bf" title="Set playing tricks." alt="" coords="2308,816,2493,843"/>
+<area shape="poly" id="edge44_Node000026_Node000041" title=" " alt="" coords="2176,677,2228,737,2266,772,2309,802,2321,808,2318,812,2306,806,2263,776,2225,741,2172,681"/>
+<area shape="rect" id="Node000042" href="$class_c_features.html#a480a4b89d2619e6dc4c2486efe6dcb50" title="Set general quality assesment for a given suit." alt="" coords="2335,867,2466,893"/>
+<area shape="poly" id="edge46_Node000026_Node000042" title=" " alt="" coords="2172,678,2191,713,2221,761,2261,810,2309,852,2322,860,2319,864,2306,857,2257,814,2217,764,2187,716,2168,680"/>
+<area shape="rect" id="Node000043" href="$class_c_features.html#ab84e075c9ea5b9a3c1b0e97f3e40e555" title="Set quick tricks." alt="" coords="2312,917,2488,944"/>
+<area shape="poly" id="edge47_Node000026_Node000043" title=" " alt="" coords="2173,678,2244,803,2283,869,2310,903,2316,908,2313,912,2306,907,2279,872,2239,806,2169,681"/>
+<area shape="poly" id="edge63_Node000047_Node000012" title=" " alt="" coords="1713,376,1826,314,1880,293,1924,281,1967,267,2015,238,2029,222,2038,207,2046,191,2063,175,2090,160,2116,152,2163,147,2209,142,2232,134,2258,118,2274,100,2281,81,2289,61,2306,42,2313,37,2316,41,2309,46,2293,64,2286,83,2278,103,2261,122,2235,138,2210,147,2163,153,2117,157,2092,165,2066,179,2051,194,2042,209,2034,226,2018,242,1969,272,1926,286,1882,298,1828,318,1716,380"/>
+<area shape="poly" id="edge52_Node000047_Node000024" title=" " alt="" coords="1702,404,1749,478,1785,522,1829,560,1850,573,1848,577,1825,565,1781,526,1744,481,1697,407"/>
+<area shape="poly" id="edge64_Node000047_Node000026" title=" " alt="" coords="1705,404,1754,459,1789,490,1828,516,1878,537,1921,544,1965,550,2017,567,2081,603,2134,640,2130,644,2078,607,2015,572,1963,555,1920,549,1877,542,1826,521,1786,494,1751,463,1701,408"/>
+<area shape="rect" id="Node000048" href="$class_c_play_history.html#a5cc0654b1cee3c4732e0c7e034a4c15f" title="Check if the played card is ok." alt="" coords="1848,328,1995,355"/>
+<area shape="poly" id="edge51_Node000047_Node000048" title=" " alt="" coords="1755,375,1842,356,1844,361,1756,381"/>
+<area shape="rect" id="Node000049" href="$class_c_play_engine.html#a94db368c4bada6139eea30a567de5bd2" title="Get the best card to play for opponent not leading and discarding." alt="" coords="1838,379,2005,405"/>
+<area shape="poly" id="edge53_Node000047_Node000049" title=" " alt="" coords="1779,389,1823,389,1823,395,1779,395"/>
+<area shape="rect" id="Node000050" href="$class_c_play_engine.html#a2338ef54a543e0b4f7c3c4bdcd926932" title="Get the best card to play for opponent not leading, but following suit." alt="" coords="1842,429,2001,456"/>
+<area shape="poly" id="edge57_Node000047_Node000050" title=" " alt="" coords="1756,403,1844,423,1842,428,1755,409"/>
+<area shape="rect" id="Node000051" href="$class_c_play_history.html#abd93e03fcb76a44b281c3468a74ccf9f" title="Determine leader till now (not all card has been played)." alt="" coords="1840,480,2003,507"/>
+<area shape="poly" id="edge61_Node000047_Node000051" title=" " alt="" coords="1714,404,1765,434,1828,466,1847,472,1845,477,1826,470,1762,439,1711,408"/>
+<area shape="rect" id="Node000052" href="$class_c_play_engine.html#a1a1b1a3699e0cf8e8d6c6bc73a09e011" title="Get best lead card for opponent." alt="" coords="1834,151,2009,177"/>
+<area shape="poly" id="edge62_Node000047_Node000052" title=" " alt="" coords="1695,377,1711,339,1739,288,1777,234,1800,209,1825,187,1833,182,1836,187,1829,191,1803,213,1781,237,1743,291,1716,342,1700,379"/>
+<area shape="rect" id="Node000053" href="$class_c_play_history.html#a8ed696608bafe92d7a1bd765a4ded669" title="Can the card given take the next trick?" alt="" coords="1842,201,2001,228"/>
+<area shape="poly" id="edge65_Node000047_Node000053" title=" " alt="" coords="1699,377,1748,314,1784,277,1826,244,1850,232,1852,237,1828,249,1788,281,1752,317,1703,380"/>
+<area shape="poly" id="edge55_Node000049_Node000012" title=" " alt="" coords="1998,376,2015,365,2028,348,2035,332,2038,298,2041,262,2049,244,2062,226,2087,207,2112,197,2161,193,2210,189,2234,180,2258,162,2270,148,2276,133,2281,103,2285,73,2293,57,2306,42,2310,38,2314,42,2310,46,2297,60,2291,74,2286,104,2281,135,2274,151,2261,166,2236,184,2211,194,2162,198,2114,202,2090,212,2066,230,2053,247,2047,263,2043,298,2040,333,2032,351,2018,369,2001,380"/>
+<area shape="poly" id="edge56_Node000049_Node000026" title=" " alt="" coords="1998,404,2018,415,2045,439,2069,467,2109,528,2137,588,2155,636,2150,638,2132,590,2104,531,2065,470,2041,443,2015,419,1995,408"/>
+<area shape="poly" id="edge54_Node000049_Node000028" title=" " alt="" coords="2004,404,2018,415,2043,449,2056,482,2060,513,2058,545,2053,612,2056,649,2067,690,2090,744,2113,788,2163,857,2214,927,2238,971,2262,1026,2272,1061,2276,1094,2273,1151,2273,1178,2278,1204,2289,1230,2310,1258,2323,1268,2319,1273,2306,1262,2284,1233,2272,1206,2268,1178,2268,1151,2270,1094,2267,1062,2257,1028,2234,974,2209,930,2159,861,2109,790,2085,746,2062,692,2051,650,2048,612,2053,545,2054,513,2050,483,2038,452,2014,419,2000,408"/>
+<area shape="poly" id="edge59_Node000050_Node000012" title=" " alt="" coords="1998,427,2015,415,2028,398,2035,381,2037,344,2040,307,2048,288,2063,270,2088,253,2113,246,2138,245,2163,248,2187,251,2211,250,2234,243,2258,226,2274,204,2282,182,2283,160,2282,137,2280,113,2281,89,2289,66,2306,42,2310,38,2314,42,2310,46,2293,68,2286,90,2285,113,2287,136,2289,160,2287,183,2279,207,2262,230,2237,248,2212,255,2187,256,2162,253,2138,251,2114,251,2090,258,2066,274,2052,291,2045,308,2043,344,2040,382,2033,401,2018,419,2001,431"/>
+<area shape="poly" id="edge60_Node000050_Node000026" title=" " alt="" coords="1996,454,2018,466,2063,505,2101,552,2130,598,2151,637,2146,639,2126,601,2096,555,2059,509,2015,470,1993,459"/>
+<area shape="poly" id="edge58_Node000050_Node000028" title=" " alt="" coords="2003,454,2018,466,2037,501,2047,548,2052,604,2054,664,2055,783,2059,834,2067,873,2110,997,2131,1047,2153,1092,2179,1133,2212,1174,2255,1214,2309,1258,2322,1266,2320,1270,2306,1262,2251,1218,2208,1177,2175,1136,2148,1094,2126,1049,2106,998,2062,874,2053,835,2050,784,2049,664,2047,604,2042,549,2032,503,2014,470,2000,458"/>
+</map>

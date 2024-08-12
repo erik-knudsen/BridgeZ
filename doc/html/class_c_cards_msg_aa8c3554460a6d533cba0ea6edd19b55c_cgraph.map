@@ -1,0 +1,7 @@
+<map id="CCardsMsg::lineToMsg" name="CCardsMsg::lineToMsg">
+<area shape="rect" id="Node000001" title="Unpack message from line." alt="" coords="5,31,162,57"/>
+<area shape="rect" id="Node000002" href="$class_c_msg.html#a78fdb43f9bcf38685596967aeaf55fca" title="Get the card values from a cards line received." alt="" coords="210,5,358,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="161,31,194,27,195,33,162,37"/>
+<area shape="rect" id="Node000003" href="$class_c_msg.html#afe84c3ce73d1b92201a486e9a69eea2f" title="Get the seat from a line received." alt="" coords="230,56,338,83"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="162,51,215,58,214,63,161,57"/>
+</map>

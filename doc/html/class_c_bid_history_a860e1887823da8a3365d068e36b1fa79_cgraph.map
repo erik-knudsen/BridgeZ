@@ -1,0 +1,20 @@
+<map id="CBidHistory::undo" name="CBidHistory::undo">
+<area shape="rect" id="Node000001" title="Undo some of the bid history." alt="" coords="5,92,132,119"/>
+<area shape="rect" id="Node000002" href="$class_c_bid_history.html#a59a2444cf6d9c61ee87b4274fdc2d18e" title="Calculate public range of feature attributes for the bid history of a given seat." alt="" coords="180,38,367,64"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="121,89,205,66,206,71,122,94"/>
+<area shape="rect" id="Node000006" href="$class_c_bid_history.html#a389f031e8b4dd75138c0a3e2999198db" title="Set the bidders seat." alt="" coords="415,143,611,170"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="124,117,180,128,293,142,399,149,399,155,292,147,179,134,123,122"/>
+<area shape="rect" id="Node000007" href="$class_c_bid_history.html#ab480b98264400f8722fc1a7fe3c1a17d" title="Reset (clear) the bid history." alt="" coords="180,92,367,119"/>
+<area shape="poly" id="edge10_Node000001_Node000007" title=" " alt="" coords="132,103,164,103,164,108,132,108"/>
+<area shape="rect" id="Node000003" href="$class_c_bid_history.html#a971ff6c2fd31a9905e91f1bdec7925ba" title="Calculate range of feature attributes for a given bid in the bid history." alt="" coords="428,26,599,68"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="367,47,412,46,412,51,367,52"/>
+<area shape="rect" id="Node000004" href="$class_c_features.html#ae6b24bb06a203edf7789396cc19d32fe" title="Set maximum features." alt="" coords="659,34,843,60"/>
+<area shape="poly" id="edge5_Node000002_Node000004" title=" " alt="" coords="315,34,362,21,415,11,513,3,612,11,690,26,689,32,611,16,513,8,415,16,364,26,317,39"/>
+<area shape="rect" id="Node000005" href="$class_c_features.html#a76f907bf67c09a0d85479404e58b2d98" title="Set minium features." alt="" coords="661,92,841,119"/>
+<area shape="poly" id="edge6_Node000002_Node000005" title=" " alt="" coords="334,62,415,78,535,91,646,99,646,104,534,96,415,83,333,68"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="599,44,644,44,644,50,599,50"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="600,65,680,85,679,91,599,71"/>
+<area shape="poly" id="edge8_Node000006_Node000004" title=" " alt="" coords="537,140,592,110,658,78,693,64,695,69,660,83,594,115,540,145"/>
+<area shape="poly" id="edge9_Node000006_Node000005" title=" " alt="" coords="579,140,670,120,671,125,580,145"/>
+<area shape="poly" id="edge11_Node000007_Node000006" title=" " alt="" coords="341,117,432,137,431,142,340,122"/>
+</map>

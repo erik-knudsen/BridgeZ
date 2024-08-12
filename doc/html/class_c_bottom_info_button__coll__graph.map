@@ -1,0 +1,5 @@
+<map id="CBottomInfoButton" name="CBottomInfoButton">
+<area shape="rect" id="Node000001" title="Shows a button in the bottom info auction widget in the play view." alt="" coords="5,80,136,107"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="8,5,133,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="73,48,73,80,68,80,68,48"/>
+</map>

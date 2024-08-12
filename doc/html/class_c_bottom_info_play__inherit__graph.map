@@ -1,0 +1,5 @@
+<map id="CBottomInfoPlay" name="CBottomInfoPlay">
+<area shape="rect" id="Node000001" title="The bottom info play class shows play information in the bottom info panel." alt="" coords="8,80,127,107"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,130,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="70,48,70,80,65,80,65,48"/>
+</map>

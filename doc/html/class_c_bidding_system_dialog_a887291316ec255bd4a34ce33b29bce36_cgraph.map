@@ -1,0 +1,13 @@
+<map id="CBiddingSystemDialog::on_createRule_clicked" name="CBiddingSystemDialog::on_createRule_clicked">
+<area shape="rect" id="Node000001" title="Create a new next bid." alt="" coords="5,93,166,136"/>
+<area shape="rect" id="Node000002" href="$class_c_bidding_system_dialog.html#a822f8a17ef70d22d2932d0dfafba7a96" title=" " alt="" coords="214,5,368,48"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="136,90,224,52,226,57,139,95"/>
+<area shape="rect" id="Node000003" href="$class_c_bidding_system_dialog.html#a09d5a80ac0136c3ef164bc86f7c2e9a4" title="Another bid was selected in the rules drop down." alt="" coords="214,123,368,165"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="166,123,198,128,198,133,165,129"/>
+<area shape="rect" id="Node000004" href="$class_c_bidding_system_dialog.html#a2ecf41edff642967305748a0a04d4e8f" title=" " alt="" coords="416,77,570,120"/>
+<area shape="poly" id="edge5_Node000001_Node000004" title=" " alt="" coords="166,109,400,100,400,105,166,114"/>
+<area shape="rect" id="Node000005" href="$class_c_bidding_system_dialog.html#a1a9684959aa7ac999f6d68cc0be969b2" title=" " alt="" coords="416,156,570,199"/>
+<area shape="poly" id="edge6_Node000001_Node000005" title=" " alt="" coords="121,134,165,157,214,175,261,183,310,187,401,185,401,190,310,192,261,188,213,180,162,162,119,139"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="368,124,401,117,402,122,369,129"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="369,154,402,160,401,165,368,159"/>
+</map>

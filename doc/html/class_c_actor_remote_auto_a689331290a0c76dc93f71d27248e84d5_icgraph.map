@@ -1,0 +1,39 @@
+<map id="CActorRemoteAuto::sendLine" name="CActorRemoteAuto::sendLine">
+<area shape="rect" id="Node000001" title=" " alt="" coords="546,499,739,525"/>
+<area shape="rect" id="Node000002" href="$class_c_actor_remote_auto.html#a31db4384675ae3604864da73ca0523cb" title="Synchronization message from table manager (pack and send to client via front end)." alt="" coords="293,5,477,48"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="638,483,632,401,624,347,612,288,594,227,569,167,537,111,496,62,476,47,479,43,500,58,541,108,574,164,599,225,617,286,629,346,637,400,644,483"/>
+<area shape="rect" id="Node000003" href="$class_c_actor_remote_auto.html#a06ec275b152740fa68c904fee910efc5" title="Synchronization message from table manager (pack and send to client via front end)." alt="" coords="292,72,478,115"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="636,483,626,411,603,316,585,265,562,215,532,169,496,129,476,115,480,110,500,125,536,166,566,213,590,263,608,314,632,410,642,482"/>
+<area shape="rect" id="Node000004" href="$class_c_actor_remote_auto.html#aea8b8e46d4133655d4506bce3771c829" title="A bid has been done (pack and send to client via front end)." alt="" coords="291,139,479,165"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="635,484,623,420,598,337,580,294,557,252,530,213,496,179,478,168,481,163,500,175,534,209,562,249,585,291,603,335,628,419,640,483"/>
+<area shape="rect" id="Node000005" href="$class_c_actor_remote_auto.html#adf3f7d5a6f2e2671ba5c8edc1620ca97" title="Constructor for actor remote class for auto play." alt="" coords="294,189,476,232"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="632,485,615,433,588,369,548,303,524,272,496,246,475,233,478,228,500,242,528,269,553,300,592,366,620,431,637,483"/>
+<area shape="rect" id="Node000006" href="$class_c_actor_remote_auto.html#a8c0556dcdaa9f8ad00b3b71b123ca66f" title="Cards message from table manager (pack and send to client via front end)." alt="" coords="298,280,472,307"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="626,486,605,450,576,407,539,364,497,328,459,310,461,305,499,323,543,360,580,404,609,447,630,484"/>
+<area shape="rect" id="Node000007" href="$class_c_actor_remote_auto.html#aae7744706e0fa948ae5a05603e637c71" title="Dummy cards message from table manager (pack and send to client via front end)." alt="" coords="5,305,224,332"/>
+<area shape="poly" id="edge10_Node000001_Node000007" title=" " alt="" coords="621,488,570,427,536,396,497,372,448,356,379,344,224,328,225,323,380,339,450,351,499,367,539,392,574,423,626,484"/>
+<area shape="rect" id="Node000008" href="$class_c_actor_remote_auto.html#a986e28f7ce730d5441c45c560c81d28c" title="Synchronization message from table manager (pack and send to client via front end)." alt="" coords="293,381,476,424"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="605,493,554,465,497,438,466,427,468,422,499,434,557,461,607,488"/>
+<area shape="rect" id="Node000009" href="$class_c_actor_remote_auto.html#ab98c80e336ae1db8969cf29e1ec4a825" title="Deal info message from table manager (pack and send to client via front end)." alt="" coords="292,448,478,475"/>
+<area shape="poly" id="edge9_Node000001_Node000009" title=" " alt="" coords="555,498,456,478,457,473,556,492"/>
+<area shape="rect" id="Node000010" href="$class_c_actor_remote_auto.html#a0df65cc18d3ad226e416b820d8cf3e65" title="Dummy to lead message from table manager (pack and send to client via front end)." alt="" coords="272,499,498,525"/>
+<area shape="poly" id="edge11_Node000001_Node000010" title=" " alt="" coords="531,515,498,515,498,509,531,509"/>
+<area shape="rect" id="Node000011" href="$class_c_actor_remote_auto.html#ae8e59952694e40d8b8f28ce7c1c716c7" title="End of session message from table manager (pack and send to client via front end)." alt="" coords="274,549,496,576"/>
+<area shape="poly" id="edge12_Node000001_Node000011" title=" " alt="" coords="556,532,457,551,456,546,555,526"/>
+<area shape="rect" id="Node000012" href="$class_c_actor_remote_auto.html#a49fa3114e076c7242788968c33328fe0" title="Player plays message from table manager (pack and send to client via front end)." alt="" coords="297,600,473,643"/>
+<area shape="poly" id="edge13_Node000001_Node000012" title=" " alt="" coords="607,536,557,563,499,590,468,602,466,597,497,586,554,559,605,531"/>
+<area shape="rect" id="Node000013" href="$class_c_actor_remote_auto.html#a634f691fb107779df2ef404fafc62efe" title="Player to lead message from table manager (pack and send to client via front end)." alt="" coords="297,667,473,709"/>
+<area shape="poly" id="edge14_Node000001_Node000013" title=" " alt="" coords="624,539,572,598,538,630,499,657,475,669,472,664,497,652,534,626,569,594,620,536"/>
+<area shape="rect" id="Node000014" href="$class_c_actor_remote_auto.html#adf6044cef32841a710a63c6ed140baa9" title="Seated message from table manager (pack and send to client via front end)." alt="" coords="295,733,475,760"/>
+<area shape="poly" id="edge15_Node000001_Node000014" title=" " alt="" coords="633,541,613,582,584,632,546,682,500,724,477,735,474,731,496,719,543,678,580,629,609,580,628,539"/>
+<area shape="rect" id="Node000015" href="$class_c_actor_remote_auto.html#a3147e757e407c62a81ac691bc1cc9aad" title="Start of board message from table manager (pack and send to client via front end)." alt="" coords="295,784,475,827"/>
+<area shape="poly" id="edge16_Node000001_Node000015" title=" " alt="" coords="636,541,619,591,591,654,552,718,527,748,500,774,477,788,474,784,496,770,523,744,547,715,586,651,614,589,631,539"/>
+<area shape="rect" id="Node000016" href="$class_c_actor_remote_auto.html#afe8393cb2d35fcbf750fca721f5b87b4" title="Team names message from table manager (pack and send to client via front end)." alt="" coords="279,851,490,877"/>
+<area shape="poly" id="edge17_Node000001_Node000016" title=" " alt="" coords="640,541,627,604,602,685,584,728,561,769,533,808,500,841,481,852,478,848,496,837,529,804,556,766,579,725,597,683,622,602,635,540"/>
+<area shape="rect" id="Node000017" href="$class_c_actor_remote_auto.html#a16977f998507c1514caa791193f0e942" title="Undo bid message from table manager (pack and send to client via front end)." alt="" coords="291,901,479,928"/>
+<area shape="poly" id="edge18_Node000001_Node000017" title=" " alt="" coords="642,541,632,613,609,708,591,758,567,807,537,852,500,891,481,904,478,899,496,887,533,849,562,804,586,756,604,706,627,612,637,541"/>
+<area shape="rect" id="Node000018" href="$class_c_actor_remote_auto.html#afa36dd5421a23448a02e797e7e852d3f" title="Undo trick message from table manager (pack and send to client via front end)." alt="" coords="286,952,484,979"/>
+<area shape="poly" id="edge19_Node000001_Node000018" title=" " alt="" coords="643,541,637,621,629,673,616,729,598,787,573,844,541,896,500,942,483,954,480,949,496,938,536,893,568,841,593,785,611,728,623,672,632,620,638,541"/>
+<area shape="poly" id="edge6_Node000006_Node000006" title=" " alt="" coords="430,268,415,261,385,259,358,261,343,266,339,271,346,278,342,281,334,271,339,261,357,255,385,253,416,256,432,263"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="283,306,224,311,224,306,282,300"/>
+</map>

@@ -1,0 +1,24 @@
+<map id="CBiddingSystemDialog::textToAuction" name="CBiddingSystemDialog::textToAuction">
+<area shape="rect" id="Node000001" title=" " alt="" coords="508,227,662,269"/>
+<area shape="rect" id="Node000002" href="$class_c_bidding_system_dialog.html#a3ea5033056808aea8a67c88cb1f71539" title="Another auction was selected in the auctions drop down." alt="" coords="5,5,234,48"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="568,214,551,178,528,137,497,99,459,68,405,43,348,28,289,21,234,19,234,14,290,15,349,23,407,38,461,63,500,95,532,134,556,175,573,212"/>
+<area shape="rect" id="Node000003" href="$class_c_bidding_system_dialog.html#aabe6aacad2e37986d157e52f269a33fe" title="Create a new auction." alt="" coords="282,227,460,269"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="492,251,460,251,460,245,492,245"/>
+<area shape="rect" id="Node000004" href="$class_c_bidding_system_dialog.html#a3724bb65258dad62d602ede227c27cc7" title="Create a new substitute link (auction)." alt="" coords="292,293,450,336"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="501,277,443,295,441,290,499,272"/>
+<area shape="rect" id="Node000005" href="$class_c_bidding_system_dialog.html#a887291316ec255bd4a34ce33b29bce36" title="Create a new next bid." alt="" coords="39,76,200,119"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="565,214,547,184,523,152,493,122,459,100,427,87,394,79,326,72,260,74,200,82,200,76,259,68,326,66,395,74,429,82,461,95,497,118,527,149,551,181,569,212"/>
+<area shape="rect" id="Node000006" href="$class_c_bidding_system_dialog.html#a0a2b150e7c6ebd0f10f4746bb013269f" title="Delete the current auction (and connected bids etc.)." alt="" coords="282,360,460,403"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="552,282,510,317,461,350,438,362,436,357,459,346,507,313,549,278"/>
+<area shape="rect" id="Node000007" href="$class_c_bidding_system_dialog.html#ac71cf866df3cfaab9d854c5071407454" title="Delete the current substitute link (auction)." alt="" coords="292,427,450,469"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="568,284,525,351,496,386,462,417,443,428,440,424,458,413,492,382,521,348,564,281"/>
+<area shape="rect" id="Node000008" href="$class_c_bidding_system_dialog.html#a963691a8b903fa7b4f25f24037ee4cfb" title="Delete the current next bid." alt="" coords="40,151,199,193"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="493,225,459,217,322,195,199,181,200,176,323,190,461,212,495,220"/>
+<area shape="rect" id="Node000009" href="$class_c_bidding_system_dialog.html#ada28166813555fb2b394dfdc4f25762e" title="Temporary." alt="" coords="294,493,448,536"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="576,285,560,330,536,383,504,436,462,483,445,495,442,491,458,479,499,433,531,380,555,328,571,283"/>
+<area shape="rect" id="Node000010" href="$class_c_bidding_system_dialog.html#a09d5a80ac0136c3ef164bc86f7c2e9a4" title="Another bid was selected in the rules drop down." alt="" coords="294,109,448,152"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="538,220,459,173,422,155,425,150,461,168,541,216"/>
+<area shape="poly" id="edge10_Node000010_Node000002" title=" " alt="" coords="314,104,233,66,191,51,193,46,235,62,316,99"/>
+<area shape="poly" id="edge11_Node000010_Node000005" title=" " alt="" coords="278,121,200,111,200,105,278,116"/>
+<area shape="poly" id="edge12_Node000010_Node000008" title=" " alt="" coords="279,148,200,162,199,156,278,143"/>
+</map>

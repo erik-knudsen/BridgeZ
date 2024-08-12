@@ -1,0 +1,12 @@
+<map id="CBiddingSystemDialog::on_auctions_currentIndexChanged" name="CBiddingSystemDialog::on_auctions_currentIndexChanged">
+<area shape="rect" id="Node000001" title="Another auction was selected in the auctions drop down." alt="" coords="5,64,234,107"/>
+<area shape="rect" id="Node000002" href="$class_c_bidding_system_dialog.html#a265803d4a453a98e6afc1cd9a318cce0" title=" " alt="" coords="282,5,436,48"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="209,61,266,47,267,52,210,66"/>
+<area shape="rect" id="Node000003" href="$class_c_bidding_system_dialog.html#a09d5a80ac0136c3ef164bc86f7c2e9a4" title="Another bid was selected in the rules drop down." alt="" coords="282,123,436,165"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="210,105,267,119,266,124,209,110"/>
+<area shape="rect" id="Node000004" href="$class_c_bidding_system_dialog.html#a2ecf41edff642967305748a0a04d4e8f" title=" " alt="" coords="484,64,638,107"/>
+<area shape="poly" id="edge5_Node000001_Node000004" title=" " alt="" coords="234,83,468,83,468,88,234,88"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="434,120,470,109,472,114,435,125"/>
+<area shape="rect" id="Node000005" href="$class_c_bidding_system_dialog.html#a1a9684959aa7ac999f6d68cc0be969b2" title=" " alt="" coords="484,131,638,173"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="436,144,469,146,469,151,436,150"/>
+</map>

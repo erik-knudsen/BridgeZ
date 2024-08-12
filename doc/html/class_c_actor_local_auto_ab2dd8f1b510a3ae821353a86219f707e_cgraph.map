@@ -1,0 +1,5 @@
+<map id="CActorLocalAuto::attemptSyncFromServerToClient" name="CActorLocalAuto::attemptSyncFromServerToClient">
+<area shape="rect" id="Node000001" title="Synchronization signal from server to client." alt="" coords="5,5,177,48"/>
+<area shape="rect" id="Node000002" href="$class_c_actor_local_auto.html#af5ad5c89e5d12c3988e2afe4ffd23737" title="Run cycle for the Yakindu synchronization statechart." alt="" coords="225,5,413,48"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="177,24,209,24,209,29,177,29"/>
+</map>

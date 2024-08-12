@@ -1,0 +1,9 @@
+<map id="CCards" name="CCards">
+<area shape="rect" id="Node000001" title="One hand of cards." alt="" coords="65,80,130,107"/>
+<area shape="rect" id="Node000003" href="$class_c_l_r_cards.html" title="One hand of cards in the left or right position in the play view." alt="" coords="5,155,86,181"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="82,121,57,156,52,153,77,118"/>
+<area shape="rect" id="Node000004" href="$class_c_t_b_cards.html" title="One hand of cards in the top or bottom position in the play view." alt="" coords="109,155,190,181"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="118,118,143,153,138,156,113,121"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="35,5,160,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="100,48,100,80,95,80,95,48"/>
+</map>

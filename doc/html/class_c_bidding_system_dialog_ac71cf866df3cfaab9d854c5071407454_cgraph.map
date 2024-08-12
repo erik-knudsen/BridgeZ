@@ -1,0 +1,5 @@
+<map id="CBiddingSystemDialog::on_deleteLink_clicked" name="CBiddingSystemDialog::on_deleteLink_clicked">
+<area shape="rect" id="Node000001" title="Delete the current substitute link (auction)." alt="" coords="5,5,163,48"/>
+<area shape="rect" id="Node000002" href="$class_c_bidding_system_dialog.html#a2ecf41edff642967305748a0a04d4e8f" title=" " alt="" coords="211,5,365,48"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="163,24,195,24,195,29,163,29"/>
+</map>

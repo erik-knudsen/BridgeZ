@@ -1,0 +1,5 @@
+<map id="CGamesDoc::getDuplicatePointBoard" name="CGamesDoc::getDuplicatePointBoard">
+<area shape="rect" id="Node000001" title="Calculate duplicate points for a given game/play." alt="" coords="5,5,211,48"/>
+<area shape="rect" id="Node000002" href="$class_c_games_doc.html#aeacb76555659f671de22f7859f6f7b3b" title="Calculate the duplicate score for the given game/play." alt="" coords="259,13,468,40"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="211,24,243,24,243,29,211,29"/>
+</map>

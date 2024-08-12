@@ -1,0 +1,5 @@
+<map id="CBidOptions::on_DeleteConvention_clicked" name="CBidOptions::on_DeleteConvention_clicked">
+<area shape="rect" id="Node000001" title="Delete the current bid option set." alt="" coords="5,5,229,48"/>
+<area shape="rect" id="Node000002" href="$class_c_z_bridge_doc.html#ab377cee363d9c6058db3410356ba0500" title="Write bid options to permanent storage." alt="" coords="277,13,474,40"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="229,24,261,24,261,29,229,29"/>
+</map>

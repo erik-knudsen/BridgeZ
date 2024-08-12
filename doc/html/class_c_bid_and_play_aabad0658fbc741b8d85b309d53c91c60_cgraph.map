@@ -1,0 +1,11 @@
+<map id="CBidAndPlay::resetBidHistory" name="CBidAndPlay::resetBidHistory">
+<area shape="rect" id="Node000001" title="Reset bid history." alt="" coords="5,31,201,57"/>
+<area shape="rect" id="Node000002" href="$class_c_bid_history.html#ab480b98264400f8722fc1a7fe3c1a17d" title="Reset (clear) the bid history." alt="" coords="249,31,436,57"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="201,41,233,41,233,47,201,47"/>
+<area shape="rect" id="Node000003" href="$class_c_bid_history.html#a389f031e8b4dd75138c0a3e2999198db" title="Set the bidders seat." alt="" coords="484,31,680,57"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="436,41,468,41,468,47,436,47"/>
+<area shape="rect" id="Node000004" href="$class_c_features.html#ae6b24bb06a203edf7789396cc19d32fe" title="Set maximum features." alt="" coords="728,5,912,32"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="681,31,713,27,713,33,681,36"/>
+<area shape="rect" id="Node000005" href="$class_c_features.html#a76f907bf67c09a0d85479404e58b2d98" title="Set minium features." alt="" coords="730,56,910,83"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="681,52,715,55,714,61,681,57"/>
+</map>

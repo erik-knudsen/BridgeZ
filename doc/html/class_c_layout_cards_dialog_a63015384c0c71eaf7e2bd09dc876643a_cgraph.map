@@ -1,0 +1,17 @@
+<map id="CLayoutCardsDialog::CLayoutCardsDialog" name="CLayoutCardsDialog::CLayoutCardsDialog">
+<area shape="rect" id="Node000001" title="Constructor for the layout card class." alt="" coords="5,123,153,165"/>
+<area shape="rect" id="Node000002" href="$class_c_layout_cards_dialog.html#a3b8a55f559e7c0a2cf67e9686f73de4f" title="Set a current deal in the internal format." alt="" coords="207,89,346,132"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="153,129,191,122,192,128,153,134"/>
+<area shape="rect" id="Node000008" href="$class_c_layout_cards_dialog.html#ae1ecb589f911e3b965a67a56d772ab41" title="Enable/disable relevant buttons according to state." alt="" coords="201,156,353,199"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="153,154,186,159,185,165,153,159"/>
+<area shape="rect" id="Node000003" href="$class_c_games_doc.html#a292909cb0833d7fe4abd7acac76700b8" title="Retrieve game in the current game set (server only)." alt="" coords="401,5,548,32"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="313,87,400,42,415,35,417,40,402,46,316,91"/>
+<area shape="rect" id="Node000004" href="$class_c_layout_cards_dialog.html#a5f7970658452c318060a2a4310bc00d7" title="Generate the currently selected faces, given the seat and suit." alt="" coords="405,56,544,99"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="347,96,389,89,390,94,347,102"/>
+<area shape="rect" id="Node000005" href="$class_c_layout_cards_dialog.html#a00835f41303c9110312674fd851caa42" title="Insert card in currently dealt card." alt="" coords="405,123,544,165"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="347,120,390,127,389,132,347,125"/>
+<area shape="rect" id="Node000007" href="$class_c_layout_cards_dialog.html#a1fa559ee8afa90f7a704506e1947f78f" title="Select the current seat." alt="" coords="405,189,544,232"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="332,130,354,142,402,175,411,180,408,184,400,180,352,146,330,135"/>
+<area shape="rect" id="Node000006" href="$class_c_layout_cards_dialog.html#a598e5d2bb7ca815ca5e70f8aa73b44f0" title="Insert face sorted in currently dealt faces." alt="" coords="596,123,736,165"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="545,141,581,141,581,147,545,147"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="CActorLocal::allSyncFromServerToClient" name="CActorLocal::allSyncFromServerToClient">
+<area shape="rect" id="Node000001" title="Synchronization signal from server to client." alt="" coords="470,5,643,48"/>
+<area shape="rect" id="Node000002" href="$class_c_tbl_mngr_client.html#abcda1bcfba54546ef439a22dd43e55e9" title="Receive a line from the server." alt="" coords="241,13,422,40"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="455,29,422,29,422,24,455,24"/>
+<area shape="rect" id="Node000003" href="$class_c_tbl_mngr_client.html#abe7d4246251e95843b4b46c11ef3eb97" title="Start a new session (from main menu)." alt="" coords="5,13,193,40"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="226,29,193,29,193,24,226,24"/>
+</map>

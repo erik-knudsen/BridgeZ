@@ -1,0 +1,5 @@
+<map id="CActorRemote::dealInfo" name="CActorRemote::dealInfo">
+<area shape="rect" id="Node000001" title="Deal info message from table manager (pack and send to client via front end)." alt="" coords="5,5,164,32"/>
+<area shape="rect" id="Node000002" href="$class_c_actor_remote.html#a1f2f4a7f9f016764e21970d02648cd0c" title=" " alt="" coords="212,5,378,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="164,16,196,16,196,21,164,21"/>
+</map>

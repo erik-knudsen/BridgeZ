@@ -1,0 +1,9 @@
+<map id="CActorRemote" name="CActorRemote">
+<area shape="rect" id="Node000001" title="This class implements the actor remote class." alt="" coords="5,229,112,256"/>
+<area shape="rect" id="Node000002" href="$class_c_actor.html" title="This abstract class implements the declaration of the generic strategy for actor classes (local and r..." alt="" coords="28,155,89,181"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="61,197,61,229,56,229,56,197"/>
+<area shape="rect" id="Node000003" href="$class_c_actor_base.html" title="This abstract class implements declaration of generic base strategy for actor classes (local,..." alt="" coords="13,80,104,107"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="61,122,61,154,56,154,56,122"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="24,5,93,32"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="61,48,61,80,56,80,56,48"/>
+</map>

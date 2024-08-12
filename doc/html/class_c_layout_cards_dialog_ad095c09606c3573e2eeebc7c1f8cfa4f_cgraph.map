@@ -1,0 +1,5 @@
+<map id="CLayoutCardsDialog::on_vul_currentIndexChanged" name="CLayoutCardsDialog::on_vul_currentIndexChanged">
+<area shape="rect" id="Node000001" title="Vulnerability was changed." alt="" coords="5,5,200,48"/>
+<area shape="rect" id="Node000002" href="$class_c_layout_cards_dialog.html#ae1ecb589f911e3b965a67a56d772ab41" title="Enable/disable relevant buttons according to state." alt="" coords="248,5,400,48"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="200,24,232,24,232,29,200,29"/>
+</map>

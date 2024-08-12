@@ -1,0 +1,7 @@
+<map id="CCards::connectCards" name="CCards::connectCards">
+<area shape="rect" id="Node000001" title="Set event receiver." alt="" coords="445,13,597,40"/>
+<area shape="rect" id="Node000002" href="$class_c_play_view.html#a57bbe9e8fd5d5adca810cf73f9619d79" title="Create the scene for the play view." alt="" coords="209,5,397,48"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="429,29,397,29,397,24,429,24"/>
+<area shape="rect" id="Node000003" href="$class_c_play_view.html#ac07130afe02dc1e7f3466d1896633f10" title="Constructor for playview." alt="" coords="5,13,161,40"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="193,29,161,29,161,24,193,24"/>
+</map>

@@ -1,0 +1,93 @@
+<map id="CActorLocal" name="CActorLocal">
+<area shape="rect" id="Node000001" title="This class implements the actor local class." alt="" coords="1352,756,1445,783"/>
+<area shape="rect" id="Node000002" href="$class_c_actor.html" title="This abstract class implements the declaration of the generic strategy for actor classes (local and r..." alt="" coords="1142,756,1204,783"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1219,767,1352,767,1352,772,1219,772"/>
+<area shape="rect" id="Node000003" href="$class_c_actor_base.html" title="This abstract class implements declaration of generic base strategy for actor classes (local,..." alt="" coords="841,756,932,783"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="947,767,1142,767,1142,772,947,772"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="503,751,573,777"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="588,762,840,766,840,771,588,767"/>
+<area shape="rect" id="Node000018" href="$class_c_tbl_mngr_base.html" title="This abstract class implements the declaration of the generic base strategy for table manager classes..." alt="" coords="833,705,940,732"/>
+<area shape="poly" id="edge19_Node000018_Node000004" title=" " alt="" coords="588,755,832,723,833,728,588,760"/>
+<area shape="rect" id="Node000005" href="$class_c_bid_and_play.html" title="Bid and play handling." alt="" coords="1124,860,1222,887"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="1216,851,1366,781,1369,786,1219,856"/>
+<area shape="rect" id="Node000006" href="$class_c_bid_history.html" title="The CBidHistory class describes the bid history." alt="" coords="841,923,932,949"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="947,931,1020,922,1099,905,1147,885,1149,890,1101,911,1021,928,947,936"/>
+<area shape="rect" id="Node000007" href="$class_c_features.html" title="The class handles the features for a bridge hand." alt="" coords="497,891,579,917"/>
+<area shape="poly" id="edge16_Node000005_Node000007" title=" " alt="" coords="593,894,643,889,915,876,1123,871,1123,876,915,881,644,895,594,900"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="586,921,644,937,696,943,749,944,840,939,841,944,749,950,696,948,643,943,584,926"/>
+<area shape="rect" id="Node000008" href="$class_c_play_history.html" title="The CPlayHistory class describes the play history." alt="" coords="838,807,935,833"/>
+<area shape="poly" id="edge7_Node000005_Node000008" title=" " alt="" coords="951,826,1101,852,1124,858,1123,863,1099,857,950,831"/>
+<area shape="rect" id="Node000009" href="$struct_c_play_history_1_1play_stack.html" title=" " alt="" coords="456,807,620,833"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="635,817,837,817,837,823,635,823"/>
+<area shape="rect" id="Node000010" href="$class_c_bid_and_play_engines.html" title="This class handles computer generated bid and play of cards." alt="" coords="814,975,959,1001"/>
+<area shape="poly" id="edge9_Node000005_Node000010" title=" " alt="" coords="974,983,1037,973,1069,963,1099,950,1119,936,1136,919,1161,885,1166,889,1140,922,1122,940,1101,954,1071,968,1039,978,975,989"/>
+<area shape="rect" id="Node000011" href="$class_c_bid_engine.html" title="The bid engine class handles automatic bidding." alt="" coords="493,1043,583,1069"/>
+<area shape="poly" id="edge10_Node000010_Node000011" title=" " alt="" coords="598,1043,789,1007,823,999,825,1005,790,1012,599,1048"/>
+<area shape="rect" id="Node000012" href="$class_c_bid_d_b.html" title="This class is the top level class of the bid database." alt="" coords="218,1047,286,1073"/>
+<area shape="poly" id="edge11_Node000011_Node000012" title=" " alt="" coords="301,1057,493,1054,493,1059,301,1062"/>
+<area shape="rect" id="Node000013" href="$class_c_bid_desc.html" title="Text description of pages, rules and alerts in the bid database." alt="" coords="212,1097,292,1124"/>
+<area shape="poly" id="edge12_Node000011_Node000013" title=" " alt="" coords="307,1100,432,1079,493,1065,494,1070,433,1084,308,1106"/>
+<area shape="rect" id="Node000014" href="$class_c_bid_d_b_define.html" title="This class calculates pages and rule ids for a given set of bid options." alt="" coords="200,996,304,1023"/>
+<area shape="poly" id="edge13_Node000011_Node000014" title=" " alt="" coords="320,1017,433,1036,493,1046,493,1051,432,1041,319,1023"/>
+<area shape="rect" id="Node000015" href="$class_c_play_engine.html" title="Play engine." alt="" coords="490,971,586,997"/>
+<area shape="poly" id="edge14_Node000010_Node000015" title=" " alt="" coords="602,983,644,984,813,985,813,991,644,989,602,988"/>
+<area shape="rect" id="Node000016" href="$class_c_bid_option_doc.html" title="This class defines a set of bid options. It also describes how the options are saved and restored for..." alt="" coords="197,945,307,972"/>
+<area shape="poly" id="edge15_Node000015_Node000016" title=" " alt="" coords="322,962,490,977,489,982,322,967"/>
+<area shape="rect" id="Node000017" href="$class_c_tbl_mngr.html" title="This abstract class implements the declaration of the generic strategy for table manager classes (ser..." alt="" coords="1135,705,1211,732"/>
+<area shape="poly" id="edge17_Node000001_Node000017" title=" " alt="" coords="1227,727,1329,749,1352,755,1351,760,1328,755,1226,732"/>
+<area shape="poly" id="edge18_Node000017_Node000018" title=" " alt="" coords="955,716,1135,716,1135,721,955,721"/>
+<area shape="rect" id="Node000019" href="$class_c_play_view.html" title="This class implements the declaration of the bridge table view." alt="" coords="844,409,928,436"/>
+<area shape="poly" id="edge20_Node000017_Node000019" title=" " alt="" coords="914,446,1160,703,1157,707,910,449"/>
+<area shape="rect" id="Node000020" title=" " alt="" coords="482,393,594,420"/>
+<area shape="poly" id="edge21_Node000019_Node000020" title=" " alt="" coords="610,407,844,418,843,423,609,413"/>
+<area shape="rect" id="Node000021" href="$class_c_center_cards.html" title="This class shows the table in the play view." alt="" coords="487,37,589,64"/>
+<area shape="poly" id="edge22_Node000019_Node000021" title=" " alt="" coords="604,38,650,36,699,40,748,53,771,65,792,79,811,104,828,142,856,239,875,339,886,409,881,409,870,340,850,241,823,144,806,107,788,83,768,69,746,58,699,45,650,41,605,43"/>
+<area shape="rect" id="Node000022" title=" " alt="" coords="190,325,314,352"/>
+<area shape="poly" id="edge23_Node000021_Node000022" title=" " alt="" coords="255,309,264,269,279,220,303,170,336,126,360,109,382,102,404,98,431,88,455,74,485,62,487,67,458,78,433,93,406,103,383,108,362,114,340,130,307,173,284,222,269,270,260,310"/>
+<area shape="rect" id="Node000027" href="$class_c_cards.html" title="One hand of cards." alt="" coords="506,139,570,165"/>
+<area shape="poly" id="edge29_Node000027_Node000022" title=" " alt="" coords="269,311,298,274,337,239,362,226,384,220,406,214,431,202,442,189,455,177,480,164,505,156,506,161,482,169,458,181,446,193,434,206,408,219,386,225,364,231,340,244,302,278,273,314"/>
+<area shape="rect" id="Node000028" href="$class_c_mid_info.html" title="Mid info class." alt="" coords="502,241,574,268"/>
+<area shape="poly" id="edge32_Node000028_Node000022" title=" " alt="" coords="303,317,338,305,501,260,503,266,339,311,305,322"/>
+<area shape="rect" id="Node000029" href="$class_c_top_info.html" title="Top info class." alt="" coords="502,292,574,319"/>
+<area shape="poly" id="edge34_Node000029_Node000022" title=" " alt="" coords="330,327,502,307,502,312,330,332"/>
+<area shape="rect" id="Node000030" href="$class_c_bottom_info.html" title="Bottom info class." alt="" coords="492,343,584,369"/>
+<area shape="poly" id="edge36_Node000030_Node000022" title=" " alt="" coords="330,341,492,351,491,356,330,346"/>
+<area shape="rect" id="Node000031" href="$class_c_top_info_auction.html" title="Show relevant info for auction." alt="" coords="480,444,596,471"/>
+<area shape="poly" id="edge38_Node000031_Node000022" title=" " alt="" coords="306,356,368,382,434,414,458,430,486,441,484,446,455,434,431,418,366,386,304,361"/>
+<area shape="rect" id="Node000032" href="$class_c_top_info_play.html" title="Show relevant info for play." alt="" coords="489,495,587,521"/>
+<area shape="poly" id="edge40_Node000032_Node000022" title=" " alt="" coords="279,361,340,414,386,440,434,464,458,480,490,493,488,498,455,485,431,469,383,445,337,418,275,365"/>
+<area shape="rect" id="Node000033" href="$class_c_mid_info_auction.html" title="Show auction." alt="" coords="480,545,596,572"/>
+<area shape="poly" id="edge42_Node000033_Node000022" title=" " alt="" coords="269,365,298,414,318,441,340,465,374,491,413,513,487,542,485,547,410,518,372,496,337,469,314,444,294,417,264,367"/>
+<area shape="rect" id="Node000034" href="$class_c_mid_info_play.html" title="Show auction." alt="" coords="489,596,587,623"/>
+<area shape="poly" id="edge44_Node000034_Node000022" title=" " alt="" coords="262,367,272,402,288,445,310,489,340,527,374,554,413,575,453,589,490,599,488,604,452,594,411,580,371,559,336,531,306,492,283,447,267,404,257,368"/>
+<area shape="rect" id="Node000035" href="$class_c_bottom_info_auction.html" title="Show information for bottom info auction widget in play view." alt="" coords="470,647,606,673"/>
+<area shape="poly" id="edge46_Node000035_Node000022" title=" " alt="" coords="258,367,264,415,278,474,303,535,320,564,340,589,369,612,402,629,437,641,470,649,469,655,435,646,400,634,366,616,336,593,315,567,298,538,273,475,259,416,253,368"/>
+<area shape="rect" id="Node000036" href="$class_c_bottom_info_play.html" title="The bottom info play class shows play information in the bottom info panel." alt="" coords="479,88,597,115"/>
+<area shape="poly" id="edge48_Node000036_Node000022" title=" " alt="" coords="265,310,295,259,336,206,395,163,455,124,484,113,486,118,458,129,398,168,340,210,299,262,269,313"/>
+<area shape="rect" id="Node000037" href="$class_c_bottom_info_button.html" title="Shows a button in the bottom info auction widget in the play view." alt="" coords="473,191,603,217"/>
+<area shape="poly" id="edge50_Node000037_Node000022" title=" " alt="" coords="280,313,337,275,395,248,455,227,489,215,491,220,457,232,397,253,340,280,283,318"/>
+<area shape="rect" id="Node000023" href="$class_c_card.html" title="This class describes one card in the play view." alt="" coords="224,93,281,120"/>
+<area shape="poly" id="edge24_Node000021_Node000023" title=" " alt="" coords="295,96,486,58,487,63,296,101"/>
+<area shape="poly" id="edge30_Node000027_Node000023" title=" " alt="" coords="297,111,506,144,505,150,296,116"/>
+<area shape="rect" id="Node000024" title=" " alt="" coords="19,93,127,120"/>
+<area shape="poly" id="edge25_Node000023_Node000024" title=" " alt="" coords="143,104,223,104,223,109,143,109"/>
+<area shape="rect" id="Node000025" href="$class_c_square.html" title="Helper class for drawing vulnerabilty indication (red square)" alt="" coords="216,5,288,32"/>
+<area shape="poly" id="edge26_Node000021_Node000025" title=" " alt="" coords="304,22,487,42,486,48,303,27"/>
+<area shape="rect" id="Node000026" title=" " alt="" coords="5,5,141,32"/>
+<area shape="poly" id="edge27_Node000025_Node000026" title=" " alt="" coords="156,16,216,16,216,21,156,21"/>
+<area shape="poly" id="edge28_Node000019_Node000027" title=" " alt="" coords="586,148,700,150,754,157,776,163,791,171,818,197,840,228,856,262,868,297,882,362,887,409,882,409,877,363,863,298,851,264,835,230,814,200,788,176,774,168,753,162,700,155,586,153"/>
+<area shape="poly" id="edge31_Node000019_Node000028" title=" " alt="" coords="589,267,644,281,686,288,720,290,752,295,791,312,820,334,845,360,879,407,875,410,841,364,817,338,788,317,751,301,719,295,685,293,643,287,588,272"/>
+<area shape="poly" id="edge33_Node000019_Node000029" title=" " alt="" coords="589,315,644,328,718,339,751,345,791,359,834,382,869,407,866,411,832,387,789,364,749,351,717,345,643,333,588,320"/>
+<area shape="poly" id="edge35_Node000019_Node000030" title=" " alt="" coords="600,366,644,375,844,412,843,418,643,380,599,371"/>
+<area shape="poly" id="edge37_Node000019_Node000031" title=" " alt="" coords="611,452,789,437,843,429,844,434,790,443,611,457"/>
+<area shape="poly" id="edge39_Node000019_Node000032" title=" " alt="" coords="602,503,692,494,741,485,789,472,829,454,863,434,866,439,832,459,791,477,742,490,693,499,603,509"/>
+<area shape="poly" id="edge41_Node000019_Node000033" title=" " alt="" coords="611,559,699,550,745,539,788,522,816,503,841,479,874,435,879,438,845,483,820,507,791,526,747,544,700,556,612,564"/>
+<area shape="poly" id="edge43_Node000019_Node000034" title=" " alt="" coords="603,614,647,615,695,611,744,600,788,579,807,564,823,547,850,507,868,467,879,436,884,438,873,469,855,509,828,550,811,568,791,584,745,605,696,616,647,621,602,620"/>
+<area shape="poly" id="edge45_Node000019_Node000035" title=" " alt="" coords="621,660,719,656,760,649,788,638,812,617,831,591,847,563,859,533,874,477,881,436,886,437,880,478,864,535,852,565,836,594,816,620,791,642,762,654,719,661,622,665"/>
+<area shape="poly" id="edge47_Node000019_Node000036" title=" " alt="" coords="613,98,716,105,761,113,791,127,822,159,845,196,862,236,874,278,886,355,888,409,883,409,880,355,869,279,857,238,840,198,817,162,788,132,759,119,715,110,613,104"/>
+<area shape="poly" id="edge49_Node000019_Node000037" title=" " alt="" coords="599,220,620,227,644,235,686,241,721,242,754,247,791,266,826,299,853,339,872,378,883,408,878,410,867,380,848,342,822,303,788,270,752,252,720,248,686,247,643,240,619,232,598,225"/>
+<area shape="rect" id="Node000038" href="$class_c_bid_dialog.html" title="The CBidDialog class." alt="" coords="495,697,581,724"/>
+<area shape="poly" id="edge51_Node000019_Node000038" title=" " alt="" coords="596,709,706,703,756,695,788,682,815,655,836,623,853,588,865,552,878,484,882,436,887,437,883,485,870,554,858,590,841,626,819,659,791,686,757,700,707,709,596,714"/>
+<area shape="rect" id="Node000039" title=" " alt="" coords="218,697,286,724"/>
+<area shape="poly" id="edge52_Node000038_Node000039" title=" " alt="" coords="301,708,495,708,495,713,301,713"/>
+</map>

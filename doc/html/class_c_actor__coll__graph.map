@@ -1,0 +1,7 @@
+<map id="CActor" name="CActor">
+<area shape="rect" id="Node000001" title="This abstract class implements the declaration of the generic strategy for actor classes (local and r..." alt="" coords="20,155,82,181"/>
+<area shape="rect" id="Node000002" href="$class_c_actor_base.html" title="This abstract class implements declaration of generic base strategy for actor classes (local,..." alt="" coords="5,80,97,107"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="54,122,54,154,48,154,48,122"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="16,5,86,32"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="54,48,54,80,48,80,48,48"/>
+</map>

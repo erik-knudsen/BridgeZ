@@ -1,0 +1,15 @@
+<map id="CBidAndPlayEngines" name="CBidAndPlayEngines">
+<area shape="rect" id="Node000001" title="This class handles computer generated bid and play of cards." alt="" coords="178,203,324,229"/>
+<area shape="rect" id="Node000002" href="$class_c_bid_engine.html" title="The bid engine class handles automatic bidding." alt="" coords="149,112,238,139"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="212,150,245,201,241,204,208,153"/>
+<area shape="rect" id="Node000003" href="$class_c_bid_d_b.html" title="This class is the top level class of the bid database." alt="" coords="5,5,73,32"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="61,41,85,64,112,86,158,109,156,114,109,90,81,68,58,45"/>
+<area shape="rect" id="Node000004" href="$class_c_bid_desc.html" title="Text description of pages, rules and alerts in the bid database." alt="" coords="97,5,176,32"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="152,45,174,87,188,110,184,113,170,89,147,47"/>
+<area shape="rect" id="Node000005" href="$class_c_bid_d_b_define.html" title="This class calculates pages and rule ids for a given set of bid options." alt="" coords="201,5,304,32"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="245,48,225,89,207,114,203,110,221,87,240,46"/>
+<area shape="rect" id="Node000006" href="$class_c_play_engine.html" title="Play engine." alt="" coords="299,112,395,139"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="325,152,294,181,267,204,264,200,291,177,321,148"/>
+<area shape="rect" id="Node000007" href="$class_c_bid_option_doc.html" title="This class defines a set of bid options. It also describes how the options are saved and restored for..." alt="" coords="328,5,438,32"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="376,47,354,113,349,111,371,46"/>
+</map>

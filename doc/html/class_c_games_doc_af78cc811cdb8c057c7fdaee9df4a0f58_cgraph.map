@@ -1,0 +1,5 @@
+<map id="CGamesDoc::getRubberVulnerable" name="CGamesDoc::getRubberVulnerable">
+<area shape="rect" id="Node000001" title="Calculate rubber vulnerability for the next play after a given (user) played game/play." alt="" coords="5,5,229,32"/>
+<area shape="rect" id="Node000002" href="$class_c_games_doc.html#ad58896d1e877949a0e0b597dad6353a1" title="Get below the line points for a given (user) played game/play in rubber play." alt="" coords="277,5,478,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="229,16,261,16,261,21,229,21"/>
+</map>

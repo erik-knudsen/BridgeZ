@@ -1,0 +1,9 @@
+<map id="CGamesDoc::getRubberPoints" name="CGamesDoc::getRubberPoints">
+<area shape="rect" id="Node000001" title="Calculate rubber points for a given game/play." alt="" coords="5,56,205,83"/>
+<area shape="rect" id="Node000002" href="$class_c_games_doc.html#ac7a0bbe8b17a0f8cb818b99c7651dff0" title="Get above the line points for a given game/play in rubber play." alt="" coords="253,5,454,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="174,53,269,33,270,38,175,58"/>
+<area shape="rect" id="Node000003" href="$class_c_games_doc.html#ad58896d1e877949a0e0b597dad6353a1" title="Get below the line points for a given (user) played game/play in rubber play." alt="" coords="253,56,454,83"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="205,67,237,67,237,72,205,72"/>
+<area shape="rect" id="Node000004" href="$class_c_games_doc.html#a1bfedc3e06fdfd06ff7936f23c66f2ac" title="Get honor bonus points for a given game/play in rubber play." alt="" coords="257,107,450,133"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="175,81,270,100,269,106,174,86"/>
+</map>

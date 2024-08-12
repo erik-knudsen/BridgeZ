@@ -1,0 +1,7 @@
+<map id="CCards::setCardValues" name="CCards::setCardValues">
+<area shape="rect" id="Node000001" title="Sort card values after all have been set." alt="" coords="264,31,421,57"/>
+<area shape="rect" id="Node000002" href="$class_c_l_r_cards.html#aa5f88b0754c78d468d493ae75b3111aa" title="Layout how to draw faces in the left and right positions." alt="" coords="5,5,216,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="248,36,216,33,216,28,248,31"/>
+<area shape="rect" id="Node000003" href="$class_c_t_b_cards.html#a5eaa364868a0b0bd7833c5de6e086451" title="Layout card faces to be drawn in top and bottom positions." alt="" coords="5,56,216,83"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="248,57,216,60,216,55,248,52"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="CCards::showCards" name="CCards::showCards">
+<area shape="rect" id="Node000001" title="Show the cards in the proper place in the play view." alt="" coords="5,5,142,32"/>
+<area shape="rect" id="Node000002" href="$class_c_cards.html#a5b9ebf2beb07e6e87b5d75467f1de8e8" title="Set the parent of all cards widgets." alt="" coords="190,5,318,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="142,16,174,16,174,21,142,21"/>
+</map>

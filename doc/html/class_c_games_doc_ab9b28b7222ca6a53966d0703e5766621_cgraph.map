@@ -1,0 +1,13 @@
+<map id="CGamesDoc::writePlayedGames" name="CGamesDoc::writePlayedGames">
+<area shape="rect" id="Node000001" title="Write played games." alt="" coords="5,81,218,108"/>
+<area shape="rect" id="Node000002" href="$class_c_games_doc.html#a9176a1de8f8d34ccd8277b47c78cebdb" title="Write a game in pbn format." alt="" coords="266,81,431,108"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="218,92,250,92,250,97,218,97"/>
+<area shape="rect" id="Node000003" href="$class_c_games_doc.html#a6f90023c388f3a5a18dcc7aecd088b66" title="Make pbn auction lines (including notes)." alt="" coords="479,5,658,32"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="382,78,478,41,500,34,502,39,480,47,384,83"/>
+<area shape="rect" id="Node000004" href="$class_c_games_doc.html#a98e8fe7fc38a77d66945d1ecce954ae8" title="Make pbn play lines." alt="" coords="488,56,649,83"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="431,83,472,78,472,83,432,88"/>
+<area shape="rect" id="Node000005" href="$class_c_games_doc.html#a1ad832bb47a9424f1460322452b3e531" title="Construct a pbn deal line." alt="" coords="491,107,646,133"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="432,102,476,107,475,112,431,107"/>
+<area shape="rect" id="Node000006" href="$class_c_games_doc.html#ac2734b29b5aca39b02d43e8b4fc4ef36" title="Construct a pbn contract line." alt="" coords="484,157,654,184"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="384,106,480,143,502,150,500,155,478,148,382,111"/>
+</map>

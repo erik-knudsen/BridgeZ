@@ -1,0 +1,9 @@
+<map id="CGamesDoc::setPlayedResult" name="CGamesDoc::setPlayedResult">
+<area shape="rect" id="Node000001" title="Set played result for the current game (manually played game)." alt="" coords="489,31,687,57"/>
+<area shape="rect" id="Node000002" href="$class_c_tbl_mngr_client.html#aca8c1c792fcf8f8454dfa03b324fc7aa" title="Update game info." alt="" coords="239,5,440,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="473,35,440,32,440,26,474,30"/>
+<area shape="rect" id="Node000003" href="$class_c_tbl_mngr_server.html#a07f057357db82369723fde308526b7c1" title="Update game info and activate relevant main menu entries." alt="" coords="238,56,441,83"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="474,58,442,62,441,56,473,53"/>
+<area shape="rect" id="Node000004" href="$class_c_tbl_mngr_server.html#a77643a32f6f5ddde6c667cc2af890c48" title="Synchronization between server and clients." alt="" coords="5,48,190,91"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="222,72,190,72,190,67,222,67"/>
+</map>

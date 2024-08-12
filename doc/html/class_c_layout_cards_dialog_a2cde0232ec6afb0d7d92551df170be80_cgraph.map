@@ -1,0 +1,21 @@
+<map id="CLayoutCardsDialog::on_first_clicked" name="CLayoutCardsDialog::on_first_clicked">
+<area shape="rect" id="Node000001" title="Edit first deal." alt="" coords="5,119,145,161"/>
+<area shape="rect" id="Node000002" href="$class_c_layout_cards_dialog.html#a2ed61f56c74e91aae350d280a0e81603" title="Get the currently edited deal in a format suitable for storing." alt="" coords="199,23,338,65"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="114,116,191,75,202,70,204,75,194,80,117,120"/>
+<area shape="rect" id="Node000003" href="$class_c_layout_cards_dialog.html#a3b8a55f559e7c0a2cf67e9686f73de4f" title="Set a current deal in the internal format." alt="" coords="199,89,338,132"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="144,127,183,121,184,126,145,132"/>
+<area shape="rect" id="Node000009" href="$class_c_games_doc.html#a32c21db0e3c9d59c39786a5e7a99db66" title="Set info for the game in the current game set (server only)." alt="" coords="195,156,342,183"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="145,148,181,153,180,159,144,153"/>
+<area shape="rect" id="Node000010" href="$class_c_layout_cards_dialog.html#ae1ecb589f911e3b965a67a56d772ab41" title="Enable/disable relevant buttons according to state." alt="" coords="193,207,345,249"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="123,159,194,192,205,197,203,202,192,197,121,164"/>
+<area shape="rect" id="Node000004" href="$class_c_games_doc.html#a292909cb0833d7fe4abd7acac76700b8" title="Retrieve game in the current game set (server only)." alt="" coords="393,5,540,32"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="322,86,344,75,367,58,392,42,404,36,407,41,394,46,370,63,346,80,324,91"/>
+<area shape="rect" id="Node000005" href="$class_c_layout_cards_dialog.html#a5f7970658452c318060a2a4310bc00d7" title="Generate the currently selected faces, given the seat and suit." alt="" coords="397,56,536,99"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="339,96,381,89,382,94,339,102"/>
+<area shape="rect" id="Node000006" href="$class_c_layout_cards_dialog.html#a00835f41303c9110312674fd851caa42" title="Insert card in currently dealt card." alt="" coords="397,123,536,165"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="339,120,382,127,381,132,339,125"/>
+<area shape="rect" id="Node000008" href="$class_c_layout_cards_dialog.html#a1fa559ee8afa90f7a704506e1947f78f" title="Select the current seat." alt="" coords="397,189,536,232"/>
+<area shape="poly" id="edge7_Node000003_Node000008" title=" " alt="" coords="324,130,346,142,394,175,403,180,400,184,392,180,344,146,322,135"/>
+<area shape="rect" id="Node000007" href="$class_c_layout_cards_dialog.html#a598e5d2bb7ca815ca5e70f8aa73b44f0" title="Insert face sorted in currently dealt faces." alt="" coords="588,123,728,165"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="537,141,573,141,573,147,537,147"/>
+</map>

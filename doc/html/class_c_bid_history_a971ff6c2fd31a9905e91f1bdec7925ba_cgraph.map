@@ -1,0 +1,7 @@
+<map id="CBidHistory::CalculateBidRuleRange" name="CBidHistory::CalculateBidRuleRange">
+<area shape="rect" id="Node000001" title="Calculate range of feature attributes for a given bid in the bid history." alt="" coords="5,23,177,65"/>
+<area shape="rect" id="Node000002" href="$class_c_features.html#ae6b24bb06a203edf7789396cc19d32fe" title="Set maximum features." alt="" coords="225,5,408,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="177,32,209,28,209,33,177,37"/>
+<area shape="rect" id="Node000003" href="$class_c_features.html#a76f907bf67c09a0d85479404e58b2d98" title="Set minium features." alt="" coords="227,56,406,83"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="177,51,212,55,211,60,177,56"/>
+</map>

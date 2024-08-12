@@ -1,0 +1,15 @@
+<map id="CGamesDoc::getDeal" name="CGamesDoc::getDeal">
+<area shape="rect" id="Node000001" title="Retrieve game in the current game set (server only)." alt="" coords="394,147,541,173"/>
+<area shape="rect" id="Node000002" href="$class_c_layout_cards_dialog.html#a3b8a55f559e7c0a2cf67e9686f73de4f" title="Set a current deal in the internal format." alt="" coords="207,139,346,181"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="378,163,346,163,346,157,378,157"/>
+<area shape="rect" id="Node000003" href="$class_c_layout_cards_dialog.html#a63015384c0c71eaf7e2bd09dc876643a" title="Constructor for the layout card class." alt="" coords="8,5,156,48"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="241,130,202,95,157,62,137,51,139,46,160,58,206,91,245,126"/>
+<area shape="rect" id="Node000004" href="$class_c_layout_cards_dialog.html#ac1d41bb84a90f1c761ce292d900788c6" title="Edit previous deal." alt="" coords="5,72,159,115"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="197,136,145,118,147,113,199,131"/>
+<area shape="rect" id="Node000005" href="$class_c_layout_cards_dialog.html#a2cde0232ec6afb0d7d92551df170be80" title="Edit first deal." alt="" coords="12,139,152,181"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="191,163,152,163,152,157,191,157"/>
+<area shape="rect" id="Node000006" href="$class_c_layout_cards_dialog.html#a1070afc6012668cf8f3ed9632a8a54ed" title="Edit next deal." alt="" coords="12,205,152,248"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="199,189,147,207,145,202,197,184"/>
+<area shape="rect" id="Node000007" href="$class_c_layout_cards_dialog.html#a9ba9fd8d1f3cd46ef57c45e465166890" title="Edit last deal." alt="" coords="12,272,152,315"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="245,194,206,229,160,262,139,274,137,269,157,258,202,225,241,190"/>
+</map>

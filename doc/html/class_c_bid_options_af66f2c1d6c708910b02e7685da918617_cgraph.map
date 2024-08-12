@@ -1,0 +1,7 @@
+<map id="CBidOptions::on_newConvention_clicked" name="CBidOptions::on_newConvention_clicked">
+<area shape="rect" id="Node000001" title="Create a new bid option set." alt="" coords="5,23,215,65"/>
+<area shape="rect" id="Node000002" href="$class_c_new_convention.html#a68602fd228acd5798c511ff675ef07c5" title="Get the name of the new bid option set." alt="" coords="263,5,529,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="215,32,247,29,247,35,215,37"/>
+<area shape="rect" id="Node000003" href="$class_c_z_bridge_doc.html#ab377cee363d9c6058db3410356ba0500" title="Write bid options to permanent storage." alt="" coords="297,56,494,83"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="215,51,282,57,282,62,215,56"/>
+</map>

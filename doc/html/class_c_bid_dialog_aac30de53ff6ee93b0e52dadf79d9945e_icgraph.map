@@ -1,0 +1,9 @@
+<map id="CBidDialog::enableBidder" name="CBidDialog::enableBidder">
+<area shape="rect" id="Node000001" title="Enable the bid dialog." alt="" coords="656,5,825,32"/>
+<area shape="rect" id="Node000002" href="$class_c_play_view.html#adc1c329fb3aef6e99a515639e8187d09" title="Enable bidder." alt="" coords="441,5,608,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="641,21,609,21,609,16,641,16"/>
+<area shape="rect" id="Node000003" href="$class_c_tbl_mngr.html#a6b635a07d94b3a2724376fcf36d65f76" title="Enable next bidder tod bid." alt="" coords="225,5,393,32"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="426,21,393,21,393,16,426,16"/>
+<area shape="rect" id="Node000004" href="$class_c_actor_local.html#a4ba7efe758762d38513ec6bd23545ef4" title="Constructor for local actor." alt="" coords="5,5,177,32"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="209,21,177,21,177,16,209,16"/>
+</map>

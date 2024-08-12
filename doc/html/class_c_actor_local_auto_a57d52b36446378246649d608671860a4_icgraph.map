@@ -1,0 +1,18 @@
+<map id="CActorLocalAuto::endOfSession" name="CActorLocalAuto::endOfSession">
+<area shape="rect" id="Node000001" title="End of session message from table manager." alt="" coords="568,131,777,157"/>
+<area shape="rect" id="Node000002" href="$class_c_tbl_mngr_client_auto.html#a1a7b6ffc62e0fde684de6811a95fb62c" title="Clean table manager so that it can start a new session." alt="" coords="379,123,520,165"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="553,147,521,147,521,141,553,141"/>
+<area shape="rect" id="Node000003" href="$class_c_tbl_mngr_client_auto.html#a2bf3fb957cdf432207efe3f3d24b11e4" title="Client was disconnected from the server." alt="" coords="190,5,331,48"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="403,116,330,69,299,51,302,46,332,64,406,112"/>
+<area shape="rect" id="Node000004" href="$class_c_tbl_mngr_client_auto.html#ad30ccf290adeb052b1a7db462bba42b5" title="Start a new session (from main menu and through a signal)." alt="" coords="5,93,142,136"/>
+<area shape="poly" id="edge7_Node000002_Node000004" title=" " alt="" coords="368,121,331,113,232,107,142,111,142,105,232,102,331,108,369,116"/>
+<area shape="rect" id="Node000005" href="$class_c_tbl_mngr_client_auto.html#ae0bef6507e2e927cfb02bb0406397eca" title="Receive a line from the server." alt="" coords="192,123,328,165"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="364,147,329,147,329,141,364,141"/>
+<area shape="rect" id="Node000006" href="$class_c_tbl_mngr_client_auto.html#a1608e87bc270603a9d9d54c794be1cea" title=" " alt="" coords="192,189,328,232"/>
+<area shape="poly" id="edge6_Node000002_Node000006" title=" " alt="" coords="374,173,324,191,322,186,372,168"/>
+<area shape="rect" id="Node000007" href="$class_c_tbl_mngr_client_auto.html#a7e51e9ae30bb208d5959310cf560d894" title="There was a socket error on the tcp/ip connection." alt="" coords="192,256,328,299"/>
+<area shape="poly" id="edge8_Node000002_Node000007" title=" " alt="" coords="417,178,378,213,332,246,313,258,310,253,330,242,375,208,414,174"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="200,58,121,95,119,91,198,53"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="176,134,142,128,143,123,177,128"/>
+<area shape="poly" id="edge9_Node000007_Node000004" title=" " alt="" coords="193,250,188,246,157,220,130,191,88,138,92,135,134,187,161,216,191,242,196,245"/>
+</map>
