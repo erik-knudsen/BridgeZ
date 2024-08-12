@@ -1,9 +1,0 @@
-<map id="CBidItem" name="CBidItem">
-<area shape="rect" id="Node000001" title="Description of one bid." alt="" coords="44,172,118,199"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="5,81,114,108"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="69,123,80,171,75,172,63,124"/>
-<area shape="rect" id="Node000003" href="$class_c_popup.html" title=" " alt="" coords="138,81,205,108"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="149,121,96,173,92,170,146,117"/>
-<area shape="rect" id="Node000004" title=" " alt="" coords="138,5,205,32"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="174,47,174,81,169,81,169,47"/>
-</map>

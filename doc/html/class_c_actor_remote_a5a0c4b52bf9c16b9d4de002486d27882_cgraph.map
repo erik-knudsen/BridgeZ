@@ -1,5 +1,0 @@
-<map id="CActorRemote::startOfBoard" name="CActorRemote::startOfBoard">
-<area shape="rect" id="Node000001" title="Start of board message from table manager (pack and send to client via front end)." alt="" coords="5,5,193,32"/>
-<area shape="rect" id="Node000002" href="$class_c_actor_remote.html#a1f2f4a7f9f016764e21970d02648cd0c" title=" " alt="" coords="241,5,407,32"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="193,16,225,16,225,21,193,21"/>
-</map>

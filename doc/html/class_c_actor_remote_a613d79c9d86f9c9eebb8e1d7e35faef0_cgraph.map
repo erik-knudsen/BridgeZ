@@ -1,5 +1,0 @@
-<map id="CActorRemote::bidDone" name="CActorRemote::bidDone">
-<area shape="rect" id="Node000001" title="A bid has been done (pack and send to client via front end)." alt="" coords="5,5,167,32"/>
-<area shape="rect" id="Node000002" href="$class_c_actor_remote.html#a1f2f4a7f9f016764e21970d02648cd0c" title=" " alt="" coords="215,5,381,32"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="167,16,199,16,199,21,167,21"/>
-</map>

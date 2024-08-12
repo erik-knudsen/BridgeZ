@@ -1,5 +1,0 @@
-<map id="CActorRemoteAuto::dummyToLead" name="CActorRemoteAuto::dummyToLead">
-<area shape="rect" id="Node000001" title="Dummy to lead message from table manager (pack and send to client via front end)." alt="" coords="5,5,232,32"/>
-<area shape="rect" id="Node000002" href="$class_c_actor_remote_auto.html#a689331290a0c76dc93f71d27248e84d5" title=" " alt="" coords="280,5,473,32"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="232,16,264,16,264,21,232,21"/>
-</map>

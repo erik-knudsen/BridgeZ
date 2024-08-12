@@ -1,5 +1,0 @@
-<map id="CDummyCardsMsg::msgToLine" name="CDummyCardsMsg::msgToLine">
-<area shape="rect" id="Node000001" title="Pack message into line." alt="" coords="5,5,211,32"/>
-<area shape="rect" id="Node000002" href="$class_c_msg.html#a94ddcc358b0892990262d3ae40ede0c7" title="Set face values in a string to send." alt="" coords="259,5,409,32"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="211,16,243,16,243,21,211,21"/>
-</map>

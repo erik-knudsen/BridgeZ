@@ -1,9 +1,0 @@
-<map id="CCards::showTopClearedCard" name="CCards::showTopClearedCard">
-<area shape="rect" id="Node000001" title="Show top cleared card again after having been cleared." alt="" coords="625,5,820,32"/>
-<area shape="rect" id="Node000002" href="$class_c_play_view.html#a1544d045d0d9c34bb1e284c3317c3fa0" title="Undo card." alt="" coords="430,5,577,32"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="610,21,577,21,577,16,610,16"/>
-<area shape="rect" id="Node000003" href="$class_c_play_dialog.html#a412ea403cdd3252163cbaf7c97c53cc6" title="Slot for forward, backward signal. Shows the card play sequentially on the CPlayView view." alt="" coords="225,5,382,32"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="415,21,382,21,382,16,415,16"/>
-<area shape="rect" id="Node000004" href="$class_c_play_dialog.html#a39548752ff31731cef2330156a9b8a66" title="The constructor sets up the display." alt="" coords="5,5,177,32"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="210,21,177,21,177,16,210,16"/>
-</map>

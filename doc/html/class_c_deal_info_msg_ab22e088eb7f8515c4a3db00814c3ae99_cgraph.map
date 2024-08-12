@@ -1,7 +1,0 @@
-<map id="CDealInfoMsg::lineToMsg" name="CDealInfoMsg::lineToMsg">
-<area shape="rect" id="Node000001" title="Unpack message from line." alt="" coords="5,31,174,57"/>
-<area shape="rect" id="Node000002" href="$class_c_msg.html#afe84c3ce73d1b92201a486e9a69eea2f" title="Get the seat from a line received." alt="" coords="224,5,332,32"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="174,30,208,25,209,31,174,35"/>
-<area shape="rect" id="Node000003" href="$class_c_msg.html#a4a5d09aaf88154d01b245ee572d7616c" title="Get the team from a line received." alt="" coords="222,56,335,83"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="174,53,206,57,206,62,174,58"/>
-</map>

@@ -1,7 +1,0 @@
-<map id="CBidHistory::initializeFeatures" name="CBidHistory::initializeFeatures">
-<area shape="rect" id="Node000001" title="Set the bidders seat." alt="" coords="5,31,202,57"/>
-<area shape="rect" id="Node000002" href="$class_c_features.html#ae6b24bb06a203edf7789396cc19d32fe" title="Set maximum features." alt="" coords="250,5,433,32"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="202,31,234,27,234,33,202,36"/>
-<area shape="rect" id="Node000003" href="$class_c_features.html#a76f907bf67c09a0d85479404e58b2d98" title="Set minium features." alt="" coords="252,56,431,83"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="202,52,236,55,236,61,202,57"/>
-</map>

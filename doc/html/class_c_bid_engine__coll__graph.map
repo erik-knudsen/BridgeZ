@@ -1,9 +1,0 @@
-<map id="CBidEngine" name="CBidEngine">
-<area shape="rect" id="Node000001" title="The bid engine class handles automatic bidding." alt="" coords="92,96,181,123"/>
-<area shape="rect" id="Node000002" href="$class_c_bid_d_b.html" title="This class is the top level class of the bid database." alt="" coords="5,5,73,32"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="63,41,94,70,122,93,118,97,90,74,60,45"/>
-<area shape="rect" id="Node000003" href="$class_c_bid_desc.html" title="Text description of pages, rules and alerts in the bid database." alt="" coords="97,5,176,32"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="139,48,139,95,134,95,134,48"/>
-<area shape="rect" id="Node000004" href="$class_c_bid_d_b_define.html" title="This class calculates pages and rule ids for a given set of bid options." alt="" coords="201,5,304,32"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="229,45,194,74,159,98,156,93,191,70,226,41"/>
-</map>

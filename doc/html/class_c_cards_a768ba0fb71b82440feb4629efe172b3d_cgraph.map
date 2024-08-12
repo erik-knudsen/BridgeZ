@@ -1,5 +1,0 @@
-<map id="CCards::setHint" name="CCards::setHint">
-<area shape="rect" id="Node000001" title="Set hint for a card." alt="" coords="5,5,119,32"/>
-<area shape="rect" id="Node000002" href="$class_c_cards.html#ac9ab9da8645755d590480f8efa4c9d54" title="Get index in array of cards for a given card." alt="" coords="167,5,315,32"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="119,16,151,16,151,21,119,21"/>
-</map>

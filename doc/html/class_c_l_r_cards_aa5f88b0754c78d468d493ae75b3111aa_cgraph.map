@@ -1,7 +1,0 @@
-<map id="CLRCards::prepareToDrawFaces" name="CLRCards::prepareToDrawFaces">
-<area shape="rect" id="Node000001" title="Layout how to draw faces in the left and right positions." alt="" coords="5,31,216,57"/>
-<area shape="rect" id="Node000002" href="$class_c_cards.html#a4f6f96cfd8869d626ac3782c580fd5e9" title="Sort card values after all have been set." alt="" coords="264,5,421,32"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="216,30,248,26,248,32,216,35"/>
-<area shape="rect" id="Node000003" href="$class_c_cards.html#a5b9ebf2beb07e6e87b5d75467f1de8e8" title="Set the parent of all cards widgets." alt="" coords="278,56,406,83"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="216,53,263,58,262,63,216,58"/>
-</map>

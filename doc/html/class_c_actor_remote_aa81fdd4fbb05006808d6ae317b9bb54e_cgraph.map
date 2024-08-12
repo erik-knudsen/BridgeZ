@@ -1,5 +1,0 @@
-<map id="CActorRemote::attemptSyncFromServerToClient" name="CActorRemote::attemptSyncFromServerToClient">
-<area shape="rect" id="Node000001" title="Synchronization message from table manager (pack and send to client via front end)." alt="" coords="5,5,194,48"/>
-<area shape="rect" id="Node000002" href="$class_c_actor_remote.html#a1f2f4a7f9f016764e21970d02648cd0c" title=" " alt="" coords="242,13,408,40"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="194,24,226,24,226,29,194,29"/>
-</map>

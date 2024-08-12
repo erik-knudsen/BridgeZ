@@ -1,5 +1,0 @@
-<map id="CConnectMsg::lineToMsg" name="CConnectMsg::lineToMsg">
-<area shape="rect" id="Node000001" title="Unpack message from line." alt="" coords="5,5,176,32"/>
-<area shape="rect" id="Node000002" href="$class_c_msg.html#afe84c3ce73d1b92201a486e9a69eea2f" title="Get the seat from a line received." alt="" coords="224,5,332,32"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="176,16,208,16,208,21,176,21"/>
-</map>

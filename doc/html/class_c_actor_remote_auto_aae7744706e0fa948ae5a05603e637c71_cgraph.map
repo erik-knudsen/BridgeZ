@@ -1,9 +1,0 @@
-<map id="CActorRemoteAuto::dummyCards" name="CActorRemoteAuto::dummyCards">
-<area shape="rect" id="Node000001" title="Dummy cards message from table manager (pack and send to client via front end)." alt="" coords="5,55,224,81"/>
-<area shape="rect" id="Node000002" href="$class_c_actor_remote_auto.html#a8c0556dcdaa9f8ad00b3b71b123ca66f" title="Cards message from table manager (pack and send to client via front end)." alt="" coords="272,29,445,56"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="224,54,256,51,256,56,224,59"/>
-<area shape="rect" id="Node000003" href="$class_c_actor_remote_auto.html#a689331290a0c76dc93f71d27248e84d5" title=" " alt="" coords="493,55,686,81"/>
-<area shape="poly" id="edge4_Node000001_Node000003" title=" " alt="" coords="224,65,478,65,478,71,224,71"/>
-<area shape="poly" id="edge2_Node000002_Node000002" title=" " alt="" coords="319,31,312,21,317,11,333,5,358,3,386,5,401,12,399,17,385,10,358,8,334,10,321,15,318,20,324,27"/>
-<area shape="poly" id="edge3_Node000002_Node000003" title=" " alt="" coords="446,50,478,53,477,58,445,55"/>
-</map>

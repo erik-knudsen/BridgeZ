@@ -1,5 +1,0 @@
-<map id="CActorRemoteAuto::seated" name="CActorRemoteAuto::seated">
-<area shape="rect" id="Node000001" title="Seated message from table manager (pack and send to client via front end)." alt="" coords="5,5,186,32"/>
-<area shape="rect" id="Node000002" href="$class_c_actor_remote_auto.html#a689331290a0c76dc93f71d27248e84d5" title=" " alt="" coords="234,5,427,32"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="186,16,218,16,218,21,186,21"/>
-</map>

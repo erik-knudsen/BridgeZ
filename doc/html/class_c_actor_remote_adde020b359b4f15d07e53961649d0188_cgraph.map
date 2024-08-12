@@ -1,5 +1,0 @@
-<map id="CActorRemote::receiveLine" name="CActorRemote::receiveLine">
-<area shape="rect" id="Node000001" title="Receive line from client (remote actor)." alt="" coords="5,5,184,32"/>
-<area shape="rect" id="Node000002" href="$cremoteprotocol_8cpp.html#a8b3e0493d0a30a70c9f2af4f5d1ff8a0" title="Get the message type from a line received." alt="" coords="232,5,352,32"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="184,16,216,16,216,21,184,21"/>
-</map>

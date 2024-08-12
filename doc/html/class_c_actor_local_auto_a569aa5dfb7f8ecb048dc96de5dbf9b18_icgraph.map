@@ -1,7 +1,0 @@
-<map id="CActorLocalAuto::reStart" name="CActorLocalAuto::reStart">
-<area shape="rect" id="Node000001" title="Restart message from table manager." alt="" coords="374,13,540,40"/>
-<area shape="rect" id="Node000002" href="$class_c_tbl_mngr_client_auto.html#ae0bef6507e2e927cfb02bb0406397eca" title="Receive a line from the server." alt="" coords="190,5,326,48"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="358,29,326,29,326,24,358,24"/>
-<area shape="rect" id="Node000003" href="$class_c_tbl_mngr_client_auto.html#ad30ccf290adeb052b1a7db462bba42b5" title="Start a new session (from main menu and through a signal)." alt="" coords="5,5,142,48"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="174,29,142,29,142,24,174,24"/>
-</map>

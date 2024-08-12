@@ -1,6 +1,0 @@
-<map id="CActorRemoteAuto::cards" name="CActorRemoteAuto::cards">
-<area shape="rect" id="Node000001" title="Cards message from table manager (pack and send to client via front end)." alt="" coords="272,29,445,56"/>
-<area shape="poly" id="edge1_Node000001_Node000001" title=" " alt="" coords="401,17,386,10,358,8,333,10,319,15,315,20,322,27,318,31,310,21,315,11,332,5,358,3,388,5,403,12"/>
-<area shape="rect" id="Node000002" href="$class_c_actor_remote_auto.html#aae7744706e0fa948ae5a05603e637c71" title="Dummy cards message from table manager (pack and send to client via front end)." alt="" coords="5,29,224,56"/>
-<area shape="poly" id="edge2_Node000001_Node000002" title=" " alt="" coords="256,45,224,45,224,40,256,40"/>
-</map>

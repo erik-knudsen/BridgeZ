@@ -1,5 +1,0 @@
-<map id="CBidOptions::on_editConvention_clicked" name="CBidOptions::on_editConvention_clicked">
-<area shape="rect" id="Node000001" title="Edit the current bid option set." alt="" coords="5,5,213,48"/>
-<area shape="rect" id="Node000002" href="$class_c_z_bridge_doc.html#ab377cee363d9c6058db3410356ba0500" title="Write bid options to permanent storage." alt="" coords="261,13,458,40"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="213,24,245,24,245,29,213,29"/>
-</map>

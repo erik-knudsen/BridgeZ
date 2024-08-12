@@ -1,5 +1,0 @@
-<map id="CLRCards::prepareToDrawBacks" name="CLRCards::prepareToDrawBacks">
-<area shape="rect" id="Node000001" title="Layout how to draw back of cards in the left and right positions.." alt="" coords="5,5,217,32"/>
-<area shape="rect" id="Node000002" href="$class_c_cards.html#a5b9ebf2beb07e6e87b5d75467f1de8e8" title="Set the parent of all cards widgets." alt="" coords="265,5,393,32"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="217,16,249,16,249,21,217,21"/>
-</map>

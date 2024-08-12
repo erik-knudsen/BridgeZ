@@ -1,7 +1,0 @@
-<map id="CActorLocal::startNewSession" name="CActorLocal::startNewSession">
-<area shape="rect" id="Node000001" title="Start a new session for the actor." alt="" coords="499,5,697,32"/>
-<area shape="rect" id="Node000002" href="$class_c_tbl_mngr_client.html#a8ecaf7b041460a38591236c4da34495c" title="Client is now connected to the server." alt="" coords="241,5,451,32"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="483,21,452,21,452,16,483,16"/>
-<area shape="rect" id="Node000003" href="$class_c_tbl_mngr_client.html#abe7d4246251e95843b4b46c11ef3eb97" title="Start a new session (from main menu)." alt="" coords="5,5,193,32"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="225,21,193,21,193,16,225,16"/>
-</map>

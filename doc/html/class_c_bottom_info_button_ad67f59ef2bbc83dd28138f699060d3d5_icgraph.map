@@ -1,7 +1,0 @@
-<map id="CBottomInfoButton::connectButton" name="CBottomInfoButton::connectButton">
-<area shape="rect" id="Node000001" title="Connect button events to an event receiver." alt="" coords="432,5,570,48"/>
-<area shape="rect" id="Node000002" href="$class_c_play_view.html#a77b77d86f72c81bd3d3fcfd5c664a4fc" title="Create children for the info widgets in the scene." alt="" coords="209,13,384,40"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="416,29,384,29,384,24,416,24"/>
-<area shape="rect" id="Node000003" href="$class_c_play_view.html#ac07130afe02dc1e7f3466d1896633f10" title="Constructor for playview." alt="" coords="5,13,161,40"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="193,29,161,29,161,24,193,24"/>
-</map>

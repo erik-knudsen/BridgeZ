@@ -1,9 +1,0 @@
-<map id="CBiddingSystemDialog::auctionToText" name="CBiddingSystemDialog::auctionToText">
-<area shape="rect" id="Node000001" title=" " alt="" coords="507,39,661,81"/>
-<area shape="rect" id="Node000002" href="$class_c_bidding_system_dialog.html#a3ea5033056808aea8a67c88cb1f71539" title="Another auction was selected in the auctions drop down." alt="" coords="231,5,459,48"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="491,50,459,45,460,40,492,44"/>
-<area shape="rect" id="Node000003" href="$class_c_bidding_system_dialog.html#a7ce49284317cbbc1f1645cd78808172c" title="Another page was selected in the page drop down." alt="" coords="238,72,452,115"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="492,75,453,81,452,76,491,70"/>
-<area shape="rect" id="Node000004" href="$class_c_bidding_system_dialog.html#a0a2b150e7c6ebd0f10f4746bb013269f" title="Delete the current auction (and connected bids etc.)." alt="" coords="5,72,183,115"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="222,96,183,96,183,91,222,91"/>
-</map>
