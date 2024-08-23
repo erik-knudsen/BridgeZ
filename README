@@ -4,9 +4,12 @@ computer(s) plays the non human players. Players can be either local on the loca
 computer or remote on one or more remote computers. I started development of the
 program because I was not satisfied with the (to my knowledge) existing
 bridge programs with regard to their net abilities.
-ZBridge is for Windows computers. Its companion ZBridgeE is for embedded computers (currently only Android). They use the same communication protocol i.e. they can play bridge with each other on the internet. 
+ZBridge is for Windows computers. Its companion ZBridgeE is for embedded computers 
+(currently only Android). They use the same communication protocol i.e. they can 
+play bridge with each other on the internet. 
 Yakindu (ItemisCREATE) is used for modelling the states of the communication protocol.
-Bridge bidding is implemented by means of a table. Bo Haglunds Double Dummy Solver is used for calculating the best card to play (version DDS 2.9.0).
+Bridge bidding is implemented by means of a table. Bo Haglunds Double Dummy Solver
+is used for calculating the best card to play (version DDS 2.9.1).
 
 The ZBridge software is covered by the GNU GENERAL PUBLIC LICENSE Version3 (GPLv3).
 
@@ -32,11 +35,11 @@ Installation for ZBridge development:
                 
 5. The Double Dummy Solver by Bo Haglund is generated as a dll (dds.dll).
 	dds.dll is in the folder c:/projects/qt/BridgeZ/ZBridge/,(as library
-	for the linker). The Double Dummy Solver is also in the dds repository
-	as a Qt projects and can be generated here. After building the zbridge
-	application, copy dds.ddl to the build directory (debug or release)
+	for the linker). The Double Dummy Solver can also be found in the dds
+	repository as a Qt projects and can be generated here. After building 
+	the zbridge application, copy dds.ddl to the build directory (debug or release)
 	to be used by the zbridge application (where the zbridge.exe file is
-	located)
+	located).
 	
     The docs folder has help files used by the Qt help framework to generate
 	help for ZBridge (qhelpgenerator zbridge.qhcp -o zbridge.qhc).
