@@ -30,7 +30,7 @@ typedef intptr_t		sc_intptr_t;
 
 #ifndef null
 	#ifdef __cplusplus
-		#define null 0
+//		#define null 0
 	#else
 		#define null ((void *)0)
 	#endif
