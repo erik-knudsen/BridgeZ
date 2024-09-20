@@ -11,9 +11,11 @@ extern "C" {
 /*! \file Header of the state machine 'ZBridgeClient'.
 */
 
+
 /*! Enumeration of all states */ 
 typedef enum
 {
+	ZBridgeClient_last_state,
 	ZBridgeClient_main_region_Connecting,
 	ZBridgeClient_main_region__final_,
 	ZBridgeClient_main_region_Seated,
@@ -29,8 +31,7 @@ typedef enum
 	ZBridgeClient_main_region_SyncLeader,
 	ZBridgeClient_main_region_SyncAuction,
 	ZBridgeClient_main_region_SyncPlay,
-	ZBridgeClient_main_region_SyncReplay,
-	ZBridgeClient_last_state
+	ZBridgeClient_main_region_SyncReplay
 } ZBridgeClientStates;
 
 /*! Type definition of the data structure for the ZBridgeClientInternal interface scope. */
@@ -122,6 +123,24 @@ typedef struct
 /*! Define dimension of the state configuration vector for orthogonal states. */
 #define ZBRIDGECLIENT_MAX_ORTHOGONAL_STATES 1
 
+/*! Define indices of states in the StateConfVector */
+#define SCVI_ZBRIDGECLIENT_MAIN_REGION_CONNECTING 0
+#define SCVI_ZBRIDGECLIENT_MAIN_REGION__FINAL_ 0
+#define SCVI_ZBRIDGECLIENT_MAIN_REGION_SEATED 0
+#define SCVI_ZBRIDGECLIENT_MAIN_REGION_STARTOFBOARD 0
+#define SCVI_ZBRIDGECLIENT_MAIN_REGION_INFO 0
+#define SCVI_ZBRIDGECLIENT_MAIN_REGION_CARDS 0
+#define SCVI_ZBRIDGECLIENT_MAIN_REGION_BID 0
+#define SCVI_ZBRIDGECLIENT_MAIN_REGION_LEAD 0
+#define SCVI_ZBRIDGECLIENT_MAIN_REGION_DUMMYCARDS 0
+#define SCVI_ZBRIDGECLIENT_MAIN_REGION_PLAY 0
+#define SCVI_ZBRIDGECLIENT_MAIN_REGION_WAITLEADER 0
+#define SCVI_ZBRIDGECLIENT_MAIN_REGION_SYNCSB 0
+#define SCVI_ZBRIDGECLIENT_MAIN_REGION_SYNCLEADER 0
+#define SCVI_ZBRIDGECLIENT_MAIN_REGION_SYNCAUCTION 0
+#define SCVI_ZBRIDGECLIENT_MAIN_REGION_SYNCPLAY 0
+#define SCVI_ZBRIDGECLIENT_MAIN_REGION_SYNCREPLAY 0
+
 /*! 
  * Type definition of the data structure for the ZBridgeClient state machine.
  * This data structure has to be allocated by the client code. 
@@ -134,6 +153,7 @@ typedef struct
 	ZBridgeClientInternal internal;
 	ZBridgeClientIface iface;
 } ZBridgeClient;
+
 
 /*! Initializes the ZBridgeClient state machine data structures. Must be called before first usage.*/
 extern void zBridgeClient_init(ZBridgeClient* handle);
@@ -335,6 +355,8 @@ extern sc_boolean zBridgeClient_isFinal(const ZBridgeClient* handle);
 
 /*! Checks if the specified state is active (until 2.4.1 the used method for states was called isActive()). */
 extern sc_boolean zBridgeClient_isStateActive(const ZBridgeClient* handle, ZBridgeClientStates state);
+
+
 
 #ifdef __cplusplus
 }

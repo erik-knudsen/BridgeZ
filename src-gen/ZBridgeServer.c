@@ -493,81 +493,80 @@ static void zBridgeServer_clearOutEvents(ZBridgeServer* handle);
 
 void zBridgeServer_init(ZBridgeServer* handle)
 {
-	sc_integer i;
-
-	for (i = 0; i < ZBRIDGESERVER_MAX_ORTHOGONAL_STATES; ++i)
-	{
-		handle->stateConfVector[i] = ZBridgeServer_last_state;
-	}
+		sc_integer i;
 	
+		for (i = 0; i < ZBRIDGESERVER_MAX_ORTHOGONAL_STATES; ++i)
+		{
+			handle->stateConfVector[i] = ZBridgeServer_last_state;
+		}
+		
+		
+		handle->stateConfVectorPosition = 0;
 	
-	handle->stateConfVectorPosition = 0;
-
-	zBridgeServer_clearInEvents(handle);
-	zBridgeServer_clearOutEvents(handle);
-
-	/* Default init sequence for statechart ZBridgeServer */
-	handle->internal.SS = 1;
-	handle->internal.SA = 2;
-	handle->internal.SP = 3;
-	handle->internal.SL = 4;
-	handle->internal.SR = 5;
-	handle->internal.BID_NONE = -1;
-	handle->internal.BID_PASS = 0;
-	handle->internal.BID_DOUBLE = 36;
-	handle->internal.BID_REDOUBLE = 37;
-	handle->internal.W = 0;
-	handle->internal.N = 1;
-	handle->internal.E = 2;
-	handle->internal.S = 3;
-	handle->internal.REBID = -1;
-	handle->internal.REPLAY = -2;
-	handle->internal.CT = 1;
-	handle->internal.PT = 2;
-	handle->internal.westConnected = bool_false;
-	handle->internal.northConnected = bool_false;
-	handle->internal.eastConnected = bool_false;
-	handle->internal.southConnected = bool_false;
-	handle->internal.westRTNames = bool_false;
-	handle->internal.northRTNames = bool_false;
-	handle->internal.eastRTNames = bool_false;
-	handle->internal.southRTNames = bool_false;
-	handle->internal.westRSBoard = bool_false;
-	handle->internal.northRSBoard = bool_false;
-	handle->internal.eastRSBoard = bool_false;
-	handle->internal.southRSBoard = bool_false;
-	handle->internal.westRSBid = bool_false;
-	handle->internal.northRSBid = bool_false;
-	handle->internal.eastRSBid = bool_false;
-	handle->internal.southRSBid = bool_false;
-	handle->internal.westBid = bool_false;
-	handle->internal.northBid = bool_false;
-	handle->internal.eastBid = bool_false;
-	handle->internal.southBid = bool_false;
-	handle->internal.noBoards = 0;
-	handle->internal.westRCard = bool_false;
-	handle->internal.northRCard = bool_false;
-	handle->internal.eastRCard = bool_false;
-	handle->internal.southRCard = bool_false;
-	handle->internal.curBidder = 0;
-	handle->internal.firstBidRound = bool_false;
-	handle->internal.lastBidder = 0;
-	handle->internal.noPasses = 0;
-	handle->internal.playNo = 0;
-	handle->iface.noOfBoards = 0;
-	handle->iface.dealer = 0;
-	handle->iface.bidVal = 0;
-	handle->iface.bidder = 0;
-	handle->iface.lastBid = 0;
-	handle->iface.bidDouble = 0;
-	handle->iface.declarer = 0;
-	handle->iface.leader = 0;
-	handle->iface.dummy = 0;
-	handle->iface.player = 0;
-	handle->iface.noTrick = 0;
-	handle->iface.cardVal = 0;
-	handle->iface.syncState = 0;
-
+		zBridgeServer_clearInEvents(handle);
+		zBridgeServer_clearOutEvents(handle);
+	
+		/* Default init sequence for statechart ZBridgeServer */
+		handle->internal.SS = 1;
+		handle->internal.SA = 2;
+		handle->internal.SP = 3;
+		handle->internal.SL = 4;
+		handle->internal.SR = 5;
+		handle->internal.BID_NONE = -1;
+		handle->internal.BID_PASS = 0;
+		handle->internal.BID_DOUBLE = 36;
+		handle->internal.BID_REDOUBLE = 37;
+		handle->internal.W = 0;
+		handle->internal.N = 1;
+		handle->internal.E = 2;
+		handle->internal.S = 3;
+		handle->internal.REBID = -1;
+		handle->internal.REPLAY = -2;
+		handle->internal.CT = 1;
+		handle->internal.PT = 2;
+		handle->internal.westConnected = bool_false;
+		handle->internal.northConnected = bool_false;
+		handle->internal.eastConnected = bool_false;
+		handle->internal.southConnected = bool_false;
+		handle->internal.westRTNames = bool_false;
+		handle->internal.northRTNames = bool_false;
+		handle->internal.eastRTNames = bool_false;
+		handle->internal.southRTNames = bool_false;
+		handle->internal.westRSBoard = bool_false;
+		handle->internal.northRSBoard = bool_false;
+		handle->internal.eastRSBoard = bool_false;
+		handle->internal.southRSBoard = bool_false;
+		handle->internal.westRSBid = bool_false;
+		handle->internal.northRSBid = bool_false;
+		handle->internal.eastRSBid = bool_false;
+		handle->internal.southRSBid = bool_false;
+		handle->internal.westBid = bool_false;
+		handle->internal.northBid = bool_false;
+		handle->internal.eastBid = bool_false;
+		handle->internal.southBid = bool_false;
+		handle->internal.noBoards = 0;
+		handle->internal.westRCard = bool_false;
+		handle->internal.northRCard = bool_false;
+		handle->internal.eastRCard = bool_false;
+		handle->internal.southRCard = bool_false;
+		handle->internal.curBidder = 0;
+		handle->internal.firstBidRound = bool_false;
+		handle->internal.lastBidder = 0;
+		handle->internal.noPasses = 0;
+		handle->internal.playNo = 0;
+		handle->iface.noOfBoards = 0;
+		handle->iface.dealer = 0;
+		handle->iface.bidVal = 0;
+		handle->iface.bidder = 0;
+		handle->iface.lastBid = 0;
+		handle->iface.bidDouble = 0;
+		handle->iface.declarer = 0;
+		handle->iface.leader = 0;
+		handle->iface.dummy = 0;
+		handle->iface.player = 0;
+		handle->iface.noTrick = 0;
+		handle->iface.cardVal = 0;
+		handle->iface.syncState = 0;
 }
 
 void zBridgeServer_enter(ZBridgeServer* handle)
@@ -584,15 +583,14 @@ void zBridgeServer_exit(ZBridgeServer* handle)
 
 sc_boolean zBridgeServer_isActive(const ZBridgeServer* handle)
 {
-	sc_boolean result;
-	if (handle->stateConfVector[0] != ZBridgeServer_last_state || handle->stateConfVector[1] != ZBridgeServer_last_state || handle->stateConfVector[2] != ZBridgeServer_last_state || handle->stateConfVector[3] != ZBridgeServer_last_state)
+	sc_boolean result = bool_false;
+	int i;
+	
+	for(i = 0; i < ZBRIDGESERVER_MAX_ORTHOGONAL_STATES; i++)
 	{
-		result =  bool_true;
+		result = result || handle->stateConfVector[i] != ZBridgeServer_last_state;
 	}
-	else
-	{
-		result = bool_false;
-	}
+	
 	return result;
 }
 
@@ -652,7 +650,6 @@ void zBridgeServer_runCycle(ZBridgeServer* handle)
 {
 	
 	zBridgeServer_clearOutEvents(handle);
-	
 	for (handle->stateConfVectorPosition = 0;
 		handle->stateConfVectorPosition < ZBRIDGESERVER_MAX_ORTHOGONAL_STATES;
 		handle->stateConfVectorPosition++)
@@ -660,267 +657,267 @@ void zBridgeServer_runCycle(ZBridgeServer* handle)
 			
 		switch (handle->stateConfVector[handle->stateConfVectorPosition])
 		{
-		case ZBridgeServer_entry__Connect_West_Seated :
+		case ZBridgeServer_entry__Connect_West_Seated:
 		{
 			zBridgeServer_react_entry__Connect_West_Seated(handle);
 			break;
 		}
-		case ZBridgeServer_entry__Connect_West_TeamNames :
+		case ZBridgeServer_entry__Connect_West_TeamNames:
 		{
 			zBridgeServer_react_entry__Connect_West_TeamNames(handle);
 			break;
 		}
-		case ZBridgeServer_entry__Connect_West_StartOfBoard :
+		case ZBridgeServer_entry__Connect_West_StartOfBoard:
 		{
 			zBridgeServer_react_entry__Connect_West_StartOfBoard(handle);
 			break;
 		}
-		case ZBridgeServer_entry__Connect_West_Connect :
+		case ZBridgeServer_entry__Connect_West_Connect:
 		{
 			zBridgeServer_react_entry__Connect_West_Connect(handle);
 			break;
 		}
-		case ZBridgeServer_entry__Connect_North_Seated :
+		case ZBridgeServer_entry__Connect_North_Seated:
 		{
 			zBridgeServer_react_entry__Connect_North_Seated(handle);
 			break;
 		}
-		case ZBridgeServer_entry__Connect_North_TeamNames :
+		case ZBridgeServer_entry__Connect_North_TeamNames:
 		{
 			zBridgeServer_react_entry__Connect_North_TeamNames(handle);
 			break;
 		}
-		case ZBridgeServer_entry__Connect_North_StartOfBoard :
+		case ZBridgeServer_entry__Connect_North_StartOfBoard:
 		{
 			zBridgeServer_react_entry__Connect_North_StartOfBoard(handle);
 			break;
 		}
-		case ZBridgeServer_entry__Connect_North_Connect :
+		case ZBridgeServer_entry__Connect_North_Connect:
 		{
 			zBridgeServer_react_entry__Connect_North_Connect(handle);
 			break;
 		}
-		case ZBridgeServer_entry__Connect_East_Seated :
+		case ZBridgeServer_entry__Connect_East_Seated:
 		{
 			zBridgeServer_react_entry__Connect_East_Seated(handle);
 			break;
 		}
-		case ZBridgeServer_entry__Connect_East_TeamNames :
+		case ZBridgeServer_entry__Connect_East_TeamNames:
 		{
 			zBridgeServer_react_entry__Connect_East_TeamNames(handle);
 			break;
 		}
-		case ZBridgeServer_entry__Connect_East_StartOfBoard :
+		case ZBridgeServer_entry__Connect_East_StartOfBoard:
 		{
 			zBridgeServer_react_entry__Connect_East_StartOfBoard(handle);
 			break;
 		}
-		case ZBridgeServer_entry__Connect_East_Connect :
+		case ZBridgeServer_entry__Connect_East_Connect:
 		{
 			zBridgeServer_react_entry__Connect_East_Connect(handle);
 			break;
 		}
-		case ZBridgeServer_entry__Connect_South_Seated :
+		case ZBridgeServer_entry__Connect_South_Seated:
 		{
 			zBridgeServer_react_entry__Connect_South_Seated(handle);
 			break;
 		}
-		case ZBridgeServer_entry__Connect_South_TeamNames :
+		case ZBridgeServer_entry__Connect_South_TeamNames:
 		{
 			zBridgeServer_react_entry__Connect_South_TeamNames(handle);
 			break;
 		}
-		case ZBridgeServer_entry__Connect_South_StartOfBoard :
+		case ZBridgeServer_entry__Connect_South_StartOfBoard:
 		{
 			zBridgeServer_react_entry__Connect_South_StartOfBoard(handle);
 			break;
 		}
-		case ZBridgeServer_entry__Connect_South_Connect :
+		case ZBridgeServer_entry__Connect_South_Connect:
 		{
 			zBridgeServer_react_entry__Connect_South_Connect(handle);
 			break;
 		}
-		case ZBridgeServer_entry__Deal_West_Info :
+		case ZBridgeServer_entry__Deal_West_Info:
 		{
 			zBridgeServer_react_entry__Deal_West_Info(handle);
 			break;
 		}
-		case ZBridgeServer_entry__Deal_West_Cards :
+		case ZBridgeServer_entry__Deal_West_Cards:
 		{
 			zBridgeServer_react_entry__Deal_West_Cards(handle);
 			break;
 		}
-		case ZBridgeServer_entry__Deal_West_Sync :
+		case ZBridgeServer_entry__Deal_West_Sync:
 		{
 			zBridgeServer_react_entry__Deal_West_Sync(handle);
 			break;
 		}
-		case ZBridgeServer_entry__Deal_North_Info :
+		case ZBridgeServer_entry__Deal_North_Info:
 		{
 			zBridgeServer_react_entry__Deal_North_Info(handle);
 			break;
 		}
-		case ZBridgeServer_entry__Deal_North_Cards :
+		case ZBridgeServer_entry__Deal_North_Cards:
 		{
 			zBridgeServer_react_entry__Deal_North_Cards(handle);
 			break;
 		}
-		case ZBridgeServer_entry__Deal_North_Sync :
+		case ZBridgeServer_entry__Deal_North_Sync:
 		{
 			zBridgeServer_react_entry__Deal_North_Sync(handle);
 			break;
 		}
-		case ZBridgeServer_entry__Deal_East_Info :
+		case ZBridgeServer_entry__Deal_East_Info:
 		{
 			zBridgeServer_react_entry__Deal_East_Info(handle);
 			break;
 		}
-		case ZBridgeServer_entry__Deal_East_Cards :
+		case ZBridgeServer_entry__Deal_East_Cards:
 		{
 			zBridgeServer_react_entry__Deal_East_Cards(handle);
 			break;
 		}
-		case ZBridgeServer_entry__Deal_East_Sync :
+		case ZBridgeServer_entry__Deal_East_Sync:
 		{
 			zBridgeServer_react_entry__Deal_East_Sync(handle);
 			break;
 		}
-		case ZBridgeServer_entry__Deal_South_Info :
+		case ZBridgeServer_entry__Deal_South_Info:
 		{
 			zBridgeServer_react_entry__Deal_South_Info(handle);
 			break;
 		}
-		case ZBridgeServer_entry__Deal_South_Cards :
+		case ZBridgeServer_entry__Deal_South_Cards:
 		{
 			zBridgeServer_react_entry__Deal_South_Cards(handle);
 			break;
 		}
-		case ZBridgeServer_entry__Deal_South_Sync :
+		case ZBridgeServer_entry__Deal_South_Sync:
 		{
 			zBridgeServer_react_entry__Deal_South_Sync(handle);
 			break;
 		}
-		case ZBridgeServer_entry__Bidding_West_Wait :
+		case ZBridgeServer_entry__Bidding_West_Wait:
 		{
 			zBridgeServer_react_entry__Bidding_West_Wait(handle);
 			break;
 		}
-		case ZBridgeServer_entry__Bidding_West_Sync :
+		case ZBridgeServer_entry__Bidding_West_Sync:
 		{
 			zBridgeServer_react_entry__Bidding_West_Sync(handle);
 			break;
 		}
-		case ZBridgeServer_entry__Bidding_North_Wait :
+		case ZBridgeServer_entry__Bidding_North_Wait:
 		{
 			zBridgeServer_react_entry__Bidding_North_Wait(handle);
 			break;
 		}
-		case ZBridgeServer_entry__Bidding_North_Sync :
+		case ZBridgeServer_entry__Bidding_North_Sync:
 		{
 			zBridgeServer_react_entry__Bidding_North_Sync(handle);
 			break;
 		}
-		case ZBridgeServer_entry__Bidding_East_Wait :
+		case ZBridgeServer_entry__Bidding_East_Wait:
 		{
 			zBridgeServer_react_entry__Bidding_East_Wait(handle);
 			break;
 		}
-		case ZBridgeServer_entry__Bidding_East_Sync :
+		case ZBridgeServer_entry__Bidding_East_Sync:
 		{
 			zBridgeServer_react_entry__Bidding_East_Sync(handle);
 			break;
 		}
-		case ZBridgeServer_entry__Bidding_South_Wait :
+		case ZBridgeServer_entry__Bidding_South_Wait:
 		{
 			zBridgeServer_react_entry__Bidding_South_Wait(handle);
 			break;
 		}
-		case ZBridgeServer_entry__Bidding_South_Sync :
+		case ZBridgeServer_entry__Bidding_South_Sync:
 		{
 			zBridgeServer_react_entry__Bidding_South_Sync(handle);
 			break;
 		}
-		case ZBridgeServer_entry__Playing_West_Wait :
+		case ZBridgeServer_entry__Playing_West_Wait:
 		{
 			zBridgeServer_react_entry__Playing_West_Wait(handle);
 			break;
 		}
-		case ZBridgeServer_entry__Playing_West_Sync :
+		case ZBridgeServer_entry__Playing_West_Sync:
 		{
 			zBridgeServer_react_entry__Playing_West_Sync(handle);
 			break;
 		}
-		case ZBridgeServer_entry__Playing_North_Wait :
+		case ZBridgeServer_entry__Playing_North_Wait:
 		{
 			zBridgeServer_react_entry__Playing_North_Wait(handle);
 			break;
 		}
-		case ZBridgeServer_entry__Playing_North_Sync :
+		case ZBridgeServer_entry__Playing_North_Sync:
 		{
 			zBridgeServer_react_entry__Playing_North_Sync(handle);
 			break;
 		}
-		case ZBridgeServer_entry__Playing_East_Wait :
+		case ZBridgeServer_entry__Playing_East_Wait:
 		{
 			zBridgeServer_react_entry__Playing_East_Wait(handle);
 			break;
 		}
-		case ZBridgeServer_entry__Playing_East_Sync :
+		case ZBridgeServer_entry__Playing_East_Sync:
 		{
 			zBridgeServer_react_entry__Playing_East_Sync(handle);
 			break;
 		}
-		case ZBridgeServer_entry__Playing_South_Wait :
+		case ZBridgeServer_entry__Playing_South_Wait:
 		{
 			zBridgeServer_react_entry__Playing_South_Wait(handle);
 			break;
 		}
-		case ZBridgeServer_entry__Playing_South_Sync :
+		case ZBridgeServer_entry__Playing_South_Sync:
 		{
 			zBridgeServer_react_entry__Playing_South_Sync(handle);
 			break;
 		}
-		case ZBridgeServer_entry__Exit1 :
+		case ZBridgeServer_entry__Exit1:
 		{
 			zBridgeServer_react_entry__Exit1(handle);
 			break;
 		}
-		case ZBridgeServer_entry__Exit2 :
+		case ZBridgeServer_entry__Exit2:
 		{
 			zBridgeServer_react_entry__Exit2(handle);
 			break;
 		}
-		case ZBridgeServer_entry__Exit3 :
+		case ZBridgeServer_entry__Exit3:
 		{
 			zBridgeServer_react_entry__Exit3(handle);
 			break;
 		}
-		case ZBridgeServer_entry__WaitLeader :
+		case ZBridgeServer_entry__WaitLeader:
 		{
 			zBridgeServer_react_entry__WaitLeader(handle);
 			break;
 		}
-		case ZBridgeServer_entry__SyncSB :
+		case ZBridgeServer_entry__SyncSB:
 		{
 			zBridgeServer_react_entry__SyncSB(handle);
 			break;
 		}
-		case ZBridgeServer_entry__SyncAuction :
+		case ZBridgeServer_entry__SyncAuction:
 		{
 			zBridgeServer_react_entry__SyncAuction(handle);
 			break;
 		}
-		case ZBridgeServer_entry__SyncPlay :
+		case ZBridgeServer_entry__SyncPlay:
 		{
 			zBridgeServer_react_entry__SyncPlay(handle);
 			break;
 		}
-		case ZBridgeServer_entry__SyncLeader :
+		case ZBridgeServer_entry__SyncLeader:
 		{
 			zBridgeServer_react_entry__SyncLeader(handle);
 			break;
 		}
-		case ZBridgeServer_entry__SyncReplay :
+		case ZBridgeServer_entry__SyncReplay:
 		{
 			zBridgeServer_react_entry__SyncReplay(handle);
 			break;
@@ -940,231 +937,231 @@ sc_boolean zBridgeServer_isStateActive(const ZBridgeServer* handle, ZBridgeServe
 	switch (state)
 	{
 		case ZBridgeServer_entry__Connect :
-			result = (sc_boolean) (handle->stateConfVector[0] >= ZBridgeServer_entry__Connect
-				&& handle->stateConfVector[0] <= ZBridgeServer_entry__Connect_South_Connect);
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGESERVER_ENTRY__CONNECT] >= ZBridgeServer_entry__Connect
+				&& handle->stateConfVector[SCVI_ZBRIDGESERVER_ENTRY__CONNECT] <= ZBridgeServer_entry__Connect_South_Connect);
 			break;
 		case ZBridgeServer_entry__Connect_West_Seated :
-			result = (sc_boolean) (handle->stateConfVector[0] == ZBridgeServer_entry__Connect_West_Seated
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGESERVER_ENTRY__CONNECT_WEST_SEATED] == ZBridgeServer_entry__Connect_West_Seated
 			);
 			break;
 		case ZBridgeServer_entry__Connect_West_TeamNames :
-			result = (sc_boolean) (handle->stateConfVector[0] == ZBridgeServer_entry__Connect_West_TeamNames
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGESERVER_ENTRY__CONNECT_WEST_TEAMNAMES] == ZBridgeServer_entry__Connect_West_TeamNames
 			);
 			break;
 		case ZBridgeServer_entry__Connect_West_StartOfBoard :
-			result = (sc_boolean) (handle->stateConfVector[0] == ZBridgeServer_entry__Connect_West_StartOfBoard
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGESERVER_ENTRY__CONNECT_WEST_STARTOFBOARD] == ZBridgeServer_entry__Connect_West_StartOfBoard
 			);
 			break;
 		case ZBridgeServer_entry__Connect_West_Connect :
-			result = (sc_boolean) (handle->stateConfVector[0] == ZBridgeServer_entry__Connect_West_Connect
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGESERVER_ENTRY__CONNECT_WEST_CONNECT] == ZBridgeServer_entry__Connect_West_Connect
 			);
 			break;
 		case ZBridgeServer_entry__Connect_North_Seated :
-			result = (sc_boolean) (handle->stateConfVector[1] == ZBridgeServer_entry__Connect_North_Seated
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGESERVER_ENTRY__CONNECT_NORTH_SEATED] == ZBridgeServer_entry__Connect_North_Seated
 			);
 			break;
 		case ZBridgeServer_entry__Connect_North_TeamNames :
-			result = (sc_boolean) (handle->stateConfVector[1] == ZBridgeServer_entry__Connect_North_TeamNames
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGESERVER_ENTRY__CONNECT_NORTH_TEAMNAMES] == ZBridgeServer_entry__Connect_North_TeamNames
 			);
 			break;
 		case ZBridgeServer_entry__Connect_North_StartOfBoard :
-			result = (sc_boolean) (handle->stateConfVector[1] == ZBridgeServer_entry__Connect_North_StartOfBoard
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGESERVER_ENTRY__CONNECT_NORTH_STARTOFBOARD] == ZBridgeServer_entry__Connect_North_StartOfBoard
 			);
 			break;
 		case ZBridgeServer_entry__Connect_North_Connect :
-			result = (sc_boolean) (handle->stateConfVector[1] == ZBridgeServer_entry__Connect_North_Connect
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGESERVER_ENTRY__CONNECT_NORTH_CONNECT] == ZBridgeServer_entry__Connect_North_Connect
 			);
 			break;
 		case ZBridgeServer_entry__Connect_East_Seated :
-			result = (sc_boolean) (handle->stateConfVector[2] == ZBridgeServer_entry__Connect_East_Seated
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGESERVER_ENTRY__CONNECT_EAST_SEATED] == ZBridgeServer_entry__Connect_East_Seated
 			);
 			break;
 		case ZBridgeServer_entry__Connect_East_TeamNames :
-			result = (sc_boolean) (handle->stateConfVector[2] == ZBridgeServer_entry__Connect_East_TeamNames
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGESERVER_ENTRY__CONNECT_EAST_TEAMNAMES] == ZBridgeServer_entry__Connect_East_TeamNames
 			);
 			break;
 		case ZBridgeServer_entry__Connect_East_StartOfBoard :
-			result = (sc_boolean) (handle->stateConfVector[2] == ZBridgeServer_entry__Connect_East_StartOfBoard
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGESERVER_ENTRY__CONNECT_EAST_STARTOFBOARD] == ZBridgeServer_entry__Connect_East_StartOfBoard
 			);
 			break;
 		case ZBridgeServer_entry__Connect_East_Connect :
-			result = (sc_boolean) (handle->stateConfVector[2] == ZBridgeServer_entry__Connect_East_Connect
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGESERVER_ENTRY__CONNECT_EAST_CONNECT] == ZBridgeServer_entry__Connect_East_Connect
 			);
 			break;
 		case ZBridgeServer_entry__Connect_South_Seated :
-			result = (sc_boolean) (handle->stateConfVector[3] == ZBridgeServer_entry__Connect_South_Seated
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGESERVER_ENTRY__CONNECT_SOUTH_SEATED] == ZBridgeServer_entry__Connect_South_Seated
 			);
 			break;
 		case ZBridgeServer_entry__Connect_South_TeamNames :
-			result = (sc_boolean) (handle->stateConfVector[3] == ZBridgeServer_entry__Connect_South_TeamNames
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGESERVER_ENTRY__CONNECT_SOUTH_TEAMNAMES] == ZBridgeServer_entry__Connect_South_TeamNames
 			);
 			break;
 		case ZBridgeServer_entry__Connect_South_StartOfBoard :
-			result = (sc_boolean) (handle->stateConfVector[3] == ZBridgeServer_entry__Connect_South_StartOfBoard
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGESERVER_ENTRY__CONNECT_SOUTH_STARTOFBOARD] == ZBridgeServer_entry__Connect_South_StartOfBoard
 			);
 			break;
 		case ZBridgeServer_entry__Connect_South_Connect :
-			result = (sc_boolean) (handle->stateConfVector[3] == ZBridgeServer_entry__Connect_South_Connect
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGESERVER_ENTRY__CONNECT_SOUTH_CONNECT] == ZBridgeServer_entry__Connect_South_Connect
 			);
 			break;
 		case ZBridgeServer_entry__Deal :
-			result = (sc_boolean) (handle->stateConfVector[0] >= ZBridgeServer_entry__Deal
-				&& handle->stateConfVector[0] <= ZBridgeServer_entry__Deal_South_Sync);
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGESERVER_ENTRY__DEAL] >= ZBridgeServer_entry__Deal
+				&& handle->stateConfVector[SCVI_ZBRIDGESERVER_ENTRY__DEAL] <= ZBridgeServer_entry__Deal_South_Sync);
 			break;
 		case ZBridgeServer_entry__Deal_West_Info :
-			result = (sc_boolean) (handle->stateConfVector[0] == ZBridgeServer_entry__Deal_West_Info
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGESERVER_ENTRY__DEAL_WEST_INFO] == ZBridgeServer_entry__Deal_West_Info
 			);
 			break;
 		case ZBridgeServer_entry__Deal_West_Cards :
-			result = (sc_boolean) (handle->stateConfVector[0] == ZBridgeServer_entry__Deal_West_Cards
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGESERVER_ENTRY__DEAL_WEST_CARDS] == ZBridgeServer_entry__Deal_West_Cards
 			);
 			break;
 		case ZBridgeServer_entry__Deal_West_Sync :
-			result = (sc_boolean) (handle->stateConfVector[0] == ZBridgeServer_entry__Deal_West_Sync
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGESERVER_ENTRY__DEAL_WEST_SYNC] == ZBridgeServer_entry__Deal_West_Sync
 			);
 			break;
 		case ZBridgeServer_entry__Deal_North_Info :
-			result = (sc_boolean) (handle->stateConfVector[1] == ZBridgeServer_entry__Deal_North_Info
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGESERVER_ENTRY__DEAL_NORTH_INFO] == ZBridgeServer_entry__Deal_North_Info
 			);
 			break;
 		case ZBridgeServer_entry__Deal_North_Cards :
-			result = (sc_boolean) (handle->stateConfVector[1] == ZBridgeServer_entry__Deal_North_Cards
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGESERVER_ENTRY__DEAL_NORTH_CARDS] == ZBridgeServer_entry__Deal_North_Cards
 			);
 			break;
 		case ZBridgeServer_entry__Deal_North_Sync :
-			result = (sc_boolean) (handle->stateConfVector[1] == ZBridgeServer_entry__Deal_North_Sync
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGESERVER_ENTRY__DEAL_NORTH_SYNC] == ZBridgeServer_entry__Deal_North_Sync
 			);
 			break;
 		case ZBridgeServer_entry__Deal_East_Info :
-			result = (sc_boolean) (handle->stateConfVector[2] == ZBridgeServer_entry__Deal_East_Info
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGESERVER_ENTRY__DEAL_EAST_INFO] == ZBridgeServer_entry__Deal_East_Info
 			);
 			break;
 		case ZBridgeServer_entry__Deal_East_Cards :
-			result = (sc_boolean) (handle->stateConfVector[2] == ZBridgeServer_entry__Deal_East_Cards
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGESERVER_ENTRY__DEAL_EAST_CARDS] == ZBridgeServer_entry__Deal_East_Cards
 			);
 			break;
 		case ZBridgeServer_entry__Deal_East_Sync :
-			result = (sc_boolean) (handle->stateConfVector[2] == ZBridgeServer_entry__Deal_East_Sync
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGESERVER_ENTRY__DEAL_EAST_SYNC] == ZBridgeServer_entry__Deal_East_Sync
 			);
 			break;
 		case ZBridgeServer_entry__Deal_South_Info :
-			result = (sc_boolean) (handle->stateConfVector[3] == ZBridgeServer_entry__Deal_South_Info
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGESERVER_ENTRY__DEAL_SOUTH_INFO] == ZBridgeServer_entry__Deal_South_Info
 			);
 			break;
 		case ZBridgeServer_entry__Deal_South_Cards :
-			result = (sc_boolean) (handle->stateConfVector[3] == ZBridgeServer_entry__Deal_South_Cards
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGESERVER_ENTRY__DEAL_SOUTH_CARDS] == ZBridgeServer_entry__Deal_South_Cards
 			);
 			break;
 		case ZBridgeServer_entry__Deal_South_Sync :
-			result = (sc_boolean) (handle->stateConfVector[3] == ZBridgeServer_entry__Deal_South_Sync
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGESERVER_ENTRY__DEAL_SOUTH_SYNC] == ZBridgeServer_entry__Deal_South_Sync
 			);
 			break;
 		case ZBridgeServer_entry__Bidding :
-			result = (sc_boolean) (handle->stateConfVector[0] >= ZBridgeServer_entry__Bidding
-				&& handle->stateConfVector[0] <= ZBridgeServer_entry__Bidding_South_Sync);
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGESERVER_ENTRY__BIDDING] >= ZBridgeServer_entry__Bidding
+				&& handle->stateConfVector[SCVI_ZBRIDGESERVER_ENTRY__BIDDING] <= ZBridgeServer_entry__Bidding_South_Sync);
 			break;
 		case ZBridgeServer_entry__Bidding_West_Wait :
-			result = (sc_boolean) (handle->stateConfVector[0] == ZBridgeServer_entry__Bidding_West_Wait
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGESERVER_ENTRY__BIDDING_WEST_WAIT] == ZBridgeServer_entry__Bidding_West_Wait
 			);
 			break;
 		case ZBridgeServer_entry__Bidding_West_Sync :
-			result = (sc_boolean) (handle->stateConfVector[0] == ZBridgeServer_entry__Bidding_West_Sync
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGESERVER_ENTRY__BIDDING_WEST_SYNC] == ZBridgeServer_entry__Bidding_West_Sync
 			);
 			break;
 		case ZBridgeServer_entry__Bidding_North_Wait :
-			result = (sc_boolean) (handle->stateConfVector[1] == ZBridgeServer_entry__Bidding_North_Wait
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGESERVER_ENTRY__BIDDING_NORTH_WAIT] == ZBridgeServer_entry__Bidding_North_Wait
 			);
 			break;
 		case ZBridgeServer_entry__Bidding_North_Sync :
-			result = (sc_boolean) (handle->stateConfVector[1] == ZBridgeServer_entry__Bidding_North_Sync
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGESERVER_ENTRY__BIDDING_NORTH_SYNC] == ZBridgeServer_entry__Bidding_North_Sync
 			);
 			break;
 		case ZBridgeServer_entry__Bidding_East_Wait :
-			result = (sc_boolean) (handle->stateConfVector[2] == ZBridgeServer_entry__Bidding_East_Wait
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGESERVER_ENTRY__BIDDING_EAST_WAIT] == ZBridgeServer_entry__Bidding_East_Wait
 			);
 			break;
 		case ZBridgeServer_entry__Bidding_East_Sync :
-			result = (sc_boolean) (handle->stateConfVector[2] == ZBridgeServer_entry__Bidding_East_Sync
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGESERVER_ENTRY__BIDDING_EAST_SYNC] == ZBridgeServer_entry__Bidding_East_Sync
 			);
 			break;
 		case ZBridgeServer_entry__Bidding_South_Wait :
-			result = (sc_boolean) (handle->stateConfVector[3] == ZBridgeServer_entry__Bidding_South_Wait
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGESERVER_ENTRY__BIDDING_SOUTH_WAIT] == ZBridgeServer_entry__Bidding_South_Wait
 			);
 			break;
 		case ZBridgeServer_entry__Bidding_South_Sync :
-			result = (sc_boolean) (handle->stateConfVector[3] == ZBridgeServer_entry__Bidding_South_Sync
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGESERVER_ENTRY__BIDDING_SOUTH_SYNC] == ZBridgeServer_entry__Bidding_South_Sync
 			);
 			break;
 		case ZBridgeServer_entry__Playing :
-			result = (sc_boolean) (handle->stateConfVector[0] >= ZBridgeServer_entry__Playing
-				&& handle->stateConfVector[0] <= ZBridgeServer_entry__Playing_South_Sync);
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGESERVER_ENTRY__PLAYING] >= ZBridgeServer_entry__Playing
+				&& handle->stateConfVector[SCVI_ZBRIDGESERVER_ENTRY__PLAYING] <= ZBridgeServer_entry__Playing_South_Sync);
 			break;
 		case ZBridgeServer_entry__Playing_West_Wait :
-			result = (sc_boolean) (handle->stateConfVector[0] == ZBridgeServer_entry__Playing_West_Wait
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGESERVER_ENTRY__PLAYING_WEST_WAIT] == ZBridgeServer_entry__Playing_West_Wait
 			);
 			break;
 		case ZBridgeServer_entry__Playing_West_Sync :
-			result = (sc_boolean) (handle->stateConfVector[0] == ZBridgeServer_entry__Playing_West_Sync
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGESERVER_ENTRY__PLAYING_WEST_SYNC] == ZBridgeServer_entry__Playing_West_Sync
 			);
 			break;
 		case ZBridgeServer_entry__Playing_North_Wait :
-			result = (sc_boolean) (handle->stateConfVector[1] == ZBridgeServer_entry__Playing_North_Wait
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGESERVER_ENTRY__PLAYING_NORTH_WAIT] == ZBridgeServer_entry__Playing_North_Wait
 			);
 			break;
 		case ZBridgeServer_entry__Playing_North_Sync :
-			result = (sc_boolean) (handle->stateConfVector[1] == ZBridgeServer_entry__Playing_North_Sync
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGESERVER_ENTRY__PLAYING_NORTH_SYNC] == ZBridgeServer_entry__Playing_North_Sync
 			);
 			break;
 		case ZBridgeServer_entry__Playing_East_Wait :
-			result = (sc_boolean) (handle->stateConfVector[2] == ZBridgeServer_entry__Playing_East_Wait
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGESERVER_ENTRY__PLAYING_EAST_WAIT] == ZBridgeServer_entry__Playing_East_Wait
 			);
 			break;
 		case ZBridgeServer_entry__Playing_East_Sync :
-			result = (sc_boolean) (handle->stateConfVector[2] == ZBridgeServer_entry__Playing_East_Sync
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGESERVER_ENTRY__PLAYING_EAST_SYNC] == ZBridgeServer_entry__Playing_East_Sync
 			);
 			break;
 		case ZBridgeServer_entry__Playing_South_Wait :
-			result = (sc_boolean) (handle->stateConfVector[3] == ZBridgeServer_entry__Playing_South_Wait
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGESERVER_ENTRY__PLAYING_SOUTH_WAIT] == ZBridgeServer_entry__Playing_South_Wait
 			);
 			break;
 		case ZBridgeServer_entry__Playing_South_Sync :
-			result = (sc_boolean) (handle->stateConfVector[3] == ZBridgeServer_entry__Playing_South_Sync
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGESERVER_ENTRY__PLAYING_SOUTH_SYNC] == ZBridgeServer_entry__Playing_South_Sync
 			);
 			break;
 		case ZBridgeServer_entry__Exit1 :
-			result = (sc_boolean) (handle->stateConfVector[0] == ZBridgeServer_entry__Exit1
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGESERVER_ENTRY__EXIT1] == ZBridgeServer_entry__Exit1
 			);
 			break;
 		case ZBridgeServer_entry__Exit2 :
-			result = (sc_boolean) (handle->stateConfVector[0] == ZBridgeServer_entry__Exit2
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGESERVER_ENTRY__EXIT2] == ZBridgeServer_entry__Exit2
 			);
 			break;
 		case ZBridgeServer_entry__Exit3 :
-			result = (sc_boolean) (handle->stateConfVector[0] == ZBridgeServer_entry__Exit3
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGESERVER_ENTRY__EXIT3] == ZBridgeServer_entry__Exit3
 			);
 			break;
 		case ZBridgeServer_entry__WaitLeader :
-			result = (sc_boolean) (handle->stateConfVector[0] == ZBridgeServer_entry__WaitLeader
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGESERVER_ENTRY__WAITLEADER] == ZBridgeServer_entry__WaitLeader
 			);
 			break;
 		case ZBridgeServer_entry__SyncSB :
-			result = (sc_boolean) (handle->stateConfVector[0] == ZBridgeServer_entry__SyncSB
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGESERVER_ENTRY__SYNCSB] == ZBridgeServer_entry__SyncSB
 			);
 			break;
 		case ZBridgeServer_entry__SyncAuction :
-			result = (sc_boolean) (handle->stateConfVector[0] == ZBridgeServer_entry__SyncAuction
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGESERVER_ENTRY__SYNCAUCTION] == ZBridgeServer_entry__SyncAuction
 			);
 			break;
 		case ZBridgeServer_entry__SyncPlay :
-			result = (sc_boolean) (handle->stateConfVector[0] == ZBridgeServer_entry__SyncPlay
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGESERVER_ENTRY__SYNCPLAY] == ZBridgeServer_entry__SyncPlay
 			);
 			break;
 		case ZBridgeServer_entry__SyncLeader :
-			result = (sc_boolean) (handle->stateConfVector[0] == ZBridgeServer_entry__SyncLeader
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGESERVER_ENTRY__SYNCLEADER] == ZBridgeServer_entry__SyncLeader
 			);
 			break;
 		case ZBridgeServer_entry__SyncReplay :
-			result = (sc_boolean) (handle->stateConfVector[0] == ZBridgeServer_entry__SyncReplay
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGESERVER_ENTRY__SYNCREPLAY] == ZBridgeServer_entry__SyncReplay
 			);
 			break;
 		default:
@@ -5467,19 +5464,16 @@ static void zBridgeServer_react_entry__Playing_South_Sync(ZBridgeServer* handle)
 /* The reactions of state Exit1. */
 static void zBridgeServer_react_entry__Exit1(ZBridgeServer* handle)
 {
-	/* The reactions of state Exit1. */
 }
 
 /* The reactions of state Exit2. */
 static void zBridgeServer_react_entry__Exit2(ZBridgeServer* handle)
 {
-	/* The reactions of state Exit2. */
 }
 
 /* The reactions of state Exit3. */
 static void zBridgeServer_react_entry__Exit3(ZBridgeServer* handle)
 {
-	/* The reactions of state Exit3. */
 }
 
 /* The reactions of state WaitLeader. */

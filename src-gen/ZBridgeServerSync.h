@@ -11,9 +11,11 @@ extern "C" {
 /*! \file Header of the state machine 'ZBridgeServerSync'.
 */
 
+
 /*! Enumeration of all states */ 
 typedef enum
 {
+	ZBridgeServerSync_last_state,
 	ZBridgeServerSync_entry_SynChronizeServer,
 	ZBridgeServerSync_entry_SynChronizeServer_West_WaitForAttemptSync,
 	ZBridgeServerSync_entry_SynChronizeServer_West_waitForConfirmSync,
@@ -33,8 +35,7 @@ typedef enum
 	ZBridgeServerSync_entry_ClientConfirm_South_WaitForConfirmSync,
 	ZBridgeServerSync_entry_ClientConfirm_South_WaitForSync,
 	ZBridgeServerSync_entry__final_,
-	ZBridgeServerSync_entry_AttemptSync,
-	ZBridgeServerSync_last_state
+	ZBridgeServerSync_entry_AttemptSync
 } ZBridgeServerSyncStates;
 
 /*! Type definition of the data structure for the ZBridgeServerSyncInternal interface scope. */
@@ -69,6 +70,28 @@ typedef struct
 /*! Define dimension of the state configuration vector for orthogonal states. */
 #define ZBRIDGESERVERSYNC_MAX_ORTHOGONAL_STATES 4
 
+/*! Define indices of states in the StateConfVector */
+#define SCVI_ZBRIDGESERVERSYNC_ENTRY_SYNCHRONIZESERVER 0
+#define SCVI_ZBRIDGESERVERSYNC_ENTRY_SYNCHRONIZESERVER_WEST_WAITFORATTEMPTSYNC 0
+#define SCVI_ZBRIDGESERVERSYNC_ENTRY_SYNCHRONIZESERVER_WEST_WAITFORCONFIRMSYNC 0
+#define SCVI_ZBRIDGESERVERSYNC_ENTRY_SYNCHRONIZESERVER_NORTH_WAITFORATTEMPTSYNC 1
+#define SCVI_ZBRIDGESERVERSYNC_ENTRY_SYNCHRONIZESERVER_NORTH_WAITFORCONFIRMSYNC 1
+#define SCVI_ZBRIDGESERVERSYNC_ENTRY_SYNCHRONIZESERVER_EAST_WAITFORATTEMPTSYNC 2
+#define SCVI_ZBRIDGESERVERSYNC_ENTRY_SYNCHRONIZESERVER_EAST_WAITFORCONFIRMSYNC 2
+#define SCVI_ZBRIDGESERVERSYNC_ENTRY_SYNCHRONIZESERVER_SOUTH_WAITFORATTEMPTSYNC 3
+#define SCVI_ZBRIDGESERVERSYNC_ENTRY_SYNCHRONIZESERVER_SOUTH_WAITFORCONFIRMSYNC 3
+#define SCVI_ZBRIDGESERVERSYNC_ENTRY_CLIENTCONFIRM 0
+#define SCVI_ZBRIDGESERVERSYNC_ENTRY_CLIENTCONFIRM_WEST_WAITFORCONFIRMSYNC 0
+#define SCVI_ZBRIDGESERVERSYNC_ENTRY_CLIENTCONFIRM_WEST_WAITFORSYNC 0
+#define SCVI_ZBRIDGESERVERSYNC_ENTRY_CLIENTCONFIRM_NORTH_WAITFORCONFIRMSYNC 1
+#define SCVI_ZBRIDGESERVERSYNC_ENTRY_CLIENTCONFIRM_NORTH_WAITFORSYNC 1
+#define SCVI_ZBRIDGESERVERSYNC_ENTRY_CLIENTCONFIRM_EAST_WAITFORCONFIRMSYNC 2
+#define SCVI_ZBRIDGESERVERSYNC_ENTRY_CLIENTCONFIRM_EAST_WAITFORSYNC 2
+#define SCVI_ZBRIDGESERVERSYNC_ENTRY_CLIENTCONFIRM_SOUTH_WAITFORCONFIRMSYNC 3
+#define SCVI_ZBRIDGESERVERSYNC_ENTRY_CLIENTCONFIRM_SOUTH_WAITFORSYNC 3
+#define SCVI_ZBRIDGESERVERSYNC_ENTRY__FINAL_ 0
+#define SCVI_ZBRIDGESERVERSYNC_ENTRY_ATTEMPTSYNC 0
+
 /*! 
  * Type definition of the data structure for the ZBridgeServerSync state machine.
  * This data structure has to be allocated by the client code. 
@@ -81,6 +104,7 @@ typedef struct
 	ZBridgeServerSyncInternal internal;
 	ZBridgeServerSyncIface iface;
 } ZBridgeServerSync;
+
 
 /*! Initializes the ZBridgeServerSync state machine data structures. Must be called before first usage.*/
 extern void zBridgeServerSync_init(ZBridgeServerSync* handle);
@@ -134,6 +158,8 @@ extern sc_boolean zBridgeServerSync_isFinal(const ZBridgeServerSync* handle);
 
 /*! Checks if the specified state is active (until 2.4.1 the used method for states was called isActive()). */
 extern sc_boolean zBridgeServerSync_isStateActive(const ZBridgeServerSync* handle, ZBridgeServerSyncStates state);
+
+
 
 #ifdef __cplusplus
 }

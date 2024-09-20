@@ -11,9 +11,11 @@ extern "C" {
 /*! \file Header of the state machine 'ZBridgeServer'.
 */
 
+
 /*! Enumeration of all states */ 
 typedef enum
 {
+	ZBridgeServer_last_state,
 	ZBridgeServer_entry__Connect,
 	ZBridgeServer_entry__Connect_West_Seated,
 	ZBridgeServer_entry__Connect_West_TeamNames,
@@ -70,8 +72,7 @@ typedef enum
 	ZBridgeServer_entry__SyncAuction,
 	ZBridgeServer_entry__SyncPlay,
 	ZBridgeServer_entry__SyncLeader,
-	ZBridgeServer_entry__SyncReplay,
-	ZBridgeServer_last_state
+	ZBridgeServer_entry__SyncReplay
 } ZBridgeServerStates;
 
 /*! Type definition of the data structure for the ZBridgeServerInternal interface scope. */
@@ -207,6 +208,65 @@ typedef struct
 /*! Define dimension of the state configuration vector for orthogonal states. */
 #define ZBRIDGESERVER_MAX_ORTHOGONAL_STATES 4
 
+/*! Define indices of states in the StateConfVector */
+#define SCVI_ZBRIDGESERVER_ENTRY__CONNECT 0
+#define SCVI_ZBRIDGESERVER_ENTRY__CONNECT_WEST_SEATED 0
+#define SCVI_ZBRIDGESERVER_ENTRY__CONNECT_WEST_TEAMNAMES 0
+#define SCVI_ZBRIDGESERVER_ENTRY__CONNECT_WEST_STARTOFBOARD 0
+#define SCVI_ZBRIDGESERVER_ENTRY__CONNECT_WEST_CONNECT 0
+#define SCVI_ZBRIDGESERVER_ENTRY__CONNECT_NORTH_SEATED 1
+#define SCVI_ZBRIDGESERVER_ENTRY__CONNECT_NORTH_TEAMNAMES 1
+#define SCVI_ZBRIDGESERVER_ENTRY__CONNECT_NORTH_STARTOFBOARD 1
+#define SCVI_ZBRIDGESERVER_ENTRY__CONNECT_NORTH_CONNECT 1
+#define SCVI_ZBRIDGESERVER_ENTRY__CONNECT_EAST_SEATED 2
+#define SCVI_ZBRIDGESERVER_ENTRY__CONNECT_EAST_TEAMNAMES 2
+#define SCVI_ZBRIDGESERVER_ENTRY__CONNECT_EAST_STARTOFBOARD 2
+#define SCVI_ZBRIDGESERVER_ENTRY__CONNECT_EAST_CONNECT 2
+#define SCVI_ZBRIDGESERVER_ENTRY__CONNECT_SOUTH_SEATED 3
+#define SCVI_ZBRIDGESERVER_ENTRY__CONNECT_SOUTH_TEAMNAMES 3
+#define SCVI_ZBRIDGESERVER_ENTRY__CONNECT_SOUTH_STARTOFBOARD 3
+#define SCVI_ZBRIDGESERVER_ENTRY__CONNECT_SOUTH_CONNECT 3
+#define SCVI_ZBRIDGESERVER_ENTRY__DEAL 0
+#define SCVI_ZBRIDGESERVER_ENTRY__DEAL_WEST_INFO 0
+#define SCVI_ZBRIDGESERVER_ENTRY__DEAL_WEST_CARDS 0
+#define SCVI_ZBRIDGESERVER_ENTRY__DEAL_WEST_SYNC 0
+#define SCVI_ZBRIDGESERVER_ENTRY__DEAL_NORTH_INFO 1
+#define SCVI_ZBRIDGESERVER_ENTRY__DEAL_NORTH_CARDS 1
+#define SCVI_ZBRIDGESERVER_ENTRY__DEAL_NORTH_SYNC 1
+#define SCVI_ZBRIDGESERVER_ENTRY__DEAL_EAST_INFO 2
+#define SCVI_ZBRIDGESERVER_ENTRY__DEAL_EAST_CARDS 2
+#define SCVI_ZBRIDGESERVER_ENTRY__DEAL_EAST_SYNC 2
+#define SCVI_ZBRIDGESERVER_ENTRY__DEAL_SOUTH_INFO 3
+#define SCVI_ZBRIDGESERVER_ENTRY__DEAL_SOUTH_CARDS 3
+#define SCVI_ZBRIDGESERVER_ENTRY__DEAL_SOUTH_SYNC 3
+#define SCVI_ZBRIDGESERVER_ENTRY__BIDDING 0
+#define SCVI_ZBRIDGESERVER_ENTRY__BIDDING_WEST_WAIT 0
+#define SCVI_ZBRIDGESERVER_ENTRY__BIDDING_WEST_SYNC 0
+#define SCVI_ZBRIDGESERVER_ENTRY__BIDDING_NORTH_WAIT 1
+#define SCVI_ZBRIDGESERVER_ENTRY__BIDDING_NORTH_SYNC 1
+#define SCVI_ZBRIDGESERVER_ENTRY__BIDDING_EAST_WAIT 2
+#define SCVI_ZBRIDGESERVER_ENTRY__BIDDING_EAST_SYNC 2
+#define SCVI_ZBRIDGESERVER_ENTRY__BIDDING_SOUTH_WAIT 3
+#define SCVI_ZBRIDGESERVER_ENTRY__BIDDING_SOUTH_SYNC 3
+#define SCVI_ZBRIDGESERVER_ENTRY__PLAYING 0
+#define SCVI_ZBRIDGESERVER_ENTRY__PLAYING_WEST_WAIT 0
+#define SCVI_ZBRIDGESERVER_ENTRY__PLAYING_WEST_SYNC 0
+#define SCVI_ZBRIDGESERVER_ENTRY__PLAYING_NORTH_WAIT 1
+#define SCVI_ZBRIDGESERVER_ENTRY__PLAYING_NORTH_SYNC 1
+#define SCVI_ZBRIDGESERVER_ENTRY__PLAYING_EAST_WAIT 2
+#define SCVI_ZBRIDGESERVER_ENTRY__PLAYING_EAST_SYNC 2
+#define SCVI_ZBRIDGESERVER_ENTRY__PLAYING_SOUTH_WAIT 3
+#define SCVI_ZBRIDGESERVER_ENTRY__PLAYING_SOUTH_SYNC 3
+#define SCVI_ZBRIDGESERVER_ENTRY__EXIT1 0
+#define SCVI_ZBRIDGESERVER_ENTRY__EXIT2 0
+#define SCVI_ZBRIDGESERVER_ENTRY__EXIT3 0
+#define SCVI_ZBRIDGESERVER_ENTRY__WAITLEADER 0
+#define SCVI_ZBRIDGESERVER_ENTRY__SYNCSB 0
+#define SCVI_ZBRIDGESERVER_ENTRY__SYNCAUCTION 0
+#define SCVI_ZBRIDGESERVER_ENTRY__SYNCPLAY 0
+#define SCVI_ZBRIDGESERVER_ENTRY__SYNCLEADER 0
+#define SCVI_ZBRIDGESERVER_ENTRY__SYNCREPLAY 0
+
 /*! 
  * Type definition of the data structure for the ZBridgeServer state machine.
  * This data structure has to be allocated by the client code. 
@@ -219,6 +279,7 @@ typedef struct
 	ZBridgeServerInternal internal;
 	ZBridgeServerIface iface;
 } ZBridgeServer;
+
 
 /*! Initializes the ZBridgeServer state machine data structures. Must be called before first usage.*/
 extern void zBridgeServer_init(ZBridgeServer* handle);
@@ -438,6 +499,8 @@ extern sc_boolean zBridgeServer_isFinal(const ZBridgeServer* handle);
 
 /*! Checks if the specified state is active (until 2.4.1 the used method for states was called isActive()). */
 extern sc_boolean zBridgeServer_isStateActive(const ZBridgeServer* handle, ZBridgeServerStates state);
+
+
 
 #ifdef __cplusplus
 }

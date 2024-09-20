@@ -242,56 +242,55 @@ static void zBridgeClient_clearOutEvents(ZBridgeClient* handle);
 
 void zBridgeClient_init(ZBridgeClient* handle)
 {
-	sc_integer i;
-
-	for (i = 0; i < ZBRIDGECLIENT_MAX_ORTHOGONAL_STATES; ++i)
-	{
-		handle->stateConfVector[i] = ZBridgeClient_last_state;
-	}
+		sc_integer i;
 	
+		for (i = 0; i < ZBRIDGECLIENT_MAX_ORTHOGONAL_STATES; ++i)
+		{
+			handle->stateConfVector[i] = ZBridgeClient_last_state;
+		}
+		
+		
+		handle->stateConfVectorPosition = 0;
 	
-	handle->stateConfVectorPosition = 0;
-
-	zBridgeClient_clearInEvents(handle);
-	zBridgeClient_clearOutEvents(handle);
-
-	/* Default init sequence for statechart ZBridgeClient */
-	handle->internal.SS = 1;
-	handle->internal.SA = 2;
-	handle->internal.SP = 3;
-	handle->internal.SL = 4;
-	handle->internal.SR = 5;
-	handle->internal.BID_NONE = -1;
-	handle->internal.BID_PASS = 0;
-	handle->internal.BID_DOUBLE = 36;
-	handle->internal.BID_REDOUBLE = 37;
-	handle->internal.REBID = -1;
-	handle->internal.REPLAY = -2;
-	handle->internal.CT = 1;
-	handle->internal.PT = 2;
-	handle->internal.curBidder = 0;
-	handle->internal.firstBidRound = bool_false;
-	handle->internal.noPasses = 0;
-	handle->internal.lastBidder = 0;
-	handle->internal.playNo = 0;
-	handle->internal.firstTrick = bool_false;
-	handle->iface.boardNumber = 0;
-	handle->iface.vulnerability = 0;
-	handle->iface.client = 0;
-	handle->iface.dealer = 0;
-	handle->iface.bidder = 0;
-	handle->iface.bidVal = 0;
-	handle->iface.lastBid = 0;
-	handle->iface.bidDouble = 0;
-	handle->iface.bidEnable = 0;
-	handle->iface.declarer = 0;
-	handle->iface.dummy = 0;
-	handle->iface.leader = 0;
-	handle->iface.noTrick = 0;
-	handle->iface.player = 0;
-	handle->iface.cardVal = 0;
-	handle->iface.syncState = 0;
-
+		zBridgeClient_clearInEvents(handle);
+		zBridgeClient_clearOutEvents(handle);
+	
+		/* Default init sequence for statechart ZBridgeClient */
+		handle->internal.SS = 1;
+		handle->internal.SA = 2;
+		handle->internal.SP = 3;
+		handle->internal.SL = 4;
+		handle->internal.SR = 5;
+		handle->internal.BID_NONE = -1;
+		handle->internal.BID_PASS = 0;
+		handle->internal.BID_DOUBLE = 36;
+		handle->internal.BID_REDOUBLE = 37;
+		handle->internal.REBID = -1;
+		handle->internal.REPLAY = -2;
+		handle->internal.CT = 1;
+		handle->internal.PT = 2;
+		handle->internal.curBidder = 0;
+		handle->internal.firstBidRound = bool_false;
+		handle->internal.noPasses = 0;
+		handle->internal.lastBidder = 0;
+		handle->internal.playNo = 0;
+		handle->internal.firstTrick = bool_false;
+		handle->iface.boardNumber = 0;
+		handle->iface.vulnerability = 0;
+		handle->iface.client = 0;
+		handle->iface.dealer = 0;
+		handle->iface.bidder = 0;
+		handle->iface.bidVal = 0;
+		handle->iface.lastBid = 0;
+		handle->iface.bidDouble = 0;
+		handle->iface.bidEnable = 0;
+		handle->iface.declarer = 0;
+		handle->iface.dummy = 0;
+		handle->iface.leader = 0;
+		handle->iface.noTrick = 0;
+		handle->iface.player = 0;
+		handle->iface.cardVal = 0;
+		handle->iface.syncState = 0;
 }
 
 void zBridgeClient_enter(ZBridgeClient* handle)
@@ -308,15 +307,14 @@ void zBridgeClient_exit(ZBridgeClient* handle)
 
 sc_boolean zBridgeClient_isActive(const ZBridgeClient* handle)
 {
-	sc_boolean result;
-	if (handle->stateConfVector[0] != ZBridgeClient_last_state)
+	sc_boolean result = bool_false;
+	int i;
+	
+	for(i = 0; i < ZBRIDGECLIENT_MAX_ORTHOGONAL_STATES; i++)
 	{
-		result =  bool_true;
+		result = result || handle->stateConfVector[i] != ZBridgeClient_last_state;
 	}
-	else
-	{
-		result = bool_false;
-	}
+	
 	return result;
 }
 
@@ -371,7 +369,6 @@ void zBridgeClient_runCycle(ZBridgeClient* handle)
 {
 	
 	zBridgeClient_clearOutEvents(handle);
-	
 	for (handle->stateConfVectorPosition = 0;
 		handle->stateConfVectorPosition < ZBRIDGECLIENT_MAX_ORTHOGONAL_STATES;
 		handle->stateConfVectorPosition++)
@@ -379,82 +376,82 @@ void zBridgeClient_runCycle(ZBridgeClient* handle)
 			
 		switch (handle->stateConfVector[handle->stateConfVectorPosition])
 		{
-		case ZBridgeClient_main_region_Connecting :
+		case ZBridgeClient_main_region_Connecting:
 		{
 			zBridgeClient_react_main_region_Connecting(handle);
 			break;
 		}
-		case ZBridgeClient_main_region__final_ :
+		case ZBridgeClient_main_region__final_:
 		{
 			zBridgeClient_react_main_region__final_(handle);
 			break;
 		}
-		case ZBridgeClient_main_region_Seated :
+		case ZBridgeClient_main_region_Seated:
 		{
 			zBridgeClient_react_main_region_Seated(handle);
 			break;
 		}
-		case ZBridgeClient_main_region_StartOfBoard :
+		case ZBridgeClient_main_region_StartOfBoard:
 		{
 			zBridgeClient_react_main_region_StartOfBoard(handle);
 			break;
 		}
-		case ZBridgeClient_main_region_Info :
+		case ZBridgeClient_main_region_Info:
 		{
 			zBridgeClient_react_main_region_Info(handle);
 			break;
 		}
-		case ZBridgeClient_main_region_Cards :
+		case ZBridgeClient_main_region_Cards:
 		{
 			zBridgeClient_react_main_region_Cards(handle);
 			break;
 		}
-		case ZBridgeClient_main_region_Bid :
+		case ZBridgeClient_main_region_Bid:
 		{
 			zBridgeClient_react_main_region_Bid(handle);
 			break;
 		}
-		case ZBridgeClient_main_region_Lead :
+		case ZBridgeClient_main_region_Lead:
 		{
 			zBridgeClient_react_main_region_Lead(handle);
 			break;
 		}
-		case ZBridgeClient_main_region_DummyCards :
+		case ZBridgeClient_main_region_DummyCards:
 		{
 			zBridgeClient_react_main_region_DummyCards(handle);
 			break;
 		}
-		case ZBridgeClient_main_region_Play :
+		case ZBridgeClient_main_region_Play:
 		{
 			zBridgeClient_react_main_region_Play(handle);
 			break;
 		}
-		case ZBridgeClient_main_region_WaitLeader :
+		case ZBridgeClient_main_region_WaitLeader:
 		{
 			zBridgeClient_react_main_region_WaitLeader(handle);
 			break;
 		}
-		case ZBridgeClient_main_region_SyncSB :
+		case ZBridgeClient_main_region_SyncSB:
 		{
 			zBridgeClient_react_main_region_SyncSB(handle);
 			break;
 		}
-		case ZBridgeClient_main_region_SyncLeader :
+		case ZBridgeClient_main_region_SyncLeader:
 		{
 			zBridgeClient_react_main_region_SyncLeader(handle);
 			break;
 		}
-		case ZBridgeClient_main_region_SyncAuction :
+		case ZBridgeClient_main_region_SyncAuction:
 		{
 			zBridgeClient_react_main_region_SyncAuction(handle);
 			break;
 		}
-		case ZBridgeClient_main_region_SyncPlay :
+		case ZBridgeClient_main_region_SyncPlay:
 		{
 			zBridgeClient_react_main_region_SyncPlay(handle);
 			break;
 		}
-		case ZBridgeClient_main_region_SyncReplay :
+		case ZBridgeClient_main_region_SyncReplay:
 		{
 			zBridgeClient_react_main_region_SyncReplay(handle);
 			break;
@@ -474,67 +471,67 @@ sc_boolean zBridgeClient_isStateActive(const ZBridgeClient* handle, ZBridgeClien
 	switch (state)
 	{
 		case ZBridgeClient_main_region_Connecting :
-			result = (sc_boolean) (handle->stateConfVector[0] == ZBridgeClient_main_region_Connecting
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGECLIENT_MAIN_REGION_CONNECTING] == ZBridgeClient_main_region_Connecting
 			);
 			break;
 		case ZBridgeClient_main_region__final_ :
-			result = (sc_boolean) (handle->stateConfVector[0] == ZBridgeClient_main_region__final_
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGECLIENT_MAIN_REGION__FINAL_] == ZBridgeClient_main_region__final_
 			);
 			break;
 		case ZBridgeClient_main_region_Seated :
-			result = (sc_boolean) (handle->stateConfVector[0] == ZBridgeClient_main_region_Seated
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGECLIENT_MAIN_REGION_SEATED] == ZBridgeClient_main_region_Seated
 			);
 			break;
 		case ZBridgeClient_main_region_StartOfBoard :
-			result = (sc_boolean) (handle->stateConfVector[0] == ZBridgeClient_main_region_StartOfBoard
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGECLIENT_MAIN_REGION_STARTOFBOARD] == ZBridgeClient_main_region_StartOfBoard
 			);
 			break;
 		case ZBridgeClient_main_region_Info :
-			result = (sc_boolean) (handle->stateConfVector[0] == ZBridgeClient_main_region_Info
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGECLIENT_MAIN_REGION_INFO] == ZBridgeClient_main_region_Info
 			);
 			break;
 		case ZBridgeClient_main_region_Cards :
-			result = (sc_boolean) (handle->stateConfVector[0] == ZBridgeClient_main_region_Cards
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGECLIENT_MAIN_REGION_CARDS] == ZBridgeClient_main_region_Cards
 			);
 			break;
 		case ZBridgeClient_main_region_Bid :
-			result = (sc_boolean) (handle->stateConfVector[0] == ZBridgeClient_main_region_Bid
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGECLIENT_MAIN_REGION_BID] == ZBridgeClient_main_region_Bid
 			);
 			break;
 		case ZBridgeClient_main_region_Lead :
-			result = (sc_boolean) (handle->stateConfVector[0] == ZBridgeClient_main_region_Lead
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGECLIENT_MAIN_REGION_LEAD] == ZBridgeClient_main_region_Lead
 			);
 			break;
 		case ZBridgeClient_main_region_DummyCards :
-			result = (sc_boolean) (handle->stateConfVector[0] == ZBridgeClient_main_region_DummyCards
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGECLIENT_MAIN_REGION_DUMMYCARDS] == ZBridgeClient_main_region_DummyCards
 			);
 			break;
 		case ZBridgeClient_main_region_Play :
-			result = (sc_boolean) (handle->stateConfVector[0] == ZBridgeClient_main_region_Play
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGECLIENT_MAIN_REGION_PLAY] == ZBridgeClient_main_region_Play
 			);
 			break;
 		case ZBridgeClient_main_region_WaitLeader :
-			result = (sc_boolean) (handle->stateConfVector[0] == ZBridgeClient_main_region_WaitLeader
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGECLIENT_MAIN_REGION_WAITLEADER] == ZBridgeClient_main_region_WaitLeader
 			);
 			break;
 		case ZBridgeClient_main_region_SyncSB :
-			result = (sc_boolean) (handle->stateConfVector[0] == ZBridgeClient_main_region_SyncSB
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGECLIENT_MAIN_REGION_SYNCSB] == ZBridgeClient_main_region_SyncSB
 			);
 			break;
 		case ZBridgeClient_main_region_SyncLeader :
-			result = (sc_boolean) (handle->stateConfVector[0] == ZBridgeClient_main_region_SyncLeader
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGECLIENT_MAIN_REGION_SYNCLEADER] == ZBridgeClient_main_region_SyncLeader
 			);
 			break;
 		case ZBridgeClient_main_region_SyncAuction :
-			result = (sc_boolean) (handle->stateConfVector[0] == ZBridgeClient_main_region_SyncAuction
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGECLIENT_MAIN_REGION_SYNCAUCTION] == ZBridgeClient_main_region_SyncAuction
 			);
 			break;
 		case ZBridgeClient_main_region_SyncPlay :
-			result = (sc_boolean) (handle->stateConfVector[0] == ZBridgeClient_main_region_SyncPlay
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGECLIENT_MAIN_REGION_SYNCPLAY] == ZBridgeClient_main_region_SyncPlay
 			);
 			break;
 		case ZBridgeClient_main_region_SyncReplay :
-			result = (sc_boolean) (handle->stateConfVector[0] == ZBridgeClient_main_region_SyncReplay
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGECLIENT_MAIN_REGION_SYNCREPLAY] == ZBridgeClient_main_region_SyncReplay
 			);
 			break;
 		default:
@@ -2108,7 +2105,6 @@ static void zBridgeClient_react_main_region_Connecting(ZBridgeClient* handle)
 /* The reactions of state null. */
 static void zBridgeClient_react_main_region__final_(ZBridgeClient* handle)
 {
-	/* The reactions of state null. */
 }
 
 /* The reactions of state Seated. */

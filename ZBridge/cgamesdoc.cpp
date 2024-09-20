@@ -2392,7 +2392,7 @@ int CGamesDoc::preloadPBNFile(QTextStream &PBNFile, QString event, QStringList &
         line = PBNFile.readLine();
 
         //Take care of escape
-        if (!inComment && line[0] == '%')
+        if (!inComment && !line.isEmpty() && (line[0] == '%'))
         {
             if (line.indexOf("% EXPORT", 0, Qt::CaseInsensitive) == 0)
                 exportFound = true;

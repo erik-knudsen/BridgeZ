@@ -142,29 +142,28 @@ static void zBridgeServerSync_clearOutEvents(ZBridgeServerSync* handle);
 
 void zBridgeServerSync_init(ZBridgeServerSync* handle)
 {
-	sc_integer i;
-
-	for (i = 0; i < ZBRIDGESERVERSYNC_MAX_ORTHOGONAL_STATES; ++i)
-	{
-		handle->stateConfVector[i] = ZBridgeServerSync_last_state;
-	}
+		sc_integer i;
 	
+		for (i = 0; i < ZBRIDGESERVERSYNC_MAX_ORTHOGONAL_STATES; ++i)
+		{
+			handle->stateConfVector[i] = ZBridgeServerSync_last_state;
+		}
+		
+		
+		handle->stateConfVectorPosition = 0;
 	
-	handle->stateConfVectorPosition = 0;
-
-	zBridgeServerSync_clearInEvents(handle);
-	zBridgeServerSync_clearOutEvents(handle);
-
-	/* Default init sequence for statechart ZBridgeServerSync */
-	handle->internal.W = 0;
-	handle->internal.N = 1;
-	handle->internal.E = 2;
-	handle->internal.S = 3;
-	handle->internal.confirmWest = bool_false;
-	handle->internal.confirmNorth = bool_false;
-	handle->internal.confirmEast = bool_false;
-	handle->internal.confirmSouth = bool_false;
-
+		zBridgeServerSync_clearInEvents(handle);
+		zBridgeServerSync_clearOutEvents(handle);
+	
+		/* Default init sequence for statechart ZBridgeServerSync */
+		handle->internal.W = 0;
+		handle->internal.N = 1;
+		handle->internal.E = 2;
+		handle->internal.S = 3;
+		handle->internal.confirmWest = bool_false;
+		handle->internal.confirmNorth = bool_false;
+		handle->internal.confirmEast = bool_false;
+		handle->internal.confirmSouth = bool_false;
 }
 
 void zBridgeServerSync_enter(ZBridgeServerSync* handle)
@@ -181,15 +180,14 @@ void zBridgeServerSync_exit(ZBridgeServerSync* handle)
 
 sc_boolean zBridgeServerSync_isActive(const ZBridgeServerSync* handle)
 {
-	sc_boolean result;
-	if (handle->stateConfVector[0] != ZBridgeServerSync_last_state || handle->stateConfVector[1] != ZBridgeServerSync_last_state || handle->stateConfVector[2] != ZBridgeServerSync_last_state || handle->stateConfVector[3] != ZBridgeServerSync_last_state)
+	sc_boolean result = bool_false;
+	int i;
+	
+	for(i = 0; i < ZBRIDGESERVERSYNC_MAX_ORTHOGONAL_STATES; i++)
 	{
-		result =  bool_true;
+		result = result || handle->stateConfVector[i] != ZBridgeServerSync_last_state;
 	}
-	else
-	{
-		result = bool_false;
-	}
+	
 	return result;
 }
 
@@ -218,7 +216,6 @@ void zBridgeServerSync_runCycle(ZBridgeServerSync* handle)
 {
 	
 	zBridgeServerSync_clearOutEvents(handle);
-	
 	for (handle->stateConfVectorPosition = 0;
 		handle->stateConfVectorPosition < ZBRIDGESERVERSYNC_MAX_ORTHOGONAL_STATES;
 		handle->stateConfVectorPosition++)
@@ -226,92 +223,92 @@ void zBridgeServerSync_runCycle(ZBridgeServerSync* handle)
 			
 		switch (handle->stateConfVector[handle->stateConfVectorPosition])
 		{
-		case ZBridgeServerSync_entry_SynChronizeServer_West_WaitForAttemptSync :
+		case ZBridgeServerSync_entry_SynChronizeServer_West_WaitForAttemptSync:
 		{
 			zBridgeServerSync_react_entry_SynChronizeServer_West_WaitForAttemptSync(handle);
 			break;
 		}
-		case ZBridgeServerSync_entry_SynChronizeServer_West_waitForConfirmSync :
+		case ZBridgeServerSync_entry_SynChronizeServer_West_waitForConfirmSync:
 		{
 			zBridgeServerSync_react_entry_SynChronizeServer_West_waitForConfirmSync(handle);
 			break;
 		}
-		case ZBridgeServerSync_entry_SynChronizeServer_North_WaitForAttemptSync :
+		case ZBridgeServerSync_entry_SynChronizeServer_North_WaitForAttemptSync:
 		{
 			zBridgeServerSync_react_entry_SynChronizeServer_North_WaitForAttemptSync(handle);
 			break;
 		}
-		case ZBridgeServerSync_entry_SynChronizeServer_North_waitForConfirmSync :
+		case ZBridgeServerSync_entry_SynChronizeServer_North_waitForConfirmSync:
 		{
 			zBridgeServerSync_react_entry_SynChronizeServer_North_waitForConfirmSync(handle);
 			break;
 		}
-		case ZBridgeServerSync_entry_SynChronizeServer_East_WaitForAttemptSync :
+		case ZBridgeServerSync_entry_SynChronizeServer_East_WaitForAttemptSync:
 		{
 			zBridgeServerSync_react_entry_SynChronizeServer_East_WaitForAttemptSync(handle);
 			break;
 		}
-		case ZBridgeServerSync_entry_SynChronizeServer_East_waitForConfirmSync :
+		case ZBridgeServerSync_entry_SynChronizeServer_East_waitForConfirmSync:
 		{
 			zBridgeServerSync_react_entry_SynChronizeServer_East_waitForConfirmSync(handle);
 			break;
 		}
-		case ZBridgeServerSync_entry_SynChronizeServer_South_WaitForAttemptSync :
+		case ZBridgeServerSync_entry_SynChronizeServer_South_WaitForAttemptSync:
 		{
 			zBridgeServerSync_react_entry_SynChronizeServer_South_WaitForAttemptSync(handle);
 			break;
 		}
-		case ZBridgeServerSync_entry_SynChronizeServer_South_waitForConfirmSync :
+		case ZBridgeServerSync_entry_SynChronizeServer_South_waitForConfirmSync:
 		{
 			zBridgeServerSync_react_entry_SynChronizeServer_South_waitForConfirmSync(handle);
 			break;
 		}
-		case ZBridgeServerSync_entry_ClientConfirm_West_WaitForConfirmSync :
+		case ZBridgeServerSync_entry_ClientConfirm_West_WaitForConfirmSync:
 		{
 			zBridgeServerSync_react_entry_ClientConfirm_West_WaitForConfirmSync(handle);
 			break;
 		}
-		case ZBridgeServerSync_entry_ClientConfirm_West_WaitForSync :
+		case ZBridgeServerSync_entry_ClientConfirm_West_WaitForSync:
 		{
 			zBridgeServerSync_react_entry_ClientConfirm_West_WaitForSync(handle);
 			break;
 		}
-		case ZBridgeServerSync_entry_ClientConfirm_North_WaitForConfirmSync :
+		case ZBridgeServerSync_entry_ClientConfirm_North_WaitForConfirmSync:
 		{
 			zBridgeServerSync_react_entry_ClientConfirm_North_WaitForConfirmSync(handle);
 			break;
 		}
-		case ZBridgeServerSync_entry_ClientConfirm_North_WaitForSync :
+		case ZBridgeServerSync_entry_ClientConfirm_North_WaitForSync:
 		{
 			zBridgeServerSync_react_entry_ClientConfirm_North_WaitForSync(handle);
 			break;
 		}
-		case ZBridgeServerSync_entry_ClientConfirm_East_WaitForConfirmSync :
+		case ZBridgeServerSync_entry_ClientConfirm_East_WaitForConfirmSync:
 		{
 			zBridgeServerSync_react_entry_ClientConfirm_East_WaitForConfirmSync(handle);
 			break;
 		}
-		case ZBridgeServerSync_entry_ClientConfirm_East_WaitForSync :
+		case ZBridgeServerSync_entry_ClientConfirm_East_WaitForSync:
 		{
 			zBridgeServerSync_react_entry_ClientConfirm_East_WaitForSync(handle);
 			break;
 		}
-		case ZBridgeServerSync_entry_ClientConfirm_South_WaitForConfirmSync :
+		case ZBridgeServerSync_entry_ClientConfirm_South_WaitForConfirmSync:
 		{
 			zBridgeServerSync_react_entry_ClientConfirm_South_WaitForConfirmSync(handle);
 			break;
 		}
-		case ZBridgeServerSync_entry_ClientConfirm_South_WaitForSync :
+		case ZBridgeServerSync_entry_ClientConfirm_South_WaitForSync:
 		{
 			zBridgeServerSync_react_entry_ClientConfirm_South_WaitForSync(handle);
 			break;
 		}
-		case ZBridgeServerSync_entry__final_ :
+		case ZBridgeServerSync_entry__final_:
 		{
 			zBridgeServerSync_react_entry__final_(handle);
 			break;
 		}
-		case ZBridgeServerSync_entry_AttemptSync :
+		case ZBridgeServerSync_entry_AttemptSync:
 		{
 			zBridgeServerSync_react_entry_AttemptSync(handle);
 			break;
@@ -331,83 +328,83 @@ sc_boolean zBridgeServerSync_isStateActive(const ZBridgeServerSync* handle, ZBri
 	switch (state)
 	{
 		case ZBridgeServerSync_entry_SynChronizeServer :
-			result = (sc_boolean) (handle->stateConfVector[0] >= ZBridgeServerSync_entry_SynChronizeServer
-				&& handle->stateConfVector[0] <= ZBridgeServerSync_entry_SynChronizeServer_South_waitForConfirmSync);
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGESERVERSYNC_ENTRY_SYNCHRONIZESERVER] >= ZBridgeServerSync_entry_SynChronizeServer
+				&& handle->stateConfVector[SCVI_ZBRIDGESERVERSYNC_ENTRY_SYNCHRONIZESERVER] <= ZBridgeServerSync_entry_SynChronizeServer_South_waitForConfirmSync);
 			break;
 		case ZBridgeServerSync_entry_SynChronizeServer_West_WaitForAttemptSync :
-			result = (sc_boolean) (handle->stateConfVector[0] == ZBridgeServerSync_entry_SynChronizeServer_West_WaitForAttemptSync
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGESERVERSYNC_ENTRY_SYNCHRONIZESERVER_WEST_WAITFORATTEMPTSYNC] == ZBridgeServerSync_entry_SynChronizeServer_West_WaitForAttemptSync
 			);
 			break;
 		case ZBridgeServerSync_entry_SynChronizeServer_West_waitForConfirmSync :
-			result = (sc_boolean) (handle->stateConfVector[0] == ZBridgeServerSync_entry_SynChronizeServer_West_waitForConfirmSync
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGESERVERSYNC_ENTRY_SYNCHRONIZESERVER_WEST_WAITFORCONFIRMSYNC] == ZBridgeServerSync_entry_SynChronizeServer_West_waitForConfirmSync
 			);
 			break;
 		case ZBridgeServerSync_entry_SynChronizeServer_North_WaitForAttemptSync :
-			result = (sc_boolean) (handle->stateConfVector[1] == ZBridgeServerSync_entry_SynChronizeServer_North_WaitForAttemptSync
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGESERVERSYNC_ENTRY_SYNCHRONIZESERVER_NORTH_WAITFORATTEMPTSYNC] == ZBridgeServerSync_entry_SynChronizeServer_North_WaitForAttemptSync
 			);
 			break;
 		case ZBridgeServerSync_entry_SynChronizeServer_North_waitForConfirmSync :
-			result = (sc_boolean) (handle->stateConfVector[1] == ZBridgeServerSync_entry_SynChronizeServer_North_waitForConfirmSync
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGESERVERSYNC_ENTRY_SYNCHRONIZESERVER_NORTH_WAITFORCONFIRMSYNC] == ZBridgeServerSync_entry_SynChronizeServer_North_waitForConfirmSync
 			);
 			break;
 		case ZBridgeServerSync_entry_SynChronizeServer_East_WaitForAttemptSync :
-			result = (sc_boolean) (handle->stateConfVector[2] == ZBridgeServerSync_entry_SynChronizeServer_East_WaitForAttemptSync
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGESERVERSYNC_ENTRY_SYNCHRONIZESERVER_EAST_WAITFORATTEMPTSYNC] == ZBridgeServerSync_entry_SynChronizeServer_East_WaitForAttemptSync
 			);
 			break;
 		case ZBridgeServerSync_entry_SynChronizeServer_East_waitForConfirmSync :
-			result = (sc_boolean) (handle->stateConfVector[2] == ZBridgeServerSync_entry_SynChronizeServer_East_waitForConfirmSync
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGESERVERSYNC_ENTRY_SYNCHRONIZESERVER_EAST_WAITFORCONFIRMSYNC] == ZBridgeServerSync_entry_SynChronizeServer_East_waitForConfirmSync
 			);
 			break;
 		case ZBridgeServerSync_entry_SynChronizeServer_South_WaitForAttemptSync :
-			result = (sc_boolean) (handle->stateConfVector[3] == ZBridgeServerSync_entry_SynChronizeServer_South_WaitForAttemptSync
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGESERVERSYNC_ENTRY_SYNCHRONIZESERVER_SOUTH_WAITFORATTEMPTSYNC] == ZBridgeServerSync_entry_SynChronizeServer_South_WaitForAttemptSync
 			);
 			break;
 		case ZBridgeServerSync_entry_SynChronizeServer_South_waitForConfirmSync :
-			result = (sc_boolean) (handle->stateConfVector[3] == ZBridgeServerSync_entry_SynChronizeServer_South_waitForConfirmSync
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGESERVERSYNC_ENTRY_SYNCHRONIZESERVER_SOUTH_WAITFORCONFIRMSYNC] == ZBridgeServerSync_entry_SynChronizeServer_South_waitForConfirmSync
 			);
 			break;
 		case ZBridgeServerSync_entry_ClientConfirm :
-			result = (sc_boolean) (handle->stateConfVector[0] >= ZBridgeServerSync_entry_ClientConfirm
-				&& handle->stateConfVector[0] <= ZBridgeServerSync_entry_ClientConfirm_South_WaitForSync);
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGESERVERSYNC_ENTRY_CLIENTCONFIRM] >= ZBridgeServerSync_entry_ClientConfirm
+				&& handle->stateConfVector[SCVI_ZBRIDGESERVERSYNC_ENTRY_CLIENTCONFIRM] <= ZBridgeServerSync_entry_ClientConfirm_South_WaitForSync);
 			break;
 		case ZBridgeServerSync_entry_ClientConfirm_West_WaitForConfirmSync :
-			result = (sc_boolean) (handle->stateConfVector[0] == ZBridgeServerSync_entry_ClientConfirm_West_WaitForConfirmSync
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGESERVERSYNC_ENTRY_CLIENTCONFIRM_WEST_WAITFORCONFIRMSYNC] == ZBridgeServerSync_entry_ClientConfirm_West_WaitForConfirmSync
 			);
 			break;
 		case ZBridgeServerSync_entry_ClientConfirm_West_WaitForSync :
-			result = (sc_boolean) (handle->stateConfVector[0] == ZBridgeServerSync_entry_ClientConfirm_West_WaitForSync
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGESERVERSYNC_ENTRY_CLIENTCONFIRM_WEST_WAITFORSYNC] == ZBridgeServerSync_entry_ClientConfirm_West_WaitForSync
 			);
 			break;
 		case ZBridgeServerSync_entry_ClientConfirm_North_WaitForConfirmSync :
-			result = (sc_boolean) (handle->stateConfVector[1] == ZBridgeServerSync_entry_ClientConfirm_North_WaitForConfirmSync
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGESERVERSYNC_ENTRY_CLIENTCONFIRM_NORTH_WAITFORCONFIRMSYNC] == ZBridgeServerSync_entry_ClientConfirm_North_WaitForConfirmSync
 			);
 			break;
 		case ZBridgeServerSync_entry_ClientConfirm_North_WaitForSync :
-			result = (sc_boolean) (handle->stateConfVector[1] == ZBridgeServerSync_entry_ClientConfirm_North_WaitForSync
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGESERVERSYNC_ENTRY_CLIENTCONFIRM_NORTH_WAITFORSYNC] == ZBridgeServerSync_entry_ClientConfirm_North_WaitForSync
 			);
 			break;
 		case ZBridgeServerSync_entry_ClientConfirm_East_WaitForConfirmSync :
-			result = (sc_boolean) (handle->stateConfVector[2] == ZBridgeServerSync_entry_ClientConfirm_East_WaitForConfirmSync
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGESERVERSYNC_ENTRY_CLIENTCONFIRM_EAST_WAITFORCONFIRMSYNC] == ZBridgeServerSync_entry_ClientConfirm_East_WaitForConfirmSync
 			);
 			break;
 		case ZBridgeServerSync_entry_ClientConfirm_East_WaitForSync :
-			result = (sc_boolean) (handle->stateConfVector[2] == ZBridgeServerSync_entry_ClientConfirm_East_WaitForSync
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGESERVERSYNC_ENTRY_CLIENTCONFIRM_EAST_WAITFORSYNC] == ZBridgeServerSync_entry_ClientConfirm_East_WaitForSync
 			);
 			break;
 		case ZBridgeServerSync_entry_ClientConfirm_South_WaitForConfirmSync :
-			result = (sc_boolean) (handle->stateConfVector[3] == ZBridgeServerSync_entry_ClientConfirm_South_WaitForConfirmSync
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGESERVERSYNC_ENTRY_CLIENTCONFIRM_SOUTH_WAITFORCONFIRMSYNC] == ZBridgeServerSync_entry_ClientConfirm_South_WaitForConfirmSync
 			);
 			break;
 		case ZBridgeServerSync_entry_ClientConfirm_South_WaitForSync :
-			result = (sc_boolean) (handle->stateConfVector[3] == ZBridgeServerSync_entry_ClientConfirm_South_WaitForSync
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGESERVERSYNC_ENTRY_CLIENTCONFIRM_SOUTH_WAITFORSYNC] == ZBridgeServerSync_entry_ClientConfirm_South_WaitForSync
 			);
 			break;
 		case ZBridgeServerSync_entry__final_ :
-			result = (sc_boolean) (handle->stateConfVector[0] == ZBridgeServerSync_entry__final_
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGESERVERSYNC_ENTRY__FINAL_] == ZBridgeServerSync_entry__final_
 			);
 			break;
 		case ZBridgeServerSync_entry_AttemptSync :
-			result = (sc_boolean) (handle->stateConfVector[0] == ZBridgeServerSync_entry_AttemptSync
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGESERVERSYNC_ENTRY_ATTEMPTSYNC] == ZBridgeServerSync_entry_AttemptSync
 			);
 			break;
 		default:
@@ -1586,7 +1583,6 @@ static void zBridgeServerSync_react_entry_ClientConfirm_South_WaitForSync(ZBridg
 /* The reactions of state null. */
 static void zBridgeServerSync_react_entry__final_(ZBridgeServerSync* handle)
 {
-	/* The reactions of state null. */
 }
 
 /* The reactions of state AttemptSync. */

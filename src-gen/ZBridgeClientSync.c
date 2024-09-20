@@ -35,22 +35,21 @@ static void zBridgeClientSync_clearOutEvents(ZBridgeClientSync* handle);
 
 void zBridgeClientSync_init(ZBridgeClientSync* handle)
 {
-	sc_integer i;
-
-	for (i = 0; i < ZBRIDGECLIENTSYNC_MAX_ORTHOGONAL_STATES; ++i)
-	{
-		handle->stateConfVector[i] = ZBridgeClientSync_last_state;
-	}
+		sc_integer i;
 	
+		for (i = 0; i < ZBRIDGECLIENTSYNC_MAX_ORTHOGONAL_STATES; ++i)
+		{
+			handle->stateConfVector[i] = ZBridgeClientSync_last_state;
+		}
+		
+		
+		handle->stateConfVectorPosition = 0;
 	
-	handle->stateConfVectorPosition = 0;
-
-	zBridgeClientSync_clearInEvents(handle);
-	zBridgeClientSync_clearOutEvents(handle);
-
-	/* Default init sequence for statechart ZBridgeClientSync */
-	handle->iface.syncState = 0;
-
+		zBridgeClientSync_clearInEvents(handle);
+		zBridgeClientSync_clearOutEvents(handle);
+	
+		/* Default init sequence for statechart ZBridgeClientSync */
+		handle->iface.syncState = 0;
 }
 
 void zBridgeClientSync_enter(ZBridgeClientSync* handle)
@@ -67,15 +66,14 @@ void zBridgeClientSync_exit(ZBridgeClientSync* handle)
 
 sc_boolean zBridgeClientSync_isActive(const ZBridgeClientSync* handle)
 {
-	sc_boolean result;
-	if (handle->stateConfVector[0] != ZBridgeClientSync_last_state)
+	sc_boolean result = bool_false;
+	int i;
+	
+	for(i = 0; i < ZBRIDGECLIENTSYNC_MAX_ORTHOGONAL_STATES; i++)
 	{
-		result =  bool_true;
+		result = result || handle->stateConfVector[i] != ZBridgeClientSync_last_state;
 	}
-	else
-	{
-		result = bool_false;
-	}
+	
 	return result;
 }
 
@@ -103,7 +101,6 @@ void zBridgeClientSync_runCycle(ZBridgeClientSync* handle)
 {
 	
 	zBridgeClientSync_clearOutEvents(handle);
-	
 	for (handle->stateConfVectorPosition = 0;
 		handle->stateConfVectorPosition < ZBRIDGECLIENTSYNC_MAX_ORTHOGONAL_STATES;
 		handle->stateConfVectorPosition++)
@@ -111,22 +108,22 @@ void zBridgeClientSync_runCycle(ZBridgeClientSync* handle)
 			
 		switch (handle->stateConfVector[handle->stateConfVectorPosition])
 		{
-		case ZBridgeClientSync_main_region_WaitForAttemptSync :
+		case ZBridgeClientSync_main_region_WaitForAttemptSync:
 		{
 			zBridgeClientSync_react_main_region_WaitForAttemptSync(handle);
 			break;
 		}
-		case ZBridgeClientSync_main_region__final_ :
+		case ZBridgeClientSync_main_region__final_:
 		{
 			zBridgeClientSync_react_main_region__final_(handle);
 			break;
 		}
-		case ZBridgeClientSync_main_region_WaitForConfirmSync :
+		case ZBridgeClientSync_main_region_WaitForConfirmSync:
 		{
 			zBridgeClientSync_react_main_region_WaitForConfirmSync(handle);
 			break;
 		}
-		case ZBridgeClientSync_main_region_WaitForAllSync :
+		case ZBridgeClientSync_main_region_WaitForAllSync:
 		{
 			zBridgeClientSync_react_main_region_WaitForAllSync(handle);
 			break;
@@ -146,19 +143,19 @@ sc_boolean zBridgeClientSync_isStateActive(const ZBridgeClientSync* handle, ZBri
 	switch (state)
 	{
 		case ZBridgeClientSync_main_region_WaitForAttemptSync :
-			result = (sc_boolean) (handle->stateConfVector[0] == ZBridgeClientSync_main_region_WaitForAttemptSync
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGECLIENTSYNC_MAIN_REGION_WAITFORATTEMPTSYNC] == ZBridgeClientSync_main_region_WaitForAttemptSync
 			);
 			break;
 		case ZBridgeClientSync_main_region__final_ :
-			result = (sc_boolean) (handle->stateConfVector[0] == ZBridgeClientSync_main_region__final_
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGECLIENTSYNC_MAIN_REGION__FINAL_] == ZBridgeClientSync_main_region__final_
 			);
 			break;
 		case ZBridgeClientSync_main_region_WaitForConfirmSync :
-			result = (sc_boolean) (handle->stateConfVector[0] == ZBridgeClientSync_main_region_WaitForConfirmSync
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGECLIENTSYNC_MAIN_REGION_WAITFORCONFIRMSYNC] == ZBridgeClientSync_main_region_WaitForConfirmSync
 			);
 			break;
 		case ZBridgeClientSync_main_region_WaitForAllSync :
-			result = (sc_boolean) (handle->stateConfVector[0] == ZBridgeClientSync_main_region_WaitForAllSync
+			result = (sc_boolean) (handle->stateConfVector[SCVI_ZBRIDGECLIENTSYNC_MAIN_REGION_WAITFORALLSYNC] == ZBridgeClientSync_main_region_WaitForAllSync
 			);
 			break;
 		default:
@@ -364,7 +361,6 @@ static void zBridgeClientSync_react_main_region_WaitForAttemptSync(ZBridgeClient
 /* The reactions of state null. */
 static void zBridgeClientSync_react_main_region__final_(ZBridgeClientSync* handle)
 {
-	/* The reactions of state null. */
 }
 
 /* The reactions of state WaitForConfirmSync. */

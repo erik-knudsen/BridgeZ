@@ -11,14 +11,15 @@ extern "C" {
 /*! \file Header of the state machine 'ZBridgeClientSync'.
 */
 
+
 /*! Enumeration of all states */ 
 typedef enum
 {
+	ZBridgeClientSync_last_state,
 	ZBridgeClientSync_main_region_WaitForAttemptSync,
 	ZBridgeClientSync_main_region__final_,
 	ZBridgeClientSync_main_region_WaitForConfirmSync,
-	ZBridgeClientSync_main_region_WaitForAllSync,
-	ZBridgeClientSync_last_state
+	ZBridgeClientSync_main_region_WaitForAllSync
 } ZBridgeClientSyncStates;
 
 /*! Type definition of the data structure for the ZBridgeClientSyncIface interface scope. */
@@ -37,6 +38,12 @@ typedef struct
 /*! Define dimension of the state configuration vector for orthogonal states. */
 #define ZBRIDGECLIENTSYNC_MAX_ORTHOGONAL_STATES 1
 
+/*! Define indices of states in the StateConfVector */
+#define SCVI_ZBRIDGECLIENTSYNC_MAIN_REGION_WAITFORATTEMPTSYNC 0
+#define SCVI_ZBRIDGECLIENTSYNC_MAIN_REGION__FINAL_ 0
+#define SCVI_ZBRIDGECLIENTSYNC_MAIN_REGION_WAITFORCONFIRMSYNC 0
+#define SCVI_ZBRIDGECLIENTSYNC_MAIN_REGION_WAITFORALLSYNC 0
+
 /*! 
  * Type definition of the data structure for the ZBridgeClientSync state machine.
  * This data structure has to be allocated by the client code. 
@@ -48,6 +55,7 @@ typedef struct
 	
 	ZBridgeClientSyncIface iface;
 } ZBridgeClientSync;
+
 
 /*! Initializes the ZBridgeClientSync state machine data structures. Must be called before first usage.*/
 extern void zBridgeClientSync_init(ZBridgeClientSync* handle);
@@ -99,6 +107,8 @@ extern sc_boolean zBridgeClientSync_isFinal(const ZBridgeClientSync* handle);
 
 /*! Checks if the specified state is active (until 2.4.1 the used method for states was called isActive()). */
 extern sc_boolean zBridgeClientSync_isStateActive(const ZBridgeClientSync* handle, ZBridgeClientSyncStates state);
+
+
 
 #ifdef __cplusplus
 }
