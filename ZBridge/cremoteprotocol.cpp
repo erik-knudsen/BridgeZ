@@ -761,10 +761,10 @@ void CBidMsg::lineToMsg()
 
     if (line.contains(BIDTYPE_NET[PASSES_NET], Qt::CaseInsensitive))
         bid = BID_PASS;
-    else if (line.contains(BIDTYPE_NET[DOUBLES_NET], Qt::CaseInsensitive))
-        bid = BID_DOUBLE;
     else if (line.contains(BIDTYPE_NET[REDOUBLES_NET], Qt::CaseInsensitive))
         bid = BID_REDOUBLE;
+    else if (line.contains(BIDTYPE_NET[DOUBLES_NET], Qt::CaseInsensitive))
+        bid = BID_DOUBLE;
     else
     {
         Suit j;
