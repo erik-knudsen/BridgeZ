@@ -35,13 +35,6 @@
 #include "cbidandplayengines.h"
 #include "ctblmngrserver.h"
 
-//Undo states;
-const int DISABLE_UNDO = 0;
-const int ENABLE_UNDO_BID = 1;
-const int ENABLE_UNDO_PLAY = 2;
-const int ENABLE_UNDO_LEADER = 3;
-
-
 /**
  * @brief Constructor for table manager server.
  * @param doc Pointer to model data.
@@ -195,7 +188,7 @@ void CTblMngrServer::serverActions()
         if (showUser)
         {
             //The server must show relevant information to the user.
-            sShowAuction();                 //Show auction widgets in play view.
+            sShowAuction(false, NO_SEAT);            //Show auction widgets in play view.
             sShowCenter(currentVulnerable); //Show center widget in play view.
         }
 
@@ -274,7 +267,7 @@ void CTblMngrServer::serverActions()
 //            sShowBid((Seat)zBridgeServerIface_get_bidder(&handle), BID_BLANK);
             sClearYourTurnOnTable();
             sShowDummyOnTable((Seat)((zBridgeServerIface_get_declarer(&handle) + 2) & 3));
-            sShowPlay();        //Show play widget in play view.
+            sShowPlay(BID_SUIT((Bids)zBridgeServerIface_get_lastBid(&handle)));        //Show play widget in play view.
         }
 
         //Set bid, double and open leader in play history.
@@ -320,21 +313,10 @@ void CTblMngrServer::serverActions()
 
     else if (zBridgeServerIface_israised_getLeader(&handle))
     {
-        //Get the next leader.
         if (showUser)
-        {
-            //Initialize play view for next trick.
-            playView->clearCardsOnTable();
-            playView->clearYourTurnOnTable();
-        }
-
-        zBridgeServerIface_raise_newLeader(&handle, playHistory.getNextLeader());
-
-        //Show number of tricks in play view.
-        if (showUser)
-            sShowTricks(playHistory.getEWTricks(), playHistory.getNSTricks());
-
-        serverRunCycle();
+            QTimer::singleShot(1000, this, SLOT(getNextLeader()));
+        else
+            getNextLeader();
     }
 
     else if (zBridgeServerIface_israised_undoPlay(&handle) || zBridgeServerIface_israised_undoBid(&handle))
@@ -343,15 +325,15 @@ void CTblMngrServer::serverActions()
         if (zBridgeServerIface_israised_undoPlay(&handle))
         {
             QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_REPLAY , false));
-            //if declarer is auto and partner is manual then instead of declarer playing
-            //partners cards then we let partner play declarers cards.
-            //(this is only implemented with local actors. In other cases auto declarer plays the cards.).
-            Seat declarer = (Seat)zBridgeServerIface_get_declarer(&handle);
-            Seat dummy = (Seat)zBridgeServerIface_get_dummy(&handle);
-            actors[declarer]->setManual(false);
-            if ((actors[declarer]->getActorType() == AUTO_ACTOR) &&
-                    (actors[dummy]->getActorType() == MANUAL_ACTOR))
+
+            //In case dummy has been set to play declarers cards then we need to reset this.
+            if (declarerSetManual)
+            {
+                declarerSetManual = false;
+                Seat declarer = (Seat)zBridgeServerIface_get_declarer(&handle);
+                actors[declarer]->setManual(false);
                 playView->showCards(declarer, false);
+            }
         }
 
         //Undo bid always is after undo play.
@@ -598,7 +580,6 @@ void CTblMngrServer::newSession()
 
     cleanTableManager();
 
-    waiting = false;
     boardNo = 0;
 
     playWaiting = playContinue = false;
@@ -651,7 +632,7 @@ void CTblMngrServer::newSession()
                 bidAndPlayEngines, this);
     actors[SOUTH_SEAT] = actor;
 
-    setShowUser(showAll);
+    setShowUser();
     setUpdateGameInfo();
 
     //Transfer game data to clients.
@@ -706,8 +687,6 @@ void CTblMngrServer::newSession()
  */
 void CTblMngrServer::newDeal()
 {
-    waiting = false;
-
     QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_UNDO , false));
     QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_REBID , false));
     QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_REPLAY , false));
@@ -827,9 +806,8 @@ void CTblMngrServer::hint()
 
 /**
  * @brief Determine who controls the play view.
- * @param showAll If true all cards should be shown in the play view.
  */
-void CTblMngrServer::setShowUser(bool showAll)
+void CTblMngrServer::setShowUser()
 {
     showUser = false;
     actors[WEST_SEAT]->setShowUser(false);
@@ -845,7 +823,7 @@ void CTblMngrServer::setShowUser(bool showAll)
         actors[EAST_SEAT]->setShowUser(true);
     else if (actors[SOUTH_SEAT]->getActorType() == MANUAL_ACTOR)
         actors[SOUTH_SEAT]->setShowUser(true);
-    else if (showAll)
+    else
         showUser = true;
 }
 
@@ -959,6 +937,30 @@ void CTblMngrServer::startOfBoard()
         actors[EAST_SEAT]->startOfBoard();
         actors[SOUTH_SEAT]->startOfBoard();
     }
+}
+
+/**
+ * @brief Get next leader.
+ *
+ * Delayed when all actors are auto.
+ */
+void CTblMngrServer::getNextLeader()
+{
+    //Get the next leader.
+    if (showUser)
+    {
+        //Initialize play view for next trick.
+        playView->clearCardsOnTable();
+        playView->clearYourTurnOnTable();
+    }
+
+    zBridgeServerIface_raise_newLeader(&handle, playHistory.getNextLeader());
+
+    //Show number of tricks in play view.
+    if (showUser)
+        sShowTricks(playHistory.getEWTricks(), playHistory.getNSTricks());
+
+    serverRunCycle();
 }
 
 /**
@@ -1180,8 +1182,10 @@ void CTblMngrServer::sUpdateGameToNextDeal()
 
 /**
  * @brief Show auction info widgets in play view (actor slot).
+ * @param afterReplay True if after replay.
+ * @param dummy The Dummys seat.
  */
-void CTblMngrServer::sShowAuction()
+void CTblMngrServer::sShowAuction(bool afterReplay, Seat dummy)
 {
     playView->showInfoPlay(false);
 
@@ -1191,12 +1195,22 @@ void CTblMngrServer::sShowAuction()
     str.setNum(currentBoardNo);
     playView->setInfoAuction(str, currentVulnerable, (Seat)zBridgeServerIface_get_dealer(&handle));
     playView->showInfoAuction(true);
+    if (afterReplay)
+    {
+        playView->showEWNSTextOnTable();
+        if (!showUser)
+            playView->setTrumpSuit(ANY);
+        showDummy = false;
+        if (!showAll && !showUser && (actors[dummy]->getActorType() != MANUAL_ACTOR))
+            playView->showCards(dummy, false);
+    }
 }
 
 /**
  * @brief Show play info widgets in play view (actor slot).
+ * @param trump The trump suit-
  */
-void CTblMngrServer::sShowPlay()
+void CTblMngrServer::sShowPlay(Suit trump)
 {
     //Show play info window with dealer, declarer and contract.
     playView->showInfoAuction(false);
@@ -1213,8 +1227,75 @@ void CTblMngrServer::sShowPlay()
 
     playView->showInfoPlay(true);
 
+    showDummy = false;
+
     //Rearrange display of cards for the contracts trumpsuit.
-    playView->setTrumpSuit(BID_SUIT((Bids)zBridgeServerIface_get_lastBid(&handle)));
+    if (!showUser)
+        playView->setTrumpSuit(trump);
+}
+
+void CTblMngrServer::sUndoTrick(int noTrick, int nsTricks, int ewTricks)
+{
+    if (noTrick > 0)
+    {
+        QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_UNDO , true));
+        QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_REBID , true));
+        QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_REPLAY , true));
+    }
+
+    CTblMngr::sUndoTrick(noTrick, nsTricks, ewTricks);
+}
+
+/**
+ * @brief Enable next bidder to bid.
+ * @param bidder The bidder.
+ * @param lastBid The last bid given.
+ * @param doubleBid Double/redouble ?
+ */
+void CTblMngrServer::sEnableBidder(Seat bidder, Bids lastBid, Bids doubleBid)
+{
+    QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_UNDO , true));
+    QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_REBID , true));
+
+    CTblMngr::sEnableBidder(bidder, lastBid, doubleBid);
+}
+
+/**
+ * @brief Disable bidder.
+ * @param bidder Current bidder.
+ */
+void CTblMngrServer::sDisableBidder(Seat bidder)
+{
+    QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_UNDO , false));
+    QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_REBID , false));
+
+    CTblMngr::sDisableBidder(bidder);
+}
+
+/**
+ * @brief Enable next player to play.
+ * @param player The player.
+ */
+void CTblMngrServer::sEnablePlayer(Seat player)
+{
+    QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_UNDO , true));
+    QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_REBID , true));
+    QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_REPLAY , true));
+
+    CTblMngr::sEnablePlayer(player);
+}
+
+/**
+ * @brief  Disableplayer
+ * @param player Current player.
+ */
+void CTblMngrServer::sDisablePlayer(Seat player)
+{
+    QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_UNDO , false));
+    QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_REBID , false));
+    QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_REPLAY , false));
+
+    CTblMngr::sDisablePlayer(player);
 }
 
 /**
@@ -1223,45 +1304,40 @@ void CTblMngrServer::sShowPlay()
  */
 void CTblMngrServer::sEnableContinueSync(int syncState)
 {
-    if (!waiting)
+    switch (syncState)
     {
-        waiting = true;
-        switch (syncState)
-        {
-        case BUTTON_AUCTION:
-            QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_UNDO , false));
-            QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_REBID , false));
-            QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_REPLAY , false));
-            playView->showInfoAuctionButton(true, BUTTON_AUCTION);
-            break;
+    case BUTTON_AUCTION:
+        playView->showInfoAuctionButton(true, BUTTON_AUCTION);
+        break;
 
-        case BUTTON_PLAY:
-            QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_UNDO , false));
-            QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_REBID , false));
-            playView->showInfoPlayButton(true, BUTTON_PLAY);
-            break;
+    case BUTTON_PLAY:
+        playView->showInfoPlayButton(true, BUTTON_PLAY);
+        break;
 
-        case BUTTON_LEADER:
-            playView->enableLeaderOnTable();
-            break;
+    case BUTTON_LEADER:
+        QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_UNDO , true));
+        QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_REBID , true));
+        QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_REPLAY , true));
+        playView->enableLeaderOnTable();
+        break;
 
-        case BUTTON_DEAL:          
-            //Disable Undo and Rebid and replay and New Deal and Show All and Double Dummy Results menu actions.
-            QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_UNDO , false));
-            QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_REBID , false));
-            QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_REPLAY , false));
-            QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_NEW_DEAL , false));
-            QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_SHOW_ALL , false));
-            QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_PAR , false));
+    case BUTTON_DEAL:
+        //Disable Undo and Rebid and replay and New Deal and Show All and Double Dummy Results menu actions.
+        QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_UNDO , false));
+        QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_REBID , false));
+        QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_REPLAY , false));
+        QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_NEW_DEAL , false));
+        QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_SHOW_ALL , false));
+        QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_PAR , false));
 
-            emit sShowScore();
+        emit sShowScore();
 
-            playView->showInfoNextButton(true, BUTTON_DEAL);
-            break;
+        playView->showInfoNextButton(true, BUTTON_DEAL);
+        break;
 
-        default:
-            ;
-        }
+    default:
+        ;
+
     }
 }
 
@@ -1271,48 +1347,45 @@ void CTblMngrServer::sEnableContinueSync(int syncState)
  */
 void CTblMngrServer::sDisableContinueSync(int syncState)
 {
-    if (waiting)
+    switch (syncState)
     {
-        waiting = false;
-        switch (syncState)
+    case BUTTON_AUCTION:
+        playView->showInfoAuctionButton(false, BUTTON_AUCTION);
+        break;
+
+    case BUTTON_PLAY:
+    {
+        playView->showInfoPlayButton(false, BUTTON_PLAY);
+
+        //if declarer is auto and partner is manual then instead of declarer playing
+        //dummys cards then we let dummy play declarers cards.
+        //(this is only implemented with local actors. In other cases auto declarer plays the cards.).
+        Seat declarer = (Seat)zBridgeServerIface_get_declarer(&handle);
+        Seat dummy = (Seat)zBridgeServerIface_get_dummy(&handle);
+        declarerSetManual = false;  //just in case dummy (in last deal) has played declarers cards.
+        if ((actors[declarer]->getActorType() == AUTO_ACTOR) &&
+            (actors[dummy]->getActorType() == MANUAL_ACTOR))
         {
-        case BUTTON_AUCTION:
-            playView->showInfoAuctionButton(false, BUTTON_AUCTION);
-            QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_UNDO , true));
-            QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_REBID , true));
-            break;
-
-        case BUTTON_PLAY:
-        {
-            playView->showInfoPlayButton(false, BUTTON_PLAY);
-
-            //if declarer is auto and partner is manual then instead of declarer playing
-            //partners cards then we let partner play declarers cards.
-            //(this is only implemented with local actors. In other cases auto declarer plays the cards.).
-            Seat declarer = (Seat)zBridgeServerIface_get_declarer(&handle);
-            Seat dummy = (Seat)zBridgeServerIface_get_dummy(&handle);
-            if ((actors[declarer]->getActorType() == AUTO_ACTOR) &&
-                    (actors[dummy]->getActorType() == MANUAL_ACTOR))
-            {
-                playView->showCards(declarer, true);
-                actors[declarer]->setManual(true);
-            }
-            QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_UNDO , true));
-            QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_REBID , true));
-            QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_REPLAY , true));
+            playView->showCards(declarer, true);
+            actors[declarer]->setManual(true);
+            declarerSetManual = true;
         }
-            break;
+    }
+    break;
 
-        case BUTTON_LEADER:
-            playView->disableLeaderOnTable();
-            break;
+    case BUTTON_LEADER:
+        QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_UNDO , false));
+        QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_REBID , false));
+        QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_REPLAY , false));
+        playView->disableLeaderOnTable();
+        break;
 
-        case BUTTON_DEAL:
-            playView->showInfoNextButton(false, BUTTON_DEAL);
-            break;
+    case BUTTON_DEAL:
+        playView->showInfoNextButton(false, BUTTON_DEAL);
+        break;
 
-        default: ;
-        }
+    default: ;
+
     }
 }
 

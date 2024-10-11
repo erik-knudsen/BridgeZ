@@ -58,7 +58,6 @@ public:
 
     void bidValue(Bids bid);
     void playValue(int card);
-    void continueSync();
 
     void setShowUser(bool showUser) { this->showUser = showUser; }
     void setUpdateGameInfo(bool updateGameInfo) { this->updateGameInfo = updateGameInfo; }
@@ -95,9 +94,10 @@ public:
 public slots:
     void bidValue();
     void playValue();
+    void continueSync();
 signals:
-    void sShowAuction();
-    void sShowPlay();
+    void sShowAuction(bool afterReplay, Seat dummy);
+    void sShowPlay(Suit trump);
     void sShowBidDialog(bool show);
     void sShowBid(Seat seat, Bids bid, QString features = "", QString alert = "");
     void sBidHint(Bids bid);

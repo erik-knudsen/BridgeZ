@@ -78,8 +78,8 @@ public slots:
      * These slot methods are signalled from the actors.
      */
     /*@{*/
-    virtual void sShowAuction() = 0;
-    virtual void sShowPlay() = 0;
+    virtual void sShowAuction(bool afterReplay, Seat dummy) = 0;
+    virtual void sShowPlay(Suit trump) = 0;
     void sShowBidDialog(bool show);
     void sShowBid(Seat seat, Bids bid, QString features = "", QString alert = "");
     void sBidHint(Bids bid);
@@ -93,12 +93,12 @@ public slots:
     void sClearCardsOnTable();
     void sShowTricks(int ewTricks, int nsTricks);
     void sUndoBid(int noBid);
-    void sUndoTrick(int noTrick, int nsTricks, int ewTricks);
+    virtual void sUndoTrick(int noTrick, int nsTricks, int ewTricks);
 
-    void sEnableBidder(Seat bidder, Bids lastBid, Bids doubleBid);
-    void sDisableBidder(Seat bidder);
-    void sEnablePlayer(Seat player);
-    void sDisablePlayer(Seat player);
+    virtual void sEnableBidder(Seat bidder, Bids lastBid, Bids doubleBid);
+    virtual void sDisableBidder(Seat bidder);
+    virtual void sEnablePlayer(Seat player);
+    virtual void sDisablePlayer(Seat player);
     virtual void sEnableContinueSync(int syncState) = 0;
     virtual void sDisableContinueSync(int syncState) = 0;
 

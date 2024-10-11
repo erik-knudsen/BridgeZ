@@ -148,7 +148,8 @@ void CTblMngrClient::newSession()
         actor = new CActorLocal(protocol, bidDelay, playDelay, (doc->getSeatOptions().southActor == MANUAL_ACTOR),
                                 doc->getSeatOptions().southName, SOUTH_SEAT, bidAndPlayEngines, this);
 
-    actor->setShowUser((actor->getActorType() == MANUAL_ACTOR) || showAll);
+    actor->setShowUser(true);   //Always, also for client in auto mode.
+//    actor->setShowUser((actor->getActorType() == MANUAL_ACTOR) || showAll);
     actor->setUpdateGameInfo(true);
 
     //Start tcp/ip interface to server.
@@ -169,13 +170,13 @@ void CTblMngrClient::showAllCards()
     showAll = !showAll;
 
     bool showWest = showAll || ((actor->getSeat() == WEST_SEAT) && (actor->getActorType() == MANUAL_ACTOR)) ||
-            (showDummy && (actor->getSeat() == dummy));
+                (showDummy && (WEST_SEAT == dummy));
     bool showNorth = showAll || ((actor->getSeat() == NORTH_SEAT) && (actor->getActorType() == MANUAL_ACTOR)) ||
-            (showDummy && (actor->getSeat() == dummy));
+                (showDummy && (NORTH_SEAT == dummy));
     bool showEast = showAll || ((actor->getSeat() == EAST_SEAT) && (actor->getActorType() == MANUAL_ACTOR)) ||
-            (showDummy && (actor->getSeat() == dummy));
+                (showDummy && (EAST_SEAT == dummy));
     bool showSouth = showAll || ((actor->getSeat() == SOUTH_SEAT) && (actor->getActorType() == MANUAL_ACTOR)) ||
-            (showDummy && (actor->getSeat() == dummy));
+                (showDummy && (SOUTH_SEAT == dummy));
 
     playView->showCards(WEST_SEAT, showWest);
     playView->showCards(NORTH_SEAT, showNorth);
@@ -398,21 +399,35 @@ void CTblMngrClient::sUpdateGameToNextDeal()
 
 /**
  * @brief Show auction info widgets in play view (actor slot).
+ * @param afterReplay True if after replay.
+ * @param dummy Dummys seat.
  */
-void CTblMngrClient::sShowAuction()
+void CTblMngrClient::sShowAuction(bool afterReplay, Seat dummy)
 {
+    playView->showInfoPlay(false);
+
     playView->setParams(doc->getSeatOptions().seat, doc->getDisplayOptions().cardBack);
 
     QString str;
     str.setNum(zBridgeClientIface_get_boardNumber(handle));
     playView->setInfoAuction(str, (Team)zBridgeClientIface_get_vulnerability(handle), (Seat)zBridgeClientIface_get_dealer(handle));
     playView->showInfoAuction(true);
+    if (afterReplay)
+    {
+        playView->showEWNSTextOnTable();
+        if (actor->getActorType() == MANUAL_ACTOR)
+            playView->setTrumpSuit(ANY);
+        showDummy = false;
+        if (!showAll && (actor->getActorType() != MANUAL_ACTOR))
+            playView->showCards(dummy, false);
+    }
 }
 
 /**
  * @brief Show play info widgets in play view (actor slot).
+ * @param trump The trump suit.
  */
-void CTblMngrClient::sShowPlay()
+void CTblMngrClient::sShowPlay(Suit trump)
 {
     playView->showInfoAuction(false);
 
@@ -428,6 +443,12 @@ void CTblMngrClient::sShowPlay()
     playView->showEWTricks(0);
 
     playView->showInfoPlay(true);
+
+    showDummy = false;
+
+    //Rearrange display of cards for the contracts trumpsuit.
+    if (actor->getActorType() == MANUAL_ACTOR)
+        playView->setTrumpSuit(trump);
 }
 
 /**
@@ -710,6 +731,7 @@ void CTblMngrClient::receiveLine(QString line)
     case UNDOBID_MSG:
     {
         //Undo bid message was received.
+        QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_HINT , false));
         CUndoBidMsg undoBidMsg(line);
         actor->undoBid(false);
         break;
@@ -718,6 +740,7 @@ void CTblMngrClient::receiveLine(QString line)
     case  UNDOTRICK_MSG:
     {
         //Undo trick message was received.
+        QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_HINT , false));
         CUndoTrickMsg undoTrickMsg(line);
         actor->undoTrick(false);
         break;
@@ -727,6 +750,7 @@ void CTblMngrClient::receiveLine(QString line)
     {
         //Rebid message was received.
         CReBidMsg reBidMsg(line);
+        QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_HINT , false));
         actor->undoBid(true);
         break;
     }
@@ -735,6 +759,7 @@ void CTblMngrClient::receiveLine(QString line)
     {
         //Replay message was received.
         CRePlayMsg rePlayMsg(line);
+        QApplication::postEvent(parent(), new UPDATE_UI_ACTION_Event(UPDATE_UI_HINT , false));
         actor->undoTrick(true);
         break;
     }

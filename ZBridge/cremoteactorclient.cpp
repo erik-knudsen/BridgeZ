@@ -40,7 +40,8 @@ CRemoteActorClient::CRemoteActorClient(QString hostAddress, quint16 port, QObjec
     connect(socket, &QTcpSocket::connected, this, &CRemoteActorClient::connected);
     connect(socket, &QTcpSocket::disconnected, this, &CRemoteActorClient::disConnected);
     connect(socket, &QTcpSocket::readyRead, this, &CRemoteActorClient::readLine);
-    connect(socket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(socketError(QAbstractSocket::SocketError)));
+    connect(socket, &QTcpSocket::errorOccurred, this, &CRemoteActorClient::socketError);
+//    connect(socket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(socketError(QAbstractSocket::SocketError)));
 
     socket->connectToHost(hostAddress, port);
 }

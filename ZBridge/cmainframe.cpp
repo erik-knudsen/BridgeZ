@@ -1069,6 +1069,10 @@ void CMainFrame::on_actionActivate_Deal_Profile_triggered()
  */
 void CMainFrame::on_actionUndo_triggered()
 {
+    QApplication::postEvent(this, new UPDATE_UI_ACTION_Event(UPDATE_UI_UNDO , false));
+    QApplication::postEvent(this, new UPDATE_UI_ACTION_Event(UPDATE_UI_REBID , false));
+    QApplication::postEvent(this, new UPDATE_UI_ACTION_Event(UPDATE_UI_REPLAY , false));
+    QApplication::postEvent(this, new UPDATE_UI_ACTION_Event(UPDATE_UI_HINT , false));
     tableManager->undo();
 }
 
@@ -1077,6 +1081,10 @@ void CMainFrame::on_actionUndo_triggered()
  */
 void CMainFrame::on_action_Bid_Rebid_triggered()
 {
+    QApplication::postEvent(this, new UPDATE_UI_ACTION_Event(UPDATE_UI_UNDO , false));
+    QApplication::postEvent(this, new UPDATE_UI_ACTION_Event(UPDATE_UI_REBID , false));
+    QApplication::postEvent(this, new UPDATE_UI_ACTION_Event(UPDATE_UI_REPLAY , false));
+    QApplication::postEvent(this, new UPDATE_UI_ACTION_Event(UPDATE_UI_HINT , false));
     tableManager->reBid();
 }
 
@@ -1085,6 +1093,10 @@ void CMainFrame::on_action_Bid_Rebid_triggered()
  */
 void CMainFrame::on_action_Restart_Hand_triggered()
 {
+    QApplication::postEvent(this, new UPDATE_UI_ACTION_Event(UPDATE_UI_UNDO , false));
+    QApplication::postEvent(this, new UPDATE_UI_ACTION_Event(UPDATE_UI_REBID , false));
+    QApplication::postEvent(this, new UPDATE_UI_ACTION_Event(UPDATE_UI_REPLAY , false));
+    QApplication::postEvent(this, new UPDATE_UI_ACTION_Event(UPDATE_UI_HINT , false));
     tableManager->rePlay();
 }
 

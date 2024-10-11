@@ -215,6 +215,7 @@ void CTblMngr::sShowTricks(int ewTricks, int nsTricks)
 void CTblMngr::sUndoBid(int noBid)
 {
     playView->undoBid(noBid);
+    sDisableBidder(NO_SEAT);
 }
 
 void CTblMngr::sUndoTrick(int noTrick, int nsTricks, int ewTricks)

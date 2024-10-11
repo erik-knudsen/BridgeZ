@@ -130,7 +130,6 @@ void CActorLocal::clientActions()
     else if (zBridgeClientIface_israised_rDealInfo(&handle))
     {
         //Actor has received start of board and is ready for deal information.
-        manual = defManual;
         emit sRDealInfo( (Seat)zBridgeClientIface_get_client(&handle));
     }
 
@@ -140,7 +139,7 @@ void CActorLocal::clientActions()
         if (showUser)
         {
             //Must show the user the auction info and the table.
-            emit sShowAuction();
+            emit sShowAuction(false, NO_SEAT);
             emit sShowCenter((Team)zBridgeClientIface_get_vulnerability(&handle));
         }
 
@@ -158,7 +157,7 @@ void CActorLocal::clientActions()
             emit sShowBidDialog(false);
 //            emit sShowBid((Seat)zBridgeClientIface_get_bidder(&handle), BID_BLANK);
             emit sShowDummyOnTable((Seat)((zBridgeClientIface_get_declarer(&handle) + 2) & 3));
-            emit sShowPlay();
+            emit sShowPlay(BID_SUIT((Bids)zBridgeClientIface_get_lastBid(&handle)));
         }
 
         //Set in bid history,
@@ -209,7 +208,7 @@ void CActorLocal::clientActions()
             {
                 //Rebid when started playing.
                 emit sUndoTrick(0, 0, 0);
-                emit sShowAuction();
+                emit sShowAuction(true, (Seat)((zBridgeClientIface_get_declarer(&handle) + 2) & 3));
                 emit sShowBidDialog(true);
             }
 
@@ -318,10 +317,12 @@ void CActorLocal::clientSyncActions()
         }
         if (updateGameInfo && (syncState == SS))            //Sync Start of Board.
             emit sUpdateGameToNextDeal();
-        if (manual && ((syncState == SA) || (syncState == SP) || (syncState == SS) || (syncState == SL)))
+        if (showUser && manual && ((syncState == SA) || (syncState == SP) || (syncState == SS) || (syncState == SL)))
             emit sEnableContinueSync(syncState);
+        else if (showUser)
+            QTimer::singleShot(1000, this, SLOT(continueSync()));
         else
-            continueSync();                 //Never when showUser is true.
+            continueSync();                 //Only when showUser is false.
     }
 
     else if (zBridgeClientSyncIface_israised_okSync(&syncHandle))
@@ -466,7 +467,7 @@ void CActorLocal::playValue(int card)
 void CActorLocal::continueSync()
 {
     int syncState = zBridgeClientSyncIface_get_syncState(&syncHandle);
-    if (manual && ((syncState == SA) || (syncState == SP) || (syncState == SS) || (syncState == SL)))
+    if (showUser && manual && ((syncState == SA) || (syncState == SP) || (syncState == SS) || (syncState == SL)))
         emit sDisableContinueSync(zBridgeClientSyncIface_get_syncState(&syncHandle));
 
     if (showUser &&(syncState == SL))
@@ -540,6 +541,9 @@ void CActorLocal::cards(int cards[4][13])
 {
     //Save cards.
     bidAndPlay.setActorsCards(cards[(Seat)zBridgeClientIface_get_client(&handle)]);
+
+    //Reset in case dummy has played declarers cards
+    manual = defManual;
 
     //Initialize for a new bid and play history.
     bidAndPlay.resetBidHistory();
@@ -636,7 +640,7 @@ void CActorLocal::dummyCards(int cards[])
     bidAndPlay.setDummysCards(cards);
 
     //Also show the cards on the display.
-    if (showUser)
+    if (showUser && manual)
         emit sShowDummyCards((Seat)zBridgeClientIface_get_dummy(&handle), cards);
 
     zBridgeClientIface_raise_dummyCards(&handle);
