@@ -30,6 +30,17 @@
 #include "cbiddbdefine.h"
 #include "cbidengine.h"
 
+//---------------------------------------------------------------
+//For DDS.
+#include "dll.h"
+#include "mt19937ar.h"
+#include "cddslock.h"
+
+const int BATCH_SIZE = 8;       //Batch size for double dummy solver.
+const int MAX_NO_HANDS = 100;   //MSVC does not support dynamic arrays (newer versions of gcc does).
+const int MAX_ITER = 1000;      //Maximum number of iterations for finding a hand for DDS.
+//---------------------------------------------------------------
+
 //Bid limit levels.
 const int BID_POINT_SIZE = 8;
 const int BID_SUIT_POINT[BID_POINT_SIZE] = {17, 20, 22, 25, 28, 33, 37, 40};
@@ -124,13 +135,14 @@ CBidEngine::~CBidEngine()
  * is extended by using a built in algoritmic approach.
  *
  * @param[in] seat Bidders seat.
+ * @param[in] ownCards The bidders cards.
  * @param[in] ownFeatures The features of the bidders cards.
  * @param[in] bidHistory The bid history.
  * @param[in] scoringMethod The scoring method.
  * @param[in] teamVul Team vulnerability.
  * @return The determined next bid.
  */
-CBid CBidEngine::getNextBid(Seat seat, CFeatures &ownFeatures, CBidHistory &bidHistory, ScoringMethod scoringMethod,
+CBid CBidEngine::getNextBid(Seat seat, int ownCards[], CFeatures &ownFeatures, CBidHistory &bidHistory, ScoringMethod scoringMethod,
                             Team teamVul)
 {
     assert ((bidHistory.bidList.size() == 0) ? true : (((bidHistory.bidList.last().bidder + 1) % 4) == seat));
@@ -283,8 +295,22 @@ CBid CBidEngine::getNextBid(Seat seat, CFeatures &ownFeatures, CBidHistory &bidH
         return bid;
     }
     else
+    {
         //Built in algoritmic calculation of next bid.
-        return calculateNextBid(seat, bidHistory, ownFeatures, scoringMethod, teamVul);
+        bid = calculateNextBid(seat, bidHistory, ownFeatures, scoringMethod, teamVul);
+
+        //Double Dummy approach.
+        //EAK: Does not give reliable/trustworthy results.
+//        if (bid.bid == BID_PASS)
+//        {
+//            //Double Dummy Solver bid.
+//            Bids ddsBid = getDDSBid(seat, ownCards, bidHistory);
+//            qDebug() << QString("DDS Seat: %1").arg(SEAT_NAMES[seat]);
+//            if (ddsBid != BID_NONE)
+//                bid.bid = ddsBid;
+//        }
+        return bid;
+    }
 }
 
 /**
@@ -1557,6 +1583,251 @@ CBid CBidEngine::calculateNextBid(Seat seat, CBidHistory &bidHistory, CFeatures 
     }
     return bid;
 }
+
+
+/**
+ * @brief Calculate best bid using DDS.
+ *
+ * Calculate best bid using Double Dummy Solver approach.
+ * EAK: Does not give reliable, trustworthy results.
+ *
+ * @param[in] seat Bidders seat.
+ * @param[in] cards The bidders cards.
+ * @param[in] bidHistory The bid history.
+ */
+Bids CBidEngine::getDDSBid(Seat ownSeat, int ownCards[13], CBidHistory &bidHistory)
+{
+    ddTableDeals deals;
+    ddTablesRes tablesRes;
+    allParResults pres;
+
+    int hands[MAX_NO_HANDS][4][13];
+    int handNo = 0;
+    int noHands = 10;
+    int iter = 0;
+    int maxFailures = 0;
+    int curBoard = 0;
+    int ddsResult[5] = {0, 0, 0, 0, 0};
+
+    int size = bidHistory.bidList.size();
+
+    //Own last bid.
+    Bids ownLastBid = BID_NONE;
+    for (int i = size - 1; i >= 0; i--)
+        if ((bidHistory.bidList[i].bidder == ownSeat) && (BID_LEVEL(bidHistory.bidList[i].bid) != -1) &&
+            (ownLastBid == BID_NONE))
+            ownLastBid = bidHistory.bidList[i].bid;
+    if (ownLastBid == BID_NONE)
+        return BID_NONE;
+
+    //Highest total bid.
+    Bids highTBid = BID_NONE;
+    for (int i = 0; i < size; i++)
+        if (BID_LEVEL(bidHistory.bidList[i].bid) != -1)
+            highTBid = bidHistory.bidList[i].bid;
+    if (highTBid == BID_NONE)
+        return BID_NONE;
+
+    //Highest own/partner bid.
+    Bids highOPBid = BID_NONE;
+    Seat seatPartner = (Seat)((ownSeat +2) % 4);
+    for (int i = 0; i < size; i++)
+        if (((bidHistory.bidList[i].bidder == ownSeat) || (bidHistory.bidList[i].bidder == seatPartner)) &&
+            (BID_LEVEL(bidHistory.bidList[i].bid) != -1))
+            highOPBid = bidHistory.bidList[i].bid;
+    if (highOPBid == BID_NONE)
+        return BID_NONE;
+
+    if (highTBid <= highOPBid)
+    {
+        //Slam?
+        if (BID_LEVEL(highOPBid) >= 6)
+            return BID_NONE;
+
+        //No Trump game?
+        if (ISNOTRUMP(BID_SUIT(highOPBid)) && (BID_LEVEL(highOPBid) == 3))
+            return BID_NONE;
+
+        //Major game?
+        if (ISMAJOR(BID_SUIT(highOPBid)) && (BID_LEVEL(highOPBid) == 4))
+            return BID_NONE;
+
+        //Minor game?
+        if (ISMINOR(BID_SUIT(highOPBid)) && BID_LEVEL(highOPBid) == 5)
+            return BID_NONE;
+    }
+
+    while (handNo < noHands)
+    {
+        //Initialize cards.
+        int cardValues[52];
+        for (int i = 0; i < 52; i++)
+            cardValues[i] = i;
+
+        //Own cards are always known, therefore remove own cards.
+        for (int i = 0; i < 13; i++)
+            cardValues[ownCards[i]] = -1;
+
+        //Sort cards, so that unknown cards are first.
+        int noCards = 0;
+        for (int i = 0; i < 52; i++)
+            if (cardValues[i] != -1)
+                cardValues[noCards++] = cardValues[i];
+        for (int i = noCards; i < 52; i++)
+            cardValues[i] = -1;
+
+        //Deal unknown cards randomly.
+        for (int i = noCards - 1; i >= 0; i--)
+        {
+            int inx = genrand_int32() % (i + 1);
+            int card = cardValues[inx];
+            for (int j = inx; j < i; j++)
+                cardValues[j] = cardValues[j + 1];
+            cardValues[i] = card;
+        }
+
+        //In the hand own cars are known.
+        for (int i = 0; i < 13; i++)
+            hands[handNo][ownSeat][i] = ownCards[i];
+
+        //Distribute properly remaining cards.
+        Seat seat_0 = ownSeat;
+        Seat seat_1 = (Seat)((ownSeat + 1) % 4);
+        Seat seat_2 = (Seat)((ownSeat + 2) % 4);
+        Seat seat_3 = (Seat)((ownSeat + 3) % 4);
+        int j = 0;
+        for (int i = 0; i < 13; i++)
+        {
+            if (seat_0 != ownSeat)
+                hands[handNo][seat_0][i] = cardValues[j++];
+            if (seat_1 != ownSeat)
+                hands[handNo][seat_1][i] = cardValues[j++];
+            if (seat_2 != ownSeat)
+                hands[handNo][seat_2][i] = cardValues[j++];
+            if (seat_3 != ownSeat)
+                hands[handNo][seat_3][i] = cardValues[j++];
+        }
+
+        //Check features.
+        int noFailures = 0;
+        int i;
+        for (i = 0; i < 4; i++)
+        {
+            //Only check for hands with unknown cards.
+            if (i != ownSeat)
+            {
+                int cards[13];
+                for (int k = 0; k < 13; k++)
+                    cards[k] = hands[handNo][i][k];
+
+                bool res = bidHistory.checkCardFeatures(cards, (Seat)i);
+                if (res)
+                    noFailures++;
+                if ((res) && (noFailures > maxFailures))
+                    break;
+            }
+        }
+
+        iter++;
+        if (( i < 4) && (iter >= MAX_ITER))
+        {
+            maxFailures++;
+            iter = 0;
+        }
+
+        //Hand ok so far?
+        else if (i == 4)
+        {
+            //Prepare for double dummy solver.
+            ddTableDeal dl;
+            int mode = -1;          //No par calculation is to be performed.
+            int trumpFilter[5] = {0, 0, 0 ,0, 0}; //All suits.
+
+            //Cards.
+            for (int i = 0; i < 4; i++)
+                for (j = 0; j < 4; j++)
+                    dl.cards[i][j] = 0;
+            for (int i = 0; i < 4; i++)
+                for (int j = 0; j < 13; j++)
+                {
+                    int hand = (i + 3) % 4;
+                    int card = hands[handNo][i][j];
+                    Suit suit = CARD_SUIT(card);
+                    int face = CARD_FACE(card);
+                    dl.cards[hand][3 - suit] |= (1 << (face + 2));            //Double dummy solver format.
+                }
+
+            //Double dummy solver batch parameters.
+            deals.deals[curBoard] = dl;
+
+            //Next hand.
+            handNo++; iter = 0; maxFailures = 0;
+            curBoard++;
+
+            //Solve with double dummy solver?
+            if ((curBoard == BATCH_SIZE) || (handNo == noHands))
+            {
+                deals.noOfTables = curBoard;
+                CddsLock::mutex.lock();         //Static lock to protect dds static data.
+                int res = CalcAllTables(&deals, mode, trumpFilter, &tablesRes, &pres);
+                CddsLock::mutex.unlock();
+                int h = (ownSeat == WEST_SEAT) ? 3 : (ownSeat == NORTH_SEAT) ? 0 : (ownSeat == EAST_SEAT) ? 1 : 2;
+                for (int k = 0; k < deals.noOfTables; k++)
+                {
+                    ddsResult[NOTRUMP] += tablesRes.results[k].resTable[4][h];
+                    ddsResult[SPADES] += tablesRes.results[k].resTable[0][h];
+                    ddsResult[HEARTS] += tablesRes.results[k].resTable[1][h];
+                    ddsResult[DIAMONDS] += tablesRes.results[k].resTable[2][h];
+                    ddsResult[CLUBS] += tablesRes.results[k].resTable[3][h];
+                }
+                curBoard = 0;
+            }
+        }
+    }
+    int xnt = ddsResult[NOTRUMP];
+    int xs = ddsResult[SPADES];
+    int xh = ddsResult[HEARTS];
+    int xd = ddsResult[DIAMONDS];
+    int xc= ddsResult[CLUBS];
+    qDebug() << QString("DDS Seat: %1 ; NT: %2, S: %3, H: %4, D: %5, C: %6").arg(SEAT_NAMES[ownSeat]).arg(xnt).arg(xs).arg(xh).arg(xd).arg(xc);
+
+    //Get highest DDS bid
+    Bids bidDDS = BID_NONE;
+    int level = 0;
+    for (int i = 0; i < 5; i++)
+    {
+        ddsResult[i] = ddsResult[i]/noHands - 6;
+        if (level < ddsResult[i])
+        {
+            level = ddsResult[i];
+            bidDDS = MAKE_BID(i, level);
+        }
+    }
+
+    //Skip if below bid level.
+    if (bidDDS == BID_NONE)
+        return BID_NONE;
+
+    //Skip if below already bidded level.
+    if (bidDDS <= highTBid)
+        return BID_NONE;
+
+    //Slam?
+    if ((highTBid > highOPBid) || (BID_LEVEL(bidDDS) >= 6))
+        return bidDDS;
+
+    //No Trump game?
+    if (ISNOTRUMP(BID_SUIT(bidDDS)))
+        return (BID_LEVEL(highOPBid) <= 3) ? (bidDDS) : (BID_NONE);
+
+    //Major game?
+    if (ISMAJOR(BID_SUIT(bidDDS)))
+        return (BID_LEVEL(highOPBid) <= 4) ? (bidDDS) : (BID_NONE);
+
+    //Minor game?
+    return (BID_LEVEL(highOPBid) <= 5) ? (bidDDS) : (BID_NONE);
+}
+
 
 /**
  * @brief Calculate possible rules for a given bid history and next bid as calculated by getNextBid.

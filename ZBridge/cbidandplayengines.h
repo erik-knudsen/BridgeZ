@@ -46,7 +46,7 @@ public:
                     CBidOptionDoc &nsBidOptionDoc, CBidOptionDoc &ewBidOptionDoc,
                     ScoringMethod scoringMethod);
     void setScoringMethod(ScoringMethod scoringMethod) { this->scoringMethod = scoringMethod; }
-    CBid getNextBid(Seat seat, CFeatures &ownFeatures, CBidHistory &bidHistory, Team teamVul);
+    CBid getNextBid(Seat seat, int ownCards[], CFeatures &ownFeatures, CBidHistory &bidHistory, Team teamVul);
     QList<CRule *> getpRules(Seat seat, CBidHistory &bidHistory, Bids bid, Team teamVul,
                              bool *substitute);
     QString getAlertIdDesc(quint8 alertId);

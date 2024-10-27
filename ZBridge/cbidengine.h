@@ -49,8 +49,9 @@ public:
                CBidOptionDoc &nsBidOptionDoc, CBidOptionDoc &ewBidOptionDoc);
     virtual ~CBidEngine();
 
-    CBid getNextBid(Seat seat, CFeatures &ownFeatures, CBidHistory &bidHistory, ScoringMethod scoringMethod,
+    CBid getNextBid(Seat seat, int ownCards[], CFeatures &ownFeatures, CBidHistory &bidHistory, ScoringMethod scoringMethod,
             Team teamVul);
+    Bids getDDSBid(Seat seat, int cards[13], CBidHistory &bidHistory);
     QList<CRule *> getpRules(Seat seat, CBidHistory &bidHistory, Bids bid, ScoringMethod scoringMethod,
                              Team teamVul, bool *substitute);
     QString getAlertIdDesc(quint8 alertId);

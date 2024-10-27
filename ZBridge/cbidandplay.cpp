@@ -86,7 +86,7 @@ int CBidAndPlay::bidUndo(Bids *bid)
  */
 CBid CBidAndPlay::getNextBid(Seat seat, Team teamVul)
 {
-    return (bidAndPlayEngines->getNextBid(seat, ownFeatures, bidHistory, teamVul));
+    return (bidAndPlayEngines->getNextBid(seat, actorsCards, ownFeatures, bidHistory, teamVul));
 }
 
 void CBidAndPlay::setActorsCards(int cards[])
