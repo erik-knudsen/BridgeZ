@@ -1,240 +1,226 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html><head>
-<meta content="text/html; charset=ISO-8859-1" http-equiv="content-type"><title>Computer Player Logic</title>
-
+<html>
+<head>
+  <meta content="text/html; charset=iso-8859-1" http-equiv="content-type">
+  <title>Computer Player Logic</title>
 </head>
+
 <body>
-<h1><span lang="EN-US"><b><font style="font-size: 15pt;" color="#0000cc">Computer
-Player Logic.</font></b></span></h1>
+<h1><span lang="EN-US"><b>Computer Player Logic.</b></span></h1>
+
 <h1><span lang="EN-US"></span></h1>
-<p><big><span lang="EN-US">The computer is a
-fair
-player. The computer player is not as skillful as expert bridge
-players, but much better than novice players. A computer player bids
-naturally, plays cleverly and alerts correctly just like an
-experienced player.</span>
-</big></p>
+
+<p><big><span lang="EN-US">The computer plays much better than novice players,
+though not as well as expert bridge players. Bidding and playing is done
+naturally, just like an experienced player.</span></big></p>
 <br>
-<h3 id="C1"><span lang="EN-US"><b>Bidding
-Rule Tables.</b></span></h3>
-<p><big><span lang="EN-US">Bid algorithms are
-based on
-Bidding Rule Tables. After the bid goes
-through the Bidding Rule Tables, the computer bids according to a
-built-in approach. The Bidding Rule Tables characterize the bidding
-system: five-card majors, weak twos, Jacoby transfers,
-etc.&nbsp;ZBridge allows you to choose among many bidding options.</span>
-</big></p>
+
+
+<h3 id="C1"><span lang="EN-US"><b>Bidding Rule Tables.</b></span></h3>
+
+<p><big><span lang="EN-US">Bid algorithms are based on Bidding Rule Tables. The
+bid goes first through the Bidding Rule Tables and thereafter the computer bids
+following a built-in approach. The Bidding Rule Tables are characteristic for
+the the bidding system selected: four- or five-card majors etc. ZBridge has
+many bidding options to choose among.</span> </big></p>
 <br>
-<h3 id="C2"><span lang="EN-US"><span style="font-weight: bold;">Random generated hands.</span></span></h3>
-<p><big><span lang="EN-US">Play
-algorithms are based on random generated hands. The computer randomly
-generates unknown hands under known conditions that are derived from
-information of the auction (HCP range, suit length, number of Aces).
-The computer regards the generated hands just as real hands and decides
-possible best plays using double dummy algorithms. Afterwards it
-chooses among these best plays using&nbsp;
-information based on the defenders' signals.
-The computer iterates hand generation and
-makes decisions about the&nbsp;play. It evaluates the set of
-decisions derived from each simulation trial, and then makes the
-final&nbsp;play.</span></big></p>
+
+
+<h3 id="C2"><span lang="EN-US"><span style="font-weight: bold;">Random
+generated hands.</span></span></h3>
+
+<p><big><span lang="EN-US">Play algorithms are based on random generated hands.
+The computer generates unknown hands randomly with constraints base on
+information from the auction (HCP range, suit length, number of Aces, etc.).
+The computer calculates best play based on a double dummy algorithm. A number
+of simulation trials are performed and afterwards the computer chooses among
+these best plays using  information based on the defenders' signals and finally
+makes the final play.</span></big></p>
 <big><br>
-</big>
-<h2 id="C3"><span lang="EN-US"><b><font style="font-size: 15pt;" color="#0000cc">Built-In
-Approach of ZBridge Bidding.</font></b></span></h2>
+</big> 
+
+<h2 id="C3"><span lang="EN-US"><b>Built-In Approach of ZBridge
+Bidding.</b></span></h2>
+
 <p class="a1"><span lang="EN-US"></span></p>
-<p><big><span lang="EN-US">ZBridge
-uses the Bidding
-Rule Tables at the early stage of the auction. After the bid goes
-through the Bidding Rule Tables, the computer will bid according to the
-built-in approach. Built-in approaches are as follows.</span>
-</big></p>
+
+<p><big><span lang="EN-US">ZBridge uses the Bidding Rule Tables in the early
+stage of the auction. After the bid goes through the Bidding Rule Tables, the
+computer bids according to the built-in approach. Built-in approaches are as
+follows.</span> </big></p>
 <br>
-<h3 id="C4"><span lang="EN-US"><b>Non-Forcing
-and Limit.</b></span></h3>
-<p><big><span lang="EN-US">New suit
-bids and rebids are
-usually non-forcing. Notrump bids and raises of partner's suit are
-limit bids.</span>
-</big></p>
+
+
+<h3 id="C4"><span lang="EN-US"><b>Non-Forcing and Limit.</b></span></h3>
+
+<p><big><span lang="EN-US">New suit bids and rebids are usually non-forcing.
+Notrump bids and raises of partner's suit are limit bids.</span> </big></p>
 <br>
-<h3 id="C5"><span lang="EN-US"><b>Cue
-Bids.</b></span></h3>
-<p><big><span lang="EN-US">Guarantees
-added strength to
-bid an opponent's suit or to bid a new suit after a trump fit is found,
-but does not guarantee any length of the bid suit.</span>
-</big></p>
+
+
+<h3 id="C5"><span lang="EN-US"><b>Cue Bids.</b></span></h3>
+
+<p><big><span lang="EN-US">Guarantees added strength to bid an opponent's
+suit.</span></big></p>
 <br>
+
+
 <h3 id="C6"><b><span lang="EN-US">Exception.</span></b></h3>
-<p><big><span lang="EN-US">After a
-minor suit fit has
-been found, a new suit bid of three normally shows stoppers in the bid
-suit.</span>
-</big></p>
+
+<p><big><span lang="EN-US">After a minor suit fit has been found, a new suit
+bid of three normally shows stoppers in the bid suit.</span> </big></p>
 <br>
+
+
 <h3 id="C7"><span lang="EN-US"><b>Doubles.</b></span></h3>
-<p><big><span lang="EN-US">When the
-partner shows some
-strength, all doubles are for penalties. Otherwise, doubles against
-three or lower bids are for takeout and doubles against four or higher
-bids are for penalties.</span>
-</big></p>
+
+<p><big><span lang="EN-US">doubles are for penalties, when the partner shows
+strength. Otherwise, doubles against three or lower bids are for takeout and
+doubles against four or higher bids are for penalties.</span> </big></p>
 <br>
-<h3 id="C8"><span lang="EN-US"><b>Ace
-Asking Bids.</b></span></h3>
-<p><big><span lang="EN-US">4NT is
-usually a Blackwood
-convention. 4C after 1NT or 2NT opening bids is Gerber
-convention.
-</span></big></p>
+
+
+<h3 id="C8"><span lang="EN-US"><b>Ace Asking Bids.</b></span></h3>
+
+<p><big><span lang="EN-US">4NT is usually a Blackwood convention. 4C after 1NT
+or 2NT opening bids is Gerber convention. </span></big></p>
 <br>
-<h2 id="C9"><font style="font-size: 15pt;" color="#0000cc"><b><span lang="EN-US">Hand
-Valuation of ZBridge.</span></b></font></h2>
-<p class="a1"><font style="font-size: 15pt;" color="#0000cc"><b><span lang="EN-US"></span></b></font></p>
-<p><big><span lang="EN-US">ZBridge
-supports various
-types of natural bidding systems. These systems are based on the common
-hand valuation and approach below.</span>
+
+
+<p></p>
+
+<h2 id="C9"><b><span lang="EN-US">Hand Valuation of ZBridge.</span></b></h2>
+
+<p class="a1"><b><span lang="EN-US"></span></b></p>
+
+<p><big><span lang="EN-US">ZBridge uses the hand valuation shown next:</span>
 <br>
 <br>
 <b>High Card Points (HCP)</b><br>
-Ace=4&nbsp;&nbsp;&nbsp;&nbsp;King=3&nbsp;&nbsp;&nbsp;&nbsp;
-Queen=2&nbsp;&nbsp;&nbsp;&nbsp;Jack=1
-<br>
+Ace=4    King=3     Queen=2    Jack=1 <br>
 <br>
 <b>Distribution Points (DP) when a trump fit is found</b><br>
 1 point for each doubleton<br>
 2 points for each singleton<br>
-3 points for each void
-<br>
+3 points for each void <br>
 <br>
 <b>Long Suit Points (LP)</b><br>
-At its simplest it is considered that long suits have a value
-beyond the HCP held. This can be turned into numbers by adding one
-point
-for each card exceeding 4 cards in a suit.
-<br>
+Long suits have a value beyond the HCP held. Add one point for each card
+exceeding 4 cards in a suit. <br>
 <br>
 <b>Trump Fit Points (FP)</b><br>
-Add 1 point for each trump over 8-card fitting.
-<br>
+Add 1 point for each trump exceeding 8-card fitting. <br>
 <br>
 <b>Total Points (TP)</b><br>
-When intending to make a bid in a suit and there is not
-agreement on trump suit, add high card points (HCP) and long suit
-points
-(LP) to get
-the total point value of one's hand. When intending to raise an agreed
-trump suit, add high card points (HCP) and distribution points (DP) and
-trump fit points (FP). When making a
-bid in notrump with intent to play, value high card points (HCP) only.
-<br>
+When intending to make a bid in a suit and there is not agreement on trump
+suit, add high card points (HCP) and long suit points (LP) to get the total
+point value of one's hand. When intending to raise an agreed trump suit, add
+high card points (HCP) and distribution points (DP) and trump fit points (FP).
+When making a bid in notrump with intent to play, value high card points (HCP)
+only. <br>
 <br>
 <b>Control Number</b><br>
-Ace=2&nbsp;&nbsp;&nbsp;&nbsp;King=1
-<br>
+Ace=2    King=1 <br>
 <br>
 <b>Required Points for a Game and Slam Contract</b><br>
+</big>
 <div style="margin-left: 40px;">
+
 <table border="2" cellpadding="2" cellspacing="2">
-<tbody valign="top">
-<tr>
-<td>4 of a suit</td>
-<td>26 total points</td>
-</tr>
-<tr>
-<td>5 of a suit</td>
-<td>29 total points</td>
-</tr>
-<tr>
-<td>6 of a suit</td>
-<td>33 total points.</td>
-</tr>
-<tr>
-<td>7 of a sui</td>
-<td>37 total points.</td>
-</tr>
-<tr>
-<td>3NT</td>
-<td>26 total points.</td>
-</tr>
-<tr>
-<td>6NT</td>
-<td>33 total points.</td>
-</tr>
-<tr>
-<td>7NT</td>
-<td>37 total points.</td>
-</tr>
-</tbody>
+  <tbody valign="top">
+    <tr>
+      <td><big>4 of a suit</big></td>
+      <td><big>26 total points</big></td>
+    </tr>
+    <tr>
+      <td><big>5 of a suit</big></td>
+      <td><big>29 total points</big></td>
+    </tr>
+    <tr>
+      <td><big>6 of a suit</big></td>
+      <td><big>33 total points.</big></td>
+    </tr>
+    <tr>
+      <td><big>7 of a sui</big></td>
+      <td><big>37 total points.</big></td>
+    </tr>
+    <tr>
+      <td><big>3NT</big></td>
+      <td><big>26 total points.</big></td>
+    </tr>
+    <tr>
+      <td><big>6NT</big></td>
+      <td><big>33 total points.</big></td>
+    </tr>
+    <tr>
+      <td><big>7NT</big></td>
+      <td><big>37 total points.</big></td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<big><br>
+<br>
+<b>Point Ranges</b> <br>
+ZBridge bids according to the following point ranges. <br>
+<br>
+<span style="font-style: italic;">Opener</span> </big></p>
+
+<div style="margin-left: 40px;">
+
+<table border="2" cellpadding="2" cellspacing="2">
+  <tbody valign="top">
+    <tr>
+      <td>Minimum</td>
+      <td>12-15</td>
+    </tr>
+    <tr>
+      <td>Intermediate</td>
+      <td>16-18 (game invitation)</td>
+    </tr>
+    <tr>
+      <td>Strong</td>
+      <td>19-21 (game forcing)</td>
+    </tr>
+    <tr>
+      <td>Very Strong</td>
+      <td>(strong two opening)</td>
+    </tr>
+  </tbody>
 </table>
 </div>
 <br>
 <br>
-<b>Point Ranges</b>
-<br>
-ZBridge usually bids according to the following point ranges.
-<br>
-<br>
-<span style="font-style: italic;">Opener</span>
+<span style="font-style: italic;">Responder</span> 
+
 <div style="margin-left: 40px;">
+
 <table border="2" cellpadding="2" cellspacing="2">
-<tbody valign="top">
-<tr>
-<td>Minimum</td>
-<td>12-15</td>
-</tr>
-<tr>
-<td>Intermediate</td>
-<td>16-18 (game invitation zone)</td>
-</tr>
-<tr>
-<td>Strong</td>
-<td>19-21 (game forcing zone</td>
-</tr>
-<tr>
-<td>Very Strong</td>
-<td>(strong two opening zone)</td>
-</tr>
-</tbody>
+  <tbody valign="top">
+    <tr>
+      <td>Minimum</td>
+      <td>6-9</td>
+    </tr>
+    <tr>
+      <td>Intermediate</td>
+      <td>10-12 (game invitation)</td>
+    </tr>
+    <tr>
+      <td>Strong</td>
+      <td>13-15 (game forcing)</td>
+    </tr>
+    <tr>
+      <td>Very Strong</td>
+      <td>(jump shift)</td>
+    </tr>
+  </tbody>
 </table>
 </div>
 <br>
 <br>
-<span style="font-style: italic;">Responder</span>
-<div style="margin-left: 40px;">
-<table border="2" cellpadding="2" cellspacing="2">
-<tbody valign="top">
-<tr>
-<td>Minimum</td>
-<td>6-9</td>
-</tr>
-<tr>
-<td>Intermediate</td>
-<td>10-12 (game invitation zone)</td>
-</tr>
-<tr>
-<td>Strong</td>
-<td>13-15 (game forcing zone)</td>
-</tr>
-<tr>
-<td>Very Strong</td>
-<td>(jump shift zone)</td>
-</tr>
-</tbody>
-</table>
-</div>
+<b>Note:</b> <br>
+ZBridge jumps to a new suit with 16 or more points after the partner opens with
+one in a suit. <br>
 <br>
-<br>
-<b>Note:</b>
-<br>
-ZBridge
-jumps to a new suit with 16 or more points after the partner opens with
-one in a suit. This means that a jump shift is a slam invitation and is
-not a slam forcing.
-</big></p>
-<br>
-<br>
-</body></html>
+</body>
+</html>

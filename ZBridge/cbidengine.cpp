@@ -299,16 +299,17 @@ CBid CBidEngine::getNextBid(Seat seat, int ownCards[], CFeatures &ownFeatures, C
         //Built in algoritmic calculation of next bid.
         bid = calculateNextBid(seat, bidHistory, ownFeatures, scoringMethod, teamVul);
 
-        //Double Dummy approach.
+/*        //Double Dummy approach.
         //EAK: Does not give reliable/trustworthy results.
-//        if (bid.bid == BID_PASS)
-//        {
-//            //Double Dummy Solver bid.
-//            Bids ddsBid = getDDSBid(seat, ownCards, bidHistory);
-//            qDebug() << QString("DDS Seat: %1").arg(SEAT_NAMES[seat]);
-//            if (ddsBid != BID_NONE)
-//                bid.bid = ddsBid;
-//        }
+        if (bid.bid == BID_PASS)
+        {
+            //Double Dummy Solver bid.
+            Bids ddsBid = getDDSBid(seat, ownCards, bidHistory);
+            qDebug() << QString("DDS Seat: %1").arg(SEAT_NAMES[seat]);
+            if (ddsBid != BID_NONE)
+                bid.bid = ddsBid;
+        }
+*/
         return bid;
     }
 }
@@ -1611,6 +1612,14 @@ Bids CBidEngine::getDDSBid(Seat ownSeat, int ownCards[13], CBidHistory &bidHisto
 
     int size = bidHistory.bidList.size();
 
+    //Highest total bid.
+    Bids highTBid = BID_NONE;
+    for (int i = 0; i < size; i++)
+        if (BID_LEVEL(bidHistory.bidList[i].bid) != -1)
+            highTBid = bidHistory.bidList[i].bid;
+    if (highTBid == BID_NONE)
+        return BID_NONE;
+
     //Own last bid.
     Bids ownLastBid = BID_NONE;
     for (int i = size - 1; i >= 0; i--)
@@ -1618,14 +1627,6 @@ Bids CBidEngine::getDDSBid(Seat ownSeat, int ownCards[13], CBidHistory &bidHisto
             (ownLastBid == BID_NONE))
             ownLastBid = bidHistory.bidList[i].bid;
     if (ownLastBid == BID_NONE)
-        return BID_NONE;
-
-    //Highest total bid.
-    Bids highTBid = BID_NONE;
-    for (int i = 0; i < size; i++)
-        if (BID_LEVEL(bidHistory.bidList[i].bid) != -1)
-            highTBid = bidHistory.bidList[i].bid;
-    if (highTBid == BID_NONE)
         return BID_NONE;
 
     //Highest own/partner bid.

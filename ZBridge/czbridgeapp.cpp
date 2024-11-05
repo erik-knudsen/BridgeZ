@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
 
     CZBridgeApp app(argc, argv);
 
-    app.setWindowIcon(QIcon(":/resources/IDR_MAIN.ICO"));
+    app.setWindowIcon(QIcon(":/resources/ZBridge.ico"));
 
     qRegisterMetaType<QAbstractSocket::SocketError>();
     qRegisterMetaType<Seat>();

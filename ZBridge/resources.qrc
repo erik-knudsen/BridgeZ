@@ -184,7 +184,6 @@
         <file>resources/ico_expand.ico</file>
         <file>resources/ico_play_history.ico</file>
         <file>resources/idr_clos.ico</file>
-        <file>resources/IDR_MAIN.ICO</file>
         <file>resources/IDR_PLAY.ICO</file>
         <file>resources/idr_time.ico</file>
         <file>resources/Information Icon.bmp</file>
@@ -217,7 +216,6 @@
         <file>resources/play_west.cur</file>
         <file>resources/PlayerBidPrompt.ico</file>
         <file>resources/PlayRubber.bmp</file>
-        <file>resources/Portrait.bmp</file>
         <file>resources/Print.ico</file>
         <file>resources/ProgramTitle.bmp</file>
         <file>resources/RECFIRST.BMP</file>
@@ -325,23 +323,6 @@
         <file>resources/winners.bmp</file>
         <file>resources/winners_small.bmp</file>
         <file>resources/wizard.bmp</file>
-        <file>resources/ZBridge.ico</file>
-        <file>resources/ZBridgeICN.bmp</file>
-        <file>resources/BridgeSceneBB1.bmp</file>
-        <file>resources/BridgeSceneBB2.bmp</file>
-        <file>resources/BridgeSceneBB3.bmp</file>
-        <file>resources/BridgeSceneBB4.bmp</file>
-        <file>resources/BridgeSceneBB5.bmp</file>
-        <file>resources/BridgeSceneBB6.bmp</file>
-        <file>resources/BridgeSceneGG1.bmp</file>
-        <file>resources/BridgeSceneGG2.bmp</file>
-        <file>resources/BridgeSceneGG3.bmp</file>
-        <file>resources/BridgeSceneGG4.bmp</file>
-        <file>resources/BridgeSceneGG5.bmp</file>
-        <file>resources/BridgeSceneGG6.bmp</file>
-        <file>resources/BridgeSceneGG7.bmp</file>
-        <file>resources/BridgeSceneGG8.bmp</file>
-        <file>resources/BridgeSceneGG9.bmp</file>
         <file>resources/Suit_Order_1.bmp</file>
         <file>resources/Suit_Order_2.bmp</file>
         <file>resources/Suit_Order_3.bmp</file>
@@ -359,5 +340,6 @@
         <file>biddb.bsf</file>
         <file>biddb.dsc</file>
         <file>BidOption.bid</file>
+        <file>resources/ZBridge.ico</file>
     </qresource>
 </RCC>
